@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module IV: Theorems, Figures, Cross References</title>
+<style>
+:root{--ink:#1c2230;--muted:#5d6577;--accent:#1f4fbf;--rule:#d9dee8;--code:#f3f5f9;--note:#eef3ff;--warn:#fff6e5;--ok:#eefaf0;--ok-rule:#2e8b57}
+*{box-sizing:border-box}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;background:#fff;color:var(--ink);font:16.5px/1.65 Georgia,"Times New Roman",serif}
+main{max-width:46rem;margin:0 auto;padding:2.5rem 1.25rem 4rem}
+header.title{border-bottom:3px solid var(--accent);margin-bottom:2rem;padding-bottom:1rem}
+header.title h1{font:700 2rem/1.2 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;margin:0 0 .3rem}
+header.title .meta{font:.95rem system-ui,sans-serif;color:var(--muted)}
+nav.toc{border:1px solid var(--rule);border-radius:8px;padding:1rem 1.3rem;margin-bottom:2rem;font:.94rem/1.7 system-ui,sans-serif}
+nav.toc strong{display:block;margin-bottom:.3rem}
+nav.toc ol{margin:0;padding-left:1.2rem;columns:2;column-gap:2rem}
+nav.toc a{color:var(--accent);text-decoration:none}
+section.part{margin-top:2.4rem}
+h2{font:700 1.5rem/1.3 system-ui,sans-serif;margin:0 0 .6rem;padding-bottom:.35rem;border-bottom:2px solid var(--accent);color:var(--accent)}
+h3{font:600 1.12rem/1.3 system-ui,sans-serif;margin:1.7rem 0 .5rem;color:var(--ink)}
+h4{font:600 .98rem/1.3 system-ui,sans-serif;margin:1.2rem 0 .3rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+p{margin:.65rem 0}
+code{font:.87em/1.4 "DejaVu Sans Mono",Consolas,monospace;background:var(--code);padding:.08em .3em;border-radius:4px;white-space:nowrap}
+pre{background:var(--code);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:6px;padding:.75rem .95rem;overflow-x:auto;font:.84rem/1.5 "DejaVu Sans Mono",Consolas,monospace;white-space:pre;margin:.8rem 0}
+pre code{background:none;padding:0;font:inherit;white-space:pre}
+.plain{background:var(--note);border-left:4px solid var(--accent);padding:.6rem .95rem;border-radius:6px;margin:1rem 0}
+.plain>strong:first-child{font-family:system-ui,sans-serif;color:var(--accent)}
+.remember{background:var(--ok);border-left:4px solid var(--ok-rule);padding:.6rem .95rem;border-radius:6px;margin:1rem 0}
+.remember>strong:first-child{font-family:system-ui,sans-serif;color:var(--ok-rule)}
+.warn{background:var(--warn);border-left:4px solid #d99a14;padding:.6rem .95rem;border-radius:6px;margin:1rem 0}
+.warn>strong:first-child{font-family:system-ui,sans-serif;color:#8a5a00}
+.io{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;align-items:start;margin:.6rem 0 1rem}
+.io>div{border:1px solid var(--rule);border-radius:6px;padding:.4rem .6rem;font-size:.95rem;background:#fff}
+.io>div>.lab{font:600 .72rem system-ui,sans-serif;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:0 0 .2rem}
+.io pre{margin:0;font-size:.8rem}
+.io .shown{padding:.1rem .2rem}
+table{border-collapse:collapse;margin:.9rem 0;width:100%;font-size:.93rem}
+th,td{border-bottom:1px solid var(--rule);padding:.42rem .6rem;text-align:left;vertical-align:top}
+th{font:600 .8rem system-ui,sans-serif;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);border-bottom:2px solid var(--ink)}
+td code{white-space:normal}
+ul,ol{padding-left:1.4rem}
+li{margin:.22rem 0}
+.tag{display:inline-block;font:600 .7rem system-ui,sans-serif;text-transform:uppercase;letter-spacing:.05em;background:#e4e9f5;color:var(--accent);border-radius:4px;padding:.08rem .4rem;vertical-align:middle}
+.tag.gap{background:#fde9c4;color:#7a4b00}
+footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--rule);color:var(--muted);font:.85rem system-ui,sans-serif}
+@media (max-width:640px){.io{grid-template-columns:1fr}nav.toc ol{columns:1}}
+@media print{
+  @page{size:A4;margin:16mm 18mm}
+  body{font-size:10.5pt}
+  main{max-width:none;padding:0}
+  section.part{break-before:page}
+  section.part:first-of-type{break-before:auto}
+  h2,h3,h4{break-after:avoid}
+  pre,table,.plain,.remember,.warn,.io{break-inside:avoid}
+  nav.toc{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<main>
+<header class="title"><h1>Module IV: Theorems, Figures, Cross References</h1><div class="meta">LaTeX Made Simple &middot; Syllabus units 12&ndash;19 &middot; Primer chapters 9&ndash;14, plus the appendices</div></header>
+<section class="part" id="ch9">
+  <h2>9. Typesetting theorems</h2>
+  <p class="tag">Syllabus units 12 and 13 &middot; Primer pages 137&ndash;150 (syllabus omits 9.2.2 and 9.2.3)</p>
+
+  <div class="plain">
+    <strong>In plain words.</strong> Mathematics has special statements: theorems, lemmas, definitions, remarks. Each has a name and a number, and the statement is set apart from the text. You define the kinds once in the preamble with <code>\newtheorem</code>, then use them as environments.
+  </div>
+
+  <h3>9.1 Theorems in LaTeX</h3>
+  <pre><code>\newtheorem{thm}{Theorem}       % preamble: name of environment, then printed name
+
+\begin{thm}
+  The sum of the angles of a triangle is $180^\circ$.
+\end{thm}</code></pre>
+  <p>This prints "Theorem 1. The sum of the angles of a triangle is 180&deg;." Keep all <code>\newtheorem</code> commands together in the preamble.</p>
+
+  <h4>Numbering</h4>
+  <table>
+    <thead><tr><th>Definition</th><th>Result</th></tr></thead>
+    <tbody>
+      <tr><td><code>\newtheorem{thm}{Theorem}</code></td><td>Theorem 1, Theorem 2, ...</td></tr>
+      <tr><td><code>\newtheorem{thm}{Theorem}[section]</code></td><td>Theorem 9.1.1, 9.1.2, ... (section number first)</td></tr>
+      <tr><td><code>\newtheorem{cor}[thm]{Corollary}</code></td><td>Shares the numbering of <code>thm</code>: Corollary 9.1.3 follows Theorem 9.1.2</td></tr>
+    </tbody>
+  </table>
+  <p>The optional argument in square brackets, <code>[thm]</code> or <code>[section]</code>, says which counter to share or to nest in. The primer's example: after <code>\newtheorem{thm}{Theorem}[section]</code> and <code>\newtheorem{cor}[thm]{Corollary}</code>, Theorem and Corollary share one sequence.</p>
+
+  <h4>Optional note</h4>
+  <pre><code>\begin{thm}[Euclid]
+  The sum of the angles of a triangle is $180^\circ$.
+\end{thm}</code></pre>
+  <p>The note appears after the number: "Theorem 9.1.5 (Euclid)."</p>
+
+  <div class="warn">
+    <strong>Pitfall: square brackets again.</strong> <code>\begin{thm}[0,1] is a compact subset...</code> treats "0,1" as the note. The fix is to put the maths in dollar signs: <code>\begin{thm} $[0,1]$ is a compact subset of $\mathbb{R}$. \end{thm}</code>.
+  </div>
+
+  <h3>9.2 Designer theorems: the amsthm package</h3>
+  <p>The <code>amsthm</code> package gives you styles and control. Load it with <code>\usepackage{amsthm}</code>.</p>
+
+  <h4>Ready-made styles</h4>
+  <table>
+    <thead><tr><th>Style</th><th>Heading (name and number)</th><th>Body text</th><th>Typical use</th></tr></thead>
+    <tbody>
+      <tr><td><code>plain</code> (default)</td><td><strong>bold</strong></td><td><em>italic</em></td><td>theorem, lemma, proposition, corollary</td></tr>
+      <tr><td><code>definition</code></td><td><strong>bold</strong></td><td>roman</td><td>definition, example, exercise</td></tr>
+      <tr><td><code>remark</code></td><td><em>italic</em></td><td>roman</td><td>remark, note</td></tr>
+    </tbody>
+  </table>
+  <pre><code>\usepackage{amsthm}
+\newtheorem{thm}{Theorem}[section]
+\theoremstyle{definition}
+\newtheorem{dfn}{Definition}[section]
+\theoremstyle{remark}
+\newtheorem{note}{Note}[section]
+\theoremstyle{plain}
+\newtheorem{lem}[thm]{Lemma}</code></pre>
+  <p>Each <code>\theoremstyle</code> applies to the <code>\newtheorem</code> commands after it. Without <code>\theoremstyle{plain}</code> before <code>lem</code>, the lemma would be set in remark style. Always switch styles before you define a new group.</p>
+
+  <h4>Proofs</h4>
+  <pre><code>\begin{proof}
+  Let $\{p_1,p_2,\dotsc p_k\}$ be a finite set of primes.
+  Define $n=p_1p_2\dotsm p_k+1$. Then either $n$ itself is a prime
+  or has a prime factor. Thus no finite set of primes can include
+  all the primes.
+\end{proof}</code></pre>
+  <ul>
+    <li>The end of a proof is marked automatically with a box (the "qed" symbol). Change the symbol with <code>\renewcommand{\qedsymbol}{\halmos}</code> if you define your own.</li>
+    <li>When the last line of a proof is a display, the box can land in an awkward place. The primer's fix: put <code>\tag*{\qed}</code> at the end of that equation, and add <code>\renewcommand{\qed}{}</code> at the end of the proof so the box is not printed twice. This needs amsmath loaded without the <code>leqno</code> option.</li>
+    <li><code>\begin{proof}[\textsc{Proof\,(Euclid)}:]</code> changes the proof heading.</li>
+  </ul>
+
+  <h4>Custom styles (the rest of 9.2)</h4>
+  <p>The syllabus omits sections 9.2.2 and 9.2.3 (<code>\newtheoremstyle</code> with nine parameters, and <code>\swapnumbers</code>). They are not needed for the exam, but the primer's examples show what you can do.</p>
+
+  <div class="remember">
+    <strong>Remember (Part 9)</strong>
+    <ul>
+      <li>Define theorem-like environments with <code>\newtheorem{name}{Printed name}</code> in the preamble.</li>
+      <li>Use the optional argument to share a counter (<code>[thm]</code>) or to number within sections (<code>[section]</code>).</li>
+      <li>Set <code>\theoremstyle</code> before each group of definitions.</li>
+      <li><code>\begin{proof}...\end{proof}</code> adds the heading and the end-of-proof box.</li>
+    </ul>
+  </div>
+</section>
+<section class="part" id="ch10">
+  <h2>10. Boxes</h2>
+  <p class="tag">Syllabus unit 14 (sections 10.1 and 10.2 only) &middot; Primer pages 151&ndash;166</p>
+
+  <div class="plain">
+    <strong>In plain words.</strong> TeX builds every line from boxes. A character is a box. A word is a box of boxes. You can make your own boxes, with or without a frame, and place them where you want. A box is never broken across lines unless you use a paragraph box.
+  </div>
+
+  <h3>10.1 Boxes with frames: <code>\fbox</code></h3>
+  <pre><code>\fbox{Boxed text}</code></pre>
+  <p>This draws a frame around the text. The gap between the text and the frame is <code>\fboxsep</code> (default 3 pt). The thickness of the frame line is <code>\fboxrule</code> (default 0.4 pt).</p>
+  <pre><code>an \fbox{ordinary box} and a
+\setlength{\fboxrule}{5pt}
+\setlength{\fboxsep}{15pt}
+\fbox{custom box} with extra-thick walls and extra padding</code></pre>
+  <p>Use <code>\phantom{text}</code> to make an empty box exactly the size of the text. This is how the primer draws "boxes of letters" with no letters showing.</p>
+
+  <h4>Boxes that are a fixed width: <code>\framebox</code></h4>
+  <pre><code>\framebox[6cm]{6\,cm}          % a box 6 cm wide (plus the padding)
+\framebox[3cm][l]{flushleft text}
+\framebox[3cm][c]{centered text}
+\framebox[3cm][r]{flushright text}
+\framebox[3cm][s]{stretched text}</code></pre>
+  <ul>
+    <li>The position letter: <code>l</code> left, <code>c</code> centre (default), <code>r</code> right, <code>s</code> stretched to fill the box.</li>
+    <li>The width includes the padding on both sides. To make a box exactly 6 cm, subtract the padding, as the primer does with <code>calc</code>: <code>\framebox[\dimexpr(6cm - 6pt)]{...}</code>.</li>
+    <li>If the text is wider than the box, it spills out.</li>
+  </ul>
+
+  <h4>Lengths that refer to the text: <code>\width</code>, <code>\height</code>, <code>\depth</code></h4>
+  <pre><code>\framebox{Text}\\
+\framebox[2\width][l]{Text}      % twice the width of the text (inside the box)</code></pre>
+  <p><code>\width</code>, <code>\height</code>, <code>\depth</code> and <code>\totalheight</code> mean the size of the text inside the box. They work only inside a width specification like this one. The width of the box also includes the padding and rules, so the primer adds <code>4\fboxsep + 4\fboxrule</code> when it needs an exact doubling.</p>
+
+  <h4>What boxes cannot do</h4>
+  <p>A <code>\fbox</code> is an LR box: it is one indivisible unit. Its text stays on one line, even if it is longer than the text width. This is why <code>\fbox</code> cannot hold a paragraph. Use <code>\parbox</code> or <code>minipage</code> for that (Section 10.5 in the primer, outside the syllabus).</p>
+
+  <h3>10.2 Boxes without frames: <code>\mbox</code> and <code>\makebox</code></h3>
+  <pre><code>\mbox{text}                    % an LR box of the text's own width
+\makebox[width][pos]{text}    % a box of a set width, no frame</code></pre>
+  <p>A box without a frame is useful to keep text together. The primer's example: "3 : 2 : 1" wrapped in <code>\mbox{$3:2:1$}</code> is never split across two lines, even when the paragraph is very narrow.</p>
+
+  <h4>Zero-width boxes stick out of the margin</h4>
+  <pre><code>\makebox[0cm][r]{\textit{median}$\rightarrow$\hspace{\tabcolsep}}</code></pre>
+  <p>A zero-width box prints its text on top of the surrounding space, so the word hangs out to the left. The primer uses this to put "median" beside a row of a table.</p>
+
+  <h3>Notes on the rest of Chapter 10 (outside the syllabus)</h3>
+  <p>Chapter 10 also covers <code>\parbox</code> and <code>minipage</code> (multi-line boxes), <code>\rule</code> (black boxes and struts), and <code>\raisebox</code> (moving boxes up or down). They are not in the syllabus units 14, but they are useful. In brief:</p>
+  <ul>
+    <li><code>\parbox[pos]{width}{text}</code>: a paragraph in a line. <code>pos</code> is <code>t</code>, <code>b</code> or the middle (default) to align with the line of text.</li>
+    <li><code>\rule[lift]{width}{height}</code>: a solid black rectangle. A zero-width rule is an invisible strut that makes a box taller.</li>
+    <li><code>\raisebox{lift}{text}</code>: moves text up (positive) or down (negative) from the baseline.</li>
+  </ul>
+
+  <div class="remember">
+    <strong>Remember (Part 10)</strong>
+    <ul>
+      <li><code>\fbox</code> draws a frame; <code>\fboxsep</code> sets the padding and <code>\fboxrule</code> the line thickness.</li>
+      <li><code>\framebox[width][l|c|r|s]{text}</code> gives a frame with a fixed width and alignment.</li>
+      <li><code>\mbox</code> keeps text on one line without a frame.</li>
+      <li>A box never breaks across lines. Use <code>\parbox</code> or <code>minipage</code> for paragraphs.</li>
+    </ul>
+  </div>
+</section>
+<section class="part" id="ch11">
+  <h2>11. Floats: figures and tables</h2>
+  <p class="tag">Syllabus unit 15 &middot; Primer pages 167&ndash;177</p>
+
+  <div class="plain">
+    <strong>In plain words.</strong> A figure or table is too big to split across pages, so LaTeX treats it as a <em>float</em>. It moves the figure to a good place, often the top or bottom of a page, and numbers it. You put the picture and caption inside a <code>figure</code> (or <code>table</code>) environment. You do not place it by hand.
+  </div>
+
+  <h3>11.1 The figure environment</h3>
+  <pre><code>\begin{figure}
+  \centering
+  \includegraphics{figure.eps}
+  \caption{This is an inserted EPS graphic}
+  \label{fig1}
+\end{figure}</code></pre>
+  <ul>
+    <li><code>\caption</code> sets the caption and the number.</li>
+    <li><code>\label</code> must come <strong>after</strong> <code>\caption</code>. Then <code>\ref{fig1}</code> gives the number and <code>\pageref{fig1}</code> the page.</li>
+    <li>A figure with no caption is an unnumbered float.</li>
+    <li>Several captions in one figure environment give several figures that float together.</li>
+    <li><code>\caption[Short]{Long text}</code>: the short version appears in the list of figures.</li>
+    <li><code>\listoffigures</code> prints the list of figures.</li>
+  </ul>
+
+  <h4>Placement</h4>
+  <p>The optional argument in square brackets says where the float may go:</p>
+  <table>
+    <thead><tr><th>Letter</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td><code>h</code></td><td>Here, where the command is, if there is room</td></tr>
+      <tr><td><code>t</code></td><td>Top of a page</td></tr>
+      <tr><td><code>b</code></td><td>Bottom of a page</td></tr>
+      <tr><td><code>p</code></td><td>On a page of its own (a float page)</td></tr>
+    </tbody>
+  </table>
+  <p>With no option, the default is <code>[tbp]</code>. A common choice is <code>\begin{figure}[htbp]</code>.</p>
+
+  <h4>Forcing floats out</h4>
+  <ul>
+    <li><code>\clearpage</code> places all waiting floats and starts a new page.</li>
+    <li><code>\FloatBarrier</code> (package <code>placeins</code>) places waiting floats without starting a new page. <code>\usepackage[section]{placeins}</code> puts a barrier before each section.</li>
+    <li><code>\afterpage{\clearpage}</code> (package <code>afterpage</code>) clears floats at the next page break.</li>
+  </ul>
+
+  <h4>Controlling how many floats</h4>
+  <pre><code>\setcounter{totalnumber}{2}      % at most 2 floats on any text page
+\renewcommand{\textfraction}{0.3}  % at least 30% of a text page must be text</code></pre>
+  <table>
+    <thead><tr><th>Setting</th><th>Default</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td><code>topnumber</code></td><td>2</td><td>Max floats at the top of a text page</td></tr>
+      <tr><td><code>bottomnumber</code></td><td>1</td><td>Max floats at the bottom</td></tr>
+      <tr><td><code>totalnumber</code></td><td>3</td><td>Max floats on any text page</td></tr>
+      <tr><td><code>textfraction</code></td><td>0.2</td><td>Min fraction of a text page that must be text</td></tr>
+      <tr><td><code>topfraction</code></td><td>0.7</td><td>Max fraction of a text page used by floats at the top</td></tr>
+      <tr><td><code>bottomfraction</code></td><td>0.3</td><td>Max fraction used by floats at the bottom</td></tr>
+      <tr><td><code>floatpagefraction</code></td><td>0.5</td><td>Min fraction of a float page that must be filled</td></tr>
+    </tbody>
+  </table>
+  <p>A <code>!</code> in the placement options makes LaTeX ignore the first three settings.</p>
+
+  <div class="warn">
+    <strong>Syllabus check.</strong> Unit 15 names sections XI.1.1, XI.1.2 and XI.1.5. Section 11.1.5 does not exist in the primer. Sections 11.1.1 and 11.1.2 are covered above. The nearest match for the third item is 11.1.3, <em>Customizing float placement</em>, which is also covered above. Confirm with the teacher.
+  </div>
+
+  <h3>11.2 The table environment</h3>
+  <p>A <code>table</code> environment works the same way as <code>figure</code>, but holds a <code>tabular</code>. It has a caption and a label.</p>
+  <pre><code>\begin{table}[htbp]
+  \centering
+  \caption{Marks awarded in the LaTeX internal examination}
+  \label{tab:marks}
+  \begin{tabular}{lcc}
+    \hline
+    Student &amp;amp; Assignment &amp;amp; Viva \\
+    \hline
+    Student A &amp;amp; 9 &amp;amp; 8 \\
+    Student B &amp;amp; 7 &amp;amp; 9 \\
+    \hline
+  \end{tabular}
+\end{table}</code></pre>
+  <p>Refer to it as <code>Table~\ref{tab:marks}</code>. The tilde is a non-breaking space, so "Table" and the number stay together.</p>
+
+  <h4>Tabular and tabular*</h4>
+  <pre><code>\begin{tabular}[pos]{cols} rows \end{tabular}
+\begin{tabular*}{width}[pos]{cols} rows \end{tabular*}</code></pre>
+  <ul>
+    <li><code>pos</code>: <code>t</code> aligns the top row with the text baseline, <code>b</code> the bottom row. Default: centred.</li>
+    <li><code>tabular*</code> sets a fixed total width. Its columns need <code>@{\extracolsep{\fill}}</code> to stretch.</li>
+    <li>Column letters: <code>l</code>, <code>c</code>, <code>r</code>, <code>{wd}</code> (a paragraph of width wd), <code>*{n}{cols}</code> (repeat n times), <code>|</code> (vertical line), <code>@{text}</code> (insert text between columns, removing the normal gap).</li>
+  </ul>
+
+  <h4>Table style parameters</h4>
+  <table>
+    <thead><tr><th>Parameter</th><th>Controls</th></tr></thead>
+    <tbody>
+      <tr><td><code>\tabcolsep</code></td><td>Half the gap between columns</td></tr>
+      <tr><td><code>\arrayrulewidth</code></td><td>Thickness of table lines</td></tr>
+      <tr><td><code>\doublerulesep</code></td><td>Gap between the two lines of a double rule</td></tr>
+      <tr><td><code>\arraystretch</code></td><td>Multiplier for the row spacing (default 1; 1.5 adds 50%)</td></tr>
+    </tbody>
+  </table>
+  <p>Set them with <code>\setlength</code> (for lengths) or <code>\renewcommand</code> (for <code>\arraystretch</code>). Do not change them inside the tabular itself.</p>
+
+  <div class="remember">
+    <strong>Remember (Part 11)</strong>
+    <ul>
+      <li>Put every figure in a <code>figure</code> environment and every table in a <code>table</code> environment.</li>
+      <li><code>\label</code> goes after <code>\caption</code>.</li>
+      <li>Let LaTeX place floats. Use <code>[htbp]</code> to give it options, and <code>\clearpage</code> to force them out.</li>
+    </ul>
+  </div>
+</section>
+<section class="part" id="ch12">
+  <h2>12. Graphics inclusion</h2>
+  <p class="tag">Not a numbered syllabus unit &middot; Primer pages 179&ndash;185 &middot; relevant to figures (unit 15) and to Module V</p>
+
+  <div class="plain">
+    <strong>In plain words.</strong> Some pictures come from other programs: graphs of data, photographs. The <code>graphicx</code> package includes such a file in your document and can scale, rotate and crop it. LaTeX only reserves the space; the driver (dvips, xdvi, pdflatex) draws the picture.
+  </div>
+
+  <h3>12.1 Loading and including</h3>
+  <pre><code>\usepackage{graphicx}
+\usepackage[dvips]{graphicx}     % if the output is made with dvips
+\usepackage[xetex]{graphicx}     % if the engine is xelatex</code></pre>
+  <pre><code>\includegraphics{ellipse}                     % the file's own size
+\includegraphics[scale=0.5]{ellann.eps}      % half the size
+\includegraphics[width=4cm,height=0.5cm]{ellann.eps}   % fit a box
+\includegraphics[angle=60]{ellann.pdf}       % rotated, counter-clockwise</code></pre>
+
+  <div class="warn">
+    <strong>Order matters.</strong> The keys are applied from left to right. <code>[width=4cm,height=1cm,angle=60]</code> scales the picture first and then rotates it. <code>[angle=60,width=4cm,height=1cm]</code> rotates first and then scales the rotated picture into the box. The results are different.
+  </div>
+
+  <h3>12.2 Clipping a picture</h3>
+  <p>An EPS file has a <em>bounding box</em> line, such as <code>%%BoundingBox: 249 604 362 689</code>, giving the lower-left and upper-right corners in points. To show only part of the picture, give a new bounding box with <code>bb=</code> and add <code>clip</code>:</p>
+  <pre><code>\includegraphics[bb=249 604 362 646.5,clip]{ellann.eps}   % lower half only</code></pre>
+  <p>Stacking two clipped halves with <code>\\[-1.253pt]</code> between them rebuilds the whole picture.</p>
+
+  <h3>12.3 Finding files</h3>
+  <pre><code>\graphicspath{{dir1/}{dir2/}}          % look in these folders too
+\DeclareGraphicsExtensions{.eps,.ps}  % extensions to try when none is given</code></pre>
+  <p>With the extensions set, <code>\includegraphics{file}</code> looks for <code>file.eps</code>, then <code>file.ps</code>, and so on.</p>
+
+  <div class="remember">
+    <strong>Note on modern use.</strong> The primer was written for EPS files and the dvips driver. With <code>pdflatex</code> today, PNG, JPG and PDF files are normal, and you write the file name with its extension, for example <code>\includegraphics[width=0.6\textwidth]{plot.png}</code>. The keys (<code>width</code>, <code>scale</code>, <code>angle</code>) are the same.
+  </div>
+
+  <h3>12.4 Drawing in LaTeX</h3>
+  <p>The primer draws its elliptic annulus with <code>pstricks</code>, a package for drawing inside TeX. It is an extra topic, not part of the syllabus.</p>
+</section>
+<section class="part" id="ch13">
+  <h2>13. Cross references</h2>
+  <p class="tag">Syllabus unit 16 (sections 13.1 and 13.2 only) &middot; Primer pages 187&ndash;196</p>
+
+  <div class="plain">
+    <strong>In plain words.</strong> A cross reference is a pointer to another part of the same document: "see Section 2", "by Theorem 3.1". Writing the numbers by hand breaks when you add a section. Instead, give the target a <em>label</em> with <code>\label{key}</code>, and point to it with <code>\ref{key}</code>. LaTeX fills in the right number.
+  </div>
+
+  <h3>13.1 Labels and references</h3>
+  <pre><code>\section{Why cross references}\label{intro}
+...
+(see Section \ref{intro} for details)</code></pre>
+  <ul>
+    <li>The label can go anywhere inside the section, not only right after the heading.</li>
+    <li>The key can be any mix of letters, digits and punctuation. Use a memorable one, such as <code>limcon</code> for "Limits and Continuity".</li>
+    <li>Type <code>~\ref{limcon}</code> with a tilde, so the number never starts a new line on its own.</li>
+    <li>The first run writes the references to the <code>.aux</code> file and prints "There were undefined references". A second run fixes them. Run again after any change.</li>
+  </ul>
+
+  <h3>13.2 Other kinds of target</h3>
+  <table>
+    <thead><tr><th>Target</th><th>How to label it</th></tr></thead>
+    <tbody>
+      <tr><td>Section, chapter</td><td><code>\section{...}\label{key}</code></td></tr>
+      <tr><td>Item in an enumerated list</td><td><code>\item All men are mortal.\label{pre1}</code>, then <code>(\ref{pre1})</code></td></tr>
+      <tr><td>Figure or table</td><td><code>\caption{...}\label{tabxy}</code>: the label comes after the caption</td></tr>
+      <tr><td>Theorem</td><td><code>\begin{theorem}\label{diffcon}</code></td></tr>
+      <tr><td>Equation</td><td><code>\begin{equation}\label{sumsq}</code>, then <code>\eqref{sumsq}</code></td></tr>
+    </tbody>
+  </table>
+
+  <h4>Equations with amsmath</h4>
+  <pre><code>Equation~\eqref{sumsq} gives the following.      % prints "Equation (13.1)"
+
+\begin{align}
+  (x+y)^2 &amp;amp;= x^2+2xy+y^2 \label{sum}\\
+  (x-y)^2 &amp;amp;= x^2-2xy+y^2 \tag{\ref{sum}a}
+\end{align}</code></pre>
+  <p><code>\eqref</code> adds the brackets around the number. In an <code>align</code>, the second line's tag can reuse the first line's number with a letter, as shown: (13.2) and (13.2a).</p>
+
+  <h4>Forward references</h4>
+  <p>You can refer to a label that comes later in the document, in the same way. The second run then gets it right.</p>
+
+  <h3>13.3 Page numbers: <code>\pageref</code> and <code>varioref</code></h3>
+  <pre><code>see Table~\ref{tabxy} in page~\pageref{tabxy}</code></pre>
+  <p>The package <code>varioref</code> adds smart page references with <code>\vref{key}</code>. If the target is on the same page, it prints only the number. If it is on the next page, it adds "on the following page". Its page phrases can be changed with <code>\reftextbefore</code> and <code>\reftextafter</code>.</p>
+  <pre><code>\usepackage{varioref}
+see the \vpageref[above table][table~]{tabxy}   % "above table" if same page</code></pre>
+
+  <h3>13.4 Other documents: xr, and the key list</h3>
+  <p>The <code>xr</code> package lets one document refer to labels in another file: <code>\usepackage{xr}</code> and <code>\externaldocument{other}</code> in the preamble. Two external files with the same key can be told apart with a prefix: <code>\externaldocument[a-]{other}</code>, then <code>\ref{a-key}</code>.</p>
+
+  <div class="remember">
+    <strong>Remember (Part 13)</strong>
+    <ul>
+      <li>Label after the thing being labelled (after <code>\caption</code> for floats).</li>
+      <li>Reference with <code>\ref</code>, or <code>\eqref</code> for equations.</li>
+      <li>Compile twice after adding or moving labels.</li>
+      <li>Use <code>~</code> before a reference so "Table 1" stays together.</li>
+    </ul>
+  </div>
+</section>
+<section class="part" id="ch14">
+  <h2>14. Footnotes, margin notes and endnotes</h2>
+  <p class="tag">Syllabus unit 17 (section 14.1 only) &middot; Primer pages 197&ndash;205</p>
+
+  <h3>14.1 Footnotes</h3>
+  <div class="plain">
+    <strong>In plain words.</strong> A footnote is a note at the bottom of the page, linked to a number in the text. LaTeX numbers it and places it for you.
+  </div>
+  <pre><code>A footnote is written with \footnote{footnote text}.</code></pre>
+  <p>The footnote text is set smaller, below a short rule. The first line of the footnote is indented and carries the same mark as the text.</p>
+
+  <h4>Footnotes in a minipage or table</h4>
+  <p>Inside a <code>minipage</code>, a plain <code>\footnote</code> is set at the bottom of that minipage, and it uses its own counter. To put a footnote mark in the minipage but print the note at the bottom of the page, use <code>\footnotemark</code> in the text and <code>\footnotetext</code> after the minipage:</p>
+  <pre><code>\begin{minipage}{5cm}
+  This text references a footnote at the bottom of the page.\footnotemark
+\end{minipage}
+\footnotetext{At bottom of page}</code></pre>
+
+  <div class="warn">
+    <strong>Tables.</strong> A plain <code>\footnote</code> inside <code>tabular</code> does not print correctly. Use <code>longtable</code> or <code>tabularx</code>, or put the table in a <code>minipage</code>. The <code>threeparttable</code> package is the cleanest way to set table notes, with <code>\tnote{a}</code> marks and a <code>tablenotes</code> list.
+  </div>
+
+  <h4>Changing the look</h4>
+  <pre><code>\setcounter{footnote}{0}           % restart numbering (before a section)
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}   % * \dagger \ddagger ...
+\footnote[7]{Marker shown as 7.}  % a footnote with a set number</code></pre>
+  <ul>
+    <li><code>\thefootnote</code> sets the style: <code>\arabic</code>, <code>\roman</code>, <code>\alph</code>, <code>\fnsymbol</code> (symbols for 1 to 9).</li>
+    <li>Restore the normal numbers with <code>\renewcommand{\thefootnote}{\arabic{footnote}}</code> after using symbols.</li>
+    <li>Style parameters: <code>\footnotesize</code> (font), <code>\footnotesep</code> (strut at the start), <code>\footnoterule</code> (the line above the notes).</li>
+  </ul>
+
+  <h3>14.2 Marginal notes</h3>
+  <pre><code>text\marginpar{This is a marginal note}</code></pre>
+  <p>The note prints in the margin, starting at the height of the line where the command sits. With one argument it goes to the right margin (one-sided) or the outside margin (two-sided). With two arguments, <code>\marginpar[left]{right}</code>, the first is for the left margin.</p>
+  <ul>
+    <li><code>\reversemarginpar</code> and <code>\normalmarginpar</code> switch the margin.</li>
+    <li><code>\marginparwidth</code>, <code>\marginparsep</code> and <code>\marginparpush</code> set the size and spacing.</li>
+    <li><code>\marginpar</code> does not start a paragraph. If it sits before the first word of a paragraph, the alignment can be off.</li>
+  </ul>
+
+  <h3>14.3 Endnotes</h3>
+  <p>Endnotes are collected at the end of a chapter or document. They are not in standard LaTeX; the <code>endnotes</code> package adds them.</p>
+  <pre><code>\usepackage{endnotes}
+This is simple text.\endnote{The first endnote.}
+\theendnotes     % prints all the endnotes collected so far</code></pre>
+  <p>Writing <code>\renewcommand{\footnote}{\endnote}</code> turns every footnote into an endnote.</p>
+
+  <div class="remember">
+    <strong>Remember (Part 14)</strong>
+    <ul>
+      <li><code>\footnote{text}</code> goes right after the word it explains.</li>
+      <li>Footnotes do not work inside <code>tabular</code>; use <code>longtable</code>, <code>threeparttable</code>, or a minipage.</li>
+      <li>Use <code>\footnotemark</code> and <code>\footnotetext</code> to keep a minipage footnote in the page sequence.</li>
+    </ul>
+  </div>
+</section>
+<section class="part" id="gap">
+  <h2>15. What the primer does not cover</h2>
+  <p class="tag gap">Syllabus Module V and Text 2</p>
+
+  <p>The primer stops at chapter 14. The syllabus adds topics that are not in it. Here is where to find them.</p>
+
+  <table>
+    <thead><tr><th>Topic (syllabus)</th><th>Status in this guide</th><th>Where to look</th></tr></thead>
+    <tbody>
+      <tr><td>Installing LaTeX (V.1)</td><td>Not in the primer</td><td>The notes in <code>latex-notes/</code>, module 5</td></tr>
+      <tr><td>Overleaf (V.2)</td><td>Not in the primer</td><td>Module 5 notes</td></tr>
+      <tr><td>Writing a chapter of a book (V.3)</td><td>Partly: the <code>report</code> class and chapters are in Part 2 of this guide</td><td>Module 5 notes (the chapter template)</td></tr>
+      <tr><td>Beamer slides and posters (V.4)</td><td>Not in the primer</td><td>Module 5 notes</td></tr>
+      <tr><td>Transliteration of Indian languages (V.5)</td><td>Not in the primer; IAST diacritics are in Module 5</td><td>Module 5 notes; the <code>fontspec</code> and <code>polyglossia</code> setup</td></tr>
+      <tr><td>Presentation: Gratzer ch. 12 (units 18&ndash;19)</td><td>Not available to read here</td><td>Module 4 notes cover the parts of presentation that are general</td></tr>
+    </tbody>
+  </table>
+
+  <div class="warn">
+    <strong>Next step.</strong> If you want these topics in the same detailed style, the Beamer and transliteration parts need their own reading (the primer does not cover them). Gratzer's Chapter 12 needs the book itself; upload it and this guide can be extended from it.
+  </div>
+</section>
+<section class="part" id="cheat">
+  <h2>Appendix A. Cheat sheet</h2>
+  <table>
+    <thead><tr><th>I want to&hellip;</th><th>Write</th></tr></thead>
+    <tbody>
+      <tr><td>Start a document</td><td><code>\documentclass{article}</code> ... <code>\begin{document}</code> ... <code>\end{document}</code></td></tr>
+      <tr><td>Emphasise a word</td><td><code>\emph{word}</code></td></tr>
+      <tr><td>Bold, italic, typewriter</td><td><code>\textbf{}</code>, <code>\textit{}</code>, <code>\texttt{}</code></td></tr>
+      <tr><td>Change size of a passage</td><td><code>{\large text}</code></td></tr>
+      <tr><td>Print a reserved character</td><td><code>\% \$ \&amp; \# \_ \{ \}</code></td></tr>
+      <tr><td>Force a line break</td><td><code>\\</code> (or <code>\\[10pt]</code>)</td></tr>
+      <tr><td>Centre, left, right</td><td><code>center</code>, <code>flushleft</code>, <code>flushright</code> environments</td></tr>
+      <tr><td>Title block</td><td><code>\title{}</code> <code>\author{}</code> <code>\date{}</code> <code>\maketitle</code></td></tr>
+      <tr><td>Section, subsection</td><td><code>\section{}</code>, <code>\subsection{}</code></td></tr>
+      <tr><td>Contents, index, figure list</td><td><code>\tableofcontents</code>, <code>\printindex</code>, <code>\listoffigures</code></td></tr>
+      <tr><td>Index entry</td><td><code>\index{word}</code>, with <code>\makeindex</code> in the preamble</td></tr>
+      <tr><td>Cite a reference</td><td><code>\cite{key}</code> or <code>\citet{key}</code> with natbib</td></tr>
+      <tr><td>Bulleted list / numbered / description</td><td><code>itemize</code> / <code>enumerate</code> / <code>description</code></td></tr>
+      <tr><td>Verse</td><td><code>verse</code> environment, lines end with <code>\\</code></td></tr>
+      <tr><td>Table</td><td><code>tabular</code> with <code>\hline</code>, <code>&amp;</code>, <code>\\</code>; floats in <code>table</code></td></tr>
+      <tr><td>Merge cells</td><td><code>\multicolumn{n}{pos}{text}</code></td></tr>
+      <tr><td>Maths inline / display</td><td><code>$...$</code> / <code>\[...\]</code> or <code>equation</code></td></tr>
+      <tr><td>Fraction, root, power, subscript</td><td><code>\frac{a}{b}</code>, <code>\sqrt{x}</code>, <code>x^{n}</code>, <code>x_{i}</code></td></tr>
+      <tr><td>Sum, integral, limit</td><td><code>\sum_{i=1}^{n}</code>, <code>\int_0^1</code>, <code>\lim_{x\to 0}</code></td></tr>
+      <tr><td>Matrix with brackets</td><td><code>pmatrix</code> (round), <code>bmatrix</code> (square), <code>vmatrix</code> (determinant)</td></tr>
+      <tr><td>Aligned equations</td><td><code>align</code> (numbered), <code>align*</code> (not numbered), with <code>&amp;</code> at the alignment point</td></tr>
+      <tr><td>Stretchy brackets</td><td><code>\left( ... \right)</code></td></tr>
+      <tr><td>Your own theorem kind</td><td><code>\newtheorem{thm}{Theorem}[section]</code>, then <code>\begin{thm}</code></td></tr>
+      <tr><td>Proof</td><td><code>\begin{proof} ... \end{proof}</code></td></tr>
+      <tr><td>Frame around text</td><td><code>\fbox{text}</code>, fixed width <code>\framebox[3cm][c]{text}</code></td></tr>
+      <tr><td>Figure</td><td><code>figure</code> environment with <code>\includegraphics</code>, <code>\caption</code>, <code>\label</code></td></tr>
+      <tr><td>Cross reference</td><td><code>\label{key}</code> then <code>\ref{key}</code> (or <code>\eqref</code>, <code>\pageref</code>)</td></tr>
+      <tr><td>Footnote</td><td><code>\footnote{text}</code></td></tr>
+    </tbody>
+  </table>
+</section>
+<section class="part" id="errors">
+  <h2>Appendix B. Common mistakes</h2>
+  <table>
+    <thead><tr><th>Symptom</th><th>Likely cause and fix</th></tr></thead>
+    <tbody>
+      <tr><td>Extra spaces disappear after a command word</td><td>TeX eats spaces after a command. Write <code>\LaTeX\ is</code>.</td></tr>
+      <tr><td>Whole rest of the page is bold, or in one font</td><td>A declaration such as <code>\bfseries</code> lasts until the end of its group. Wrap it in braces with its text: <code>{\bfseries text}</code>.</td></tr>
+      <tr><td>A % removes the end of a line</td><td>A <code>%</code> starts a comment. Write <code>\%</code> to print it.</td></tr>
+      <tr><td>Superscript or subscript shows the wrong letters</td><td>Missing braces: <code>x^{mn}</code>, not <code>x^mn</code>.</td></tr>
+      <tr><td>A list item loses its text inside square brackets</td><td>The brackets are read as an item label. Put the maths in <code>$...$</code>.</td></tr>
+      <tr><td>Enumerate labels show (11), (22)</td><td>A letter in the label argument is a numbering code. Wrap it in braces.</td></tr>
+      <tr><td>Theorem note is wrong, e.g. "(0,1)"</td><td>The same square-bracket trap. Use <code>$[0,1]$</code> at the start of the theorem.</td></tr>
+      <tr><td>Table columns misaligned</td><td>Count the <code>&amp;</code> signs: each row needs one fewer than the number of columns. Check that every row ends with <code>\\</code>.</td></tr>
+      <tr><td>"?" in place of a citation or reference</td><td>Run LaTeX again. For citations, run the bibtex step first.</td></tr>
+      <tr><td><code>\index</code> gives no index</td><td>Add <code>\makeindex</code> in the preamble, and run makeindex between two LaTeX runs.</td></tr>
+      <tr><td>Error "Missing $ inserted"</td><td>A maths symbol (such as <code>_</code>, <code>^</code>) is used outside maths. Wrap it in <code>$...$</code>.</td></tr>
+      <tr><td>Error at <code>\right</code></td><td>Every <code>\left</code> needs a matching <code>\right</code> (use <code>\right.</code> to hide one).</td></tr>
+      <tr><td>Error "Undefined control sequence"</td><td>A command is misspelt, or its package is not loaded (for example <code>\mathbb</code> needs amssymb).</td></tr>
+      <tr><td>Overfull box warning</td><td>A line is wider than the text. Reword or allow a break; an <code>\fbox</code> never breaks.</td></tr>
+    </tbody>
+  </table>
+  <div class="plain">
+    <strong>First error wins.</strong> When compilation fails, read the log file. The first error message is the real one; later messages are often side effects.
+  </div>
+</section>
+<section class="part" id="compile">
+  <h2>Appendix C. Compiling step by step</h2>
+  <p>The primer's workflow, with the commands it uses (on GNU/Linux, typed in a terminal):</p>
+  <table>
+    <thead><tr><th>Document has</th><th>Run</th></tr></thead>
+    <tbody>
+      <tr><td>Only text</td><td><code>latex file</code> (or <code>pdflatex file</code>)</td></tr>
+      <tr><td>Contents, cross references, figure list</td><td>Compile twice</td></tr>
+      <tr><td>Bibliography with <code>thebibliography</code></td><td>Compile twice</td></tr>
+      <tr><td>Bibliography with BibTeX</td><td><code>latex</code>, <code>bibtex</code>, <code>latex</code>, <code>latex</code></td></tr>
+      <tr><td>Index</td><td><code>latex</code>, <code>makeindex</code>, <code>latex</code></td></tr>
+      <tr><td>Both BibTeX and an index</td><td><code>latex</code>, <code>bibtex</code>, <code>makeindex</code>, <code>latex</code>, <code>latex</code></td></tr>
+    </tbody>
+  </table>
+  <p>The primer also shows the viewing step: <code>xdvi file</code> opens a DVI file in X Window. With <code>pdflatex</code> the output is a PDF, which any PDF viewer opens.</p>
+  <div class="remember">
+    <strong>Why twice?</strong> LaTeX writes the page numbers and labels to auxiliary files during one run and reads them in the next. Until the second run, the numbers may be out of date. When in doubt, run it again until the log says "Rerun" no more.
+  </div>
+  <footer>Study guide based on <em>LaTeX Tutorial: A Primer</em>, Indian TeX Users Group (Sayahna Foundation, 2020 edition). Prepared for MAT5FS112.</footer>
+</section>
+</main>
+</body>
+</html>

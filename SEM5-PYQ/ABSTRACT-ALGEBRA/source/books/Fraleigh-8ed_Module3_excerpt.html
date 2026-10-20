@@ -1,0 +1,613 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fraleigh, A First Course in Abstract Algebra (8th ed.), Module 3 excerpt</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+  :root {
+    --page-bg: #d9d9d4;
+    --paper: #fdfdfb;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --page-bg: #2b2b2b;
+      --paper: #f4f3ee;
+      --ink: #111;
+      --rule: #444;
+      --note: #555;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page-bg: #2b2b2b;
+    --paper: #f4f3ee;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  body {
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--ink);
+    font-family: "Times New Roman", Times, "Liberation Serif", serif;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .sheet {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 12mm auto;
+    padding: 14mm 18mm 16mm;
+    box-sizing: border-box;
+    background: var(--paper);
+    box-shadow: 0 1px 6px rgba(0,0,0,.25);
+    position: relative;
+  }
+  .sheet + .sheet { margin-top: 0; }
+  .hdr {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: start;
+    font-size: 14px;
+  }
+  .code { font-size: 22px; font-weight: bold; letter-spacing: .5px; }
+  .pages { text-align: center; padding-top: 14px; }
+  .name { text-align: right; line-height: 2; }
+  .title { text-align: center; margin-top: 22px; }
+  .title .exam { font-size: 19px; font-weight: bold; letter-spacing: .3px; }
+  .title .sch { margin-top: 2px; }
+  .title .course { margin-top: 10px; font-size: 16px; }
+  .title .subject { margin-top: 6px; font-size: 16px; font-weight: bold; }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 16px;
+    font-size: 15px;
+  }
+  .sec { margin-top: 14px; }
+  .sec-head {
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    font-weight: bold;
+  }
+  .sec-head .num { font-weight: bold; }
+  .sec-head .body { font-weight: normal; }
+  .sec-head .body b { font-weight: bold; }
+  .sec-head .body i { font-style: italic; }
+  .sec-total { text-align: right; font-weight: normal; margin-top: 4px; }
+  .qs { margin-top: 6px; }
+  .q {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    margin-bottom: 7px;
+  }
+  .q .n { text-align: right; padding-right: 10px; }
+  .q p { margin: 0; }
+  .sub { margin-left: 22px; }
+  .cut { color: var(--note); }
+  .turn { text-align: right; font-weight: bold; margin-top: 26px; }
+  .fig {
+    display: block;
+    margin: 8px auto 2px 36px;
+    width: 230px;
+    height: auto;
+  }
+  .fig-cap { margin-left: 36px; font-size: 13px; color: var(--note); font-style: italic; }
+  .foot-note {
+    margin-top: 26px;
+    border-top: 1px solid var(--rule);
+    padding-top: 6px;
+    font-size: 12px;
+    color: var(--note);
+  }
+  .pno { text-align: center; font-size: 15px; margin-bottom: 4px; }
+  .pno-hdr { position: absolute; top: 10mm; right: 18mm; font-weight: bold; font-size: 14px; }
+  @media print {
+    @page { size: A4; margin: 0; }
+    body { background: #fff; }
+    .sheet { margin: 0; box-shadow: none; width: 210mm; height: 297mm; min-height: 0; page-break-after: always; }
+    .sheet:last-child { page-break-after: auto; }
+  }
+  @media (max-width: 720px) {
+    .sheet { width: auto; margin: 0; padding: 14px 16px; min-height: 0; }
+    .hdr { grid-template-columns: 1fr; gap: 6px; }
+    .name { text-align: left; }
+    .pages { text-align: left; padding-top: 0; }
+  }
+</style>
+<style>
+  .sheet.book { height: auto; min-height: 297mm; text-align: justify; hyphens: auto; }
+  .sheet.book p { margin: 6px 0; }
+  .rh { display: flex; justify-content: space-between; font-size: 12px; color: var(--note);
+        border-bottom: 1px solid var(--rule); padding-bottom: 3px; margin-bottom: 12px; }
+  .chap { display: flex; background: #8a8a86; color: #fff; margin: 4px 0 16px; }
+  .chap .cn { background: #b4b4ae; padding: 10px 18px; font-size: 26px; }
+  .chap .ct { padding: 12px 16px; font-size: 22px; font-weight: bold; }
+  h2.sec { font-size: 20px; margin: 18px 0 8px; border-bottom: 2px solid var(--rule); padding-bottom: 3px; }
+  h3.sub { font-size: 16px; margin: 14px 0 6px; border-bottom: 1px solid var(--rule); padding-bottom: 2px; }
+  .eq { margin: 10px 0; text-align: center; overflow: visible; }
+  mjx-container[display="true"], mjx-container { overflow: visible !important; max-width: 100%; }
+  .sheet.book, .sheet.book .eq { overflow: visible; }
+  .eq.boxed { border: 1px solid var(--ink); display: block; padding: 4px 8px; }
+  .prob { background: #ecece7; border: 1px solid var(--rule); padding: 8px 12px; margin: 10px 0; text-align: left; }
+  .prob p { margin: 5px 0; }
+  .ex, .ex-cont { border: 1px solid var(--rule); padding: 8px 12px; margin: 10px 0; text-align: left; }
+  .ex p, .ex-cont p { margin: 5px 0; }
+  .figbox { border: 1px dashed var(--rule); padding: 10px; color: var(--note); font-size: 13px; text-align: center; margin: 8px 0; font-style: italic; }
+  figure { margin: 8px 0; text-align: center; }
+  figure > svg { width: 100%; max-width: 230px; height: auto; }
+  figure.single > svg { max-width: 260px; }
+  figure figcaption { font-size: 12px; font-style: italic; color: var(--note); }
+  .figrow { display: flex; flex-wrap: wrap; justify-content: space-around; gap: 8px; }
+  .figrow > figure { flex: 1 1 180px; max-width: 240px; }
+  .fn { font-size: 12.5px; color: var(--note); margin: 6px 0; text-align: left; }
+  .cont { font-size: 12.5px; color: var(--note); font-style: italic; }
+  .gapnote { font-size: 13px; color: var(--note); font-style: italic; border-left: 3px solid var(--rule); padding: 2px 8px; margin: 4px 0 10px; }
+  .flag { color: #8a1c1c; font-weight: bold; }
+  .answer { font-size: 14px; }
+  .tbl { border-collapse: collapse; width: 100%; font-size: 13px; margin: 6px 0; }
+  .tbl td, .tbl th { border: 1px solid var(--rule); padding: 3px 6px; text-align: center; }
+  .tbl th { background: #ebebe6; }
+  .tblcap { font-size: 13px; margin-top: 8px; text-align: left; }
+  .pno { text-align: center; font-size: 14px; margin-top: 14px; }
+  .intro p, .intro li { font-size: 14px; text-align: left; }
+  .intro table { border-collapse: collapse; width: 100%; font-size: 14px; margin: 6px 0; }
+  .intro td, .intro th { border: 1px solid var(--rule); padding: 4px 8px; text-align: left; }
+  @media print {
+    .sheet.book { height: auto !important; min-height: 0 !important; page-break-after: always; }
+  }
+  @media (max-width: 720px) {
+    .sheet.book .eq { overflow-x: auto; max-width: 100%; }
+    .sheet.book mjx-container[display="true"] { font-size: 85% !important; }
+    .sheet.book .figrow > figure { flex: 1 1 100%; max-width: 100%; }
+    .sheet.book { padding-left: 14px; padding-right: 14px; }
+  }
+</style>
+<style>
+  /* additions for the Fraleigh excerpt */
+  .sheet.book .rh span:first-child { font-style: normal; }
+  .num { font-weight: bold; margin-right: 4px; }
+  .secno { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--note); margin-right: 8px; }
+  .sec-rule { border-top: 1px solid var(--rule); margin: 14px 0 6px; }
+  .axiom { margin: 6px 0 2px; }
+  .toc-part { margin: 14px 0 18px; font-size: 14px; line-height: 1.6; }
+  .chap .cn { font-weight: bold; margin-right: 12px; letter-spacing: .1em; }
+  .tbl { border-collapse: collapse; margin: 8px auto 10px; font-size: 14px; }
+  .tbl th, .tbl td { border: 1px solid var(--rule); padding: 3px 9px; text-align: center; min-width: 26px; }
+  .tbl th { font-weight: bold; background: rgba(0,0,0,.03); }
+  .tbl.small th, .tbl.small td { padding: 2px 7px; font-size: 13px; }
+  .tbl.center { margin-left: auto; margin-right: auto; }
+  .tbl.float-r { float: right; margin: 4px 0 8px 18px; }
+  .tbl-row { display: flex; flex-wrap: wrap; gap: 18px; justify-content: center; align-items: flex-start; margin: 8px 0; }
+  .tbl caption { caption-side: top; text-align: center; margin-bottom: 4px; font-size: 13px; }
+  .exl { margin: 6px 0 6px 26px; padding-left: 4px; }
+  .exl > li { margin-bottom: 6px; }
+  .exl-plain, .conds { margin: 6px 0 6px 26px; }
+  ol.alpha { list-style: lower-alpha; margin: 4px 0 4px 22px; }
+  ol.tf { list-style: none; margin: 6px 0 6px 6px; }
+  ol.tf > li::before { content: "____ "; }
+  ul.bul, ul.plain { margin: 4px 0 4px 24px; }
+  ul.plain { list-style: none; margin-left: 12px; }
+  .indent { text-indent: 22px; }
+  .center { text-align: center; }
+  .hbox { border: 2px double var(--rule); padding: 8px 12px 10px; margin: 12px 0 14px; clear: both; }
+  .hbox-title { font-weight: bold; margin-bottom: 4px; }
+  .hbox-cols { columns: 2; column-gap: 22px; font-size: 14px; line-height: 1.42; text-align: justify; }
+  .hbox-cols p { margin: 0 0 6px; }
+  .fn { font-size: 12px; color: var(--note); border-top: 1px solid var(--rule); margin-top: 18px; padding-top: 6px; }
+  sup { font-size: 75%; }
+  @media (max-width: 720px) { .hbox-cols { columns: 1; } }
+</style>
+</head>
+<body>
+<style>
+  .exl { margin: 4px 0 4px 0; text-align: left; }
+  .exl.sub { margin-left: 22px; }
+  .center { text-align: center; }
+  .printed { color: #8a1c1c; font-style: italic; font-size: 12px; }
+  .trim, .module3 { color: var(--note); font-style: italic; font-size: 13px; border-left: 3px solid var(--rule); padding: 2px 8px; margin: 8px 0; }
+  .cont { font-size: 12.5px; color: var(--note); font-style: italic; }
+  .tblrow { display: flex; flex-wrap: wrap; gap: 24px; justify-content: space-around; align-items: flex-start; }
+  .tcap { font-size: 13px; text-align: center; margin: 6px 0 2px; }
+  .figrow11 { display: flex; flex-wrap: wrap; gap: 24px; justify-content: space-around; }
+  .figrow11 > div { flex: 1 1 200px; text-align: center; }
+  .fig10, .fig527, .fig529, .fig63, .fig619, .fig820, .fig821, .fig826, .fig827 { margin: 8px 0; text-align: center; }
+  .fig527, .fig529, .fig820, .fig821, .fig826 { font-size: 13px; }
+  .hist { border: 1px solid var(--ink); padding: 8px 10px; margin: 8px 0; font-size: 13.5px; }
+  .hist-h { font-weight: bold; letter-spacing: .5px; margin-bottom: 4px; }
+  ol.cond { margin: 4px 0 4px 24px; padding: 0; }
+  .part { border: 1px solid var(--rule); padding: 10px 12px; margin: 10px 0; }
+  .part .pn { font-weight: bold; margin-right: 12px; letter-spacing: 1px; }
+  .part .pt { font-size: 18px; font-weight: bold; }
+  .part .pl { margin: 6px 0 0 0; padding-left: 18px; font-size: 14px; }
+  table.tbl td, table.tbl th { border: 1px solid var(--rule); padding: 2px 6px; }
+  table.tbl { border-collapse: collapse; margin: 6px auto; font-size: 13.5px; }
+  table.tbl th { font-weight: bold; }
+  .sheet.book h2.sec { font-size: 20px; }
+  .chap .cn { font-size: 26px; }
+  .sheet.book .sub-title { font-weight: bold; }
+  .sheet.book td { vertical-align: middle; }
+</style>
+<main>
+<div class="sheet book intro" id="contents">
+  <div class="rh"><span>Contents</span><span>Fraleigh, <i>A First Course in Abstract Algebra</i> (8th ed.)</span></div>
+  <h2 class="sec">Module 3 excerpt, page by page</h2>
+  <p>This file converts 20 sheets of the 8th edition copy on disk: printed pages 43&ndash;46 (Section 4, permutation groups and disjoint cycles), 82&ndash;84 (Section 8, even and odd permutations and the alternating groups; these sheets are copied from the Module 2 excerpt, not re-transcribed), and 97&ndash;104 (Section 10, cosets and the Theorem of Lagrange, with Exercises 46&ndash;55 of Section 9 that open printed page 97 and Exercises 1&ndash;46 of Section 10). The printed page is the PDF page minus 17 (PDF 60 = printed 43; PDF 121 = printed 104). Each sheet is headed with the printed page number.</p>
+  <p><b>Edition warning.</b> The syllabus (MAT5CJ302) names the <b>7th edition</b> and cites its section numbers (Module III: Section 9 items 13&ndash;14, Section 10 items 15&ndash;16). The file on disk is the <b>8th edition</b>, where <b>Section 9 is <i>Finitely Generated Abelian Groups</i></b>. The orbits, cycles and alternating-group material of the 7th-edition Section 9 is in the 8th edition in Section 4 (4.8&ndash;4.15, cycle notation) and Section 8 (8.17&ndash;8.25). Section 10 keeps its number and its item numbering: syllabus items 15 (10.1&ndash;10.9) and 16 (10.10&ndash;10.14) match 8th-ed 10.1&ndash;10.9 and 10.10&ndash;10.14 by content and by number. Items are matched by content.</p>
+  <table>
+    <tr><th>Excerpt sheets</th><th>Printed pages</th><th>Content (8th edition)</th></tr>
+    <tr><td>PDF 60&ndash;63</td><td>43&ndash;46</td><td>4.8 (S_A is a group), the warning on products (names Exercise 34, printed 52), 4.9 (S_n), two-row and disjoint cycle notation, 4.10&ndash;4.14 (examples), Table 4.15 (S_3)</td></tr>
+    <tr><td>PDF 99&ndash;101 (copied from the Module 2 excerpt)</td><td>82&ndash;84</td><td>8.19 (even and odd, orbit counting; names Exercise 42), Figures 8.20, 8.21, 8.22, 8.23, 8.24 (sign; names Exercise 52), 8.25 (the alternating group)</td></tr>
+    <tr><td>PDF 114&ndash;117</td><td>97&ndash;100</td><td>Exercises 46&ndash;55 (Section 9 end, printed 97); Section 10: 10.1 to 10.13 (equivalence, cosets, Lagrange, index)</td></tr>
+    <tr><td>PDF 118&ndash;121</td><td>101&ndash;104</td><td>10.14 and 10.15 (tables), 10.16 (D_3 table), 10.17 to 10.20; Exercises 1&ndash;46 of Section 10 (Exercise 40 is named in 10.10)</td></tr>
+  </table>
+  <p><b>Where the syllabus items fall.</b></p>
+  <table>
+    <tr><th>Syllabus item (7th ed.)</th><th>8th-ed content</th><th>Printed pages</th></tr>
+    <tr><td>13 Orbits, cycles (up to 9.10)</td><td>4.8&ndash;4.15 (permutation groups, S_n, disjoint cycles, products, inverses, S_3 table). The orbit definition is 8.17&ndash;8.18 (Module II, already in the Module 2 notes)</td><td>43&ndash;46</td></tr>
+    <tr><td>14 Alternating groups (9.11&ndash;9.21)</td><td>8.19&ndash;8.25 (even and odd permutations, A_n)</td><td>82&ndash;84</td></tr>
+    <tr><td>15 Cosets, Lagrange (up to 10.9)</td><td>10.1&ndash;10.9</td><td>97&ndash;100</td></tr>
+    <tr><td>16 Cosets, Lagrange (10.10&ndash;10.14)</td><td>10.10&ndash;10.14</td><td>100&ndash;101</td></tr>
+  </table>
+  <p><b>Beyond the syllabus items (kept in Module III):</b> 10.15&ndash;10.20 (the rest of the cosets subsection: the table of shadings, the D_3 coset table, the right-coset and kernel theorem 10.17, its corollary 10.19 and Example 10.20). Theorem 10.17 is the link to the homomorphisms of Module IV.</p>
+  <p><b>Not in Module III:</b> printed 39&ndash;42 (Section 4.1 to 4.7: the first examples of nonabelian groups) and printed 47&ndash;52 (the dihedral groups D_n, 4.16 onward, and Section 4 exercises); printed 52 (Section 4 exercises 32&ndash;38, including Exercise 34); printed 85&ndash;88 (Section 8 exercises, including 42 and 52, copied in the notes from the Module 2 excerpt); Section 9 (Finitely Generated Abelian Groups, printed 88&ndash;96); Section 11 (Plane Isometries, printed 105&ndash;112); Section 12 onward. <b>Gaps flagged:</b> printed 39&ndash;47 (4.1&ndash;4.7 and D_n) belong to no syllabus module as far as the syllabus text shows, and Section 9 and Section 11 belong to no module either.</p>
+  <p><b>Conventions.</b></p>
+  <ul>
+    <li>Numbers are the book&rsquo;s own (4.8, 4.15 Table, 8.19, 10.7 Theorem, 10.20 Example).</li>
+    <li>Exercises are kept in full with their printed numbers on the pages that carry them (Section 10: 1&ndash;55, on printed 97, 102, 103, 104).</li>
+    <li>Tables are HTML tables with MathJax entries. The S_3 table (4.15) and the D_3 table (10.16) are typed from the page; the S_3 table was checked by computing it.</li>
+    <li>Figures are described with their labels, not redrawn. Printed typos are kept and marked <span class="printed">[as printed]</span>.</li>
+  </ul>
+  <p>This is a personal study excerpt. It is not for distribution.</p>
+  <div class="pno">1</div>
+</div>
+<div class="sheet book" id="pdf-p60">
+  <div class="rh"><span>Section 4 &middot; Nonabelian Examples</span><span>43</span></div>
+  <p>We now show that the collection of all permutations of a nonempty set $A$ forms a group under this permutation multiplication.</p>
+  <p><span class="num">4.8 Theorem</span> Let $A$ be a nonempty set, and let $S_A$ be the collection of all permutations of $A$. Then $S_A$ is a group under permutation multiplication.</p>
+  <p><i>Proof.</i> We have shown that composition of two permutations of $A$ yields a permutation of $A$, so $S_A$ is closed under permutation multiplication. Now permutation multiplication is defined as function composition, and in Section 1, we showed that <i>function composition is associative</i>. Hence $\mathcal{G}_1$ is satisfied. The permutation $\iota$ such that $\iota(a) = a$, for all $a \in A$ acts as identity. Therefore $\mathcal{G}_2$ is satisfied. For a permutation $\sigma$, the inverse function, $\sigma^{-1}$, is the permutation that reverses the direction of the mapping $\sigma$, that is, $\sigma^{-1}(a)$ is the element $a'$ of $A$ such that $a = \sigma(a')$. The existence of exactly one such element $a'$ is a consequence of the fact that, as a function, $\sigma$ is both one-to-one and onto. For each $a \in A$ we have</p>
+  <p class="center">$\iota(a) = a = \sigma(a') = \sigma(\sigma^{-1}(a)) = (\sigma\sigma^{-1})(a)$</p>
+  <p>and also</p>
+  <p class="center">$\iota(a') = a' = \sigma^{-1}(a) = \sigma^{-1}(\sigma(a')) = (\sigma^{-1}\sigma)(a')$,</p>
+  <p>so that $\sigma^{-1}\sigma$ and $\sigma\sigma^{-1}$ are both the permutation $\iota$. Thus $\mathcal{G}_3$ is satisfied. &#9670;</p>
+  <p><b>Warning:</b> Some texts compute a product $\sigma\mu$ of permutations in left-to-right order, so that $(\sigma\mu)(a) = \mu(\sigma(a))$. Thus the permutation they get for $\sigma\mu$ is the one we would get by computing $\mu\sigma$. Exercise 34 asks us to check in two ways that we still get a group. If you refer to another text on this material, be sure to check its order for permutation multiplication.</p>
+  <p>There was nothing in our definition of a permutation to require that the set $A$ be finite. However, most of our examples of permutation groups will be concerned with permutations of finite sets. Note that the <i>structure</i> of the group $S_A$ is concerned only with the number of elements in the set $A$, and not what the elements in $A$ are. If sets $A$ and $B$ have the same cardinality, then $S_A \simeq S_B$. To define an isomorphism $\phi : S_A \to S_B$, we let $f : A \to B$ be a one-to-one function mapping $A$ onto $B$, which establishes that $A$ and $B$ have the same cardinality. For $\sigma \in S_A$, we let $\phi(\sigma)$ be the permutation $\bar\sigma \in S_B$ such that $\bar\sigma(f(a)) = f(\sigma(a))$ for all $a \in A$. To illustrate this for $A = \{1, 2, 3\}$ and $B = \{\#, \$, \%\}$ and the function $f : A \to B$ defined as</p>
+  <p class="center">$f(1) = \#, \quad f(2) = \$, \quad f(3) = \%,$</p>
+  <p>$\phi$ maps $\begin{pmatrix}1&2&3\\3&2&1\end{pmatrix}$ into $\begin{pmatrix}\#&\$&\%\\\%&\$&\#\end{pmatrix}$.</p>
+  <p>We simply rename the elements of $A$ in our two-row notation by elements in $B$ using the renaming function $f$, thus renaming elements of $S_A$ to be those of $S_B$. We can take $\{1, 2, 3, \cdots, n\}$ to be a prototype for a finite set $A$ of $n$ elements.</p>
+  <p><span class="num">4.9 Definition</span> Let $A$ be the finite set $\{1, 2, \cdots, n\}$. The group of all permutations of $A$ is the <b>symmetric group on $n$ letters</b>, and is denoted by $S_n$. &#9632;</p>
+  <p>Note that $S_n$ has $n!$ elements, where $n! = n(n-1)(n-2)\cdots(3)(2)(1)$.</p>
+</div>
+
+<div class="sheet book" id="pdf-p61">
+  <div class="rh"><span>Part I &middot; Groups and Subgroups</span><span>44</span></div>
+  <p class="center">Let $\sigma = \begin{pmatrix}1&2&3\\2&1&3\end{pmatrix}$ and $\tau = \begin{pmatrix}1&2&3\\1&3&2\end{pmatrix}$. Then $\sigma\tau(1) = \sigma(1) = 2$ and $\tau\sigma(1) = 3$,</p>
+  <p>which says $\sigma\tau \ne \tau\sigma$. Therefore $S_3$ is not abelian. We have seen that any group with at most four elements is abelian. Furthermore we will see later that up to isomorphism, the abelian group $\mathbb{Z}_5$ is the only group of order $5$. Thus $S_3$ is the smallest group which is not abelian.</p>
+  <p><span class="num">4.10 Example</span> Suppose that $\sigma = \begin{pmatrix}1&2&3&4&5&6\\3&2&6&1&4&5\end{pmatrix}$. We find the inverse $\sigma^{-1}$. We saw in the proof of Theorem 4.8 that the inverse function of a permutation is the group inverse. So it is easy to find inverses for permutations, we simply turn the tables! That is, we switch the top and bottom rows and sort the columns so the top row is in order:</p>
+  <p class="center">$\sigma^{-1} = \begin{pmatrix}1&2&3&4&5&6\\4&2&1&5&6&3\end{pmatrix}$. &#9650;</p>
+  <h3 class="sub">Disjoint Cycles</h3>
+  <p>There is a more efficient way of specifying the action of a permutation. In the two-row notation that we have been using, we list each number $1$ through $n$ twice, once in the top row and once in the bottom row. Disjoint cycle notation allows us to write the permutation using each number only once. We illustrate with an example. Let $\sigma = \begin{pmatrix}1&2&3&4&5&6\\3&4&6&2&5&1\end{pmatrix}$. To write in disjoint cycle notation we start by writing</p>
+  <p class="center">$(1$</p>
+  <p>We see that $\sigma(1) = 3$, so we place $3$ just to the right of $1$:</p>
+  <p class="center">$(1, 3$</p>
+  <p>Now we see that $\sigma$ maps $3$ to $6$, so we write:</p>
+  <p class="center">$(1, 3, 6$</p>
+  <p>Our permutation maps $6$ to $1$, but there is no reason to write $1$ again, so we just place a parenthesis after the $6$ to indicate that $6$ maps back to the first element listed:</p>
+  <p class="center">$(1, 3, 6)$</p>
+  <p>This is called a <b>cycle</b> because when we apply $\sigma$ repeatedly, we cycle through the numbers $1$, $3$, and $6$. A cycle containing exactly $k$ numbers is called a <b>$k$-cycle</b>. So the cycle $(1, 3, 6)$ is a $3$-cycle. This is not the end of the story for $\sigma$ because we have not indicated that $2$ maps to $4$. So we start another cycle and write $(1, 3, 6)(2, 4$ to indicate that $\sigma$ maps $2$ to $4$. Since $4$ maps back to $2$, we obtain a $2$-cycle:</p>
+  <p class="center">$(1, 3, 6)(2, 4)$</p>
+  <p>We still have not indicated what $\sigma$ does to $5$. We can write $(1, 3, 6)(2, 4)(5)$ to indicate that $5$ maps to itself, but usually we will simply leave out $1$-cycles with the understanding that any number not listed maps to itself. So in disjoint cycle notation</p>
+  <p class="center">$\sigma = (1, 3, 6)(2, 4)$.</p>
+</div>
+
+<div class="sheet book" id="pdf-p62">
+  <div class="rh"><span>Section 4 &middot; Nonabelian Examples</span><span>45</span></div>
+  <p>We see that $\sigma$ is a product of a $3$-cycle and a $2$-cycle. Sometimes we refer to a $2$-cycle as a <b>transposition</b>.</p>
+  <p>A collection of cycles is said to be <b>disjoint</b> if no entry is in more than one cycle. Note that $\sigma$ could also be written as $(3, 6, 1)(4, 2)$, $(2, 4)(1, 3, 6)$, or in a number of other ways. In general it doesn't matter which order we write the disjoint cycles, and inside each cycle we can start with any number as long as we keep the cyclic order the same. It is clear that any permutation in $S_n$ can be written in disjoint cycle notation and that the representation is unique up to the order the cycles are written and the cyclic order within each cycle.</p>
+  <p><span class="num">4.11 Example</span> In disjoint cycle notation, $\sigma \in S_9$ is written as $(1, 5, 2, 7)(3, 4, 9)$. Let us rewrite $\sigma$ in two-row notation. Reading off the disjoint cycle notation we see that $\sigma(1) = 5$, $\sigma(5) = 2$, $\sigma(2) = 7$, $\sigma(7) = 1$, $\sigma(3) = 4$, $\sigma(4) = 9$, and $\sigma(9) = 3$. Since $6$ and $8$ do not appear in either cycle, we know that $\sigma(6) = 6$ and $\sigma(8) = 8$. Therefore,</p>
+  <p class="center">$\sigma = \begin{pmatrix}1&2&3&4&5&6&7&8&9\\5&7&4&9&2&6&1&8&3\end{pmatrix}$. &#9650;</p>
+  <p>The operation that makes $S_n$ a group is composition of functions. Keeping this in mind, we can see how to multiply permutations written in disjoint cycle notation.</p>
+  <p><span class="num">4.12 Example</span> Let $\sigma = (1, 5, 3, 2, 6)$ and $\tau = (1, 2, 4, 3, 6)$ in $S_6$. Let us find $\sigma\tau$ in disjoint cycle notation without resorting to using two-row notation. So</p>
+  <p class="center">$\sigma\tau = (1, 5, 3, 2, 6)(1, 2, 4, 3, 6)$.</p>
+  <p>We need to rewrite this product in disjoint cycles. So we ask where $1$ is mapped. Since the operation is function composition, we see that the cycle $\tau$ on the right sends $1$ to $2$ and then the cycle on the left sends $2$ to $6$. So $\sigma\tau(1) = 6$ and we start our cycle by writing $(1, 6$. Now we see that $\tau$ maps $6$ to $1$ and $\sigma$ maps $1$ to $5$, so we write $(1, 6, 5$. We note that $5$ is not in the cycle $(1, 2, 4, 3, 6)$, so $\tau(5) = 5$ and $\sigma\tau(5) = \sigma(5) = 3$. So we write $(1, 6, 5, 3$. Continuing in the same manner, we see that $3$ maps to $1$ and we complete the first cycle: $(1, 6, 5, 3)$.</p>
+  <p>We are now ready to start the second cycle. We note that we have still not seen where $2$ maps, so we start the next cycle with $2$ and we write</p>
+  <p class="center">$\sigma\tau = (1, 5, 3, 2, 6)(1, 2, 4, 3, 6) = (1, 6, 5, 3)(2, 4)$</p>
+  <p>using the same method we used for the first cycle. We know we are through since we have used every number $1$ through $6$. &#9650;</p>
+  <p>Example 4.12 illustrates the process of multiplying permutations in general. We move from right to left between the cycles, and within the cycles we move from left to right.</p>
+  <p><span class="num">4.13 Example</span> We compute the product of the permutations</p>
+  <p class="center">$\sigma = (1, 5)(2, 4)(1, 4, 3)(2, 5)(4, 2, 1)$</p>
+  <p>using disjoint cycle notation. We start by seeing where $1$ is mapped. The first cycle on the right maps $1$ to $4$. We are using function composition, so we next check what $(2, 5)$ does to $4$, which is nothing. So we move to the cycle $(1, 4, 3)$ and note that $4$ is mapped to $3$. Next, $3$ is not in the cycle $(2, 4)$ and so $(2, 4)$ does not move $3$. Finally, $(1, 5)$ also does not move $3$ and we conclude that $\sigma(1) = 3$. We next need to determine where $3$ is mapped by $\sigma$ and continue until we arrive at</p>
+  <p class="center">$\sigma = (1, 3, 5, 4)(2) = (1, 3, 5, 4)$. &#9650;</p>
+  <p>It is interesting to note that in Example 4.13 the group was never specified. The same calculation is valid whether the group is $S_5$, $S_6$, or $S_n$ for any $n \ge 5$.</p>
+</div>
+
+<div class="sheet book" id="pdf-p63">
+  <div class="rh"><span>Section 4 &middot; Nonabelian Examples</span><span>46</span></div>
+  <p><span class="num">4.14 Example</span> We compute the inverse of $\sigma = (1, 5, 7)(3, 8, 2, 4, 6)$. We first note that in general for a group $(ab)^{-1} = b^{-1}a^{-1}$, so</p>
+  <p class="center">$\sigma^{-1} = (3, 8, 2, 4, 6)^{-1}(1, 5, 7)^{-1}$.</p>
+  <p>The inverse of a cycle is simply the cycle written backward:</p>
+  <p class="center">$\sigma^{-1} = (6, 4, 2, 8, 3)(7, 5, 1)$.</p>
+  <p>This is a perfectly good way of writing $\sigma^{-1}$, but since disjoint cycles commute and we can start each cycle with any entry in the cycle, we could write</p>
+  <p class="center">$\sigma^{-1} = (1, 7, 5)(2, 8, 3, 6, 4)$. &#9650;</p>
+  <p>With a little practice, computing products of permutations in disjoint cycle notation becomes routine. We give the table for $S_3$.</p>
+  <div class="tcap"><span class="num">4.15 Table</span></div>
+  <table class="tbl center">
+    <tr><th>$S_3$, $\circ$</th><th>$\iota$</th><th>$(1,2,3)$</th><th>$(1,3,2)$</th><th>$(1,2)$</th><th>$(1,3)$</th><th>$(2,3)$</th></tr>
+    <tr><th>$\iota$</th><td>$\iota$</td><td>$(1,2,3)$</td><td>$(1,3,2)$</td><td>$(1,2)$</td><td>$(1,3)$</td><td>$(2,3)$</td></tr>
+    <tr><th>$(1,2,3)$</th><td>$(1,2,3)$</td><td>$(1,3,2)$</td><td>$\iota$</td><td>$(1,3)$</td><td>$(2,3)$</td><td>$(1,2)$</td></tr>
+    <tr><th>$(1,3,2)$</th><td>$(1,3,2)$</td><td>$\iota$</td><td>$(1,2,3)$</td><td>$(2,3)$</td><td>$(1,2)$</td><td>$(1,3)$</td></tr>
+    <tr><th>$(1,2)$</th><td>$(1,2)$</td><td>$(2,3)$</td><td>$(1,3)$</td><td>$\iota$</td><td>$(1,3,2)$</td><td>$(1,2,3)$</td></tr>
+    <tr><th>$(1,3)$</th><td>$(1,3)$</td><td>$(1,2)$</td><td>$(2,3)$</td><td>$(1,2,3)$</td><td>$\iota$</td><td>$(1,3,2)$</td></tr>
+    <tr><th>$(2,3)$</th><td>$(2,3)$</td><td>$(1,3)$</td><td>$(1,2)$</td><td>$(1,3,2)$</td><td>$(1,2,3)$</td><td>$\iota$</td></tr></table>
+  <p>Again we can see that $S_3$ is not abelian since the table is not symmetric about the main diagonal. We also notice that although disjoint cycles commute, the same cannot be said for cycles that are not disjoint. For example we see in Table 4.15 that $(1, 2)(2, 3) = (1, 2, 3) \ne (1, 3, 2) = (2, 3)(1, 2)$.</p>
+</div>
+<div class="sheet book" id="pdf-p99">
+  <div class="rh"><span>Part II &middot; Structure of Groups</span><span>82</span></div>
+  <p><span class="num">8.17 Example</span> In $S_n$ for $n \ge 2$, the identity permutation is the product $(1, 2)(1, 2)$ of transpositions. &#9650;</p>
+  <p>We have seen that every permutation of a finite set with at least two elements is a product of transpositions. The transpositions may not be disjoint, and a representation of the permutation in this way is not unique. For example, we can always insert at the beginning the transposition $(1, 2)$ twice, because $(1, 2)(1, 2)$ is the identity permutation. What is true is that the number of transpositions used to represent a given permutation must either always be even or always be odd. This is an important fact. The proof involves counting orbits and was suggested by David M. Bloom.</p>
+  <p>Let $\sigma \in S_A$ and $a \in A$. We let the <b>orbit</b> of $a$ be the set $\{\sigma^k(a) \mid k \in \mathbb{Z}\}$. In the case of $\sigma \in S_n$, a simple way to think of the orbit of $a$ is to think of the elements in the cycle containing $a$ in the disjoint cycle representation of $\sigma$.</p>
+  <p><span class="num">8.18 Example</span> Let $\sigma = (1, 2, 6)(3, 5) \in S_6$. Then the orbit of $1$ is the set $\{1, 2, 6\}$, which is also the orbit of $2$ and the orbit of $6$. The set $\{3, 5\}$ is the orbit of $3$ and the orbit of $5$. What about the orbit of $4$? Recall that if we include $1$-cycles, $\sigma = (1, 2, 6)(3, 5)(4)$, which says the orbit of $4$ is $\{4\}$. &#9650;</p>
+  <p class="module3">[Module 3 material begins here: 8.19 and its proof, Figures 8.20 and 8.21, and the alternating groups in 8.19 to 8.25. Outside Module 2. Transcribed as printed for the excerpt.]</p>
+  <p><span class="num">8.19 Theorem</span> No permutation in $S_n$ can be expressed both as a product of an even number of transpositions and as a product of an odd number of transpositions.</p>
+  <p><i>Proof.</i> Let $\sigma \in S_n$ and let $\tau = (i, j)$ be a transposition in $S_n$. We claim that the number of orbits of $\sigma$ and of $\tau\sigma$ differ by $1$.</p>
+  <p><b>Case I.</b> Suppose $i$ and $j$ are in different orbits of $\sigma$. Write $\sigma$ as a product of disjoint cycles, the first of which contains $j$ and the second of which contains $i$, symbolized by the two circles in Fig. 8.20. We may write the product of these two cycles symbolically as</p>
+  <p class="center">$(b, j, \times, \times, \times)(a, i, \times, \times)$</p>
+  <p>where the symbols $\times$ denote possible other elements in these orbits.</p>
+  <div class="fig820"><span class="num">8.20 Figure</span><div class="figbox">Two circles joined by a pinched middle, with points labelled $j$, $a$, $b$, and $i$. Not redrawn.</div></div>
+  <p>Computing the product of the first three cycles in $\tau\sigma = (i, j)\sigma$, we obtain</p>
+  <p class="center">$(i, j)(b, j, \times, \times, \times)(a, i, \times, \times) = (a, j, \times, \times, \times, b, i, \times, \times)$.</p>
+  <p>The original 2 orbits have been joined to form just one in $\tau\sigma$ as symbolized in Fig. 8.20. Exercise 42 asks us to repeat the computation to show that the same thing happens if either one or both of $i$ and $j$ should be the only element of their orbit in $\sigma$.</p>
+  <p><b>Case II.</b> Suppose $i$ and $j$ are in the same orbit of $\sigma$. We can then write $\sigma$ as a product of disjoint cycles with the first cycle of the form</p>
+  <p class="center">$(a, i, \times, \times, \times, b, j, \times, \times)$.</p>
+</div>
+
+<div class="sheet book" id="pdf-p100">
+  <div class="rh"><span>Section 8 &middot; Groups of Permutations</span><span>83</span></div>
+  <p class="module3">[Module 3 material, as printed.]</p>
+  <div class="fig821"><span class="num">8.21 Figure</span><div class="figbox">A single dashed-and-solid loop split into two loops, with points labelled $i$, $a$, $b$, and $j$. Not redrawn.</div></div>
+  <p>shown symbolically by the circle in Fig. 8.20. Computing the product of the first two cycles in $\tau\sigma = (i, j)\sigma$, we obtain</p>
+  <p class="center">$(i, j)(a, i, \times, \times, \times, b, j, \times, \times) = (a, j, \times, \times, \times)(b, i, \times, \times, \times)$.</p>
+  <p>The original single orbit has been split into two as symbolized in Fig. 8.21.</p>
+  <p>We have shown that the number of orbits of $\tau\sigma$ differs from the number of orbits of $\sigma$ by $1$. The identity permutation $\iota$ has $n$ orbits, because each element is the only member of its orbit. Now the number of orbits of a given permutation $\sigma \in S_n$ differs from $n$ by either an even or an odd number, but not both. Thus it is impossible to write $\sigma = \tau_1\tau_2\tau_3 \cdots \tau_m\iota$ where the $\tau_k$ are transpositions in two ways, once with $m$ even and once with $m$ odd. &#9670;</p>
+  <p><span class="num">8.22 Definition</span> A permutation of a finite set is <b>even</b> or <b>odd</b> according to whether it can be expressed as a product of an even number of transpositions or the product of an odd number of transpositions, respectively. &#9632;</p>
+  <p><span class="num">8.23 Example</span> The identity permutation $\iota$ in $S_n$ is an even permutation since we have $\iota = (1, 2)(1, 2)$. If $n = 1$ so that we cannot form this product, we define $\iota$ to be even. On the other hand, the permutation $(1, 4, 5, 6)(2, 1, 5)$ in $S_6$ can be written as</p>
+  <p class="center">$(1, 4, 5, 6)(2, 1, 5) = (1, 6)(1, 5)(1, 4)(2, 5)(2, 1)$,</p>
+  <p>which has five transpositions, so this is an odd permutation. &#9650;</p>
+  <h3 class="sub">The Alternating Groups</h3>
+  <p>We claim that for $n \ge 2$, the number of even permutations in $S_n$ is the same as the number of odd permutations; that is, $S_n$ is split equally and both numbers are $(n!)/2$. To show this, let $A_n$ be the set of even permutations in $S_n$ and let $B_n$ be the set of odd permutations for $n \ge 2$. We proceed to define a one-to-one function from $A_n$ onto $B_n$. This is exactly what is needed to show that $A_n$ and $B_n$ have the same number of elements.</p>
+  <p>Let $\tau$ be any fixed transposition in $S_n$; it exists since $n \ge 2$. We may as well suppose that $\tau = (1, 2)$. We define a function</p>
+  <p class="center">$\lambda_\tau : A_n \to B_n$</p>
+  <p>by</p>
+  <p class="center">$\lambda_\tau(\sigma) = \tau\sigma$,</p>
+  <p>that is, $\sigma \in A_n$ is mapped into $(1, 2)\sigma$ by $\lambda_\tau$. Observe that since $\sigma$ is even, the permutation $(1, 2)\sigma$ can be expressed as a product of a $(1 + \text{even number})$, or odd number, of transpositions, so $(1, 2)\sigma$ is indeed in $B_n$. If for $\sigma$ and $\mu$ in $A_n$ it is true that $\lambda_\tau(\sigma) = \lambda_\tau(\mu)$, then</p>
+  <p class="center">$(1, 2)\sigma = (1, 2)\mu$,</p>
+  <p>and since $S_n$ is a group, we have $\sigma = \mu$. Thus $\lambda_\tau$ is a one-to-one function. Finally,</p>
+  <p class="center">$\tau = (1, 2) = \tau^{-1}$,</p>
+  <p>so if $\rho \in B_n$, then</p>
+  <p class="center">$\tau^{-1}\rho \in A_n$,</p>
+</div>
+
+<div class="sheet book" id="pdf-p101">
+  <div class="rh"><span>Part II &middot; Structure of Groups</span><span>84</span></div>
+  <p>and</p>
+  <p class="center">$\lambda_\tau(\tau^{-1}\rho) = \tau(\tau^{-1}\rho) = \rho$.</p>
+  <p>Thus $\lambda_\tau$ maps onto $B_n$. Hence the number of elements in $A_n$ is the same as the number in $B_n$ since there is a one-to-one correspondence between the elements of the sets.</p>
+  <p>Note that the product of two even permutations is again even. Also since $n \ge 2$, $S_n$ has the transposition $(1, 2)$ and $\iota = (1, 2)(1, 2)$ is an even permutation. Finally, note that if $\sigma$ is expressed as a product of transpositions, the product of the same transpositions taken in just the opposite order is $\sigma^{-1}$. Thus if $\sigma$ is an even permutation, $\sigma^{-1}$ must also be even. Referring to Theorem 5.12, we see that we have proved the following statement.</p>
+  <p><span class="num">8.24 Theorem</span> If $n \ge 2$, then the collection of all even permutations of $\{1, 2, 3, \cdots, n\}$ forms a subgroup of order $n!/2$ of the symmetric group $S_n$.</p>
+  <p>We can define a function called the <b>sign of a permutation</b>, $\operatorname{sgn} : S_n \to \{1, -1\}$ by the formula</p>
+  <p class="center">$\operatorname{sgn}(\sigma) = \begin{cases} 1 &amp; \text{if } \sigma \text{ is even} \\ -1 &amp; \text{if } \sigma \text{ is odd.} \end{cases}$</p>
+  <p>Thinking of $\{1, -1\}$ as a group under multiplication, it is easy to see that $\operatorname{sgn}$ is a homomorphism. Since $1$ is the identity in the group $\{1, -1\}$, $\operatorname{Ker}(\operatorname{sgn}) = \operatorname{sgn}^{-1}[\{1\}]$ is a subgroup of $S_n$ consisting of all the even permutations. The homomorphism $\operatorname{sgn}$ is used in the standard way of defining the determinant of a square matrix. Exercise 52 asks you to prove some of the standard facts about determinants using this definition.</p>
+  <p><span class="num">8.25 Definition</span> The subgroup of $S_n$ consisting of the even permutations of $n$ letters is the <b>alternating group</b> $A_n$ <b>on $n$ letters</b>.</p>
+  <p>Both $S_n$ and $A_n$ are very important groups. Cayley's theorem shows that every finite group $G$ is structurally identical to some subgroup of $S_n$ for $n = |G|$. It can be shown that there are no formulas involving just radicals for solution of polynomial equations of degree $n$ for $n \ge 5$. This fact is actually due to the structure of $A_n$, surprising as that may seem!</p>
+</div>
+<div class="sheet book" id="pdf-p114">
+  <div class="rh"><span>Section 10 &middot; Cosets and the Theorem of Lagrange</span><span>97</span></div>
+  <h3 class="sub">Theory</h3>
+  <p class="exl"><b>46.</b> Prove that a direct product of abelian groups is abelian.</p>
+  <p class="exl"><b>47.</b> Let $G$ be an abelian group. Let $H$ be the subset of $G$ consisting of the identity $e$ together with all elements of $G$ of order $2$. Show that $H$ is a subgroup of $G$.</p>
+  <p class="exl"><b>48.</b> Following up the idea of Exercise 47 determine whether $H$ will always be a subgroup for every abelian group $G$ if $H$ consists of the identity $e$ together with all elements of $G$ of order $3$; of order $4$. For what positive integers $n$ will $H$ always be a subgroup for every abelian group $G$, if $H$ consists of the identity $e$ together with all elements of $G$ of order $n$? Compare with Exercise 54 of Section 5.</p>
+  <p class="exl"><b>49.</b> Find a counterexample of Exercise 47 with the hypothesis that $G$ is abelian omitted.</p>
+  <p>Let $H$ and $K$ be subgroups of a group $G$. Exercises 50 and 51 ask you to establish necessary and sufficient criteria for $G$ to appear as the internal direct product of $H$ and $K$.</p>
+  <p class="exl"><b>50.</b> Let $H$ and $K$ be groups and let $G = H \times K$. Recall that both $H$ and $K$ appear as subgroups of $G$ in a natural way. Show that these subgroups $H$ (actually $H \times \{e\}$) and $K$ (actually $\{e\} \times K$) have the following properties.</p>
+  <p class="exl sub"><b>a.</b> Every element of $G$ is of the form $hk$ for some $h \in H$ and $k \in K$. &nbsp; <b>b.</b> $hk = kh$ for all $h \in H$ and $k \in K$. &nbsp; <b>c.</b> $H \cap K = \{e\}$.</p>
+  <p class="exl"><b>51.</b> Let $H$ and $K$ be subgroups of a group $G$ satisfying the three properties listed in the preceding exercise. Show that for each $g \in G$, the expression $g = hk$ for $h \in H$ and $k \in K$ is unique. Then let each $g$ be renamed $(h, k)$. Show that, under this renaming, $G$ becomes structurally identical (isomorphic) to $H \times K$.</p>
+  <p class="exl"><b>52.</b> Show that a finite abelian group is not cyclic if and only if it contains a subgroup isomorphic to $\mathbb{Z}_p \times \mathbb{Z}_p$ for some prime $p$.</p>
+  <p class="exl"><b>53.</b> Prove that if a finite abelian group has order a power of a prime $p$, then the order of every element in the group is a power of $p$.</p>
+  <p class="exl"><b>54.</b> Let $G, H$, and $K$ be finitely generated abelian groups. Show that if $G \times K$ is isomorphic to $H \times K$, then $G \simeq H$.</p>
+  <p class="exl"><b>55.</b> Using the notation of Theorem 9.14, prove that for any finite abelian group $G$, every cyclic subgroup of $G$ has order no more than $d_k$, the largest invariant factor for $G$.</p>
+</div>
+
+<div class="sheet book" id="pdf-p115">
+  <div class="rh"><span>Section 10 &middot; Cosets and the Theorem of Lagrange</span><span>98</span></div>
+  <p>Let $H$ be a subgroup of a group $G$, which may be of finite or infinite order. We exhibit a partition of $G$ by defining an equivalence relation, $\sim_L$ on $G$.</p>
+  <p><span class="num">10.1 Theorem</span> Let $H$ be a subgroup of $G$. Let the relation $\sim_L$ be defined on $G$ by</p>
+  <p class="center">$a \sim_L b$ &nbsp;&nbsp;&nbsp; if and only if &nbsp;&nbsp;&nbsp; $a^{-1}b \in H$.</p>
+  <p>Then $\sim_L$ is an equivalence relation on $G$.</p>
+  <p><i>Proof.</i> When reading the proof, notice how we must constantly make use of the fact that $H$ is a <i>subgroup</i> of $G$.</p>
+  <p class="cond-block"><b>Reflexive.</b> Let $a \in G$. Then $a^{-1}a = e$ and $e \in H$ since $H$ is a subgroup. Thus $a \sim_L a$.</p>
+  <p class="cond-block"><b>Symmetric.</b> Suppose $a \sim_L b$. Then $a^{-1}b \in H$. Since $H$ is a subgroup, $(a^{-1}b)^{-1}$ is in $H$ and $(a^{-1}b)^{-1} = b^{-1}a$, so $b^{-1}a$ is in $H$ and $b \sim_L a$.</p>
+  <p class="cond-block"><b>Transitive.</b> Let $a \sim_L b$ and $b \sim_L c$. Then $a^{-1}b \in H$ and $b^{-1}c \in H$. Since $H$ is a subgroup, $(a^{-1}b)(b^{-1}c) = a^{-1}c$ is in $H$, so $a \sim_L c$. &#9670;</p>
+  <p>The equivalence relation $\sim_L$ in Theorem 10.1 defines a partition of $G$, as described in Theorem 0.22. Let's see what the cells in this partition look like. Suppose $a \in G$. The cell containing $a$ consists of all $x \in G$ such that $a \sim_L x$, which means all $x \in G$ such that $a^{-1}x \in H$. Now $a^{-1}x \in H$ if and only if $a^{-1}x = h$ for some $h \in H$, or equivalently, if and only if $x = ah$ for some $h \in H$. Therefore the cell containing $a$ is $\{ah \mid h \in H\}$, which we denote by $aH$.</p>
+  <p><span class="num">10.2 Definition</span> Let $H$ be a subgroup of a group $G$. The subset $aH = \{ah \mid h \in H\}$ of $G$ is the <b>left coset</b> of $H$ containing $a$. &#9632;</p>
+  <p><span class="num">10.3 Example</span> Exhibit the left coset of the subgroup $3\mathbb{Z}$ of $\mathbb{Z}$.</p>
+  <p><i>Solution.</i> Our notation here is additive, so the left coset of $3\mathbb{Z}$ containing $m$ is $m + 3\mathbb{Z}$. Taking $m = 0$, we see that</p>
+  <p class="center">$3\mathbb{Z} = \{\cdots, -9, -6, -3, 0, 3, 6, 9, \cdots\}$</p>
+  <p>is itself one of its left cosets, the coset containing $0$. To find another left coset, we select an element of $\mathbb{Z}$ not in $3\mathbb{Z}$, say $1$, and find the left coset containing it. We have</p>
+  <p class="center">$1 + 3\mathbb{Z} = \{\cdots, -8, -5, -2, 1, 4, 7, 10, \cdots\}$.</p>
+  <p>These two left cosets, $3\mathbb{Z}$ and $1 + 3\mathbb{Z}$, do not yet exhaust $\mathbb{Z}$. For example, $2$ is in neither of them. The left coset containing $2$ is</p>
+  <p class="center">$2 + 3\mathbb{Z} = \{\cdots, -7, -4, -1, 2, 5, 8, 11, \cdots\}$.</p>
+  <p>It is clear that these three left cosets we have found do exhaust $\mathbb{Z}$, so they constitute the partition of $\mathbb{Z}$ into left cosets of $3\mathbb{Z}$. &#9650;</p>
+  <p><span class="num">10.4 Example</span> We find the partition of $\mathbb{Z}_{12}$ into left cosets of $H = \langle 3 \rangle$. One coset is always the subgroup itself, so $0 + H = \{0, 3, 6, 9\}$. We next find $1 + H = \{1, 4, 7, 10\}$. We are still not done since we have not included every element of $\mathbb{Z}_{12}$ in the two cosets we listed so far. Finally, $2 + H = \{2, 5, 8, 11\}$ and we have computed all the left cosets of $H$ in $\mathbb{Z}_{12}$. &#9650;</p>
+  <p><span class="num">10.5 Example</span> We now list the left cosets of the subgroup $H = \langle \mu \rangle = \{\iota, \mu\}$ of the nonabelian group $D_4 = \{\iota, \rho, \rho^2, \rho^3, \mu, \mu\rho, \mu\rho^2, \mu\rho^3\}$.</p>
+  <p class="center">$\iota\{\iota, \mu\} = \{\iota, \mu\}$<br>$\rho\{\iota, \mu\} = \{\rho, \mu\rho^3\}$<br>$\rho^2\{\iota, \mu\} = \{\rho^2, \mu\rho^2\}$<br>$\rho^3\{\iota, \mu\} = \{\rho^3, \mu\rho\}$</p>
+  <p>We know this is a complete list of the left cosets since every element of $D_4$ appears in exactly one of the listed sets. &#9650;</p>
+</div>
+
+<div class="sheet book" id="pdf-p116">
+  <div class="rh"><span>Section 10 &middot; Cosets and the Theorem of Lagrange</span><span>99</span></div>
+  <h3 class="sub">The Theorem of Lagrange</h3>
+  <p>In Example 10.4 each left coset of $\langle 3 \rangle \le \mathbb{Z}_{12}$ has four elements. In Example 10.5, each left coset has two elements. From the computation of the left cosets, it is no surprise that all left cosets of a subgroup have the same number of elements. Theorem 10.6 confirms this is what happens in general.</p>
+  <p><span class="num">10.6 Theorem</span> Let $H$ be a subgroup of $G$. Then for any $a \in G$, the coset $aH$ has the same cardinality as $H$.</p>
+  <p><i>Proof.</i> Let $f : H \to aH$ be defined by the formula $f(h) = ah$. To show $f$ is one-to-one, we suppose that $b, c \in H$ and $f(b) = f(c)$. Then $ab = ac$ and left cancellation gives $b = c$. So $f$ is one-to-one. Now suppose that $y \in aH$. Then there is an $h \in H$ such that $y = ah$ by definition of the left coset $aH$. Thus $y = f(h)$ and $f$ is surjective. Since there is a one-to-one function mapping $H$ onto $aH$, $H$ and $aH$ have the same cardinality. &#9670;</p>
+  <p>In the case of a finite subgroup $H$, Theorem 10.6 says that $H$ and $aH$ have the same number of elements for any $a$ in the group $G$. This is precisely what we were seeking in order to prove Lagrange's Theorem.</p>
+  <p><span class="num">10.7 Theorem</span> <b>(Theorem of Lagrange)</b> Let $H$ be a subgroup of a finite group $G$. Then the order of $H$ is a divisor of the order of $G$.</p>
+  <p><i>Proof.</i> Let $n$ be the order of $G$, and let $H$ have order $m$. Theorem 10.6 shows that every coset of $H$ also has $m$ elements. Let $r$ be the number of cells in the partition of $G$ into left cosets of $H$. Then $n = rm$, so $m$ is indeed a divisor of $n$. &#9670;</p>
+  <p>Note that this elegant and important theorem comes from the simple counting of cosets and the number of elements in each coset. We continue to derive consequences of Theorem 10.7, which should be regarded as a counting theorem.</p>
+  <p><span class="num">10.8 Corollary</span> Every group of prime order is cyclic.</p>
+  <p><i>Proof.</i> Let $G$ be of prime order $p$, and let $a$ be an element of $G$ different from the identity. Then the cyclic subgroup $\langle a \rangle$ of $G$ generated by $a$ has at least two elements, $a$ and $e$. But by Theorem 10.7, the order $m \ge 2$ of $\langle a \rangle$ must divide the prime $p$. Thus we must have $m = p$ and $\langle a \rangle = G$, so $G$ is cyclic. &#9670;</p>
+  <p>Since every cyclic group of order $p$ is isomorphic to $\mathbb{Z}_p$, we see that <i>there is only one group structure, up to isomorphism, of a given prime order $p$</i>. Now doesn't this elegant result follow easily from the theorem of Lagrange, a <i>counting</i> theorem? <i>Never underestimate a theorem that counts something</i>. Proving the preceding corollary is a favorite examination question.</p>
+  <p><span class="num">10.9 Theorem</span> The order of an element of a finite group divides the order of the group.</p>
+  <p><i>Proof.</i> Remembering that the order of an element is the same as the order of the cyclic subgroup generated by the element, we see that this theorem follows directly from Lagrange's Theorem. &#9670;</p>
+  <p><span class="num">10.10 Definition</span> Let $H$ be a subgroup of a group $G$. The number of left cosets of $H$ in $G$ is the <b>index</b> $(G : H)$ of $H$ in $G$. &#9632;</p>
+  <p>The index $(G : H)$ just defined may be finite or infinite. If $G$ is finite, then obviously $(G : H)$ is finite and $(G : H) = |G|/|H|$, since every coset of $H$ contains $|H|$ elements. We state a basic theorem concerning indices of subgroups, and leave the proof to the exercises (see Exercise 40).</p>
+</div>
+
+<div class="sheet book" id="pdf-p117">
+  <div class="rh"><span>Part II &middot; Structure of Groups</span><span>100</span></div>
+  <p><span class="num">10.11 Theorem</span> Suppose $H$ and $K$ are subgroups of a group $G$ such that $K \le H \le G$, and suppose $(H : K)$ and $(G : H)$ are both finite. Then $(G : K)$ is finite, and $(G : K) = (G : H)(H : K)$.</p>
+  <p>Lagrange's Theorem says that for any subgroup $H$ of a finite group $G$, the order of $H$ divides the order of $G$. But if $d$ is a divisor of the order of $G$, does $G$ necessarily have a subgroup with exactly $d$ elements? We will show in Section 13 that the answer is no for some groups. This suggests a new question: Under what conditions does $G$ have a subgroup of every order $d$ that is a divisor of $G$? We saw in Section 9 that for every divisor of the order of an abelian group, there is a subgroup of that order. The complete answer to this question is beyond the scope of this book, but we will come back to the question later.</p>
+  <h3 class="sub">Cosets Left and Right!</h3>
+  <p>It is possible to do everything we have done in this section using right cosets instead of left cosets. All it takes is some minor and straightforward modifications to the definitions and proofs. We briefly give the corresponding definitions that lead to right cosets and point out some of their properties.</p>
+  <p>Let $H$ be a subgroup of $G$. To start with, instead of $\sim_L$ we could have used $\sim_R$ defined by</p>
+  <p class="center">$a \sim_R b$ &nbsp;&nbsp;&nbsp; if and only if &nbsp;&nbsp;&nbsp; $ab^{-1} \in H$.</p>
+  <p>With this definition, $\sim_R$ is an equivalence relation and the equivalence classes are the <b>right cosets</b>. The right coset of $H$ containing the element $a \in G$ is</p>
+  <p class="center">$Ha = \{ha \mid h \in H\}$.</p>
+  <p>Just like left cosets, each right coset of a subgroup $H$ has the same cardinality as $H$. So left cosets and right cosets have the same cardinality. In abelian groups, the right and left cosets are the same, but there is no reason to think they would be the same in general for nonabelian groups. If the right and left cosets are the same, we can drop left or right and just refer to cosets.</p>
+  <p><span class="num">10.12 Example</span> In Example 10.5 we computed the left cosets of the subgroup $H = \langle \mu \rangle = \{\iota, \mu\}$ of the group $D_4 = \{\iota, \rho, \rho^2, \rho^3, \mu, \mu\rho, \mu\rho^2, \mu\rho^3\}$. We now compute the right cosets.</p>
+  <p class="center">$\{\iota, \mu\}\iota = \{\iota, \mu\}$<br>$\{\iota, \mu\}\rho = \{\rho, \mu\rho\}$<br>$\{\iota, \mu\}\rho^2 = \{\rho^2, \mu\rho^2\}$<br>$\{\iota, \mu\}\rho^3 = \{\rho^3, \mu\rho^3\}$</p>
+  <p>The right cosets and the left cosets are not the same. For example, $\rho H = \{\rho, \mu\rho^3\}$ while $H\rho = \{\rho, \mu\rho\}$. &#9650;</p>
+  <p>If this were the whole story of left and right cosets, there would be no reason to even mention right cosets. We could just use left coset, prove Lagrange's Theorem, and call it a day. However, as we shall see in Part III, a curious thing happens when the left and right cosets are the same. We illustrate with an example.</p>
+  <p><span class="num">10.13 Example</span> The group $\mathbb{Z}_6$ is abelian. Find the partition of $\mathbb{Z}_6$ into cosets of the subgroup $H = \{0, 3\}$.</p>
+  <p><i>Solution.</i> One coset is $\{0, 3\}$ itself. The coset containing $1$ is $1 + \{0, 3\} = \{1, 4\}$. The coset containing $2$ is $2 + \{0, 3\} = \{2, 5\}$. Since $\{0, 3\}$, $\{1, 4\}$, and $\{2, 5\}$ exhaust all of $\mathbb{Z}_6$, these are all the cosets. &#9650;</p>
+</div>
+<div class="sheet book" id="pdf-p118">
+  <div class="rh"><span>Section 10 &middot; Cosets and the Theorem of Lagrange</span><span>101</span></div>
+  <p>We point out a fascinating thing that we will develop in detail in Section 12. Referring back to Example 10.13, Table 10.14 gives the binary operation for $\mathbb{Z}_6$ but with elements listed in the order they appear in the cosets $\{0, 3\}$, $\{1, 4\}$, $\{2, 5\}$. We shaded the table according to these cosets.</p>
+  <div class="tblrow">
+    <div><div class="tcap"><span class="num">10.14 Table</span></div>
+      <table class="tbl center"><tr><th>$+_6$</th><th>0</th><th>3</th><th>1</th><th>4</th><th>2</th><th>5</th></tr>
+      <tr><th>0</th><td>0</td><td>3</td><td>1</td><td>4</td><td>2</td><td>5</td></tr>
+      <tr><th>3</th><td>3</td><td>0</td><td>4</td><td>1</td><td>5</td><td>2</td></tr>
+      <tr><th>1</th><td>1</td><td>4</td><td>2</td><td>5</td><td>3</td><td>0</td></tr>
+      <tr><th>4</th><td>4</td><td>1</td><td>5</td><td>2</td><td>0</td><td>3</td></tr>
+      <tr><th>2</th><td>2</td><td>5</td><td>3</td><td>0</td><td>4</td><td>1</td></tr>
+      <tr><th>5</th><td>5</td><td>2</td><td>0</td><td>3</td><td>1</td><td>4</td></tr></table>
+      <div class="cont">Shading as printed: the columns and rows for 0 and 3 are unshaded, those for 1 and 4 light, those for 2 and 5 dark.</div></div>
+    <div><div class="tcap"><span class="num">10.15 Table</span></div>
+      <table class="tbl center"><tr><th></th><th>LT</th><th>MD</th><th>DK</th></tr>
+      <tr><th>LT</th><td>LT</td><td>MD</td><td>DK</td></tr>
+      <tr><th>MD</th><td>MD</td><td>DK</td><td>LT</td></tr>
+      <tr><th>DK</th><td>DK</td><td>LT</td><td>MD</td></tr></table></div>
+  </div>
+  <p>Suppose we denote these cosets by LT(light), MD(medium), and DK(dark) according to their shading. Table 10.14 then defines a binary operation on these shadings, as shown in Table 10.15. Note that if we replace LT by $0$, MD by $1$, and DK by $2$ in Table 10.15, we obtain the table for $\mathbb{Z}_3$. Thus the table of shadings forms a group!</p>
+  <p>We will see in Section 12 that when left cosets and right cosets are the same, then the cosets form a group as in Example 10.13. If right and left cosets are different, the construction fails.</p>
+  <p><span class="num">10.16 Example</span> Let $H = \{\iota, \mu\} \le D_3$. The group table for $D_3$ is given below with the elements arranged so that left cosets are together. The double lines divide the cosets.</p>
+  <div class="cont">No caption on the page. The table is printed under Example 10.16; the double lines divide the cosets.</div>
+  <table class="tbl center">
+    <tr><th></th><th>$\iota$</th><th>$\mu$</th><th>$\rho$</th><th>$\mu\rho^2$</th><th>$\rho^2$</th><th>$\mu\rho$</th></tr>
+    <tr><th>$\iota$</th><td>$\iota$</td><td>$\mu$</td><td>$\rho$</td><td>$\mu\rho^2$</td><td>$\rho^2$</td><td>$\mu\rho$</td></tr>
+    <tr><th>$\mu$</th><td>$\mu$</td><td>$\iota$</td><td>$\mu\rho$</td><td>$\rho^2$</td><td>$\mu\rho^2$</td><td>$\rho$</td></tr>
+    <tr><th>$\rho$</th><td>$\rho$</td><td>$\mu\rho^2$</td><td>$\rho^2$</td><td>$\mu\rho$</td><td>$\iota$</td><td>$\mu$</td></tr>
+    <tr><th>$\mu\rho^2$</th><td>$\mu\rho^2$</td><td>$\rho$</td><td>$\mu$</td><td>$\iota$</td><td>$\mu\rho$</td><td>$\rho^2$</td></tr>
+    <tr><th>$\rho^2$</th><td>$\rho^2$</td><td>$\mu\rho$</td><td>$\iota$</td><td>$\mu$</td><td>$\rho$</td><td>$\mu\rho^2$</td></tr>
+    <tr><th>$\mu\rho$</th><td>$\mu\rho$</td><td>$\rho^2$</td><td>$\mu\rho^2$</td><td>$\rho$</td><td>$\mu$</td><td>$\iota$</td></tr></table>
+  <p>The situation here is much different from the situation in Example 10.13. In Table 10.14 the two-by-two blocks in the table each contain only elements of a left coset. In the present example, most blocks do not contain elements from only one left coset. Furthermore, even if we tried to use the two-by-two blocks of elements to form a three-by-three group table, the second row of blocks contains two blocks, both having the same elements, $\{\rho^2, \mu\rho, \mu, \iota\}$. So the table of blocks would have a row with the same element listed twice. In this case, there is no natural way of making the left cosets a group. &#9650;</p>
+  <p>If $G$ is an abelian group, then the left and right cosets are the same. Theorem 10.17 gives another condition when left and right cosets are the same. Recall that if $\phi : G \to G'$ is a group homomorphism, then $\operatorname{Ker}(\phi) = \phi^{-1}[\{e\}] \le G$ is the kernel of $\phi$.</p>
+  <p><span class="num">10.17 Theorem</span> Let $\phi : G \to G'$ be a group homomorphism. Then the left and right cosets of $\operatorname{Ker}(\phi)$ are identical. Furthermore, $a, b \in G$ are in the same coset of $\operatorname{Ker}(\phi)$ if and only if $\phi(a) = \phi(b)$.</p>
+</div>
+
+<div class="sheet book" id="pdf-p119">
+  <div class="rh"><span>Part II &middot; Structure of Groups</span><span>102</span></div>
+  <p><i>Proof.</i> We first assume that $a$ and $b$ are in the same left cosets of $\operatorname{Ker}(\phi)$ and show they are also in the same right cosets. Then $a^{-1}b \in \operatorname{Ker}(\phi)$. So $\phi(a^{-1}b) = e$, the identity element. Because $\phi$ is a homomorphism, $\phi(a)^{-1}\phi(b) = e$, which implies that $\phi(a) = \phi(b)$. Therefore, $\phi(ab^{-1}) = \phi(a)\phi(b)^{-1} = \phi(a)\phi(a)^{-1} = e$. Thus $ab^{-1} \in \operatorname{Ker}(\phi)$, which says that $a$ and $b$ are in the same right coset. Note that in the process we showed that if $a$ and $b$ are in the same left coset of $\operatorname{Ker}(\phi)$, then $\phi(a) = \phi(b)$.</p>
+  <p>Now suppose that $\phi(a) = \phi(b)$. Then $\phi(b^{-1}a) = \phi(b)^{-1}\phi(a) = e$. Thus $b^{-1}a \in \operatorname{Ker}(\phi)$, which implies that $a$ and $b$ are in the same left coset.</p>
+  <p>To complete the proof, we need to show that if $a$ and $b$ are in the same right coset, then they are also in the same left coset. The proof is essentially the same as above, so we leave this detail to the reader. &#9670;</p>
+  <p><span class="num">10.18 Example</span> Consider the determinant map $\det : \operatorname{GL}(2, \mathbb{R}) \to \mathbb{R}^*$. In linear algebra you learn that $\det(AB) = \det(A)\det(B)$, so the determinant is a group homomorphism. The kernel of $\det$ is the set of all $2 \times 2$ matrices with determinant $1$. Two matrices $A, B \in \operatorname{GL}(2, \mathbb{R})$ are in the same left coset of $\operatorname{Ker}(\det)$ if and only if they are in the same right coset of $\operatorname{Ker}(\det)$ if and only if $\det(A) = \det(B)$. In particular, the two matrices</p>
+  <p class="center">$\begin{bmatrix}2&0\\0&1\end{bmatrix}$ and $\begin{bmatrix}3&2\\2&2\end{bmatrix}$</p>
+  <p>each have determinant $2$, so they are in the same left (and right) cosets of $\operatorname{Ker}(\det)$. &#9650;</p>
+  <p><span class="num">10.19 Corollary</span> A homomorphism $\phi : G \to G'$ is one-to-one if and only if $\operatorname{Ker}(\phi)$ is the trivial subgroup of $G$.</p>
+  <p><i>Proof.</i> We first assume that $\operatorname{Ker}(\phi) = \{e\}$. Every coset of $\operatorname{Ker}(\phi)$ has only one element. Suppose that $\phi(a) = \phi(b)$. Then $a$ and $b$ are in the same coset of $\operatorname{Ker}(\phi)$ by Theorem 10.17. Thus $a = b$.</p>
+  <p>Now suppose that $\phi$ is one-to-one. Then only the identity $e$ is mapped to the identity in $G'$. So $\operatorname{Ker}(\phi) = \{e\}$. &#9670;</p>
+  <p>Corollary 10.19 says that to check if a homomorphism $\phi : G \to G'$ is one-to-one one merely needs to check that $\operatorname{Ker}(\phi)$ is the trivial subgroup. In other words, show that the only solution to $\phi(x) = e'$ is $e$, where $e$ and $e'$ are the identities in $G$ and $G'$, respectively.</p>
+  <p><span class="num">10.20 Example</span> Let $\phi : \mathbb{R} \to \mathbb{R}^+$ be defined by $\phi(x) = 2^x$. Since $\phi$ is a homomorphism, we can check that $\phi$ is one-to-one by solving $\phi(x) = 1$. The equation $2^x = \phi(x) = 1$ has only the solution $0$ since for $x &gt; 0$, $2^x &gt; 1$ and for $x &lt; 0$, $2^x &lt; 1$. Thus $\phi$ is one-to-one. &#9650;</p>
+  <h3 class="sub">Exercises 10</h3>
+  <h4 class="sub">Computations</h4>
+  <p class="exl"><b>1.</b> Find all cosets of the subgroup $4\mathbb{Z}$ of $\mathbb{Z}$.</p>
+  <p class="exl"><b>2.</b> Find all cosets of the subgroup $4\mathbb{Z}$ of $2\mathbb{Z}$.</p>
+  <p class="exl"><b>3.</b> Find all cosets of the subgroup $\langle 3 \rangle$ in $\mathbb{Z}_{18}$.</p>
+  <p class="exl"><b>4.</b> Find all cosets of the subgroup $\langle 6 \rangle$ in $\mathbb{Z}_{18}$.</p>
+  <p class="exl"><b>5.</b> Find all cosets of the subgroup $\langle 18 \rangle$ of $\mathbb{Z}_{36}$.</p>
+  <p class="exl"><b>6.</b> Find all left cosets of $\langle \mu\rho \rangle$ in $D_4$.</p>
+  <p class="exl"><b>7.</b> Repeat the preceding exercise, but find the right cosets this time. Are they the same as the left cosets?</p>
+</div>
+
+<div class="sheet book" id="pdf-p120">
+  <div class="rh"><span>Section 10 &middot; Exercises</span><span>103</span></div>
+  <p class="exl"><b>8.</b> Are the left and right cosets the same for the subgroup $\{\iota, \rho^4, \mu, \mu\rho^4\}$ of $D_8$? If so, display the cosets. If not, find a left coset that is not the same as any right coset.</p>
+  <p class="exl"><b>9.</b> Find all the left cosets of $\langle \rho^2 \rangle \le D_4$.</p>
+  <p class="exl"><b>10.</b> Repeat the previous exercise, but find the right cosets. Are the left and right cosets the same? If so, make the group table for $D_4$, ordering the elements so that the cosets are in blocks, see if the blocks form a group with four elements, and determine what group of order 4 the blocks form.</p>
+  <p class="exl"><b>11.</b> Find the index of $\langle \rho^2 \rangle$ in the group $D_6$.</p>
+  <p class="exl"><b>12.</b> Find the index of $\langle 3 \rangle$ in the group $\mathbb{Z}_{24}$.</p>
+  <p class="exl"><b>13.</b> Find the index of $12\mathbb{Z}$ in $\mathbb{Z}$.</p>
+  <p class="exl"><b>14.</b> Find the index of $12\mathbb{Z}$ in $3\mathbb{Z}$.</p>
+  <p class="exl"><b>15.</b> Let $\sigma = (1, 2, 5, 4)(2, 3)$ in $S_5$. Find the index of $\langle \sigma \rangle$ in $S_5$.</p>
+  <p class="exl"><b>16.</b> Let $\mu = (1, 2, 4, 5)(3, 6)$ in $S_6$. Find the index of $\langle \mu \rangle$ in $S_6$.</p>
+  <h4 class="sub">Concepts</h4>
+  <p>In Exercises 17 through 19, correct the definition of the italicized term without reference to the text, if correction is needed, so that it is in a form acceptable for publication.</p>
+  <p class="exl"><b>17.</b> Let $G$ be a group and let $H \subseteq G$. The <i>left coset of $H$ containing $a$</i> is $aH = \{ah \mid h \in H\}$.</p>
+  <p class="exl"><b>18.</b> Let $G$ be a group and let $H \le G$. The <i>index of $H$ in $G$</i> is the number of right cosets of $H$ in $G$.</p>
+  <p class="exl"><b>19.</b> Let $\phi : G \to G'$. Then the <i>kernel</i> of $\phi$ is $\operatorname{Ker}(\phi) = \{g \in G \mid \phi(g) = e\}$.</p>
+  <p class="exl"><b>20.</b> Determine whether each of the following is true or false.</p>
+  <p class="exl sub"><b>a.</b> Every subgroup of every group has left cosets. &nbsp; <b>b.</b> The number of left cosets of a subgroup of a finite group divides the order of the group. &nbsp; <b>c.</b> Every group of prime order is abelian.<br><b>d.</b> One cannot have left cosets of a finite subgroup of an infinite group. &nbsp; <b>e.</b> A subgroup of a group is a left coset of itself. &nbsp; <b>f.</b> Only subgroups of finite groups can have left cosets.<br><b>g.</b> $A_n$ is of index 2 in $S_n$ for $n &gt; 1$. &nbsp; <b>h.</b> The theorem of Lagrange is a nice result.<br><b>i.</b> Every finite group contains an element of every order that divides the order of the group.<br><b>j.</b> Every finite cyclic group contains an element of every order that divides the order of the group.<br><b>k.</b> The kernel of a homomorphism is a subgroup of the range of the homomorphism.<br><b>l.</b> Left cosets and right cosets of the kernel of a homomorphism are the same.</p>
+  <p>In Exercises 21 through 26, give an example of the desired subgroup and group if possible. If impossible, say why it is impossible.</p>
+  <p class="exl"><b>21.</b> A subgroup $H \le G$ with $G$ infinite and $H$ having only a finite number of left cosets in $G$.</p>
+  <p class="exl"><b>22.</b> A subgroup of an abelian group $G$ whose left cosets and right cosets give different partitions of $G$.</p>
+  <p class="exl"><b>23.</b> A subgroup of a group $G$ whose left cosets give a partition of $G$ into just one cell.</p>
+  <p class="exl"><b>24.</b> A subgroup of a group of order 6 whose left cosets give a partition of the group into 6 cells.</p>
+  <p class="exl"><b>25.</b> A subgroup of a group of order 6 whose left cosets give a partition of the group into 12 cells.</p>
+  <p class="exl"><b>26.</b> A subgroup of a group of order 6 whose left cosets give a partition of the group into 4 cells.</p>
+  <h4 class="sub">Proof Synopsis</h4>
+  <p class="exl"><b>27.</b> Give a one-sentence synopsis of the proof of the Theorem of Lagrange.</p>
+</div>
+
+<div class="sheet book" id="pdf-p121">
+  <div class="rh"><span>Part II &middot; Structure of Groups</span><span>104</span></div>
+  <h4 class="sub">Theory</h4>
+  <p class="exl"><b>28.</b> Prove that the relation $\sim_R$ that is used to define right cosets is an equivalence relation.</p>
+  <p class="exl"><b>29.</b> Let $H$ be a subgroup of a group $G$ and let $g \in G$. Define a one-to-one map of $H$ onto $Hg$. Prove that your map is one-to-one and is onto $Hg$.</p>
+  <p class="exl"><b>30.</b> Let $H$ be a subgroup of a group $G$ such that $g^{-1}hg \in H$ for all $g \in G$ and all $h \in H$. Show that every left coset $gH$ is the same as the right coset $Hg$.</p>
+  <p class="exl"><b>31.</b> Let $H$ be a subgroup of a group $G$. Prove that if the partition of $G$ into left cosets of $H$ is the same as the partition into right cosets of $H$, then $g^{-1}hg \in H$ for all $g \in G$ and all $h \in H$. (Note that this is the converse of Exercise 30.)</p>
+  <p>Let $H$ be a subgroup of a group $G$ and let $a, b \in G$. In Exercises 32 through 35 prove the statement or give a counterexample.</p>
+  <p class="exl"><b>32.</b> If $aH = bH$, then $Ha = Hb$.</p>
+  <p class="exl"><b>33.</b> If $Ha = Hb$, then $b \in Ha$.</p>
+  <p class="exl"><b>34.</b> If $aH = bH$, then $Ha^{-1} = Hb^{-1}$.</p>
+  <p class="exl"><b>35.</b> If $aH = bH$, then $a^2H = b^2H$.</p>
+  <p class="exl"><b>36.</b> Let $G$ be a group of order $pq$, where $p$ and $q$ are prime numbers. Show that every proper subgroup of $G$ is cyclic.</p>
+  <p class="exl"><b>37.</b> Show that there are the same number of left as right cosets of a subgroup $H$ of a group $G$; that is, exhibit a one-to-one map of the collection of left cosets onto the collection of right cosets. (Note that this result is obvious by counting for finite groups. Your proof must hold for any group.)</p>
+  <p class="exl"><b>38.</b> Exercise 29 of Section 2 showed that every finite group of even order $2n$ contains an element of order 2. Using the theorem of Lagrange, show that if $n$ is odd, then an abelian group of order $2n$ contains precisely one element of order 2.</p>
+  <p class="exl"><b>39.</b> Show that a group with at least two elements but with no proper nontrivial subgroups must be finite and of prime order.</p>
+  <p class="exl"><b>40.</b> Prove Theorem 10.11 [<i>Hint:</i> Let $\{a_iH \mid i = 1, \cdots, r\}$ be the collection of distinct left cosets of $H$ in $G$ and $\{b_jK \mid j = 1, \cdots, s\}$ be the collection of distinct left cosets of $K$ in $H$. Show that</p>
+  <p class="center">$\{(a_ib_j)K \mid i = 1, \cdots, r;\ j = 1, \cdots, s\}$</p>
+  <p>is the collection of distinct left cosets of $K$ in $G$.]</p>
+  <p class="exl"><b>41.</b> Show that if $H$ is a subgroup of index 2 in a finite group $G$, then every left coset of $H$ is also a right coset of $H$.</p>
+  <p class="exl"><b>42.</b> Show that if a group $G$ with identity $e$ has finite order $n$, then $a^n = e$ for all $a \in G$.</p>
+  <p class="exl"><b>43.</b> Show that every left coset of the subgroup $\mathbb{Z}$ of the additive group of real numbers contains exactly one element $x$ such that $0 \le x &lt; 1$.</p>
+  <p class="exl"><b>44.</b> Show that the function <i>sine</i> assigns the same value to each element of any fixed left coset of the subgroup $\langle 2\pi \rangle$ of the additive group $\mathbb{R}$ of real numbers. (Thus <i>sine</i> induces a well-defined function on the set of cosets; the value of the function on a coset is obtained when we choose an element $x$ of the coset and compute $\sin x$.)</p>
+  <p class="exl"><b>45.</b> Let $H$ and $K$ be subgroups of a group $G$. Define $\sim$ on $G$ by $a \sim b$ if and only if $a = hbk$ for some $h \in H$ and some $k \in K$.</p>
+  <p class="exl sub"><b>a.</b> Prove that $\sim$ is an equivalence relation on $G$. &nbsp; <b>b.</b> Describe the elements in the equivalence class containing $a \in G$. (These equivalence classes are called <b>double cosets</b>.)</p>
+  <p class="exl"><b>46.</b> Let $S_A$ be the group of all permutations of the set $A$, and let $c$ be one particular element of $A$.</p>
+  <p class="exl sub"><b>a.</b> Show that $\{\sigma \in S_A \mid \sigma(c) = c\}$ is a subgroup $S_{c,c}$ of $S_A$. &nbsp; <b>b.</b> Let $d \ne c$ be another particular element of A. Is $S_{c,d} = \{\sigma \in S_A \mid \sigma(c) = d\}$ a subgroup of $S_A$? Why or why not? &nbsp; <b>c.</b> Characterize the set $S_{c,d}$ of part (b) in terms of the subgroup $S_{c,c}$ of part (a).</p>
+</div>
+</main>
+</body>
+</html>

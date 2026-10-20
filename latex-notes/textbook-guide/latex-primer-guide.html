@@ -1,0 +1,1790 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LaTeX Made Simple: Guide to the Primer</title>
+<style>
+:root{--ink:#1c2230;--muted:#5d6577;--accent:#1f4fbf;--rule:#d9dee8;--code:#f3f5f9;--note:#eef3ff;--warn:#fff6e5;--ok:#eefaf0;--ok-rule:#2e8b57}
+*{box-sizing:border-box}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;background:#fff;color:var(--ink);font:16.5px/1.65 Georgia,"Times New Roman",serif}
+main{max-width:46rem;margin:0 auto;padding:2.5rem 1.25rem 4rem}
+header.title{border-bottom:3px solid var(--accent);margin-bottom:2rem;padding-bottom:1rem}
+header.title h1{font:700 2rem/1.2 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;margin:0 0 .3rem}
+header.title .meta{font:.95rem system-ui,sans-serif;color:var(--muted)}
+nav.toc{border:1px solid var(--rule);border-radius:8px;padding:1rem 1.3rem;margin-bottom:2rem;font:.94rem/1.7 system-ui,sans-serif}
+nav.toc strong{display:block;margin-bottom:.3rem}
+nav.toc ol{margin:0;padding-left:1.2rem;columns:2;column-gap:2rem}
+nav.toc a{color:var(--accent);text-decoration:none}
+section.part{margin-top:2.4rem}
+h2{font:700 1.5rem/1.3 system-ui,sans-serif;margin:0 0 .6rem;padding-bottom:.35rem;border-bottom:2px solid var(--accent);color:var(--accent)}
+h3{font:600 1.12rem/1.3 system-ui,sans-serif;margin:1.7rem 0 .5rem;color:var(--ink)}
+h4{font:600 .98rem/1.3 system-ui,sans-serif;margin:1.2rem 0 .3rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+p{margin:.65rem 0}
+code{font:.87em/1.4 "DejaVu Sans Mono",Consolas,monospace;background:var(--code);padding:.08em .3em;border-radius:4px;white-space:nowrap}
+pre{background:var(--code);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:6px;padding:.75rem .95rem;overflow-x:auto;font:.84rem/1.5 "DejaVu Sans Mono",Consolas,monospace;white-space:pre;margin:.8rem 0}
+pre code{background:none;padding:0;font:inherit;white-space:pre}
+.plain{background:var(--note);border-left:4px solid var(--accent);padding:.6rem .95rem;border-radius:6px;margin:1rem 0}
+.plain>strong:first-child{font-family:system-ui,sans-serif;color:var(--accent)}
+.remember{background:var(--ok);border-left:4px solid var(--ok-rule);padding:.6rem .95rem;border-radius:6px;margin:1rem 0}
+.remember>strong:first-child{font-family:system-ui,sans-serif;color:var(--ok-rule)}
+.warn{background:var(--warn);border-left:4px solid #d99a14;padding:.6rem .95rem;border-radius:6px;margin:1rem 0}
+.warn>strong:first-child{font-family:system-ui,sans-serif;color:#8a5a00}
+.io{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;align-items:start;margin:.6rem 0 1rem}
+.io>div{border:1px solid var(--rule);border-radius:6px;padding:.4rem .6rem;font-size:.95rem;background:#fff}
+.io>div>.lab{font:600 .72rem system-ui,sans-serif;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:0 0 .2rem}
+.io pre{margin:0;font-size:.8rem}
+.io .shown{padding:.1rem .2rem}
+table{border-collapse:collapse;margin:.9rem 0;width:100%;font-size:.93rem}
+th,td{border-bottom:1px solid var(--rule);padding:.42rem .6rem;text-align:left;vertical-align:top}
+th{font:600 .8rem system-ui,sans-serif;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);border-bottom:2px solid var(--ink)}
+td code{white-space:normal}
+ul,ol{padding-left:1.4rem}
+li{margin:.22rem 0}
+.tag{display:inline-block;font:600 .7rem system-ui,sans-serif;text-transform:uppercase;letter-spacing:.05em;background:#e4e9f5;color:var(--accent);border-radius:4px;padding:.08rem .4rem;vertical-align:middle}
+.tag.gap{background:#fde9c4;color:#7a4b00}
+footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--rule);color:var(--muted);font:.85rem system-ui,sans-serif}
+@media (max-width:640px){.io{grid-template-columns:1fr}nav.toc ol{columns:1}}
+@media print{
+  @page{size:A4;margin:16mm 18mm}
+  body{font-size:10.5pt}
+  main{max-width:none;padding:0}
+  section.part{break-before:page}
+  section.part:first-of-type{break-before:auto}
+  h2,h3,h4{break-after:avoid}
+  pre,table,.plain,.remember,.warn,.io{break-inside:avoid}
+  nav.toc{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<main>
+<header class="title">
+  <h1>LaTeX Made Simple</h1>
+  <div class="meta">A detailed, plain-language guide to the LaTeX Tutorial: A Primer (Indian TeX Users Group) &middot; for MAT5FS112, Text 1, Tutorials I&ndash;XIII</div>
+</header>
+
+<nav class="toc">
+  <strong>Contents</strong>
+  <ol>
+    <li><a href="#about">About this guide</a></li>
+    <li><a href="#map">Syllabus map</a></li>
+    <li><a href="#ch1">1. The basics</a></li>
+    <li><a href="#ch2">2. The document</a></li>
+    <li><a href="#ch3">3. Bibliography</a></li>
+    <li><a href="#ch4">4. Bibliographic databases (BibTeX)</a></li>
+    <li><a href="#ch5">5. Table of contents, index</a></li>
+    <li><a href="#ch6">6. Displayed text and lists</a></li>
+    <li><a href="#ch7">7. Rows and columns</a></li>
+    <li><a href="#ch8">8. Typesetting mathematics</a></li>
+    <li><a href="#ch9">9. Theorems</a></li>
+    <li><a href="#ch10">10. Boxes</a></li>
+    <li><a href="#ch11">11. Floats (figures and tables)</a></li>
+    <li><a href="#ch12">12. Graphics</a></li>
+    <li><a href="#ch13">13. Cross references</a></li>
+    <li><a href="#ch14">14. Footnotes, margin notes, endnotes</a></li>
+    <li><a href="#gap">15. What the primer does not cover</a></li>
+    <li><a href="#cheat">Appendix A. Cheat sheet</a></li>
+    <li><a href="#errors">Appendix B. Common mistakes</a></li>
+    <li><a href="#compile">Appendix C. Compiling step by step</a></li>
+  </ol>
+</nav>
+
+<section class="part" id="about">
+  <h2>About this guide</h2>
+
+  <p>The syllabus for MAT5FS112 names <strong>Text 1: <em>LaTeX Tutorial: A Primer</em></strong> by the Indian TeX Users Group, edited by E. Krishnan, as its main textbook. This guide follows that primer chapter by chapter. Each part explains the ideas in plain words, shows the commands with examples, and ends with the points to remember.</p>
+
+  <p>The copy used here is the 2020 Sayahna Foundation revision of the same tutorial (226 pages, printed page numbers shown in the map below). The primer's own page numbers are used in the references.</p>
+
+  <div class="plain">
+    <strong>How to read each part</strong>
+    <ul>
+      <li><strong>In plain words:</strong> what the ideas mean, without jargon.</li>
+      <li><strong>Commands and examples:</strong> the input you type, and what LaTeX prints for it.</li>
+      <li><strong>Remember:</strong> the few points that catch most people out.</li>
+    </ul>
+    <p>Every example is typed exactly as it should go into a <code>.tex</code> file. Try them. Typing is the fastest way to learn LaTeX.</p>
+  </div>
+
+  <div class="warn">
+    <strong>Two gaps to know about.</strong>
+    <ul>
+      <li>Text 2 (George Gratzer, <em>More Math into LaTeX</em>, Ch. 12, Presentation) is <strong>not</strong> in this guide. The copy of the book was not available to read, so the syllabus units 18 and 19 are not covered from it.</li>
+      <li>The primer does not cover Overleaf, Beamer slides, posters or Indian-language transliteration. These belong to syllabus Module V and are listed in Part 15 with pointers to the notes already written.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="part" id="map">
+  <h2>Syllabus map</h2>
+
+  <p>The table links each syllabus unit to the primer chapter that covers it. Page numbers are the printed page numbers in the Sayahna PDF.</p>
+
+  <table>
+    <thead>
+      <tr><th>Module / unit</th><th>Topic</th><th>Primer chapter &amp; sections</th><th>Printed pages</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>I &middot; 1</td><td>The basics (Tutorial I)</td><td>Ch. 1 (1.1&ndash;1.4)</td><td>1&ndash;14</td></tr>
+      <tr><td>I &middot; 2</td><td>The document (Tutorial II)</td><td>Ch. 2 (2.1&ndash;2.7)</td><td>15&ndash;26</td></tr>
+      <tr><td>I &middot; 3</td><td>Bibliographic database (Tutorials III &amp; IV)</td><td>Ch. 3 (thebibliography, natbib); Ch. 4 (BibTeX)</td><td>27&ndash;42</td></tr>
+      <tr><td>I &middot; 4</td><td>Table of contents and index (Tutorial V, omit glossary)</td><td>Ch. 5 (5.1, 5.2); 5.3 glossary omitted</td><td>43&ndash;51</td></tr>
+      <tr><td>II &middot; 5</td><td>Displayed text (Tutorial VI)</td><td>Ch. 6 (6.1&ndash;6.5)</td><td>55&ndash;68</td></tr>
+      <tr><td>II &middot; 6</td><td>Rows and columns (Tutorial VII)</td><td>Ch. 7 (7.1 tabbing; 7.2 tables)</td><td>69&ndash;94</td></tr>
+      <tr><td>II &middot; 7</td><td>Tables (Tutorial VII.2)</td><td>Ch. 7.2 (tabular, array, multirow, longtable)</td><td>76&ndash;94</td></tr>
+      <tr><td>III &middot; 8</td><td>Basic mathematical equations (VIII.1, VIII.2)</td><td>Ch. 8.1</td><td>95&ndash;101</td></tr>
+      <tr><td>III &middot; 9</td><td>Groups of equations and numbering (VIII.3)</td><td>Ch. 8.3 (amsmath)</td><td>102&ndash;111</td></tr>
+      <tr><td>III &middot; 10</td><td>Matrices, dots, delimiters, affixing symbols (VIII.4)</td><td>Ch. 8.4</td><td>112&ndash;124</td></tr>
+      <tr><td>III &middot; 11</td><td>Operators, symbols, Greek letters (VIII.5&ndash;VIII.8)</td><td>Ch. 8.5&ndash;8.8 (symbols: usual ones only)</td><td>126&ndash;136</td></tr>
+      <tr><td>IV &middot; 12</td><td>Theorems in LaTeX (IX.1)</td><td>Ch. 9.1</td><td>137&ndash;139</td></tr>
+      <tr><td>IV &middot; 13</td><td>The amsthm package (IX.2, omit IX.2.2 and IX.2.3)</td><td>Ch. 9.2.1 (ready-made styles), with the proof environment</td><td>140&ndash;149</td></tr>
+      <tr><td>IV &middot; 14</td><td>Boxes (Tutorial X, sections 10.1 and 10.2 only)</td><td>Ch. 10.1&ndash;10.2</td><td>151&ndash;154</td></tr>
+      <tr><td>IV &middot; 15</td><td>Floating figures (Tutorial XI)</td><td>Ch. 11.1 (see note in Part 11)</td><td>167&ndash;170</td></tr>
+      <tr><td>IV &middot; 16</td><td>Cross references (Tutorial XII, sections 12.1 and 12.2 only)</td><td>Ch. 13.1&ndash;13.2</td><td>187&ndash;191</td></tr>
+      <tr><td>IV &middot; 17</td><td>Footnotes (Tutorial XIII, section 13.1 only)</td><td>Ch. 14.1</td><td>197&ndash;203</td></tr>
+      <tr><td>IV &middot; 18&ndash;19</td><td>Presentation (Text 2, Gratzer ch. 12)</td><td>Not in the primer; Text 2 not available here</td><td>&mdash;</td></tr>
+      <tr><td>V</td><td>Open-ended: installation, Overleaf, chapter, beamer, posters, transliteration</td><td>Mostly not in the primer; see Part 15</td><td>&mdash;</td></tr>
+    </tbody>
+  </table>
+
+  <div class="warn">
+    <strong>Check with the syllabus.</strong> Unit 15 asks for sections XI.1.1, XI.1.2 and XI.1.5. The primer has no section 11.1.5. The nearest one is 11.1.3, <em>Customizing float placement</em>. This guide covers 11.1.3, but the exact intention should be confirmed with the teacher.
+  </div>
+</section>
+
+<section class="part" id="ch1">
+  <h2>1. The basics</h2>
+  <p class="tag">Syllabus unit 1 &middot; Primer pages 1&ndash;14</p>
+
+  <h3>1.1 What is LaTeX?</h3>
+  <div class="plain">
+    <strong>In plain words.</strong> LaTeX is a typesetting program. You do not type into a page and see the result at once, as in Word. You write plain text with a few commands (words that start with <code>\</code>), then <em>compile</em> the file. The compiler produces the finished PDF. The program underneath is TeX, written by Donald Knuth. LaTeX is a large set of ready-made commands built on TeX.
+  </div>
+
+  <p>Word processors do all four steps (typing, formatting, screen display, printing) in one program. TeX does only the formatting step, which is the step that decides line breaks, page breaks and spacing. This is why TeX is so good at mathematics: it spends its effort on exactly that job.</p>
+
+  <p>The workflow is always the same:</p>
+  <ol>
+    <li>Type the text and commands in a plain text editor (the primer uses Emacs on GNU/Linux).</li>
+    <li>Compile it with <code>latex myfile</code> (or <code>pdflatex myfile</code> to get a PDF directly).</li>
+    <li>View the result in a previewer, and print it if needed.</li>
+  </ol>
+
+  <h3>1.2 Your first document</h3>
+  <pre><code>\documentclass{article}
+\begin{document}
+This is my \emph{first} document prepared in \LaTeX.
+\end{document}</code></pre>
+
+  <div class="io">
+    <div><div class="lab">You type</div><pre><code>This is my \emph{first} document
+prepared in \LaTeX.</code></pre></div>
+    <div><div class="lab">You get</div><div class="shown">This is my <em>first</em> document prepared in LaTeX.</div></div>
+  </div>
+
+  <p>Read the example line by line:</p>
+  <ul>
+    <li><code>\documentclass{article}</code> says what kind of document this is. Every file must start with it.</li>
+    <li><code>\begin{document}</code> and <code>\end{document}</code> enclose the text to be printed.</li>
+    <li><code>\emph{first}</code> asks for emphasis. The word comes out in italics.</li>
+    <li><code>\LaTeX</code> prints the name of the program. Other commands give special output, such as <code>\today</code>, which prints today's date.</li>
+  </ul>
+
+  <h3>1.3 Paragraphs and spaces</h3>
+  <p>LaTeX ignores how many spaces you type between words, and it ignores line breaks inside a paragraph. It sets every line to the same length by adjusting the spaces between words. A <strong>blank line</strong> starts a new paragraph.</p>
+
+  <p>A paragraph starts with an indent. To stop that indent, put <code>\noindent</code> at the start of the paragraph.</p>
+
+  <p>Two special spacing cases:</p>
+  <ul>
+    <li><strong>After a full stop</strong> that follows a capital letter, such as "Vitamin A.", LaTeX thinks the sentence has ended and adds extra space. Type <code>A\@.</code> to stop this. Write <code>\@</code> before the full stop.</li>
+    <li><strong>After a full stop</strong> that ends an abbreviation such as "etc.", you want a normal space. Type <code>etc.\ are</code>. The <code>\ </code> (backslash and space) forces a normal word space.</li>
+  </ul>
+  <p>Also, TeX gobbles every space after a command word. So <code>\LaTeX is fun</code> loses the space before "is". Write <code>\LaTeX\ is fun</code> instead.</p>
+
+  <h3>1.4 Quotes and dashes</h3>
+  <p>Opening and closing quotes are different in typeset text. Use a backtick for the opening quote and an apostrophe for the closing one:</p>
+  <pre><code>`single quotes'  and  ``double quotes''</code></pre>
+  <p>The commands <code>\lq</code> and <code>\rq</code> give the same quotes if your keyboard lacks a backtick.</p>
+
+  <p>There are three kinds of dash, and the number of dash characters in the source decides which you get:</p>
+  <table>
+    <thead><tr><th>You type</th><th>You get</th><th>Name and use</th></tr></thead>
+    <tbody>
+      <tr><td><code>-</code></td><td>-</td><td>hyphen, as in "hyphen-ated"</td></tr>
+      <tr><td><code>--</code></td><td>&ndash;</td><td>en dash, for ranges such as pages 221&ndash;225</td></tr>
+      <tr><td><code>---</code></td><td>&mdash;</td><td>em dash, for a parenthetical remark</td></tr>
+    </tbody>
+  </table>
+
+  <h3>1.5 Accents and foreign letters</h3>
+  <p>Accents are added with a command and the letter. Some examples:</p>
+  <table>
+    <thead><tr><th>Command</th><th>Result</th><th>Command</th><th>Result</th></tr></thead>
+    <tbody>
+      <tr><td><code>\'o</code></td><td>&oacute;</td><td><code>\"o</code></td><td>&ouml;</td></tr>
+      <tr><td><code>\^o</code></td><td>&ocirc;</td><td><code>\c c</code></td><td>&ccedil;</td></tr>
+      <tr><td><code>\=o</code></td><td>&omacr;</td><td><code>\v s</code></td><td>&scaron;</td></tr>
+      <tr><td><code>\d o</code></td><td>o with dot below</td><td><code>\u o</code></td><td>o with breve</td></tr>
+      <tr><td><code>\oe</code>, <code>\ae</code>, <code>\ss</code></td><td>&#339;, &aelig;, &szlig;</td><td><code>\o</code>, <code>\l</code></td><td>&oslash;, &#322;</td></tr>
+    </tbody>
+  </table>
+  <p>The letters <code>i</code> and <code>j</code> must lose their dot before an accent goes on them. Use <code>\i</code> and <code>\j</code> for the dotless forms, as in <code>\'{\i}</code>, which gives &iacute;.</p>
+  <pre><code>\'{E}l est\'{a} aqu\'{\i}</code></pre>
+  <p>This gives <em>&Eacute;l est&aacute; aqu&iacute;</em> (Spanish).</p>
+
+  <h3>1.6 Special characters that must be escaped</h3>
+  <p>Ten characters have a special job for TeX: <code>#</code> <code>$</code> <code>%</code> <code>&amp;</code> <code>~</code> <code>_</code> <code>^</code> <code>\</code> <code>{</code> <code>}</code>. To print one of them, put a backslash in front of it:</p>
+  <table>
+    <thead><tr><th>You type</th><th>You get</th><th>You type</th><th>You get</th></tr></thead>
+    <tbody>
+      <tr><td><code>\%</code></td><td>%</td><td><code>\&amp;</code></td><td>&amp;</td></tr>
+      <tr><td><code>\$</code></td><td>$</td><td><code>\#</code></td><td>#</td></tr>
+      <tr><td><code>\_</code></td><td>_</td><td><code>\{</code>, <code>\}</code></td><td>{ and }</td></tr>
+      <tr><td><code>\textbackslash</code></td><td>\</td><td><code>\textasciitilde</code></td><td>~</td></tr>
+      <tr><td><code>\textasciicircum</code></td><td>^</td><td></td><td></td></tr>
+    </tbody>
+  </table>
+  <p>The percent sign deserves a note. <code>%</code> starts a <strong>comment</strong>: everything after it on that line is ignored. Comments are useful for notes to yourself, such as a "to do" list.</p>
+
+  <h3>1.7 Line breaks</h3>
+  <p><code>\\</code> forces a new line. <code>\\[10pt]</code> also adds 10 points of extra space between the lines. (One point is about 1/72 of an inch.)</p>
+
+  <h3>1.8 Positioning text: center, flushleft, flushright</h3>
+  <pre><code>\begin{center}
+  The \TeX nical Institute\\[.75cm]
+    Certificate
+\end{center}
+\begin{flushright}
+  The Director\\
+  The \TeX nical Institute
+\end{flushright}</code></pre>
+  <p><code>center</code> centres the text, <code>flushright</code> pushes it against the right margin, and <code>flushleft</code> against the left. These are <strong>environments</strong>: a <code>\begin{name}</code> and a matching <code>\end{name}</code> enclose the part they affect.</p>
+
+  <h3>1.9 Type style: family, series and shape</h3>
+  <p>A type style is a mix of three things: a <em>family</em> (roman, sans serif, typewriter), a <em>series</em> (medium, bold) and a <em>shape</em> (upright, italic, slanted, small caps). The commands:</p>
+  <table>
+    <thead><tr><th>Style</th><th>Command</th><th>Declaration form</th></tr></thead>
+    <tbody>
+      <tr><td>roman (family)</td><td><code>\textrm{roman}</code></td><td><code>{\rmfamily roman}</code></td></tr>
+      <tr><td>sans serif (family)</td><td><code>\textsf{sans serif}</code></td><td><code>{\sffamily sans serif}</code></td></tr>
+      <tr><td>typewriter (family)</td><td><code>\texttt{typewriter}</code></td><td><code>{\ttfamily typewriter}</code></td></tr>
+      <tr><td>medium (series)</td><td><code>\textmd{medium}</code></td><td><code>{\mdseries medium}</code></td></tr>
+      <tr><td>boldface (series)</td><td><code>\textbf{boldface}</code></td><td><code>{\bfseries boldface}</code></td></tr>
+      <tr><td>upright (shape)</td><td><code>\textup{upright}</code></td><td><code>{\upshape upright}</code></td></tr>
+      <tr><td>italic (shape)</td><td><code>\textit{italic}</code></td><td><code>{\itshape italic}</code></td></tr>
+      <tr><td>slanted (shape)</td><td><code>\textsl{slanted}</code></td><td><code>{\slshape slanted}</code></td></tr>
+      <tr><td>small caps (shape)</td><td><code>\textsc{small cap}</code></td><td><code>{\scshape small cap}</code></td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>Command or declaration?</strong> <code>\textbf{...}</code> works on exactly the text in its braces. A declaration such as <code>\bfseries</code> stays on until the end of the group it sits in, which is the closing brace or the end of the paragraph. Compare:</p>
+  <pre><code>By a \bfseries{triangle}, we mean a polygon of three sides.
+By a {\bfseries triangle}, we mean a polygon of three sides.</code></pre>
+  <p>In the first line, everything after <code>\bfseries</code> is bold. In the second, the braces around the declaration and its text limit the bold to "triangle". So wrap a declaration and the text it should affect in braces.</p>
+
+  <div class="plain">
+    <strong>The emphasis rule.</strong> <code>\emph</code> switches to italics in normal text, but switches to upright text when it is already inside italics. So in <code>\textit{A triangle is called a \emph{triangle}}</code>, the word "triangle" comes out upright. This is deliberate: it stands out from italic text.
+  </div>
+
+  <h3>1.10 Type size</h3>
+  <p>The default size is 10 points. The ten size commands, from smallest to largest, are <code>\tiny</code>, <code>\scriptsize</code>, <code>\footnotesize</code>, <code>\small</code>, <code>\normalsize</code>, <code>\large</code>, <code>\Large</code>, <code>\LARGE</code>, <code>\huge</code>, <code>\Huge</code>. They are declarations, so use them in braces:</p>
+  <pre><code>{\bfseries\huge The \TeX nical Institute}\\[1cm]
+{\scshape\LARGE Certificate}</code></pre>
+  <p>Style and size commands can be combined, as above.</p>
+
+  <div class="remember">
+    <strong>Remember (Part 1)</strong>
+    <ul>
+      <li>Spaces and line breaks in the source do not change the output. A blank line starts a paragraph.</li>
+      <li>A command eats the spaces after it. Use <code>\ </code> to keep one.</li>
+      <li>Ten characters are reserved. Escape them with a backslash.</li>
+      <li><code>%</code> starts a comment, so it does not print.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="part" id="ch2">
+  <h2>2. The document</h2>
+  <p class="tag">Syllabus unit 2 &middot; Primer pages 15&ndash;26</p>
+
+  <h3>2.1 Document class and options</h3>
+  <div class="plain">
+    <strong>In plain words.</strong> The document class decides the overall shape of the document: its page size, its sectioning, and whether it has chapters. Options adjust that shape. Options go in square brackets, and the class name goes in braces.
+  </div>
+  <pre><code>\documentclass[options]{class}</code></pre>
+  <ul>
+    <li><strong>Classes:</strong> <code>article</code> (papers, assignments; no chapters), <code>report</code> (long documents with chapters), <code>book</code> (chapters, odd-page starts), <code>letter</code>.</li>
+    <li><strong>Font size:</strong> <code>10pt</code> (default), <code>11pt</code>, <code>12pt</code>. Example: <code>\documentclass[11pt]{article}</code>.</li>
+    <li><strong>Paper:</strong> <code>a4paper</code>, <code>letterpaper</code> (default), <code>a5paper</code>, <code>legalpaper</code>, <code>b5paper</code>. The primer's table lists sizes for each; for India, use <code>a4paper</code>.</li>
+    <li><strong>Columns:</strong> <code>onecolumn</code> (default) or <code>twocolumn</code>, like a dictionary.</li>
+    <li><strong>Sides:</strong> <code>oneside</code> (default for article) or <code>twoside</code> (page numbers on the outside edge, for double-sided printing; default for book).</li>
+    <li><strong>Chapter starts:</strong> <code>openany</code> (report default) or <code>openright</code> (book default: chapters start on odd pages).</li>
+    <li><strong>Title page:</strong> <code>titlepage</code> or <code>notitlepage</code>. Report and book put the title on its own page; article does not.</li>
+  </ul>
+  <pre><code>\documentclass[11pt,a4paper]{article}</code></pre>
+  <p>LaTeX has no default class, so you must always name one.</p>
+
+  <h3>2.2 Page style: headers and footers</h3>
+  <p>Each page has a "head" and a "foot". The <code>\pagestyle</code> command chooses what goes there:</p>
+  <table>
+    <thead><tr><th>Style</th><th>What it shows</th></tr></thead>
+    <tbody>
+      <tr><td><code>plain</code></td><td>Empty head, page number centred in the foot (article default)</td></tr>
+      <tr><td><code>empty</code></td><td>Nothing, so no page numbers</td></tr>
+      <tr><td><code>headings</code></td><td>Page number and chapter/section names in the head (book default)</td></tr>
+      <tr><td><code>myheadings</code></td><td>Same as headings, but you choose the text with <code>\markboth{left}{right}</code> or <code>\markright{right}</code></td></tr>
+    </tbody>
+  </table>
+  <p>To change one page only, use <code>\thispagestyle{empty}</code>. For full control of headers, the <code>fancyhdr</code> package is better; the primer points to it.</p>
+
+  <h3>2.3 Page numbering</h3>
+  <pre><code>\pagenumbering{roman}    % i, ii, iii ...
+\pagenumbering{arabic}   % 1, 2, 3 ... (the default)
+\setcounter{page}{5}     % the current page is numbered 5</code></pre>
+  <p>Other styles: <code>Roman</code> (I, II), <code>alph</code> (a, b), <code>Alph</code> (A, B). A common pattern: roman numbers for the preface, arabic numbers for the body.</p>
+
+  <h3>2.4 Lengths</h3>
+  <p>Page layout uses lengths such as the width of the text. You change them with <code>\setlength</code>:</p>
+  <pre><code>\setlength{\textwidth}{15cm}</code></pre>
+  <p>The <code>geometry</code> package is easier: <code>\usepackage[margin=2.5cm]{geometry}</code> sets all margins in one line.</p>
+
+  <h3>2.5 Title, author and date</h3>
+  <pre><code>\title{Document name}
+\author{Author names}
+\date{Date text}
+\maketitle</code></pre>
+  <ul>
+    <li><code>\maketitle</code> prints the title block. Without it, nothing is printed.</li>
+    <li>Use <code>\\</code> to break a long title or to print several lines of address in the author field.</li>
+    <li>Use <code>\and</code> between authors to set them side by side.</li>
+    <li><code>\date{}</code> (empty braces) prints no date. Omitting <code>\date</code> prints today's date.</li>
+    <li><code>\thanks{...}</code> adds a footnote mark to the title, author or date.</li>
+  </ul>
+
+  <h3>2.6 Abstract</h3>
+  <pre><code>\begin{abstract}
+  Abstract text.
+\end{abstract}</code></pre>
+  <p>Works in <code>article</code> and <code>report</code>, but not <code>book</code>. In an article, it appears under the title on the first page.</p>
+
+  <h3>2.7 Dividing the document: sectioning</h3>
+  <p>The hierarchy in <code>book</code> and <code>report</code> is:</p>
+  <pre><code>\chapter   \section   \subsection   \subsubsection   \paragraph   \subparagraph</code></pre>
+  <p><code>article</code> has no <code>\chapter</code>; its top level is <code>\section</code>.</p>
+  <ul>
+    <li>Numbering: a chapter prints "Chapter 2", a section "2.1", a subsection "2.1.1". Subsubsections and below have no numbers in book and report. In article, subsubsections are numbered.</li>
+    <li><code>\paragraph</code> and <code>\subparagraph</code> have no numbers and use run-in headings.</li>
+    <li>Add a star to remove the number and the table-of-contents entry: <code>\section*{Introduction}</code>.</li>
+    <li><code>\part{...}</code> sits above chapters in long documents. It does not change the numbering below it.</li>
+  </ul>
+
+  <div class="remember">
+    <strong>Remember (Part 2)</strong>
+    <ul>
+      <li>Every file starts with <code>\documentclass</code>.</li>
+      <li>The title block needs <code>\maketitle</code> in the body.</li>
+      <li>Chapters exist only in book and report.</li>
+      <li>Starred sectioning (<code>\section*</code>) removes numbers and table-of-contents entries.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="part" id="ch3">
+  <h2>3. Bibliography</h2>
+  <p class="tag">Syllabus unit 3 &middot; Primer pages 27&ndash;34</p>
+
+  <div class="plain">
+    <strong>In plain words.</strong> A bibliography is the list of sources at the end of a document. In the text, you refer to a source by a short <em>key</em> (for example <code>lamport</code>). LaTeX turns the key into a number, such as [1], and prints the full entry at the end under the same number. You can change the numbering style without touching the entries.
+  </div>
+
+  <h3>3.1 Writing a list by hand: thebibliography</h3>
+  <pre><code>\begin{thebibliography}{99}
+  \bibitem{les85} Leslie Lamport, 1985. \emph{\LaTeX---A
+   Document Preparation System---User's Guide and
+   Reference Manual}, Addison-Wesley, Reading.
+  \bibitem{don89} Donald E. Knuth, 1989. \emph{Typesetting
+   Concrete Mathematics}, TUGBoat, 10(1):31-36.
+\end{thebibliography}</code></pre>
+
+  <ul>
+    <li>The argument <code>{99}</code> is the width of the widest label. Use a two-digit number for 10 to 99 entries. For custom labels, use the longest label, such as <code>{Long-name}</code>.</li>
+    <li>Each entry starts with <code>\bibitem{key}</code>. The key is any string without a comma, for example <code>ale91</code>.</li>
+    <li>Cite an entry with <code>\cite{key}</code>. Cite several with commas: <code>\cite{key1,key2}</code>.</li>
+    <li>Add a note with an optional argument: <code>\cite[page~25]{key1}</code> prints "[1, page 25]".</li>
+    <li>The first compilation writes the keys to a file; the second replaces the citations with numbers. So compile twice.</li>
+  </ul>
+
+  <p>Example from the primer. The input</p>
+  <pre><code>It is hard to write unstructured documents using \LaTeX~\cite{les85}.
+It is interesting to typeset one equation~\cite[Sec 3.3]{les85}
+rather than setting ten pages of running matter~\cite{don89,rondon89}.</code></pre>
+  <p>prints "It is hard to write unstructured documents using LaTeX [1]. It is interesting to typeset one equation [1, Sec 3.3] rather than setting ten pages of running matter [2,3]." The <code>~</code> is a non-breaking space, so the citation never starts a new line on its own.</p>
+
+  <h3>3.2 Author and year citations: natbib</h3>
+  <p>The <code>natbib</code> package gives you control over the citation style. Load it with <code>\usepackage[options]{natbib}</code>.</p>
+  <table>
+    <thead><tr><th>Option</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td><code>round</code> (default), <code>square</code>, <code>curly</code>, <code>angle</code></td><td>Brackets around citations</td></tr>
+      <tr><td><code>authoryear</code> (default), <code>numbers</code>, <code>super</code></td><td>Author and year, numbers in brackets, or superscript numbers (as in Nature)</td></tr>
+      <tr><td><code>sort</code>, <code>sort&amp;compress</code></td><td>Order multiple citations by list position; compress 3&ndash;6, 15</td></tr>
+    </tbody>
+  </table>
+
+  <p>The main commands and what they print for a key <code>ale91</code> (Alex et al., 1991):</p>
+  <table>
+    <thead><tr><th>Command</th><th>Prints</th></tr></thead>
+    <tbody>
+      <tr><td><code>\citet{ale91}</code></td><td>Alex et al. (1991)</td></tr>
+      <tr><td><code>\citep{ale91}</code></td><td>(Alex et al., 1991)</td></tr>
+      <tr><td><code>\citep[chap.~4]{ale91}</code></td><td>(Alex et al., 1991, chap. 4)</td></tr>
+      <tr><td><code>\citealt{ale91}</code></td><td>Alex et al. 1991 (no brackets)</td></tr>
+      <tr><td><code>\citet*{ale91}</code></td><td>Alex, Mathew and Ravi (1991): the starred form prints all authors</td></tr>
+      <tr><td><code>\citet{ale91,rav92}</code></td><td>Alex et al. (1991); Ravi et al. (1992)</td></tr>
+      <tr><td><code>\citeauthor{ale91}</code>, <code>\citeyear{ale91}</code></td><td>Alex et al.; 1991 (for partial citations)</td></tr>
+    </tbody>
+  </table>
+  <p>In numerical mode, the same citation prints as <code>[5]</code> or <code>Alex et al. [5]</code>.</p>
+
+  <h3>3.3 Bibliography entries with natbib</h3>
+  <p>With author-year citations, each <code>\bibitem</code> gets a label with the author and year in square brackets:</p>
+  <pre><code>\begin{thebibliography}{widest-label}
+  \bibitem[Lamport(1985)]{les85} Leslie Lamport, 1985.
+    \emph{\LaTeX---A Document Preparation}...
+\end{thebibliography}</code></pre>
+  <div class="warn">
+    <strong>Careful.</strong> The year in parentheses inside the optional argument is required. If one entry lacks a year, the whole list silently switches to numbers. Use <code>(0000)</code> when a year is unknown and cite with <code>\citeauthor</code> in the text.
+  </div>
+
+  <h3>3.4 Changing the punctuation</h3>
+  <p><code>\bibpunct</code> sets the brackets, separators and mode. Example from the primer:</p>
+  <pre><code>\bibpunct{[}{]}{,}{a}{}{;}
+\citep{jon90,jon91,jam92}     % prints [Jones et al. 1990; 1991, James et al. 1992]</code></pre>
+
+  <div class="remember">
+    <strong>Remember (Part 3)</strong>
+    <ul>
+      <li>A key is a short name; <code>\cite</code> prints the number or author-year.</li>
+      <li>Compile twice (or more) for the citations to be correct.</li>
+      <li>Use <code>~</code> before a citation so it does not break across lines.</li>
+      <li>Use natbib for author-year lists; its <code>\citet</code> and <code>\citep</code> are the commands to learn.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="part" id="ch4">
+  <h2>4. Bibliographic databases (BibTeX)</h2>
+  <p class="tag">Syllabus unit 3 &middot; Primer pages 35&ndash;42</p>
+
+  <div class="plain">
+    <strong>In plain words.</strong> Typing the same reference into every paper is tedious. BibTeX lets you keep references once, in a <code>.bib</code> database file. BibTeX then formats them in whatever style a journal wants. You never retype a reference.
+  </div>
+
+  <h3>4.1 The database entry</h3>
+  <pre><code>@BOOK{knuth:86a,
+  AUTHOR    = "Donald E. Knuth",
+  TITLE     = {The \TeX{}book},
+  EDITION   = "third",
+  PUBLISHER = "Addison-Wesley",
+  ADDRESS   = {Reading, MA},
+  YEAR      = 1986 }</code></pre>
+  <ul>
+    <li><code>@BOOK</code> is the entry type. Capitals or small letters both work.</li>
+    <li><code>knuth:86a</code> is the key you use with <code>\cite</code>.</li>
+    <li>Each field is <code>NAME = {text}</code>, or <code>"text"</code>. A plain number such as <code>1986</code> needs neither.</li>
+    <li>Fields are separated by commas. Fields that the style does not need are ignored, so you can store notes or abstracts there too.</li>
+  </ul>
+
+  <h3>4.2 Common entry types</h3>
+  <table>
+    <thead><tr><th>Type</th><th>Use for</th><th>Required fields</th></tr></thead>
+    <tbody>
+      <tr><td><code>@article</code></td><td>Article in a journal or magazine</td><td>author, title, journal, year</td></tr>
+      <tr><td><code>@book</code></td><td>Book with a publisher</td><td>author or editor, title, publisher, year</td></tr>
+      <tr><td><code>@inbook</code></td><td>Part of a book (chapter or pages)</td><td>author or editor, title, chapter and/or pages, publisher, year</td></tr>
+      <tr><td><code>@incollection</code></td><td>Part of a book with its own title</td><td>author, title, booktitle, publisher, year</td></tr>
+      <tr><td><code>@inproceedings</code>, <code>@conference</code></td><td>Paper in conference proceedings</td><td>author, title, booktitle, year</td></tr>
+      <tr><td><code>@phdthesis</code>, <code>@masterthesis</code></td><td>Thesis</td><td>author, title, school, year</td></tr>
+      <tr><td><code>@manual</code></td><td>Technical documentation</td><td>title</td></tr>
+      <tr><td><code>@misc</code></td><td>Anything that fits nowhere else</td><td>none</td></tr>
+      <tr><td><code>@unpublished</code></td><td>Unpublished work</td><td>author, title, note</td></tr>
+    </tbody>
+  </table>
+  <p>Optional fields such as <code>volume</code>, <code>number</code>, <code>pages</code>, <code>month</code> and <code>note</code> are printed when present. If a required field is missing, BibTeX shows an error in its log.</p>
+
+  <h3>4.3 Using the database in a document</h3>
+  <pre><code>\documentclass{article}
+\pagestyle{empty}
+\begin{document}
+Citation of a normal book~\cite{Eijkhout:1991}. A reference to
+a manual~\cite{Dynatext} and a PhD thesis \cite{Liang:1983}.
+\bibliographystyle{plain}   % the layout of the list
+\bibliography{bsample}      % the file bsample.bib
+\end{document}</code></pre>
+  <p>The command <code>\bibliographystyle</code> chooses the format. The common styles:</p>
+  <table>
+    <thead><tr><th>Style</th><th>Behaviour</th></tr></thead>
+    <tbody>
+      <tr><td><code>plain</code></td><td>Sorted alphabetically, numeric labels</td></tr>
+      <tr><td><code>unsrt</code></td><td>Like plain, but in order of first citation</td></tr>
+      <tr><td><code>alpha</code></td><td>Labels made from author and year, such as Knu86</td></tr>
+      <tr><td><code>abbrv</code></td><td>Like plain, but names of months and journals shortened</td></tr>
+      <tr><td><code>acm</code>, <code>apalike</code></td><td>House styles of ACM and APA journals</td></tr>
+    </tbody>
+  </table>
+
+  <h3>4.4 The four-step procedure</h3>
+  <p>BibTeX does not read the <code>.tex</code> file. It reads the <code>.aux</code> file that LaTeX wrote, then looks up the keys in the database and writes a <code>.bbl</code> file. Run the commands in this order:</p>
+  <pre><code>$ latex sample     # 1st run: writes the citation keys to sample.aux
+$ bibtex sample    # reads sample.aux and bsample.bib, writes sample.bbl
+$ latex sample     # 2nd run: reads sample.bbl
+$ latex sample     # 3rd run: resolves all references</code></pre>
+  <p>Warnings and errors from BibTeX go to <code>sample.blg</code>.</p>
+
+  <p><code>\nocite{key}</code> puts an entry in the list without printing a citation. <code>\nocite{*}</code> puts every entry from every database in the list, which is useful for checking a database.</p>
+
+  <div class="remember">
+    <strong>Remember (Part 4)</strong>
+    <ul>
+      <li>References live in a <code>.bib</code> file once. The document only says which file (<code>\bibliography{name}</code>) and which style (<code>\bibliographystyle{...}</code>).</li>
+      <li>Run latex, bibtex, latex, latex. If a citation still shows "?", run latex once more.</li>
+      <li>Check the <code>.blg</code> file when something is missing.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="part" id="ch5">
+  <h2>5. Table of contents and index</h2>
+  <p class="tag">Syllabus unit 4 &middot; Primer pages 43&ndash;51 (glossary, 5.3, is omitted by the syllabus)</p>
+
+  <h3>5.1 Table of contents, lists of figures and tables</h3>
+  <div class="plain">
+    <strong>In plain words.</strong> LaTeX writes down every heading, figure caption and table caption as it goes, along with its page number. Then <code>\tableofcontents</code> prints them all in a list. You only type the command where the list should appear.
+  </div>
+  <pre><code>\tableofcontents    % the contents page
+\listoffigures     % list of figures
+\listoftables      % list of tables</code></pre>
+  <ul>
+    <li>The contents list needs <strong>two</strong> compilations. The first run saves the headings to a <code>.toc</code> file; the second run reads them back and prints the list.</li>
+    <li>Figure and table lists use the caption text, saved to <code>.lof</code> and <code>.lot</code>.</li>
+    <li>Starred headings (<code>\section*</code>) are not listed. To list one anyway, add it by hand: <code>\addcontentsline{toc}{section}{Preface}</code>.</li>
+    <li><code>\addtocontents{toc}{\protect\vspace{2ex}}</code> adds a gap in the middle of the contents.</li>
+    <li>Use the optional argument of a caption to shorten its entry in the lists: <code>\caption[Short]{Long caption text}</code>.</li>
+  </ul>
+
+  <h3>5.2 Index</h3>
+  <div class="plain">
+    <strong>In plain words.</strong> An index lists important words with the pages where they appear. You mark each word in the text with <code>\index{word}</code>. A program called <code>makeindex</code> sorts them, and <code>\printindex</code> prints the sorted list.
+  </div>
+
+  <p>Steps (from the primer):</p>
+  <ol>
+    <li>Mark terms in the text: <code>\index{index entry}</code>.</li>
+    <li>In the preamble, load the package and turn on indexing: <code>\usepackage{makeidx}</code> then <code>\makeindex</code>.</li>
+    <li>Put <code>\printindex</code> where the index should appear, normally before <code>\end{document}</code>.</li>
+    <li>Compile with <code>latex</code>. This writes a raw index file (<code>file.idx</code>).</li>
+    <li>Run <code>makeindex file</code>. This writes <code>file.ind</code> (the sorted index) and <code>file.ilg</code> (a log).</li>
+    <li>Compile with <code>latex</code> again to see the index.</li>
+  </ol>
+
+  <h4>Sub-entries</h4>
+  <pre><code>\index{dimensions!rule!width}   % main ! sub ! subsub
+\index{animal!mammal!cat}</code></pre>
+  <p>The <code>!</code> character separates the levels. The output is an indented list: dimensions, then rule, then width, with the page number after it.</p>
+
+  <h4>Page ranges and cross-references</h4>
+  <pre><code>\index{fonts!PostScript|(}     % start of a range
+\index{fonts!PostScript|)}     % end of the range
+\index{animalism|see{animal}}   % "animalism, see animal" (no page number)</code></pre>
+
+  <h4>Showing the entry differently</h4>
+  <pre><code>\index{delta@$\delta$}                  % sorted under "delta", printed as delta
+\index{tabular@\texttt{tabular} environment}
+\index{animal@\emph{animal}}           % page number printed in italics</code></pre>
+  <p>The part before <code>@</code> decides where the entry is sorted. The part after it is what is printed.</p>
+
+  <h4>Special characters</h4>
+  <p>The characters <code>!</code>, <code>@</code>, <code>"</code> and <code>|</code> have jobs in the index. To print one of them, put <code>"</code> in front: <code>\index{exclamation ("!)}</code> prints "exclamation (!)".</p>
+
+  <div class="warn">
+    <strong>No index file?</strong> Nothing is produced unless <code>\makeindex</code> is in the preamble. The primer notes this in the text: without it, <code>\index</code> writes nothing.
+  </div>
+
+  <h3>5.3 Glossary (omitted in the syllabus)</h3>
+  <p>The primer describes <code>\makeglossary</code> and <code>\glossary{entry}</code> for a glossary. The syllabus leaves this out, so it is not needed for the exam.</p>
+
+  <div class="remember">
+    <strong>Remember (Part 5)</strong>
+    <ul>
+      <li>The contents list needs two runs. The index needs latex, makeindex, latex.</li>
+      <li><code>\index</code> does nothing without <code>\makeindex</code> in the preamble.</li>
+      <li><code>!</code> makes sub-entries; <code>|</code> makes page ranges and "see" cross-references; <code>@</code> sets the sort key.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="part" id="ch6">
+  <h2>6. Displayed text and lists</h2>
+  <p class="tag">Syllabus unit 5 &middot; Primer pages 55&ndash;68</p>
+
+  <div class="plain">
+    <strong>In plain words.</strong> "Displaying" means setting a passage apart from the main text, for example an indented quotation, a poem, or a list. LaTeX does this with <em>environments</em>: a <code>\begin{name}</code> and an <code>\end{name}</code> around the passage.
+  </div>
+
+  <h3>6.1 Quotations</h3>
+  <table>
+    <thead><tr><th>Environment</th><th>Use</th><th>Look</th></tr></thead>
+    <tbody>
+      <tr><td><code>quote</code></td><td>A quotation that is one paragraph</td><td>Indented on both sides</td></tr>
+      <tr><td><code>quotation</code></td><td>A quotation of several paragraphs</td><td>Indented on both sides, and the first line of each paragraph is indented too</td></tr>
+    </tbody>
+  </table>
+  <pre><code>\begin{quote}
+  The true spirit of delight ... from which all great work springs.
+\end{quote}</code></pre>
+  <p>Paragraphs inside <code>quotation</code> are separated by blank lines, as in ordinary text.</p>
+
+  <h3>6.2 Poetry: verse</h3>
+  <pre><code>\begin{verse}
+A mathematician once confided\\
+That a M\"obius band is one sided\\
+You'll get quite a laugh\\
+If you cut it in half\\
+For it stays in one piece when divided
+\end{verse}</code></pre>
+  <ul>
+    <li><code>\\</code> forces a line break. Stanzas are separated by a blank line.</li>
+    <li><code>\\*</code> forces the break but forbids a page break there, so a rhyming couplet stays together.</li>
+    <li><code>\\[5pt]</code> adds 5 points of extra space after the line.</li>
+  </ul>
+
+  <h3>6.3 Lists</h3>
+  <div class="plain">
+    <strong>In plain words.</strong> LaTeX has three list environments. Each item is marked with <code>\item</code>. Lists can be nested up to four levels deep.
+  </div>
+
+  <table>
+    <thead><tr><th>Environment</th><th>Labels</th><th>Use for</th></tr></thead>
+    <tbody>
+      <tr><td><code>itemize</code></td><td>Bullets: &bull;, &ndash;, *, &middot; at the four levels</td><td>Unordered points</td></tr>
+      <tr><td><code>enumerate</code></td><td>Numbers: 1., (a), i., A.</td><td>Steps, or points you refer to by number</td></tr>
+      <tr><td><code>description</code></td><td>Whatever you give in square brackets after <code>\item</code>, in bold</td><td>Terms and their meanings</td></tr>
+    </tbody>
+  </table>
+
+  <h4>Bullets</h4>
+  <pre><code>One should keep the following in mind when using \TeX
+\begin{itemize}
+\item \TeX\ is a typesetting language and not a word processor
+\item \TeX\ is a program and not an application
+\end{itemize}
+Being a program, \TeX\ offers a high degree of flexibility.</code></pre>
+  <p>A list inside a list is nested. The second level uses dashes, the third an asterisk, the fourth a dot.</p>
+
+  <h4>Changing the bullet</h4>
+  <pre><code>{\renewcommand{\labelitemi}{$\triangleright$}
+\begin{itemize}
+\item First item of a new list
+\item Second item
+\end{itemize}}</code></pre>
+  <p>The braces keep the change local to this list. The first-level bullet is <code>\labelitemi</code>, the second-level <code>\labelitemii</code>, and so on. Remove the braces to change the bullet for the whole document.</p>
+
+  <h4>Numbered lists</h4>
+  <pre><code>\begin{enumerate}
+  \item Prepare a source file with the extension "tex"
+  \item Compile it with \LaTeX to produce a "dvi" file
+  \item Print the document using a "dvi" driver
+\end{enumerate}</code></pre>
+  <p>The numbering is 1, 2, 3 at the first level, (a), (b) at the second, i, ii at the third, and A, B at the fourth.</p>
+
+  <h4>Custom labels with the enumerate package</h4>
+  <pre><code>\usepackage{enumerate}   % in the preamble, by David Carlisle
+\begin{enumerate}[\hspace{0.5cm}Step 1.]
+\item Prepare a source file with the extension "tex"
+\item Compile it with \LaTeX to produce a "dvi" file
+  \begin{enumerate}[i.]
+  \item Use a previewer to view the output
+  \item Edit the source if needed
+  \end{enumerate}
+\item Print the document using a "dvi" driver
+\end{enumerate}</code></pre>
+  <p>The text in square brackets after <code>\begin{enumerate}</code> becomes the label of the first item. The <code>\hspace</code> adds an indent. The letters <code>A</code>, <code>a</code>, <code>I</code>, <code>i</code> and <code>1</code> inside the brackets are read as numbering styles. To keep one as plain text, wrap it in braces, as in <code>[\hspace{1cm}({A}1)]</code>. The primer's example then shows (A1), (A2), (A3), (A4).</p>
+
+  <div class="warn">
+    <strong>Pitfall (from the primer).</strong> Writing <code>\begin{enumerate}[\hspace{1cm}(A1)]</code> without braces gives (11), (22), (33). The letter A is read as an instruction to number with capitals. Braces around the A fix it.
+  </div>
+
+  <h4>Overriding one label</h4>
+  <pre><code>\begin{enumerate}
+  \item[(1)] $l$ is an upper bound of $A$
+  \item[(2)] if $u$ is an upper bound of $A$, then $l\le u$
+\end{enumerate}</code></pre>
+  <p>Any list can use a custom label in square brackets right after <code>\item</code>.</p>
+
+  <div class="warn">
+    <strong>Pitfall: square brackets.</strong> Write <code>\item (0,1) is an open interval</code> and it works. But <code>\item [0,1] is a closed interval</code> loses the <code>[0,1]</code>, because LaTeX reads it as a label. Put the maths in dollar signs: <code>\item $[0,1]$ is a closed interval</code>.
+  </div>
+
+  <h4>Descriptions</h4>
+  <pre><code>\begin{description}
+  \item[\TeX] A typesetting program
+  \item[Emacs] A text editor and also
+  \item[AbiWord] A word processor
+\end{description}</code></pre>
+  <p>The label is whatever is in the brackets, typeset in bold roman. There is no indent at the first level by default.</p>
+
+  <div class="remember">
+    <strong>Remember (Part 6)</strong>
+    <ul>
+      <li>Use <code>quote</code> for one paragraph and <code>quotation</code> for several.</li>
+      <li>Inside verse, the line break is <code>\\</code>. A blank line starts a new stanza.</li>
+      <li>Lists nest up to four levels. Each item starts with <code>\item</code>.</li>
+      <li>Braces keep a change of label local. Put maths and brackets in <code>$...$</code> inside an item.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="part" id="ch7">
+  <h2>7. Rows and columns</h2>
+  <p class="tag">Syllabus units 6 and 7 &middot; Primer pages 69&ndash;94</p>
+
+  <div class="plain">
+    <strong>In plain words.</strong> A list gives you rows. When the rows need columns that line up, use <code>tabbing</code> (for simple aligned text) or <code>tabular</code> (for a real table with rules and cells). <code>tabular</code> is the one you will use most.
+  </div>
+
+  <h3>7.1 Tabbing: setting tab stops</h3>
+  <p>In <code>tabbing</code>, you set tab stops with <code>\=</code> and jump to them with <code>\></code>. A line ends with <code>\\</code>.</p>
+  <pre><code>\begin{tabbing}
+\hspace{1cm}\= \textbf{AbiWord}\quad\= word processor\\[5pt]
+            \&gt; \textbf{Emacs}                  \&gt; text editor\\[5pt]
+            \&gt; \textbf{\TeX}                   \&gt; typesetting program
+\end{tabbing}</code></pre>
+  <p>Line by line: the first <code>\=</code> sets a tab 1 cm from the margin; the second sets a tab after the word "AbiWord" plus a quad (a space the width of the letter M). Every later <code>\></code> goes to those tab stops.</p>
+
+  <div class="warn">
+    <strong>Pitfall.</strong> A tab is set by the first line that uses <code>\=</code>. If that line is wide (for example the word "TEX" above), the later lines jump too far. The fix is a <strong>dummy line</strong> that sets the tabs and is removed with <code>\kill</code>:
+  </div>
+  <pre><code>\begin{tabbing}
+  \textbf{AbiWord}\quad\= A word processor\kill
+  \textbf{\TeX}\quad \&gt; A typesetting program\\[5pt]
+  \textbf{Emacs}\quad \&gt; A text editor\\[5pt]
+  \textbf{AbiWord}\quad\&gt; A word processor
+\end{tabbing}</code></pre>
+  <p>The line ending in <code>\kill</code> sets the tab stops but is not printed.</p>
+
+  <h4>Other tabbing commands</h4>
+  <table>
+    <thead><tr><th>Command</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td><code>\=</code></td><td>Set a new tab stop here</td></tr>
+      <tr><td><code>\&gt;</code></td><td>Jump to the next tab stop</td></tr>
+      <tr><td><code>\\</code></td><td>End of line</td></tr>
+      <tr><td><code>\kill</code></td><td>End of line, but do not print it (for setting tabs)</td></tr>
+      <tr><td><code>\+</code>, <code>\-</code></td><td><code>\+</code> at the end of a line makes the following lines start at the first tab; <code>\+\+</code> starts them at the second tab. <code>\-</code> cancels one <code>\+</code></td></tr>
+      <tr><td><code>\`</code></td><td>Text after it is pushed flush right</td></tr>
+      <tr><td><code>\pushtabs</code> ... <code>\poptabs</code></td><td>Save the tab settings, use new ones, then restore the saved ones</td></tr>
+    </tbody>
+  </table>
+  <p>Tabbing cannot be nested, and it can run across pages. Tabular cannot run across pages but can sit inside maths and other tables.</p>
+
+  <h3>7.2 Tabular: the table environment</h3>
+  <div class="plain">
+    <strong>In plain words.</strong> A <code>tabular</code> is a grid. The argument in braces after <code>\begin{tabular}</code> gives one letter per column: <code>l</code> left, <code>c</code> centred, <code>r</code> right. Cells are separated by <code>&amp;</code>, and each row ends with <code>\\</code>.
+  </div>
+
+  <pre><code>\begin{center}
+\begin{tabular}{lr}
+Planet &amp;amp; Diameter (km)\\[5pt]
+Mercury &amp;amp; 4878\\
+Venus   &amp;amp; 12104\\
+Earth   &amp;amp; 12756
+\end{tabular}
+\end{center}</code></pre>
+  <p>The <code>center</code> environment centres the table on the page. The <code>\\[5pt]</code> adds a little space after the heading row.</p>
+
+  <div class="io">
+    <div><div class="lab">Result (planet table)</div>
+      <table>
+        <thead><tr><th>Planet</th><th style="text-align:right">Diameter (km)</th></tr></thead>
+        <tbody>
+          <tr><td>Mercury</td><td style="text-align:right">4878</td></tr>
+          <tr><td>Venus</td><td style="text-align:right">12104</td></tr>
+          <tr><td>Earth</td><td style="text-align:right">12756</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div><div class="lab">Column letters</div>
+      <ul>
+        <li><code>l</code>, <code>c</code>, <code>r</code>: left, centre, right</li>
+        <li><code>p{6cm}</code>: a paragraph cell 6 cm wide, wrapping its text</li>
+        <li><code>|</code>: a vertical line</li>
+      </ul>
+    </div>
+  </div>
+
+  <h4>Rules: <code>\hline</code> and <code>\cline</code></h4>
+  <pre><code>\begin{tabular}{|l|r|}
+\hline
+Planet &amp;amp; Diameter(km)\\
+\hline
+Mercury &amp;amp; 4878\\
+\hline
+\end{tabular}</code></pre>
+  <ul>
+    <li><code>|</code> in the column letters draws a vertical line. Two bars give a double line.</li>
+    <li><code>\hline</code> draws a horizontal line across the whole table. It must come at the start of a row or right after <code>\\</code>.</li>
+    <li><code>\cline{i-j}</code> draws a line only under columns i to j.</li>
+    <li>Because a final <code>\hline</code> follows the last row, that last row still needs its <code>\\</code>.</li>
+  </ul>
+
+  <h4>Spanning columns: <code>\multicolumn</code></h4>
+  <pre><code>\begin{tabular}{lrr}
+Planet &amp;amp; \multicolumn{2}{c}{Distance from sun (km)}\\
+       &amp;amp; Maximum   &amp;amp; Minimum\\
+Mercury &amp;amp; 69400000 &amp;amp; 46800000\\
+\end{tabular}</code></pre>
+  <p><code>\multicolumn{2}{c}{text}</code> makes one cell that spans two columns, centred. The general form is <code>\multicolumn{num}{pos}{item}</code>. The empty first cell of the second row begins with <code>&amp;</code>, because the row has no entry in column one.</p>
+
+  <div class="warn">
+    <strong>Careful with the last column.</strong> When a <code>\multicolumn</code> covers the last column and you want a vertical line on its right, put the line in its position argument: <code>\multicolumn{2}{c|}{...}</code>. The primer shows that the final <code>|</code> is reset by <code>\multicolumn</code> and must be repeated.
+  </div>
+
+  <h4>Spacing: <code>\arraystretch</code> and <code>@{}</code></h4>
+  <pre><code>\renewcommand{\arraystretch}{1.2}   % 20% more space between rows
+\begin{tabular}{|c|r@{--}l|}          % a dash between the two numbers
+  \hline
+  Height &amp;amp; \multicolumn{2}{c|}{Ideal weight}\\
+  (cm)   &amp;amp; \multicolumn{2}{c|}{(kg)}\\
+  \hline
+  155 &amp;amp; 53.5 &amp;amp; 64\\
+  \hline
+\end{tabular}</code></pre>
+  <p><code>r@{--}l</code> means: right-aligned, then a dash, then left-aligned, with no normal gap between them. The result is "53.5&ndash;64". The <code>@{...}</code> form removes the usual column space; you can add space back with <code>\hspace</code> inside the braces.</p>
+
+  <h4>Cleaner rules: booktabs</h4>
+  <p>The primer's tables use <code>\hline</code>, but for a cleaner look, the <code>booktabs</code> package gives <code>\toprule</code>, <code>\midrule</code> and <code>\bottomrule</code>, with no vertical lines. Use <code>\cmidrule{2-3}</code> for a partial rule. This is an extension beyond the primer, but it is standard practice.</p>
+
+  <h3>7.3 Better columns with the array package</h3>
+  <pre><code>\usepackage{array}
+\begin{tabular}{|m{1.5cm}|m{2.3cm}|}
+\hline
+Planet &amp;amp; Mean distance from sun (km)\\
+\hline
+Mercury &amp;amp; 58100000\\
+\hline
+\end{tabular}</code></pre>
+<p>Here the <code>m</code> columns are the same width as <code>p</code> columns would be, but each cell's text is centred vertically in its box, so a two-line heading sits neatly in the middle.</p>
+  <ul>
+    <li><code>m{width}</code>: a column of fixed width whose text is centred <em>vertically</em>. <code>p{width}</code> aligns the text with the top.</li>
+    <li><code>&gt;{\bfseries}l</code>: put a declaration in front of every entry of a column. Here, the column is bold.</li>
+    <li><code>!{...}</code> is like <code>@{...}</code>, but keeps the normal space between columns.</li>
+  </ul>
+
+  <h4>Multi-row cells: <code>multirow</code></h4>
+  <pre><code>\usepackage{multirow}
+\renewcommand{\multirowsetup}{\centering}
+\multirow{3}{1.5cm}{Planet}    % spans three rows, vertically centred</code></pre>
+  <p><code>\multirow{num}{width}{text}</code> spans <code>num</code> rows. The <code>\multirowsetup</code> line centres the text horizontally; without it, the text is left-aligned.</p>
+
+  <h3>7.4 Tables that run over several pages: longtable</h3>
+  <pre><code>\usepackage{longtable}
+\begin{longtable}{|c|l|}
+  \hline
+  Year &amp;amp; Event\\
+  \hline
+  \endfirsthead          % rows for the first page's header are above this line
+  \hline
+  Year &amp;amp; Event (continued)\\
+  \hline
+  \endhead               % header repeated on each following page
+  \hline
+  continued on the next page\\
+  \endfoot               % footer on each page except the last
+  \hline
+  Source: The Cambridge Factfinder\\
+  \endlastfoot          % footer on the last page
+  1900 &amp;amp; Max Planck proposes quantum theory\\
+  \hline
+\end{longtable}</code></pre>
+  <p>Use <code>longtable</code> instead of <code>tabular</code>, and mark the rows that repeat with <code>\endfirsthead</code>, <code>\endhead</code>, <code>\endfoot</code> and <code>\endlastfoot</code>.</p>
+
+  <h4>Other packages named in the primer</h4>
+  <p><code>tabularx</code>, <code>dcolumn</code>, <code>delarray</code> and <code>hhline</code>. Read their manuals with <code>texdoc tabularx</code> in a terminal.</p>
+
+  <div class="remember">
+    <strong>Remember (Part 7)</strong>
+    <ul>
+      <li>Use <code>tabbing</code> for aligned text, <code>tabular</code> for a table.</li>
+      <li>Columns are <code>&amp;</code>-separated; rows end with <code>\\</code>.</li>
+      <li><code>\hline</code> and <code>\cline</code> draw rules; <code>|</code> draws vertical lines.</li>
+      <li><code>\multicolumn</code> merges cells. Keep the last column's line in its position argument.</li>
+      <li>Use <code>longtable</code> for tables longer than a page.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="part" id="ch8">
+  <h2>8. Typesetting mathematics</h2>
+  <p class="tag">Syllabus units 8&ndash;11 &middot; Primer pages 95&ndash;136</p>
+
+  <div class="plain">
+    <strong>In plain words.</strong> TeX was written to typeset mathematics well. Inside a formula, LaTeX spaces the symbols itself, so you write the meaning and let it place the spaces. Maths has two modes: <em>in-text</em> (inside a sentence, with <code>$...$</code>) and <em>display</em> (a formula on its own line, with <code>\[...\]</code> or <code>equation</code>).
+  </div>
+
+  <h3>8.1 The basics</h3>
+
+  <h4>In-text and displayed maths</h4>
+  <pre><code>The equation representing a straight line in the Cartesian plane is
+of the form $ax+by+c=0$, where $a$, $b$, $c$ are constants.
+
+$$
+  ax+by+c=0
+$$</code></pre>
+  <ul>
+    <li><code>$...$</code> keeps maths in the sentence. The letters are in math italic.</li>
+    <li><code>$$...$$</code> (TeX) and <code>\[...\]</code> (LaTeX) put the formula on its own centred line.</li>
+    <li><code>\(...\)</code> and <code>\begin{math}...\end{math}</code> are the LaTeX forms of in-text maths.</li>
+  </ul>
+
+  <div class="remember">
+    <strong>Spaces in maths.</strong> TeX ignores the spaces you type inside maths and places its own. <code>$ax+by+c=0$</code> and <code>$ax + by + c = 0$</code> print the same. Do not type spaces to make the result look right.
+  </div>
+
+  <h4>Superscripts and subscripts</h4>
+  <pre><code>$x^2$      $x_n$      $x_n^2$      % x squared, x sub n, both together
+$x^{mn}$    $x_{n-1}$                       % braces group several symbols
+$(x^m)^n = x^{mn}$</code></pre>
+  <p>Without braces, only the next character is affected. So <code>x^mn</code> prints "x<sup>m</sup>n", but <code>x^{mn}</code> prints x<sup>mn</sup>. For a superscript and a subscript together on the same letter, the order and braces change the output: <code>x_m^n</code>, <code>x^n_m</code> and <code>{x_m}^n</code> come out differently. Use braces to say what you mean.</p>
+  <pre><code>$$ x_m^n \qquad x^n_m \qquad {x_m}^n \qquad {x^n}_m $$</code></pre>
+
+  <h4>Roots and fractions</h4>
+  <pre><code>$\sqrt{2}$          % square root
+$\sqrt[4]{5}$      % fourth root
+$\sqrt{x+y}$       % the top bar stretches over the whole expression
+$\sqrt{2+\sqrt{2}}$ % nested roots</code></pre>
+  <p>The square root's horizontal bar stretches to cover its contents. Use <code>\frac{numerator}{denominator}</code> for fractions (covered in Part 8.4 below).</p>
+
+  <h4>Spacing inside maths</h4>
+  <table>
+    <thead><tr><th>Command</th><th>Space</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td><code>\,</code></td><td>thin space</td><td><code>\int f(x)\,dx</code></td></tr>
+      <tr><td><code>\;</code></td><td>thick space</td><td><code>x_n = x_{n-1}\;(n&gt;2)</code></td></tr>
+      <tr><td><code>\quad</code></td><td>a quad (about the width of M)</td><td><code>x_1=1,\quad x_2=1</code></td></tr>
+    </tbody>
+  </table>
+
+  <h4>Binary operators and relations</h4>
+  <p>TeX adds extra space around <em>binary operators</em> (such as <code>+</code>, <code>-</code>, <code>\circ</code>) and around <em>relations</em> (such as <code>=</code>, <code>\le</code>). Symbols that are not in either class do not get that space. To force a symbol to behave as one of these:</p>
+  <pre><code>x\circ y = x+y-xy          % \circ is a binary operator: spaces on both sides
+x\mathbin\Box y           % force \Box (from amssymb) to act as a binary operator
+x\mathrel\rho y           % force \rho to act as a relation</code></pre>
+  <p>Some symbols (for example <code>\Box</code>) are only available after loading <code>amssymb</code> or <code>latexsym</code>.</p>
+
+  <h3>8.2 Custom commands</h3>
+  <div class="plain">
+    <strong>In plain words.</strong> If you type the same expression many times, give it a short name with <code>\newcommand</code>. Put the definitions in the preamble, so they can be used anywhere.
+  </div>
+  <pre><code>\newcommand{\vect}{(x_1,x_2,\dots,x_n)}
+We often write $x$ to denote the vector $\vect$.</code></pre>
+  <p>With an argument, the same command can produce many vectors:</p>
+  <pre><code>\newcommand{\vect}[1]{(#1_1,#1_2,\dots,#1_n)}
+$\vect{x}$ gives $(x_1,x_2,\dots,x_n)$ and $\vect{a}$ gives $(a_1,a_2,\dots,a_n)$.
+
+\newcommand{\vect}[2]{(#1_1,#1_2,\dots,#1_#2)}
+$\vect{x}{m}$ gives $(x_1,x_2,\dots,x_m)$.</code></pre>
+  <p><code>[1]</code> says the command takes one argument. <code>#1</code> is replaced by that argument. A command can take up to nine arguments.</p>
+
+  <h3>8.3 More on mathematics: the amsmath package</h3>
+  <p>The primer uses <code>amsmath</code> for this section. Load it with <code>\usepackage{amsmath}</code>. It gives better equation environments.</p>
+
+  <h4>Single equations</h4>
+  <table>
+    <thead><tr><th>Environment</th><th>Numbered?</th><th>Use</th></tr></thead>
+    <tbody>
+      <tr><td><code>equation*</code></td><td>No</td><td>One display, no number</td></tr>
+      <tr><td><code>equation</code></td><td>Yes</td><td>One display with a number, such as (8.1)</td></tr>
+      <tr><td><code>multline*</code>, <code>multline</code></td><td>No / yes</td><td>One long formula over several lines (first line left, last line right)</td></tr>
+      <tr><td><code>split</code></td><td>Inside another environment</td><td>Several lines aligned at <code>&amp;</code>, inside one equation</td></tr>
+    </tbody>
+  </table>
+  <p>The starred version (<code>equation*</code>) has no number. The plain version numbers the formula. For any environment, the unstarred form adds numbers.</p>
+
+  <pre><code>\begin{equation*}
+  (a+b)^2 = (a+b)(a+b)
+\end{equation*}</code></pre>
+
+  <p>Text inside a display uses <code>\text</code>. Maths inside that text needs dollar signs:</p>
+  <pre><code>\begin{equation*}
+  x\le|x|\quad\text{and}\quad x\ge|x|
+\end{equation*}
+\begin{equation*}
+  x\le|x|\quad\text{for all $x$ in $R$}.
+\end{equation*}</code></pre>
+
+  <h4>Long equations: split and multline</h4>
+  <p>When an equation is too long for one line, <code>split</code> inside an <code>equation*</code> lines it up at the <code>&amp;</code> character, with the <code>=</code> signs aligned:</p>
+  <pre><code>\begin{equation*}
+  \begin{split}
+    (a+b)^2 &amp;amp; = (a+b)(a+b)\\
+            &amp;amp; = a^2+ab+ba+b^2\\
+            &amp;amp; = a^2+2ab+b^2
+  \end{split}
+\end{equation*}</code></pre>
+  <p><code>multline</code> is simpler to type, but for more than two lines its output is less neat. The primer recommends <code>split</code> for long expansions.</p>
+
+  <h4>Groups of equations: gather and align</h4>
+  <pre><code>\begin{gather*}
+  (a,b)+(c,d)=(a+c,b+d)\\
+  (a,b)(c,d)=(ac-bd,ad+bc)
+\end{gather*}
+
+Thus $x$, $y$ and $z$ satisfy the equations
+\begin{align*}
+  x+y-z &amp;amp; = 1\\
+  x-y+z &amp;amp; = 1
+\end{align*}</code></pre>
+  <ul>
+    <li><code>gather</code>: each line centred on its own.</li>
+    <li><code>align</code>: lines aligned at each <code>&amp;</code>. Put the <code>&amp;</code> before the <code>=</code> to line up the equals signs.</li>
+    <li><code>\intertext{and by hypothesis}</code> puts a short piece of text between aligned lines without breaking the alignment.</li>
+    <li>Extra <code>&amp;</code> signs make side-by-side columns. Use <code>\qquad</code> to space the columns apart.</li>
+    <li><code>aligned</code>, <code>gathered</code> and <code>alignedat</code> take only the width they need, so they can sit inside an <code>equation*</code> beside other text.</li>
+  </ul>
+
+  <h4>Cases</h4>
+  <pre><code>\begin{equation*}
+  |x| =
+  \begin{cases}
+    x      &amp;amp; \text{if $x\ge 0$}\\
+    -x     &amp;amp; \text{if $x\le 0$}
+  \end{cases}
+\end{equation*}</code></pre>
+
+  <h4>Equation numbers and labels</h4>
+  <pre><code>\numberwithin{equation}{section}   % equation numbers now carry the section number
+\begin{equation}\tag{L}
+  ax+by+c=0
+\end{equation}
+\begin{align}
+  x+y-z &amp;amp; = 1 \notag \\
+  x-y+z &amp;amp; = 1 \tag{H}
+\end{align}</code></pre>
+  <ul>
+    <li>Numbers are added to the unstarred environments automatically. In a book or report, the chapter number comes first: the second numbered equation of Chapter 8 prints as (8.2), as in the primer.</li>
+    <li><code>\numberwithin{equation}{section}</code> adds the section number as well, in the style (section.equation).</li>
+    <li><code>\tag{name}</code> replaces the automatic number with your own label.</li>
+    <li><code>\notag</code> removes the number from one row of an <code>align</code>.</li>
+    <li>Put <code>\tag</code> before the <code>\\</code> at the end of the row, not after it.</li>
+  </ul>
+
+  <div class="remember">
+    <strong>Remember (Part 8.1&ndash;8.3)</strong>
+    <ul>
+      <li>Use <code>$...$</code> for in-text maths and <code>\[...\]</code> or <code>equation</code> for displays.</li>
+      <li>Braces group the superscript or subscript. <code>x^{mn}</code>, not <code>x^mn</code>.</li>
+      <li>TeX sets the spaces in maths. Do not add spaces by hand.</li>
+      <li>Use <code>align</code> for several lines that must line up, and <code>split</code> inside an equation for one long formula.</li>
+      <li>The starred environment is unnumbered; the plain one is numbered.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="part" id="ch8b">
+  <h2>8 (continued). Matrices, delimiters, fractions, operators and symbols</h2>
+  <p class="tag">Syllabus units 10 and 11 &middot; Primer pages 112&ndash;136</p>
+
+  <h3>8.4 Mathematics miscellany</h3>
+
+  <h4>Matrices</h4>
+  <p>Matrices are set with environments, where <code>&amp;</code> separates the columns and <code>\\</code> ends each row:</p>
+  <table>
+    <thead><tr><th>Environment</th><th>Brackets</th></tr></thead>
+    <tbody>
+      <tr><td><code>matrix</code></td><td>None</td></tr>
+      <tr><td><code>pmatrix</code></td><td>Round ( )</td></tr>
+      <tr><td><code>bmatrix</code></td><td>Square [ ]</td></tr>
+      <tr><td><code>vmatrix</code></td><td>Single bars | |  (determinant)</td></tr>
+      <tr><td><code>Vmatrix</code></td><td>Double bars &#8214; &#8214;</td></tr>
+      <tr><td><code>Bmatrix</code></td><td>Curly braces { }</td></tr>
+      <tr><td><code>smallmatrix</code></td><td>None, for use inside a line of text</td></tr>
+    </tbody>
+  </table>
+  <pre><code>\begin{equation*}
+  \begin{pmatrix}
+    1 &amp;amp; 1 &amp;amp; -1\\
+    1 &amp;amp; -1 &amp;amp; 1\\
+    1 &amp;amp; 1 &amp;amp; 1
+  \end{pmatrix}
+  \begin{pmatrix} x\\ y\\ z \end{pmatrix} =
+  \begin{pmatrix} 1\\ 1\\ 1 \end{pmatrix}.
+\end{equation*}
+The determinant $\begin{vmatrix} a &amp;amp; b\\ c &amp;amp; d \end{vmatrix}$ is defined by
+\begin{equation*}
+  \begin{vmatrix} a &amp;amp; b\\ c &amp;amp; d \end{vmatrix} = ad - bc
+\end{equation*}</code></pre>
+  <p><code>matrix</code> with no bracket is an array without outer delimiters, so use <code>pmatrix</code> or <code>bmatrix</code> when you want brackets. <code>pmatrix</code> works both in text and in displays.</p>
+
+  <h4>Dots</h4>
+  <table>
+    <thead><tr><th>Command</th><th>Looks like</th><th>Use</th></tr></thead>
+    <tbody>
+      <tr><td><code>\ldots</code></td><td>x<sub>1</sub>, x<sub>2</sub>, &hellip;</td><td>On the baseline, in a list</td></tr>
+      <tr><td><code>\cdots</code></td><td>&middot;&middot;&middot;</td><td>Centred, between operators</td></tr>
+      <tr><td><code>\vdots</code>, <code>\ddots</code></td><td>vertical and diagonal dots</td><td>In matrices</td></tr>
+      <tr><td><code>\dotsc</code>, <code>\dotsb</code>, <code>\dotsm</code>, <code>\dotsi</code></td><td>dots for commas, binary operators, products, integrals</td><td>Choose by what comes before and after</td></tr>
+    </tbody>
+  </table>
+  <p>In a matrix, <code>\hdotsfor{4}</code> draws a row of dots spanning four columns. It takes an optional spacing argument, such as <code>\hdotsfor[2]{4}</code>.</p>
+
+  <h4>Delimiters that grow: <code>\left</code> and <code>\right</code></h4>
+  <pre><code>\[
+  \left( \frac{x}{y} \right)^{2} \qquad
+  \left[ \sum_{k=1}^{n} k \right] \qquad
+  \left\{ x \in \mathbb{R} : x &amp;gt; 0 \right\}
+\]</code></pre>
+  <ul>
+    <li>Each <code>\left</code> needs a matching <code>\right</code>. Use <code>\right.</code> for an invisible closing delimiter.</li>
+    <li>The delimiters need not match. A large brace on one side of a system of equations is a common use: <code>\left.</code> ... <code>\right\}</code>.</li>
+    <li>Sometimes <code>\left</code> is too big. <code>\bigl</code>, <code>\bigr</code>, <code>\Bigl</code>, <code>\biggl</code>, <code>\Biggl</code> (and the <code>r</code> forms) give sizes you choose.</li>
+  </ul>
+
+  <h4>Fractions and binomial coefficients</h4>
+  <pre><code>\frac{a+b}{c}          % fraction
+\binom{n}{k}           % binomial coefficient
+\tfrac{1}{2}           % smaller fraction, for use in a line
+\dfrac{1}{2^{n-1}}     % larger fraction, even in text
+\cfrac{1^2}{2+\cfrac{3^2}{2+\dotsb}}   % continued fraction</code></pre>
+  <p>Inside text, <code>\frac</code> prints smaller than in a display. Use <code>\tfrac</code> or <code>\dfrac</code> to override that. <code>\dbinom</code> and <code>\tbinom</code> do the same for binomials.</p>
+
+  <p><code>\genfrac{left}{right}{thickness}{style}{top}{bottom}</code> gives a custom fraction. Here, <code>\genfrac{\{}{\}}{0pt}{}{ij}{k}</code> prints the Christoffel symbol with braces, and <code>\genfrac{[}{]}{0pt}{}{ij}{k}</code> with square brackets. A zero thickness removes the line.</p>
+
+  <h4>Limits on large operators</h4>
+  <pre><code>In text:      $\sum_{n=1}^{\infty} \frac{1}{n^2}$
+In display:   \[ \sum_{n=1}^{\infty} \frac{1}{n^2} = \frac{\pi^2}{6} \]
+Force text style in a line:   $\displaystyle\sum_{n=1}^{\infty} \frac{1}{n^2}$
+Limits at the side in display: $\sum\nolimits_{n=1}^{\infty}$
+Limits above and below in text: $\sum\limits_{n=1}^{\infty}$
+Integral with limits above and below: $\int\limits_0^{\infty}$</code></pre>
+  <ul>
+    <li>In a display, the sum sign is larger and its limits sit above and below. In text, the limits sit at the side.</li>
+    <li><code>\limits</code> and <code>\nolimits</code> change the position. <code>\displaystyle</code> and <code>\textstyle</code> change the size.</li>
+    <li>Integrals keep their limits at the side even in display, unless you add <code>\limits</code>.</li>
+    <li><code>\substack{i=1\\i\ne k}</code> puts two lines of subscript under one operator. <code>\sideset</code> puts symbols at all four corners.</li>
+  </ul>
+
+  <h4>Accents, over and under</h4>
+  <pre><code>$\hat{a}$  $\bar{a}$  $\dot{a}$  $\ddot{a}$  $\tilde{a}$  $\vec{a}$
+$\overset{\circ}{a}$      % a with a small circle above
+$\underset{\circ}{a}$     % a with a small circle below
+$\overbrace{a+b+c}^{\text{sum}}$   $\underbrace{x+y}_{\text{pair}}$
+$\overrightarrow{AB}$     $\underline{ab}$
+$\xrightarrow[\text{monic}]{f}$     % arrow with a label above and below</code></pre>
+  <p><code>\xrightarrow</code> and <code>\xleftarrow</code> (from amsmath) stretch to fit a label. The optional argument in square brackets is the label below.</p>
+
+  <h3>8.5 New operators</h3>
+  <p>Functions such as <code>\sin</code>, <code>\log</code> and <code>\lim</code> are already set upright. To make your own, declare it in the preamble:</p>
+  <pre><code>\DeclareMathOperator{\cl}{cl}          % in the preamble
+We denote the closure of $A$ in $Y$ by $\cl_Y(A)$.
+
+\DeclareMathOperator*{\esup}{ess\,sup} % starred: limits above and below
+$\|f\|_\infty=\esup_{x\in R}|f(x)|$</code></pre>
+
+  <h3>8.6 The many faces of mathematics: math fonts</h3>
+  <table>
+    <thead><tr><th>Command</th><th>Example</th><th>Use</th></tr></thead>
+    <tbody>
+      <tr><td><code>\mathit</code></td><td>x+y=z</td><td>Italic (default)</td></tr>
+      <tr><td><code>\mathrm</code></td><td>x+y=z (upright)</td><td>Upright text inside maths; the letter <em>d</em> in differentials</td></tr>
+      <tr><td><code>\mathbf</code></td><td>bold roman</td><td>Bold, without italics</td></tr>
+      <tr><td><code>\mathsf</code></td><td>sans serif</td><td>Matrices (ISO style, sans serif)</td></tr>
+      <tr><td><code>\mathtt</code></td><td>typewriter</td><td>Code-like symbols</td></tr>
+      <tr><td><code>\mathcal</code></td><td>calligraphic capitals</td><td>Like $\mathcal{L}$</td></tr>
+      <tr><td><code>\boldsymbol</code></td><td>bold italic</td><td>Vectors such as $\boldsymbol{a}+\boldsymbol{b}=\boldsymbol{c}$</td></tr>
+      <tr><td><code>\mathbb</code></td><td>blackboard bold</td><td>$\mathbb{R}$, $\mathbb{N}$ (needs amssymb)</td></tr>
+    </tbody>
+  </table>
+  <p><code>\mathbf</code> gives roman bold, not bold italic. For bold italic vectors use <code>\boldsymbol</code>. Note that <code>\boldsymbol{a+b=c}</code> makes the plus and equals bold too, because it affects every symbol in its braces.</p>
+
+  <div class="plain">
+    <strong>ISO conventions (from the primer).</strong> Simple variables are italic. Vectors are bold italic. The special numbers <em>e</em> and <em>i</em>, and the differential <em>d</em>, are upright. Define them once:
+  </div>
+  <pre><code>\newcommand{\me}{\mathrm{e}}
+\newcommand{\mi}{\mathrm{i}}
+\newcommand{\diff}{\mathrm{d}}   % then write $\diff x$</code></pre>
+
+  <h3>8.7 And that is not all</h3>
+  <p>The primer points to the <em>amsldoc</em> document, which comes with TeX distributions, and to Knuth's <em>The TeXbook</em>, chapter 18, "Fine Points of Mathematics Typing", for more.</p>
+
+  <h3>8.8 Symbols: the ones you need most</h3>
+  <p>The primer has full symbol tables. Here are the most used ones.</p>
+
+  <table>
+    <thead><tr><th>Group</th><th>Commands and what they print</th></tr></thead>
+    <tbody>
+      <tr><td>Greek lower case</td><td><code>\alpha</code> &alpha;, <code>\beta</code> &beta;, <code>\gamma</code> &gamma;, <code>\delta</code> &delta;, <code>\epsilon</code> &epsilon;, <code>\varepsilon</code> &epsilon;, <code>\theta</code> &theta;, <code>\lambda</code> &lambda;, <code>\mu</code> &mu;, <code>\pi</code> &pi;, <code>\rho</code> &rho;, <code>\sigma</code> &sigma;, <code>\phi</code> &phi;, <code>\omega</code> &omega;</td></tr>
+      <tr><td>Greek capitals</td><td><code>\Gamma</code> &Gamma;, <code>\Delta</code> &Delta;, <code>\Theta</code> &Theta;, <code>\Lambda</code> &Lambda;, <code>\Sigma</code> &Sigma;, <code>\Pi</code> &Pi;, <code>\Omega</code> &Omega;</td></tr>
+      <tr><td>Binary operators</td><td><code>\pm</code> &plusmn;, <code>\times</code> &times;, <code>\div</code> &divide;, <code>\cdot</code> &middot;, <code>\circ</code> &#8728;,<code>\cap</code> &cap;, <code>\cup</code> &cup;, <code>\wedge</code> &and;, <code>\vee</code> &or;</td></tr>
+      <tr><td>Relations</td><td><code>\le</code> &le;, <code>\ge</code> &ge;, <code>\ne</code> &ne;, <code>\approx</code> &asymp;, <code>\equiv</code> &equiv;, <code>\sim</code> &sim;, <code>\subset</code> &sub;, <code>\subseteq</code> &sube;, <code>\in</code> &isin;, <code>\propto</code> &prop;</td></tr>
+      <tr><td>Arrows</td><td><code>\to</code> or <code>\rightarrow</code> &rarr;, <code>\leftarrow</code> &larr;, <code>\Rightarrow</code> &rArr;, <code>\Leftrightarrow</code> &hArr;, <code>\mapsto</code> &#8614;, <code>\longrightarrow</code> &#10230;</td></tr>
+      <tr><td>Miscellaneous</td><td><code>\infty</code> &infin;, <code>\partial</code> &part;, <code>\nabla</code> &nabla;, <code>\forall</code> &forall;, <code>\exists</code> &exist;, <code>\emptyset</code> &empty;, <code>\neg</code> &not;, <code>\prime</code> &prime;, <code>\ldots</code> &hellip;</td></tr>
+      <tr><td>Variable-sized</td><td><code>\sum</code> &sum;, <code>\prod</code> &prod;, <code>\int</code> &int;, <code>\oint</code>, <code>\bigcup</code>, <code>\bigcap</code>, <code>\bigoplus</code></td></tr>
+      <tr><td>Log-like (upright)</td><td><code>\sin</code>, <code>\cos</code>, <code>\tan</code>, <code>\log</code>, <code>\ln</code>, <code>\exp</code>, <code>\lim</code>, <code>\max</code>, <code>\min</code>, <code>\sup</code>, <code>\inf</code>, <code>\det</code>, <code>\gcd</code>, <code>\arg</code></td></tr>
+      <tr><td>Delimiters</td><td><code>(</code> <code>)</code> <code>[</code> <code>]</code> <code>\{</code> <code>\}</code> <code>\langle</code> <code>\rangle</code> <code>\lfloor</code> <code>\rfloor</code> <code>\lceil</code> <code>\rceil</code> <code>|</code> <code>\|</code></td></tr>
+      <tr><td>Accents</td><td><code>\hat</code>, <code>\bar</code>, <code>\dot</code>, <code>\ddot</code>, <code>\tilde</code>, <code>\vec</code>, <code>\check</code>, <code>\breve</code>, <code>\grave</code>, <code>\acute</code></td></tr>
+      <tr><td>Other constructions</td><td><code>\widehat{abc}</code>, <code>\widetilde{abc}</code>, <code>\overline{abc}</code>, <code>\underline{abc}</code>, <code>\overbrace</code>, <code>\underbrace</code>, <code>\sqrt[n]{abc}</code>, <code>\frac{abc}{xyz}</code></td></tr>
+    </tbody>
+  </table>
+  <div class="warn">
+    <strong>Packages for more symbols.</strong> Symbols marked "not predefined in LaTeX 2e" in the primer's tables need <code>amssymb</code> (or <code>latexsym</code>). That includes <code>\Box</code>, <code>\blacksquare</code>, <code>\nexists</code>, <code>\mathbb</code> and most of the AMS arrows and relations.
+  </div>
+
+  <div class="remember">
+    <strong>Remember (Part 8.4&ndash;8.8)</strong>
+    <ul>
+      <li><code>pmatrix</code> and <code>bmatrix</code> give brackets; <code>matrix</code> gives none.</li>
+      <li><code>\left</code> and <code>\right</code> must come in pairs. Use <code>.</code> to hide one side.</li>
+      <li><code>\frac</code> is small in text; use <code>\dfrac</code> to override it.</li>
+      <li><code>\DeclareMathOperator</code> goes in the preamble.</li>
+      <li>For bold vectors use <code>\boldsymbol</code>, not <code>\mathbf</code>, when the symbols must be italic.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="part" id="ch9">
+  <h2>9. Typesetting theorems</h2>
+  <p class="tag">Syllabus units 12 and 13 &middot; Primer pages 137&ndash;150 (syllabus omits 9.2.2 and 9.2.3)</p>
+
+  <div class="plain">
+    <strong>In plain words.</strong> Mathematics has special statements: theorems, lemmas, definitions, remarks. Each has a name and a number, and the statement is set apart from the text. You define the kinds once in the preamble with <code>\newtheorem</code>, then use them as environments.
+  </div>
+
+  <h3>9.1 Theorems in LaTeX</h3>
+  <pre><code>\newtheorem{thm}{Theorem}       % preamble: name of environment, then printed name
+
+\begin{thm}
+  The sum of the angles of a triangle is $180^\circ$.
+\end{thm}</code></pre>
+  <p>This prints "Theorem 1. The sum of the angles of a triangle is 180&deg;." Keep all <code>\newtheorem</code> commands together in the preamble.</p>
+
+  <h4>Numbering</h4>
+  <table>
+    <thead><tr><th>Definition</th><th>Result</th></tr></thead>
+    <tbody>
+      <tr><td><code>\newtheorem{thm}{Theorem}</code></td><td>Theorem 1, Theorem 2, ...</td></tr>
+      <tr><td><code>\newtheorem{thm}{Theorem}[section]</code></td><td>Theorem 9.1.1, 9.1.2, ... (section number first)</td></tr>
+      <tr><td><code>\newtheorem{cor}[thm]{Corollary}</code></td><td>Shares the numbering of <code>thm</code>: Corollary 9.1.3 follows Theorem 9.1.2</td></tr>
+    </tbody>
+  </table>
+  <p>The optional argument in square brackets, <code>[thm]</code> or <code>[section]</code>, says which counter to share or to nest in. The primer's example: after <code>\newtheorem{thm}{Theorem}[section]</code> and <code>\newtheorem{cor}[thm]{Corollary}</code>, Theorem and Corollary share one sequence.</p>
+
+  <h4>Optional note</h4>
+  <pre><code>\begin{thm}[Euclid]
+  The sum of the angles of a triangle is $180^\circ$.
+\end{thm}</code></pre>
+  <p>The note appears after the number: "Theorem 9.1.5 (Euclid)."</p>
+
+  <div class="warn">
+    <strong>Pitfall: square brackets again.</strong> <code>\begin{thm}[0,1] is a compact subset...</code> treats "0,1" as the note. The fix is to put the maths in dollar signs: <code>\begin{thm} $[0,1]$ is a compact subset of $\mathbb{R}$. \end{thm}</code>.
+  </div>
+
+  <h3>9.2 Designer theorems: the amsthm package</h3>
+  <p>The <code>amsthm</code> package gives you styles and control. Load it with <code>\usepackage{amsthm}</code>.</p>
+
+  <h4>Ready-made styles</h4>
+  <table>
+    <thead><tr><th>Style</th><th>Heading (name and number)</th><th>Body text</th><th>Typical use</th></tr></thead>
+    <tbody>
+      <tr><td><code>plain</code> (default)</td><td><strong>bold</strong></td><td><em>italic</em></td><td>theorem, lemma, proposition, corollary</td></tr>
+      <tr><td><code>definition</code></td><td><strong>bold</strong></td><td>roman</td><td>definition, example, exercise</td></tr>
+      <tr><td><code>remark</code></td><td><em>italic</em></td><td>roman</td><td>remark, note</td></tr>
+    </tbody>
+  </table>
+  <pre><code>\usepackage{amsthm}
+\newtheorem{thm}{Theorem}[section]
+\theoremstyle{definition}
+\newtheorem{dfn}{Definition}[section]
+\theoremstyle{remark}
+\newtheorem{note}{Note}[section]
+\theoremstyle{plain}
+\newtheorem{lem}[thm]{Lemma}</code></pre>
+  <p>Each <code>\theoremstyle</code> applies to the <code>\newtheorem</code> commands after it. Without <code>\theoremstyle{plain}</code> before <code>lem</code>, the lemma would be set in remark style. Always switch styles before you define a new group.</p>
+
+  <h4>Proofs</h4>
+  <pre><code>\begin{proof}
+  Let $\{p_1,p_2,\dotsc p_k\}$ be a finite set of primes.
+  Define $n=p_1p_2\dotsm p_k+1$. Then either $n$ itself is a prime
+  or has a prime factor. Thus no finite set of primes can include
+  all the primes.
+\end{proof}</code></pre>
+  <ul>
+    <li>The end of a proof is marked automatically with a box (the "qed" symbol). Change the symbol with <code>\renewcommand{\qedsymbol}{\halmos}</code> if you define your own.</li>
+    <li>When the last line of a proof is a display, the box can land in an awkward place. The primer's fix: put <code>\tag*{\qed}</code> at the end of that equation, and add <code>\renewcommand{\qed}{}</code> at the end of the proof so the box is not printed twice. This needs amsmath loaded without the <code>leqno</code> option.</li>
+    <li><code>\begin{proof}[\textsc{Proof\,(Euclid)}:]</code> changes the proof heading.</li>
+  </ul>
+
+  <h4>Custom styles (the rest of 9.2)</h4>
+  <p>The syllabus omits sections 9.2.2 and 9.2.3 (<code>\newtheoremstyle</code> with nine parameters, and <code>\swapnumbers</code>). They are not needed for the exam, but the primer's examples show what you can do.</p>
+
+  <div class="remember">
+    <strong>Remember (Part 9)</strong>
+    <ul>
+      <li>Define theorem-like environments with <code>\newtheorem{name}{Printed name}</code> in the preamble.</li>
+      <li>Use the optional argument to share a counter (<code>[thm]</code>) or to number within sections (<code>[section]</code>).</li>
+      <li>Set <code>\theoremstyle</code> before each group of definitions.</li>
+      <li><code>\begin{proof}...\end{proof}</code> adds the heading and the end-of-proof box.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="part" id="ch10">
+  <h2>10. Boxes</h2>
+  <p class="tag">Syllabus unit 14 (sections 10.1 and 10.2 only) &middot; Primer pages 151&ndash;166</p>
+
+  <div class="plain">
+    <strong>In plain words.</strong> TeX builds every line from boxes. A character is a box. A word is a box of boxes. You can make your own boxes, with or without a frame, and place them where you want. A box is never broken across lines unless you use a paragraph box.
+  </div>
+
+  <h3>10.1 Boxes with frames: <code>\fbox</code></h3>
+  <pre><code>\fbox{Boxed text}</code></pre>
+  <p>This draws a frame around the text. The gap between the text and the frame is <code>\fboxsep</code> (default 3 pt). The thickness of the frame line is <code>\fboxrule</code> (default 0.4 pt).</p>
+  <pre><code>an \fbox{ordinary box} and a
+\setlength{\fboxrule}{5pt}
+\setlength{\fboxsep}{15pt}
+\fbox{custom box} with extra-thick walls and extra padding</code></pre>
+  <p>Use <code>\phantom{text}</code> to make an empty box exactly the size of the text. This is how the primer draws "boxes of letters" with no letters showing.</p>
+
+  <h4>Boxes that are a fixed width: <code>\framebox</code></h4>
+  <pre><code>\framebox[6cm]{6\,cm}          % a box 6 cm wide (plus the padding)
+\framebox[3cm][l]{flushleft text}
+\framebox[3cm][c]{centered text}
+\framebox[3cm][r]{flushright text}
+\framebox[3cm][s]{stretched text}</code></pre>
+  <ul>
+    <li>The position letter: <code>l</code> left, <code>c</code> centre (default), <code>r</code> right, <code>s</code> stretched to fill the box.</li>
+    <li>The width includes the padding on both sides. To make a box exactly 6 cm, subtract the padding, as the primer does with <code>calc</code>: <code>\framebox[\dimexpr(6cm - 6pt)]{...}</code>.</li>
+    <li>If the text is wider than the box, it spills out.</li>
+  </ul>
+
+  <h4>Lengths that refer to the text: <code>\width</code>, <code>\height</code>, <code>\depth</code></h4>
+  <pre><code>\framebox{Text}\\
+\framebox[2\width][l]{Text}      % twice the width of the text (inside the box)</code></pre>
+  <p><code>\width</code>, <code>\height</code>, <code>\depth</code> and <code>\totalheight</code> mean the size of the text inside the box. They work only inside a width specification like this one. The width of the box also includes the padding and rules, so the primer adds <code>4\fboxsep + 4\fboxrule</code> when it needs an exact doubling.</p>
+
+  <h4>What boxes cannot do</h4>
+  <p>A <code>\fbox</code> is an LR box: it is one indivisible unit. Its text stays on one line, even if it is longer than the text width. This is why <code>\fbox</code> cannot hold a paragraph. Use <code>\parbox</code> or <code>minipage</code> for that (Section 10.5 in the primer, outside the syllabus).</p>
+
+  <h3>10.2 Boxes without frames: <code>\mbox</code> and <code>\makebox</code></h3>
+  <pre><code>\mbox{text}                    % an LR box of the text's own width
+\makebox[width][pos]{text}    % a box of a set width, no frame</code></pre>
+  <p>A box without a frame is useful to keep text together. The primer's example: "3 : 2 : 1" wrapped in <code>\mbox{$3:2:1$}</code> is never split across two lines, even when the paragraph is very narrow.</p>
+
+  <h4>Zero-width boxes stick out of the margin</h4>
+  <pre><code>\makebox[0cm][r]{\textit{median}$\rightarrow$\hspace{\tabcolsep}}</code></pre>
+  <p>A zero-width box prints its text on top of the surrounding space, so the word hangs out to the left. The primer uses this to put "median" beside a row of a table.</p>
+
+  <h3>Notes on the rest of Chapter 10 (outside the syllabus)</h3>
+  <p>Chapter 10 also covers <code>\parbox</code> and <code>minipage</code> (multi-line boxes), <code>\rule</code> (black boxes and struts), and <code>\raisebox</code> (moving boxes up or down). They are not in the syllabus units 14, but they are useful. In brief:</p>
+  <ul>
+    <li><code>\parbox[pos]{width}{text}</code>: a paragraph in a line. <code>pos</code> is <code>t</code>, <code>b</code> or the middle (default) to align with the line of text.</li>
+    <li><code>\rule[lift]{width}{height}</code>: a solid black rectangle. A zero-width rule is an invisible strut that makes a box taller.</li>
+    <li><code>\raisebox{lift}{text}</code>: moves text up (positive) or down (negative) from the baseline.</li>
+  </ul>
+
+  <div class="remember">
+    <strong>Remember (Part 10)</strong>
+    <ul>
+      <li><code>\fbox</code> draws a frame; <code>\fboxsep</code> sets the padding and <code>\fboxrule</code> the line thickness.</li>
+      <li><code>\framebox[width][l|c|r|s]{text}</code> gives a frame with a fixed width and alignment.</li>
+      <li><code>\mbox</code> keeps text on one line without a frame.</li>
+      <li>A box never breaks across lines. Use <code>\parbox</code> or <code>minipage</code> for paragraphs.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="part" id="ch11">
+  <h2>11. Floats: figures and tables</h2>
+  <p class="tag">Syllabus unit 15 &middot; Primer pages 167&ndash;177</p>
+
+  <div class="plain">
+    <strong>In plain words.</strong> A figure or table is too big to split across pages, so LaTeX treats it as a <em>float</em>. It moves the figure to a good place, often the top or bottom of a page, and numbers it. You put the picture and caption inside a <code>figure</code> (or <code>table</code>) environment. You do not place it by hand.
+  </div>
+
+  <h3>11.1 The figure environment</h3>
+  <pre><code>\begin{figure}
+  \centering
+  \includegraphics{figure.eps}
+  \caption{This is an inserted EPS graphic}
+  \label{fig1}
+\end{figure}</code></pre>
+  <ul>
+    <li><code>\caption</code> sets the caption and the number.</li>
+    <li><code>\label</code> must come <strong>after</strong> <code>\caption</code>. Then <code>\ref{fig1}</code> gives the number and <code>\pageref{fig1}</code> the page.</li>
+    <li>A figure with no caption is an unnumbered float.</li>
+    <li>Several captions in one figure environment give several figures that float together.</li>
+    <li><code>\caption[Short]{Long text}</code>: the short version appears in the list of figures.</li>
+    <li><code>\listoffigures</code> prints the list of figures.</li>
+  </ul>
+
+  <h4>Placement</h4>
+  <p>The optional argument in square brackets says where the float may go:</p>
+  <table>
+    <thead><tr><th>Letter</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td><code>h</code></td><td>Here, where the command is, if there is room</td></tr>
+      <tr><td><code>t</code></td><td>Top of a page</td></tr>
+      <tr><td><code>b</code></td><td>Bottom of a page</td></tr>
+      <tr><td><code>p</code></td><td>On a page of its own (a float page)</td></tr>
+    </tbody>
+  </table>
+  <p>With no option, the default is <code>[tbp]</code>. A common choice is <code>\begin{figure}[htbp]</code>.</p>
+
+  <h4>Forcing floats out</h4>
+  <ul>
+    <li><code>\clearpage</code> places all waiting floats and starts a new page.</li>
+    <li><code>\FloatBarrier</code> (package <code>placeins</code>) places waiting floats without starting a new page. <code>\usepackage[section]{placeins}</code> puts a barrier before each section.</li>
+    <li><code>\afterpage{\clearpage}</code> (package <code>afterpage</code>) clears floats at the next page break.</li>
+  </ul>
+
+  <h4>Controlling how many floats</h4>
+  <pre><code>\setcounter{totalnumber}{2}      % at most 2 floats on any text page
+\renewcommand{\textfraction}{0.3}  % at least 30% of a text page must be text</code></pre>
+  <table>
+    <thead><tr><th>Setting</th><th>Default</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td><code>topnumber</code></td><td>2</td><td>Max floats at the top of a text page</td></tr>
+      <tr><td><code>bottomnumber</code></td><td>1</td><td>Max floats at the bottom</td></tr>
+      <tr><td><code>totalnumber</code></td><td>3</td><td>Max floats on any text page</td></tr>
+      <tr><td><code>textfraction</code></td><td>0.2</td><td>Min fraction of a text page that must be text</td></tr>
+      <tr><td><code>topfraction</code></td><td>0.7</td><td>Max fraction of a text page used by floats at the top</td></tr>
+      <tr><td><code>bottomfraction</code></td><td>0.3</td><td>Max fraction used by floats at the bottom</td></tr>
+      <tr><td><code>floatpagefraction</code></td><td>0.5</td><td>Min fraction of a float page that must be filled</td></tr>
+    </tbody>
+  </table>
+  <p>A <code>!</code> in the placement options makes LaTeX ignore the first three settings.</p>
+
+  <div class="warn">
+    <strong>Syllabus check.</strong> Unit 15 names sections XI.1.1, XI.1.2 and XI.1.5. Section 11.1.5 does not exist in the primer. Sections 11.1.1 and 11.1.2 are covered above. The nearest match for the third item is 11.1.3, <em>Customizing float placement</em>, which is also covered above. Confirm with the teacher.
+  </div>
+
+  <h3>11.2 The table environment</h3>
+  <p>A <code>table</code> environment works the same way as <code>figure</code>, but holds a <code>tabular</code>. It has a caption and a label.</p>
+  <pre><code>\begin{table}[htbp]
+  \centering
+  \caption{Marks awarded in the LaTeX internal examination}
+  \label{tab:marks}
+  \begin{tabular}{lcc}
+    \hline
+    Student &amp;amp; Assignment &amp;amp; Viva \\
+    \hline
+    Student A &amp;amp; 9 &amp;amp; 8 \\
+    Student B &amp;amp; 7 &amp;amp; 9 \\
+    \hline
+  \end{tabular}
+\end{table}</code></pre>
+  <p>Refer to it as <code>Table~\ref{tab:marks}</code>. The tilde is a non-breaking space, so "Table" and the number stay together.</p>
+
+  <h4>Tabular and tabular*</h4>
+  <pre><code>\begin{tabular}[pos]{cols} rows \end{tabular}
+\begin{tabular*}{width}[pos]{cols} rows \end{tabular*}</code></pre>
+  <ul>
+    <li><code>pos</code>: <code>t</code> aligns the top row with the text baseline, <code>b</code> the bottom row. Default: centred.</li>
+    <li><code>tabular*</code> sets a fixed total width. Its columns need <code>@{\extracolsep{\fill}}</code> to stretch.</li>
+    <li>Column letters: <code>l</code>, <code>c</code>, <code>r</code>, <code>{wd}</code> (a paragraph of width wd), <code>*{n}{cols}</code> (repeat n times), <code>|</code> (vertical line), <code>@{text}</code> (insert text between columns, removing the normal gap).</li>
+  </ul>
+
+  <h4>Table style parameters</h4>
+  <table>
+    <thead><tr><th>Parameter</th><th>Controls</th></tr></thead>
+    <tbody>
+      <tr><td><code>\tabcolsep</code></td><td>Half the gap between columns</td></tr>
+      <tr><td><code>\arrayrulewidth</code></td><td>Thickness of table lines</td></tr>
+      <tr><td><code>\doublerulesep</code></td><td>Gap between the two lines of a double rule</td></tr>
+      <tr><td><code>\arraystretch</code></td><td>Multiplier for the row spacing (default 1; 1.5 adds 50%)</td></tr>
+    </tbody>
+  </table>
+  <p>Set them with <code>\setlength</code> (for lengths) or <code>\renewcommand</code> (for <code>\arraystretch</code>). Do not change them inside the tabular itself.</p>
+
+  <div class="remember">
+    <strong>Remember (Part 11)</strong>
+    <ul>
+      <li>Put every figure in a <code>figure</code> environment and every table in a <code>table</code> environment.</li>
+      <li><code>\label</code> goes after <code>\caption</code>.</li>
+      <li>Let LaTeX place floats. Use <code>[htbp]</code> to give it options, and <code>\clearpage</code> to force them out.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="part" id="ch12">
+  <h2>12. Graphics inclusion</h2>
+  <p class="tag">Not a numbered syllabus unit &middot; Primer pages 179&ndash;185 &middot; relevant to figures (unit 15) and to Module V</p>
+
+  <div class="plain">
+    <strong>In plain words.</strong> Some pictures come from other programs: graphs of data, photographs. The <code>graphicx</code> package includes such a file in your document and can scale, rotate and crop it. LaTeX only reserves the space; the driver (dvips, xdvi, pdflatex) draws the picture.
+  </div>
+
+  <h3>12.1 Loading and including</h3>
+  <pre><code>\usepackage{graphicx}
+\usepackage[dvips]{graphicx}     % if the output is made with dvips
+\usepackage[xetex]{graphicx}     % if the engine is xelatex</code></pre>
+  <pre><code>\includegraphics{ellipse}                     % the file's own size
+\includegraphics[scale=0.5]{ellann.eps}      % half the size
+\includegraphics[width=4cm,height=0.5cm]{ellann.eps}   % fit a box
+\includegraphics[angle=60]{ellann.pdf}       % rotated, counter-clockwise</code></pre>
+
+  <div class="warn">
+    <strong>Order matters.</strong> The keys are applied from left to right. <code>[width=4cm,height=1cm,angle=60]</code> scales the picture first and then rotates it. <code>[angle=60,width=4cm,height=1cm]</code> rotates first and then scales the rotated picture into the box. The results are different.
+  </div>
+
+  <h3>12.2 Clipping a picture</h3>
+  <p>An EPS file has a <em>bounding box</em> line, such as <code>%%BoundingBox: 249 604 362 689</code>, giving the lower-left and upper-right corners in points. To show only part of the picture, give a new bounding box with <code>bb=</code> and add <code>clip</code>:</p>
+  <pre><code>\includegraphics[bb=249 604 362 646.5,clip]{ellann.eps}   % lower half only</code></pre>
+  <p>Stacking two clipped halves with <code>\\[-1.253pt]</code> between them rebuilds the whole picture.</p>
+
+  <h3>12.3 Finding files</h3>
+  <pre><code>\graphicspath{{dir1/}{dir2/}}          % look in these folders too
+\DeclareGraphicsExtensions{.eps,.ps}  % extensions to try when none is given</code></pre>
+  <p>With the extensions set, <code>\includegraphics{file}</code> looks for <code>file.eps</code>, then <code>file.ps</code>, and so on.</p>
+
+  <div class="remember">
+    <strong>Note on modern use.</strong> The primer was written for EPS files and the dvips driver. With <code>pdflatex</code> today, PNG, JPG and PDF files are normal, and you write the file name with its extension, for example <code>\includegraphics[width=0.6\textwidth]{plot.png}</code>. The keys (<code>width</code>, <code>scale</code>, <code>angle</code>) are the same.
+  </div>
+
+  <h3>12.4 Drawing in LaTeX</h3>
+  <p>The primer draws its elliptic annulus with <code>pstricks</code>, a package for drawing inside TeX. It is an extra topic, not part of the syllabus.</p>
+</section>
+
+<section class="part" id="ch13">
+  <h2>13. Cross references</h2>
+  <p class="tag">Syllabus unit 16 (sections 13.1 and 13.2 only) &middot; Primer pages 187&ndash;196</p>
+
+  <div class="plain">
+    <strong>In plain words.</strong> A cross reference is a pointer to another part of the same document: "see Section 2", "by Theorem 3.1". Writing the numbers by hand breaks when you add a section. Instead, give the target a <em>label</em> with <code>\label{key}</code>, and point to it with <code>\ref{key}</code>. LaTeX fills in the right number.
+  </div>
+
+  <h3>13.1 Labels and references</h3>
+  <pre><code>\section{Why cross references}\label{intro}
+...
+(see Section \ref{intro} for details)</code></pre>
+  <ul>
+    <li>The label can go anywhere inside the section, not only right after the heading.</li>
+    <li>The key can be any mix of letters, digits and punctuation. Use a memorable one, such as <code>limcon</code> for "Limits and Continuity".</li>
+    <li>Type <code>~\ref{limcon}</code> with a tilde, so the number never starts a new line on its own.</li>
+    <li>The first run writes the references to the <code>.aux</code> file and prints "There were undefined references". A second run fixes them. Run again after any change.</li>
+  </ul>
+
+  <h3>13.2 Other kinds of target</h3>
+  <table>
+    <thead><tr><th>Target</th><th>How to label it</th></tr></thead>
+    <tbody>
+      <tr><td>Section, chapter</td><td><code>\section{...}\label{key}</code></td></tr>
+      <tr><td>Item in an enumerated list</td><td><code>\item All men are mortal.\label{pre1}</code>, then <code>(\ref{pre1})</code></td></tr>
+      <tr><td>Figure or table</td><td><code>\caption{...}\label{tabxy}</code>: the label comes after the caption</td></tr>
+      <tr><td>Theorem</td><td><code>\begin{theorem}\label{diffcon}</code></td></tr>
+      <tr><td>Equation</td><td><code>\begin{equation}\label{sumsq}</code>, then <code>\eqref{sumsq}</code></td></tr>
+    </tbody>
+  </table>
+
+  <h4>Equations with amsmath</h4>
+  <pre><code>Equation~\eqref{sumsq} gives the following.      % prints "Equation (13.1)"
+
+\begin{align}
+  (x+y)^2 &amp;amp;= x^2+2xy+y^2 \label{sum}\\
+  (x-y)^2 &amp;amp;= x^2-2xy+y^2 \tag{\ref{sum}a}
+\end{align}</code></pre>
+  <p><code>\eqref</code> adds the brackets around the number. In an <code>align</code>, the second line's tag can reuse the first line's number with a letter, as shown: (13.2) and (13.2a).</p>
+
+  <h4>Forward references</h4>
+  <p>You can refer to a label that comes later in the document, in the same way. The second run then gets it right.</p>
+
+  <h3>13.3 Page numbers: <code>\pageref</code> and <code>varioref</code></h3>
+  <pre><code>see Table~\ref{tabxy} in page~\pageref{tabxy}</code></pre>
+  <p>The package <code>varioref</code> adds smart page references with <code>\vref{key}</code>. If the target is on the same page, it prints only the number. If it is on the next page, it adds "on the following page". Its page phrases can be changed with <code>\reftextbefore</code> and <code>\reftextafter</code>.</p>
+  <pre><code>\usepackage{varioref}
+see the \vpageref[above table][table~]{tabxy}   % "above table" if same page</code></pre>
+
+  <h3>13.4 Other documents: xr, and the key list</h3>
+  <p>The <code>xr</code> package lets one document refer to labels in another file: <code>\usepackage{xr}</code> and <code>\externaldocument{other}</code> in the preamble. Two external files with the same key can be told apart with a prefix: <code>\externaldocument[a-]{other}</code>, then <code>\ref{a-key}</code>.</p>
+
+  <div class="remember">
+    <strong>Remember (Part 13)</strong>
+    <ul>
+      <li>Label after the thing being labelled (after <code>\caption</code> for floats).</li>
+      <li>Reference with <code>\ref</code>, or <code>\eqref</code> for equations.</li>
+      <li>Compile twice after adding or moving labels.</li>
+      <li>Use <code>~</code> before a reference so "Table 1" stays together.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="part" id="ch14">
+  <h2>14. Footnotes, margin notes and endnotes</h2>
+  <p class="tag">Syllabus unit 17 (section 14.1 only) &middot; Primer pages 197&ndash;205</p>
+
+  <h3>14.1 Footnotes</h3>
+  <div class="plain">
+    <strong>In plain words.</strong> A footnote is a note at the bottom of the page, linked to a number in the text. LaTeX numbers it and places it for you.
+  </div>
+  <pre><code>A footnote is written with \footnote{footnote text}.</code></pre>
+  <p>The footnote text is set smaller, below a short rule. The first line of the footnote is indented and carries the same mark as the text.</p>
+
+  <h4>Footnotes in a minipage or table</h4>
+  <p>Inside a <code>minipage</code>, a plain <code>\footnote</code> is set at the bottom of that minipage, and it uses its own counter. To put a footnote mark in the minipage but print the note at the bottom of the page, use <code>\footnotemark</code> in the text and <code>\footnotetext</code> after the minipage:</p>
+  <pre><code>\begin{minipage}{5cm}
+  This text references a footnote at the bottom of the page.\footnotemark
+\end{minipage}
+\footnotetext{At bottom of page}</code></pre>
+
+  <div class="warn">
+    <strong>Tables.</strong> A plain <code>\footnote</code> inside <code>tabular</code> does not print correctly. Use <code>longtable</code> or <code>tabularx</code>, or put the table in a <code>minipage</code>. The <code>threeparttable</code> package is the cleanest way to set table notes, with <code>\tnote{a}</code> marks and a <code>tablenotes</code> list.
+  </div>
+
+  <h4>Changing the look</h4>
+  <pre><code>\setcounter{footnote}{0}           % restart numbering (before a section)
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}   % * \dagger \ddagger ...
+\footnote[7]{Marker shown as 7.}  % a footnote with a set number</code></pre>
+  <ul>
+    <li><code>\thefootnote</code> sets the style: <code>\arabic</code>, <code>\roman</code>, <code>\alph</code>, <code>\fnsymbol</code> (symbols for 1 to 9).</li>
+    <li>Restore the normal numbers with <code>\renewcommand{\thefootnote}{\arabic{footnote}}</code> after using symbols.</li>
+    <li>Style parameters: <code>\footnotesize</code> (font), <code>\footnotesep</code> (strut at the start), <code>\footnoterule</code> (the line above the notes).</li>
+  </ul>
+
+  <h3>14.2 Marginal notes</h3>
+  <pre><code>text\marginpar{This is a marginal note}</code></pre>
+  <p>The note prints in the margin, starting at the height of the line where the command sits. With one argument it goes to the right margin (one-sided) or the outside margin (two-sided). With two arguments, <code>\marginpar[left]{right}</code>, the first is for the left margin.</p>
+  <ul>
+    <li><code>\reversemarginpar</code> and <code>\normalmarginpar</code> switch the margin.</li>
+    <li><code>\marginparwidth</code>, <code>\marginparsep</code> and <code>\marginparpush</code> set the size and spacing.</li>
+    <li><code>\marginpar</code> does not start a paragraph. If it sits before the first word of a paragraph, the alignment can be off.</li>
+  </ul>
+
+  <h3>14.3 Endnotes</h3>
+  <p>Endnotes are collected at the end of a chapter or document. They are not in standard LaTeX; the <code>endnotes</code> package adds them.</p>
+  <pre><code>\usepackage{endnotes}
+This is simple text.\endnote{The first endnote.}
+\theendnotes     % prints all the endnotes collected so far</code></pre>
+  <p>Writing <code>\renewcommand{\footnote}{\endnote}</code> turns every footnote into an endnote.</p>
+
+  <div class="remember">
+    <strong>Remember (Part 14)</strong>
+    <ul>
+      <li><code>\footnote{text}</code> goes right after the word it explains.</li>
+      <li>Footnotes do not work inside <code>tabular</code>; use <code>longtable</code>, <code>threeparttable</code>, or a minipage.</li>
+      <li>Use <code>\footnotemark</code> and <code>\footnotetext</code> to keep a minipage footnote in the page sequence.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="part" id="gap">
+  <h2>15. What the primer does not cover</h2>
+  <p class="tag gap">Syllabus Module V and Text 2</p>
+
+  <p>The primer stops at chapter 14. The syllabus adds topics that are not in it. Here is where to find them.</p>
+
+  <table>
+    <thead><tr><th>Topic (syllabus)</th><th>Status in this guide</th><th>Where to look</th></tr></thead>
+    <tbody>
+      <tr><td>Installing LaTeX (V.1)</td><td>Not in the primer</td><td>The notes in <code>latex-notes/</code>, module 5</td></tr>
+      <tr><td>Overleaf (V.2)</td><td>Not in the primer</td><td>Module 5 notes</td></tr>
+      <tr><td>Writing a chapter of a book (V.3)</td><td>Partly: the <code>report</code> class and chapters are in Part 2 of this guide</td><td>Module 5 notes (the chapter template)</td></tr>
+      <tr><td>Beamer slides and posters (V.4)</td><td>Not in the primer</td><td>Module 5 notes</td></tr>
+      <tr><td>Transliteration of Indian languages (V.5)</td><td>Not in the primer; IAST diacritics are in Module 5</td><td>Module 5 notes; the <code>fontspec</code> and <code>polyglossia</code> setup</td></tr>
+      <tr><td>Presentation: Gratzer ch. 12 (units 18&ndash;19)</td><td>Not available to read here</td><td>Module 4 notes cover the parts of presentation that are general</td></tr>
+    </tbody>
+  </table>
+
+  <div class="warn">
+    <strong>Next step.</strong> If you want these topics in the same detailed style, the Beamer and transliteration parts need their own reading (the primer does not cover them). Gratzer's Chapter 12 needs the book itself; upload it and this guide can be extended from it.
+  </div>
+</section>
+
+<section class="part" id="cheat">
+  <h2>Appendix A. Cheat sheet</h2>
+  <table>
+    <thead><tr><th>I want to&hellip;</th><th>Write</th></tr></thead>
+    <tbody>
+      <tr><td>Start a document</td><td><code>\documentclass{article}</code> ... <code>\begin{document}</code> ... <code>\end{document}</code></td></tr>
+      <tr><td>Emphasise a word</td><td><code>\emph{word}</code></td></tr>
+      <tr><td>Bold, italic, typewriter</td><td><code>\textbf{}</code>, <code>\textit{}</code>, <code>\texttt{}</code></td></tr>
+      <tr><td>Change size of a passage</td><td><code>{\large text}</code></td></tr>
+      <tr><td>Print a reserved character</td><td><code>\% \$ \&amp; \# \_ \{ \}</code></td></tr>
+      <tr><td>Force a line break</td><td><code>\\</code> (or <code>\\[10pt]</code>)</td></tr>
+      <tr><td>Centre, left, right</td><td><code>center</code>, <code>flushleft</code>, <code>flushright</code> environments</td></tr>
+      <tr><td>Title block</td><td><code>\title{}</code> <code>\author{}</code> <code>\date{}</code> <code>\maketitle</code></td></tr>
+      <tr><td>Section, subsection</td><td><code>\section{}</code>, <code>\subsection{}</code></td></tr>
+      <tr><td>Contents, index, figure list</td><td><code>\tableofcontents</code>, <code>\printindex</code>, <code>\listoffigures</code></td></tr>
+      <tr><td>Index entry</td><td><code>\index{word}</code>, with <code>\makeindex</code> in the preamble</td></tr>
+      <tr><td>Cite a reference</td><td><code>\cite{key}</code> or <code>\citet{key}</code> with natbib</td></tr>
+      <tr><td>Bulleted list / numbered / description</td><td><code>itemize</code> / <code>enumerate</code> / <code>description</code></td></tr>
+      <tr><td>Verse</td><td><code>verse</code> environment, lines end with <code>\\</code></td></tr>
+      <tr><td>Table</td><td><code>tabular</code> with <code>\hline</code>, <code>&amp;</code>, <code>\\</code>; floats in <code>table</code></td></tr>
+      <tr><td>Merge cells</td><td><code>\multicolumn{n}{pos}{text}</code></td></tr>
+      <tr><td>Maths inline / display</td><td><code>$...$</code> / <code>\[...\]</code> or <code>equation</code></td></tr>
+      <tr><td>Fraction, root, power, subscript</td><td><code>\frac{a}{b}</code>, <code>\sqrt{x}</code>, <code>x^{n}</code>, <code>x_{i}</code></td></tr>
+      <tr><td>Sum, integral, limit</td><td><code>\sum_{i=1}^{n}</code>, <code>\int_0^1</code>, <code>\lim_{x\to 0}</code></td></tr>
+      <tr><td>Matrix with brackets</td><td><code>pmatrix</code> (round), <code>bmatrix</code> (square), <code>vmatrix</code> (determinant)</td></tr>
+      <tr><td>Aligned equations</td><td><code>align</code> (numbered), <code>align*</code> (not numbered), with <code>&amp;</code> at the alignment point</td></tr>
+      <tr><td>Stretchy brackets</td><td><code>\left( ... \right)</code></td></tr>
+      <tr><td>Your own theorem kind</td><td><code>\newtheorem{thm}{Theorem}[section]</code>, then <code>\begin{thm}</code></td></tr>
+      <tr><td>Proof</td><td><code>\begin{proof} ... \end{proof}</code></td></tr>
+      <tr><td>Frame around text</td><td><code>\fbox{text}</code>, fixed width <code>\framebox[3cm][c]{text}</code></td></tr>
+      <tr><td>Figure</td><td><code>figure</code> environment with <code>\includegraphics</code>, <code>\caption</code>, <code>\label</code></td></tr>
+      <tr><td>Cross reference</td><td><code>\label{key}</code> then <code>\ref{key}</code> (or <code>\eqref</code>, <code>\pageref</code>)</td></tr>
+      <tr><td>Footnote</td><td><code>\footnote{text}</code></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="part" id="errors">
+  <h2>Appendix B. Common mistakes</h2>
+  <table>
+    <thead><tr><th>Symptom</th><th>Likely cause and fix</th></tr></thead>
+    <tbody>
+      <tr><td>Extra spaces disappear after a command word</td><td>TeX eats spaces after a command. Write <code>\LaTeX\ is</code>.</td></tr>
+      <tr><td>Whole rest of the page is bold, or in one font</td><td>A declaration such as <code>\bfseries</code> lasts until the end of its group. Wrap it in braces with its text: <code>{\bfseries text}</code>.</td></tr>
+      <tr><td>A % removes the end of a line</td><td>A <code>%</code> starts a comment. Write <code>\%</code> to print it.</td></tr>
+      <tr><td>Superscript or subscript shows the wrong letters</td><td>Missing braces: <code>x^{mn}</code>, not <code>x^mn</code>.</td></tr>
+      <tr><td>A list item loses its text inside square brackets</td><td>The brackets are read as an item label. Put the maths in <code>$...$</code>.</td></tr>
+      <tr><td>Enumerate labels show (11), (22)</td><td>A letter in the label argument is a numbering code. Wrap it in braces.</td></tr>
+      <tr><td>Theorem note is wrong, e.g. "(0,1)"</td><td>The same square-bracket trap. Use <code>$[0,1]$</code> at the start of the theorem.</td></tr>
+      <tr><td>Table columns misaligned</td><td>Count the <code>&amp;</code> signs: each row needs one fewer than the number of columns. Check that every row ends with <code>\\</code>.</td></tr>
+      <tr><td>"?" in place of a citation or reference</td><td>Run LaTeX again. For citations, run the bibtex step first.</td></tr>
+      <tr><td><code>\index</code> gives no index</td><td>Add <code>\makeindex</code> in the preamble, and run makeindex between two LaTeX runs.</td></tr>
+      <tr><td>Error "Missing $ inserted"</td><td>A maths symbol (such as <code>_</code>, <code>^</code>) is used outside maths. Wrap it in <code>$...$</code>.</td></tr>
+      <tr><td>Error at <code>\right</code></td><td>Every <code>\left</code> needs a matching <code>\right</code> (use <code>\right.</code> to hide one).</td></tr>
+      <tr><td>Error "Undefined control sequence"</td><td>A command is misspelt, or its package is not loaded (for example <code>\mathbb</code> needs amssymb).</td></tr>
+      <tr><td>Overfull box warning</td><td>A line is wider than the text. Reword or allow a break; an <code>\fbox</code> never breaks.</td></tr>
+    </tbody>
+  </table>
+  <div class="plain">
+    <strong>First error wins.</strong> When compilation fails, read the log file. The first error message is the real one; later messages are often side effects.
+  </div>
+</section>
+
+<section class="part" id="compile">
+  <h2>Appendix C. Compiling step by step</h2>
+  <p>The primer's workflow, with the commands it uses (on GNU/Linux, typed in a terminal):</p>
+  <table>
+    <thead><tr><th>Document has</th><th>Run</th></tr></thead>
+    <tbody>
+      <tr><td>Only text</td><td><code>latex file</code> (or <code>pdflatex file</code>)</td></tr>
+      <tr><td>Contents, cross references, figure list</td><td>Compile twice</td></tr>
+      <tr><td>Bibliography with <code>thebibliography</code></td><td>Compile twice</td></tr>
+      <tr><td>Bibliography with BibTeX</td><td><code>latex</code>, <code>bibtex</code>, <code>latex</code>, <code>latex</code></td></tr>
+      <tr><td>Index</td><td><code>latex</code>, <code>makeindex</code>, <code>latex</code></td></tr>
+      <tr><td>Both BibTeX and an index</td><td><code>latex</code>, <code>bibtex</code>, <code>makeindex</code>, <code>latex</code>, <code>latex</code></td></tr>
+    </tbody>
+  </table>
+  <p>The primer also shows the viewing step: <code>xdvi file</code> opens a DVI file in X Window. With <code>pdflatex</code> the output is a PDF, which any PDF viewer opens.</p>
+  <div class="remember">
+    <strong>Why twice?</strong> LaTeX writes the page numbers and labels to auxiliary files during one run and reads them in the next. Until the second run, the numbers may be out of date. When in doubt, run it again until the log says "Rerun" no more.
+  </div>
+  <footer>Study guide based on <em>LaTeX Tutorial: A Primer</em>, Indian TeX Users Group (Sayahna Foundation, 2020 edition). Prepared for MAT5FS112.</footer>
+</section>
+
+</main>
+</body>
+</html>

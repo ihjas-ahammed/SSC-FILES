@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Griffiths 5th ed., Magnetization (Griffiths 6.1, pp. 268–276)</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+  :root {
+    --page-bg: #d9d9d4;
+    --paper: #fdfdfb;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --page-bg: #2b2b2b;
+      --paper: #f4f3ee;
+      --ink: #111;
+      --rule: #444;
+      --note: #555;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page-bg: #2b2b2b;
+    --paper: #f4f3ee;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  body {
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--ink);
+    font-family: "Times New Roman", Times, "Liberation Serif", serif;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .sheet {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 12mm auto;
+    padding: 14mm 18mm 16mm;
+    box-sizing: border-box;
+    background: var(--paper);
+    box-shadow: 0 1px 6px rgba(0,0,0,.25);
+    position: relative;
+  }
+  .sheet + .sheet { margin-top: 0; }
+  .hdr {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: start;
+    font-size: 14px;
+  }
+  .code { font-size: 22px; font-weight: bold; letter-spacing: .5px; }
+  .pages { text-align: center; padding-top: 14px; }
+  .name { text-align: right; line-height: 2; }
+  .title { text-align: center; margin-top: 22px; }
+  .title .exam { font-size: 19px; font-weight: bold; letter-spacing: .3px; }
+  .title .sch { margin-top: 2px; }
+  .title .course { margin-top: 10px; font-size: 16px; }
+  .title .subject { margin-top: 6px; font-size: 16px; font-weight: bold; }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 16px;
+    font-size: 15px;
+  }
+  .sec { margin-top: 14px; }
+  .sec-head {
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    font-weight: bold;
+  }
+  .sec-head .num { font-weight: bold; }
+  .sec-head .body { font-weight: normal; }
+  .sec-head .body b { font-weight: bold; }
+  .sec-head .body i { font-style: italic; }
+  .sec-total { text-align: right; font-weight: normal; margin-top: 4px; }
+  .qs { margin-top: 6px; }
+  .q {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    margin-bottom: 7px;
+  }
+  .q .n { text-align: right; padding-right: 10px; }
+  .q p { margin: 0; }
+  .sub { margin-left: 22px; }
+  .cut { color: var(--note); }
+  .turn { text-align: right; font-weight: bold; margin-top: 26px; }
+  .fig {
+    display: block;
+    margin: 8px auto 2px 36px;
+    width: 230px;
+    height: auto;
+  }
+  .fig-cap { margin-left: 36px; font-size: 13px; color: var(--note); font-style: italic; }
+  .foot-note {
+    margin-top: 26px;
+    border-top: 1px solid var(--rule);
+    padding-top: 6px;
+    font-size: 12px;
+    color: var(--note);
+  }
+  .pno { text-align: center; font-size: 15px; margin-bottom: 4px; }
+  .pno-hdr { position: absolute; top: 10mm; right: 18mm; font-weight: bold; font-size: 14px; }
+  @media print {
+    @page { size: A4; margin: 0; }
+    body { background: #fff; }
+    .sheet { margin: 0; box-shadow: none; width: 210mm; height: 297mm; min-height: 0; page-break-after: always; }
+    .sheet:last-child { page-break-after: auto; }
+  }
+  @media (max-width: 720px) {
+    .sheet { width: auto; margin: 0; padding: 14px 16px; min-height: 0; }
+    .hdr { grid-template-columns: 1fr; gap: 6px; }
+    .name { text-align: left; }
+    .pages { text-align: left; padding-top: 0; }
+  }
+</style>
+<style>
+  .sheet.book { height: auto; min-height: 297mm; text-align: justify; hyphens: auto; }
+  .sheet.book p { margin: 6px 0; }
+  .rh { display: flex; justify-content: space-between; font-size: 12px; color: var(--note);
+        border-bottom: 1px solid var(--rule); padding-bottom: 3px; margin-bottom: 12px; }
+  .chap { display: flex; background: #8a8a86; color: #fff; margin: 4px 0 16px; }
+  .chap .cn { background: #b4b4ae; padding: 10px 18px; font-size: 26px; }
+  .chap .ct { padding: 12px 16px; font-size: 22px; font-weight: bold; }
+  h2.sec { font-size: 20px; margin: 18px 0 8px; border-bottom: 2px solid var(--rule); padding-bottom: 3px; }
+  h3.sub { font-size: 16px; margin: 14px 0 6px; border-bottom: 1px solid var(--rule); padding-bottom: 2px; }
+  .eq { margin: 10px 0; text-align: center; overflow: visible; }
+  mjx-container[display="true"], mjx-container { overflow: visible !important; max-width: 100%; }
+  .sheet.book, .sheet.book .eq { overflow: visible; }
+  .eq.boxed { border: 1px solid var(--ink); display: block; padding: 4px 8px; }
+  .prob { background: #ecece7; border: 1px solid var(--rule); padding: 8px 12px; margin: 10px 0; text-align: left; }
+  .prob p { margin: 5px 0; }
+  .ex, .ex-cont { border: 1px solid var(--rule); padding: 8px 12px; margin: 10px 0; text-align: left; }
+  .ex p, .ex-cont p { margin: 5px 0; }
+  .figbox { border: 1px dashed var(--rule); padding: 10px; color: var(--note); font-size: 13px; text-align: center; margin: 8px 0; font-style: italic; }
+  figure { margin: 8px 0; text-align: center; }
+  figure svg { width: 100%; max-width: 230px; height: auto; }
+  figure.single svg { max-width: 260px; }
+  figure figcaption { font-size: 12px; font-style: italic; color: var(--note); }
+  .figrow { display: flex; flex-wrap: wrap; justify-content: space-around; gap: 8px; }
+  .figrow > figure { flex: 1 1 180px; max-width: 240px; }
+  .fn { font-size: 12.5px; color: var(--note); margin: 6px 0; text-align: left; }
+  .cont { font-size: 12.5px; color: var(--note); font-style: italic; }
+  .gapnote { font-size: 13px; color: var(--note); font-style: italic; border-left: 3px solid var(--rule); padding: 2px 8px; margin: 4px 0 10px; }
+  .flag { color: #8a1c1c; font-weight: bold; }
+  .answer { font-size: 14px; }
+  .tbl { border-collapse: collapse; width: 100%; font-size: 13px; margin: 6px 0; }
+  .tbl td, .tbl th { border: 1px solid var(--rule); padding: 3px 6px; text-align: center; }
+  .tbl th { background: #ebebe6; }
+  .tblcap { font-size: 13px; margin-top: 8px; text-align: left; }
+  .pno { text-align: center; font-size: 14px; margin-top: 14px; }
+  .intro p, .intro li { font-size: 14px; text-align: left; }
+  .intro table { border-collapse: collapse; width: 100%; font-size: 14px; margin: 6px 0; }
+  .intro td, .intro th { border: 1px solid var(--rule); padding: 4px 8px; text-align: left; }
+  @media print {
+    .sheet.book { height: auto !important; min-height: 0 !important; page-break-after: always; }
+  }
+</style>
+</head>
+<body>
+<div class="sheet book" id="pdf-p37">
+  <div class="rh"><span>268 (chapter opener)</span><span>6 Magnetic Fields in Matter</span></div>
+  <div class="gapnote">Book pages 209–267 are not in this excerpt.</div>
+  <div class="chap"><span class="cn">6</span><span class="ct">Magnetic Fields in Matter</span></div>
+  <h2 class="sec">6.1 Magnetization</h2>
+  <h3 class="sub">6.1.1 Diamagnets, Paramagnets, Ferromagnets</h3>
+  <p>If you ask the average person what “magnetism” is, you will probably be told about refrigerator decorations, compass needles, and the North Pole – none of which has any obvious connection with moving charges or current-carrying wires. And yet, in <i>classical</i> electrodynamics all magnetic phenomena are due to electric charges in motion; if you could examine a piece of magnetic material on an atomic scale you would find tiny currents: electrons orbiting around nuclei and spinning about their axes.<sup>1</sup> For macroscopic purposes, these current loops are so small that we may treat them as <i>magnetic dipoles</i>. Ordinarily, they cancel each other out because of the random orientation of the atoms. But when a magnetic field is applied, a net alignment of these dipoles occurs, and the medium becomes magnetically polarized, or <b>magnetized</b>.</p>
+  <p>Unlike electric polarization, which is almost always in the same direction as <b>E</b>, some materials acquire a magnetization <i>parallel</i> to <b>B</b> (<b>paramagnets</b>) and some <i>opposite</i> to <b>B</b> (<b>diamagnets</b>). A few substances (called <b>ferromagnets</b>, in deference to the most common example, iron) retain their magnetization even after the external field has been removed – for these, the magnetization is not determined by the <i>present</i> field but by the whole magnetic “history” of the object. Permanent magnets made of iron are the most familiar examples of magnetism, but from a theoretical point of view they are the most complicated; I’ll save ferromagnetism for the end of the chapter, and begin with qualitative models of paramagnetism and diamagnetism.</p>
+  <p class="fn"><sup>1</sup> That’s the <i>classical</i> picture – <i>quantum</i> mechanics tells a quite different story: the magnetic dipole moment associated with the electron’s intrinsic spin is localized at a point and fixed in magnitude. It is notoriously misleading to model it as a tiny spinning sphere – for one thing, a point on the “equator” would be traveling much faster than the speed of light (Prob. 8.19d). You can’t speed it up (or slow it down) by applying a torque. Electrons are subject to the <b>Pauli exclusion principle</b> and the quantization of energy and angular momentum. These radically <i>non</i>classical objects are essential to a proper understanding of magnetism in matter. But this is a book on classical electrodynamics, in which such considerations have no place. I’ll do my best to provide a plausible account of the mechanisms involved, but remember that the resulting theory is unavoidably incomplete.</p>
+  <div class="pno">268</div>
+</div>
+<div class="sheet book" id="pdf-p38">
+  <div class="rh"><span>269</span><span>6.1 Magnetization</span></div>
+  <h3 class="sub">6.1.2 Torques and Forces on Magnetic Dipoles</h3>
+  <p>A magnetic dipole experiences a torque in a magnetic field, just as an electric dipole does in an electric field. Let’s calculate the torque on a rectangular current loop in a uniform field <b>B</b>. (Since any current loop could be built up from infinitesimal rectangles, with all the “internal” sides canceling, as suggested in Fig. 6.1, there is no real loss of generality here; but if you prefer to start from scratch with an arbitrary shape, see Prob. 6.2.) Center the loop at the origin, and tilt it an angle $\theta$ from the $z$-axis toward the $y$-axis (Fig. 6.2). Let <b>B</b> point in the $z$ direction. The forces on the two sloping sides cancel (they tend to <i>stretch</i> the loop, but they don’t <i>rotate</i> it). The forces on the “horizontal” sides are likewise equal and opposite, so the net <i>force</i> on the loop is zero, but they do generate a torque:</p>
+  <div class="eq">$$\mathbf N = aF\sin\theta\,\hat{\mathbf x}.$$</div>
+  <p>The magnitude of the force on each of these segments is</p>
+  <div class="eq">$$F = IbB,$$</div>
+  <p>and therefore</p>
+  <div class="eq">$$\mathbf N = IabB\sin\theta\,\hat{\mathbf x} = mB\sin\theta\,\hat{\mathbf x},$$</div>
+  <p>or</p>
+  <div class="eq boxed">$$\mathbf N = \mathbf m\times\mathbf B,\tag{6.1}$$</div>
+  <figure class="single"><svg viewBox="0 0 240 200" role="img" aria-label="Current loop built from small rectangular loops" xmlns="http://www.w3.org/2000/svg"><defs><marker id="f61-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#111"/></marker><marker id="f61-ahr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8a1c1c"/></marker></defs><rect x="40" y="60" width="22" height="26" fill="none" stroke="#111" stroke-width="1"/><line x1="44" y1="86" x2="44" y2="64" stroke="#111" stroke-width="1" marker-end="url(#f6100-ah)"/><rect x="66" y="60" width="22" height="26" fill="none" stroke="#111" stroke-width="1"/><line x1="70" y1="86" x2="70" y2="64" stroke="#111" stroke-width="1" marker-end="url(#f6101-ah)"/><rect x="92" y="60" width="22" height="26" fill="none" stroke="#111" stroke-width="1"/><line x1="96" y1="86" x2="96" y2="64" stroke="#111" stroke-width="1" marker-end="url(#f6102-ah)"/><rect x="118" y="60" width="22" height="26" fill="none" stroke="#111" stroke-width="1"/><line x1="122" y1="86" x2="122" y2="64" stroke="#111" stroke-width="1" marker-end="url(#f6103-ah)"/><rect x="144" y="60" width="22" height="26" fill="none" stroke="#111" stroke-width="1"/><line x1="148" y1="86" x2="148" y2="64" stroke="#111" stroke-width="1" marker-end="url(#f6104-ah)"/><rect x="170" y="60" width="22" height="26" fill="none" stroke="#111" stroke-width="1"/><line x1="174" y1="86" x2="174" y2="64" stroke="#111" stroke-width="1" marker-end="url(#f6105-ah)"/><rect x="40" y="96" width="22" height="26" fill="none" stroke="#111" stroke-width="1"/><line x1="44" y1="122" x2="44" y2="100" stroke="#111" stroke-width="1" marker-end="url(#f6110-ah)"/><rect x="66" y="96" width="22" height="26" fill="none" stroke="#111" stroke-width="1"/><line x1="70" y1="122" x2="70" y2="100" stroke="#111" stroke-width="1" marker-end="url(#f6111-ah)"/><rect x="92" y="96" width="22" height="26" fill="none" stroke="#111" stroke-width="1"/><line x1="96" y1="122" x2="96" y2="100" stroke="#111" stroke-width="1" marker-end="url(#f6112-ah)"/><rect x="118" y="96" width="22" height="26" fill="none" stroke="#111" stroke-width="1"/><line x1="122" y1="122" x2="122" y2="100" stroke="#111" stroke-width="1" marker-end="url(#f6113-ah)"/><rect x="144" y="96" width="22" height="26" fill="none" stroke="#111" stroke-width="1"/><line x1="148" y1="122" x2="148" y2="100" stroke="#111" stroke-width="1" marker-end="url(#f6114-ah)"/><rect x="170" y="96" width="22" height="26" fill="none" stroke="#111" stroke-width="1"/><line x1="174" y1="122" x2="174" y2="100" stroke="#111" stroke-width="1" marker-end="url(#f6115-ah)"/><path d="M30,120 C30,140 60,150 120,150 C180,150 215,140 215,120 C215,100 190,96 170,100" fill="none" stroke="#111" stroke-width="1.4"/><line x1="205" y1="100" x2="216" y2="120" stroke="#111" stroke-width="1.4" marker-end="url(#f61-ah)"/><text x="184.00" y="136.00" font-size="13" font-family="Times New Roman, serif" font-style="italic">I</text><text x="120.00" y="185.00" font-size="11" font-family="Times New Roman, serif" text-anchor="middle" font-style="italic">internal sides cancel; only the outer edge carries I</text></svg><figcaption>Fig. 6.1</figcaption></figure>
+  <div class="pno">269</div>
+</div>
+<div class="sheet book" id="pdf-p39">
+  <div class="rh"><span>270</span><span>6 Magnetic Fields in Matter</span></div>
+  <p>where $m = Iab$ is the magnetic dipole moment of the loop. Equation 6.1 gives the torque on any localized current distribution, in the presence of a uniform field; in a nonuniform field it is the exact torque (about the center) for a <i>perfect</i> dipole of infinitesimal size.</p>
+  <p>Notice that Eq. 6.1 is identical in form to the electrical analog, Eq. 4.4: $\mathbf N = \mathbf p\times\mathbf E$. In particular, the torque is again in such a direction as to line the dipole up <i>parallel</i> to the field. It is this torque that accounts for <b>paramagnetism</b>. Since every electron constitutes a magnetic dipole – picture it, if you like (just don’t tell anybody), as a tiny spinning charged sphere – you might expect paramagnetism to be a universal phenomenon. Actually, quantum mechanics (specifically, the Pauli exclusion principle) tends to lock the electrons within a given atom together in pairs with opposing spins,<sup>2</sup> and this effectively neutralizes the torque on the combination. As a result, paramagnetism most often occurs in atoms or molecules with an odd number of electrons, where the “extra” unpaired member is subject to the magnetic torque. Even here, the alignment is far from complete, since random thermal collisions tend to upset the order.</p>
+  <p>In a uniform field, the net <i>force</i> on a current loop is zero:</p>
+  <div class="eq">$$\mathbf F = I\oint(d\mathbf l\times\mathbf B) = I\left(\oint d\mathbf l\right)\times\mathbf B = 0;$$</div>
+  <p>the constant <b>B</b> comes outside the integral, and the net displacement $\oint d\mathbf l$ around a closed loop vanishes. In a <i>nonuniform</i> field this is no longer the case. For example, suppose a circular wire ring of radius $R$, carrying a current $I$, is suspended above a short solenoid in the “fringing” region (Fig. 6.3). Here <b>B</b> has a radial component, and there is a net downward force on the loop (Fig. 6.4):</p>
+  <div class="eq">$$F = 2\pi IRB\cos\theta.\tag{6.2}$$</div>
+  <figure class="figrow"><figure><svg viewBox="0 0 240 200" role="img" aria-label="Current ring above a solenoid in its fringing field" xmlns="http://www.w3.org/2000/svg"><defs><marker id="f63-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#111"/></marker><marker id="f63-ahr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8a1c1c"/></marker></defs><rect x="84" y="110" width="72" height="70" fill="none" stroke="#111" stroke-width="1.4"/><path d="M84,116 q36,-6 72,0" fill="none" stroke="#111" stroke-width="1"/><path d="M84,125 q36,-6 72,0" fill="none" stroke="#111" stroke-width="1"/><path d="M84,134 q36,-6 72,0" fill="none" stroke="#111" stroke-width="1"/><path d="M84,143 q36,-6 72,0" fill="none" stroke="#111" stroke-width="1"/><path d="M84,152 q36,-6 72,0" fill="none" stroke="#111" stroke-width="1"/><path d="M84,161 q36,-6 72,0" fill="none" stroke="#111" stroke-width="1"/><path d="M84,170 q36,-6 72,0" fill="none" stroke="#111" stroke-width="1"/><ellipse cx="120" cy="92" rx="48" ry="12" fill="none" stroke="#111" stroke-width="1.4"/><line x1="168" y1="92" x2="166" y2="100" stroke="#111" stroke-width="1.4" marker-end="url(#f63-ah)"/><text x="60.00" y="92.00" font-size="13" font-family="Times New Roman, serif" font-style="italic">I</text><line x1="80" y1="92" x2="62" y2="70" stroke="#111" stroke-width="1.2" marker-end="url(#f63-ah)"/><line x1="80" y1="92" x2="74" y2="118" stroke="#8a1c1c" stroke-width="1.5" marker-end="url(#f63-ahr)"/><line x1="160" y1="92" x2="178" y2="70" stroke="#111" stroke-width="1.2" marker-end="url(#f63-ah)"/><line x1="160" y1="92" x2="166" y2="118" stroke="#8a1c1c" stroke-width="1.5" marker-end="url(#f63-ahr)"/><text x="172.00" y="36.00" font-size="11" font-family="Times New Roman, serif" font-style="italic">B (fringe)</text><text x="166.00" y="150.00" font-size="13" font-family="Times New Roman, serif" font-style="italic" fill="#8a1c1c">F</text><text x="120.00" y="195.00" font-size="11" font-family="Times New Roman, serif" text-anchor="middle" font-style="italic">net downward force F = 2πIRB cosθ</text></svg></figure><figure><svg viewBox="0 0 240 200" role="img" aria-label="Cross-section of the ring with B and F" xmlns="http://www.w3.org/2000/svg"><defs><marker id="f64-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#111"/></marker><marker id="f64-ahr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8a1c1c"/></marker></defs><circle cx="120" cy="100" r="4" fill="#111" stroke="#111" stroke-width="1.4"/><text x="100.00" y="114.00" font-size="13" font-family="Times New Roman, serif" font-style="italic">R</text><path d="M180,100 A60,60 0 0 1 120,160" fill="none" stroke="#111" stroke-width="1" stroke-dasharray="3 3"/><circle cx="180" cy="100" r="4" fill="#111"/><text x="194.00" y="100.00" font-size="13" font-family="Times New Roman, serif" font-style="italic">I</text><line x1="180" y1="100" x2="180" y2="99.99" stroke="none" stroke-width="0.1" marker-end="url(#f64-ah)"/><line x1="120" y1="100" x2="204.26" y2="29.29" stroke="#111" stroke-width="0.9" stroke-dasharray="4 3"/><line x1="180" y1="100" x2="199.28" y2="77.02" stroke="#111" stroke-width="1.4" marker-end="url(#f64-ah)"/><text x="214.00" y="66.00" font-size="13" font-family="Times New Roman, serif" font-style="italic" font-weight="bold">B</text><line x1="180" y1="100" x2="160.72" y2="122.98" stroke="#8a1c1c" stroke-width="1.4" marker-end="url(#f64-ahr)"/><text x="136.00" y="136.00" font-size="13" font-family="Times New Roman, serif" font-style="italic" fill="#8a1c1c">F</text><text x="120.00" y="190.00" font-size="11" font-family="Times New Roman, serif" text-anchor="middle" font-style="italic">θ: angle between B and the ring axis</text></svg></figure><figcaption style="width:100%">Fig. 6.3–6.4</figcaption></figure>
+  <p class="fn"><sup>2</sup> This is not always true for the outermost electrons in unfilled shells.</p>
+  <div class="pno">270</div>
+</div>
+<div class="sheet book" id="pdf-p40">
+  <div class="rh"><span>271</span><span>6.1 Magnetization</span></div>
+  <figure class="single"><svg viewBox="0 0 260 180" role="img" aria-label="Three models of a dipole" xmlns="http://www.w3.org/2000/svg"><defs><marker id="f65-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#111"/></marker><marker id="f65-ahr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8a1c1c"/></marker></defs><text x="40.00" y="16.00" font-size="12" font-family="Times New Roman, serif" text-anchor="middle" font-style="italic">(a)</text><text x="40.00" y="40.00" font-size="12" font-family="Times New Roman, serif" text-anchor="middle">N</text><circle cx="40" cy="46" r="3" fill="#111"/><line x1="40" y1="46" x2="40" y2="118" stroke="#111" stroke-width="1"/><circle cx="40" cy="118" r="3" fill="#111"/><text x="40.00" y="136.00" font-size="12" font-family="Times New Roman, serif" text-anchor="middle">S</text><line x1="46" y1="96" x2="46" y2="62" stroke="#111" stroke-width="1.4" marker-end="url(#f65-ah)"/><text x="54.00" y="80.00" font-size="13" font-family="Times New Roman, serif" font-style="italic">m</text><text x="120.00" y="16.00" font-size="12" font-family="Times New Roman, serif" text-anchor="middle" font-style="italic">(b)</text><text x="120.00" y="38.00" font-size="14" font-family="Times New Roman, serif" text-anchor="middle">+</text><circle cx="120" cy="46" r="3" fill="#111"/><line x1="120" y1="46" x2="120" y2="118" stroke="#111" stroke-width="1"/><circle cx="120" cy="118" r="3" fill="#111"/><text x="120.00" y="136.00" font-size="14" font-family="Times New Roman, serif" text-anchor="middle">−</text><line x1="126" y1="96" x2="126" y2="62" stroke="#111" stroke-width="1.4" marker-end="url(#f65-ah)"/><text x="134.00" y="80.00" font-size="13" font-family="Times New Roman, serif" font-style="italic">p</text><text x="200.00" y="16.00" font-size="12" font-family="Times New Roman, serif" text-anchor="middle" font-style="italic">(c)</text><ellipse cx="200" cy="82" rx="14" ry="36" fill="none" stroke="#111" stroke-width="1.4"/><line x1="214" y1="60" x2="214" y2="66" stroke="#111" stroke-width="1.4" marker-end="url(#f65-ah)"/><text x="222.00" y="54.00" font-size="13" font-family="Times New Roman, serif" font-style="italic">I</text><line x1="200" y1="118" x2="200" y2="80" stroke="none" stroke-width="0.1" marker-end="url(#f65-ah)"/><line x1="230" y1="98" x2="230" y2="60" stroke="#111" stroke-width="1.4" marker-end="url(#f65-ah)"/><text x="236.00" y="76.00" font-size="13" font-family="Times New Roman, serif" font-style="italic">m</text><text x="120.00" y="170.00" font-size="10" font-family="Times New Roman, serif" text-anchor="middle" font-style="italic">dipoles are current loops (c); (a) is a model</text></svg><figcaption>Fig. 6.5</figcaption></figure>
+  <p>For an <i>infinitesimal</i> loop, with dipole moment <b>m</b>, in a field <b>B</b>, the force is</p>
+  <div class="eq boxed">$$\mathbf F = \nabla(\mathbf m\cdot\mathbf B),\tag{6.3}$$</div>
+  <p>as you’ll see in Prob. 6.4. Once again the magnetic formula is identical to its electrical “twin,” if we write the latter in the form $\mathbf F = \nabla(\mathbf p\cdot\mathbf E)$.<sup>3</sup></p>
+  <p>If you’re starting to get a sense of <i>déjà vu</i>, perhaps you will have more respect for those early physicists who thought magnetic dipoles consisted of positive and negative magnetic “charges” (north and south “poles,” they called them), separated by a small distance, just like electric dipoles (Fig. 6.5a). They wrote down a “Coulomb’s law” for the attraction and repulsion of these poles, and developed the whole of magnetostatics in exact analogy to electrostatics. It’s not a bad model, for many purposes – it gives the correct field of a dipole (at least, away from the origin), the right torque on a dipole (at least, on a <i>stationary</i> dipole), and the proper force on a dipole (at least, in the absence of external currents). But it’s bad physics, because <i>there’s no such thing</i> as a single magnetic north pole or south pole. If you break a bar magnet in half, you don’t get a north pole in one hand and a south pole in the other; you get two complete magnets. Magnetism is <i>not</i> due to magnetic monopoles, but rather to <i>moving electric charges</i>; magnetic dipoles are tiny current loops (Fig. 6.5c), and it’s an extraordinary thing, really, that the formulas involving <b>m</b> bear any resemblance to the corresponding formulas for <b>p</b>. Sometimes it is easier to think in terms of the <b>Gilbert model</b> of a magnetic dipole (separated monopoles), instead of the physically correct <b>Ampère model</b> (current loop). Indeed, this picture occasionally offers a quick and clever solution to an otherwise cumbersome problem (you just copy the corresponding result from electrostatics, changing <b>p</b> to <b>m</b>, $1/\epsilon_0$ to $\mu_0$, and <b>E</b> to <b>B</b>). But whenever the <i>close-up</i> features of the dipole come into play, the two models can yield strikingly different answers. My advice is to use the Gilbert model, if you like, to get an intuitive “feel” for a problem, but never rely on it for quantitative results.</p>
+  <p class="fn"><sup>3</sup> In the spirit of the footnote to Eq. 4.5, it would be safer to write Eq. 6.3 as $\mathbf F = \mathbf m\times(\nabla\times\mathbf B) + (\mathbf m\cdot\nabla)\mathbf B$, since <b>m</b> is not to be differentiated here.</p>
+  <div class="pno">271</div>
+</div>
+<div class="sheet book" id="pdf-p41">
+  <div class="rh"><span>272</span><span>6 Magnetic Fields in Matter</span></div>
+  <div class="prob">
+    <p><b>Problem 6.1.</b> Calculate the torque exerted on the square loop shown in Fig. 6.6, due to the circular loop (assume $r$ is much larger than $a$ or $b$). If the square loop is free to rotate, what will its equilibrium orientation be?</p>
+    <figure class="single"><svg viewBox="0 0 240 195" role="img" aria-label="Circular loop and square loop separated by r" xmlns="http://www.w3.org/2000/svg"><defs><marker id="f66-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#111"/></marker><marker id="f66-ahr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8a1c1c"/></marker></defs><ellipse cx="60" cy="100" rx="16" ry="34" fill="none" stroke="#111" stroke-width="1.4"/><line x1="60" y1="66" x2="62" y2="66" stroke="#111" stroke-width="1.2" marker-end="url(#f66-ah)"/><text x="44.00" y="62.00" font-size="13" font-family="Times New Roman, serif" font-style="italic">I</text><text x="60.00" y="152.00" font-size="13" font-family="Times New Roman, serif" text-anchor="middle" font-style="italic">a</text><line x1="60" y1="100" x2="190" y2="100" stroke="#111" stroke-width="1" stroke-dasharray="4 3"/><text x="125.00" y="92.00" font-size="13" font-family="Times New Roman, serif" text-anchor="middle" font-style="italic">r</text><rect x="186" y="78" width="26" height="44" fill="none" stroke="#111" stroke-width="1.4"/><line x1="186" y1="122" x2="186" y2="78" stroke="#111" stroke-width="1.2" marker-end="url(#f66-ah)"/><text x="176.00" y="74.00" font-size="13" font-family="Times New Roman, serif" font-style="italic">I</text><text x="200.00" y="140.00" font-size="13" font-family="Times New Roman, serif" text-anchor="middle" font-style="italic">b</text><text x="120.00" y="185.00" font-size="10" font-family="Times New Roman, serif" text-anchor="middle" font-style="italic">square loop (side b) far from circular loop (radius a ≪ r)</text></svg><figcaption>Fig. 6.6</figcaption></figure>
+    <p><b>Problem 6.2.</b> Starting from the Lorentz force law, in the form of Eq. 5.16, show that the torque on <i>any</i> steady current distribution (not just a square loop) in a uniform field <b>B</b> is $\mathbf m\times\mathbf B$.</p>
+    <p><b>Problem 6.3.</b> Find the force of attraction between two magnetic dipoles, $\mathbf m_1$ and $\mathbf m_2$, oriented as shown in Fig. 6.7, a distance $r$ apart, (a) using Eq. 6.2 and (b) using Eq. 6.3.</p>
+    <figure class="figrow"><figure><svg viewBox="0 0 240 150" role="img" aria-label="Two dipoles lined up on one axis" xmlns="http://www.w3.org/2000/svg"><defs><marker id="f67-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#111"/></marker><marker id="f67-ahr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8a1c1c"/></marker></defs><circle cx="60" cy="100" r="4" fill="#111"/><line x1="60" y1="86" x2="96" y2="86" stroke="#111" stroke-width="1.6" marker-end="url(#f67-ah)"/><text x="72.00" y="80.00" font-size="13" font-family="Times New Roman, serif" font-style="italic">m₁</text><circle cx="160" cy="100" r="4" fill="#111"/><line x1="160" y1="86" x2="196" y2="86" stroke="#111" stroke-width="1.6" marker-end="url(#f67-ah)"/><text x="172.00" y="80.00" font-size="13" font-family="Times New Roman, serif" font-style="italic">m₂</text><line x1="60" y1="122" x2="160" y2="122" stroke="#111" stroke-width="1"/><line x1="60" y1="122" x2="60" y2="122" stroke="none" stroke-width="0.1" marker-end="url(#f67-ah)"/><text x="110.00" y="138.00" font-size="13" font-family="Times New Roman, serif" text-anchor="middle" font-style="italic">r</text></svg></figure><figure><svg viewBox="0 0 240 170" role="img" aria-label="Square loop in the yz-plane with axes" xmlns="http://www.w3.org/2000/svg"><defs><marker id="f68-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#111"/></marker><marker id="f68-ahr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8a1c1c"/></marker></defs><line x1="60" y1="150" x2="60" y2="40" stroke="#111" stroke-width="1.2"/><line x1="60" y1="40" x2="60" y2="34" stroke="#111" stroke-width="1.2" marker-end="url(#f68-ah)"/><text x="66.00" y="42.00" font-size="13" font-family="Times New Roman, serif" font-style="italic">z</text><line x1="60" y1="150" x2="210" y2="150" stroke="#111" stroke-width="1.2"/><line x1="210" y1="150" x2="216" y2="150" stroke="#111" stroke-width="1.2" marker-end="url(#f68-ah)"/><text x="216.00" y="164.00" font-size="13" font-family="Times New Roman, serif" font-style="italic">y</text><line x1="60" y1="150" x2="24" y2="180" stroke="#111" stroke-width="1.2"/><text x="14.00" y="190.00" font-size="13" font-family="Times New Roman, serif" font-style="italic">x</text><polygon points="60,90 120,90 120,150 60,150" fill="none" stroke="#111" stroke-width="1.4"/><line x1="90" y1="90" x2="118" y2="90" stroke="#111" stroke-width="1.4" marker-end="url(#f68-ah)"/><text x="90.00" y="84.00" font-size="12" font-family="Times New Roman, serif" text-anchor="middle" font-style="italic">I</text><text x="120.00" y="164.00" font-size="13" font-family="Times New Roman, serif" text-anchor="middle" font-style="italic">ε</text><text x="44.00" y="116.00" font-size="13" font-family="Times New Roman, serif" font-style="italic">ε</text></svg></figure><figcaption style="width:100%">Fig. 6.7–6.8</figcaption></figure>
+    <p><b>Problem 6.4.</b> Derive Eq. 6.3. [Here’s one way to do it: Assume the dipole is an infinitesimal square, of side $\epsilon$ (if it’s not, chop it up into squares, and apply the argument to each one). Choose axes as shown in Fig. 6.8, and calculate $\mathbf F = I\oint(d\mathbf l\times\mathbf B)$ along each of the four sides. Expand <b>B</b> in a Taylor series – on the right-hand side, for instance, $\mathbf B = \mathbf B(0,\epsilon,z)\approx\mathbf B(0,0,z)+\epsilon\,\frac{\partial\mathbf B}{\partial y}\big|_{(0,0,z)}$. For more sophisticated methods, see Prob. 6.22 or Prob. 6.23.]</p>
+    <p><b>Problem 6.5.</b> A uniform current density $\mathbf J = J_0\hat{\mathbf z}$ fills a slab straddling the $yz$ plane, from $x=-a$ to $x=+a$. A magnetic dipole $\mathbf m = m_0\hat{\mathbf x}$ is situated at the origin.<br>(a) Find the force on the dipole, using Eq. 6.3.<br>(b) Do the same for a dipole pointing in the $y$ direction: $\mathbf m = m_0\hat{\mathbf y}$.<br>(c) In the <i>electrostatic</i> case, the expressions $\mathbf F = \nabla(\mathbf p\cdot\mathbf E)$ and $\mathbf F = (\mathbf p\cdot\nabla)\mathbf E$ are equivalent (prove it), but this is <i>not</i> the case for the magnetic analogs (explain why). As an example, calculate $(\mathbf m\cdot\nabla)\mathbf B$ for the configurations in (a) and (b).</p>
+  </div>
+  <div class="pno">272</div>
+</div>
+<div class="sheet book" id="pdf-p42">
+  <div class="rh"><span>273</span><span>6.1 Magnetization</span></div>
+  <h3 class="sub">6.1.3 Effect of a Magnetic Field on Atomic Orbits</h3>
+  <p>Electrons not only <i>spin</i>, they also <i>revolve</i> around the nucleus – for simplicity, let’s assume the orbit is a circle of radius $R$ (Fig. 6.9). Although technically this orbital motion does not constitute a steady current, in practice the period $T = 2\pi R/v$ is so short that unless you blink awfully fast, it’s going to <i>look</i> like a steady current:</p>
+  <div class="eq">$$I = \frac{-e}{T} = -\frac{ev}{2\pi R}.$$</div>
+  <p>(The minus sign accounts for the negative charge of the electron.) Accordingly, the orbital dipole moment ($I\pi R^2$) is</p>
+  <div class="eq">$$\mathbf m = -\tfrac12 evR\,\hat{\mathbf z}.\tag{6.4}$$</div>
+  <p>Like any other magnetic dipole, this one is subject to a torque ($\mathbf m\times\mathbf B$) when you turn on a magnetic field. But it’s a lot harder to tilt the entire orbit than it is the spin, so the orbital contribution to paramagnetism is small. There is, however, a more significant effect on the orbital motion: The electron <i>speeds up</i> or <i>slows down</i>, depending on the orientation of <b>B</b>. For whereas the centripetal acceleration $v^2/R$ is ordinarily sustained by electrical forces alone,<sup>4</sup></p>
+  <div class="eq">$$\frac{1}{4\pi\epsilon_0}\frac{e^2}{R^2} = m_e\frac{v^2}{R},\tag{6.5}$$</div>
+  <p>in the presence of a magnetic field there is an additional force, $-e(\mathbf v\times\mathbf B)$. For the sake of argument, let’s say that <b>B</b> is perpendicular to the plane of the orbit, as shown in Fig. 6.10; then</p>
+  <div class="eq">$$\frac{1}{4\pi\epsilon_0}\frac{e^2}{R^2} + e\bar v B = m_e\frac{\bar v^2}{R}.\tag{6.6}$$</div>
+  <p>Under these conditions, the new speed $\bar v$ is <i>greater</i> than $v$:</p>
+  <div class="eq">$$e\bar vB = \frac{m_e}{R}(\bar v^2 - v^2) = \frac{m_e}{R}(\bar v+v)(\bar v-v),$$</div>
+  <figure class="single"><svg viewBox="0 0 240 200" role="img" aria-label="Electron orbit with orbital magnetic moment" xmlns="http://www.w3.org/2000/svg"><defs><marker id="f69-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#111"/></marker><marker id="f69-ahr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8a1c1c"/></marker></defs><ellipse cx="120" cy="100" rx="56" ry="22.400000000000002" fill="none" stroke="#111" stroke-width="1.4"/><circle cx="120" cy="100" r="4" fill="#111"/><text x="126.00" y="114.00" font-size="12" font-family="Times New Roman, serif">+e</text><circle cx="176" cy="100" r="4" fill="#111"/><text x="182.00" y="104.00" font-size="12" font-family="Times New Roman, serif">−e</text><line x1="175.5" y1="86" x2="175.5" y2="116" stroke="#111" stroke-width="1.4" marker-end="url(#f69-ah)"/><text x="180.00" y="96.00" font-size="13" font-family="Times New Roman, serif" font-style="italic">v</text><line x1="120" y1="138" x2="120" y2="170" stroke="#111" stroke-width="1.6" marker-end="url(#f69-ah)"/><text x="126.00" y="174.00" font-size="13" font-family="Times New Roman, serif" font-style="italic">m</text><text x="110.00" y="54.00" font-size="13" font-family="Times New Roman, serif" font-style="italic">R</text><text x="120.00" y="190.00" font-size="11" font-family="Times New Roman, serif" text-anchor="middle" font-style="italic">electron orbit; m = −½evR ẑ</text></svg><figcaption>Fig. 6.9</figcaption></figure>
+  <p class="fn"><sup>4</sup> To avoid confusion with the magnetic dipole moment <i>m</i>, I’ll write the electron mass with subscript: $m_e$.</p>
+  <div class="pno">273</div>
+</div>
+<div class="sheet book" id="pdf-p43">
+  <div class="rh"><span>274</span><span>6 Magnetic Fields in Matter</span></div>
+  <figure class="single"><svg viewBox="0 0 240 200" role="img" aria-label="Electron orbit in a magnetic field perpendicular to the plane" xmlns="http://www.w3.org/2000/svg"><defs><marker id="f610-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#111"/></marker><marker id="f610-ahr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8a1c1c"/></marker></defs><ellipse cx="120" cy="100" rx="52" ry="20.8" fill="none" stroke="#111" stroke-width="1.4"/><line x1="60" y1="50" x2="60" y2="16" stroke="#111" stroke-width="1.3" marker-end="url(#f610-ah)"/><text x="64.00" y="30.00" font-size="12" font-family="Times New Roman, serif" font-style="italic">B</text><line x1="120" y1="50" x2="120" y2="16" stroke="#111" stroke-width="1.3" marker-end="url(#f610-ah)"/><text x="124.00" y="30.00" font-size="12" font-family="Times New Roman, serif" font-style="italic">B</text><line x1="180" y1="50" x2="180" y2="16" stroke="#111" stroke-width="1.3" marker-end="url(#f610-ah)"/><text x="184.00" y="30.00" font-size="12" font-family="Times New Roman, serif" font-style="italic">B</text><circle cx="120" cy="100" r="4" fill="#111"/><text x="126.00" y="114.00" font-size="12" font-family="Times New Roman, serif">+e</text><circle cx="172" cy="100" r="4" fill="#111"/><text x="178.00" y="104.00" font-size="12" font-family="Times New Roman, serif">−e</text><line x1="172" y1="84" x2="156" y2="98" stroke="#111" stroke-width="1.4" marker-end="url(#f610-ah)"/><text x="146.00" y="78.00" font-size="13" font-family="Times New Roman, serif" font-style="italic">v</text><text x="120.00" y="190.00" font-size="11" font-family="Times New Roman, serif" text-anchor="middle" font-style="italic">B ⊥ orbit: the electron speeds up or slows down</text></svg><figcaption>Fig. 6.10</figcaption></figure>
+  <p>or, assuming the change $\Delta v = \bar v - v$ is small,</p>
+  <div class="eq">$$\Delta v = \frac{eRB}{2m_e}.\tag{6.7}$$</div>
+  <p>When <b>B</b> is turned on, then, the electron <i>speeds up</i>.<sup>5</sup></p>
+  <p>A change in orbital speed means a change in the dipole moment (Eq. 6.4):</p>
+  <div class="eq">$$\Delta\mathbf m = -\tfrac12 e(\Delta v)R\,\hat{\mathbf z} = -\frac{e^2R^2}{4m_e}\mathbf B.\tag{6.8}$$</div>
+  <p>Notice that the change in <b>m</b> is <i>opposite</i> to the direction of <b>B</b>. (An electron circling the other way would have a dipole moment pointing upward, but such an orbit would be slowed down by the field, so the change is still opposite to <b>B</b>.) Ordinarily, the electron orbits are randomly oriented, and the orbital dipole moments cancel out. But in the presence of a magnetic field, each atom picks up a little “extra” dipole moment, and these increments are all <i>antiparallel</i> to the field. This is the mechanism responsible for <b>diamagnetism</b>. It is a universal phenomenon, affecting all atoms. However, it is typically much weaker than paramagnetism, and is therefore observed mainly in atoms with <i>even</i> numbers of electrons, where paramagnetism is usually absent.</p>
+  <p>In deriving Eq. 6.8, I assumed that the orbit remains circular, with its original radius $R$. I cannot offer a justification for this at the present stage. If the atom is stationary while the field is turned on, then my assumption can be proved – this is not magnetostatics, however, and the details will have to await Chapter 7 (see Prob. 7.55). If the atom is moved into the field, the situation is enormously more complicated. But never mind – I’m only trying to give you a qualitative account of diamagnetism. Assume, if you prefer, that the velocity remains the same while the <i>radius</i> changes – the formula (Eq. 6.8) is altered (by a factor of 2), but the qualitative conclusion is unaffected. The truth is that this classical model is fundamentally flawed (diamagnetism is really a <i>quantum</i> phenomenon), so there’s not much point <span class="cont">(continued on the next page)</span></p>
+  <p class="fn"><sup>5</sup> I said (Eq. 5.11) that magnetic fields do no work, and are incapable of speeding a particle up. I stand by that. However, as we shall see in Chapter 7, a <i>changing</i> magnetic field induces an <i>electric</i> field, and it is the latter that accelerates the electrons in this instance.</p>
+  <div class="pno">274</div>
+</div>
+<div class="sheet book" id="pdf-p44">
+  <div class="rh"><span>275</span><span>6.1 Magnetization</span></div>
+  <p>in refining the details.<sup>6</sup> What <i>is</i> important is the empirical fact that in diamagnetic materials the induced dipole moments point opposite to the magnetic field.</p>
+  <h3 class="sub">6.1.4 Magnetization</h3>
+  <p>In the presence of a magnetic field, matter becomes <i>magnetized</i>; that is, upon microscopic examination, it will be found to contain many tiny dipoles, with a net alignment along some direction. We have discussed two mechanisms that account for this magnetic polarization: (1) paramagnetism (the dipoles associated with the spins of unpaired electrons experience a torque tending to line them up parallel to the field) and (2) diamagnetism (the speed of the electrons is altered in such a way as to change the orbital dipole moment in a direction opposite to the field). Whatever the cause, we describe the state of magnetic polarization by the quantity</p>
+  <div class="eq">$$\mathbf M\equiv\text{magnetic dipole moment per unit volume}.\tag{6.9}$$</div>
+  <p>The vector <b>M</b> is called the <b>magnetization</b>; it plays a role analogous to the polarization <b>P</b> in electrostatics. In the following section, we will not worry about how the magnetization <i>got</i> there – it could be paramagnetism, diamagnetism, or even ferromagnetism – we shall take <b>M</b> as <i>given</i>, and calculate the field this magnetization itself produces.</p>
+  <p>Incidentally, it may have surprised you to learn that materials other than the famous ferromagnetic trio (iron, nickel, and cobalt) are affected by a magnetic field <i>at all</i>. You cannot, of course, pick up a piece of wood or aluminum with a magnet. The reason is that diamagnetism and paramagnetism are extremely weak: it takes a delicate experiment and a powerful magnet to detect them at all. If you were to suspend a piece of paramagnetic material above a solenoid, as in Fig. 6.3, the induced magnetization would be upward, and hence the force downward. By contrast, the magnetization of a diamagnetic object would be downward and the force upward. In general, when a sample is placed in a region of nonuniform field, <i>paramagnets are attracted into the field</i>, whereas <i>diamagnets are repelled away</i>. But the actual forces are pitifully weak – in a typical experimental arrangement the force on a comparable sample of iron would be $10^4$ or $10^5$ times as great. That’s why it was reasonable for us to calculate the field inside a piece of copper wire, say, in Chapter 5, without worrying about the effects of magnetization.<sup>7</sup></p>
+  <p class="fn"><sup>6</sup> S. L. O’Dell and R. K. P. Zia, <i>Am. J. Phys.</i> <b>54</b>, 32, (1986); R. Peierls, <i>Surprises in Theoretical Physics</i>, Princeton University Press, Princeton, NJ (1979), Sect. 4.3; R. P. Feynman, R. B. Leighton, and M. Sands, <i>The Feynman Lectures on Physics</i>, Vol. 2, Addison-Wesley, New York (1966), Sects. 34–36.<br><sup>7</sup> In 1997, Andre Geim managed to levitate a live frog (diamagnetic) for 30 minutes; he was awarded the 2000 Ig Nobel prize for this achievement, and later (2010) the Nobel prize for research on graphene. See M. V. Berry and A. K. Geim, <i>Eur. J. Phys.</i> <b>18</b>, 307 (1997) and Geim, <i>Physics Today</i> September 1998, p. 36.</p>
+  <div class="pno">275</div>
+</div>
+<div class="sheet book" id="pdf-p45">
+  <div class="rh"><span>276</span><span>6 Magnetic Fields in Matter</span></div>
+  <div class="prob">
+    <p><b>Problem 6.6.</b> Of the following materials, which would you expect to be paramagnetic and which diamagnetic: aluminum, copper, copper chloride (CuCl<sub>2</sub>), carbon, lead, nitrogen (N<sub>2</sub>), salt (NaCl), sodium, sulfur, water? (Actually, copper is slightly <i>dia</i>magnetic; otherwise they’re all what you’d expect.)<sup>8</sup></p>
+  </div>
+  <h2 class="sec">6.2 The Field of a Magnetized Object</h2>
+  <h3 class="sub">6.2.1 Bound Currents</h3>
+  <p>Suppose we have a piece of magnetized material; the magnetic dipole moment per unit volume, <b>M</b>, is given. What field does this object produce? Well, the vector potential of a single dipole <b>m</b> is given by Eq. 5.85:</p>
+  <div class="eq">$$\mathbf A(\mathbf r) = \frac{\mu_0}{4\pi}\frac{\mathbf m\times\hat{\boldsymbol{\mathcal R}}}{\mathcal R^2}.\tag{6.10}$$</div>
+  <p>In the magnetized object, each volume element $d\tau'$ carries a dipole moment $\mathbf M\,d\tau'$, so the total vector potential is (Fig. 6.11)</p>
+  <div class="eq">$$\mathbf A(\mathbf r) = \frac{\mu_0}{4\pi}\int\frac{\mathbf M(\mathbf r')\times\hat{\boldsymbol{\mathcal R}}}{\mathcal R^2}\,d\tau'.\tag{6.11}$$</div>
+  <p>That <i>does</i> it, in principle. But, as in the electrical case (Section 4.2.1), the integral can be cast in a more illuminating form by exploiting the identity</p>
+  <div class="eq">$$\nabla'\!\left(\frac{1}{\mathcal R}\right) = \frac{\hat{\boldsymbol{\mathcal R}}}{\mathcal R^2}.$$</div>
+  <figure class="single"><svg viewBox="0 0 240 190" role="img" aria-label="Magnetized body with volume element and vector to field point" xmlns="http://www.w3.org/2000/svg"><defs><marker id="f611-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#111"/></marker><marker id="f611-ahr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8a1c1c"/></marker></defs><path d="M50,100 C40,60 90,40 120,60 C160,40 200,70 190,110 C205,150 160,175 120,160 C90,180 50,150 50,100 Z" fill="#dcdcd4" stroke="#111" stroke-width="1.4"/><rect x="96" y="112" width="14" height="14" fill="#ffffff" stroke="#111" stroke-width="1.1"/><line x1="103" y1="126" x2="103" y2="110" stroke="#111" stroke-width="1.3" marker-end="url(#f611-ah)"/><text x="114.00" y="130.00" font-size="12" font-family="Times New Roman, serif" font-style="italic">dτ′</text><line x1="103" y1="119" x2="200" y2="60" stroke="#111" stroke-width="1.1" marker-end="url(#f611-ah)"/><text x="176.00" y="90.00" font-size="13" font-family="Times New Roman, serif" font-style="italic">ℛ</text><circle cx="202" cy="58" r="3" fill="#111"/><text x="70.00" y="174.00" font-size="13" font-family="Times New Roman, serif" font-style="italic" font-weight="bold">M</text></svg><figcaption>Fig. 6.11</figcaption></figure>
+  <p class="fn"><sup>8</sup> In truth, the determination is more complicated than I have suggested. Although an individual atom (or molecule) with an odd number of electrons obviously has an unpaired electron, and is therefore paramagnetic, those with an even number can also have unpaired electrons (this is governed by <b>Hund’s rule</b>). Atomic oxygen, for example, is paramagnetic. Moreover, in molecules and solids, pairing may occur between <i>shared</i> electrons – thus bismuth (atomic number 83) is strongly diamagnetic in its solid phase.</p>
+  <div class="pno">276</div>
+</div>
+</body>
+</html>

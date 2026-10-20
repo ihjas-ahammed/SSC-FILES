@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Structured notes: Section 1: growth and decay of current in an L-R circuit (Murugeshan 12.1, 12.2)</title>
+<script>
+window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+  @page { size: A4; margin: 16mm; }
+  :root { --ink:#1B2631; --muted:#5D6D7E; --rule:#AEB6BF; --paper:#FFFFFF; --bound:#B9770E; --res:#117A65; --eq:#1F618D; --idb:#A04000; --hi:#FDF2E9; }
+  body { margin:0; background:var(--paper); color:var(--ink); font-family:"Times New Roman", Times, "Liberation Serif", serif; font-size:12.5pt; line-height:1.5; }
+  main { max-width:760px; margin:0 auto; padding:14px; }
+  h1 { font-size:20pt; margin:0 0 4px; color:var(--eq); }
+  .meta { color:var(--muted); font-size:10.5pt; margin-bottom:10px; }
+  h2 { font-size:14pt; margin:22px 0 6px; color:var(--eq); border-bottom:2px solid var(--eq); padding-bottom:2px; break-after:avoid; }
+  h3 { font-size:12.5pt; margin:14px 0 4px; color:var(--res); break-after:avoid; }
+  p, li { margin:5px 0; }
+  ul { margin:4px 0 4px 22px; padding:0; }
+  .eq { margin:8px 0; text-align:center; }
+  .box-eq { background:#EAF2F8; border-left:4px solid var(--eq); padding:6px 10px; margin:8px 0; }
+  .box-res { background:#E9F7EF; border-left:4px solid var(--res); padding:6px 10px; margin:8px 0; }
+  .box-id { background:var(--hi); border-left:4px solid var(--idb); padding:6px 10px; margin:8px 0; }
+  .lbl { font-weight:bold; font-size:10.5pt; text-transform:uppercase; letter-spacing:.3px; }
+  .lbl.res { color:var(--res); } .lbl.eq { color:var(--eq); } .lbl.id { color:var(--idb); }
+  .note { font-size:11.5pt; color:var(--muted); margin:4px 0; }
+  .bg { font-size:10.5pt; color:var(--muted); font-style:italic; }
+  .bound { color:var(--bound); font-weight:bold; }
+  .fig { margin:12px 0; text-align:center; break-inside:avoid; }
+  .fig svg { display:block; width:100%; max-width:320px; height:auto; margin:0 auto; }
+  .fig figcaption { font-size:10.5pt; color:var(--muted); font-style:italic; margin-top:3px; }
+  @media print { .keep { break-inside: avoid; } }
+
+  .box-recall { background:#FEF9E7; border-left:4px solid #B9770E; padding:6px 10px; margin:8px 0; }
+  .box-recall ol { margin:4px 0 4px 20px; padding:0; }
+  .lbl.recall { color:#B9770E; }
+  .figsvg { display:block; width:100%; max-width:240px; height:auto; margin:0 auto; }
+  .fig img { display:block; width:100%; max-width:240px; height:auto; margin:0 auto; }
+  .box-res p, .box-eq p { margin:4px 0; }
+  .sec-body { column-count: 2; column-gap: 22px; column-rule: 1px solid #AEB6BF; }
+  .sec-body .eq, .sec-body .box-eq, .sec-body .fig { break-inside: avoid; }
+  .sec-body .box-res, .sec-body .box-recall { box-decoration-break: clone; }
+  .sec-body .fig img, .sec-body .figsvg { max-height: 130px; width: auto; max-width: 220px; }
+  .sec-body h3 { break-after: avoid; }
+  .sec-body p, .sec-body li { font-size: 11pt; }
+  .sec-body .eq { font-size: 0.93em; }
+  .sec-body .longeq mjx-container[display="true"] { font-size: 0.72em !important; }
+  .sec-body mjx-container[display="true"] { font-size: 0.85em !important; max-width: 100%; }
+  .sec-bar { background:#1F618D; color:#fff; font-size:13pt; font-weight:bold; padding:6px 10px; margin:16px 0 6px; column-span: all; break-after: avoid; }
+  main { max-width: none; margin: 0; padding: 0 14px; }
+  @page { size: A4; margin: 16mm; }
+  @media print { h2 { break-after: avoid; } }
+</style>
+</head>
+<body>
+<main>
+<h1>Structured notes: Section 1: growth and decay of current in an L-R circuit (Murugeshan 12.1, 12.2)</h1>
+<div class="meta">Murugeshan, <i>Electricity and Magnetism</i> (10th ed.), Ch. 12 §12.1 and §12.2 (Module 4, syllabus item 15–16). Figures are drawn for these notes from the book formulas; the book figure number is in each caption. Problems are not included.</div>
+<h2>12.1 Growth of current in an L-R circuit</h2>
+<div class="sec-body">
+<div class="bg">Source: <i>book-sources/m4-s12-1-growth.html</i>, Murugeshan pp. 312–313 (printed). Syllabus item 15. Equations (1)–(4) are given in full.</div>
+
+<h3>Prerequisites</h3>
+<ul>
+<li>Ohm’s law and the emf of a source (Plus Two; pre-physics P1).</li>
+<li>First-order differential equations solved by separation of variables (Beyond; pre-math M4).</li>
+<li>Exponentials and natural logarithms (pre-math M3).</li>
+</ul>
+
+<h3>1. Setup</h3>
+<p>An inductance $L$ and a resistance $R$ are connected in series with a steady emf $E$ through a key (Fig. 12.1). On closing the key the current rises from zero to a final value $I_0$. $I$ denotes the current at time $t$.</p>
+<figure class="fig"><img src="final/m4-s1-circuit.jpg" alt="m4 s1 circuit"><figcaption>Fig. 12.1 (book): inductance L and resistance R in series with a cell E and key K. Schematic.</figcaption></figure>
+
+<h3>2. Loop equation</h3>
+<p>The induced back emf is $\varepsilon=-L\,dI/dt$. The loop equation is</p>
+<div class="eq">$$E = RI + L\frac{dI}{dt}\tag{12.1(1)}$$</div>
+
+<h3>3. Final current</h3>
+<p>At the maximum, $dI/dt=0$, so</p>
+<div class="eq">$$E = RI_0\tag{12.1(2)}$$</div>
+<div class="box-recall"><span class="lbl recall">Recall (Plus Two)</span> Ohm’s law gives $I_0=E/R$ for a steady current, which is the value the inductor allows once its back emf vanishes.</div>
+
+<h3>4. Variables separated</h3>
+<p>Substituting Eq. (2) into Eq. (1) gives $R(I_0-I)=L\,dI/dt$, that is</p>
+<div class="eq">$$\frac{dI}{I_0 - I} = \frac{R}{L}\,dt$$</div>
+
+<h3>5. Integration and boundary condition</h3>
+<p>Integration gives</p>
+<div class="eq">$$-\log(I_0 - I) = \frac{R}{L}t + C\tag{12.1(3)}$$</div>
+<p>The boundary condition $I=0$ at $t=0$ fixes $C=-\log I_0$, so $\log_e\left[(I_0-I)/I_0\right]=-(R/L)t$.</p>
+
+<h3>6. Solution</h3>
+<div class="eq">$$I = I_0\left(1 - e^{-(R/L)t}\right)\tag{12.1(4)}$$</div>
+
+<h3>7. Time constant</h3>
+<p>The time constant is $\tau = L/R$. At $t=\tau$, $I=(1-e^{-1})I_0 = 0.632\,I_0$. The current reaches $0.865\,I_0$ at $2\tau$ and $0.950\,I_0$ at $3\tau$ (Fig. 12.2).</p>
+<figure class="fig"><img src="final/m4-s1-growth.jpg" alt="m4 s1 growth"><figcaption>Fig. 12.2 (book): current I/I0 against time for low, medium and large L/R. Drawn from I = I0(1 − e^(−Rt/L)).</figcaption></figure>
+
+<h3>8. Worked example (printed p. 314)</h3>
+<p>For $R=10\ \Omega$, $L=0.5$ H and $E=10$ V, $R/L=20\ \text{s}^{-1}$. The time to reach 63.2% of $I_0$ is $t=\frac{\ln 2.717}{20}=0.05$ s, which equals $\tau=L/R$.</p>
+</div>
+<h2>12.2 Decay of current in an L-R circuit</h2>
+<div class="sec-body">
+<div class="bg">Source: <i>book-sources/m4-s12-2-decay.html</i>, Murugeshan pp. 313–314 (printed), with Examples 1 and 2. Syllabus item 16. Equations (1) and (2) are given in full. Example 1 is worked in §12.1.</div>
+
+<h3>Prerequisites</h3>
+<ul>
+<li>§12.1 of these notes: the loop equation and the time constant.</li>
+<li>Exponentials and natural logarithms (pre-math M3).</li>
+</ul>
+
+<h3>1. Setup</h3>
+<p>The cell is disconnected and the two ends of the circuit are joined. The emf is zero, and the inductor drives the current through $R$ by its back emf.</p>
+
+<h3>2. Loop equation</h3>
+<div class="eq">$$0 = RI + L\frac{dI}{dt}\tag{12.2(1)}$$</div>
+<p>Separating variables, $dI/I = -(R/L)\,dt$.</p>
+
+<h3>3. Solution</h3>
+<p>Integration gives $\log_e I = -(R/L)t + C$. The initial condition $I=I_0$ at $t=0$ gives $C=\log_e I_0$, and so</p>
+<div class="eq">$$I = I_0 e^{-(R/L)t}\tag{12.2(2)}$$</div>
+
+<h3>4. Interpretation</h3>
+<p>The decay time constant is $L/R$, the time in which the current falls to $1/e$ of $I_0$. The rate of decay is $dI/dt=-(R/L)I$. Growth and decay are complementary (Fig. 12.5).</p>
+<figure class="fig"><img src="final/m4-s1-decay.jpg" alt="m4 s1 decay"><figcaption>Fig. 12.3 (book): decay of current I = I0 e^(−Rt/L) against time. At t = L/R the current is I0/e.</figcaption></figure>
+<figure class="fig"><img src="final/m4-s1-gd.jpg" alt="m4 s1 gd"><figcaption>Fig. 12.5 (book): growth and decay curves shown together; they are complementary.</figcaption></figure>
+
+<h3>5. Worked example (printed p. 315)</h3>
+<p>$I_0=E/R=2$ A and $R/L=10\ \text{s}^{-1}$, so $I=2e^{-10t}$. At $t=0.05$ s, $I=1.213$ A. At $t=0.2$ s, $I=0.271$ A.</p>
+</div>
+</main>
+</body>
+</html>

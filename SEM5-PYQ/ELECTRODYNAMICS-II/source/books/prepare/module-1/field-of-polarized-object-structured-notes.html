@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Polarization (Griffiths 4.2): structured notes</title>
+<script>
+window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+  @page { size: A4; margin: 16mm; }
+  :root { --ink:#111; --muted:#555; --rule:#999; --hi:#f3f3ee; }
+  body { margin:0; background:#fff; color:var(--ink); font-family:"Times New Roman", Times, "Liberation Serif", serif; font-size:12.5pt; line-height:1.45; }
+  main { max-width:760px; margin:0 auto; padding:14px; }
+  h1 { font-size:18pt; margin:0 0 2px; }
+  .meta { color:var(--muted); font-size:10.5pt; margin-bottom:10px; }
+  h2 { font-size:14pt; margin:20px 0 6px; border-bottom:1.5px solid var(--ink); padding-bottom:2px; break-after:avoid; }
+  h3 { font-size:12.5pt; margin:14px 0 4px; break-after:avoid; }
+  p, li { margin:4px 0; }
+  ul, ol { margin:4px 0 4px 22px; padding:0; }
+  .eq { margin:6px 0; text-align:center; }
+  .result { border:1px solid var(--ink); background:var(--hi); padding:5px 9px; margin:8px 0; }
+  .result .lbl { font-weight:bold; font-size:10.5pt; text-transform:uppercase; letter-spacing:.3px; }
+  .note { font-size:11.5pt; color:var(--muted); margin:4px 0; }
+  .bg { font-size:10.5pt; color:var(--muted); font-style:italic; }
+  .fig { margin:12px 0; text-align:center; break-inside:avoid; }
+  .fig svg { display:block; width:100%; max-width:300px; height:auto; margin:0 auto; }
+  .fig figcaption { font-size:10.5pt; color:var(--muted); font-style:italic; margin-top:3px; }
+  .ref { font-size:10.5pt; color:var(--muted); }
+  @media print { .keep { break-inside: avoid; } }
+</style>
+</head>
+<body>
+<main>
+<h1>Polarization (Griffiths §4.2): structured notes</h1>
+<div class="meta">Griffiths, <i>Introduction to Electrodynamics</i> (5th ed.), pp. 173–180. Full content of the study notes, arranged by topic for revision. Equation numbers match the book. Figures are sketches, not the book's figures.</div>
+
+<h2>Before you start</h2>
+<ul>
+<li>Potential of a single dipole, $V = \dfrac{1}{4\pi\epsilon_0}\dfrac{\mathbf p\cdot\hat{\mathbf r}}{r^2}$ (Eq. 4.8, from §4.1).</li>
+<li>Polarization $\mathbf P$ = dipole moment per unit volume (§4.1.4). Field of a uniformly polarized sphere (Eq. 4.14 is derived below).</li>
+<li>Surface and volume charge densities, and the potential they produce (book Eqs. 3.86–3.87 for a surface charge $\cos\theta$ distribution on a sphere).</li>
+<li>Maths: gradient $\nabla$, divergence $\nabla\cdot$, product rule for $\nabla$, integration by parts, the divergence theorem. Partial derivatives are needed (not in Class 12 maths).</li>
+</ul>
+
+<h2>1. Potential of a polarized object (§4.2.1)</h2>
+
+<h3>1.1 Starting point: sum over dipoles</h3>
+<ul>
+<li>Each volume element $d\tau'$ at $\mathbf r'$ carries a dipole $\mathbf P(\mathbf r')\,d\tau'$.</li>
+<li>Summing the dipole potentials of Eq. 4.8 over the volume:</li>
+</ul>
+<div class="eq">$$V(\mathbf r) = \frac{1}{4\pi\epsilon_0}\int_V\frac{\mathbf P(\mathbf r')\cdot\hat{\boldsymbol{\mathcal R}}}{\mathcal R^2}\,d\tau' \quad(4.9).$$</div>
+<ul>
+<li>$\boldsymbol{\mathcal R} = \mathbf r - \mathbf r'$ is the vector from the source point to the field point. This is correct in principle but not useful for calculation.</li>
+</ul>
+
+<h3>1.2 Rewrite using a gradient</h3>
+<ul>
+<li>Key identity (differentiation with respect to the source coordinates $\mathbf r'$):</li>
+</ul>
+<div class="eq">$$\nabla'\!\left(\frac{1}{\mathcal R}\right) = \frac{\hat{\boldsymbol{\mathcal R}}}{\mathcal R^2}.$$</div>
+<ul>
+<li>Substituting:</li>
+</ul>
+<div class="eq">$$V = \frac{1}{4\pi\epsilon_0}\int_V\mathbf P\cdot\nabla'\!\left(\frac{1}{\mathcal R}\right)d\tau'.$$</div>
+
+<h3>1.3 Integrate by parts</h3>
+<ul>
+<li>Product rule: $\nabla'\cdot\!\left(\dfrac{\mathbf P}{\mathcal R}\right) = \dfrac{1}{\mathcal R}\nabla'\cdot\mathbf P + \mathbf P\cdot\nabla'\!\left(\dfrac{1}{\mathcal R}\right)$. Rearranged:</li>
+</ul>
+<div class="eq">$$V = \frac{1}{4\pi\epsilon_0}\left[\int_V\nabla'\cdot\!\left(\frac{\mathbf P}{\mathcal R}\right)d\tau' - \int_V\frac{1}{\mathcal R}(\nabla'\cdot\mathbf P)\,d\tau'\right].$$</div>
+<ul>
+<li>Divergence theorem on the first integral turns it into a surface integral:</li>
+</ul>
+<div class="eq">$$V = \frac{1}{4\pi\epsilon_0}\oint_S\frac{1}{\mathcal R}\,\mathbf P\cdot d\mathbf a' - \frac{1}{4\pi\epsilon_0}\int_V\frac{1}{\mathcal R}(\nabla'\cdot\mathbf P)\,d\tau' \quad(4.10).$$</div>
+
+<h3>1.4 Define the bound charges</h3>
+<div class="result"><span class="lbl">Definitions</span><br>
+Bound surface charge: $\sigma_b = \mathbf P\cdot\hat{\mathbf n}$ (4.11), where $\hat{\mathbf n}$ is the outward normal.<br>
+Bound volume charge: $\rho_b = -\nabla\cdot\mathbf P$ (4.12).</div>
+<ul>
+<li>Substituting into Eq. 4.10 gives</li>
+</ul>
+<div class="result"><span class="lbl">Result</span><br>$V(\mathbf r) = \dfrac{1}{4\pi\epsilon_0}\oint_S\dfrac{\sigma_b}{\mathcal R}\,da' + \dfrac{1}{4\pi\epsilon_0}\displaystyle\int_V\dfrac{\rho_b}{\mathcal R}\,d\tau'$ (4.13).</div>
+<ul>
+<li>Meaning: the potential, and so the field, of a polarized object equals that of a volume charge $\rho_b$ plus a surface charge $\sigma_b$.</li>
+<li>Method: find $\sigma_b$ and $\rho_b$ first, then use Gauss's law or the usual potential integrals for those charges.</li>
+</ul>
+
+<h2>2. Worked example: uniformly polarized sphere (Example 4.2)</h2>
+<ul>
+<li>Radius $R$, polarization $\mathbf P$ uniform. Choose the $z$-axis along $\mathbf P$.</li>
+<li>Volume charge: $\rho_b = -\nabla\cdot\mathbf P = 0$, since $\mathbf P$ is uniform.</li>
+<li>Surface charge: $\sigma_b = \mathbf P\cdot\hat{\mathbf n} = P\cos\theta$.</li>
+<li>So the problem is the field of a $P\cos\theta$ surface charge on a sphere. The book uses the known potential of that distribution (Eqs. 3.86–3.87):</li>
+</ul>
+<div class="eq">$$V(r,\theta) = \begin{cases}\dfrac{P}{3\epsilon_0}\,r\cos\theta & r\le R,\\[2mm] \dfrac{P}{3\epsilon_0}\dfrac{R^3}{r^2}\cos\theta & r\ge R.\end{cases}$$</div>
+<ul>
+<li>Inside: $r\cos\theta = z$, so the potential is linear in $z$ and the field is uniform:</li>
+</ul>
+<div class="result"><span class="lbl">Result inside</span><br>$\mathbf E = -\nabla V = -\dfrac{P}{3\epsilon_0}\hat{\mathbf z} = -\dfrac{1}{3\epsilon_0}\mathbf P$ for $r < R$ (4.14).</div>
+<ul>
+<li>Outside: the potential equals that of a perfect dipole at the origin, with moment equal to the total dipole moment of the sphere:</li>
+</ul>
+<div class="result"><span class="lbl">Result outside</span><br>$V = \dfrac{1}{4\pi\epsilon_0}\dfrac{\mathbf p\cdot\hat{\mathbf r}}{r^2}$ for $r \ge R$ (4.15), with $\mathbf p = \dfrac{4}{3}\pi R^3\,\mathbf P$ (4.16).</div>
+<ul>
+<li>Check: $\dfrac{p}{4\pi\epsilon_0} = \dfrac{(4/3)\pi R^3 P}{4\pi\epsilon_0} = \dfrac{R^3 P}{3\epsilon_0}$, which matches the outside potential above.</li>
+</ul>
+<figure class="fig">
+<svg viewBox="0 0 260 200" role="img" aria-label="Field of a uniformly polarized sphere: uniform field inside opposite to P, dipole-like field outside">
+  <defs><marker id="sa1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#111"/></marker></defs>
+  <circle cx="130" cy="100" r="60" fill="#efefe9" stroke="#111" stroke-width="1.4"/>
+  <line x1="60" y1="100" x2="200" y2="100" stroke="#111" stroke-width="1.8" marker-end="url(#sa1)"/>
+  <text x="206" y="104" font-size="13" font-style="italic" font-family="Times New Roman, serif">P</text>
+  <line x1="150" y1="128" x2="110" y2="128" stroke="#111" stroke-width="1.6" marker-end="url(#sa1)"/>
+  <text x="128" y="146" font-size="12" text-anchor="middle" font-family="Times New Roman, serif">E inside = −P/3ε₀</text>
+  <text x="130" y="24" font-size="12" text-anchor="middle" font-family="Times New Roman, serif">+σb on the top cap, −σb on the bottom</text>
+  <text x="130" y="186" font-size="12" text-anchor="middle" font-family="Times New Roman, serif">outside: dipole field, p = (4/3)πR³P</text>
+</svg>
+<figcaption>Figure A. My sketch of the Example 4.2 sphere: uniform P inside, bound surface charge on the surface.</figcaption>
+</figure>
+
+<h2>3. Physical meaning of bound charges (§4.2.2)</h2>
+
+<h3>3.1 Dipole chain</h3>
+<ul>
+<li>Take a line of dipoles. Inside the line, the head of one dipole cancels the tail of its neighbour.</li>
+<li>At the two ends, one charge is left over: positive at the right end, negative at the left.</li>
+<li>Such leftover charge is called <b>bound charge</b>. It cannot be removed, because each electron stays attached to its own atom or molecule. Otherwise it behaves like any other charge.</li>
+</ul>
+
+<h3>3.2 Amount of bound charge at a flat end</h3>
+<ul>
+<li>Consider a tube of dielectric parallel to $\mathbf P$, cross-section $A$. Each chunk of length $d$ has dipole moment $P(Ad)$. Written as $qd$, the charge at the end of the tube is</li>
+</ul>
+<div class="eq">$$q = PA.$$</div>
+<ul>
+<li>For a flat cut perpendicular to $\mathbf P$: $\sigma_b = q/A = P$.</li>
+<li>For an oblique cut at angle $\theta$ to the perpendicular, the end area is $A_\text{end} = A/\cos\theta$. The charge is unchanged, so</li>
+</ul>
+<div class="result"><span class="lbl">Result</span><br>$\sigma_b = \dfrac{q}{A_\text{end}} = P\cos\theta = \mathbf P\cdot\hat{\mathbf n}$.</div>
+<ul>
+<li>This agrees with the rigorous result of §4.2.1 (Eq. 4.11), and now we know where the charge comes from.</li>
+</ul>
+<figure class="fig">
+<svg viewBox="0 0 300 180" role="img" aria-label="Dielectric tube with P to the right; the slanted end carries bound charge P dot n">
+  <defs><marker id="sa2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#111"/></marker></defs>
+  <polygon points="60,50 200,50 240,130 60,130" fill="#efefe9" stroke="#111" stroke-width="1.4"/>
+  <line x1="90" y1="90" x2="170" y2="90" stroke="#111" stroke-width="1.8" marker-end="url(#sa2)"/>
+  <text x="120" y="82" font-size="13" font-style="italic" font-family="Times New Roman, serif">P</text>
+  <text x="222" y="92" font-size="14" font-weight="bold" font-family="Times New Roman, serif">+</text>
+  <line x1="220" y1="90" x2="246" y2="77" stroke="#111" stroke-width="1.4" marker-end="url(#sa2)"/>
+  <text x="250" y="72" font-size="13" font-style="italic" font-family="Times New Roman, serif">n̂</text>
+  <text x="150" y="168" font-size="13" text-anchor="middle" font-family="Times New Roman, serif">σb = P cos θ = P·n̂ on the slanted end</text>
+</svg>
+<figcaption>Figure B. My sketch of an oblique cut of a polarized tube (§4.2.2).</figcaption>
+</figure>
+
+<h3>3.3 Bound volume charge from non-uniform P</h3>
+<ul>
+<li>If $\mathbf P$ varies in space, charge also piles up inside the material.</li>
+<li>Where $\mathbf P$ diverges (spreads out), there is a net negative pile-up, because the flux of $\mathbf P$ leaving a volume leaves a deficit of positive charge behind.</li>
+<li>Total bound charge in a volume must equal minus the flux of $\mathbf P$ out of it:</li>
+</ul>
+<div class="eq">$$\int_V\rho_b\,d\tau = -\oint_S\mathbf P\cdot d\mathbf a = -\int_V(\nabla\cdot\mathbf P)\,d\tau.$$</div>
+<ul>
+<li>Since this holds for any volume: $\rho_b = -\nabla\cdot\mathbf P$ (4.12), confirming §4.2.1.</li>
+</ul>
+<figure class="fig">
+<svg viewBox="0 0 260 160" role="img" aria-label="Polarization that diverges from the centre of a block; net negative bound charge in the middle">
+  <defs><marker id="sa3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#111"/></marker></defs>
+  <rect x="40" y="40" width="180" height="80" fill="#efefe9" stroke="#111" stroke-width="1.4"/>
+  <line x1="105" y1="62" x2="86" y2="62" stroke="#111" stroke-width="1.6" marker-end="url(#sa3)"/>
+  <line x1="155" y1="62" x2="174" y2="62" stroke="#111" stroke-width="1.6" marker-end="url(#sa3)"/>
+  <line x1="105" y1="98" x2="86" y2="98" stroke="#111" stroke-width="1.6" marker-end="url(#sa3)"/>
+  <line x1="155" y1="98" x2="174" y2="98" stroke="#111" stroke-width="1.6" marker-end="url(#sa3)"/>
+  <text x="130" y="84" font-size="16" text-anchor="middle" font-family="Times New Roman, serif">−</text>
+  <text x="130" y="144" font-size="12" text-anchor="middle" font-family="Times New Roman, serif">P diverges, so ρb = −∇·P &lt; 0 in the middle</text>
+</svg>
+<figcaption>Figure C. My sketch of a diverging P: net negative bound charge builds up inside.</figcaption>
+</figure>
+
+<h3>3.4 Example 4.3: two overlapping spheres</h3>
+<ul>
+<li>A uniformly polarized sphere can be seen as a positive sphere and a negative sphere of equal size, displaced by $\mathbf d$. Before polarization they cancel exactly.</li>
+<li>Polarization moves the positive charges up and the negative charges down. Two caps of uncancelled charge remain: positive at the top, negative at the bottom. These are the bound surface charges $\sigma_b$.</li>
+<li>Inside the overlap, the field of the two uniform spheres is (from Prob. 2.19):</li>
+</ul>
+<div class="eq">$$\mathbf E = -\frac{1}{4\pi\epsilon_0}\frac{q\,\mathbf d}{R^3}.$$</div>
+<ul>
+<li>With $\mathbf p = q\mathbf d = \tfrac{4}{3}\pi R^3\mathbf P$, this is $\mathbf E = -\dfrac{1}{3\epsilon_0}\mathbf P$, which matches Eq. 4.14.</li>
+<li>Outside: each sphere acts as a point charge at its centre, so the total is a dipole with potential $\dfrac{1}{4\pi\epsilon_0}\dfrac{\mathbf p\cdot\hat{\mathbf r}}{r^2}$. This matches Eq. 4.15.</li>
+<li>Note: $\mathbf d$ is a small fraction of an atomic radius. The book's figure exaggerates it.</li>
+</ul>
+
+<h2>4. Macroscopic and microscopic fields (§4.2.3)</h2>
+<p class="bg">Background. Book footnote 5 says this subsection can be skipped without loss of continuity. It is not in the syllabus list for Module I.</p>
+
+<h3>4.1 Why the method is questioned</h3>
+<ul>
+<li>Section 1 used perfect (point) dipoles and replaced a set of discrete molecular dipoles by a continuous density $\mathbf P$.</li>
+<li>Outside the dielectric, the molecules are far away, so the dipole approximation holds and the method is safe.</li>
+<li>Inside, the actual field is very complicated on the atomic scale. It is huge near an electron and small or reversed a short distance away, and it changes with time.</li>
+</ul>
+
+<h3>4.2 Macroscopic field</h3>
+<ul>
+<li>Definition: the average of the true microscopic field over a region that is large enough to contain very many atoms, and small enough not to smooth out large-scale variations. In practice, the averaging region is much smaller than the object.</li>
+<li>Ordinarily, "the field inside matter" means this macroscopic field. It is also the basis of the idea of density of a material.</li>
+</ul>
+
+<h3>4.3 Split the field at a point</h3>
+<ul>
+<li>Draw a small sphere about the point $\mathbf r$. The macroscopic field splits into two parts:</li>
+</ul>
+<div class="eq">$$\mathbf E = \mathbf E_\text{out} + \mathbf E_\text{in}.$$</div>
+<ul>
+<li>$\mathbf E_\text{out}$: the average field over the sphere due to charges outside it. The average over a sphere due to outside charges equals the field at the centre (Prob. 3.51d). Far enough away, Eq. 4.9 applies:</li>
+</ul>
+<div class="eq">$$V_\text{out} = \frac{1}{4\pi\epsilon_0}\int_\text{outside}\frac{\mathbf P(\mathbf r')\cdot\hat{\boldsymbol{\mathcal R}}}{\mathcal R^2}\,d\tau' \quad(4.17).$$</div>
+<ul>
+<li>$\mathbf E_\text{in}$: the average field due to charges inside the sphere. By Eq. 3.105 it depends only on the total dipole moment:</li>
+</ul>
+<div class="eq">$$\mathbf E_\text{in} = -\frac{1}{4\pi\epsilon_0}\frac{\mathbf p}{R^3} = -\frac{1}{3\epsilon_0}\mathbf P \quad(4.18).$$</div>
+
+<h3>4.4 Why this gives the same answer as §4.2.1</h3>
+<ul>
+<li>$\mathbf P$ does not vary much over the small sphere. So the part of the integral over the small sphere equals the field at the centre of a uniformly polarized sphere, which is $-\dfrac{1}{3\epsilon_0}\mathbf P$ (Eq. 4.14).</li>
+<li>Eq. 4.18 supplies exactly this term, so it is put back in.</li>
+<li>Result: the macroscopic potential is the integral over the whole dielectric:</li>
+</ul>
+<div class="result"><span class="lbl">Result</span><br>$V(\mathbf r) = \dfrac{1}{4\pi\epsilon_0}\displaystyle\int\dfrac{\mathbf P(\mathbf r')\cdot\hat{\boldsymbol{\mathcal R}}}{\mathcal R^2}\,d\tau'$ (4.19).</div>
+<ul>
+<li>This is the same integral as Eq. 4.9. The method of §4.2.1 therefore gives the macroscopic field inside the dielectric.</li>
+<li>The conclusion does not depend on the shape of the averaging region, though the book uses a sphere. A cube or ellipsoid would give the same final answer, with more difficult algebra.</li>
+</ul>
+<figure class="fig">
+<svg viewBox="0 0 260 180" role="img" aria-label="Small averaging sphere about a point inside a dielectric; charges outside and inside it">
+  <circle cx="130" cy="90" r="50" fill="#efefe9" stroke="#111" stroke-width="1.4" stroke-dasharray="5 4"/>
+  <circle cx="130" cy="90" r="2.5" fill="#111"/>
+  <text x="136" y="86" font-size="13" font-style="italic" font-family="Times New Roman, serif">r</text>
+  <text x="130" y="170" font-size="12" text-anchor="middle" font-family="Times New Roman, serif">E = E_out + E_in: outside charges and inside dipoles</text>
+</svg>
+<figcaption>Figure D. My sketch of the averaging sphere (§4.2.3). Charges outside the sphere give E_out; the dipoles inside give E_in.</figcaption>
+</figure>
+
+<h2>5. What you must be able to do</h2>
+<ul>
+<li>Derive Eq. 4.10 from Eq. 4.9, using the gradient identity, the product rule and the divergence theorem.</li>
+<li>State $\sigma_b$ and $\rho_b$ and the potential Eq. 4.13.</li>
+<li>Find the field inside and outside a uniformly polarized sphere (Eqs. 4.14–4.16).</li>
+<li>Explain why an oblique cut carries $\sigma_b = \mathbf P\cdot\hat{\mathbf n}$ (§3.2).</li>
+<li>Explain why a diverging $\mathbf P$ produces negative bound charge (§3.3).</li>
+<li>Check that the total bound charge of a neutral dielectric is zero (Prob. 4.14).</li>
+</ul>
+
+<h2>6. Problems in the excerpt (not solved here)</h2>
+<ul>
+<li>Prob. 4.10: $\mathbf P = k\mathbf r$ in a sphere; find $\sigma_b$, $\rho_b$, and the fields.</li>
+<li>Prob. 4.11: bar electret (frozen-in uniform P in a short cylinder); sketch the field for three cases.</li>
+<li>Prob. 4.12: compute the potential of the uniformly polarized sphere directly from Eq. 4.9.</li>
+<li>Prob. 4.13: field inside and outside a long cylinder with P perpendicular to its axis.</li>
+<li>Prob. 4.14: prove from Eqs. 4.11 and 4.12 that the total bound charge vanishes.</li>
+</ul>
+
+<h2>7. Open points</h2>
+<ul>
+<li>The sign and form of the outside field of the sphere (Eq. 4.15) were checked by the potential only. The field outside has not been computed separately here.</li>
+<li>Eq. 3.105 (average field of the dipoles inside a sphere) and Prob. 3.51d are cited from the book. Their proofs are not reproduced in these notes.</li>
+<li>Problems 4.10–4.13 are listed, not solved.</li>
+</ul>
+
+</main>
+</body>
+</html>

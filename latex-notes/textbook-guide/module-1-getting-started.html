@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module I: Getting Started with LaTeX</title>
+<style>
+:root{--ink:#1c2230;--muted:#5d6577;--accent:#1f4fbf;--rule:#d9dee8;--code:#f3f5f9;--note:#eef3ff;--warn:#fff6e5;--ok:#eefaf0;--ok-rule:#2e8b57}
+*{box-sizing:border-box}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;background:#fff;color:var(--ink);font:16.5px/1.65 Georgia,"Times New Roman",serif}
+main{max-width:46rem;margin:0 auto;padding:2.5rem 1.25rem 4rem}
+header.title{border-bottom:3px solid var(--accent);margin-bottom:2rem;padding-bottom:1rem}
+header.title h1{font:700 2rem/1.2 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;margin:0 0 .3rem}
+header.title .meta{font:.95rem system-ui,sans-serif;color:var(--muted)}
+nav.toc{border:1px solid var(--rule);border-radius:8px;padding:1rem 1.3rem;margin-bottom:2rem;font:.94rem/1.7 system-ui,sans-serif}
+nav.toc strong{display:block;margin-bottom:.3rem}
+nav.toc ol{margin:0;padding-left:1.2rem;columns:2;column-gap:2rem}
+nav.toc a{color:var(--accent);text-decoration:none}
+section.part{margin-top:2.4rem}
+h2{font:700 1.5rem/1.3 system-ui,sans-serif;margin:0 0 .6rem;padding-bottom:.35rem;border-bottom:2px solid var(--accent);color:var(--accent)}
+h3{font:600 1.12rem/1.3 system-ui,sans-serif;margin:1.7rem 0 .5rem;color:var(--ink)}
+h4{font:600 .98rem/1.3 system-ui,sans-serif;margin:1.2rem 0 .3rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+p{margin:.65rem 0}
+code{font:.87em/1.4 "DejaVu Sans Mono",Consolas,monospace;background:var(--code);padding:.08em .3em;border-radius:4px;white-space:nowrap}
+pre{background:var(--code);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:6px;padding:.75rem .95rem;overflow-x:auto;font:.84rem/1.5 "DejaVu Sans Mono",Consolas,monospace;white-space:pre;margin:.8rem 0}
+pre code{background:none;padding:0;font:inherit;white-space:pre}
+.plain{background:var(--note);border-left:4px solid var(--accent);padding:.6rem .95rem;border-radius:6px;margin:1rem 0}
+.plain>strong:first-child{font-family:system-ui,sans-serif;color:var(--accent)}
+.remember{background:var(--ok);border-left:4px solid var(--ok-rule);padding:.6rem .95rem;border-radius:6px;margin:1rem 0}
+.remember>strong:first-child{font-family:system-ui,sans-serif;color:var(--ok-rule)}
+.warn{background:var(--warn);border-left:4px solid #d99a14;padding:.6rem .95rem;border-radius:6px;margin:1rem 0}
+.warn>strong:first-child{font-family:system-ui,sans-serif;color:#8a5a00}
+.io{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;align-items:start;margin:.6rem 0 1rem}
+.io>div{border:1px solid var(--rule);border-radius:6px;padding:.4rem .6rem;font-size:.95rem;background:#fff}
+.io>div>.lab{font:600 .72rem system-ui,sans-serif;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:0 0 .2rem}
+.io pre{margin:0;font-size:.8rem}
+.io .shown{padding:.1rem .2rem}
+table{border-collapse:collapse;margin:.9rem 0;width:100%;font-size:.93rem}
+th,td{border-bottom:1px solid var(--rule);padding:.42rem .6rem;text-align:left;vertical-align:top}
+th{font:600 .8rem system-ui,sans-serif;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);border-bottom:2px solid var(--ink)}
+td code{white-space:normal}
+ul,ol{padding-left:1.4rem}
+li{margin:.22rem 0}
+.tag{display:inline-block;font:600 .7rem system-ui,sans-serif;text-transform:uppercase;letter-spacing:.05em;background:#e4e9f5;color:var(--accent);border-radius:4px;padding:.08rem .4rem;vertical-align:middle}
+.tag.gap{background:#fde9c4;color:#7a4b00}
+footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--rule);color:var(--muted);font:.85rem system-ui,sans-serif}
+@media (max-width:640px){.io{grid-template-columns:1fr}nav.toc ol{columns:1}}
+@media print{
+  @page{size:A4;margin:16mm 18mm}
+  body{font-size:10.5pt}
+  main{max-width:none;padding:0}
+  section.part{break-before:page}
+  section.part:first-of-type{break-before:auto}
+  h2,h3,h4{break-after:avoid}
+  pre,table,.plain,.remember,.warn,.io{break-inside:avoid}
+  nav.toc{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<main>
+<header class="title"><h1>Module I: Getting Started with LaTeX</h1><div class="meta">LaTeX Made Simple &middot; Syllabus units 1&ndash;4 &middot; Primer chapters 1&ndash;5 (pages 1&ndash;54)</div></header>
+<section class="part" id="ch1">
+  <h2>1. The basics</h2>
+  <p class="tag">Syllabus unit 1 &middot; Primer pages 1&ndash;14</p>
+
+  <h3>1.1 What is LaTeX?</h3>
+  <div class="plain">
+    <strong>In plain words.</strong> LaTeX is a typesetting program. You do not type into a page and see the result at once, as in Word. You write plain text with a few commands (words that start with <code>\</code>), then <em>compile</em> the file. The compiler produces the finished PDF. The program underneath is TeX, written by Donald Knuth. LaTeX is a large set of ready-made commands built on TeX.
+  </div>
+
+  <p>Word processors do all four steps (typing, formatting, screen display, printing) in one program. TeX does only the formatting step, which is the step that decides line breaks, page breaks and spacing. This is why TeX is so good at mathematics: it spends its effort on exactly that job.</p>
+
+  <p>The workflow is always the same:</p>
+  <ol>
+    <li>Type the text and commands in a plain text editor (the primer uses Emacs on GNU/Linux).</li>
+    <li>Compile it with <code>latex myfile</code> (or <code>pdflatex myfile</code> to get a PDF directly).</li>
+    <li>View the result in a previewer, and print it if needed.</li>
+  </ol>
+
+  <h3>1.2 Your first document</h3>
+  <pre><code>\documentclass{article}
+\begin{document}
+This is my \emph{first} document prepared in \LaTeX.
+\end{document}</code></pre>
+
+  <div class="io">
+    <div><div class="lab">You type</div><pre><code>This is my \emph{first} document
+prepared in \LaTeX.</code></pre></div>
+    <div><div class="lab">You get</div><div class="shown">This is my <em>first</em> document prepared in LaTeX.</div></div>
+  </div>
+
+  <p>Read the example line by line:</p>
+  <ul>
+    <li><code>\documentclass{article}</code> says what kind of document this is. Every file must start with it.</li>
+    <li><code>\begin{document}</code> and <code>\end{document}</code> enclose the text to be printed.</li>
+    <li><code>\emph{first}</code> asks for emphasis. The word comes out in italics.</li>
+    <li><code>\LaTeX</code> prints the name of the program. Other commands give special output, such as <code>\today</code>, which prints today's date.</li>
+  </ul>
+
+  <h3>1.3 Paragraphs and spaces</h3>
+  <p>LaTeX ignores how many spaces you type between words, and it ignores line breaks inside a paragraph. It sets every line to the same length by adjusting the spaces between words. A <strong>blank line</strong> starts a new paragraph.</p>
+
+  <p>A paragraph starts with an indent. To stop that indent, put <code>\noindent</code> at the start of the paragraph.</p>
+
+  <p>Two special spacing cases:</p>
+  <ul>
+    <li><strong>After a full stop</strong> that follows a capital letter, such as "Vitamin A.", LaTeX thinks the sentence has ended and adds extra space. Type <code>A\@.</code> to stop this. Write <code>\@</code> before the full stop.</li>
+    <li><strong>After a full stop</strong> that ends an abbreviation such as "etc.", you want a normal space. Type <code>etc.\ are</code>. The <code>\ </code> (backslash and space) forces a normal word space.</li>
+  </ul>
+  <p>Also, TeX gobbles every space after a command word. So <code>\LaTeX is fun</code> loses the space before "is". Write <code>\LaTeX\ is fun</code> instead.</p>
+
+  <h3>1.4 Quotes and dashes</h3>
+  <p>Opening and closing quotes are different in typeset text. Use a backtick for the opening quote and an apostrophe for the closing one:</p>
+  <pre><code>`single quotes'  and  ``double quotes''</code></pre>
+  <p>The commands <code>\lq</code> and <code>\rq</code> give the same quotes if your keyboard lacks a backtick.</p>
+
+  <p>There are three kinds of dash, and the number of dash characters in the source decides which you get:</p>
+  <table>
+    <thead><tr><th>You type</th><th>You get</th><th>Name and use</th></tr></thead>
+    <tbody>
+      <tr><td><code>-</code></td><td>-</td><td>hyphen, as in "hyphen-ated"</td></tr>
+      <tr><td><code>--</code></td><td>&ndash;</td><td>en dash, for ranges such as pages 221&ndash;225</td></tr>
+      <tr><td><code>---</code></td><td>&mdash;</td><td>em dash, for a parenthetical remark</td></tr>
+    </tbody>
+  </table>
+
+  <h3>1.5 Accents and foreign letters</h3>
+  <p>Accents are added with a command and the letter. Some examples:</p>
+  <table>
+    <thead><tr><th>Command</th><th>Result</th><th>Command</th><th>Result</th></tr></thead>
+    <tbody>
+      <tr><td><code>\'o</code></td><td>&oacute;</td><td><code>\"o</code></td><td>&ouml;</td></tr>
+      <tr><td><code>\^o</code></td><td>&ocirc;</td><td><code>\c c</code></td><td>&ccedil;</td></tr>
+      <tr><td><code>\=o</code></td><td>&omacr;</td><td><code>\v s</code></td><td>&scaron;</td></tr>
+      <tr><td><code>\d o</code></td><td>o with dot below</td><td><code>\u o</code></td><td>o with breve</td></tr>
+      <tr><td><code>\oe</code>, <code>\ae</code>, <code>\ss</code></td><td>&#339;, &aelig;, &szlig;</td><td><code>\o</code>, <code>\l</code></td><td>&oslash;, &#322;</td></tr>
+    </tbody>
+  </table>
+  <p>The letters <code>i</code> and <code>j</code> must lose their dot before an accent goes on them. Use <code>\i</code> and <code>\j</code> for the dotless forms, as in <code>\'{\i}</code>, which gives &iacute;.</p>
+  <pre><code>\'{E}l est\'{a} aqu\'{\i}</code></pre>
+  <p>This gives <em>&Eacute;l est&aacute; aqu&iacute;</em> (Spanish).</p>
+
+  <h3>1.6 Special characters that must be escaped</h3>
+  <p>Ten characters have a special job for TeX: <code>#</code> <code>$</code> <code>%</code> <code>&amp;</code> <code>~</code> <code>_</code> <code>^</code> <code>\</code> <code>{</code> <code>}</code>. To print one of them, put a backslash in front of it:</p>
+  <table>
+    <thead><tr><th>You type</th><th>You get</th><th>You type</th><th>You get</th></tr></thead>
+    <tbody>
+      <tr><td><code>\%</code></td><td>%</td><td><code>\&amp;</code></td><td>&amp;</td></tr>
+      <tr><td><code>\$</code></td><td>$</td><td><code>\#</code></td><td>#</td></tr>
+      <tr><td><code>\_</code></td><td>_</td><td><code>\{</code>, <code>\}</code></td><td>{ and }</td></tr>
+      <tr><td><code>\textbackslash</code></td><td>\</td><td><code>\textasciitilde</code></td><td>~</td></tr>
+      <tr><td><code>\textasciicircum</code></td><td>^</td><td></td><td></td></tr>
+    </tbody>
+  </table>
+  <p>The percent sign deserves a note. <code>%</code> starts a <strong>comment</strong>: everything after it on that line is ignored. Comments are useful for notes to yourself, such as a "to do" list.</p>
+
+  <h3>1.7 Line breaks</h3>
+  <p><code>\\</code> forces a new line. <code>\\[10pt]</code> also adds 10 points of extra space between the lines. (One point is about 1/72 of an inch.)</p>
+
+  <h3>1.8 Positioning text: center, flushleft, flushright</h3>
+  <pre><code>\begin{center}
+  The \TeX nical Institute\\[.75cm]
+    Certificate
+\end{center}
+\begin{flushright}
+  The Director\\
+  The \TeX nical Institute
+\end{flushright}</code></pre>
+  <p><code>center</code> centres the text, <code>flushright</code> pushes it against the right margin, and <code>flushleft</code> against the left. These are <strong>environments</strong>: a <code>\begin{name}</code> and a matching <code>\end{name}</code> enclose the part they affect.</p>
+
+  <h3>1.9 Type style: family, series and shape</h3>
+  <p>A type style is a mix of three things: a <em>family</em> (roman, sans serif, typewriter), a <em>series</em> (medium, bold) and a <em>shape</em> (upright, italic, slanted, small caps). The commands:</p>
+  <table>
+    <thead><tr><th>Style</th><th>Command</th><th>Declaration form</th></tr></thead>
+    <tbody>
+      <tr><td>roman (family)</td><td><code>\textrm{roman}</code></td><td><code>{\rmfamily roman}</code></td></tr>
+      <tr><td>sans serif (family)</td><td><code>\textsf{sans serif}</code></td><td><code>{\sffamily sans serif}</code></td></tr>
+      <tr><td>typewriter (family)</td><td><code>\texttt{typewriter}</code></td><td><code>{\ttfamily typewriter}</code></td></tr>
+      <tr><td>medium (series)</td><td><code>\textmd{medium}</code></td><td><code>{\mdseries medium}</code></td></tr>
+      <tr><td>boldface (series)</td><td><code>\textbf{boldface}</code></td><td><code>{\bfseries boldface}</code></td></tr>
+      <tr><td>upright (shape)</td><td><code>\textup{upright}</code></td><td><code>{\upshape upright}</code></td></tr>
+      <tr><td>italic (shape)</td><td><code>\textit{italic}</code></td><td><code>{\itshape italic}</code></td></tr>
+      <tr><td>slanted (shape)</td><td><code>\textsl{slanted}</code></td><td><code>{\slshape slanted}</code></td></tr>
+      <tr><td>small caps (shape)</td><td><code>\textsc{small cap}</code></td><td><code>{\scshape small cap}</code></td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>Command or declaration?</strong> <code>\textbf{...}</code> works on exactly the text in its braces. A declaration such as <code>\bfseries</code> stays on until the end of the group it sits in, which is the closing brace or the end of the paragraph. Compare:</p>
+  <pre><code>By a \bfseries{triangle}, we mean a polygon of three sides.
+By a {\bfseries triangle}, we mean a polygon of three sides.</code></pre>
+  <p>In the first line, everything after <code>\bfseries</code> is bold. In the second, the braces around the declaration and its text limit the bold to "triangle". So wrap a declaration and the text it should affect in braces.</p>
+
+  <div class="plain">
+    <strong>The emphasis rule.</strong> <code>\emph</code> switches to italics in normal text, but switches to upright text when it is already inside italics. So in <code>\textit{A triangle is called a \emph{triangle}}</code>, the word "triangle" comes out upright. This is deliberate: it stands out from italic text.
+  </div>
+
+  <h3>1.10 Type size</h3>
+  <p>The default size is 10 points. The ten size commands, from smallest to largest, are <code>\tiny</code>, <code>\scriptsize</code>, <code>\footnotesize</code>, <code>\small</code>, <code>\normalsize</code>, <code>\large</code>, <code>\Large</code>, <code>\LARGE</code>, <code>\huge</code>, <code>\Huge</code>. They are declarations, so use them in braces:</p>
+  <pre><code>{\bfseries\huge The \TeX nical Institute}\\[1cm]
+{\scshape\LARGE Certificate}</code></pre>
+  <p>Style and size commands can be combined, as above.</p>
+
+  <div class="remember">
+    <strong>Remember (Part 1)</strong>
+    <ul>
+      <li>Spaces and line breaks in the source do not change the output. A blank line starts a paragraph.</li>
+      <li>A command eats the spaces after it. Use <code>\ </code> to keep one.</li>
+      <li>Ten characters are reserved. Escape them with a backslash.</li>
+      <li><code>%</code> starts a comment, so it does not print.</li>
+    </ul>
+  </div>
+</section>
+<section class="part" id="ch2">
+  <h2>2. The document</h2>
+  <p class="tag">Syllabus unit 2 &middot; Primer pages 15&ndash;26</p>
+
+  <h3>2.1 Document class and options</h3>
+  <div class="plain">
+    <strong>In plain words.</strong> The document class decides the overall shape of the document: its page size, its sectioning, and whether it has chapters. Options adjust that shape. Options go in square brackets, and the class name goes in braces.
+  </div>
+  <pre><code>\documentclass[options]{class}</code></pre>
+  <ul>
+    <li><strong>Classes:</strong> <code>article</code> (papers, assignments; no chapters), <code>report</code> (long documents with chapters), <code>book</code> (chapters, odd-page starts), <code>letter</code>.</li>
+    <li><strong>Font size:</strong> <code>10pt</code> (default), <code>11pt</code>, <code>12pt</code>. Example: <code>\documentclass[11pt]{article}</code>.</li>
+    <li><strong>Paper:</strong> <code>a4paper</code>, <code>letterpaper</code> (default), <code>a5paper</code>, <code>legalpaper</code>, <code>b5paper</code>. The primer's table lists sizes for each; for India, use <code>a4paper</code>.</li>
+    <li><strong>Columns:</strong> <code>onecolumn</code> (default) or <code>twocolumn</code>, like a dictionary.</li>
+    <li><strong>Sides:</strong> <code>oneside</code> (default for article) or <code>twoside</code> (page numbers on the outside edge, for double-sided printing; default for book).</li>
+    <li><strong>Chapter starts:</strong> <code>openany</code> (report default) or <code>openright</code> (book default: chapters start on odd pages).</li>
+    <li><strong>Title page:</strong> <code>titlepage</code> or <code>notitlepage</code>. Report and book put the title on its own page; article does not.</li>
+  </ul>
+  <pre><code>\documentclass[11pt,a4paper]{article}</code></pre>
+  <p>LaTeX has no default class, so you must always name one.</p>
+
+  <h3>2.2 Page style: headers and footers</h3>
+  <p>Each page has a "head" and a "foot". The <code>\pagestyle</code> command chooses what goes there:</p>
+  <table>
+    <thead><tr><th>Style</th><th>What it shows</th></tr></thead>
+    <tbody>
+      <tr><td><code>plain</code></td><td>Empty head, page number centred in the foot (article default)</td></tr>
+      <tr><td><code>empty</code></td><td>Nothing, so no page numbers</td></tr>
+      <tr><td><code>headings</code></td><td>Page number and chapter/section names in the head (book default)</td></tr>
+      <tr><td><code>myheadings</code></td><td>Same as headings, but you choose the text with <code>\markboth{left}{right}</code> or <code>\markright{right}</code></td></tr>
+    </tbody>
+  </table>
+  <p>To change one page only, use <code>\thispagestyle{empty}</code>. For full control of headers, the <code>fancyhdr</code> package is better; the primer points to it.</p>
+
+  <h3>2.3 Page numbering</h3>
+  <pre><code>\pagenumbering{roman}    % i, ii, iii ...
+\pagenumbering{arabic}   % 1, 2, 3 ... (the default)
+\setcounter{page}{5}     % the current page is numbered 5</code></pre>
+  <p>Other styles: <code>Roman</code> (I, II), <code>alph</code> (a, b), <code>Alph</code> (A, B). A common pattern: roman numbers for the preface, arabic numbers for the body.</p>
+
+  <h3>2.4 Lengths</h3>
+  <p>Page layout uses lengths such as the width of the text. You change them with <code>\setlength</code>:</p>
+  <pre><code>\setlength{\textwidth}{15cm}</code></pre>
+  <p>The <code>geometry</code> package is easier: <code>\usepackage[margin=2.5cm]{geometry}</code> sets all margins in one line.</p>
+
+  <h3>2.5 Title, author and date</h3>
+  <pre><code>\title{Document name}
+\author{Author names}
+\date{Date text}
+\maketitle</code></pre>
+  <ul>
+    <li><code>\maketitle</code> prints the title block. Without it, nothing is printed.</li>
+    <li>Use <code>\\</code> to break a long title or to print several lines of address in the author field.</li>
+    <li>Use <code>\and</code> between authors to set them side by side.</li>
+    <li><code>\date{}</code> (empty braces) prints no date. Omitting <code>\date</code> prints today's date.</li>
+    <li><code>\thanks{...}</code> adds a footnote mark to the title, author or date.</li>
+  </ul>
+
+  <h3>2.6 Abstract</h3>
+  <pre><code>\begin{abstract}
+  Abstract text.
+\end{abstract}</code></pre>
+  <p>Works in <code>article</code> and <code>report</code>, but not <code>book</code>. In an article, it appears under the title on the first page.</p>
+
+  <h3>2.7 Dividing the document: sectioning</h3>
+  <p>The hierarchy in <code>book</code> and <code>report</code> is:</p>
+  <pre><code>\chapter   \section   \subsection   \subsubsection   \paragraph   \subparagraph</code></pre>
+  <p><code>article</code> has no <code>\chapter</code>; its top level is <code>\section</code>.</p>
+  <ul>
+    <li>Numbering: a chapter prints "Chapter 2", a section "2.1", a subsection "2.1.1". Subsubsections and below have no numbers in book and report. In article, subsubsections are numbered.</li>
+    <li><code>\paragraph</code> and <code>\subparagraph</code> have no numbers and use run-in headings.</li>
+    <li>Add a star to remove the number and the table-of-contents entry: <code>\section*{Introduction}</code>.</li>
+    <li><code>\part{...}</code> sits above chapters in long documents. It does not change the numbering below it.</li>
+  </ul>
+
+  <div class="remember">
+    <strong>Remember (Part 2)</strong>
+    <ul>
+      <li>Every file starts with <code>\documentclass</code>.</li>
+      <li>The title block needs <code>\maketitle</code> in the body.</li>
+      <li>Chapters exist only in book and report.</li>
+      <li>Starred sectioning (<code>\section*</code>) removes numbers and table-of-contents entries.</li>
+    </ul>
+  </div>
+</section>
+<section class="part" id="ch3">
+  <h2>3. Bibliography</h2>
+  <p class="tag">Syllabus unit 3 &middot; Primer pages 27&ndash;34</p>
+
+  <div class="plain">
+    <strong>In plain words.</strong> A bibliography is the list of sources at the end of a document. In the text, you refer to a source by a short <em>key</em> (for example <code>lamport</code>). LaTeX turns the key into a number, such as [1], and prints the full entry at the end under the same number. You can change the numbering style without touching the entries.
+  </div>
+
+  <h3>3.1 Writing a list by hand: thebibliography</h3>
+  <pre><code>\begin{thebibliography}{99}
+  \bibitem{les85} Leslie Lamport, 1985. \emph{\LaTeX---A
+   Document Preparation System---User's Guide and
+   Reference Manual}, Addison-Wesley, Reading.
+  \bibitem{don89} Donald E. Knuth, 1989. \emph{Typesetting
+   Concrete Mathematics}, TUGBoat, 10(1):31-36.
+\end{thebibliography}</code></pre>
+
+  <ul>
+    <li>The argument <code>{99}</code> is the width of the widest label. Use a two-digit number for 10 to 99 entries. For custom labels, use the longest label, such as <code>{Long-name}</code>.</li>
+    <li>Each entry starts with <code>\bibitem{key}</code>. The key is any string without a comma, for example <code>ale91</code>.</li>
+    <li>Cite an entry with <code>\cite{key}</code>. Cite several with commas: <code>\cite{key1,key2}</code>.</li>
+    <li>Add a note with an optional argument: <code>\cite[page~25]{key1}</code> prints "[1, page 25]".</li>
+    <li>The first compilation writes the keys to a file; the second replaces the citations with numbers. So compile twice.</li>
+  </ul>
+
+  <p>Example from the primer. The input</p>
+  <pre><code>It is hard to write unstructured documents using \LaTeX~\cite{les85}.
+It is interesting to typeset one equation~\cite[Sec 3.3]{les85}
+rather than setting ten pages of running matter~\cite{don89,rondon89}.</code></pre>
+  <p>prints "It is hard to write unstructured documents using LaTeX [1]. It is interesting to typeset one equation [1, Sec 3.3] rather than setting ten pages of running matter [2,3]." The <code>~</code> is a non-breaking space, so the citation never starts a new line on its own.</p>
+
+  <h3>3.2 Author and year citations: natbib</h3>
+  <p>The <code>natbib</code> package gives you control over the citation style. Load it with <code>\usepackage[options]{natbib}</code>.</p>
+  <table>
+    <thead><tr><th>Option</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td><code>round</code> (default), <code>square</code>, <code>curly</code>, <code>angle</code></td><td>Brackets around citations</td></tr>
+      <tr><td><code>authoryear</code> (default), <code>numbers</code>, <code>super</code></td><td>Author and year, numbers in brackets, or superscript numbers (as in Nature)</td></tr>
+      <tr><td><code>sort</code>, <code>sort&amp;compress</code></td><td>Order multiple citations by list position; compress 3&ndash;6, 15</td></tr>
+    </tbody>
+  </table>
+
+  <p>The main commands and what they print for a key <code>ale91</code> (Alex et al., 1991):</p>
+  <table>
+    <thead><tr><th>Command</th><th>Prints</th></tr></thead>
+    <tbody>
+      <tr><td><code>\citet{ale91}</code></td><td>Alex et al. (1991)</td></tr>
+      <tr><td><code>\citep{ale91}</code></td><td>(Alex et al., 1991)</td></tr>
+      <tr><td><code>\citep[chap.~4]{ale91}</code></td><td>(Alex et al., 1991, chap. 4)</td></tr>
+      <tr><td><code>\citealt{ale91}</code></td><td>Alex et al. 1991 (no brackets)</td></tr>
+      <tr><td><code>\citet*{ale91}</code></td><td>Alex, Mathew and Ravi (1991): the starred form prints all authors</td></tr>
+      <tr><td><code>\citet{ale91,rav92}</code></td><td>Alex et al. (1991); Ravi et al. (1992)</td></tr>
+      <tr><td><code>\citeauthor{ale91}</code>, <code>\citeyear{ale91}</code></td><td>Alex et al.; 1991 (for partial citations)</td></tr>
+    </tbody>
+  </table>
+  <p>In numerical mode, the same citation prints as <code>[5]</code> or <code>Alex et al. [5]</code>.</p>
+
+  <h3>3.3 Bibliography entries with natbib</h3>
+  <p>With author-year citations, each <code>\bibitem</code> gets a label with the author and year in square brackets:</p>
+  <pre><code>\begin{thebibliography}{widest-label}
+  \bibitem[Lamport(1985)]{les85} Leslie Lamport, 1985.
+    \emph{\LaTeX---A Document Preparation}...
+\end{thebibliography}</code></pre>
+  <div class="warn">
+    <strong>Careful.</strong> The year in parentheses inside the optional argument is required. If one entry lacks a year, the whole list silently switches to numbers. Use <code>(0000)</code> when a year is unknown and cite with <code>\citeauthor</code> in the text.
+  </div>
+
+  <h3>3.4 Changing the punctuation</h3>
+  <p><code>\bibpunct</code> sets the brackets, separators and mode. Example from the primer:</p>
+  <pre><code>\bibpunct{[}{]}{,}{a}{}{;}
+\citep{jon90,jon91,jam92}     % prints [Jones et al. 1990; 1991, James et al. 1992]</code></pre>
+
+  <div class="remember">
+    <strong>Remember (Part 3)</strong>
+    <ul>
+      <li>A key is a short name; <code>\cite</code> prints the number or author-year.</li>
+      <li>Compile twice (or more) for the citations to be correct.</li>
+      <li>Use <code>~</code> before a citation so it does not break across lines.</li>
+      <li>Use natbib for author-year lists; its <code>\citet</code> and <code>\citep</code> are the commands to learn.</li>
+    </ul>
+  </div>
+</section>
+<section class="part" id="ch4">
+  <h2>4. Bibliographic databases (BibTeX)</h2>
+  <p class="tag">Syllabus unit 3 &middot; Primer pages 35&ndash;42</p>
+
+  <div class="plain">
+    <strong>In plain words.</strong> Typing the same reference into every paper is tedious. BibTeX lets you keep references once, in a <code>.bib</code> database file. BibTeX then formats them in whatever style a journal wants. You never retype a reference.
+  </div>
+
+  <h3>4.1 The database entry</h3>
+  <pre><code>@BOOK{knuth:86a,
+  AUTHOR    = "Donald E. Knuth",
+  TITLE     = {The \TeX{}book},
+  EDITION   = "third",
+  PUBLISHER = "Addison-Wesley",
+  ADDRESS   = {Reading, MA},
+  YEAR      = 1986 }</code></pre>
+  <ul>
+    <li><code>@BOOK</code> is the entry type. Capitals or small letters both work.</li>
+    <li><code>knuth:86a</code> is the key you use with <code>\cite</code>.</li>
+    <li>Each field is <code>NAME = {text}</code>, or <code>"text"</code>. A plain number such as <code>1986</code> needs neither.</li>
+    <li>Fields are separated by commas. Fields that the style does not need are ignored, so you can store notes or abstracts there too.</li>
+  </ul>
+
+  <h3>4.2 Common entry types</h3>
+  <table>
+    <thead><tr><th>Type</th><th>Use for</th><th>Required fields</th></tr></thead>
+    <tbody>
+      <tr><td><code>@article</code></td><td>Article in a journal or magazine</td><td>author, title, journal, year</td></tr>
+      <tr><td><code>@book</code></td><td>Book with a publisher</td><td>author or editor, title, publisher, year</td></tr>
+      <tr><td><code>@inbook</code></td><td>Part of a book (chapter or pages)</td><td>author or editor, title, chapter and/or pages, publisher, year</td></tr>
+      <tr><td><code>@incollection</code></td><td>Part of a book with its own title</td><td>author, title, booktitle, publisher, year</td></tr>
+      <tr><td><code>@inproceedings</code>, <code>@conference</code></td><td>Paper in conference proceedings</td><td>author, title, booktitle, year</td></tr>
+      <tr><td><code>@phdthesis</code>, <code>@masterthesis</code></td><td>Thesis</td><td>author, title, school, year</td></tr>
+      <tr><td><code>@manual</code></td><td>Technical documentation</td><td>title</td></tr>
+      <tr><td><code>@misc</code></td><td>Anything that fits nowhere else</td><td>none</td></tr>
+      <tr><td><code>@unpublished</code></td><td>Unpublished work</td><td>author, title, note</td></tr>
+    </tbody>
+  </table>
+  <p>Optional fields such as <code>volume</code>, <code>number</code>, <code>pages</code>, <code>month</code> and <code>note</code> are printed when present. If a required field is missing, BibTeX shows an error in its log.</p>
+
+  <h3>4.3 Using the database in a document</h3>
+  <pre><code>\documentclass{article}
+\pagestyle{empty}
+\begin{document}
+Citation of a normal book~\cite{Eijkhout:1991}. A reference to
+a manual~\cite{Dynatext} and a PhD thesis \cite{Liang:1983}.
+\bibliographystyle{plain}   % the layout of the list
+\bibliography{bsample}      % the file bsample.bib
+\end{document}</code></pre>
+  <p>The command <code>\bibliographystyle</code> chooses the format. The common styles:</p>
+  <table>
+    <thead><tr><th>Style</th><th>Behaviour</th></tr></thead>
+    <tbody>
+      <tr><td><code>plain</code></td><td>Sorted alphabetically, numeric labels</td></tr>
+      <tr><td><code>unsrt</code></td><td>Like plain, but in order of first citation</td></tr>
+      <tr><td><code>alpha</code></td><td>Labels made from author and year, such as Knu86</td></tr>
+      <tr><td><code>abbrv</code></td><td>Like plain, but names of months and journals shortened</td></tr>
+      <tr><td><code>acm</code>, <code>apalike</code></td><td>House styles of ACM and APA journals</td></tr>
+    </tbody>
+  </table>
+
+  <h3>4.4 The four-step procedure</h3>
+  <p>BibTeX does not read the <code>.tex</code> file. It reads the <code>.aux</code> file that LaTeX wrote, then looks up the keys in the database and writes a <code>.bbl</code> file. Run the commands in this order:</p>
+  <pre><code>$ latex sample     # 1st run: writes the citation keys to sample.aux
+$ bibtex sample    # reads sample.aux and bsample.bib, writes sample.bbl
+$ latex sample     # 2nd run: reads sample.bbl
+$ latex sample     # 3rd run: resolves all references</code></pre>
+  <p>Warnings and errors from BibTeX go to <code>sample.blg</code>.</p>
+
+  <p><code>\nocite{key}</code> puts an entry in the list without printing a citation. <code>\nocite{*}</code> puts every entry from every database in the list, which is useful for checking a database.</p>
+
+  <div class="remember">
+    <strong>Remember (Part 4)</strong>
+    <ul>
+      <li>References live in a <code>.bib</code> file once. The document only says which file (<code>\bibliography{name}</code>) and which style (<code>\bibliographystyle{...}</code>).</li>
+      <li>Run latex, bibtex, latex, latex. If a citation still shows "?", run latex once more.</li>
+      <li>Check the <code>.blg</code> file when something is missing.</li>
+    </ul>
+  </div>
+</section>
+<section class="part" id="ch5">
+  <h2>5. Table of contents and index</h2>
+  <p class="tag">Syllabus unit 4 &middot; Primer pages 43&ndash;51 (glossary, 5.3, is omitted by the syllabus)</p>
+
+  <h3>5.1 Table of contents, lists of figures and tables</h3>
+  <div class="plain">
+    <strong>In plain words.</strong> LaTeX writes down every heading, figure caption and table caption as it goes, along with its page number. Then <code>\tableofcontents</code> prints them all in a list. You only type the command where the list should appear.
+  </div>
+  <pre><code>\tableofcontents    % the contents page
+\listoffigures     % list of figures
+\listoftables      % list of tables</code></pre>
+  <ul>
+    <li>The contents list needs <strong>two</strong> compilations. The first run saves the headings to a <code>.toc</code> file; the second run reads them back and prints the list.</li>
+    <li>Figure and table lists use the caption text, saved to <code>.lof</code> and <code>.lot</code>.</li>
+    <li>Starred headings (<code>\section*</code>) are not listed. To list one anyway, add it by hand: <code>\addcontentsline{toc}{section}{Preface}</code>.</li>
+    <li><code>\addtocontents{toc}{\protect\vspace{2ex}}</code> adds a gap in the middle of the contents.</li>
+    <li>Use the optional argument of a caption to shorten its entry in the lists: <code>\caption[Short]{Long caption text}</code>.</li>
+  </ul>
+
+  <h3>5.2 Index</h3>
+  <div class="plain">
+    <strong>In plain words.</strong> An index lists important words with the pages where they appear. You mark each word in the text with <code>\index{word}</code>. A program called <code>makeindex</code> sorts them, and <code>\printindex</code> prints the sorted list.
+  </div>
+
+  <p>Steps (from the primer):</p>
+  <ol>
+    <li>Mark terms in the text: <code>\index{index entry}</code>.</li>
+    <li>In the preamble, load the package and turn on indexing: <code>\usepackage{makeidx}</code> then <code>\makeindex</code>.</li>
+    <li>Put <code>\printindex</code> where the index should appear, normally before <code>\end{document}</code>.</li>
+    <li>Compile with <code>latex</code>. This writes a raw index file (<code>file.idx</code>).</li>
+    <li>Run <code>makeindex file</code>. This writes <code>file.ind</code> (the sorted index) and <code>file.ilg</code> (a log).</li>
+    <li>Compile with <code>latex</code> again to see the index.</li>
+  </ol>
+
+  <h4>Sub-entries</h4>
+  <pre><code>\index{dimensions!rule!width}   % main ! sub ! subsub
+\index{animal!mammal!cat}</code></pre>
+  <p>The <code>!</code> character separates the levels. The output is an indented list: dimensions, then rule, then width, with the page number after it.</p>
+
+  <h4>Page ranges and cross-references</h4>
+  <pre><code>\index{fonts!PostScript|(}     % start of a range
+\index{fonts!PostScript|)}     % end of the range
+\index{animalism|see{animal}}   % "animalism, see animal" (no page number)</code></pre>
+
+  <h4>Showing the entry differently</h4>
+  <pre><code>\index{delta@$\delta$}                  % sorted under "delta", printed as delta
+\index{tabular@\texttt{tabular} environment}
+\index{animal@\emph{animal}}           % page number printed in italics</code></pre>
+  <p>The part before <code>@</code> decides where the entry is sorted. The part after it is what is printed.</p>
+
+  <h4>Special characters</h4>
+  <p>The characters <code>!</code>, <code>@</code>, <code>"</code> and <code>|</code> have jobs in the index. To print one of them, put <code>"</code> in front: <code>\index{exclamation ("!)}</code> prints "exclamation (!)".</p>
+
+  <div class="warn">
+    <strong>No index file?</strong> Nothing is produced unless <code>\makeindex</code> is in the preamble. The primer notes this in the text: without it, <code>\index</code> writes nothing.
+  </div>
+
+  <h3>5.3 Glossary (omitted in the syllabus)</h3>
+  <p>The primer describes <code>\makeglossary</code> and <code>\glossary{entry}</code> for a glossary. The syllabus leaves this out, so it is not needed for the exam.</p>
+
+  <div class="remember">
+    <strong>Remember (Part 5)</strong>
+    <ul>
+      <li>The contents list needs two runs. The index needs latex, makeindex, latex.</li>
+      <li><code>\index</code> does nothing without <code>\makeindex</code> in the preamble.</li>
+      <li><code>!</code> makes sub-entries; <code>|</code> makes page ranges and "see" cross-references; <code>@</code> sets the sort key.</li>
+    </ul>
+  </div>
+</section>
+</main>
+</body>
+</html>

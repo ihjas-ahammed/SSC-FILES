@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Study notes: Section 6: power in AC circuits (Murugeshan 13.5)</title>
+<script>
+window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+  @page { size: A4; margin: 16mm; }
+  :root { --ink:#1B2631; --muted:#5D6D7E; --rule:#AEB6BF; --paper:#FFFFFF; --bound:#B9770E; --res:#117A65; --eq:#1F618D; --idb:#A04000; --hi:#FDF2E9; }
+  body { margin:0; background:var(--paper); color:var(--ink); font-family:"Times New Roman", Times, "Liberation Serif", serif; font-size:12.5pt; line-height:1.5; }
+  main { max-width:760px; margin:0 auto; padding:14px; }
+  h1 { font-size:20pt; margin:0 0 4px; color:var(--eq); }
+  .meta { color:var(--muted); font-size:10.5pt; margin-bottom:10px; }
+  h2 { font-size:14pt; margin:22px 0 6px; color:var(--eq); border-bottom:2px solid var(--eq); padding-bottom:2px; break-after:avoid; }
+  h3 { font-size:12.5pt; margin:14px 0 4px; color:var(--res); break-after:avoid; }
+  p, li { margin:5px 0; }
+  ul { margin:4px 0 4px 22px; padding:0; }
+  .eq { margin:8px 0; text-align:center; }
+  .box-eq { background:#EAF2F8; border-left:4px solid var(--eq); padding:6px 10px; margin:8px 0; }
+  .box-res { background:#E9F7EF; border-left:4px solid var(--res); padding:6px 10px; margin:8px 0; }
+  .box-id { background:var(--hi); border-left:4px solid var(--idb); padding:6px 10px; margin:8px 0; }
+  .lbl { font-weight:bold; font-size:10.5pt; text-transform:uppercase; letter-spacing:.3px; }
+  .lbl.res { color:var(--res); } .lbl.eq { color:var(--eq); } .lbl.id { color:var(--idb); }
+  .note { font-size:11.5pt; color:var(--muted); margin:4px 0; }
+  .bg { font-size:10.5pt; color:var(--muted); font-style:italic; }
+  .bound { color:var(--bound); font-weight:bold; }
+  .fig { margin:12px 0; text-align:center; break-inside:avoid; }
+  .fig svg { display:block; width:100%; max-width:320px; height:auto; margin:0 auto; }
+  .fig figcaption { font-size:10.5pt; color:var(--muted); font-style:italic; margin-top:3px; }
+  @media print { .keep { break-inside: avoid; } }
+
+  .box-recall { background:#FEF9E7; border-left:4px solid #B9770E; padding:6px 10px; margin:8px 0; }
+  .box-recall ol { margin:4px 0 4px 20px; padding:0; }
+  .lbl.recall { color:#B9770E; }
+  .figsvg { display:block; width:100%; max-width:240px; height:auto; margin:0 auto; }
+  .fig img { display:block; width:100%; max-width:240px; height:auto; margin:0 auto; }
+  .box-res p, .box-eq p { margin:4px 0; }
+  .sec-body { column-count: 2; column-gap: 22px; column-rule: 1px solid #AEB6BF; }
+  .sec-body .eq, .sec-body .box-eq, .sec-body .fig { break-inside: avoid; }
+  .sec-body .box-res, .sec-body .box-recall { box-decoration-break: clone; }
+  .sec-body .fig img, .sec-body .figsvg { max-height: 130px; width: auto; max-width: 220px; }
+  .sec-body h3 { break-after: avoid; }
+  .sec-body p, .sec-body li { font-size: 11pt; }
+  .sec-body .eq { font-size: 0.93em; }
+  .sec-body .longeq mjx-container[display="true"] { font-size: 0.72em !important; }
+  .sec-body mjx-container[display="true"] { font-size: 0.85em !important; max-width: 100%; }
+  .sec-bar { background:#1F618D; color:#fff; font-size:13pt; font-weight:bold; padding:6px 10px; margin:16px 0 6px; column-span: all; break-after: avoid; }
+  main { max-width: none; margin: 0; padding: 0 14px; }
+  @page { size: A4; margin: 16mm; }
+  @media print { h2 { break-after: avoid; } }
+</style>
+</head>
+<body>
+<main>
+<h1>Study notes: Section 6: power in AC circuits (Murugeshan 13.5)</h1>
+<div class="meta">Murugeshan, <i>Electricity and Magnetism</i> (10th ed.), Ch. 12 §12.1 and §12.2 (Module 4, syllabus item 15–16). Figures are drawn for these notes from the book formulas; the book figure number is in each caption. Problems are not included.</div>
+<h2>13.5 Power in an AC circuit with resistance, inductance and capacitance</h2>
+<div class="sec-body">
+<div class="bg">Source: <i>book-sources/m4-s6-power.html</i>, Murugeshan pp. 347–351 (printed), with Examples 1–5 of §13.5. Syllabus item 22. §13.6 (choke coil) begins on printed p. 351 and continues beyond this module; its heading is shown and its text is not included. Equations (1) and (2) are the book’s; the Example 2 equations are tagged (ex2) with their book numbers.</div>
+
+<h3>Before you start</h3>
+<ul>
+<li>Power in a DC circuit, $P = VI = I^2R$ (pre-physics P8).</li>
+<li>Products of sinusoids and the average of $\cos^2$ over a cycle (pre-math M5, M7).</li>
+<li>Phase angle $\phi$ between current and emf (Section 4 and 5 of these notes).</li>
+</ul>
+
+<h3>1. Instantaneous power</h3>
+<div class="box-recall"><span class="lbl recall">Recall (Plus Two)</span> In a DC resistive circuit, $P=VI=I^2R=V^2/R$ (Plus Two). In an AC circuit the same formula holds for the instantaneous power $EI$, and the average is taken over a cycle with the factor $\cos\phi$.</div>
+<p>Let the voltage and current be $E = E_0\sin\omega t$ and $I = I_0\sin(\omega t-\phi)$, where $\phi$ is the phase difference. Both vary with time, so the power $EI$ is calculated at each instant and then averaged over a cycle. Using $\sin A\sin B = \tfrac12[\cos(A-B)-\cos(A+B)]$,</p>
+<div class="eq">$$\begin{aligned}E\times I &= E_0I_0\sin\omega t\,\sin(\omega t-\phi) \\  &= \frac{1}{2}E_0I_0\left[\cos\phi - \cos(2\omega t-\phi)\right]\end{aligned} \tag{13.5(1)}$$</div>
+
+<h3>2. Average power</h3>
+<p>Averaging over one complete period $T$, the $\cos(2\omega t - \phi)$ term integrates to zero, and</p>
+<div class="eq">$$P = \frac{1}{T}\int_0^T EI\,dt = \frac{1}{2}E_0I_0\cos\phi\tag{13.5(2)}$$</div>
+<p>Since $E_{rms} = E_0/\sqrt2$ and $I_{rms} = I_0/\sqrt2$,</p>
+<div class="eq">$$P = E_{rms}\,I_{rms}\cos\phi$$</div>
+<p>The product $E_{rms}I_{rms}$ is the <i>apparent power</i>. The factor $\cos\phi$ is the <i>power factor</i>. The true power is the apparent power times the power factor. The power factor is the ratio of the true power to the apparent power. For a circuit of $R$, $L$ and $C$ in series,</p>
+<div class="eq">$$\begin{gathered}\tan\phi = \frac{\omega L - 1/\omega C}{R} \\ \cos\phi = \frac{R}{\sqrt{R^2 + (\omega L - 1/\omega C)^2}}\end{gathered}$$</div>
+<figure class="fig"><img src="final/m4-s6-pf-triangle.jpg" alt="m4 s6 pf triangle"><figcaption>Fig. 13.24 (book): power-factor triangle with sides R, ωL − 1/ωC and Z.</figcaption></figure>
+
+<h3>3. Special cases</h3>
+<ul>
+<li>Purely resistive: $\phi=0$, $\cos\phi=1$, and the true power is $E_{v}I_{v}$.</li>
+<li>Purely inductive: $\phi=90^\circ$, $\cos\phi=0$; the true power is zero.</li>
+<li>Purely capacitive: $\phi=-90^\circ$, $\cos\phi=0$; the true power is zero.</li>
+<li>$R$ and $L$ in series: $\cos\phi = R/\sqrt{R^2+(\omega L)^2}$.</li>
+<li>$R$ and $C$ in series: $\cos\phi = R/\sqrt{R^2 + 1/(\omega C)^2}$.</li>
+</ul>
+
+<h3>4. Wattless current</h3>
+<p>The current is <i>wattless</i> when the average power is zero. In a purely inductive or purely capacitive circuit with no resistance, $\phi=\pi/2$ and $\cos\phi=0$. The current does no useful work; it is the <i>idle</i> current. This is the principle of the choke coil, which offers reactance to the current but absorbs no power. Splitting the current into components along and perpendicular to the emf (Fig. 13.25), the component $I\cos\phi$ gives the power, and $I\sin\phi$ is wattless.</p>
+<figure class="fig"><img src="final/m4-s6-wattless.jpg" alt="m4 s6 wattless"><figcaption>Fig. 13.25 (book): I cos φ (power component) and I sin φ (wattless component).</figcaption></figure>
+<figure class="fig"><img src="final/m4-s6-inst-power.jpg" alt="m4 s6 inst power"><figcaption>Emf, current and instantaneous power against time; the average power is shown dashed.</figcaption></figure>
+
+<h3>5. Worked examples</h3>
+<p><b>Example 1 (printed p. 348).</b> A choke of inductance 5 H and resistance 200 $\Omega$ is connected to 10 V at 100 Hz. $\cos\phi = 200/\sqrt{200^2+(2\pi\cdot100\cdot5)^2} = 0.062$. The power absorbed is $0.00189$ W.</p>
+<p><b>Example 2 (printed pp. 348–349).</b> A 50 V r.m.s. source feeds an air-cored coil. At 50 Hz the power is 100 W and at 100 Hz it is 50 W. The power is dissipated only in $R$: $\frac{50^2}{R^2+(100\pi)^2L^2}R = 100$ and $\frac{50^2R}{R^2+(200\pi)^2L^2}=50$. Eliminating gives $R^2 = 2\times10^4\pi^2L^2$, so $R=100\sqrt2\,\pi L$, and then $R=16.7\ \Omega$, $L=37.3$ mH.</p>
+<div class="eq longeq">$$\text{Example 2 (ex2)}\quad \frac{50^2}{[R^2+(100\pi)^2L^2]}R = 100\ \text{W}\tag{13.5(ex2)(1)}$$</div>
+<div class="eq">$$\frac{50^2R}{[R^2+(200\pi)^2L^2]} = 50\ \text{W}\tag{13.5(ex2)(2)}$$</div>
+<div class="eq">$$2500\,R = 100\left[R^2+10^4\pi^2L^2\right]\tag{13.5(ex2)(3)}$$</div>
+<div class="eq">$$2500\,R = 50\left[R^2+4\times10^4\pi^2L^2\right]\tag{13.5(ex2)(4)}$$</div>
+<div class="eq">$$\begin{aligned}R^2 &= 2\times10^4\times\pi^2L^2\quad\text{or}\quad R \\  &= 100\sqrt2\,\pi L\end{aligned} \tag{13.5(ex2)(5)}$$</div>
+<p><b>Example 3 (printed pp. 350–351).</b> A coil of inductance 0.7 H in series with 50 $\Omega$ is connected to 200 V at 50 Hz. $Z = 225.6\ \Omega$, $I_{rms}=0.89$ A. The power component is $I\cos\phi = 0.20$ A and the wattless component is $I\sin\phi = 0.87$ A.</p>
+<p><b>Example 4 (printed p. 351).</b> A coil of 0.1 H and 12 $\Omega$ on 220 V, 50 Hz: $X_L=31.43\ \Omega$, $Z=33.6\ \Omega$, and the wattmeter reading is $(220)^2/33.6\times 12/33.6 = 514.5$ W.</p>
+<p><b>Example 5 (printed p. 351).</b> A purely inductive circuit dissipates no power. The energy drawn from the source in one part of the cycle to build the magnetic field is returned to the source in the next part. The inductance stores energy and gives it back; only the resistance of the coil loses energy as heat.</p>
+<h3>6. Choke coil (§13.6, heading only)</h3>
+<p>The choke coil is an inductance used to control current without power loss. Its section begins on printed p. 351 and continues beyond this module. It is not included in these notes.</p>
+</div>
+</main>
+</body>
+</html>

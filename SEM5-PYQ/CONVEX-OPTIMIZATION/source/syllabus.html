@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Convex Optimization: Syllabus (MAT5EJ303 (2))</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+  :root {
+    --page-bg: #d9d9d4;
+    --paper: #fdfdfb;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --page-bg: #2b2b2b;
+      --paper: #f4f3ee;
+      --ink: #111;
+      --rule: #444;
+      --note: #555;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page-bg: #2b2b2b;
+    --paper: #f4f3ee;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  body {
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--ink);
+    font-family: "Times New Roman", Times, "Liberation Serif", serif;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .sheet {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 12mm auto;
+    padding: 14mm 18mm 16mm;
+    box-sizing: border-box;
+    background: var(--paper);
+    box-shadow: 0 1px 6px rgba(0,0,0,.25);
+    position: relative;
+  }
+  .sheet + .sheet { margin-top: 0; }
+  .hdr {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: start;
+    font-size: 14px;
+  }
+  .code { font-size: 22px; font-weight: bold; letter-spacing: .5px; }
+  .pages { text-align: center; padding-top: 14px; }
+  .name { text-align: right; line-height: 2; }
+  .title { text-align: center; margin-top: 22px; }
+  .title .exam { font-size: 19px; font-weight: bold; letter-spacing: .3px; }
+  .title .sch { margin-top: 2px; }
+  .title .course { margin-top: 10px; font-size: 16px; }
+  .title .subject { margin-top: 6px; font-size: 16px; font-weight: bold; }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 16px;
+    font-size: 15px;
+  }
+  .sec { margin-top: 14px; }
+  .sec-head {
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    font-weight: bold;
+  }
+  .sec-head .num { font-weight: bold; }
+  .sec-head .body { font-weight: normal; }
+  .sec-head .body b { font-weight: bold; }
+  .sec-head .body i { font-style: italic; }
+  .sec-total { text-align: right; font-weight: normal; margin-top: 4px; }
+  .qs { margin-top: 6px; }
+  .q {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    margin-bottom: 7px;
+  }
+  .q .n { text-align: right; padding-right: 10px; }
+  .q p { margin: 0; }
+  .sub { margin-left: 22px; }
+  .cut { color: var(--note); }
+  .turn { text-align: right; font-weight: bold; margin-top: 26px; }
+  .fig {
+    display: block;
+    margin: 8px auto 2px 36px;
+    width: 230px;
+    height: auto;
+  }
+  .fig-cap { margin-left: 36px; font-size: 13px; color: var(--note); font-style: italic; }
+  .foot-note {
+    margin-top: 26px;
+    border-top: 1px solid var(--rule);
+    padding-top: 6px;
+    font-size: 12px;
+    color: var(--note);
+  }
+  .pno { text-align: center; font-size: 15px; margin-bottom: 4px; }
+  .pno-hdr { position: absolute; top: 10mm; right: 18mm; font-weight: bold; font-size: 14px; }
+  @media print {
+    @page { size: A4; margin: 0; }
+    body { background: #fff; }
+    .sheet { margin: 0; box-shadow: none; width: 210mm; height: 297mm; min-height: 0; page-break-after: always; }
+    .sheet:last-child { page-break-after: auto; }
+  }
+  @media (max-width: 720px) {
+    .sheet { width: auto; margin: 0; padding: 14px 16px; min-height: 0; }
+    .hdr { grid-template-columns: 1fr; gap: 6px; }
+    .name { text-align: left; }
+    .pages { text-align: left; padding-top: 0; }
+  }
+</style>
+<style>
+  .sec-title { font-weight: bold; margin-top: 16px; }
+  .sec-title .sub { font-weight: normal; font-style: italic; }
+  .lead { margin: 8px 0 4px; }
+  .placeholder {
+    margin: 8px 0 4px 36px; padding: 8px 10px;
+    border: 1px dashed var(--rule); font-size: 13px; color: var(--note);
+  }
+  .title .tl { margin-top: 4px; font-size: 16px; }
+  .title .tl.bold { font-weight: bold; }
+</style>
+<style>
+  table.syl { border-collapse: collapse; width: 100%; font-size: 12px; margin-top: 4px; }
+  table.syl th, table.syl td { border: 1px solid var(--rule); padding: 3px 6px; text-align: left; vertical-align: top; }
+  table.syl th { font-weight: bold; }
+</style>
+</head>
+<body>
+
+<div class="sheet">
+<div class="title" style="margin-top:0">
+<div class="tl bold">B. Sc. Mathematics Honours: Semester V</div>
+<div class="tl bold">MAT5EJ303 (2): CONVEX OPTIMIZATION</div>
+<div class="tl">Syllabus (CU-FYUGP). Elective, Specialisation: Data Science.</div>
+</div>
+<div class="sec">
+<table class="syl">
+<tr><th>Programme</th><td>B. Sc. Mathematics Honours</td></tr>
+<tr><th>Course code</th><td>MAT5EJ303 (2)</td></tr>
+<tr><th>Course title</th><td><b>CONVEX OPTIMIZATION</b></td></tr>
+<tr><th>Type of course</th><td>Elective (Specialisation: Data Science)</td></tr>
+<tr><th>Semester</th><td>V</td></tr>
+<tr><th>Academic level</th><td>300–399</td></tr>
+<tr><th>Credit / L-T per week / Practical per week / Total hours</th><td>4 / 4 / – / 60</td></tr>
+<tr><th>Pre-requisites</th><td>Linear Algebra and Multi Variable Calculus</td></tr>
+<tr><th>Course summary</th><td>The course covers the basic theory of convex sets and functions, optimization theory of convex functions and Lagrangian duality. The concepts explored in this course are important for data science, as they underpin many algorithms and methods in machine learning, optimization, and statistical analysis. For instance, understanding gradients and Hessians is essential for optimizing cost functions, while knowledge of convex optimization is vital for developing efficient algorithms. This mathematical foundation will enable data scientists to design, analyse, and implement sophisticated models and solutions.</td></tr>
+</table>
+</div>
+<div class="sec">
+<div class="sec-title">Course outcomes (CO)</div>
+<table class="syl">
+<tr><th>CO</th><th>CO statement</th><th>Cognitive level*</th><th>Knowledge category#</th><th>Evaluation tools used</th></tr>
+<tr><td>CO1</td><td>Prove the basic properties of convex sets and functions.</td><td>Ap</td><td>C</td><td>Internal Exam / Assignment / Seminar / Viva / End Sem Exam</td></tr>
+<tr><td>CO2</td><td>Model simple problems using convex optimization methods and solve them.</td><td>Ap</td><td>P</td><td>Internal Exam / Assignment / Seminar / Viva / End Sem Exam</td></tr>
+<tr><td>CO3</td><td>Formulate the dual of a convex optimization problem and describe the properties.</td><td>U</td><td>C</td><td>Internal Exam / Assignment / Seminar / Viva / End Sem Exam</td></tr>
+</table>
+<div class="foot-note">* Remember (R), Understand (U), Apply (Ap), Analyse (An), Evaluate (E), Create (C). # Factual Knowledge (F), Conceptual Knowledge (C), Procedural Knowledge (P), Metacognitive Knowledge (M).</div>
+</div>
+</div>
+
+<div class="sheet">
+<div class="sec">
+<div class="sec-title">Detailed syllabus</div>
+<table class="syl">
+<tr><th>Text book</th><td>1. K. G. Binmore, <i>Mathematical Analysis: A straightforward approach</i>, 2nd edition, Cambridge University Press, 1982.<br>2. Stephen Boyd and Lieven Vandenberghe, <i>Convex Optimization</i>, Cambridge University Press, 2004.</td></tr>
+</table>
+<table class="syl" style="margin-top:8px">
+<tr><th>Module</th><th>Unit</th><th>Content</th><th>Hrs (48+12)</th><th>Ext. marks (70)</th></tr>
+<tr><td rowspan="9"><b>I</b></td><td colspan="2"><b>Review of Multivariable Calculus</b></td><td>10</td><td rowspan="9">Min 15</td></tr>
+<tr><td>1</td><td>Scalar and vector fields. Directional and partial derivatives</td><td></td></tr>
+<tr><td>2</td><td>Differentiable functions and total derivative. Matrix representation. Gradient and Jacobian</td><td></td></tr>
+<tr><td>3</td><td>Chain rule for differentiation, matrix form</td><td></td></tr>
+<tr><td>4</td><td>Stationary points. Conditions for stationarity</td><td></td></tr>
+<tr><td>5</td><td>Second derivatives and Hessian matrix</td><td></td></tr>
+<tr><td>6</td><td>Mean value theorems. Second order Taylor's theorem</td><td></td></tr>
+<tr><td>7</td><td>Eigenvalues of Hessian</td><td></td></tr>
+<tr><td>8</td><td>Classification of stationary points</td><td></td></tr>
+<tr><td colspan="4"><i>Chapter 19 of Text Book 1, pages 190–231.</i></td></tr>
+<tr><td rowspan="10"><b>II</b></td><td colspan="2"><b>Convexity</b></td><td>14</td><td rowspan="10">Min 15</td></tr>
+<tr><td>9</td><td>Affine and convex sets</td><td></td></tr>
+<tr><td>10</td><td>Convexity preserving operations</td><td></td></tr>
+<tr><td>11</td><td>Generalized inequalities</td><td></td></tr>
+<tr><td>12</td><td>Supporting and separating hyperplanes</td><td></td></tr>
+<tr><td>13</td><td>Dual cones and generalized inequality</td><td></td></tr>
+<tr><td>14</td><td>Basic properties and examples of convex functions</td><td></td></tr>
+<tr><td>15</td><td>Convexity preserving operations</td><td></td></tr>
+<tr><td>16</td><td>Quasi convex, log convex functions</td><td></td></tr>
+<tr><td>17</td><td>Convexity and generalized inequalities</td><td></td></tr>
+<tr><td colspan="4"><i>Chapter 2 and 3 of Text Book 2.</i></td></tr>
+<tr><td rowspan="7"><b>III</b></td><td colspan="2"><b>Convex Optimization Problems</b></td><td>12</td><td rowspan="7">Min 15</td></tr>
+<tr><td>18</td><td>Optimization problems and convex optimization</td><td></td></tr>
+<tr><td>19</td><td>Linear optimization problems</td><td></td></tr>
+<tr><td>20</td><td>Quadratic optimization problems</td><td></td></tr>
+<tr><td>21</td><td>Geometric programming</td><td></td></tr>
+<tr><td>22</td><td>Generalized inequality constraints</td><td></td></tr>
+<tr><td>19</td><td>Vector optimization <i>(printed as 19 a second time)</i></td><td></td></tr>
+<tr><td colspan="4"><i>Chapter 4 of Text Book 2.</i></td></tr>
+<tr><td rowspan="7"><b>IV</b></td><td colspan="2"><b>Duality</b></td><td>12</td><td rowspan="7">Min 15</td></tr>
+<tr><td>20</td><td>The Lagrange dual function</td><td></td></tr>
+<tr><td>21</td><td>The Lagrangian dual and geometric interpretation</td><td></td></tr>
+<tr><td>22</td><td>Saddle point interpretation</td><td></td></tr>
+<tr><td>23</td><td>Optimality condition</td><td></td></tr>
+<tr><td>24</td><td>Theorems of alternatives</td><td></td></tr>
+<tr><td>25</td><td>Generalized inequalities</td><td></td></tr>
+<tr><td colspan="4"><i>Chapter 5 of Text Book 2.</i></td></tr>
+<tr><td rowspan="2"><b>V<br><i>(Open ended)</i></b></td><td colspan="2"><b>Open ended</b></td><td>12</td><td rowspan="2"></td></tr>
+<tr><td>27</td><td>Instances of practical problems that can be solved with convex optimization methods discussed in the course, such as linear classifiers, support vector machines, and linear and logistic regression.</td><td></td></tr>
+</table>
+<div class="foot-note">Printed unit numbers are kept as printed. Units 19 and 20 each appear twice (Modules III and IV), and no unit 26 is printed. Modules are counted by their printed numbers, 1–30 in order, when a question is matched to the syllabus. Hours: I 10, II 14, III 12, IV 12, V 12 (total 60).</div>
+</div>
+<div class="sec">
+<div class="sec-title">References</div>
+<div class="lead">1. David G. Luenberger and Yinyu Ye, <i>Linear and Nonlinear Programming</i>, 4th edition, Springer, 2015.<br>2. Niels Lauritzen, <i>Undergraduate Convexity: From Fourier and Motzkin to Kuhn and Tucker</i>, World Scientific, 2013.</div>
+<div class="lead"><b>Note:</b> 70 external marks are distributed over the first four modules, subject to a minimum of 15 marks from each module.</div>
+</div>
+</div>
+
+<div class="sheet">
+<div class="sec">
+<div class="sec-title">Mapping of COs with PSOs and POs</div>
+<table class="syl">
+<tr><th></th><th>PSO1</th><th>PSO2</th><th>PSO3</th><th>PSO4</th><th>PO1</th><th>PO2</th><th>PO3</th><th>PO4</th><th>PO5</th><th>PO6</th><th>PO7</th></tr>
+<tr><td>CO1</td><td>3</td><td>2</td><td>0</td><td>2</td><td>3</td><td>2</td><td>3</td><td>2</td><td>3</td><td>1</td><td>2</td></tr>
+<tr><td>CO2</td><td>2</td><td>3</td><td>1</td><td>2</td><td>3</td><td>2</td><td>3</td><td>3</td><td>3</td><td>1</td><td>3</td></tr>
+<tr><td>CO3</td><td>2</td><td>2</td><td>0</td><td>3</td><td>3</td><td>2</td><td>3</td><td>2</td><td>3</td><td>1</td><td>2</td></tr>
+</table>
+</div>
+<div class="sec">
+<div class="sec-title">Correlation levels</div>
+<table class="syl">
+<tr><th>Level</th><th>Correlation</th></tr>
+<tr><td>2–3</td><td>1N2il <i>(as printed; not legible in the source image)</i></td></tr>
+<tr><td>1</td><td>Slightly / Low</td></tr>
+<tr><td>2</td><td>Moderate / Medium</td></tr>
+<tr><td>3</td><td>Substantial / High</td></tr>
+</table>
+</div>
+<div class="sec">
+<div class="sec-title">Assessment rubrics</div>
+<div class="lead">Assignment / Seminar; Internal Exam; Viva; Final Exam (70%).</div>
+<div class="sec-title">Mapping of COs to assessment rubrics</div>
+<table class="syl">
+<tr><th></th><th>Internal Exam</th><th>Assignment</th><th>Seminar</th><th>Viva</th><th>End Semester Examinations</th></tr>
+<tr><td>CO1</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+<tr><td>CO2</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+<tr><td>CO3</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+</table>
+</div>
+<div class="foot-note">Source: `SSC-V2/SEM5/MATH/MAT5EJ3032CourseTitleCONVEXOPT_CONVEX_OPTIMIZATION.pdf` (4 pages, printed as pp. 152–155 of 454 in the source PDF, "Page 153–156 of 454"). Transcribed from the page images, not the text layer, which dropped unit 6 and garbled the correlation table.</div>
+</div>
+
+</body>
+</html>

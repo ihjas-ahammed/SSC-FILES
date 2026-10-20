@@ -1,0 +1,32 @@
+import subprocess, os, sys
+STYLE = ("Clean colored physics-textbook diagram, flat vector style, plain white background, no border, no title. "
+ "Labels in a serif font (Times style), math variables italic, subscripts and superscripts properly set. "
+ "Colours: positive charge red (#C0392B); negative charge blue (#1F618D); applied field E green (#117A65); dipole p purple (#7D3C98); forces E-orange (#D35400); polarization P and bound charge amber (#B9770E); sphere/cloud fill light orange (#FDF2E9) with brown outline (#A04000); dielectric block light blue (#EAF2F8); guides grey dashed (#7F8C8D). "
+ "Arrows have clear arrowheads. Keep every label legible and spelled exactly as written. No extra text. ")
+BRIEFS = {
+"s1-dipole-torque": "A permanent dipole at 40 degrees to a horizontal field. Green horizontal arrow labelled E at top left pointing right. Dipole axis from lower-left blue filled circle labelled -q to upper-right red filled circle labelled +q. Purple arrow along the axis toward +q labelled p. Small arc between horizontal and the dipole labelled theta. Orange arrow labelled F+ leaving +q to the right; orange arrow labelled F- leaving -q to the left. Bottom text: Net force zero; torque turns p toward E.",
+"s1-energy-graph": "Graph with x-axis labelled theta from 0 to 180 degrees (ticks 0, 90 degrees, 180 degrees) and y-axis labelled U. Y-axis ticks labelled minus pE at bottom and plus pE at top. A purple curve rising from a dot at the lower left to the upper right (U = -pE cos theta), dashed grey horizontal zero line at mid height. Label near the top left: U = -pE cos theta.",
+"s1-nonuniform": "A short horizontal dipole: blue hollow circle labelled -q on the left, red filled circle labelled +q on the right. Above: two green arrows pointing right, the right one longer labelled E+, the left one shorter labelled E-. Below: two orange arrows pointing right, the right one longer labelled F+, the left one shorter labelled F-. Bottom text: E+ > E-, so F+ > F-: net force to the right.",
+"s1-polarized-block": "A light blue rectangular block containing a 5 by 3 grid of short purple arrows, all pointing right. Green arrow above the block pointing right, labelled E. Below the block, amber text: P = N p, and beneath it smaller text: dipoles per unit volume times dipole moment.",
+"s2-dipole-sum": "Geometry of a dipole sum. At lower left, a short purple arrow labelled P dtau-prime (source element). At upper right, a black dot labelled r (field point). A green straight vector from the source to the field point labelled R with a hat (unit vector R-hat) near its midpoint. A small origin cross at lower left corner labelled origin. A dashed horizontal guide from the source, with a small arc labelled theta between the guide and the green vector. Bottom caption: V = (1/4 pi epsilon-0) integral of P dot R-hat over R squared, d tau-prime.",
+"s2-derivation-flow": "Flowchart with six rounded boxes in two rows of three, connected by black arrows. Row 1 left to right: 'Eq. 4.9: dipole sum' (light blue), 'gradient-prime of 1/R = R-hat / R squared' (light orange), 'Integrate by parts' (light orange). Arrow down from the last box of row 1 to the first box of row 2 (bend it). Row 2 left to right: 'Divergence theorem' (light orange), 'Eq. 4.10: surface + volume terms' (light blue), 'Eq. 4.13: sigma-b and rho-b' (light green with dark green outline). Below the row, two amber lines: sigma-b = P dot n-hat on the surface; rho-b = minus div P in the volume.",
+"s2-pillbox-divergence": "A dashed rectangular box as a small volume element. Several short amber arrows pointing INTO the box through its left face, and several longer amber arrows pointing OUT of the box through its right face. Labels above: P in (left) and P out (right). Blue minus sign centered inside the box. Caption below: integral of P dot da greater than 0, so rho-b = minus div P less than 0 inside.",
+"s2-dipole-chain": "A horizontal chain of six small dipoles, each a blue dot next to a red dot, with interior neighbouring charges touching and marked by small dotted grey circles. At the left end one unpaired blue minus charge; at the right end one unpaired red plus charge. Under each end label 'bound charge'. A long amber arrow above the chain pointing right, labelled P. Caption at bottom: Interior charges cancel; only the end charges remain.",
+"s2-oblique-tube": "A tube drawn as a parallelogram with light blue fill. Left end has a vertical dimension line labelled A (cross-section). Inside, an amber arrow labelled P pointing right along the tube. The right end is slanted; a short amber outward normal arrow labelled n-hat at its midpoint; a small arc labelled theta between P and the normal. Three small red plus signs along the slanted end. Caption below: A_end = A / cos theta, sigma-b = P cos theta = P dot n-hat.",
+"s2-sphere-field": "A uniformly polarized sphere with light orange fill and brown outline. Inside: a thick amber arrow labelled P pointing right, and three green arrows pointing LEFT (opposite to P) labelled E inside = minus P over 3 epsilon-0. Top of the sphere: red label +sigma-b. Bottom of the sphere: blue label minus sigma-b. Outside the sphere, green dipole-like field lines curving from the top pole around to the bottom pole on both sides.",
+"s2-averaging-sphere": "A dashed grey circle with a faint light blue fill (averaging sphere). A small black dot at the centre labelled r. Inside the circle, four small purple dipole arrows around the centre. Outside the circle, two red plus circles and two blue minus circles. Bottom caption: E = E-out + E-in, with E in green: outside charges and inside dipoles.",
+}
+if __name__ == "__main__":
+  out = sys.argv[1:] or list(BRIEFS)
+  for name in out:
+      target = f"{name}.png"
+      if os.path.exists(target):
+          print("skip", name, flush=True); continue
+      prompt = (f"Use your image generation tool to create ONE image and save it in this folder as {target}. "
+                f"Do not write any other files. Style: {STYLE} Image brief: {BRIEFS[name]} "
+                f"After saving, reply with the file name and whether it was generated.")
+      subprocess.run(["codex","exec","--sandbox","workspace-write","--skip-git-repo-check","-C",os.getcwd(),prompt],
+                     stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, timeout=900)
+      ok = os.path.exists(target)
+      print(("OK " if ok else "MISSING ") + name, flush=True)
+  print("RUN_DONE", flush=True)

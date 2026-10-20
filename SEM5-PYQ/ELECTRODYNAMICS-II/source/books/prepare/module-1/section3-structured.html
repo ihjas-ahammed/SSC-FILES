@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Electric displacement (Griffiths 4.3): structured notes</title>
+<script>
+window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+  @page { size: A4; margin: 16mm; }
+  :root { --ink:#1B2631; --muted:#5D6D7E; --rule:#AEB6BF; --paper:#FFFFFF; --bound:#B9770E; --res:#117A65; --eq:#1F618D; --idb:#A04000; --hi:#FDF2E9; }
+  body { margin:0; background:var(--paper); color:var(--ink); font-family:"Times New Roman", Times, "Liberation Serif", serif; font-size:12.5pt; line-height:1.5; }
+  main { max-width:760px; margin:0 auto; padding:14px; }
+  h1 { font-size:20pt; margin:0 0 4px; color:var(--eq); }
+  .meta { color:var(--muted); font-size:10.5pt; margin-bottom:10px; }
+  h2 { font-size:14pt; margin:22px 0 6px; color:var(--eq); border-bottom:2px solid var(--eq); padding-bottom:2px; break-after:avoid; }
+  h3 { font-size:12.5pt; margin:14px 0 4px; color:var(--res); break-after:avoid; }
+  p, li { margin:5px 0; }
+  ul { margin:4px 0 4px 22px; padding:0; }
+  .eq { margin:8px 0; text-align:center; }
+  .box-eq { background:#EAF2F8; border-left:4px solid var(--eq); padding:6px 10px; margin:8px 0; }
+  .box-res { background:#E9F7EF; border-left:4px solid var(--res); padding:6px 10px; margin:8px 0; }
+  .box-id { background:var(--hi); border-left:4px solid var(--idb); padding:6px 10px; margin:8px 0; }
+  .lbl { font-weight:bold; font-size:10.5pt; text-transform:uppercase; letter-spacing:.3px; }
+  .lbl.res { color:var(--res); } .lbl.eq { color:var(--eq); } .lbl.id { color:var(--idb); }
+  .note { font-size:11.5pt; color:var(--muted); margin:4px 0; }
+  .bg { font-size:10.5pt; color:var(--muted); font-style:italic; }
+  .bound { color:var(--bound); font-weight:bold; }
+  .fig { margin:12px 0; text-align:center; break-inside:avoid; }
+  .fig svg { display:block; width:100%; max-width:320px; height:auto; margin:0 auto; }
+  .fig figcaption { font-size:10.5pt; color:var(--muted); font-style:italic; margin-top:3px; }
+  @media print { .keep { break-inside: avoid; } }
+
+  .eq { margin:8px 0; text-align:center; }
+  .result { background:#E9F7EF; border-left:4px solid var(--res); padding:6px 10px; margin:8px 0; }
+  .fig { margin:12px 0; text-align:center; break-inside:avoid; }
+  .fig svg { display:block; width:100%; max-width:300px; height:auto; margin:0 auto; }
+  .fig figcaption { font-size:10.5pt; color:var(--muted); font-style:italic; margin-top:3px; }
+  .bg { font-size:10.5pt; color:var(--muted); font-style:italic; }
+</style>
+</head>
+<body>
+<main>
+<h1>The electric displacement (Griffiths §4.3): structured notes</h1>
+<div class="meta">Griffiths, <i>Introduction to Electrodynamics</i> (5th ed.), pp. 181–186. Covers §4.3.1 and §4.3.3 (syllabus), with §4.3.2 and §4.3.4 as background. Equation numbers match the book. Figures are placeholder sketches for now.</div>
+
+<h2>Before you start</h2>
+<ul>
+<li>Gauss's law in differential form: $\nabla\cdot\mathbf E = \rho/\epsilon_0$ (Section 2).</li>
+<li>Bound charges from §4.2: $\rho_b = -\nabla\cdot\mathbf P$ and $\sigma_b = \mathbf P\cdot\hat{\mathbf n}$ (Eqs. 4.11, 4.12).</li>
+<li>Electrostatic fields have zero curl, $\nabla\times\mathbf E = 0$ (Section 2).</li>
+<li>Maths: divergence, curl, the divergence theorem, Stokes' theorem.</li>
+</ul>
+
+<h2>1. Free and bound charge</h2>
+<ul>
+<li><b>Free charge</b> $\rho_f$: electrons on a conductor, ions in the material, or any charge not associated with $\mathbf P$.</li>
+<li><b>Bound charge</b> $\rho_b$: the charge produced by polarization (§4.2).</li>
+<li>Total charge density inside a dielectric:</li>
+</ul>
+<div class="eq">$$\rho = \rho_b + \rho_f \quad(4.20)$$</div>
+
+<h2>2. Derivation of the electric displacement (§4.3.1)</h2>
+
+<h3>2.1 Gauss's law with both kinds of charge</h3>
+<div class="eq">$$\epsilon_0\nabla\cdot\mathbf E = \rho = \rho_b + \rho_f = -\nabla\cdot\mathbf P + \rho_f$$</div>
+<ul>
+<li>Here $\mathbf E$ is the total field, not only the part due to polarization.</li>
+</ul>
+
+<h3>2.2 Combine the divergences</h3>
+<div class="eq">$$\nabla\cdot(\epsilon_0\mathbf E + \mathbf P) = \rho_f$$</div>
+<div class="result"><span class="lbl res">Definition</span><br>$\mathbf D \equiv \epsilon_0\mathbf E + \mathbf P \quad(4.21)$, the <b>electric displacement</b>.</div>
+<div class="result"><span class="lbl res">Result</span><br>$\nabla\cdot\mathbf D = \rho_f \quad(4.22)$, and in integral form $\oint\mathbf D\cdot d\mathbf a = Q_{f,\text{enc}} \quad(4.23)$.</div>
+
+<h3>2.3 Why this form is useful</h3>
+<ul>
+<li>Equation 4.23 uses only the free charge, which is the quantity we control.</li>
+<li>Bound charge follows automatically once the free charge is in place, through the polarization it causes.</li>
+<li>In a typical problem $\rho_f$ is known and $\rho_b$ is not. Eq. 4.23 lets us start from what is known.</li>
+<li>Whenever the symmetry allows (spherical, cylindrical or plane), $\mathbf D$ follows directly from the usual Gauss's law method.</li>
+</ul>
+
+<h3>2.4 Surface bound charge</h3>
+<ul>
+<li>Gauss's law in differential form cannot be applied exactly at the surface, because $\rho_b$ is infinite there (the polarization drops abruptly to zero). This is the surface term $\sigma_b$ (footnote 7).</li>
+<li>If the edge is given a thin transition zone where $\mathbf P$ tapers to zero, $\rho_b$ is large but finite, and Gauss's law holds everywhere. The integral form (4.23) avoids the issue altogether.</li>
+</ul>
+
+<h2>3. Worked example: wire with rubber insulation (Example 4.4)</h2>
+<ul>
+<li>Uniform line charge $\lambda$ on a long wire, surrounded by insulation out to radius $a$.</li>
+<li>Gaussian cylinder of radius $s$ and length $L$. By symmetry $\mathbf D$ is radial and constant on the surface. The free charge inside is $\lambda L$.</li>
+</ul>
+<div class="eq">$$D\,(2\pi s L) = \lambda L$$</div>
+<div class="result"><span class="lbl res">Result</span><br>$\mathbf D = \dfrac{\lambda}{2\pi s}\,\hat{\mathbf s}$ (4.24), valid both inside and outside the insulation.</div>
+<ul>
+<li>Outside ($s > a$): $\mathbf P = 0$, so $\mathbf E = \mathbf D/\epsilon_0 = \dfrac{\lambda}{2\pi\epsilon_0 s}\hat{\mathbf s}$.</li>
+<li>Inside: $\mathbf E$ cannot be found from $\mathbf D$ alone, because $\mathbf P$ is not yet known. This needs the material's response, given in §4.4.</li>
+</ul>
+<figure class="fig">
+<svg viewBox="0 0 260 170" role="img" aria-label="Placeholder sketch: wire with insulation and cylindrical Gaussian surface">
+  <circle cx="130" cy="85" r="60" fill="#FDF2E9" stroke="#A04000" stroke-width="1.4"/>
+  <circle cx="130" cy="85" r="10" fill="#C0392B"/>
+  <circle cx="130" cy="85" r="40" fill="none" stroke="#7F8C8D" stroke-dasharray="4 3"/>
+  <text x="130" y="165" font-size="12" text-anchor="middle" font-family="Liberation Serif, serif">Placeholder: wire, insulation, Gaussian cylinder</text>
+</svg>
+<figcaption>Figure 1. Placeholder sketch for Example 4.4. To be replaced by the Codex version.</figcaption>
+</figure>
+
+<h2>4. Method: finding D and then E</h2>
+<ol>
+<li>List the free charges only.</li>
+<li>Check the symmetry. If it is spherical, cylindrical or planar, continue; otherwise do not assume $\mathbf D$ is set by free charge alone (§5).</li>
+<li>Choose a Gaussian surface matching the symmetry and apply Eq. 4.23.</li>
+<li>Find $\mathbf E$ from $\mathbf E = (\mathbf D - \mathbf P)/\epsilon_0$ (Eq. 4.21) once $\mathbf P$ is known.</li>
+</ol>
+
+<h2>5. Pitfalls (§4.3.2: beyond syllabus)</h2>
+<ul>
+<li>Eq. 4.22 looks like Gauss's law with $\rho_f$ in place of $\rho$, so it is tempting to say "$\mathbf D$ is just $\mathbf E$ with free charge as the source". This is false: there is no Coulomb's law for $\mathbf D$.</li>
+<li>A divergence alone does not fix a vector field; the curl is needed too.</li>
+<li>The curl of $\mathbf D$ is not zero in general:</li>
+</ul>
+<div class="eq">$$\nabla\times\mathbf D = \epsilon_0(\nabla\times\mathbf E) + \nabla\times\mathbf P = \nabla\times\mathbf P \quad(4.25)$$</div>
+<ul>
+<li>So $\mathbf D$ cannot be written as the gradient of a scalar: there is no potential for $\mathbf D$.</li>
+<li>Example: a bar electret with no free charge. If $\mathbf D$ were set by free charge alone, $\mathbf D = 0$ everywhere and $\mathbf E = -\mathbf P/\epsilon_0$ inside. That is wrong, so the curl term must be kept.</li>
+<li>Advice from the book: use symmetry first. With symmetry, $\nabla\times\mathbf P$ is automatically zero, so Gauss's law gives $\mathbf D$ directly.</li>
+</ul>
+
+<h2>6. Boundary conditions (§4.3.3: in syllabus)</h2>
+<h3>6.1 Normal component of D</h3>
+<ul>
+<li>Pillbox across the interface, with area $A$, height tending to zero. Only the two flat faces contribute to $\oint\mathbf D\cdot d\mathbf a$.</li>
+<li>Free charge on the interface $\sigma_f A$ is enclosed, so</li>
+</ul>
+<div class="result"><span class="lbl res">Result</span><br>$D^\perp_\text{above} - D^\perp_\text{below} = \sigma_f \quad(4.26)$</div>
+<h3>6.2 Tangential component of D</h3>
+<ul>
+<li>Take a thin rectangular loop across the interface and apply Stokes' theorem to Eq. 4.25. The field $\nabla\times\mathbf P$ is integrated over the loop's area, which shrinks to zero, but $\mathbf P$ itself is finite. The loop integral of $\mathbf P$ gives the tangential difference times the loop length.</li>
+</ul>
+<div class="result"><span class="lbl res">Result</span><br>$\mathbf D^\parallel_\text{above} - \mathbf D^\parallel_\text{below} = \mathbf P^\parallel_\text{above} - \mathbf P^\parallel_\text{below} \quad(4.27)$</div>
+<h3>6.3 Boundary conditions on E</h3>
+<ul>
+<li>Written in terms of total charge, the normal and tangential conditions on $\mathbf E$ are (Eqs. 2.31, 2.32):</li>
+</ul>
+<div class="eq">$$E^\perp_\text{above} - E^\perp_\text{below} = \frac{\sigma}{\epsilon_0} \quad(4.28)$$</div>
+<div class="eq">$$\mathbf E^\parallel_\text{above} - \mathbf E^\parallel_\text{below} = 0 \quad(4.29)$$</div>
+<ul>
+<li>Use (4.26)–(4.27) when $\mathbf P$ is known and free charge is the given data. Use (4.28)–(4.29) for the field directly. Probs. 4.16 and 4.17 are suggested.</li>
+</ul>
+
+<h2>7. Ionic crystals: the ambiguity (§4.3.4: background)</h2>
+<ul>
+<li>In a salt crystal, Na⁺ and Cl⁻ can be paired into dipoles in several ways. Each choice gives a different $\mathbf P$ (up, down, left, right), and a different split of charge into free and bound parts.</li>
+<li>So the separation into $\mathbf P$, free charge and bound charge is not uniquely defined for crystals.</li>
+<li>What is physical is the total charge density, which is zero in the salt crystal, and changes in $\mathbf P$ when a field is switched on.</li>
+</ul>
+
+<h2>8. What you should be able to do</h2>
+<ul>
+<li>Derive Eq. 4.22 from Gauss's law with $\rho = \rho_b + \rho_f$.</li>
+<li>Find $\mathbf D$ for a symmetric free charge distribution using Eq. 4.23 (Example 4.4).</li>
+<li>State and derive Eqs. 4.26 and 4.27 with a pillbox and a thin loop.</li>
+<li>Explain why $\mathbf D$ cannot be found from free charge alone when $\nabla\times\mathbf P \neq 0$.</li>
+</ul>
+
+<h2>9. Problems in the excerpt (not solved here)</h2>
+<ul>
+<li>Prob. 4.15: thick spherical shell with $\mathbf P = (k/r)\hat{\mathbf r}$. Find E in three regions by two methods.</li>
+<li>Prob. 4.16: field at the centre of spherical, needle and wafer cavities in a polarized dielectric.</li>
+<li>Prob. 4.17: sketches of P, E and D for the bar electret (Prob. 4.11), with $L \approx 2a$.</li>
+</ul>
+
+<h2>10. Open points</h2>
+<ul>
+<li>Sign convention of the normal in Eqs. 4.26 and 4.28 to be checked against Section 2.3.5.</li>
+<li>Footnote 7 (delta-function derivative) is stated, not derived here.</li>
+<li>The book figures 4.17–4.22 are not reproduced; the diagrams here are our own.</li>
+<li>Section 4.4 (linear dielectrics, $\mathbf P = \epsilon_0\chi_e\mathbf E$) is the next section, not included here.</li>
+</ul>
+</main>
+</body>
+</html>

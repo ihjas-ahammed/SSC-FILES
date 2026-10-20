@@ -1,0 +1,203 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{amsthm}     % theorem environments and proof
+\usepackage{tikz}       % drawing figures without external image files
+\linespread{1.15}       % slightly more space between lines
+
+% ---------------------------------------------------------------
+% MODULE IV - Theorems, Figures, Cross References, Presentation
+% Syllabus units 12-19 (Text 1 Tutorials IX-XIII; Text 2 Ch. 12).
+% Compile twice with pdflatex (for \ref, \listoffigures).
+% hyperref is loaded last among the packages, as recommended.
+% ---------------------------------------------------------------
+
+% --- theorem environments (amsthm) ---
+\theoremstyle{plain}                         % bold heading, italic text
+\newtheorem{theorem}{Theorem}[section]       % numbered within sections
+\newtheorem{lemma}[theorem]{Lemma}           % shares the theorem counter
+\theoremstyle{definition}                    % bold heading, upright text
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}                        % italic heading, upright text
+\newtheorem{remark}[theorem]{Remark}
+
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref}   % load last
+
+\title{Module IV: Theorems, Figures, Cross References and Presentation}
+\author{Study Notes -- MAT5FS112}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This note covers the AMS theorem package, boxes, floating figures,
+cross references, footnotes and the layout conventions of a
+presentable document. Each example compiles as it stands.
+\end{abstract}
+
+\tableofcontents
+\listoffigures
+\newpage
+
+% ===============================================================
+\section{Theorems with \texttt{amsthm}}
+\label{sec:theorems}
+% ===============================================================
+
+\subsection{Defining and using a theorem}
+
+The preamble defines environments with \verb|\newtheorem{name}{Title}|.
+In the body the environment is used like any other:
+
+\begin{theorem}[Pythagoras]\label{thm:pyth}
+In a right-angled triangle with legs $a, b$ and hypotenuse $c$,
+$a^2 + b^2 = c^2$.
+\end{theorem}
+
+\begin{lemma}
+Every theorem in the same counter as Theorem~\ref{thm:pyth} is numbered
+in sequence with it.
+\end{lemma}
+
+\begin{definition}
+A triangle is \emph{right-angled} if one of its angles equals $90^\circ$.
+\end{definition}
+
+\begin{remark}
+The theorem numbers include the section number because of the optional
+argument \texttt{[section]} in \verb|\newtheorem|.
+\end{remark}
+
+\begin{proof}
+Let the right angle be at $C$. Place a square of side $a+b$ around the
+triangle; comparing areas gives the result. \qedhere
+\end{proof}
+
+\subsection{Choosing a theorem style}
+
+\begin{verbatim}
+\theoremstyle{plain}        % theorem, lemma, proposition, corollary
+\theoremstyle{definition}   % definition, example, exercise
+\theoremstyle{remark}       % remark, note, notation
+\end{verbatim}
+
+% ===============================================================
+\section{Boxes}
+% ===============================================================
+
+\verb|\fbox| draws a frame around its contents. \verb|\framebox| takes
+an optional width and alignment. \verb|\makebox| sets a fixed width
+without a frame. \verb|\parbox| makes a fixed-width paragraph in a line.
+
+\noindent
+\fbox{Boxed text}\quad
+\framebox[4cm][c]{Centred in 4\,cm}\quad
+\makebox[3cm][r]{Right in 3\,cm}\\[1em]
+\fbox{\parbox{0.7\textwidth}{A framed paragraph. The \texttt{parbox}
+lets the text wrap inside a box of fixed width, for key results or
+warnings.}}
+
+% ===============================================================
+\section{Floating figures}
+% ===============================================================
+
+A figure environment places the picture at a suitable location and
+numbers it. Here the picture is drawn with TikZ so that the example
+needs no image file. With an external picture, use
+\verb|\includegraphics[width=0.6\textwidth]{file.png}| (\texttt{graphicx}).
+
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[scale=1.2]
+    \draw[->] (-0.3,0) -- (3.3,0) node[right] {$x$};
+    \draw[->] (0,-0.3) -- (0,2.6) node[above] {$y$};
+    \draw[thick, blue] (0,0) .. controls (1,2.2) and (2,2.2) .. (3,0.4);
+    \draw[dashed] (0,0) -- (3,0.4);
+    \node[below right] at (3,0.4) {end};
+  \end{tikzpicture}
+  \caption{A curve from the origin, with its chord drawn dashed.}
+  \label{fig:curve}
+\end{figure}
+
+Figure~\ref{fig:curve} shows the curve. The caption sits below the
+figure; \verb|\caption| before \verb|\label| is required so that the
+reference shows the figure number.
+
+% ===============================================================
+\section{Cross references}
+% ===============================================================
+
+\subsection{Labels and the three reference commands}
+
+A label is placed right after the item it names, inside its
+environment or heading. Then:
+\begin{itemize}
+  \item \verb|\ref{label}| gives the number: Section~\ref{sec:theorems}.
+  \item \verb|\pageref{label}| gives the page: page~\pageref{sec:theorems}.
+  \item \verb|\eqref{label}| gives the equation number in brackets (for
+    equations): \eqref{eq:mass}.
+\end{itemize}
+
+\begin{equation}\label{eq:mass}
+  F = ma
+\end{equation}
+
+\subsection{Smart references with \texttt{hyperref}}
+
+With \texttt{hyperref} loaded, \verb|\autoref{label}| writes the word
+for you and makes the reference a clickable link: see
+\autoref{fig:curve} and \autoref{thm:pyth}.
+
+\subsection{Rules for labels}
+
+\begin{itemize}
+  \item Labels are case-sensitive and must be unique in the document.
+  \item Prefixes such as \texttt{sec:}, \texttt{fig:}, \texttt{tab:},
+    \texttt{eq:}, \texttt{thm:} keep them readable.
+  \item After adding or moving a label, compile again (twice in total)
+    so that the references are updated.
+\end{itemize}
+
+% ===============================================================
+\section{Footnotes}
+% ===============================================================
+
+A footnote is written with \verb|\footnote{...}|, which numbers it
+and places the text at the bottom of the page.%
+\footnote{The footnote is typeset at the bottom of the page where it
+appears, not at the end of the document.}
+Inside a table or a \texttt{minipage}, use \verb|\footnotemark| in the
+text and \verb|\footnotetext| after the table.
+
+% ===============================================================
+\section{Presentation conventions}
+% ===============================================================
+
+\subsection{Front matter and back matter}
+
+A presentable document has, in order: a title block, an abstract, a
+table of contents, lists of figures and tables, the body, and then
+references and appendices. The sectioning commands fill the body:
+\verb|\appendix| changes the later sections to letters.
+
+\subsection{Spacing and emphasis}
+
+\begin{itemize}
+  \item Put one blank line between paragraphs; do not use \verb|\\| for
+    that purpose.
+  \item Use \verb|\emph| for the first use of a term and
+    \verb|\textbf| sparingly.
+  \item Keep display maths and figures close to the text that discusses
+    them.
+\end{itemize}
+
+\appendix
+\section{A short appendix}
+
+Appendix sections are labelled A, B, \ldots. Here the theorem counter
+continues to use the section number from the body, as
+Theorem~\ref{thm:pyth} shows.
+
+\end{document}

@@ -1,0 +1,273 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{fancyhdr}   % headers and footers
+\usepackage{booktabs}   % professional table rules
+\usepackage{array}      % extra column types (m{}, b{})
+
+% ---------------------------------------------------------------
+% MODULE II - Styling Pages
+% Syllabus units 5-7 (Text 1, Tutorial VI and VII).
+% Compiles with a single run of pdflatex.
+% ---------------------------------------------------------------
+
+\pagestyle{fancy}
+\fancyhf{}                                  % clear default header/footer
+\fancyhead[L]{MAT5FS112 -- Module II}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\title{Module II: Styling Pages}
+\author{Study Notes -- MAT5FS112}
+\date{}
+
+\begin{document}
+\maketitle
+
+% ===============================================================
+\section{Fonts and text styling}
+% ===============================================================
+
+Font commands change the look of a piece of text:
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Command & Result \\
+\midrule
+\verb|\textbf{bold}| & \textbf{bold} \\
+\verb|\textit{italic}| & \textit{italic} \\
+\verb|\emph{emphasis}| & \emph{emphasis} (italic inside italic text becomes upright) \\
+\verb|\texttt{typewriter}| & \texttt{typewriter} \\
+\verb|\textsf{sans serif}| & \textsf{sans serif} \\
+\verb|\textsc{small caps}| & \textsc{small caps} \\
+\verb|\underline{underlined}| & \underline{underlined} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Use \verb|\emph| for meaning and \verb|\textit| for pure styling.
+Commands can be combined: \verb|\textbf{\textit{both}}|.
+
+\subsection{Font size}
+
+Sizes are set with declarations. A declaration applies until the end of
+the enclosing group (a pair of braces or an environment):
+\begin{verbatim}
+{\small This is small text.}
+{\Large This is large text.}
+\end{verbatim}
+
+Sizes, from small to large: \verb|\tiny|, \verb|\scriptsize|,
+\verb|\footnotesize|, \verb|\small|, \verb|\normalsize|, \verb|\large|,
+\verb|\Large|, \verb|\LARGE|, \verb|\huge|, \verb|\Huge|.
+
+{\small This is small text.} \quad {\Large This is large text.}
+
+% ===============================================================
+\section{Spacing and page layout}
+% ===============================================================
+
+\subsection{Paragraph spacing}
+
+\begin{verbatim}
+\setlength{\parindent}{0pt}     % no indent at the start of paragraphs
+\setlength{\parskip}{0.6em}     % vertical gap between paragraphs
+\noindent                       % suppress indent for one paragraph
+\end{verbatim}
+
+\subsection{Manual spacing}
+
+\verb|\vspace{1cm}| adds vertical space and \verb|\hspace{2cm}| adds
+horizontal space. \verb|\\| forces a line break and \verb|\newpage|
+forces a page break.
+
+\subsection{Margins}
+
+The \texttt{geometry} package sets margins in one line, as in this file:
+\begin{verbatim}
+\usepackage[margin=2.5cm]{geometry}
+\end{verbatim}
+
+\subsection{Headers, footers and page numbers}
+
+The \texttt{fancyhdr} package gives control over the running header
+and footer, with \verb|L|, \verb|C| and \verb|R| positions. This
+document uses:
+\begin{verbatim}
+\pagestyle{fancy}
+\fancyhf{}                          % clear everything first
+\fancyhead[L]{Left text}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\end{verbatim}
+
+Page numbering style: \verb|\pagenumbering{roman}| (i, ii, iii\ldots)
+or \verb|\pagenumbering{arabic}|. \verb|\thispagestyle{empty}| removes
+the header from one page.
+
+% ===============================================================
+\section{Displayed text}
+% ===============================================================
+
+Environments display blocks of text with a specific alignment or style.
+
+\subsection{Alignment}
+
+\begin{center}
+Centred text.
+\end{center}
+
+\begin{flushleft}
+Left-aligned (ragged right) text.
+\end{flushleft}
+
+\begin{flushright}
+Right-aligned text.
+\end{flushright}
+
+\subsection{Quotations and verse}
+
+\begin{quote}
+A quotation: a paragraph set with extra margin on both sides.
+\end{quote}
+
+\begin{quotation}
+The \texttt{quotation} environment is similar, but it indents the
+first line of each paragraph inside it.
+\end{quotation}
+
+\begin{verse}
+Verse keeps each line break you type\\
+and centres nothing else on the page.
+\end{verse}
+
+\subsection{Side-by-side blocks with minipage}
+
+\noindent
+\begin{minipage}[t]{0.45\textwidth}
+  Left column. A \texttt{minipage} is a box of fixed width that
+  holds text. Its contents are wrapped inside the box.
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.45\textwidth}
+  Right column. Two minipages placed one after the other with
+  \verb|\hfill| between them sit side by side.
+\end{minipage}
+
+\subsection{Verbatim text}
+
+\begin{verbatim}
+This text is printed exactly as typed:  $x^2$ and \textbf{stay raw}.
+\end{verbatim}
+
+% ===============================================================
+\section{Rows and columns: tabular}
+% ===============================================================
+
+The \texttt{tabular} environment sets rows and columns. The argument
+gives one letter per column: \texttt{l} (left), \texttt{c} (centre),
+\texttt{r} (right), and \texttt{p\{width\}} (wrapped paragraph of
+given width). Cells are separated by \verb|&| and rows end with
+\verb|\\|.
+
+\begin{verbatim}
+\begin{tabular}{lcr}
+Item   & Mark & Grade \\
+\hline
+Algebra & 18  & A     \\
+Real    & 14  & B     \\
+\end{tabular}
+\end{verbatim}
+
+\begin{tabular}{lcr}
+Item    & Mark & Grade \\
+\hline
+Algebra & 18   & A     \\
+Real    & 14   & B     \\
+\end{tabular}
+
+\subsection{Rules: \texttt{\textbackslash hline} and \texttt{\textbackslash cline}}
+
+\verb|\hline| draws a full-width horizontal line. \verb|\cline{2-3}|
+draws a line only under columns 2 to 3. Vertical lines come from
+\texttt{|} in the column specification.
+
+\begin{tabular}{|l|c|c|}
+\hline
+Name & Physics & Maths \\
+\cline{2-3}
+Asha & 80      & 75    \\
+\hline
+\end{tabular}
+
+\subsection{Spanning columns: \texttt{\textbackslash multicolumn}}
+
+\begin{tabular}{|l|c|c|}
+\hline
+\multicolumn{3}{|c|}{Semester V marks} \\
+\hline
+Name & Physics & Maths \\
+\hline
+Asha & 80      & 75    \\
+\hline
+\end{tabular}
+
+\subsection{Professional tables with \texttt{booktabs}}
+
+The \texttt{booktabs} package uses \verb|\toprule|, \verb|\midrule|,
+\verb|\bottomrule| and avoids vertical lines, which gives cleaner
+results. \verb|\cmidrule{2-3}| draws a partial rule.
+
+\begin{tabular}{l r r}
+\toprule
+Module & Units & Min.\ marks \\
+\midrule
+I   & 4 & 10 \\
+II  & 3 & 10 \\
+III & 4 & 10 \\
+\bottomrule
+\end{tabular}
+
+\subsection{Fixed-width columns with \texttt{p\{\}}}
+
+Use \texttt{p\{width\}} when a cell has a paragraph of text. The
+\texttt{array} package adds \texttt{m\{width\}} (vertically centred)
+and \texttt{b\{width\}} (bottom aligned).
+
+\begin{tabular}{p{3.5cm} p{8cm}}
+\toprule
+Command & Purpose \\
+\midrule
+\verb|\hline| & Draws a full horizontal rule across the table. \\
+\verb|\multicolumn| & Merges several cells in a row into one. \\
+\bottomrule
+\end{tabular}
+
+% ===============================================================
+\section{Tables as floating objects}
+% ===============================================================
+
+A table placed in a \texttt{table} environment floats: LaTeX moves
+it to a suitable place and numbers it. The caption and the label let
+the text refer to it.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Marks awarded in the LaTeX internal examination}
+  \label{tab:marks}
+  \begin{tabular}{lcc}
+    \toprule
+    Student & Assignment & Viva \\
+    \midrule
+    Student A & 9 & 8 \\
+    Student B & 7 & 9 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+As Table~\ref{tab:marks} shows, the marks are recorded in two parts.
+The placement specifier \texttt{[htbp]} means: here, top, bottom,
+or on its own page. Note the \verb|~| before \verb|\ref|: it is a
+non-breaking space that keeps ``Table'' and the number together.
+
+\end{document}

@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Structured notes: Abstract Algebra I, Module 2</title>
+<script>
+window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+@page { size: A4; margin: 15mm 15mm; }
+:root { --ink:#1B2631; --muted:#5D6D7E; --rule:#AEB6BF; --eq:#1F618D; --res:#117A65; --recall:#8A6D1A; --idb:#A04000; }
+body { margin:0; color:var(--ink); font-family:"Times New Roman", Times, "Liberation Serif", serif; font-size:11pt; line-height:1.42; }
+main { width:100%; }
+h1 { font-size:17pt; margin:0 0 3px; color:var(--eq); }
+.meta { color:var(--muted); font-size:9.5pt; margin-bottom:8px; border-bottom:1px solid var(--rule); padding-bottom:5px; }
+.sec-body { column-count:2; column-gap:16px; column-rule:0.5px solid var(--rule); }
+h2 { font-size:12.5pt; margin:12px 0 4px; color:var(--eq); border-bottom:1.5px solid var(--eq); padding-bottom:1px; break-after:avoid; column-span:none; }
+h3 { font-size:10.8pt; margin:8px 0 2px; color:var(--res); break-after:avoid; }
+p, li { margin:3px 0; }
+ul, ol { margin:3px 0 3px 18px; padding:0; }
+.eq { margin:5px 0; text-align:center; break-inside:avoid; font-size:10.5pt; }
+.box-eq { background:#EAF2F8; border-left:3px solid var(--eq); padding:4px 7px; margin:5px 0; break-inside:avoid; }
+.box-res { background:#E9F7EF; border-left:3px solid var(--res); padding:4px 7px; margin:5px 0; break-inside:avoid; }
+.box-recall { background:#FDF6E3; border-left:3px solid var(--recall); padding:4px 7px; margin:6px 0; break-inside:avoid; font-size:10.2pt; }
+.lbl { font-weight:bold; font-size:9.6pt; text-transform:uppercase; letter-spacing:.3px; }
+.lbl.eq { color:var(--eq); } .lbl.res { color:var(--res); }
+.box-recall .lbl { color:var(--recall); }
+table.tbl { border-collapse:collapse; margin:5px auto; font-size:10pt; break-inside:avoid; }
+table.tbl td, table.tbl th { border:1px solid var(--rule); padding:2px 7px; text-align:center; }
+table.tbl caption { font-size:9.5pt; color:var(--muted); caption-side:top; margin-bottom:2px; }
+.note { font-size:9.5pt; color:var(--muted); }
+.sec-title-full { column-span:all; font-size:14pt; font-weight:bold; color:var(--eq); border-bottom:2px solid var(--eq); margin:14px 0 6px; break-after:avoid; }
+.sec-sub { column-span:all; font-size:10pt; color:var(--muted); font-style:italic; margin:0 0 4px; }
+
+.keep { break-inside: avoid; }
+</style>
+</head>
+<body>
+<main>
+<h1>Structured notes: Abstract Algebra I, Module 2</h1>
+<div class="meta">Fraleigh, <i>A First Course in Abstract Algebra</i> (8th ed.), Module 2 (sections 5, 6 and 8 to 8.18). The syllabus names the 7th edition; items are matched by content. Numbers are the book&rsquo;s own. Formal version of the same content, with numbered results and the same order of items. Exercises: only the exercises the text names are reproduced, each directly after the item that names it. Figures are described with their labels; not redrawn. Item 8.19 onward is Module III and is not in these notes.</div>
+<div class="sec-body">
+<div class="sec-title-full">Section 5: Subgroups</div><div class="sec-sub">Printed pp. 52&ndash;56 (5.1&ndash;5.26; Tables 5.8, 5.9; Figures 5.10, 5.27)</div>
+<h2>Prerequisites</h2>
+<ul>
+<li>Group axioms and the notation of Section 2 (Definition 2.1).</li>
+<li>The determinant: $\det(AB) = \det(A)\det(B)$; $A$ is invertible if and only if $\det(A) \ne 0$ (used in Example 5.14).</li>
+<li>Complex numbers of modulus $1$ and their powers (Examples 5.5, 5.26).</li>
+</ul>
+
+<h2>1. Subgroups</h2>
+
+<h3>Definition 5.1</h3>
+<div class="box-eq"><span class="lbl eq">Definition 5.1</span> Let $G$ be a group. A subset $H$ of $G$ that is closed under the binary operation of $G$, and that is a group under the induced operation, is a <b>subgroup of $G$</b>. Write $H \le G$; write $H &lt; G$ if $H \le G$ and $H \ne G$.</div>
+<p><b>Remark after Definition 5.1.</b> $\langle \mathbb{Z}, + \rangle &lt; \langle \mathbb{R}, + \rangle$. The set $\mathbb{Q}^+ \subset \mathbb{R}$, but $\langle \mathbb{Q}^+, \cdot \rangle \not\le \langle \mathbb{R}, + \rangle$, because the operation differs.</p>
+<p>Every group $G$ has $G$ and $\{e\}$ as subgroups.</p>
+
+<div class="box-eq"><span class="lbl eq">Definition 5.2</span> The subgroup $G$ is the <b>improper subgroup</b> of $G$; every other subgroup is <b>proper</b>. The subgroup $\{e\}$ is the <b>trivial subgroup</b>; every other subgroup is <b>nontrivial</b>.</div>
+
+<h3>Examples 5.3 to 5.7</h3>
+<p><b>Example 5.3.</b> In the additive group $\mathbb{R}^n$, the set of row vectors with first component $0$ is a subgroup.</p>
+<p><b>Example 5.4.</b> $\langle \mathbb{Q}^+, \cdot \rangle$ is a proper subgroup of $\langle \mathbb{R}^+, \cdot \rangle$.</p>
+<p><b>Example 5.5.</b> $U_n \le U \le \mathbb{C}^*$, where $U_n$ is the set of $n$th roots of unity, $U$ is the set of complex numbers of absolute value $1$, and $\mathbb{C}^*$ is the group of nonzero complex numbers under multiplication.</p>
+<p><b>Example 5.6.</b> $D_n \subseteq S_{\mathbb{Z}_n}$, and both are groups under composition; hence $D_n \le S_{\mathbb{Z}_n}$.</p>
+<p><b>Example 5.7.</b> Up to isomorphism there are two groups of order $4$ (see Exercise 20 of Section 2, reproduced right after this example). They are $\mathbb{Z}_4$ (Table 5.8) and the Klein $4$-group $V$ (Table 5.9). In $\mathbb{Z}_4$ the only nontrivial proper subgroup is $\{0, 2\}$; $\{0, 3\}$ is not a subgroup because it is not closed. In $V$ the nontrivial proper subgroups are $\{e, a\}$, $\{e, b\}$, $\{e, c\}$; $\{e, a, b\}$ is not a subgroup because $ab = c$.</p>
+<div class="box-eq"><span class="lbl eq">Exercise 20, Section 2 (named in Example 5.7)</span> This exercise shows that there are two nonisomorphic group structures on a set of $4$ elements. Let the set be $\{e, a, b, c\}$, with $e$ the identity for the operation. A group table must begin as in Table 2.29 (Module 1 excerpt, printed page 31). The square with the question mark cannot be $a$. It must be $e$, or an element different from $e$ and $a$; without loss of generality take that element to be $b$. If the square is $e$, the table can be completed in two ways to give a group. Find these two tables. (You need not check associativity.) If the square is $b$, the table can be completed in one way. Find that table. (Again, you need not check associativity.) Of the three tables, two give isomorphic groups. Say which two, and give the one-to-one onto relabelling that is an isomorphism.<ol type="a"><li>Are all groups of 4 elements commutative?</li><li>Find a way to relabel the four matrices $\left\{\begin{bmatrix}1&0\\0&1\end{bmatrix}, \begin{bmatrix}0&-1\\1&0\end{bmatrix}, \begin{bmatrix}-1&0\\0&-1\end{bmatrix}, \begin{bmatrix}0&1\\-1&0\end{bmatrix}\right\}$ so that the matrix multiplication table is identical to one you constructed. This shows that the table defines an associative operation.</li><li>Show that for a particular value of $n$, the group elements of Exercise 14 can be relabelled so that their table is identical to one you constructed.</li></ol></div>
+
+
+<div class="tblrow">
+<div><div class="tcap"><b>Table 5.8.</b> $\mathbb{Z}_4$ under $+$</div>
+<table class="tbl"><tr><th>$+$</th><th>0</th><th>1</th><th>2</th><th>3</th></tr>
+<tr><th>0</th><td>0</td><td>1</td><td>2</td><td>3</td></tr>
+<tr><th>1</th><td>1</td><td>2</td><td>3</td><td>0</td></tr>
+<tr><th>2</th><td>2</td><td>3</td><td>0</td><td>1</td></tr>
+<tr><th>3</th><td>3</td><td>0</td><td>1</td><td>2</td></tr></table></div>
+<div><div class="tcap"><b>Table 5.9.</b> The Klein 4-group $V$</div>
+<table class="tbl"><tr><th>$V$</th><th>$e$</th><th>$a$</th><th>$b$</th><th>$c$</th></tr>
+<tr><th>$e$</th><td>$e$</td><td>$a$</td><td>$b$</td><td>$c$</td></tr>
+<tr><th>$a$</th><td>$a$</td><td>$e$</td><td>$c$</td><td>$b$</td></tr>
+<tr><th>$b$</th><td>$b$</td><td>$c$</td><td>$e$</td><td>$a$</td></tr>
+<tr><th>$c$</th><td>$c$</td><td>$b$</td><td>$a$</td><td>$e$</td></tr></table></div>
+</div>
+
+<h3>Subgroup diagrams and two remarks</h3>
+<p>A subgroup diagram places the larger group higher, with a line from $G$ down to $H$ whenever $H \le G$. <b>Figure 5.10.</b> (a) The subgroup diagram of $\mathbb{Z}_4$: $\mathbb{Z}_4 - \{0, 2\} - \{0\}$. (b) The subgroup diagram of $V$: $V$ above the three subgroups $\{e, a\}$, $\{e, b\}$, $\{e, c\}$, above $\{e\}$.</p>
+<p>Let $H \le G$ and $a \in H$. The equation $ax = a$ has a unique solution in $H$, namely the identity of $H$; it has a unique solution in $G$, namely the identity $e$ of $G$. Hence the identity of $H$ is $e$. Applying the same argument to $ax = e$ shows that the inverse of $a$ in $H$ is the inverse of $a$ in $G$.</p>
+
+<h3>Subgroup tests</h3>
+<p><b>Example 5.11.</b> The continuous real-valued functions form a subgroup of the additive group $F$ of all real-valued functions on $\mathbb{R}$.</p>
+<div class="box-res"><span class="lbl res">Theorem 5.12</span> A subset $H$ of a group $G$ is a subgroup if and only if (1) $H$ is closed under the operation of $G$, (2) $e \in H$, and (3) $a \in H$ implies $a^{-1} \in H$.
+<p class="note"><i>Proof.</i> Necessity follows from Definition 5.1. For sufficiency, (2) and (3) give $\mathcal{G}_2$ and $\mathcal{G}_3$ in $H$, and $\mathcal{G}_1$ holds in $H$ because it holds in $G$. &#9670;</p></div>
+<p><b>Example 5.13.</b> The differentiable functions form a subgroup of $F$, by Theorem 5.12.</p>
+<p><b>Example 5.14.</b> Let $G$ be the multiplicative group of invertible $n \times n$ complex matrices and $T = \{A \in G \mid \det(A) = 1\}$. The identity $\det(AB) = \det(A)\det(B)$ shows that $T$ is closed; $\det(I_n) = 1$; and $\det(A) = 1$ gives $\det(A^{-1}) = 1$. Hence $T \le G$ by Theorem 5.12.</p>
+<div class="box-recall"><span class="lbl">Plus Two recall: the determinant of a product (status OPEN, check against the Kerala text)</span>
+<p><b>Recall.</b> $\det(AB) = \det(A)\det(B)$; $A$ is invertible if and only if $\det(A) \ne 0$.</p>
+<p><b>Re-derive.</b></p>
+<ol><li>Put $B = A^{-1}$: $\det(A)\det(A^{-1}) = \det(I_n) = 1$.</li><li>If $\det(A) = 1$, then $\det(A^{-1}) = 1$.</li></ol>
+<p><b>Saved.</b> Example 5.14.</p></div>
+<p><b>Theorem 5.15.</b> A nonempty subset $H$ of a group $G$ is a subgroup of $G$ if and only if, for all $a, b \in G$, $ab^{-1} \in G$. <span class="printed">[as printed: the book writes $G$ in both places. The intended statement is: for all $a, b \in H$, $ab^{-1} \in H$.]</span> Proof: Exercise 51.</p>
+<div class="box-eq"><span class="lbl eq">Exercise 51, Section 5 (the proof of Theorem 5.15)</span> Prove Theorem 5.15.</div>
+
+<p><b>Theorem 5.16.</b> Let $H$ be a finite nonempty subset of a group $G$. Then $H \le G$ if and only if $H$ is closed under the operation of $G$. Proof: Exercise 57.</p>
+<div class="box-eq"><span class="lbl eq">Exercise 57, Section 5 (the proof of Theorem 5.16)</span> Prove Theorem 5.16.</div>
+
+<p><b>Example 5.17.</b> By Theorem 5.16, $U_n \le \mathbb{C}^*$: $U_n$ has $n$ elements, and $(z_1z_2)^n = 1$ for $z_1, z_2 \in U_n$.</p>
+<p><b>Example 5.18.</b> $H = \{\iota, \rho, \dots, \rho^{n-1}\} \le D_n$, since $\rho^k\rho^r = \rho^{k +_n r} \in H$ and Theorem 5.16 applies.</p>
+
+<h2>2. Cyclic subgroups</h2>
+<p>In $\mathbb{Z}_{12}$, any subgroup containing $3$ contains $3$, $6$, $9$, $0$; the set $\{0, 3, 6, 9\}$ is a subgroup and is the smallest one containing $3$.</p>
+<p>In a group $G$, a subgroup containing $a$ contains $a^n$ for every $n \in \mathbb{Z}$: positive powers by closure, $a^0 = e$, and negative powers as inverses. Powers need not be distinct: in $V$, $a^2 = e$, $a^3 = a$, $a^4 = e$, $a^{-1} = a$.</p>
+<div class="box-res"><span class="lbl res">Theorem 5.19</span> Let $a \in G$. Then $H = \{a^n \mid n \in \mathbb{Z}\}$ is a subgroup of $G$, and it is the smallest subgroup of $G$ containing $a$: every subgroup containing $a$ contains $H$.
+<p class="note"><i>Proof.</i> $a^ra^s = a^{r+s}$, $a^0 = e$, and $(a^r)^{-1} = a^{-r} \in H$; by Theorem 5.12, $H \le G$. Any subgroup containing $a$ contains $H$ by the remark above. &#9670;</p></div>
+<p class="note">Footnote on the book&rsquo;s terms: a subset is <i>minimal</i> with a property if no proper subset has it; it is the <i>smallest</i> if it is contained in every subset with the property. $\{e, a\}$, $\{e, b\}$, $\{e, c\}$ are minimal nontrivial subgroups of $V$; $V$ has no smallest nontrivial subgroup.</p>
+<div class="box-eq"><span class="lbl eq">Definition 5.20</span> For $a \in G$, the subgroup $\{a^n \mid n \in \mathbb{Z}\}$ of Theorem 5.19 is the <b>cyclic subgroup generated by $a$</b>, denoted $\langle a \rangle$.</div>
+<p><b>Example 5.21.</b> In $D_{10}$: $\langle \mu\rho^k \rangle = \{\iota, \mu\rho^k\}$, since $(\mu\rho^k)^2 = \iota$; and $\langle \rho \rangle = \{\iota, \rho, \dots, \rho^9\}$, since $\rho^{-1} = \rho^9$ and $\rho^{10} = \iota$.</p>
+<div class="box-eq"><span class="lbl eq">Definition 5.22</span> $a$ <b>generates</b> $G$, and is a <b>generator for</b> $G$, if $\langle a \rangle = G$. $G$ is <b>cyclic</b> if it has a generator.</div>
+<p><b>Example 5.23.</b> $\mathbb{Z}_4$ is cyclic with generators $1$ and $3$. $V$ is not cyclic: $\langle a \rangle$, $\langle b \rangle$, $\langle c \rangle$ are proper of order $2$.</p>
+<p><b>Example 5.24.</b> $\mathbb{Z}$ is cyclic with generators $1$ and $-1$ only. $\mathbb{Z}_n$ is cyclic; for $n &gt; 1$, $1$ and $n - 1$ are generators.</p>
+<p><b>Example 5.25.</b> $\langle 3 \rangle = 3\mathbb{Z}$ in $\mathbb{Z}$; in general $n\mathbb{Z} = \langle n \rangle$, and $6\mathbb{Z} &lt; 3\mathbb{Z}$.</p>
+<p><b>Example 5.26.</b> $U_n = \langle \zeta \rangle$ with $\zeta = \cos\frac{2\pi}{n} + i\sin\frac{2\pi}{n}$. Powers of $\zeta$ move counterclockwise and reach each element of $U_n$ in turn (Figure 5.27). $U_n$ is cyclic, and $\zeta$ is a generator.</p>
+<p><b>Figure 5.27.</b> The points $1, \zeta, \zeta^2, \zeta^3$ and so on, equally spaced on the unit circle, with $i$ marked. Labels as printed; not redrawn.</p>
+
+<div class="sec-title-full">Section 6: Cyclic Groups</div><div class="sec-sub">Printed pp. 61&ndash;67 (6.1&ndash;6.21; Figures 6.3, 6.11, 6.12, 6.19)</div>
+<h2>Prerequisites</h2>
+<ul>
+<li>Cyclic subgroups $\langle a \rangle$, generators, Theorem 5.19 and Definitions 5.20, 5.22.</li>
+<li>Integer division with remainder (the division algorithm, Theorem 6.2).</li>
+<li>Isomorphism of groups (Section 2).</li>
+</ul>
+
+<h2>1. Elementary properties</h2>
+<div class="box-res"><span class="lbl res">Theorem 6.1</span> Every cyclic group is abelian.
+<p class="note"><i>Proof.</i> Let $G = \langle a \rangle$ and $g_1 = a^r$, $g_2 = a^s$. Then $g_1g_2 = a^{r+s} = a^{s+r} = g_2g_1$. &#9670;</p></div>
+<p>Multiplicative notation is used throughout this section, whether or not the group is abelian.</p>
+
+<h2>2. The division algorithm and the gcd</h2>
+<div class="box-res"><span class="lbl res">Theorem 6.2 (Division Algorithm for $\mathbb{Z}$)</span> If $m \in \mathbb{Z}^+$ and $n \in \mathbb{Z}$, there exist unique $q, r \in \mathbb{Z}$ with $n = mq + r$ and $0 \le r &lt; m$.
+<p class="note"><i>Proof.</i> The book argues from the number line (Figure 6.3): either $n = qm$, or $n$ lies strictly between $qm$ and $(q+1)m$ for a unique $q$, and $r = n - qm$. &#9670;</p></div>
+<p><b>Figure 6.3.</b> Number-line diagrams for the cases $n \ge 0, q \ge 0$ and $n &lt; 0, q &lt; 0$, with the remainder $r$ marked. Labels as printed; not redrawn.</p>
+<p><b>Example 6.4.</b> $38 = 7(5) + 3$: quotient $5$, remainder $3$.</p>
+<p><b>Example 6.5.</b> $-38 = 7(-6) + 4$: quotient $-6$, remainder $4$.</p>
+
+<div class="box-res"><span class="lbl res">Theorem 6.6</span> A subgroup of a cyclic group is cyclic.
+<p class="note"><i>Proof.</i> Let $G = \langle a \rangle$ and $H \le G$. If $H = \{e\}$, then $H = \langle e \rangle$. Otherwise let $m \in \mathbb{Z}^+$ be least with $a^m \in H$, and put $c = a^m$. For $b = a^n \in H$, write $n = mq + r$, $0 \le r &lt; m$. Then $a^r = c^{-q}b \in H$, so $r = 0$ by minimality, and $b = c^q$. Thus $H = \langle c \rangle$. &#9670;</p></div>
+
+<div class="box-res"><span class="lbl res">Corollary 6.7</span> The subgroups of $\langle \mathbb{Z}, + \rangle$ are precisely the groups $n\mathbb{Z}$, $n \in \mathbb{Z}$.</div>
+<div class="box-eq"><span class="lbl eq">Exercise 54, Section 6 (named in the remark after Corollary 6.7)</span> Let $r$ and $s$ be integers. Show that $\{nr + ms \mid n, m \in \mathbb{Z}\}$ is a subgroup of $\mathbb{Z}$.</div>
+
+<div class="box-eq"><span class="lbl eq">Definition 6.8</span> Let $r \in \mathbb{Z}^+$, $s \in \mathbb{Z}_{\ge 0}$. The positive generator $d$ of $H = \{nr + ms \mid n, m \in \mathbb{Z}\}$ is the <b>greatest common divisor</b> $\gcd(r, s)$.</div>
+<p>Since $r, s \in d\mathbb{Z}$, $d$ is a common divisor; since $d = nr + ms$, every common divisor of $r$ and $s$ divides $d$. Hence $d$ is the greatest common divisor. The identity $d = nr + ms$ is <b>Bézout&rsquo;s identity</b>.</p>
+<p><b>Example 6.9.</b> $\gcd(42, 72) = 6 = (3)(72) + (-5)(42)$. Integers $r, s$ are <b>relatively prime</b> if $\gcd(r, s) = 1$.</p>
+<div class="eq">$$\text{If } \gcd(r,s) = 1 \text{ and } r \mid sm, \text{ then } r \mid m. \qquad (1)$$</div>
+<p class="note"><i>Proof of (1).</i> $1 = ar + bs$ gives $m = arm + bsm$; $r$ divides both terms. &#9670;</p>
+
+<h2>3. Structure of cyclic groups</h2>
+<div class="box-res"><span class="lbl res">Theorem 6.10</span> Let $G = \langle a \rangle$. If $|G| = \infty$, then $G \cong \langle \mathbb{Z}, + \rangle$. If $|G| = n$, then $G \cong \langle \mathbb{Z}_n, +_n \rangle$.
+<p class="note"><i>Proof.</i> <b>Case I</b>: $a^m \ne e$ for all $m &gt; 0$. Then $a^h = a^k$ forces $h = k$, and $\phi(a^i) = i$ is a well-defined bijection $G \to \mathbb{Z}$ with $\phi(a^ia^j) = \phi(a^i) + \phi(a^j)$. <b>Case II</b>: let $n$ be least positive with $a^n = e$. Then $a^0, \dots, a^{n-1}$ are distinct and exhaust $G$; $\psi(a^i) = i$ is a bijection $G \to \mathbb{Z}_n$ with $\psi(a^ia^j) = \psi(a^i) +_n \psi(a^j)$. &#9670;</p></div>
+<p><b>Figures 6.11 and 6.12.</b> The elements of a cyclic group of order $n$ placed evenly on a circle; labels are $a^0, a, \dots, a^{n-1}$ in 6.11 and $0, 1, \dots, n-1$ in 6.12. Not redrawn.</p>
+<p><b>Example 6.13.</b> Multiplication is addition of positions around the circle: $a^ha^k = a^r$, where $h + k = nq + r$ and $0 \le r &lt; n$. This is the isomorphism $\langle a \rangle \cong \mathbb{Z}_n$.</p>
+<p>Consequently, the order of $a \in G$ is the least $n \in \mathbb{Z}^+$ with $a^n = e$.</p>
+<p><b>Example 6.14.</b> The order of a $k$-cycle is $k$.</p>
+
+<h2>4. Subgroups of finite cyclic groups</h2>
+<div class="box-res"><span class="lbl res">Theorem 6.15</span> Let $G$ be cyclic of order $n$ with generator $a$, and let $b = a^s$. Then $b$ generates a cyclic subgroup of order $n/d$, where $d = \gcd(n, s)$. Moreover $\langle a^s \rangle = \langle a^t \rangle$ if and only if $\gcd(s, n) = \gcd(t, n)$.
+<p class="note"><i>Proof.</i> $|\langle b \rangle|$ is the least $m &gt; 0$ with $n \mid ms$. Write $d = un + vs$; then $\gcd(n/d, s/d) = 1$, and by (1) the least such $m$ is $n/d$. The second statement follows from the uniqueness of the subgroup of each order $n/d$ in $\mathbb{Z}_n$. &#9670;</p></div>
+<p><b>Example 6.16.</b> In $\mathbb{Z}_{12}$: $\langle 3 \rangle$ has $4$ elements, $\langle 8 \rangle$ has $3$, and $5$ generates the whole group.</p>
+<div class="box-res"><span class="lbl res">Corollary 6.17</span> If $a$ generates a finite cyclic group of order $n$, then its generators are the $a^r$ with $\gcd(r, n) = 1$.</div>
+<p><b>Example 6.18.</b> The subgroups of $\mathbb{Z}_{18}$ are $\langle 1 \rangle = \mathbb{Z}_{18}$, $\langle 2 \rangle$ (order $9$), $\langle 3 \rangle$ (order $6$), $\langle 6 \rangle = \{0, 6, 12\}$, $\langle 9 \rangle = \{0, 9\}$ and $\langle 0 \rangle$. Figure 6.19 gives the subgroup diagram: $\langle 1 \rangle$ above $\langle 2 \rangle$ and $\langle 3 \rangle$; $\langle 2 \rangle$ above $\langle 6 \rangle$; $\langle 3 \rangle$ above $\langle 6 \rangle$ and $\langle 9 \rangle$; $\langle 6 \rangle$ and $\langle 9 \rangle$ above $\langle 0 \rangle$. Labels as printed; not redrawn.</p>
+<div class="box-res"><span class="lbl res">Corollary 6.20</span> If $G$ is finite and cyclic and $H \le G$, then $|H|$ divides $|G|$.
+<p class="note"><i>Proof.</i> By Theorem 6.6 and Theorem 6.15, $|H| = n/\gcd(n, s)$ for some $s$, which divides $n$. &#9670;</p></div>
+<p><b>Example 6.21.</b> The subgroups of $\mathbb{Z}_{28}$ have orders $1, 2, 4, 7, 14, 28$, and each order occurs.</p>
+<p>Corollary 6.20 holds without cyclicity; Lagrange&rsquo;s Theorem (Section 10) gives this for all finite groups.</p>
+
+<div class="sec-title-full">Section 8: Groups of Permutations (8.1&ndash;8.18)</div><div class="sec-sub">Printed pp. 77&ndash;82 (8.1&ndash;8.18; Table 8.9; Historical note)</div>
+<h2>Prerequisites</h2>
+<ul>
+<li>Isomorphisms of groups (Section 2).</li>
+<li>Maps: composition, one-to-one and onto maps, inverse maps.</li>
+<li>Permutations and cycle notation (Section 4, used without reproduction).</li>
+</ul>
+
+<h2>1. Homomorphisms</h2>
+<div class="box-eq"><span class="lbl eq">Definition 8.1</span> A map $\phi : G \to G'$ of groups is a <b>homomorphism</b> if $\phi(ab) = \phi(a)\phi(b)$ for all $a, b \in G$.</div>
+<p><b>Example 8.2.</b> $\phi : \mathbb{R} \to U$, $\phi(x) = \cos(2\pi x) + i\sin(2\pi x) = e^{2\pi ix}$, is a homomorphism. It maps onto $U$ and is not one-to-one, so it is not an isomorphism. Moreover $\phi(-x) = (\phi(x))^{-1}$.</p>
+<p><b>Example 8.3.</b> $\phi : U_{28} \to U_4$, $\phi(z) = z^7$, is a well-defined homomorphism: $z^{28} = 1$ gives $(z^7)^4 = 1$, and $(z_1z_2)^7 = z_1^7z_2^7$.</p>
+
+<div class="box-recall"><span class="lbl">Plus Two recall: functions, images and inverse images (status OPEN, check against the Kerala text)</span>
+<p><b>Recall.</b> For $\phi : X \to Y$, the image $\phi[A]$ of a subset $A$ and the inverse image $\phi^{-1}[B]$ of a subset $B$ may be nonempty even when $\phi$ is not onto.</p>
+<p><b>Re-derive.</b></p>
+<ol><li>$\phi(x) = x^2$ on $\mathbb{R}$: $\phi^{-1}[\{4\}] = \{2, -2\}$.</li><li>$\phi[\{-1, 1\}] = \{1\}$.</li></ol>
+<p><b>Saved.</b> Definition 8.4.</p></div>
+
+<div class="box-eq"><span class="lbl eq">Definition 8.4</span> For $\phi : X \to Y$, $A \subseteq X$, $B \subseteq Y$: $\phi[A] = \{\phi(a) \mid a \in A\}$ is the <b>image of $A$</b>; $\phi^{-1}[B] = \{a \in X \mid \phi(a) \in B\}$ is the <b>inverse image of $B$</b>.</div>
+
+<div class="box-res"><span class="lbl res">Theorem 8.5</span> Let $\phi : G \to G'$ be a homomorphism.
+<ol>
+<li>$\phi(e) = e'$.</li>
+<li>$\phi(a^{-1}) = \phi(a)^{-1}$ for all $a \in G$.</li>
+<li>$H \le G$ implies $\phi[H] \le G'$.</li>
+<li>$K' \le G'$ implies $\phi^{-1}[K'] \le G$.</li>
+</ol>
+<p class="note"><i>Proof.</i> (1) $\phi(e) = \phi(e)\phi(e)$, so $\phi(e) = e'$. (2) $e' = \phi(a)\phi(a^{-1})$. (3) $\phi(a)\phi(b) = \phi(ab) \in \phi[H]$; (1) and (2) supply the identity and inverses. (4) If $a, b \in \phi^{-1}[K']$, then $\phi(ab) = \phi(a)\phi(b) \in K'$, and $\phi(a^{-1}) = \phi(a)^{-1} \in K'$; also $e' \in K'$. &#9670;</p></div>
+
+<div class="box-eq"><span class="lbl eq">Definition 8.6</span> For a homomorphism $\phi : G \to G'$, the subgroup $\operatorname{Ker}(\phi) = \phi^{-1}[\{e'\}] = \{x \in G \mid \phi(x) = e'\}$ is the <b>kernel</b> of $\phi$.</div>
+<p>The kernel is used in the book to define the alternating group. The case $H = G$ of Theorem 8.5 (3) gives that $\phi[G]$ is a subgroup of $G'$, which is used in Cayley&rsquo;s Theorem.</p>
+
+<p><b>Example 8.7.</b> In Example 8.2, $\operatorname{Ker}(\phi) = \mathbb{Z}$. For $n \ge 1$, $\phi[\langle \frac{1}{n} \rangle] = U_n$.</p>
+<p><b>Example 8.8.</b> $\phi : \mathbb{Z}_n \to D_n$, $\phi(k) = \rho^k$, is a homomorphism (cases $a + b &lt; n$ and $a + b \ge n$, using $\rho^n = \iota$), with image $\langle \rho \rangle$.</p>
+
+<h2>2. Cayley&rsquo;s Theorem</h2>
+<p>Several standard groups are groups of permutations: $\mathbb{Z}_n \cong \langle (1, 2, \dots, n) \rangle \le S_n$; $D_n$ acts on $\mathbb{Z}_n$; $GL(n, \mathbb{R})$ acts on $\mathbb{R}^n$. Cayley&rsquo;s Theorem says that every group is isomorphic to a group of permutations. The proof uses the group table: the row of $a$ defines a permutation of $G$. For $D_3$ (Table 8.9), the row for $\mu\rho$ gives $\left(\begin{smallmatrix} \iota & \rho & \rho^2 & \mu & \mu\rho & \mu\rho^2 \\ \mu\rho & \mu\rho^2 & \mu & \rho^2 & \iota & \rho \end{smallmatrix}\right)$.</p>
+<div class="keep"><p><b>Table 8.9.</b> The group table of $D_3$, headed $\iota, \rho, \rho^2, \mu, \mu\rho, \mu\rho^2$:</p>
+<table class="tbl"><tr><th>$D_3$</th><th>$\iota$</th><th>$\rho$</th><th>$\rho^2$</th><th>$\mu$</th><th>$\mu\rho$</th><th>$\mu\rho^2$</th></tr>
+<tr><th>$\iota$</th><td>$\iota$</td><td>$\rho$</td><td>$\rho^2$</td><td>$\mu$</td><td>$\mu\rho$</td><td>$\mu\rho^2$</td></tr>
+<tr><th>$\rho$</th><td>$\rho$</td><td>$\rho^2$</td><td>$\iota$</td><td>$\mu\rho^2$</td><td>$\mu$</td><td>$\mu\rho$</td></tr>
+<tr><th>$\rho^2$</th><td>$\rho^2$</td><td>$\iota$</td><td>$\rho$</td><td>$\mu\rho$</td><td>$\mu\rho^2$</td><td>$\mu$</td></tr>
+<tr><th>$\mu$</th><td>$\mu$</td><td>$\mu\rho$</td><td>$\mu\rho^2$</td><td>$\iota$</td><td>$\rho^2$</td><td>$\rho$</td></tr>
+<tr><th>$\mu\rho$</th><td>$\mu\rho$</td><td>$\mu\rho^2$</td><td>$\mu$</td><td>$\rho^2$</td><td>$\iota$</td><td>$\rho$</td></tr>
+<tr><th>$\mu\rho^2$</th><td>$\mu\rho^2$</td><td>$\mu$</td><td>$\mu\rho$</td><td>$\rho$</td><td>$\rho^2$</td><td>$\iota$</td></tr></table></div>
+
+<p>Write $\lambda_x(g) = xg$. This is well defined for infinite groups as well as finite ones.</p>
+<div class="box-eq"><span class="lbl eq">Definition 8.10</span> The map $\phi : G \to S_G$, $\phi(x) = \lambda_x$, is the <b>left regular representation</b> of $G$.</div>
+<p>Each $\lambda_x$ is a permutation: it is one-to-one by cancellation ($xa = xb \Rightarrow a = b$), and onto since $\lambda_x(x^{-1}b) = b$.</p>
+
+<div class="box-res"><span class="lbl res">Theorem 8.11 (Cayley&rsquo;s Theorem)</span> Every group is isomorphic to a group of permutations.
+<p class="note"><i>Proof.</i> If $\lambda_a = \lambda_b$, then $ae = be$, so $a = b$: $\phi$ is one-to-one. $\lambda_{ab}(g) = (ab)g = a(bg) = (\lambda_a\lambda_b)(g)$, so $\phi(ab) = \phi(a)\phi(b)$. By Theorem 8.5 (3) with $H = G$, $\phi[G] \le S_G$, and $\phi : G \to \phi[G]$ is an isomorphism. &#9670;</p></div>
+
+<p><b>Example 8.12.</b> The subgroup from the proof is not always the smallest. $D_n$ is isomorphic to a subgroup of $S_{\mathbb{Z}_n}$, while the proof gives a subgroup of $S_{D_n}$. And $\mathbb{Z}_6 \cong \langle (1, 2, 3)(4, 5) \rangle \le S_5$.</p>
+<p>The right regular representation is defined in Definition 8.13.</p>
+
+<div class="box-eq"><span class="lbl eq">Historical note</span> Arthur Cayley (1821&ndash;1895) gave an abstract definition of a group in 1854. In 1878 he stated Theorem 8.11, with a proof based on the group table. Walther von Dyck&rsquo;s axiomatic definition of 1882 led to the development of abstract group theory. The book&rsquo;s full note is kept in the excerpt.</div>
+
+<div class="box-eq"><span class="lbl eq">Definition 8.13</span> With $\sigma_x(g) = gx$, the map $\tau : G \to S_G$, $\tau(x) = \sigma_{x^{-1}}$, is the <b>right regular representation</b> of $G$.</div>
+<p>It can also be used to prove Cayley&rsquo;s Theorem. See Exercise 54, printed next.</p>
+<div class="box-eq"><span class="lbl eq">Exercise 54, Section 8 (named after Definition 8.13)</span> Prove Cayley&rsquo;s Theorem using the right regular representation rather than the left regular representation.</div>
+
+
+<h2>3. Transpositions, orbits</h2>
+<div class="box-eq"><span class="lbl eq">Definition 8.14</span> A cycle of length $2$ is a <b>transposition</b>.</div>
+<div class="eq">$$\begin{aligned}(a_1, a_2, \dots, a_n) &= (a_1, a_n)(a_1, a_{n-1}) \cdots \\ &\quad (a_1, a_3)(a_1, a_2).\end{aligned}$$</div>
+<p>Hence every $n$-cycle is a product of $n - 1$ transpositions.</p>
+<div class="box-res"><span class="lbl res">Theorem 8.15</span> Every permutation of a finite set with at least two elements is a product of transpositions.</div>
+<p><b>Example 8.16.</b> $(1, 6)(2, 5, 3) = (1, 6)(2, 3)(2, 5)$.</p>
+<p><b>Example 8.17.</b> In $S_n$ ($n \ge 2$), $\iota = (1, 2)(1, 2)$.</p>
+<p>The representation of a permutation as a product of transpositions is not unique. The even or odd parity of the number of transpositions is studied in the book from 8.19 onward (Module III, not in these notes), which uses the orbits defined below.</p>
+<p>For $\sigma \in S_A$ and $a \in A$, the <b>orbit</b> of $a$ is $\{\sigma^k(a) \mid k \in \mathbb{Z}\}$. For $\sigma \in S_n$, the orbit of $a$ is the set of entries of the cycle containing $a$ in the disjoint-cycle form of $\sigma$.</p>
+<p><b>Example 8.18.</b> For $\sigma = (1, 2, 6)(3, 5) \in S_6$: the orbits of $1$, $2$, $6$ are $\{1, 2, 6\}$; the orbits of $3$, $5$ are $\{3, 5\}$; the orbit of $4$ is $\{4\}$, since $\sigma = (1, 2, 6)(3, 5)(4)$ when $1$-cycles are included.</p>
+
+</div>
+</main>
+</body>
+</html>

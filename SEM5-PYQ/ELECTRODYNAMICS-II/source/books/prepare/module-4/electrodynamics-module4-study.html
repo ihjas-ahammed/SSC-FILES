@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Study notes: Module 4, transient circuits and alternating currents</title>
+<script>
+window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+  @page { size: A4; margin: 16mm; }
+  :root { --ink:#1B2631; --muted:#5D6D7E; --rule:#AEB6BF; --paper:#FFFFFF; --bound:#B9770E; --res:#117A65; --eq:#1F618D; --idb:#A04000; --hi:#FDF2E9; }
+  body { margin:0; background:var(--paper); color:var(--ink); font-family:"Times New Roman", Times, "Liberation Serif", serif; font-size:12.5pt; line-height:1.5; }
+  main { max-width:760px; margin:0 auto; padding:14px; }
+  h1 { font-size:20pt; margin:0 0 4px; color:var(--eq); }
+  .meta { color:var(--muted); font-size:10.5pt; margin-bottom:10px; }
+  h2 { font-size:14pt; margin:22px 0 6px; color:var(--eq); border-bottom:2px solid var(--eq); padding-bottom:2px; break-after:avoid; }
+  h3 { font-size:12.5pt; margin:14px 0 4px; color:var(--res); break-after:avoid; }
+  p, li { margin:5px 0; }
+  ul { margin:4px 0 4px 22px; padding:0; }
+  .eq { margin:8px 0; text-align:center; }
+  .box-eq { background:#EAF2F8; border-left:4px solid var(--eq); padding:6px 10px; margin:8px 0; }
+  .box-res { background:#E9F7EF; border-left:4px solid var(--res); padding:6px 10px; margin:8px 0; }
+  .box-id { background:var(--hi); border-left:4px solid var(--idb); padding:6px 10px; margin:8px 0; }
+  .lbl { font-weight:bold; font-size:10.5pt; text-transform:uppercase; letter-spacing:.3px; }
+  .lbl.res { color:var(--res); } .lbl.eq { color:var(--eq); } .lbl.id { color:var(--idb); }
+  .note { font-size:11.5pt; color:var(--muted); margin:4px 0; }
+  .bg { font-size:10.5pt; color:var(--muted); font-style:italic; }
+  .bound { color:var(--bound); font-weight:bold; }
+  .fig { margin:12px 0; text-align:center; break-inside:avoid; }
+  .fig svg { display:block; width:100%; max-width:320px; height:auto; margin:0 auto; }
+  .fig figcaption { font-size:10.5pt; color:var(--muted); font-style:italic; margin-top:3px; }
+  @media print { .keep { break-inside: avoid; } }
+
+  .box-recall { background:#FEF9E7; border-left:4px solid #B9770E; padding:6px 10px; margin:8px 0; }
+  .box-recall ol { margin:4px 0 4px 20px; padding:0; }
+  .lbl.recall { color:#B9770E; }
+  .figsvg { display:block; width:100%; max-width:240px; height:auto; margin:0 auto; }
+  .fig img { display:block; width:100%; max-width:240px; height:auto; margin:0 auto; }
+  .box-res p, .box-eq p { margin:4px 0; }
+  .sec-body { column-count: 2; column-gap: 22px; column-rule: 1px solid #AEB6BF; }
+  .sec-body .eq, .sec-body .box-eq, .sec-body .fig { break-inside: avoid; }
+  .sec-body .box-res, .sec-body .box-recall { box-decoration-break: clone; }
+  .sec-body .fig img, .sec-body .figsvg { max-height: 130px; width: auto; max-width: 220px; }
+  .sec-body h3 { break-after: avoid; }
+  .sec-body p, .sec-body li { font-size: 11pt; }
+  .sec-body .eq { font-size: 0.93em; }
+  .sec-body .longeq mjx-container[display="true"] { font-size: 0.72em !important; }
+  .sec-body mjx-container[display="true"] { font-size: 0.85em !important; max-width: 100%; }
+  .sec-bar { background:#1F618D; color:#fff; font-size:13pt; font-weight:bold; padding:6px 10px; margin:16px 0 6px; column-span: all; break-after: avoid; }
+  main { max-width: none; margin: 0; padding: 0 14px; }
+  @page { size: A4; margin: 16mm; }
+  @media print { h2 { break-after: avoid; } }
+</style>
+</head>
+<body>
+<main>
+<h1>Study notes: Module 4, transient circuits and alternating currents</h1>
+<div class="meta">Murugeshan, <i>Electricity and Magnetism</i> (10th ed.), Ch. 12 §12.1 and §12.2 (Module 4, syllabus item 15–16). Figures are drawn for these notes from the book formulas; the book figure number is in each caption. Problems are not included.</div>
+<div class="sec-bar">Section 1: growth and decay of current in an L-R circuit (Murugeshan 12.1, 12.2)</div>
+<h2>12.1 Growth of current in a circuit with resistance and inductance</h2>
+<div class="sec-body">
+<div class="bg">Source: <i>book-sources/m4-s12-1-growth.html</i>, Murugeshan pp. 312–313 (printed). Syllabus item 15. Equations (1)–(4) of §12.1 are given in full.</div>
+
+<h3>Before you start</h3>
+<ul>
+<li>Ohm’s law and the emf of a cell (Plus Two; pre-physics P1).</li>
+<li>Separating variables and integrating a first-order equation (Beyond; pre-math M4). Learn the steps here before the derivation.</li>
+<li>Exponentials and logarithms (pre-math M3).</li>
+</ul>
+
+<h3>1. The circuit</h3>
+<p>Take an inductance $L$ and a resistance $R$ in series with a cell of steady emf $E$. A key $K$ closes the circuit (Fig. 12.1). When the key is pressed, the current does not jump to its final value. It grows from zero to a maximum $I_0$. Let $I$ be the current at time $t$.</p>
+<figure class="fig"><img src="final/m4-s1-circuit.jpg" alt="m4 s1 circuit"><figcaption>Fig. 12.1 (book): inductance L and resistance R in series with a cell E and key K. Schematic.</figcaption></figure>
+
+<h3>2. The loop equation</h3>
+<p>The inductor opposes the change of current with the back emf $\varepsilon=-L\,dI/dt$. Going round the loop, the cell emf is balanced by the drop across $R$ and by the back emf of $L$:</p>
+<div class="eq">$$E = RI + L\frac{dI}{dt}\tag{12.1(1)}$$</div>
+
+<h3>3. The steady current</h3>
+<p>When the current reaches its maximum $I_0$, it no longer changes, so $dI/dt=0$ and the back emf is zero. Eq. (1) gives</p>
+<div class="eq">$$E = RI_0\tag{12.1(2)}$$</div>
+<div class="box-recall"><span class="lbl recall">Recall (Plus Two)</span> Ohm’s law. With no change of current, the inductor is a plain wire, so the final current is $I_0=E/R$. This is the same result the Plus Two circuit gives.</div>
+
+<h3>4. Separating the variables</h3>
+<p>Substitute $E=RI_0$ into Eq. (1). Then $RI_0 = RI + L\,dI/dt$, so</p>
+<div class="eq">$$\begin{aligned}R(I_0 - I) &= L\frac{dI}{dt}\quad\Rightarrow\quad \frac{dI}{I_0 - I} \\  &= \frac{R}{L}\,dt\end{aligned}$$</div>
+<p>The left side contains only $I$ and the right side only $t$. The two can be integrated separately.</p>
+
+<h3>5. Integrating and fixing the constant</h3>
+<p>Integrating both sides,</p>
+<div class="eq">$$-\log(I_0 - I) = \frac{R}{L}t + C\tag{12.1(3)}$$</div>
+<p>where $C$ is the constant of integration. At $t=0$, $I=0$, so $-\log I_0 = C$. Put this back into Eq. (3):</p>
+<div class="eq">$$\begin{aligned}\log_e\frac{I_0 - I}{I_0} &= -\frac{R}{L}t\quad\Rightarrow\quad 1 - \frac{I}{I_0} \\  &= e^{-(R/L)t}\end{aligned}$$</div>
+
+<h3>6. The result</h3>
+<div class="eq">$$I = I_0\left(1 - e^{-(R/L)t}\right)\tag{12.1(4)}$$</div>
+<p>Eq. (4) is the current in the L-R circuit at any instant. It starts at zero and tends to $I_0$ as $t$ becomes large.</p>
+
+<h3>7. The time constant</h3>
+<p>The quantity $L/R$ is the <i>time constant</i> $\tau$ of the circuit. Put $t=\tau=L/R$ in Eq. (4):</p>
+<div class="eq">$$I = I_0\left(1 - e^{-1}\right) = 0.632\,I_0$$</div>
+<p>So the time constant is the time the current takes to grow to 0.632 of its final value. A larger $L/R$ means a slower growth. At $t=2\tau$ the current is $0.865\,I_0$; at $3\tau$ it is $0.950\,I_0$. Fig. 12.2 shows this for three values of $L/R$.</p>
+<figure class="fig"><img src="final/m4-s1-growth.jpg" alt="m4 s1 growth"><figcaption>Fig. 12.2 (book): current I/I0 against time for low, medium and large L/R. Drawn from I = I0(1 − e^(−Rt/L)).</figcaption></figure>
+
+<h3>8. Worked example (printed p. 314)</h3>
+<p>An emf of 10 V is applied to a circuit with $R=10\ \Omega$ and $L=0.5$ H. The time to reach 63.2% of the final value is found from Eq. (4). Here $R/L=20\ \text{s}^{-1}$, so $e^{-20t}=0.368$ and $t=\frac{\ln 2.717}{20}=0.05$ s. The time constant is $L/R=0.05$ s, which is the same value. This is no accident: 63.2% is reached at $t=\tau$ by definition.</p>
+</div>
+<h2>12.2 Decay of current in a circuit with inductance and resistance</h2>
+<div class="sec-body">
+<div class="bg">Source: <i>book-sources/m4-s12-2-decay.html</i>, Murugeshan pp. 313–314 (printed), with Examples 1 and 2. Syllabus item 16. Equations (1) and (2) are given in full. Example 1 is a growth example; it is worked in §12.1 of these notes.</div>
+
+<h3>Before you start</h3>
+<ul>
+<li>§12.1 of these notes: the loop equation and the time constant $L/R$.</li>
+<li>Exponentials and logarithms (pre-math M3).</li>
+</ul>
+
+<h3>1. What changes when the cell is removed</h3>
+<p>Once the current has reached $I_0$, the circuit is broken from the cell and closed on itself. The emf of the cell is now zero, so $E=0$. The inductor still drives a current, because its back emf $-L\,dI/dt$ opposes the fall of current. The back emf keeps the current from dropping at once.</p>
+
+<h3>2. Loop equation with E = 0</h3>
+<div class="eq">$$0 = RI + L\frac{dI}{dt}\tag{12.2(1)}$$</div>
+<p>Rearranging, $dI/I = -(R/L)\,dt$. The variables are separated again.</p>
+
+<h3>3. Integration</h3>
+<p>Integrate, with $\log_e I = -(R/L)t + C$. At $t=0$, $I=I_0$, so $C=\log_e I_0$. Then</p>
+<div class="eq">$$\begin{aligned}\log_e\frac{I}{I_0} &= -\frac{R}{L}t\quad\Rightarrow\quad I \\  &= I_0 e^{-(R/L)t}\end{aligned} \tag{12.2(2)}$$</div>
+
+<h3>4. Reading Eq. (2)</h3>
+<p>The current falls exponentially. The time constant $\tau=L/R$ is now the time for the current to fall to $1/e\approx0.368$ of its initial value. The rate of decay is</p>
+<div class="eq">$$\frac{dI}{dt} = -\frac{R}{L}I_0 e^{-(R/L)t} = -\frac{R}{L}I$$</div>
+<p>The larger the ratio $R/L$, the more rapidly the current dies away (Fig. 12.4). The decay and growth curves are complementary (Fig. 12.5). The decay curve is the growth curve turned upside down.</p>
+<figure class="fig"><img src="final/m4-s1-decay.jpg" alt="m4 s1 decay"><figcaption>Fig. 12.3 (book): decay of current I = I0 e^(−Rt/L) against time. At t = L/R the current is I0/e.</figcaption></figure>
+<figure class="fig"><img src="final/m4-s1-gd.jpg" alt="m4 s1 gd"><figcaption>Fig. 12.5 (book): growth and decay curves shown together; they are complementary.</figcaption></figure>
+
+<h3>5. Worked example (printed p. 315)</h3>
+<p>An inductance of 500 mH and a resistance of 5 $\Omega$ are connected to a 10 V emf. The final current is $I_0=E/R=2$ A. When the cell is removed and the terminals are joined, $R/L=10\ \text{s}^{-1}$ and $I=2e^{-10t}$. After 0.05 s, $I=1.213$ A. After 0.2 s, $I=0.271$ A.</p>
+</div>
+<div class="sec-bar">Section 2: charge in C-R and L-C circuits; leakage (Murugeshan 12.3 to 12.5)</div>
+<h2>12.3 Growth and decay of charge in a circuit with resistance and capacitance</h2>
+<div class="sec-body">
+<div class="bg">Source: <i>book-sources/m4-s2-cr-lc.html</i>, Murugeshan pp. 315–317 (printed), with Example 1 (capacitor charged through 2 M$\Omega$) and Examples 2 and 3. Syllabus items 15 and 16. Equations (a)(1)–(a)(3) and (b)(1)–(b)(3) are given in full.</div>
+
+<h3>Before you start</h3>
+<ul>
+<li>Capacitance and charge, $Q=CV$ (Plus Two; pre-physics P3).</li>
+<li>Ohm’s law (pre-physics P1) and the first-order equation solved in §12.1 of these notes.</li>
+</ul>
+
+<h3>1. Growth of charge (charging)</h3>
+<div class="box-recall"><span class="lbl recall">Recall (Plus Two)</span> The charge on a capacitor is $Q=CV$, so the p.d. across it is $V=Q/C$. In the loop below, the capacitor and the resistor share the emf, as in Plus Two series circuits.</div>
+<p>A capacitor $C$ and a resistance $R$ are joined to a cell of emf $E$ through a Morse key $K$ (Fig. 12.6). When the key is pressed, a momentary current $I$ flows through $R$. Let $Q$ be the charge on the capacitor at time $t$. The p.d. across the capacitor is $Q/C$ and the p.d. across the resistor is $RI$.</p>
+<figure class="fig"><img src="final/m4-s2-cr-circuit.jpg" alt="m4 s2 cr circuit"><figcaption>Fig. 12.6 (book): capacitor C, resistance R, Morse key K and cell E in series.</figcaption></figure>
+<p>The emf equation of the circuit is</p>
+<div class="eq">$$E = \frac{Q}{C} + RI\tag{12.3(a)(1)}$$</div>
+<p>Since $I=dQ/dt$, this is $E = Q/C + R\,dQ/dt$.</p>
+
+<h3>2. The final charge</h3>
+<p>The charge grows until it reaches its maximum $Q_0$. At that instant $I=dQ/dt=0$ and the p.d. across the capacitor equals the emf: $E=Q_0/C$.</p>
+
+<h3>3. Separating the variables</h3>
+<p>Substitute $E=Q_0/C$ into the equation, so $Q_0/C = Q/C + R\,dQ/dt$. Multiply by $C$:</p>
+<div class="eq longeq">$$\begin{aligned}(Q_0 - Q) &= CR\frac{dQ}{dt}\\ \frac{dQ}{Q_0 - Q} &= \frac{dt}{CR}\end{aligned}\tag{12.3(a)(2)}$$</div>
+
+<h3>4. Integration and boundary condition</h3>
+<p>Integrating gives $-\log_e(Q_0-Q) = t/CR + K$. At $t=0$, $Q=0$, so $K=-\log_e Q_0$. Then $\log_e\frac{Q_0-Q}{Q_0} = -\frac{t}{CR}$, which gives</p>
+<div class="eq">$$Q = Q_0\left(1 - e^{-t/CR}\right)\tag{12.3(a)(3)}$$</div>
+
+<h3>5. Time constant</h3>
+<p>The time constant is $\tau = CR$. At $t=CR$, $Q = Q_0(1-e^{-1}) = 0.632\,Q_0$. The time constant is therefore the time for the charge to reach 0.632 of its maximum. The rate of growth is $dQ/dt = (Q_0/CR)e^{-t/CR}$. A smaller product $CR$ gives faster charging. The rate of charging is greatest at the start and falls as $Q$ approaches $Q_0$ (Fig. 12.7).</p>
+
+<h3>6. Decay of charge (discharging)</h3>
+<p>Now release the Morse key so that the capacitor, charged to $Q_0$, discharges through $R$. The charge flows out and forms a current. Here $E=0$, so</p>
+<div class="eq">$$R\frac{dQ}{dt} + \frac{Q}{C} = 0\tag{12.3(b)(1)}$$</div>
+<p>Separating the variables and integrating with $Q=Q_0$ at $t=0$ gives</p>
+<div class="eq">$$Q = Q_0 e^{-t/CR}\tag{12.3(b)(2)}$$</div>
+<p>The charge decays exponentially and becomes zero only after an infinite time. The rate of discharge is</p>
+<div class="eq longeq">$$\begin{aligned}I &= \frac{dQ}{dt} = -\frac{Q_0}{CR}e^{-t/CR}\\ &= -\frac{Q}{CR}\end{aligned}\tag{12.3(b)(3)}$$</div>
+<p>In Eq. (b)(2), at $t=CR$, $Q = Q_0e^{-1} = 0.368\,Q_0$. So the time constant is also the time for the charge to fall to $1/e$ of its maximum. Growth and decay are shown together in Fig. 12.7.</p>
+<figure class="fig"><img src="final/m4-s2-cr-growth.jpg" alt="m4 s2 cr growth"><figcaption>Fig. 12.7 (book): charge against time; growth to Q₀ and discharge from Q₀ are complementary.</figcaption></figure>
+
+<h3>7. Worked example 1 (printed p. 316)</h3>
+<p>A capacitor is charged through a resistance of $2\ \text{M}\Omega$. It takes 0.5 s to reach three quarters of its final charge. From Eq. (a)(3), $\tfrac34 = 1 - e^{-0.5/CR}$, so $e^{0.5/CR} = 4$ and $C = 0.5/(2\times10^6\ln 4) = 0.18\ \mu\text{F}$.</p>
+
+<h3>8. Worked example 2 (printed p. 317)</h3>
+<p>A capacitor of $0.1\ \mu\text{F}$ is discharged through $10\ \text{M}\Omega$. The time for the p.d. to fall to half its value is $t = CR\ln 2 = 0.6931$ s, since $Q/Q_0 = V/V_0$ for the same capacitor.</p>
+</div>
+<h2>12.4 Measurement of high resistance by leakage (background)</h2>
+<div class="sec-body">
+<div class="bg"><b>Background.</b> This section is outside the Module 4 items (15–22). It is kept because it uses the discharge law of §12.3 and the book gives it in full. No equations are numbered in the book for this section. Source: <i>book-sources/m4-s2-cr-lc.html</i>, Murugeshan pp. 318–319 (printed).</div>
+
+<h3>1. Principle</h3>
+<p>A capacitor of capacitance $C$ and initial charge $Q_0$ is allowed to discharge through a high resistance $R$ for a time $t$. From §12.3, the charge that remains is $Q = Q_0e^{-t/CR}$. Therefore</p>
+<div class="eq">$$\begin{gathered}\frac{Q_0}{Q} = e^{t/CR} \\ \Rightarrow \\ R = \frac{t}{C\log_e(Q_0/Q)} = \frac{t}{2.3026\,C\log_{10}(Q_0/Q)}\end{gathered}$$</div>
+<p>If $R$ is high, $CR$ is large and the discharge is very slow. Measuring $Q_0/Q$ then gives $R$.</p>
+
+<h3>2. Circuit and procedure</h3>
+<p>$C$ is a capacitor of known value, $R$ is the high resistance, B.G. is a ballistic galvanometer, $E$ is a cell and $K_1$, $K_2$, $K_3$ are tap keys (Fig. 12.8).</p>
+<figure class="fig"><img src="final/m4-s2-leak-circuit.jpg" alt="m4 s2 leak circuit"><figcaption>Fig. 12.8 (book): capacitor C, high resistance R, ballistic galvanometer B.G., cell E and keys K1, K2, K3.</figcaption></figure>
+<p>(<i>i</i>) With $K_2$ and $K_3$ open, charge $C$ fully through $K_1$. Open $K_1$ and close $K_3$. The capacitor discharges through the galvanometer, which gives a throw $\theta_0$, proportional to $Q_0$.</p>
+<p>(<i>ii</i>) Charge $C$ again, open $K_1$, and close $K_2$ for a known time $t$. Some charge leaks through $R$. Open $K_2$ and close $K_3$. The remaining charge $Q$ gives a throw $\theta$, proportional to $Q$.</p>
+<p>Since $Q_0/Q = \theta_0/\theta$,</p>
+<div class="eq">$$R = \frac{t}{2.3026\,C\log_{10}(\theta_0/\theta)}$$</div>
+
+<h3>3. Graph</h3>
+<p>A plot of $\log_{10}(\theta_0/\theta)$ against $t$ is a straight line through the origin (Fig. 12.9). Its slope gives $\frac{t}{\log_{10}(\theta_0/\theta)}$, and with $C$ known, $R$ follows.</p>
+<figure class="fig"><img src="final/m4-s2-leak-graph.jpg" alt="m4 s2 leak graph"><figcaption>Fig. 12.9 (book): straight line of log10(θ0/θ) against t; the slope gives t / log10(θ0/θ).</figcaption></figure>
+
+<h3>4. Worked examples (printed pp. 318–319)</h3>
+<p>(1) For $C=2\ \mu$F, $R=100\ \text{M}\Omega$ and $Q_0/Q=2$, the leakage time is $t=2.3026\,CR\log_{10}2=138.7$ s. (2) For $C=0.2\ \mu$F, a kick of 12 cm and then 6 cm after 2 s gives $R=14.43\ \text{M}\Omega$.</p>
+</div>
+<h2>12.5 Charging and discharging of a capacitor through an inductance</h2>
+<div class="sec-body">
+<div class="bg">Source: <i>book-sources/m4-s2-cr-lc.html</i>, Murugeshan pp. 319–321 (printed). Syllabus items 15 and 16. The book numbers the charging equations (1)–(4) and, after a new heading, the discharge equations (1)–(4) again; these are tagged here as (i) and (ii). Section 12.6 onwards is outside the module and is not included.</div>
+
+<h3>Before you start</h3>
+<ul>
+<li>The charge and the p.d. of a capacitor (pre-physics P3); self-inductance and back emf (pre-physics P2).</li>
+<li>Simple harmonic motion: $d^2x/dt^2 + \omega^2x = 0$ (pre-math H2).</li>
+</ul>
+
+<h3>1. Charging a capacitor through an inductance</h3>
+<p>A capacitance $C$ and an inductance $L$ are joined to a cell $E$ through a Morse key (Fig. 12.10). Pressing the key starts a momentary current through $L$ and the capacitor begins to charge. Let $Q$ be the charge on $C$ at time $t$. The emf equation is</p>
+<figure class="fig"><img src="final/m4-s2-lc-charge.jpg" alt="m4 s2 lc charge"><figcaption>Fig. 12.10 (book): capacitor C and inductance L joined through a Morse key to a cell E.</figcaption></figure>
+<div class="eq">$$L\frac{dI}{dt} + \frac{Q}{C} = E\tag{12.5(i)(1)}$$</div>
+<p>Using $I = dQ/dt$, so that $dI/dt = d^2Q/dt^2$, and writing $Q_0 = CE$ for the maximum charge, the equation becomes</p>
+<div class="eq longeq">$$\begin{aligned}L\frac{d^2Q}{dt^2} + \frac{Q}{C} &= E\\ \frac{d^2Q}{dt^2} + \frac{1}{LC}(Q - Q_0) &= 0\end{aligned}\tag{12.5(i)(2)}$$</div>
+<p>This is the equation of undamped simple harmonic motion, with period</p>
+<div class="eq">$$T = \frac{2\pi}{\sqrt{1/LC}} = 2\pi\sqrt{LC}\tag{12.5(i)(3)}$$</div>
+<p>The charging is oscillatory. The frequency is</p>
+<div class="eq">$$\nu = \frac{1}{2\pi\sqrt{LC}}\tag{12.5(i)(4)}$$</div>
+
+<h3>2. Discharging a capacitor through an inductance</h3>
+<p>The capacitor is charged to $Q_0$ with the inductance out of the circuit. The key is then released so that $C$ discharges through $L$ (Fig. 12.11). No external emf acts during the discharge.</p>
+<figure class="fig"><img src="final/m4-s2-lc-discharge.jpg" alt="m4 s2 lc discharge"><figcaption>Fig. 12.11 (book): capacitor C discharging through inductance L with no external emf.</figcaption></figure>
+<div class="eq longeq">$$\begin{aligned}\frac{Q}{C} + L\frac{dI}{dt} &= 0\\ \frac{d^2Q}{dt^2} + \frac{Q}{LC} &= 0\end{aligned}\tag{12.5(ii)(1)}$$</div>
+<p>This is undamped simple harmonic motion. Put $1/LC = \omega^2$. The general solution is</p>
+<div class="eq">$$Q = A\sin(\omega t + \theta)\tag{12.5(ii)(2)}$$</div>
+<p>with $\omega = 1/\sqrt{LC}$. At $t=0$, $Q=Q_0$, which gives $Q_0 = A\sin\theta$. Taking $\theta=\pi/2$ gives $A=Q_0$, and</p>
+<div class="eq">$$Q = Q_0\sin\left(\frac{t}{\sqrt{LC}} + \frac{\pi}{2}\right)\tag{12.5(ii)(3)}$$</div>
+<p>So $Q$ decreases sinusoidally: the discharge is oscillatory. The natural frequency is</p>
+<div class="eq">$$\nu = \frac{\omega}{2\pi} = \frac{1}{2\pi\sqrt{LC}}\tag{12.5(ii)(4)}$$</div>
+<figure class="fig"><img src="final/m4-s2-lc-osc.jpg" alt="m4 s2 lc osc"><figcaption>Undamped oscillation of charge, Q = Q₀ sin(t/√LC + π/2), period T = 2π√LC (book, §12.5).</figcaption></figure>
+
+<h3>3. Energy in the oscillation</h3>
+<p>When $C$ is fully charged, all the energy is stored in the electric field of the capacitor. During discharge, a current flows through the coil for a short time and the energy is stored in the magnetic field of the coil. The energy then passes back and forth between the two fields, which is the basis of the oscillations used in wireless telegraphy.</p>
+<figure class="fig"><img src="final/m4-s2-lc-energy.jpg" alt="m4 s2 lc energy"><figcaption>Energy alternates between the electric field of C and the magnetic field of L (book, §12.5).</figcaption></figure>
+</div>
+<div class="sec-bar">Section 3: emf of a rotating coil; mean, r.m.s. and virtual values (Murugeshan 13.1)</div>
+<h2>13.1 EMF induced in a coil rotating in a magnetic field</h2>
+<div class="sec-body">
+<div class="bg">Source: <i>book-sources/m4-s3-ac-emf.html</i>, Murugeshan pp. 329–333 (printed), with the impedance definitions at printed p. 333. Syllabus items 17 (and the peak, mean and r.m.s. values needed for items 18–22). The book does not number the equations of this section, so they are shown unnumbered.</div>
+
+<h3>Before you start</h3>
+<ul>
+<li>Magnetic flux $\phi = BA\cos\theta$ and Faraday’s law (pre-physics P4).</li>
+<li>Sinusoidal functions and their integrals (pre-physics P5; pre-math M5, M7).</li>
+</ul>
+
+<h3>1. The rotating coil</h3>
+<p>Take a rectangular coil of $N$ turns, of length $a$ and width $b$, rotating with uniform angular velocity $\omega$ about its axis in a uniform magnetic field $\mathbf B$ (Fig. 13.1). The axis is at right angles to the field. As the coil turns, the flux through it changes, so an emf is induced.</p>
+<figure class="fig"><img src="final/m4-s3-coil.jpg" alt="m4 s3 coil"><figcaption>Fig. 13.1 (book): rectangular coil rotating between poles N and S, with slip rings and resistance R.</figcaption></figure>
+<p>Start timing when the plane of the coil is at right angles to $\mathbf B$, that is when the normal to the coil makes zero angle with $\mathbf B$. At time $t$ the normal makes angle $\theta=\omega t$ with $\mathbf B$. The flux linked with $N$ turns is</p>
+<div class="eq">$$\phi = NBA\cos\theta = NBA\cos\omega t,\qquad A = ab$$</div>
+
+<h3>2. The induced emf</h3>
+<div class="box-recall"><span class="lbl recall">Recall (Plus Two)</span> The flux through a coil is $\phi=BA\cos\theta$, and the induced emf is $-d\phi/dt$ (Faraday). Here the coil has $N$ turns and $\theta=\omega t$, which gives the sinusoid below.</div>
+<p>By Faraday’s law, the instantaneous emf is</p>
+<div class="eq">$$E = -\frac{d\phi}{dt} = NBA\,\omega\sin\omega t = E_0\sin\omega t$$</div>
+<p>where $E_0 = NBA\omega$ is the <i>peak value</i> of the emf. With $\omega = 2\pi\nu$, the emf is a sine curve (Fig. 13.2). A coil in a closed circuit carries an <i>alternating current</i> $I = I_0\sin\omega t$.</p>
+<figure class="fig"><img src="final/m4-s3-sine.jpg" alt="m4 s3 sine"><figcaption>Fig. 13.2 (book): emf E = E₀ sin ωt against ωt; a sine curve.</figcaption></figure>
+
+<h3>3. One cycle</h3>
+<p>The time for one cycle is the <i>time period</i> $T = 1/\nu$. The peak value of the current or voltage is the <i>amplitude</i> (Fig. 13.3).</p>
+<figure class="fig"><img src="final/m4-s3-cycle.jpg" alt="m4 s3 cycle"><figcaption>Fig. 13.3 (book): one cycle of ac voltage or current, with peak value and the times T/4, T/2, 3T/4, T.</figcaption></figure>
+
+<h3>4. Mean value</h3>
+<p>The mean value is the average over half a cycle:</p>
+<div class="eq">$$\begin{aligned}I_{mean} &= \frac{\int_0^{\pi/\omega} I_0\sin\omega t\,dt}{\pi/\omega} \\  &= \frac{2I_0}{\pi} \\  &= 0.637\,I_0\end{aligned}$$</div>
+<p>Similarly $E_{mean} = 0.637\,E_0$. The mean is the area under the half-cycle curve divided by its base (Fig. 13.3 shading).</p>
+<figure class="fig"><img src="final/m4-s3-mean.jpg" alt="m4 s3 mean"><figcaption>Mean value over half a cycle, 0.637 I₀ (book, §13.1, shaded area).</figcaption></figure>
+
+<h3>5. Root mean square (r.m.s.) value</h3>
+<p>The r.m.s. value is the square root of the average of $I^2$ over a complete cycle:</p>
+<div class="eq">$$\begin{gathered}\overline{I^2} = \frac{\int_0^{2\pi/\omega} I_0^2\sin^2\omega t\,dt}{2\pi/\omega} = \frac{I_0^2}{2} \\ I_{rms} = \frac{I_0}{\sqrt 2} = 0.707\,I_0\end{gathered}$$</div>
+<p>Similarly $E_{rms} = E_0/\sqrt2 = 0.707\,E_0$.</p>
+
+<h3>6. Virtual (effective) value</h3>
+<p>The r.m.s. value is also called the <i>virtual</i> or <i>effective</i> value. It is the direct current that would produce the same heat in the same resistance in the same time. Equating the heat from $I = I_0\sin\omega t$ to $I_v^2RT$ over one period gives $I_v = I_0/\sqrt2$ again.</p>
+<div class="eq">$$I_v = \frac{I_0}{\sqrt 2} = I_{rms}$$</div>
+
+<h3>7. Form factor</h3>
+<p>The form factor measures the shape of the wave. It is the ratio of the r.m.s. value to the mean value:</p>
+<div class="eq">$$\begin{aligned}\text{Form factor} &= \frac{I_{rms}}{I_{mean}} \\  &= \frac{0.707\,E_0}{0.637\,E_0} \\  &= 1.11\end{aligned}$$</div>
+
+<h3>8. Mean emf over a half cycle</h3>
+<p>With $E = E_0\sin\omega t$, integrating over half a period $T/2$ gives $E_{av} = 2E_0/\pi$. The r.m.s. emf is obtained from the mean of $E^2$ over one period, using $\int_0^T\sin^2\omega t\,dt = T/2$, which gives $E_{rms} = E_0/\sqrt 2$.</p>
+
+<h3>9. Impedance, reactance and admittance</h3>
+<p>In an AC circuit the current is controlled by resistance, inductance and capacitance. The <i>impedance</i> $Z$ is the ratio of the applied emf to the current, $Z = E/I$. It is the hindrance the circuit offers to the alternating current. The part of the hindrance due to inductance and capacitance is the <i>reactance</i>. Inductive reactance is $X_L$ and capacitive reactance is $X_C$. The inverse of the impedance is the <i>admittance</i> $Y = 1/Z$.</p>
+</div>
+<div class="sec-bar">Section 4: AC circuits with R, L and C; phasors and the j operator (Murugeshan 13.2)</div>
+<h2>13.2 Alternating current circuit theory</h2>
+<div class="sec-body">
+<div class="bg">Source: <i>book-sources/m4-s4-ac-circuits.html</i>, Murugeshan pp. 334–337 (printed). Syllabus items 18, 19 and 20 (R, L and C alone; the L-R and C-R circuits; the j operator). The parallel resonant circuit, §13.2(vi), is in Section 5 with §13.4. Equations are tagged with the book’s numbers, (i) to (v).</div>
+
+<h3>Before you start</h3>
+<ul>
+<li>Phase of a sinusoid; lag and lead (pre-physics H2).</li>
+<li>Complex numbers, $j^2=-1$, and the phasor (Beyond; pre-math B1, B2). Each step with $j$ is explained below.</li>
+</ul>
+
+<h3>1. (i) A pure resistance</h3>
+<div class="box-recall"><span class="lbl recall">Recall (Plus Two)</span> Ohm’s law $V=IR$ (Plus Two). For a pure resistance, $E/R$ gives the current directly, and the current is in phase with the emf. The same law holds for the complex form $E=E_0e^{j\omega t}$.</div>
+<p>Let $E = E_0e^{j\omega t}$ be applied across a pure resistance $R$ (Fig. 13.4). The current is</p>
+<figure class="fig"><img src="final/m4-s4-resistor.jpg" alt="m4 s4 resistor"><figcaption>Fig. 13.4 and 13.5 (book): pure resistance; E and I in phase.</figcaption></figure>
+<div class="eq">$$\begin{gathered}I = \frac{E}{R} = \frac{E_0 e^{j\omega t}}{R} = I_0 e^{j\omega t} \\ I_0 = \frac{E_0}{R}\end{gathered}$$</div>
+<p>The actual current is the imaginary part of $I_0e^{j\omega t}$, which is $I_0\sin\omega t$. The current is <i>in phase</i> with the voltage (Fig. 13.5).</p>
+
+<h3>2. (ii) A pure inductance</h3>
+<p>Let $E = E_0e^{j\omega t}$ across an inductance $L$ (Fig. 13.6). The voltage across $L$ is $L\,dI/dt$. Integrating $L\,dI/dt = E_0e^{j\omega t}$ gives</p>
+<div class="eq">$$I = \frac{E}{j\omega L} = \frac{E_0}{\omega L}e^{j(\omega t - \pi/2)}\tag{13.2(ii)(1)}$$</div>
+<p>With $I_0 = E_0/\omega L$, the actual current is</p>
+<div class="eq">$$I = I_0\sin\left(\omega t - \frac{\pi}{2}\right)\tag{13.2(ii)(2)}$$</div>
+<p>In a pure inductor the current <i>lags</i> the emf by $\pi/2$ (Fig. 13.7). Here $\omega L$ is the inductive reactance, and $j\omega L$ is the impedance of $L$: the voltage leads the current by $90^\circ$.</p>
+<figure class="fig"><img src="final/m4-s4-inductor.jpg" alt="m4 s4 inductor"><figcaption>Fig. 13.6 and 13.7 (book): pure inductance; current lags the emf by π/2.</figcaption></figure>
+
+<h3>3. (iii) A pure capacitance</h3>
+<p>Let $E = E_0e^{j\omega t}$ across a capacitor $C$ (Fig. 13.8). With charge $q$, $q/C = E$. The current is $I = dq/dt = j\omega C E$, so</p>
+<div class="eq">$$\begin{gathered}I = \frac{E_0}{1/\omega C}e^{j(\omega t + \pi/2)} = I_0 e^{j(\omega t + \pi/2)} \\ I_0 = \frac{E_0}{1/\omega C}\end{gathered}$$</div>
+<p>The actual current is $I_0\sin(\omega t + \pi/2)$. In a pure capacitor the current <i>leads</i> the emf by $\pi/2$ (Fig. 13.9). The capacitive reactance is $1/\omega C$, and its impedance is $1/(j\omega C) = -j/(\omega C)$.</p>
+<figure class="fig"><img src="final/m4-s4-capacitor.jpg" alt="m4 s4 capacitor"><figcaption>Fig. 13.8 and 13.9 (book): pure capacitance; current leads the emf by π/2.</figcaption></figure>
+
+<h3>4. (iv) Inductance and resistance in series</h3>
+<p>Let $E = E_0e^{j\omega t}$ be applied to $L$ and a non-inductive $R$ in series (Fig. 13.10). The impedance is $Z = R + j\omega L$. The potential drops are $j\omega L I$ across $L$ and $RI$ across $R$, so $E = j\omega L I + RI$ and</p>
+<div class="eq">$$I = \frac{E}{R + j\omega L}\tag{13.2(iv)(1)}$$</div>
+<div class="eq">$$I = \frac{E}{Z}\tag{13.2(iv)(2)}$$</div>
+<div class="eq">$$Z = R + j\omega L\tag{13.2(iv)(3)}$$</div>
+<p>Write $Z$ in polar form, $Z = \sqrt{R^2+\omega^2L^2}\,e^{j\theta}$ with $\tan\theta = \omega L/R$. Then</p>
+<div class="eq">$$I = \frac{E_0}{\sqrt{R^2+\omega^2L^2}}\,e^{j(\omega t - \theta)}\tag{13.2(iv)(4)}$$</div>
+<div class="eq">$$I = I_0 e^{j(\omega t - \theta)}\tag{13.2(iv)(5)}$$</div>
+<div class="eq">$$I_0 = \frac{E_0}{\sqrt{R^2 + \omega^2L^2}}\tag{13.2(iv)(6)}$$</div>
+<p>$I_0$ is the peak current. The impedance is $Z = \sqrt{R^2+\omega^2L^2}$. The current <i>lags</i> the emf by $\theta = \tan^{-1}(\omega L/R)$ (Fig. 13.11).</p>
+<figure class="fig"><img src="final/m4-s4-rl-series.jpg" alt="m4 s4 rl series"><figcaption>Fig. 13.10 (book): R and L in series, with the phasor diagram of I₀R and I₀ωL.</figcaption></figure>
+<figure class="fig"><img src="final/m4-s4-rl-graph.jpg" alt="m4 s4 rl graph"><figcaption>Fig. 13.11 (book): emf and current for R and L in series; current lags by θ.</figcaption></figure>
+
+<h3>5. (v) Capacitance and resistance in series</h3>
+<p>Let $E = E_0e^{j\omega t}$ be applied to $R$ and $C$ in series (Fig. 13.12). Let $I$ be the current and $q$ the charge on $C$. Then</p>
+<div class="eq">$$I\left(R + \frac{1}{j\omega C}\right) = E = E_0e^{j\omega t}\tag{13.2(v)(1)}$$</div>
+<div class="eq">$$I = \frac{E}{R + 1/(j\omega C)}\tag{13.2(v)(2)}$$</div>
+<div class="eq">$$I = \frac{E}{Z}\tag{13.2(v)(3)}$$</div>
+<p>The impedance is $Z = R + 1/(j\omega C) = R - j/(\omega C)$. Writing $Z$ in polar form and taking $\theta = \tan^{-1}\left[(1/\omega C)/R\right]$,</p>
+<div class="eq">$$\begin{aligned}I &= \frac{E}{R - j/(\omega C)} \\  &= \frac{E_0e^{j\omega t}}{\sqrt{R^2 + 1/(\omega C)^2}}\,e^{-j\theta}\end{aligned} \tag{13.2(v)(4)}$$</div>
+<div class="eq">$$\theta = \tan^{-1}\left(\frac{1/\omega C}{R}\right)\tag{13.2(v)(5)}$$</div>
+<div class="eq">$$I = \frac{E_0}{\sqrt{R^2 + (1/\omega C)^2}}\,e^{j(\omega t+\theta)}\tag{13.2(v)(6)}$$</div>
+<p>The current <i>leads</i> the applied voltage by $\theta$ (Fig. 13.13). The actual current is $I = I_0\sin(\omega t+\theta)$.</p>
+<figure class="fig"><img src="final/m4-s4-rc-series.jpg" alt="m4 s4 rc series"><figcaption>Fig. 13.12 (book): R and C in series, with the phasor diagram.</figcaption></figure>
+<figure class="fig"><img src="final/m4-s4-rc-graph.jpg" alt="m4 s4 rc graph"><figcaption>Fig. 13.13 (book): emf and current for R and C in series; current leads by θ.</figcaption></figure>
+
+<h3>6. The j operator as a rotation</h3>
+<p>$j=\sqrt{-1}$ turns a phasor through $90^\circ$ anticlockwise. $-j$ turns it $90^\circ$ clockwise. In a circuit, $E_L$ lies $90^\circ$ ahead of $I$ and $E_C$ lies $90^\circ$ behind it. Hence the total emf of a circuit with $R$, $L$ and $C$ is $E = E_R + jE_L - jE_C$ (Fig. 13.20). A complex impedance $Z = R + jX$ has resistance $R$ and effective reactance $X = X_L - X_C$.</p>
+<figure class="fig"><img src="final/m4-s4-j-plane.jpg" alt="m4 s4 j plane"><figcaption>Fig. 13.20 (book): phasors E_R, jE_L and −jE_C; j rotates a phasor by 90°.</figcaption></figure>
+</div>
+<div class="sec-bar">Section 5: series LCR and parallel resonance (Murugeshan 13.2(vi), 13.3, 13.4)</div>
+<h2>13.2 (vi), 13.3 and 13.4 Parallel and series resonance</h2>
+<div class="sec-body">
+<div class="bg">Source: <i>book-sources/m4-s5-series-parallel.html</i>, Murugeshan pp. 338–346 (printed), with Examples 1 and 2 of §13.3 and Example 1 of §13.4. Syllabus items 20 (parallel L and C) and 21 (series LCR). The book numbers the series derivation by two methods; the equations are tagged (a) for the first and (b) for the second method.</div>
+
+<h3>Before you start</h3>
+<ul>
+<li>The impedance and phase of R, L and C in series (Section 4 of these notes).</li>
+<li>Complex numbers, the conjugate and the modulus (pre-math B1, B3).</li>
+</ul>
+
+<h3>1. Parallel resonant circuit (§13.2(vi))</h3>
+<p>Take an inductance $L$ and a capacitance $C$ in parallel across an alternating emf $E = E_0\sin\omega t$. The current in $L$ lags the emf by $\pi/2$, so $I_L = (E_0/\omega L)\sin(\omega t-\pi/2)$. The current in $C$ leads the emf by $\pi/2$, so $I_C = E_0/(1/\omega C)\sin(\omega t+\pi/2)$ (Fig. 13.14). The total current is</p>
+<div class="eq">$$\begin{aligned}I &= I_L + I_C \\  &= E_0\left(\omega C - \frac{1}{\omega L}\right)\cos\omega t\end{aligned} \tag{13.2(vi)(1)}$$</div>
+<p>If at a frequency $\nu_0$ we have $\omega C = 1/\omega L$, the current is zero. The circuit then offers an infinite impedance: it is a <i>parallel resonant circuit</i>. Its resonant frequency is</p>
+<div class="eq">$$\nu_0 = \frac{1}{2\pi\sqrt{LC}}\tag{13.2(vi)(2)}$$</div>
+<figure class="fig"><img src="final/m4-s5-par-circuit.jpg" alt="m4 s5 par circuit"><figcaption>Fig. 13.14 (book): parallel L and C across E = E₀ sin ωt.</figcaption></figure>
+<figure class="fig"><img src="final/m4-s5-par-curve.jpg" alt="m4 s5 par curve"><figcaption>Fig. 13.15 and 13.23 (book): current against frequency, minimum at the parallel resonant frequency.</figcaption></figure>
+
+<h3>2. Series LCR circuit: first method (§13.3)</h3>
+<div class="box-recall"><span class="lbl recall">Recall (Plus Two)</span> In Plus Two, resistances in series add, and the total opposition to current is the impedance. Here the reactances $X_L$ and $X_C$ subtract, so the impedance is $\sqrt{R^2+(X_L-X_C)^2}$.</div>
+<p>Let $E=E_0\sin\omega t$ be applied to $R$, $L$ and $C$ in series (Fig. 13.16). Let $I$ be the current and $Q$ the charge on $C$. The emf equation is $L\,dI/dt + RI + Q/C = E_0\sin\omega t$. Differentiating with respect to $t$ gives</p>
+<div class="eq longeq">$$L\frac{d^2I}{dt^2} + R\frac{dI}{dt} + \frac{1}{C}\frac{dQ}{dt} = E_0\omega\cos\omega t\tag{13.3(a)(1)}$$</div>
+<p>Try the solution $I = I_0\sin(\omega t-\phi)$, with $I_0$ and $\phi$ constants. Substituting $I$, $dI/dt$ and $d^2I/dt^2$ and equating the coefficients of $\sin(\omega t-\phi)$ and $\cos(\omega t-\phi)$ gives</p>
+<div class="eq">$$I = I_0\sin(\omega t-\phi)\tag{13.3(a)(2)}$$</div>
+<div class="eq">$$\left(-L\omega^2 + \frac{1}{C}\right)I_0 = -E_0\omega\sin\phi\tag{13.3(a)(3)}$$</div>
+<div class="eq">$$R\omega I_0 = E_0\omega\cos\phi\tag{13.3(a)(4)}$$</div>
+<p>Dividing and squaring-and-adding give</p>
+<div class="eq">$$\tan\phi = \frac{\omega L - 1/\omega C}{R}\tag{13.3(a)(5)}$$</div>
+<div class="eq">$$I_0 = \frac{E_0}{\sqrt{R^2 + \left(\omega L - 1/\omega C\right)^2}}\tag{13.3(a)(6)}$$</div>
+<div class="eq longeq">$$I = \frac{E_0}{\sqrt{R^2 + \left(\omega L - 1/\omega C\right)^2}}\sin(\omega t - \phi)\tag{13.3(a)(7)}$$</div>
+<p>The quantity $\sqrt{R^2+(\omega L-1/\omega C)^2}$ is the impedance $Z$, which is $\sqrt{R^2+(X_L-X_C)^2}$. The current lags the emf if $X_L>X_C$, leads it if $X_L\lt X_C$, and is in phase when $X_L=X_C$.</p>
+
+<h3>3. Series resonance</h3>
+<p>The impedance is least when $\omega L = 1/\omega C$, so $Z=R$ and the current is largest. This frequency is the resonant frequency $\nu_0 = 1/(2\pi\sqrt{LC})$. The largest current is $I_0=E_0/R$. The sharpness of the peak depends on $R$: small $R$ gives a sharp peak (Figs. 13.17, 13.18). The circuit is an <i>acceptor</i> circuit, because it admits the current of its own frequency most readily.</p>
+<figure class="fig"><img src="final/m4-s5-lcr-circuit.jpg" alt="m4 s5 lcr circuit"><figcaption>Fig. 13.16 (book): R, L and C in series across E = E₀ sin ωt.</figcaption></figure>
+<figure class="fig"><img src="final/m4-s5-res-curve.jpg" alt="m4 s5 res curve"><figcaption>Figs. 13.17 and 13.18 (book): current against frequency at resonance, for low and high R.</figcaption></figure>
+<div class="eq longeq">$$\begin{aligned}I &= \frac{E_0}{\sqrt{R^2 + \left(\omega L - \dfrac{1}{C\omega}\right)^2}}\\ &\quad\times\sin(\omega t-\phi)\end{aligned}\tag{13.3(res)(1)}$$</div>
+
+<h3>4. Voltage magnification and the Q-factor</h3>
+<p>At resonance $I_0 = E_0/R$, and the voltage across $L$ is $V_L = X_L I_0 = (\omega_0 L/R)E_0 = QE_0$, where $Q = \omega_0 L/R$ is the quality factor. Thus the voltage across $L$ (and across $C$) is $Q$ times the applied voltage. This is the <i>voltage magnification</i>. It does not increase the power, because the reactive power is wattless. A larger $Q$ gives a sharper, narrower resonance curve (Fig. 13.18). The sharpness is measured by the bandwidth.</p>
+<figure class="fig"><img src="final/m4-s5-vm.jpg" alt="m4 s5 vm"><figcaption>Voltage magnification at resonance: V_L / E₀ = Q (book, §13.3).</figcaption></figure>
+<figure class="fig"><img src="final/m4-s5-q-bandwidth.jpg" alt="m4 s5 q bandwidth"><figcaption>Sharp and flat resonance curves; a large Q gives a narrow bandwidth (book, §13.3).</figcaption></figure>
+<figure class="fig"><img src="final/m4-s5-vector.jpg" alt="m4 s5 vector"><figcaption>Fig. 13.19 (book): vector diagram of the series LCR circuit.</figcaption></figure>
+
+<h3>5. Vector diagram</h3>
+<p>In a series circuit the current is the same through $R$, $L$ and $C$. The drop $E_R = I_0R$ is in phase with the current, $E_L = \omega LI_0$ is $90^\circ$ ahead of it, and $E_C = I_0/\omega C$ is $90^\circ$ behind it (Fig. 13.19). The resultant of $E_L$ and $E_C$ is $E_L - E_C$, and $E_0^2 = E_R^2 + (E_L-E_C)^2$.</p>
+
+<h3>6. Series LCR circuit: second method (complex impedance)</h3>
+<p>Write $Z = Z_R + Z_L + Z_C = R + j(\omega L - 1/\omega C)$ (Fig. 13.21). With $E=E_0e^{j\omega t}$,</p>
+<div class="eq">$$E = E_0 e^{j\omega t}\tag{13.3(b)(1)}$$</div>
+<div class="eq">$$\begin{gathered}Z = \sqrt{R^2 + (\omega L - 1/\omega C)^2}\,e^{j\phi} \\ \tan\phi = \frac{\omega L-1/\omega C}{R}\end{gathered} \tag{13.3(b)(2)}$$</div>
+<div class="eq longeq">$$I = \frac{E}{Z} = \frac{E_0}{\sqrt{R^2 + (\omega L - 1/\omega C)^2}}\,e^{j(\omega t-\phi)}\tag{13.3(b)(3)}$$</div>
+<div class="eq">$$I = I_0e^{j(\omega t - \phi)}\tag{13.3(b)(4)}$$</div>
+<div class="eq longeq">$$\begin{aligned}i &= \operatorname{Im}(I)\\ &= \frac{E_0}{\sqrt{R^2+(\omega L-1/\omega C)^2}}\sin(\omega t-\phi)\end{aligned}\tag{13.3(b)(5)}$$</div>
+<p>The actual current is the imaginary part of the complex current. The current lags the voltage by $\phi$.</p>
+
+<h3>7. Parallel resonant circuit: the rejector (§13.4)</h3>
+<p>Let $C$ be in parallel with the series combination of $R$ and $L$, across $E = E_0 e^{j\omega t}$ (Fig. 13.22). The impedance of the $L$ branch is $Z_1 = R + j\omega L$ and of the $C$ branch is $Z_2 = 1/(j\omega C)$. Their parallel combination has</p>
+<div class="eq longeq">$$\frac{1}{Z} = \frac{R}{R^2 + (L\omega)^2} + j\left[C\omega - \frac{L\omega}{R^2 + (L\omega)^2}\right]$$</div>
+<p>The admittance is least, and so the impedance greatest, at $\omega_0 = \sqrt{\frac{1}{LC} - \frac{R^2}{L^2}}$. If $R$ is small, $\nu_0 = 1/(2\pi\sqrt{LC})$. At this frequency the impedance is $Z = L/(RC)$ and the current is least. A parallel circuit at resonance is a <i>rejector</i>: it blocks the current of its natural frequency (Fig. 13.23). In a parallel circuit, resonance gives maximum impedance; in a series circuit, minimum.</p>
+<figure class="fig"><img src="final/m4-s5-impedance-tri.jpg" alt="m4 s5 impedance tri"><figcaption>Impedance triangle for series LCR: Z = √(R² + (X_L − X_C)²) (book, §13.3).</figcaption></figure>
+
+<h3>8. Worked examples</h3>
+<p><b>§13.3, Example 1 (printed p. 344).</b> $R=50+2=52\ \Omega$, $L=0.3$ H, $C=40\ \mu$F, $\omega=100\pi$, $E_{rms}=200$ V. $X_L=94.2\ \Omega$, $X_C=79.6\ \Omega$, $Z=53.97\ \Omega$, $I_{rms}=3.71$ A. $\tan\phi = 0.28$, $\phi\approx15^\circ39'$, $\cos\phi=0.964$, apparent power $742$ VA, true power $716$ W.</p>
+<p><b>§13.3, Example 2 (printed p. 344).</b> For resonance with $L=5$ H and $\omega=100\pi$, $C=2\ \mu$F. The current at resonance is $I_{rms}=100/100=1.0$ A. The p.d. across $R$ is 100 V, across $L$ 1570 V, and across $C$ 1570 V, which are equal and opposite in phase.</p>
+<p><b>§13.4, Example 1 (printed p. 347).</b> $L=2$ mH, $R=15\ \Omega$, $C=0.001\ \mu$F. The resonant frequency is $\nu_0 = 112\,590$ Hz (or $112\,596$ Hz by the approximation). The peak make-up current is $E_0CR/L = 15\times10^{-6}$ A.</p>
+</div>
+<div class="sec-bar">Section 6: power in AC circuits (Murugeshan 13.5)</div>
+<h2>13.5 Power in an AC circuit with resistance, inductance and capacitance</h2>
+<div class="sec-body">
+<div class="bg">Source: <i>book-sources/m4-s6-power.html</i>, Murugeshan pp. 347–351 (printed), with Examples 1–5 of §13.5. Syllabus item 22. §13.6 (choke coil) begins on printed p. 351 and continues beyond this module; its heading is shown and its text is not included. Equations (1) and (2) are the book’s; the Example 2 equations are tagged (ex2) with their book numbers.</div>
+
+<h3>Before you start</h3>
+<ul>
+<li>Power in a DC circuit, $P = VI = I^2R$ (pre-physics P8).</li>
+<li>Products of sinusoids and the average of $\cos^2$ over a cycle (pre-math M5, M7).</li>
+<li>Phase angle $\phi$ between current and emf (Section 4 and 5 of these notes).</li>
+</ul>
+
+<h3>1. Instantaneous power</h3>
+<div class="box-recall"><span class="lbl recall">Recall (Plus Two)</span> In a DC resistive circuit, $P=VI=I^2R=V^2/R$ (Plus Two). In an AC circuit the same formula holds for the instantaneous power $EI$, and the average is taken over a cycle with the factor $\cos\phi$.</div>
+<p>Let the voltage and current be $E = E_0\sin\omega t$ and $I = I_0\sin(\omega t-\phi)$, where $\phi$ is the phase difference. Both vary with time, so the power $EI$ is calculated at each instant and then averaged over a cycle. Using $\sin A\sin B = \tfrac12[\cos(A-B)-\cos(A+B)]$,</p>
+<div class="eq">$$\begin{aligned}E\times I &= E_0I_0\sin\omega t\,\sin(\omega t-\phi) \\  &= \frac{1}{2}E_0I_0\left[\cos\phi - \cos(2\omega t-\phi)\right]\end{aligned} \tag{13.5(1)}$$</div>
+
+<h3>2. Average power</h3>
+<p>Averaging over one complete period $T$, the $\cos(2\omega t - \phi)$ term integrates to zero, and</p>
+<div class="eq">$$P = \frac{1}{T}\int_0^T EI\,dt = \frac{1}{2}E_0I_0\cos\phi\tag{13.5(2)}$$</div>
+<p>Since $E_{rms} = E_0/\sqrt2$ and $I_{rms} = I_0/\sqrt2$,</p>
+<div class="eq">$$P = E_{rms}\,I_{rms}\cos\phi$$</div>
+<p>The product $E_{rms}I_{rms}$ is the <i>apparent power</i>. The factor $\cos\phi$ is the <i>power factor</i>. The true power is the apparent power times the power factor. The power factor is the ratio of the true power to the apparent power. For a circuit of $R$, $L$ and $C$ in series,</p>
+<div class="eq">$$\begin{gathered}\tan\phi = \frac{\omega L - 1/\omega C}{R} \\ \cos\phi = \frac{R}{\sqrt{R^2 + (\omega L - 1/\omega C)^2}}\end{gathered}$$</div>
+<figure class="fig"><img src="final/m4-s6-pf-triangle.jpg" alt="m4 s6 pf triangle"><figcaption>Fig. 13.24 (book): power-factor triangle with sides R, ωL − 1/ωC and Z.</figcaption></figure>
+
+<h3>3. Special cases</h3>
+<ul>
+<li>Purely resistive: $\phi=0$, $\cos\phi=1$, and the true power is $E_{v}I_{v}$.</li>
+<li>Purely inductive: $\phi=90^\circ$, $\cos\phi=0$; the true power is zero.</li>
+<li>Purely capacitive: $\phi=-90^\circ$, $\cos\phi=0$; the true power is zero.</li>
+<li>$R$ and $L$ in series: $\cos\phi = R/\sqrt{R^2+(\omega L)^2}$.</li>
+<li>$R$ and $C$ in series: $\cos\phi = R/\sqrt{R^2 + 1/(\omega C)^2}$.</li>
+</ul>
+
+<h3>4. Wattless current</h3>
+<p>The current is <i>wattless</i> when the average power is zero. In a purely inductive or purely capacitive circuit with no resistance, $\phi=\pi/2$ and $\cos\phi=0$. The current does no useful work; it is the <i>idle</i> current. This is the principle of the choke coil, which offers reactance to the current but absorbs no power. Splitting the current into components along and perpendicular to the emf (Fig. 13.25), the component $I\cos\phi$ gives the power, and $I\sin\phi$ is wattless.</p>
+<figure class="fig"><img src="final/m4-s6-wattless.jpg" alt="m4 s6 wattless"><figcaption>Fig. 13.25 (book): I cos φ (power component) and I sin φ (wattless component).</figcaption></figure>
+<figure class="fig"><img src="final/m4-s6-inst-power.jpg" alt="m4 s6 inst power"><figcaption>Emf, current and instantaneous power against time; the average power is shown dashed.</figcaption></figure>
+
+<h3>5. Worked examples</h3>
+<p><b>Example 1 (printed p. 348).</b> A choke of inductance 5 H and resistance 200 $\Omega$ is connected to 10 V at 100 Hz. $\cos\phi = 200/\sqrt{200^2+(2\pi\cdot100\cdot5)^2} = 0.062$. The power absorbed is $0.00189$ W.</p>
+<p><b>Example 2 (printed pp. 348–349).</b> A 50 V r.m.s. source feeds an air-cored coil. At 50 Hz the power is 100 W and at 100 Hz it is 50 W. The power is dissipated only in $R$: $\frac{50^2}{R^2+(100\pi)^2L^2}R = 100$ and $\frac{50^2R}{R^2+(200\pi)^2L^2}=50$. Eliminating gives $R^2 = 2\times10^4\pi^2L^2$, so $R=100\sqrt2\,\pi L$, and then $R=16.7\ \Omega$, $L=37.3$ mH.</p>
+<div class="eq longeq">$$\frac{50^2}{[R^2+(100\pi)^2L^2]}R = 100\ \text{W}\tag{13.5(ex2)(1)}$$</div>
+<div class="eq">$$\frac{50^2R}{[R^2+(200\pi)^2L^2]} = 50\ \text{W}\tag{13.5(ex2)(2)}$$</div>
+<div class="eq longeq">$$2500\,R = 100\left[R^2+10^4\pi^2L^2\right]\tag{13.5(ex2)(3)}$$</div>
+<div class="eq longeq">$$2500\,R = 50\left[R^2+4\times10^4\pi^2L^2\right]\tag{13.5(ex2)(4)}$$</div>
+<div class="eq longeq">$$\begin{aligned}R^2 &= 2\times10^4\times\pi^2L^2\\ R &= 100\sqrt2\,\pi L\end{aligned}\tag{13.5(ex2)(5)}$$</div>
+<p><b>Example 3 (printed pp. 350–351).</b> A coil of inductance 0.7 H in series with 50 $\Omega$ is connected to 200 V at 50 Hz. $Z = 225.6\ \Omega$, $I_{rms}=0.89$ A. The power component is $I\cos\phi = 0.20$ A and the wattless component is $I\sin\phi = 0.87$ A.</p>
+<p><b>Example 4 (printed p. 351).</b> A coil of 0.1 H and 12 $\Omega$ on 220 V, 50 Hz: $X_L=31.43\ \Omega$, $Z=33.6\ \Omega$, and the wattmeter reading is $(220)^2/33.6\times 12/33.6 = 514.5$ W.</p>
+<p><b>Example 5 (printed p. 351).</b> A purely inductive circuit dissipates no power. The energy drawn from the source in one part of the cycle to build the magnetic field is returned to the source in the next part. The inductance stores energy and gives it back; only the resistance of the coil loses energy as heat.</p>
+<h3>6. Choke coil (§13.6, heading only)</h3>
+<p>The choke coil is an inductance used to control current without power loss. Its section begins on printed p. 351 and continues beyond this module. It is not included in these notes.</p>
+</div>
+</main>
+</body>
+</html>

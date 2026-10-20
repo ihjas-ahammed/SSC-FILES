@@ -1,0 +1,486 @@
+<!-- UNIT 1: BARTLE §7.1 (T01-T09) --> <section
+class="page"> <div class="kicker"
+style="font-size:8pt;font-weight:800;letter-spacing:.12em;color:#0072B2">UNIT 1 · BARTLE
+§7.1</div> <h1>The Riemann Integral</h1> <hr>
+<!-- T01 (K01) --> <div class="topic-head"><span class="tid">T01</span><h2>Partitions,
+subintervals and the norm</h2></div> <p class="oneline">Cutting [a,b] into pieces and
+measuring the widest piece (PYQ MTS-26 Q4, MAT-22 Q3, MAT-21 Q5, MAT-22 MCQ 16).</p>
+<figure> {{fig:F01_partition_norm}} <figcaption><b>What to notice:</b> For P=(0,1,1.5,2,3.4,4)
+on [0,4], the five subinterval widths are 1, 0.5, 0.5, 1.4, 0.6; the norm \lVert P\rVert = 1.4 is the
+single largest gap I_4=[2,3.4]. <b>What it does not prove:</b> Knowing \lVert P\rVert does not
+tell you how many subintervals P has or where the other cut points sit.</figcaption> </figure>
+<div class="box def"><span class="lab">Definition · Partition and Norm (Bartle §7.1, p.
+199–200, eq. (1))</span>If I := [a,b] is a closed bounded interval in \mathbb{R}, then a
+<b>partition</b> of I is a finite, ordered set P := (x_0, x_1, \dots, x_{n-1}, x_n) of points in I such
+that
+a = x_0 < x_1 < \cdots < x_{n-1} < x_n = b.
+The points of P are used to divide I = [a,b] into non-overlapping subintervals
+I_1 := [x_0, x_1],\quad I_2 := [x_1, x_2],\quad \dots,\quad I_n := [x_{n-1}, x_n].
+We define the <b>norm</b> (or <b>mesh</b>) of P to be the number
+\lVert P\rVert := \max\{x_1 - x_0,\, x_2 - x_1,\, \dots,\, x_n - x_{n-1}\}.
+<span class="say">In plain words: a partition is a strictly increasing list of cut points starting at a
+and ending at b; its norm \lVert P\rVert is the length of the widest piece.</span> </div> <div
+class="box skel"><span class="lab">Skeleton · find the norm of a given partition</span>List the
+subinterval lengths \Delta x_i = x_i - x_{i-1} for i=1,\dots,n: <span class="gap">?</span>.
+Therefore \lVert P\rVert = \max\{<span class="gap">?</span>\} = $ <span
+class="gap">?</span>.</div> <div class="box idea"><span class="lab">Worked example ·
+Bartle Exercise 7.1.1 & Past Papers</span> <p><b>1. On 𝐼 = [0, 4] (Bartle Ex 7.1.1; PYQ
+MTS-26 Q4, MAT-22 Q3):</b></p> <ul> <li>𝑃1 = (0, 1, 2, 4): gaps are 1 − 0 = 1, 2 − 1 = 1,
+4 − 2 = 2, so $\lVert P_1\rVert = \max\{1,1,2\} = 2$.</li> <li>𝑃2 = (0, 2, 3, 4): gaps are 2, 1, 1, so
+$\lVert P_2\rVert = \max\{2,1,1\} = 2$.</li> <li>𝑃3 = (0, 1, 1. 5, 2, 3. 4, 4): gaps are
+1, 0. 5, 0. 5, 1. 4, 0. 6, so $\lVert P_3\rVert = 1.4$.</li> <li>𝑃4 = (0, 0. 5, 2. 5, 3. 5, 4): gaps are
+0. 5, 2, 1, 0. 5, so $\lVert P_4\rVert = 2$.</li> </ul> <p><b>2. Non-example:</b> (0, 2, 1, 4) is
+<b>not</b> a partition of [0, 4] (not strictly increasing: $2 \not< 1$), and (0, 1, 2, 3) is <b>not</b>
+a partition of [0, 4] because 𝑥3 = 3 ≠ 4 = 𝑏.</p> </div> <div class="box check"><span
+class="lab">Check yourself · PYQ MAT-22 MCQ 16</span> <div class="q">On 𝐼 = [2, 9], which
+partition has the largest norm: 𝑃1 = (2, 4, 6, 8, 9), 𝑃2 = (2, 6, 9), or 𝑃3 = (2, 5, 7, 9)?</div> <div
+class="a">\lVert P_1\rVert = \max{2,2,2,1} = 2$; \lVert P_2\rVert = \max\{4,3\} = 4; \lVert
+P_3\rVert = \max\{3,2,2\} = 3. So P_2 has the largest norm (4).</div> </div> <p class="small">In
+the model paper: <span class="chip q">Q1</span> (PYQ MTS-26 Q4, MAT-22 Q3, MAT-21 Q5,
+MAT-22 MCQ 16).</p> </section>
+<!-- T02 (K02) --> <section class="page"> <div class="topic-head"><span
+
+class="tid">T02</span><h2>Tags, tagged partitions and Riemann sums</h2></div> <p
+class="oneline">Picking a sample point t_i in each subinterval and adding the rectangle areas
+(PYQ MTS-22 Q4).</p> <figure> {{fig:F02_tagged_riemann_sum}} <figcaption><b>What to
+notice:</b> For f(x)=x^2 on [0,1] with P=(0,0.2,0.5,0.7,1) and tags t=(0.1,0.5,0.6,0.9), each
+rectangle's top touches the curve at (t_i,f(t_i)), giving S(f;\dot
+P)=0.002+0.075+0.072+0.243=0.392. <b>What it does not prove:</b> A single Riemann sum
+0.392 is only an approximation, not the exact integral 1/3.</figcaption> </figure> <div class="box
+def"><span class="lab">Definition · Tagged Partition and Riemann Sum (Bartle §7.1, p. 200, eq.
+(2))</span>If a point t_i has been selected from each subinterval I_i = [x_{i-1}, x_i], for i = 1, 2,
+\dots, n, then the points are called <b>tags</b> of the subintervals I_i. A set of ordered pairs
+\dot P := \{([x_{i-1}, x_i], t_i)\}_{i=1}^n
+of subintervals and corresponding tags is called a <b>tagged partition</b> of I; the dot over the
+P indicates that a tag has been chosen for each subinterval. The <b>norm</b> of a tagged
+partition is defined to be the same as for the corresponding ordinary partition and does not
+depend on the choice of tags. If f : [a,b] \to \mathbb{R} is a function defined on [a,b], then the
+<b>Riemann sum</b> of f corresponding to the tagged partition \dot P is the number
+S(f;\dot P) := \sum_{i=1}^n f(t_i)(x_i - x_{i-1}).
+<span class="say">In plain words: in each piece [x_{i-1},x_i], evaluate f at its chosen tag t_i,
+multiply by the piece's width (x_i - x_{i-1}), and add up all n products.</span> </div> <div
+class="box skel"><span class="lab">Skeleton · compute a Riemann sum S(f;\dot P)</span>List
+the subintervals I_i = [x_{i-1},x_i], widths \Delta x_i = x_i - x_{i-1}, and tags t_i \in I_i. Compute
+f(t_i) for each i. Then $S(f;\dot P) = \sum_{i=1}^n f(t_i)\Delta x_i = $ <span
+class="gap">?</span>.</div> <div class="box idea"><span class="lab">Worked example ·
+Bartle Exercise 7.1.2</span> <p>Let f(x) = x^2 on [0,4]. We compute S(f;\dot P) for P_1 =
+(0,1,2,4) (widths 1, 1, 2) and P_2 = (0,2,3,4) (widths 2, 1, 1):</p> <ul> <li><b>(a) P_1 with left
+endpoints</b> t = (0,1,2): S = f(0)\cdot 1 + f(1)\cdot 1 + f(2)\cdot 2 = 0(1) + 1(1) + 4(2) = 9.</li>
+<li><b>(b) P_1 with right endpoints</b> t = (1,2,4): S = f(1)\cdot 1 + f(2)\cdot 1 + f(4)\cdot 2 =
+1(1) + 4(1) + 16(2) = 37.</li> <li><b>(c) P_2 with left endpoints</b> t = (0,2,3): S = 0(2) + 4(1) +
+9(1) = 13.</li> <li><b>(d) P_2 with right endpoints</b> t = (2,3,4): S = 4(2) + 9(1) + 16(1) =
+33.</li> </ul> <p><b>Non-example:</b> Taking t_1 = 1.5 for I_1 = [0,1] is <b>not</b> a tagged
+partition because the tag t_1 must belong to its own subinterval [0,1].</p> </div> <div
+class="box trap"><span class="lab">Your intuition will lie to you here</span> <p><b>Trap
+1:</b> Writing f(x_i) in the definition of a Riemann sum. The definition requires f(t_i) for an
+<b>arbitrary</b> tag t_i \in [x_{i-1},x_i], not just the right endpoint x_i.</p> <p><b>Trap 2:</b>
+Thinking S(f;\dot P) is always positive. Where f(t_i) < 0, the term f(t_i)(x_i - x_{i-1}) is negative
+(signed area).</p> </div> <p class="small">In the model paper: <span class="chip
+q">Q2</span> (PYQ MTS-22 Q4).</p> </section>
+<!-- T03 (K03) --> <section class="page"> <div class="topic-head"><span
+class="tid">T03</span><h2>Definition of the Riemann integral (\mathcal{R}[a,b])</h2></div> <p
+class="oneline">The \varepsilon–\delta_\varepsilon definition that governs the entire module
+(PYQ MAT-21 MCQ 9).</p> <figure> {{fig:F03_four_tag_rules}} <figcaption><b>What to
+notice:</b> On the same partition P=(0,0.25,0.5,0.75,1) of [0,1] for f(x)=x^2, left tags give
+0.21875, right tags give 0.46875, midpoints give 0.328125, and random tags (0.2,0.3,0.7,0.8)
+give 0.315—all clustering near L=1/3. <b>What it does not prove:</b> Checking four tag
+choices on one partition does not prove f\in\mathcal{R}[0,1]; every tag choice on every partition
+with \lVert P\rVert<\delta_\varepsilon must lie in (L-\varepsilon,L+\varepsilon).</figcaption>
+</figure> <div class="box def"><span class="lab">Definition 7.1.1 · Riemann Integrable (Bartle
+p. 201) · say it word for word</span>A function f : [a,b] \to \mathbb{R} is said to be <b>Riemann
+
+integrable</b> on [a,b] if there exists a number L \in \mathbb{R} such that for every \varepsilon
+> 0 there exists \delta_\varepsilon > 0 such that if \dot P is any tagged partition of [a,b] with
+\lVert P\rVert < \delta_\varepsilon, then
+\lvert S(f;\dot P) - L\rvert < \varepsilon.
+The set of all Riemann integrable functions on [a,b] is denoted by \mathcal{R}[a,b]. We write L =
+\int_a^b f or \int_a^b f(x)\,dx. <span class="say">In plain words: there is one target number L
+such that, whatever error tolerance \varepsilon > 0 you are handed, you can find a mesh bound
+\delta_\varepsilon > 0 forcing every Riemann sum with widest piece <\delta_\varepsilon (for any
+choice of cut points and any choice of tags) to land within \varepsilon of L.</span> </div> <div
+class="box skel"><span class="lab">Skeleton · prove f \in \mathcal{R}[a,b] with \int_a^b f = L
+directly from Definition 7.1.1</span>Let \varepsilon > 0 be given. Choose \delta_\varepsilon = $
+<span class="gap">?</span> $ > 0. Let \dot P = \{([x_{i-1},x_i],t_i)\}_{i=1}^n be any tagged
+partition of [a,b] with \lVert P\rVert < \delta_\varepsilon. Then \lvert S(f;\dot P) - L\rvert \le $
+<span class="gap">?</span> $ < \varepsilon. Therefore f \in \mathcal{R}[a,b] and \int_a^b f = L.
+∎</div> <div class="box idea"><span class="lab">Remark 7.1.1 & Exercise 7.1.3 · why this is
+not an ordinary limit</span> <p><b>Why \lim_{\lVert P\rVert \to 0} S(f;\dot P) is not an ordinary
+function limit:</b> For a single number \delta = \lVert P\rVert, there are infinitely many partitions
+P having that exact norm and infinitely many tag choices t_i for each P. Thus S(f;\dot P) is
+<b>not a single-valued function of \lVert P\rVert</b>.</p> <p><b>Strict < versus \le (Bartle Ex
+7.1.3):</b> Replacing \lVert P\rVert < \delta_\varepsilon and \lvert S(f;\dot P) - L\rvert <
+\varepsilon by \le gives an equivalent definition (given \varepsilon, apply the \le-version with
+\varepsilon/2 and take \delta'_\varepsilon = \tfrac12\delta_{\varepsilon/2}).</p> <p><b>Worked
+example & Non-example:</b> f(x)=5 on [0,2] is in \mathcal{R}[0,2] with L=10 since S(f;\dot
+P)=10 for every \dot P (any \delta_\varepsilon>0 works). By contrast, Dirichlet's function <span
+class="cx">C7</span> on [0,1] is <b>not</b> in \mathcal{R}[0,1] because on every partition,
+rational tags give S=1 and irrational tags give S=0, so no single number L can be within
+\varepsilon = 1/2 of both.</p> </div> <p class="small">In the model paper: <span class="chip
+q">Q3</span> (PYQ MAT-21 MCQ 9).</p> </section>
+<!-- T04 (K04) --> <section class="page"> <div class="topic-head"><span
+class="tid">T04</span><h2>Uniqueness of the integral</h2></div> <p class="oneline">A
+function in \mathcal{R}[a,b] cannot have two different integrals (Bartle Theorem 7.1.2).</p> <div
+class="box def"><span class="lab">Theorem 7.1.2 · Uniqueness of the Integral (Bartle p.
+201)</span>If f \in \mathcal{R}[a,b], then the value of the integral is uniquely determined. <span
+class="say">In plain words: if L' and L'' both satisfy Definition 7.1.1 for the same f on [a,b], then
+L' = L''.</span> </div> <div class="box hyp"><span class="lab">Hypotheses · Theorem
+7.1.2</span><ul> <li>f \in \mathcal{R}[a,b] (so \delta_\varepsilon works for <b>all</b> tagged
+partitions of norm <\delta_\varepsilon)<span class="fails">if you only require convergence along
+one chosen sequence of tagged partitions (\dot P_n), different tag sequences can converge to
+different limits: for Dirichlet <span class="cx">C7</span>, rational tags give 1 while irrational
+tags give 0</span></li> </ul></div> <div class="kw"><span>Know</span><span>L' and L'' both
+satisfy Definition 7.1.1 for f on [a,b].</span><span>Want</span><span>L' = L'', by showing
+\lvert L' - L''\rvert < \varepsilon for every \varepsilon > 0.</span></div> <div class="box
+scratch"><span class="lab">Scratch · how we link L' and L''</span>Add and subtract the same
+Riemann sum S(f;\dot P): \lvert L' - L''\rvert \le \lvert L' - S(f;\dot P)\rvert + \lvert S(f;\dot P) L''\rvert. Make each piece < \varepsilon/2 by taking \delta_\varepsilon =
+\min\{\delta'_{\varepsilon/2}, \delta''_{\varepsilon/2}\}.</div> <div class="box proof"><span
+class="lab">Proof of Theorem 7.1.2 (Bartle p. 201)</span> <div class="steps"> <div
+class="step">Assume that L' and L'' both satisfy Definition 7.1.1 and let \varepsilon > 0.<span
+
+class="why">To prove L' = L'', we will show \lvert L' - L''\rvert < \varepsilon for arbitrary
+\varepsilon > 0 (P05).</span></div> <div class="step">There exists \delta'_{\varepsilon/2} > 0
+such that if \dot P_1 is any tagged partition with \lVert P_1\rVert < \delta'_{\varepsilon/2}, then
+\lvert S(f;\dot P_1) - L'\rvert < \varepsilon/2.<span class="why">Definition 7.1.1 applied to L' with
+tolerance \varepsilon/2 > 0.</span></div> <div class="step">Also there exists
+\delta''_{\varepsilon/2} > 0 such that if \dot P_2 is any tagged partition with \lVert P_2\rVert <
+\delta''_{\varepsilon/2}, then \lvert S(f;\dot P_2) - L''\rvert < \varepsilon/2.<span
+class="why">Definition 7.1.1 applied to L'' with tolerance \varepsilon/2 > 0.</span></div> <div
+class="step">Now let \delta_\varepsilon := \min\{\delta'_{\varepsilon/2}, \delta''_{\varepsilon/2}\}
+> 0 and let \dot P be a tagged partition with \lVert P\rVert < \delta_\varepsilon.<span
+class="why">Minimum of two positive numbers is positive (M08); an equal partition with n >
+(b-a)/\delta_\varepsilon guarantees such a \dot P exists.</span></div> <div class="step">Since
+both \lVert P\rVert < \delta'_{\varepsilon/2} and \lVert P\rVert < \delta''_{\varepsilon/2}, the
+Triangle Inequality gives
+\lvert L' - L''\rvert = \lvert L' - S(f;\dot P) + S(f;\dot P) - L''\rvert \le \lvert L' - S(f;\dot P)\rvert + \lvert
+S(f;\dot P) - L''\rvert < \varepsilon/2 + \varepsilon/2 = \varepsilon.
+<span class="why">Steps 2 and 3 both apply to the same \dot P; Triangle Inequality
+(P05).</span></div> <div class="step">Since \varepsilon > 0 is arbitrary, it follows that L' = L''.
+<span class="qed">∎</span><span class="why">Arbitrary \varepsilon rule (P05): a
+non-negative number \lvert L' - L''\rvert < \varepsilon for all \varepsilon > 0 must be
+0.</span></div> </div> </div> <div class="box idea"><span class="lab">Where the hypothesis
+was used & Worked application (Ex 7.1.9)</span> <p><b>Where used:</b> f \in
+\mathcal{R}[a,b] guarantees that <b>one</b> partition \dot P with \lVert P\rVert <
+\delta_\varepsilon satisfies the closeness bound for L' and L'' simultaneously.</p>
+<p><b>Worked example (Bartle Ex 7.1.9):</b> If f \in \mathcal{R}[a,b] and (\dot P_n) is any
+sequence of tagged partitions with \lVert P_n\rVert \to 0, then \lim_{n\to\infty} S(f;\dot P_n) =
+\int_a^b f. Indeed, given \varepsilon > 0, take \delta_\varepsilon from Definition 7.1.1; since
+\lVert P_n\rVert \to 0, there is K \in \mathbb{N} with \lVert P_n\rVert < \delta_\varepsilon for all n
+\ge K, so \lvert S(f;\dot P_n) - \int_a^b f\rvert < \varepsilon for all n \ge K. By uniqueness of
+limits, \lim S(f;\dot P_n) must equal the unique integral \int_a^b f.</p> </div> <p class="small">In
+the model paper: <span class="chip q">Q4</span>.</p> </section>
+<!-- T05 (K05) --> <section class="page"> <div class="topic-head"><span
+class="tid">T05</span><h2>Integrals straight from the definition: k, step g, and
+h(x)=x</h2></div> <p class="oneline">Three foundational calculations directly from Definition
+7.1.1 (Bartle 7.1.4(a)–(c); PYQ MTS-25 Q4).</p> <figure> {{fig:F15_step_jump_strip}}
+<figcaption><b>What to notice:</b> For g(x)=2 on [0,1] and 3 on (1,3] with \lVert P\rVert <
+\delta, the subintervals with tag \le 1 cover [0,1-\delta] and lie inside [0,1+\delta], so the sum can
+only err in the \delta-strip around the jump x=1 by at most 5\delta. <b>What it does not
+prove:</b> The picture shows one \delta; the proof verifies \lvert S(g;\dot P)-8\rvert \le 5\delta <
+\varepsilon for every \varepsilon>0 via \delta_\varepsilon=\varepsilon/10.</figcaption> </figure>
+<div class="box def"><span class="lab">Examples 7.1.4(a), (b), (c) (Bartle pp.
+202–204)</span> <p><b>(a) Constant function:</b> Every constant function f(x) := k on [a,b] is
+in \mathcal{R}[a,b] and \int_a^b k = k(b-a).</p> <p><b>(b) Two-piece step function:</b> g : [0,3]
+\to \mathbb{R} defined by g(x) := 2 for 0 \le x \le 1, and g(x) := 3 for 1 < x \le 3 is in
+\mathcal{R}[0,3] and \int_0^3 g = 8.</p> <p><b>(c) Identity function:</b> h(x) := x on [0,1] is in
+\mathcal{R}[0,1] and \int_0^1 x\,dx = \tfrac12.</p> <span class="say">In plain words: for a
+constant, every Riemann sum is exact; for a step function, the error comes only from the
+subinterval(s) straddling the jump; for x, midpoint tags telescope to 1/2 and any other tags differ
+
+by less than \delta.</span> </div> <div class="box proof"><span class="lab">Proof of 7.1.4(a) ·
+Constant function (PYQ MTS-25 Q4)</span> <div class="steps"> <div class="step">Let f(x) := k
+for all x \in [a,b]. For any tagged partition \dot P = \{([x_{i-1},x_i],t_i)\}_{i=1}^n of [a,b],
+S(f;\dot P) = \sum_{i=1}^n f(t_i)(x_i - x_{i-1}) = \sum_{i=1}^n k(x_i - x_{i-1}) = k\sum_{i=1}^n (x_i
+- x_{i-1}) = k(b - a).
+<span class="why">Factor out k (P02) and telescope \sum (x_i - x_{i-1}) = x_n - x_0 = b - a
+(M01).</span></div> <div class="step">Hence for any \varepsilon > 0, we can choose
+\delta_\varepsilon := 1 so that if \lVert P\rVert < \delta_\varepsilon, then \lvert S(f;\dot P) k(b-a)\rvert = 0 < \varepsilon. Since \varepsilon > 0 is arbitrary, f \in \mathcal{R}[a,b] and \int_a^b
+k = k(b-a). <span class="qed">∎</span><span class="why">Definition 7.1.1 satisfied with L =
+k(b-a).</span></div> </div> </div> <div class="box proof"><span class="lab">Proof of 7.1.4(b) ·
+Step function g(x)=2 on [0,1], 3 on (1,3]</span> <div class="steps"> <div class="step">Let \dot
+P be a tagged partition of [0,3] with \lVert P\rVert < \delta. Split \dot P into \dot P_1 (tags t_i \in
+[0,1], where g=2) and \dot P_2 (tags t_i \in (1,3], where g=3), so S(g;\dot P) = S(g;\dot P_1) +
+S(g;\dot P_2).<span class="why">Tag-splitting tool (M10).</span></div> <div class="step">Let
+U_1 be the union of all subintervals in \dot P_1. Since \lVert P\rVert < \delta, we have [0,
+1-\delta] \subseteq U_1 \subseteq [0, 1+\delta].<span class="why">If u \in [0,1-\delta] lies in I_k,
+then x_k \le u + \delta \le 1, so t_k \le 1 and I_k \in \dot P_1; conversely if t_k \le 1, then x_k \le
+t_k + \delta \le 1 + \delta (M10).</span></div> <div class="step">Since g(t_i) = 2 on \dot P_1,
+the sum S(g;\dot P_1) equals 2 times the total length of U_1, so 2(1-\delta) \le S(g;\dot P_1) \le
+2(1+\delta).<span class="why">Length of [0,1-\delta] is 1-\delta and length of [0,1+\delta] is
+1+\delta.</span></div> <div class="step">Similarly, the union U_2 of subintervals in \dot P_2
+satisfies [1+\delta, 3] \subseteq U_2 \subseteq [1-\delta, 3] (lengths 2-\delta and 2+\delta), so
+3(2-\delta) \le S(g;\dot P_2) \le 3(2+\delta).<span class="why">Same tag-inclusion argument on
+(1,3] with g(t_i) = 3.</span></div> <div class="step">Adding the inequalities in Steps 3 and 4
+gives 8 - 5\delta \le S(g;\dot P) \le 8 + 5\delta, or \lvert S(g;\dot P) - 8\rvert \le 5\delta.<span
+class="why">2(1-\delta)+3(2-\delta)=8-5\delta and
+2(1+\delta)+3(2+\delta)=8+5\delta.</span></div> <div class="step">Given \varepsilon > 0,
+choose \delta_\varepsilon := \varepsilon/10 > 0 (any \delta_\varepsilon < \varepsilon/5 works). If
+\lVert P\rVert < \delta_\varepsilon, then \lvert S(g;\dot P) - 8\rvert \le 5(\varepsilon/10) =
+\varepsilon/2 < \varepsilon. Thus g \in \mathcal{R}[0,3] and \int_0^3 g = 8. <span
+class="qed">∎</span><span class="why">Choosing \delta_\varepsilon from 5\delta <
+\varepsilon (M09).</span></div> </div> </div> </section>
+<section class="page"> <div class="box scratch"><span class="lab">Scratch · Example
+7.1.4(c): how to integrate h(x)=x on [0,1] from Definition 7.1.1</span> <p>On subinterval I_i =
+[x_{i-1},x_i], choose the <b>midpoint tag</b> q_i = \tfrac12(x_{i-1}+x_i). Then h(q_i)(x_i x_{i-1}) = \tfrac12(x_i + x_{i-1})(x_i - x_{i-1}) = \tfrac12(x_i^2 - x_{i-1}^2), which telescopes! What
+if the opponent picks arbitrary tags t_i \in I_i? Both t_i and q_i lie in I_i, so \lvert t_i - q_i\rvert \le
+x_i - x_{i-1} \le \lVert P\rVert < \delta.</p> </div> <div class="box proof"><span
+class="lab">Proof of 7.1.4(c) · \int_0^1 x\,dx = 1/2 (Bartle pp. 203–204)</span> <div
+class="steps"> <div class="step">Let \{I_i\}_{i=1}^n be any partition of [0,1], choose the midpoint
+q_i := \tfrac12(x_{i-1}+x_i) of each I_i = [x_{i-1},x_i], and let \dot Q := \{(I_i,q_i)\}_{i=1}^n. Then
+h(q_i)(x_i - x_{i-1}) = \tfrac12(x_i + x_{i-1})(x_i - x_{i-1}) = \tfrac12(x_i^2 - x_{i-1}^2).
+<span class="why">Difference of two squares (x_i + x_{i-1})(x_i - x_{i-1}) = x_i^2 x_{i-1}^2.</span></div> <div class="step">Summing over i=1,\dots,n telescopes:
+S(h;\dot Q) = \sum_{i=1}^n \tfrac12(x_i^2 - x_{i-1}^2) = \tfrac12(x_n^2 - x_0^2) = \tfrac12(1^2 0^2) = \tfrac12.
+<span class="why">Telescoping sum (M01) with x_0 = 0 and x_n = 1.</span></div> <div
+
+class="step">Now let \dot P = \{(I_i,t_i)\}_{i=1}^n be an arbitrary tagged partition of [0,1] with
+\lVert P\rVert < \delta, and let \dot Q have the same partition points with midpoint tags q_i. Since
+t_i, q_i \in I_i, we have \lvert t_i - q_i\rvert < \delta.<span class="why">Two points in the same
+subinterval of length \le \lVert P\rVert < \delta are within \delta of each other.</span></div> <div
+class="step">By the Triangle Inequality,
+\lvert S(h;\dot P) - S(h;\dot Q)\rvert \le \sum_{i=1}^n \lvert t_i - q_i\rvert(x_i - x_{i-1}) <
+\delta\sum_{i=1}^n (x_i - x_{i-1}) = \delta(x_n - x_0) = \delta.
+<span class="why">Sum bound (M04) and telescoping \sum(x_i - x_{i-1}) = 1 - 0 = 1
+(M01).</span></div> <div class="step">Since S(h;\dot Q) = \tfrac12, we have \lvert S(h;\dot P) \tfrac12\rvert < \delta whenever \lVert P\rVert < \delta. Given \varepsilon > 0, take
+\delta_\varepsilon := \varepsilon; then \lVert P\rVert < \delta_\varepsilon \Rightarrow \lvert
+S(h;\dot P) - \tfrac12\rvert < \varepsilon. Thus h \in \mathcal{R}[0,1] and \int_0^1 x\,dx = \tfrac12.
+<span class="qed">∎</span><span class="why">Definition 7.1.1 with \delta_\varepsilon =
+\varepsilon.</span></div> </div> </div> <div class="box idea"><span class="lab">Worked
+extension · Q(x) = x^2 on [a,b], 0 \le a < b (Bartle Exercise 7.1.14)</span> <p>Choose special
+tags q_i := \sqrt{\tfrac13(x_i^2 + x_i x_{i-1} + x_{i-1}^2)}. Since x_{i-1}^2 \le \tfrac13(x_i^2 + x_i
+x_{i-1} + x_{i-1}^2) \le x_i^2, we have q_i \in [x_{i-1},x_i]. Then Q(q_i)(x_i - x_{i-1}) =
+\tfrac13(x_i^2 + x_i x_{i-1} + x_{i-1}^2)(x_i - x_{i-1}) = \tfrac13(x_i^3 - x_{i-1}^3), so S(Q;\dot Q) =
+\tfrac13(b^3 - a^3). For any tags t_i \in I_i, \lvert t_i^2 - q_i^2\rvert = \lvert t_i + q_i\rvert\lvert t_i q_i\rvert < 2b\delta, so \lvert S(Q;\dot P) - \tfrac13(b^3-a^3)\rvert < 2b(b-a)\delta. Taking
+\delta_\varepsilon = \varepsilon/[2b(b-a)] proves \int_a^b x^2\,dx = \tfrac13(b^3 - a^3).</p>
+</div> <p class="small">In the model paper: <span class="chip q">Q5</span> (PYQ MTS-25
+Q4).</p> </section>
+<!-- T06 (K06) --> <section class="page"> <div class="topic-head"><span
+class="tid">T06</span><h2>Changing a function at finitely many points</h2></div> <p
+class="oneline">Altering g \in \mathcal{R}[a,b] at finitely many points affects neither integrability
+nor the integral (Bartle 7.1.3, 7.1.4(d); PYQ MAT-22 MCQ 18, MAT-21 MCQ 13, MTS-22 MCQ
+7).</p> <div class="box def"><span class="lab">Theorem 7.1.3 (Bartle p. 201) · say it word for
+word</span>If g is Riemann integrable on [a,b] and if f(x) = g(x) except for a finite number of
+points in [a,b], then f is Riemann integrable and \int_a^b f = \int_a^b g. <span class="say">In
+plain words: a single point (or finitely many points) has width zero, so changing the height of f at
+finitely many points changes any Riemann sum by at most a multiple of \lVert P\rVert, which
+vanishes as \lVert P\rVert \to 0.</span> </div> <div class="box hyp"><span
+class="lab">Hypotheses · Theorem 7.1.3</span><ul> <li>g \in \mathcal{R}[a,b]<span
+class="fails">if g is Dirichlet <span class="cx">C7</span> and f changes g at 5 points, f is still
+not integrable</span></li> <li>the exceptional set where f(x) \ne g(x) is <b>finite</b><span
+class="fails">on a countably infinite set, integrability can fail: g(x)=0 is integrable on [0,1], but
+changing g on \{1/k : k\in\mathbb{N}\} to H(1/k)=k gives an unbounded function H \notin
+\mathcal{R}[0,1] (or changing g=0 on \mathbb{Q}\cap[0,1] to 1 gives Dirichlet <span
+class="cx">C7</span>)</span></li> </ul></div> <div class="box skel"><span
+class="lab">Skeleton · apply Theorem 7.1.3</span>Observe that f(x) = g(x) for all x \in [a,b]
+\setminus \{c_1,\dots,c_m\}, a finite set, and g \in \mathcal{R}[a,b] with \int_a^b g = $ <span
+class="gap">?</span>. By Theorem 7.1.3, 𝑓 ∈ 𝑅[𝑎, 𝑏] and $\int_a^b f = \int_a^b g = $ <span
+class="gap">?</span>. ∎</div> <div class="box proof"><span class="lab">Proof of Theorem
+7.1.3 (Bartle pp. 201–202)</span> <div class="steps"> <div class="step">It suffices to prove the
+case of one exceptional point 𝑐 ∈ [𝑎, 𝑏]; the case of 𝑚 points follows by mathematical induction,
+changing one point at a time.<span class="why">Standard induction on the number of
+
+𝑏
+
+exceptional points.</span></div> <div class="step">Let 𝑐 be the exceptional point, let 𝐿: = ∫ 𝑔,
+𝑎
+
+and assume 𝑓(𝑥) = 𝑔(𝑥) for all 𝑥 ≠ 𝑐.<span class="why">Unpack the
+hypothesis.</span></div> <div class="step">For any tagged partition 𝑃˙, the sums 𝑆(𝑓; 𝑃˙) and
+𝑆(𝑔; 𝑃˙) have identical terms except at most two (when 𝑐 is a partition point tag of two adjacent
+subintervals). Hence $$\lvert S(f;\dot P) - S(g;\dot P)\rvert = \left\lvert\sum (f(t_i) - g(t_i))(x_i x_{i-1})\right\rvert \le 2\big(\lvert g(c)\rvert + \lvert f(c)\rvert\big)\lVert P\rVert.$$<span
+class="why">At most 2 subintervals have tag 𝑐 (M03), each of width $\le \lVert P\rVert$, and
+$\lvert f(c) - g(c)\rvert \le \lvert f(c)\rvert + \lvert g(c)\rvert$ (M04). (Note: Bartle prints
+𝑓(𝑥𝑖) − 𝑔(𝑥𝑖) inside the sum; the summand is evaluated at the tags 𝑡𝑖.)</span></div> <div
+class="step">Given ε > 0, choose δ1 > 0 with $\delta_1 < \varepsilon/\big(4(\lvert f(c)\rvert +
+\lvert g(c)\rvert + 1)\big)$ (so $2(\lvert g(c)\rvert + \lvert f(c)\rvert)\delta_1 < \varepsilon/2$), and
+choose δ2 > 0 such that $\lVert P\rVert < \delta_2 \Rightarrow \lvert S(g;\dot P) - L\rvert <
+\varepsilon/2$.<span class="why">Definition 7.1.1 for 𝑔 with tolerance ε/2, and M09 for the
+exceptional-point error.</span></div> <div class="step">Let δ: = min {δ1, δ2} > 0. If $\lVert
+P\rVert < \delta$, then $$\lvert S(f;\dot P) - L\rvert \le \lvert S(f;\dot P) - S(g;\dot P)\rvert + \lvert
+S(g;\dot P) - L\rvert < \varepsilon/2 + \varepsilon/2 = \varepsilon.$$ Therefore 𝑓 ∈ 𝑅[𝑎, 𝑏] with
+𝑏
+
+𝑏
+
+∫ 𝑓 = 𝐿 = ∫ 𝑔. <span class="qed">∎</span><span class="why">$\varepsilon/2 argument and
+𝑎
+
+𝑎
+
+Triangle Inequality (M08, P05).</span></div> </div> </div> <div class="box idea"><span
+class="lab">Worked examples · Bartle Ex 7.1.6 & Example 7.1.4(d)</span> <p><b>1. Bartle Ex
+7.1.6:</b> Let f(x) = 2 on [0,1) and 1 on [1,2]; let h(x) = 2 on [0,1), h(1) = 3, and h(x) = 1 on (1,2].
+Both differ from the step function g(x)=2 on [0,1], 1 on (1,2] at most at the single point c = 1, so
+by Theorem 7.1.3, \int_0^2 h = \int_0^2 f = 2(1) + 1(1) = 3.</p> <p><b>2. Countably many
+points where heights shrink to 0 (Bartle Example 7.1.4(d)):</b> Let G(1/n) = 1/n for n \in
+\mathbb{N} and G(x) = 0 elsewhere on [0,1]. Theorem 7.1.3 does NOT apply directly (infinitely
+many points!), but given \varepsilon > 0, the set E = \{x : G(x) \ge \varepsilon\} = \{1, \tfrac12,
+\dots, \tfrac1n\} (where n \le 1/\varepsilon) is <b>finite</b> with n points. Taking \delta =
+\varepsilon/(2n), any \dot P with \lVert P\rVert < \delta splits into \dot P_0 (tags outside E, where
+G < \varepsilon and total width \le 1) and \dot P_1 (tags in E, at most 2n intervals of width
+<\delta with G \le 1), giving 0 \le S(G;\dot P) < \varepsilon(1) + (2n)\delta(1) = 2\varepsilon.
+Hence G \in \mathcal{R}[0,1] and \int_0^1 G = 0.</p> </div> <div class="box trap"><span
+class="lab">Exam trap · PYQ MTS-22 MCQ 7 vs MAT-22 MCQ 18</span> <p>If f(x) = 0 except
+at <b>finitely many</b> points c_1,\dots,c_n \in [a,b], then by Theorem 7.1.3 (with g \equiv 0)
+<b>both</b> f \in \mathcal{R}[a,b] <b>and</b> \int_a^b f = 0 hold (MAT-22 MCQ 18). If f(x) =
+g(x) off the <b>infinite</b> set \{1/n : n\in\mathbb{N}\} (MTS-22 MCQ 7), knowing f \in
+\mathcal{R}[0,1] does NOT force g \in \mathcal{R}[0,1] unless g is also bounded (take f=0 and
+g(1/n)=n).</p> </div> <p class="small">In the model paper: <span class="chip q">Q6</span>
+(PYQ MAT-22 MCQ 18, MAT-21 MCQ 13, MTS-22 MCQ 7).</p> </section>
+<!-- T07 (K07) --> <section class="page"> <div class="topic-head"><span
+class="tid">T07</span><h2>Linearity and monotonicity of the integral</h2></div> <p
+class="oneline">Integrals respect scalar multiples, sums, and \le inequalities (Bartle Theorem
+7.1.5; PYQ MTS-25 Q5, MAT-21 Q29, MTS-22 Q5, MAT-22 MCQ 14).</p> <div class="box
+def"><span class="lab">Theorem 7.1.5 · Properties of the Integral (Bartle p.
+204)</span>Suppose f and g are in \mathcal{R}[a,b]. Then: <p>(a) If k \in \mathbb{R}, the
+
+function kf is in \mathcal{R}[a,b] and \int_a^b kf = k\int_a^b f.</p> <p>(b) The function f + g is in
+\mathcal{R}[a,b] and \int_a^b (f+g) = \int_a^b f + \int_a^b g.</p> <p>(c) If f(x) \le g(x) for all x \in
+[a,b], then \int_a^b f \le \int_a^b g.</p> <span class="say">In plain words: because every
+Riemann sum is a finite sum that is linear and order-preserving, passing to the integral
+preserves constants, sums, and \le.</span> </div> <div class="box hyp"><span
+class="lab">Hypotheses · Theorem 7.1.5</span><ul> <li>both f \in \mathcal{R}[a,b] and g \in
+\mathcal{R}[a,b]<span class="fails">f = \text{Dirichlet} <span class="cx">C7</span> and g = 1 f have f+g = 1 \in \mathcal{R}[0,1], yet neither \int_0^1 f nor \int_0^1 g exists</span></li> <li>in
+(c), f(x) \le g(x) on [a,b] (or all but finitely many points by 7.1.3)<span class="fails">if f \le g fails
+on an interval of positive length where f > g, \int_a^b f \le \int_a^b g fails</span></li> </ul></div>
+<div class="box proof"><span class="lab">Proof of Theorem 7.1.5 (Bartle pp. 204–205)</span>
+<div class="steps"> <div class="step">For any tagged partition \dot P =
+\{([x_{i-1},x_i],t_i)\}_{i=1}^n of [a,b], finite sum rules (P02) give
+S(kf;\dot P) = kS(f;\dot P), \qquad S(f+g;\dot P) = S(f;\dot P) + S(g;\dot P),
+and since x_i - x_{i-1} > 0, f(x) \le g(x) on [a,b] implies S(f;\dot P) \le S(g;\dot P).<span
+class="why">Linearity and monotonicity of finite sums (P02).</span></div> <div
+class="step"><b>Part (a):</b> If k = 0, kf = 0 \in \mathcal{R}[a,b] with integral 0 = 0\int_a^b f. If k
+\ne 0, given \varepsilon > 0 let \delta_\varepsilon > 0 be such that \lVert P\rVert <
+\delta_\varepsilon \Rightarrow \lvert S(f;\dot P) - \int_a^b f\rvert < \varepsilon/\lvert k\rvert; then
+\lvert S(kf;\dot P) - k\int_a^b f\rvert = \lvert k\rvert\,\lvert S(f;\dot P) - \int_a^b f\rvert <
+\varepsilon.<span class="why">Definition 7.1.1 applied with tolerance \varepsilon/\lvert
+k\rvert.</span></div> <div class="step"><b>Part (b):</b> Given \varepsilon > 0, choose
+\delta_1, \delta_2 > 0 for f, g with tolerance \varepsilon/2, and put \delta_\varepsilon :=
+\min\{\delta_1, \delta_2\} > 0. If \lVert P\rVert < \delta_\varepsilon, then both \lvert S(f;\dot P) \int_a^b f\rvert < \varepsilon/2 and \lvert S(g;\dot P) - \int_a^b g\rvert < \varepsilon/2 hold.<span
+class="why">Common \delta_\varepsilon argument (M08) as in Theorem 7.1.2.</span></div>
+<div class="step">By Step 1 and the Triangle Inequality,
+\left\lvert S(f+g;\dot P) - \left(\int_a^b f + \int_a^b g\right)\right\rvert \le \left\lvert S(f;\dot P) \int_a^b f\right\rvert + \left\lvert S(g;\dot P) - \int_a^b g\right\rvert < \frac{\varepsilon}{2} +
+\frac{\varepsilon}{2} = \varepsilon.
+Since \varepsilon > 0 is arbitrary, f + g \in \mathcal{R}[a,b] with integral \int_a^b f + \int_a^b
+g.<span class="why">Triangle Inequality (P05) and Definition 7.1.1.</span></div> <div
+class="step"><b>Part (c):</b> For \lVert P\rVert < \delta_\varepsilon as in Step 3, unpacking the
+absolute values gives
+\int_a^b f - \frac{\varepsilon}{2} < S(f;\dot P) \le S(g;\dot P) < \int_a^b g + \frac{\varepsilon}{2}.
+Adding \varepsilon/2 yields \int_a^b f < \int_a^b g + \varepsilon. Since \varepsilon > 0 is
+arbitrary, \int_a^b f \le \int_a^b g. <span class="qed">∎</span><span class="why">Unpacking
+\lvert S - L\rvert < \varepsilon/2 and the arbitrary \varepsilon rule (P05).</span></div> </div>
+</div> <div class="box idea"><span class="lab">Worked example · Bounding \lvert\int_a^b
+f\rvert (Bartle Exercise 7.1.8) & MCQ trap</span> <p><b>Bartle Ex 7.1.8:</b> If f \in
+\mathcal{R}[a,b] and \lvert f(x)\rvert \le M for all x \in [a,b], then -M \le f(x) \le M on [a,b]. By
+Theorem 7.1.5(c) and Example 7.1.4(a), -M(b-a) = \int_a^b (-M) \le \int_a^b f \le \int_a^b M =
+M(b-a), which means \left\lvert\int_a^b f\right\rvert \le M(b-a).</p> <p><b>MCQ trap (MAT-22
+MCQ 14):</b> f(x) \le g(x) implies \int_a^b f \le \int_a^b g (with \le), <b>never</b> strict < in
+general (for instance, take f = g, or take f=0 and g(0)=1, g(x)=0 for x\in(0,1], where f \le g and
+f(0)<g(0) yet \int_0^1 f = 0 = \int_0^1 g).</p> </div> <p class="small">In the model paper: <span
+class="chip q">Q21</span> (PYQ MAT-21 Q29, MTS-22 Q5, MTS-25 Q5, MAT-22 MCQ
+14).</p> </section>
+
+<!-- T08 (K08) --> <section class="page"> <div class="topic-head"><span
+class="tid">T08</span><h2>The Boundedness Theorem</h2></div> <p class="oneline">Every
+Riemann integrable function is bounded; unbounded \Rightarrow \notin \mathcal{R}[a,b] (Bartle
+Theorem 7.1.6; PYQ MAT-22 MCQ 15, MAT-21 MCQ 11, 17, MTS-22 MCQ 8, 9).</p> <div
+class="box def"><span class="lab">Theorem 7.1.6 · Boundedness Theorem (Bartle p. 205) ·
+say it word for word</span>If f \in \mathcal{R}[a,b], then f is bounded on [a,b]. <span
+class="say">In plain words: if f blows up to \pm\infty anywhere on [a,b], you can pick a tag on
+that subinterval to make a single rectangle arbitrarily tall, destroying \lvert S(f;\dot P) - L\rvert <
+1.</span> </div> <div class="box hyp"><span class="lab">Direction & Converse · Theorem
+7.1.6</span><ul> <li><b>Necessary condition:</b> f \in \mathcal{R}[a,b] \Rightarrow f is
+bounded on [a,b] (contrapositive: f unbounded on [a,b] \Rightarrow f \notin
+\mathcal{R}[a,b])<span class="fails"><b>Converse is FALSE:</b> bounded does NOT imply
+integrable! Dirichlet's function <span class="cx">C7</span> satisfies 0 \le f(x) \le 1 on [0,1]
+(bounded), yet f \notin \mathcal{R}[0,1]. Also f \in \mathcal{R}[a,b] does NOT imply f is
+continuous or monotone (<span class="cx">C8</span> Thomae).</span></li> </ul></div> <div
+class="kw"><span>Know</span><span>f \in \mathcal{R}[a,b] with integral L. Assume for
+contradiction that f is unbounded on [a,b].</span><span>Want</span><span>Construct a
+tagged partition \dot Q with \lVert Q\rVert < \delta but \lvert S(f;\dot Q)\rvert > \lvert L\rvert + 1,
+contradicting Definition 7.1.1 for \varepsilon = 1.</span></div> <div class="box proof"><span
+class="lab">Proof of Theorem 7.1.6 (Bartle pp. 205–206)</span> <div class="steps"> <div
+class="step">Assume that f is an unbounded function in \mathcal{R}[a,b] with integral L. For
+\varepsilon = 1, there exists \delta > 0 such that if \dot P is any tagged partition of [a,b] with
+\lVert P\rVert < \delta, then \lvert S(f;\dot P) - L\rvert < 1, which by the Triangle Inequality implies
+\lvert S(f;\dot P)\rvert \le \lvert S(f;\dot P) - L\rvert + \lvert L\rvert < \lvert L\rvert + 1.
+<span class="why">Definition 7.1.1 with \varepsilon = 1 and Triangle Inequality
+(P05).</span></div> <div class="step">Let Q = \{[x_{i-1},x_i]\}_{i=1}^n be a fixed partition of
+[a,b] with \lVert Q\rVert < \delta. Since f is unbounded on [a,b], f must be unbounded on at least
+one subinterval [x_{k-1},x_k].<span class="why">If f were bounded on each [x_{i-1},x_i] by M_i,
+it would be bounded on all of [a,b] by \max\{M_1,\dots,M_n\}.</span></div> <div
+class="step">We now tag Q as follows: for i \ne k, fix t_i := x_i. Since f is unbounded on
+[x_{k-1},x_k] and x_k - x_{k-1} > 0, there exists a tag t_k \in [x_{k-1},x_k] such that
+\lvert f(t_k)(x_k - x_{k-1})\rvert > \lvert L\rvert + 1 + \left\lvert\sum_{i\ne k} f(t_i)(x_i x_{i-1})\right\rvert.
+<span class="why">For i \ne k the sum is now a fixed number; \lvert f(t_k)\rvert can be chosen
+arbitrarily large on [x_{k-1},x_k].</span></div> <div class="step">By the Reverse Triangle
+Inequality \lvert A + B\rvert \ge \lvert A\rvert - \lvert B\rvert, we obtain
+\lvert S(f;\dot Q)\rvert \ge \lvert f(t_k)(x_k - x_{k-1})\rvert - \left\lvert\sum_{i\ne k} f(t_i)(x_i x_{i-1})\right\rvert > \lvert L\rvert + 1,
+which contradicts Step 1. Therefore f must be bounded on [a,b]. <span
+class="qed">∎</span><span class="why">Reverse Triangle Inequality (P05) yields the
+contradiction.</span></div> </div> </div> <div class="box idea"><span class="lab">Worked
+examples · H(1/k)=k (PYQ MTS-22 MCQ 9, MAT-21 MCQ 17) & Bartle Ex 7.1.10</span>
+<p><b>1. H(1/k) = k (k \in \mathbb{N}), H(x) = 0 elsewhere on [0,1]:</b> Since H(1/k) = k \to
+\infty as k \to \infty, H is <b>unbounded</b> on [0,1]. By Theorem 7.1.6, H \notin
+\mathcal{R}[0,1] immediately! (Notice the contrast with Example 7.1.4(d) where G(1/n) = 1/n
+stays bounded and has integral 0.)</p> <p><b>2. Why one convergent sequence of Riemann
+sums does not prove integrability (Bartle Ex 7.1.10):</b> Let g(x) = 0 for rational x \in [0,1] and
+g(x) = 1/x for irrational x \in [0,1]. Since g is unbounded near 0, g \notin \mathcal{R}[0,1] by
+
+Theorem 7.1.6. Yet if we pick the equal partition P_n with rational tags t_i = i/n, then S(g;\dot
+P_n) = 0 \to 0! You must control <b>all</b> tags, not just your favourite ones.</p> </div> <p
+class="small">In the model paper: <span class="chip q">Q7</span> (PYQ MAT-22 MCQ 15,
+MAT-21 MCQ 11, 17, MTS-22 MCQ 8, 9).</p> </section>
+<!-- T09 (K09) --> <section class="page"> <div class="topic-head"><span
+class="tid">T09</span><h2>Thomae's function is integrable (with integral 0)</h2></div> <p
+class="oneline">Discontinuous at every rational, continuous at every irrational, not
+monotone—yet in \mathcal{R}[0,1] (Bartle Example 7.1.7).</p> <figure>
+{{fig:F09_thomae_popcorn}} <figcaption><b>What to notice:</b> For Thomae's function
+h(m/n)=1/n, only 11 points in [0,1] reach or exceed height \varepsilon/2 = 1/5 (circled set E);
+every other point sits inside the shaded band h(x) < 1/5. <b>What it does not prove:</b>
+Drawing up to denominator n=5 shows the pattern, whereas the proof works for arbitrary
+\varepsilon>0 because 1/n \ge \varepsilon/2 \iff n \le 2/\varepsilon always leaves finitely many
+fractions.</figcaption> </figure> <div class="box def"><span class="lab">Example 7.1.7 ·
+Thomae's Function <span class="cx">C8</span> (Bartle p. 206)</span>Define h : [0,1] \to
+\mathbb{R} by h(x) := 0 if x \in [0,1] is irrational, h(0) := 1, and h(x) := 1/n if x \in [0,1] is the
+rational number x = m/n where m, n \in \mathbb{N} have no common integer factor except 1.
+Then h is continuous at every irrational point and discontinuous at every rational point of [0,1], is
+not monotone on any subinterval, and h \in \mathcal{R}[0,1] with \int_0^1 h = 0. <span
+class="say">In plain words: for any threshold \varepsilon/2 > 0, only finitely many rationals m/n
+have denominator n \le 2/\varepsilon. We trap those finitely many tall spikes in tiny subintervals
+of total width \le \varepsilon/2, and everywhere else the height is <\varepsilon/2.</span> </div>
+<div class="kw"><span>Know</span><span>0 \le h(x) \le 1 on [0,1]; for any \varepsilon > 0, E =
+\{x \in [0,1] : h(x) \ge \varepsilon/2\} is a finite set of n
+points.</span><span>Want</span><span>Find \delta > 0 so that \lVert P\rVert < \delta
+\Rightarrow 0 \le S(h;\dot P) < \varepsilon.</span></div> <div class="box scratch"><span
+class="lab">Scratch · how we choose \delta</span>Split \dot P = \dot P_1 \cup \dot P_2 where
+\dot P_1 has tags in E (n points \Rightarrow at most 2n subintervals). On \dot P_1: height \le 1,
+total width \le 2n\delta; want 2n\delta \le \varepsilon/2 \Leftarrow \delta = \varepsilon/(4n). On
+\dot P_2: height < \varepsilon/2, total width \le 1, so sum < \varepsilon/2. Total <
+\varepsilon.</div> <div class="box proof"><span class="lab">Proof of Example 7.1.7 (Bartle p.
+206)</span> <div class="steps"> <div class="step">Let \varepsilon > 0 be given. Since h(m/n) =
+1/n \ge \varepsilon/2 \iff n \le 2/\varepsilon, there are only finitely many denominators n and
+finitely many numerators m \le n, so the set E := \{x \in [0,1] : h(x) \ge \varepsilon/2\} is
+finite.<span class="why">Archimedean property (P13): only finitely many n \in \mathbb{N}
+satisfy n \le 2/\varepsilon.</span></div> <div class="step">Let n be the number of points in E
+and set \delta := \varepsilon/(4n) > 0. Let \dot P be any tagged partition of [0,1] with \lVert
+P\rVert < \delta, and split \dot P into \dot P_1 (tags t_i \in E) and \dot P_2 (tags t_i \notin
+E).<span class="why">Tag-splitting tool (M10).</span></div> <div class="step">Allowing for a
+point of E being an endpoint tag of two adjacent subintervals, \dot P_1 has at most 2n
+subintervals, of total length at most 2n\delta = 2n\cdot\frac{\varepsilon}{4n} =
+\frac{\varepsilon}{2}. Since 0 < h(t_i) \le 1 on \dot P_1, we have S(h;\dot P_1) \le 1 \cdot 2n\delta
+= \varepsilon/2.<span class="why">Endpoint tag count (M03) and sum bound
+(M04).</span></div> <div class="step">For tags t_i in \dot P_2, we have h(t_i) < \varepsilon/2,
+and the total length of the subintervals in \dot P_2 is at most 1 (the length of [0,1]), so S(h;\dot
+P_2) < (\varepsilon/2)\cdot 1 = \varepsilon/2.<span class="why">Definition of E: outside E, h(x)
+< \varepsilon/2.</span></div> <div class="step">Combining Steps 3 and 4 gives
+0 \le S(h;\dot P) = S(h;\dot P_1) + S(h;\dot P_2) < \frac{\varepsilon}{2} + \frac{\varepsilon}{2} =
+
+\varepsilon.
+Since \varepsilon > 0 is arbitrary, h \in \mathcal{R}[0,1] and \int_0^1 h = 0. <span
+class="qed">∎</span><span class="why">Definition 7.1.1 with L = 0.</span></div> </div>
+</div> <div class="box check"><span class="lab">Check yourself · Bartle p. 206 numerical
+check</span> <div class="q">List all points in E = \{x \in [0,1] : h(x) \ge 1/5\} (when \varepsilon/2
+= 1/5, i.e. \varepsilon = 2/5), count them, and give Bartle's \delta.</div> <div class="a">We need
+denominators 1,2,3,4,5 in lowest terms (plus 0, where h(0)=1): E = \{0, 1, \tfrac12, \tfrac13,
+\tfrac23, \tfrac14, \tfrac34, \tfrac15, \tfrac25, \tfrac35, \tfrac45\}, which has n = 11 points. Thus
+\delta = \varepsilon/(4n) = (2/5)/44 = 1/110.</div> </div> <p class="small">In the model paper:
+<span class="chip q">Q22</span>.</p> </section>

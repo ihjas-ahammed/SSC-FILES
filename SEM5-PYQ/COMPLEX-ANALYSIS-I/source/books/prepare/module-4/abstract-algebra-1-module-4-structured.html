@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Structured notes: Abstract Algebra I, Module 4</title>
+<script>
+window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+@page { size: A4; margin: 15mm 15mm; }
+:root { --ink:#1B2631; --muted:#5D6D7E; --rule:#AEB6BF; --eq:#1F618D; --res:#117A65; --recall:#8A6D1A; --idb:#A04000; }
+body { margin:0; color:var(--ink); font-family:"Times New Roman", Times, "Liberation Serif", serif; font-size:11pt; line-height:1.42; }
+main { width:100%; }
+h1 { font-size:17pt; margin:0 0 3px; color:var(--eq); }
+.meta { color:var(--muted); font-size:9.5pt; margin-bottom:8px; border-bottom:1px solid var(--rule); padding-bottom:5px; }
+.sec-body { column-count:2; column-gap:16px; column-rule:0.5px solid var(--rule); }
+h2 { font-size:12.5pt; margin:12px 0 4px; color:var(--eq); border-bottom:1.5px solid var(--eq); padding-bottom:1px; break-after:avoid; column-span:none; }
+h3 { font-size:10.8pt; margin:8px 0 2px; color:var(--res); break-after:avoid; }
+p, li { margin:3px 0; }
+ul, ol { margin:3px 0 3px 18px; padding:0; }
+.eq { margin:5px 0; text-align:center; break-inside:avoid; font-size:10.5pt; }
+.box-eq { background:#EAF2F8; border-left:3px solid var(--eq); padding:4px 7px; margin:5px 0; break-inside:avoid; }
+.box-res { background:#E9F7EF; border-left:3px solid var(--res); padding:4px 7px; margin:5px 0; break-inside:avoid; }
+.box-recall { background:#FDF6E3; border-left:3px solid var(--recall); padding:4px 7px; margin:6px 0; break-inside:avoid; font-size:10.2pt; }
+.lbl { font-weight:bold; font-size:9.6pt; text-transform:uppercase; letter-spacing:.3px; }
+.lbl.eq { color:var(--eq); } .lbl.res { color:var(--res); }
+.box-recall .lbl { color:var(--recall); }
+table.tbl { border-collapse:collapse; margin:5px auto; font-size:10pt; break-inside:avoid; }
+table.tbl td, table.tbl th { border:1px solid var(--rule); padding:2px 7px; text-align:center; }
+table.tbl caption { font-size:9.5pt; color:var(--muted); caption-side:top; margin-bottom:2px; }
+.note { font-size:9.5pt; color:var(--muted); }
+.sec-title-full { column-span:all; font-size:14pt; font-weight:bold; color:var(--eq); border-bottom:2px solid var(--eq); margin:14px 0 6px; break-after:avoid; }
+.sec-sub { column-span:all; font-size:10pt; color:var(--muted); font-style:italic; margin:0 0 4px; }
+
+.keep { break-inside: avoid; }
+</style>
+</head>
+<body>
+<main>
+<h1>Structured notes: Abstract Algebra I, Module 4</h1>
+<div class="meta">Fraleigh, <i>A First Course in Abstract Algebra</i> (8th ed.), Module 4 (sections 16, 22 and 23). The syllabus names the 7th edition; items are matched by content. Numbers are the book&rsquo;s own. Formal version of the same content, with numbered results and the same order of items. Exercises: only the exercises the text names are reproduced, each directly after the item that names it. Figures are described with their labels; not redrawn. Factor groups and factor rings are not taught here. Sections 17 onward are not in this module.</div>
+<div class="sec-body">
+<div class="sec-title-full">Section 16: Isomorphism Theorems (16.1&ndash;16.10)</div><div class="sec-sub">Printed pp. 145&ndash;148 (16.1&ndash;16.10; Figures 16.1, 16.9; Exercise 10 is named in 16.7 and printed on page 149)</div>
+<h2>Prerequisites</h2>
+<ul>
+<li>Normal subgroups and factor groups $G/N$ (Module V material; used here only as stated).</li>
+<li>Homomorphisms, kernels and kernel cosets (Module 2, Section 8; Module 3, Theorem 10.17).</li>
+</ul>
+
+<h2>1. First isomorphism theorem</h2>
+<p><b>Figure 16.1.</b> Triangle diagram: $\phi : G \to \phi[G]$, $\gamma_K : G \to G/K$, and a dashed isomorphism $\mu : G/K \to \phi[G]$. Labels as printed; not redrawn.</p>
+<div class="box-res"><span class="lbl res">Theorem 16.2 (First Isomorphism Theorem)</span> Let $\phi : G \to G'$ be a homomorphism with kernel $K$, and $\gamma_K : G \to G/K$ canonical. There is a unique isomorphism $\mu : G/K \to \phi[G]$ with $\phi(x) = \mu(\gamma_K(x))$ for all $x \in G$.</div>
+
+<h2>2. Joins and a lemma</h2>
+<p>For $H, N \le G$ put $HN = \{hn \mid h \in H, n \in N\}$. The join $H \vee N$ is the smallest subgroup containing $HN$.</p>
+<div class="box-res"><span class="lbl res">Lemma 16.3</span> If $N \trianglelefteq G$ and $\gamma : G \to G/N$ is canonical, then $L \mapsto \gamma[L]$ is a bijection from the normal subgroups of $G$ containing $N$ onto the normal subgroups of $G/N$.
+<p class="note"><i>Proof.</i> By Theorem 13.18 and Theorem 10.17, $\gamma^{-1}[\gamma[L]] = L$ for every $L \supseteq N$, which gives injectivity. For surjectivity, $\gamma[\gamma^{-1}[H]] = H$ for every normal $H \le G/N$, and $\gamma^{-1}[H]$ contains $N$. &#9632;</p></div>
+<div class="box-res"><span class="lbl res">Lemma 16.4</span> If $N \trianglelefteq G$ and $H \le G$, then $H \vee N = HN = NH$. If $H \trianglelefteq G$ also, then $HN \trianglelefteq G$.
+<p class="note"><i>Proof.</i> For $h_1, h_2 \in H$, $n_1, n_2 \in N$, write $n_1h_2 = h_2n_3$ with $n_3 \in N$; then $(h_1n_1)(h_2n_2) = (h_1h_2)(n_3n_2)$, and $(hn)^{-1} = h^{-1}n_4$ with $n_4 \in N$. So $HN \le G$; the same argument gives $NH \le G$. If $H$ is normal, $ghng^{-1} = (ghg^{-1})(gng^{-1}) \in HN$. &#9670;</p></div>
+
+<h2>3. Second isomorphism theorem</h2>
+<div class="box-res"><span class="lbl res">Theorem 16.5</span> If $H \le G$ and $N \trianglelefteq G$, then $(HN)/N \simeq H/(H \cap N)$.
+<p class="note"><i>Proof.</i> $\phi(h) = hN$ is a homomorphism $H \to HN/N$, onto, with kernel $H \cap N$. Apply Theorem 16.2. &#9670;</p></div>
+<p><b>Example 16.6.</b> In $\mathbb{Z}^3$ with $H = \mathbb{Z}^2 \times \{0\}$ and $N = \{0\} \times \mathbb{Z}^2$: $HN = \mathbb{Z}^3$ and $H \cap N = \{0\} \times \mathbb{Z} \times \{0\}$; both quotients are $\simeq \mathbb{Z}$.</p>
+<p><b>Example 16.7.</b> In $\mathbb{Z}$ with $N = \langle n \rangle$, $H = \langle h \rangle$: $N + H = \langle \gcd(n, h) \rangle$ and $N \cap H = \langle \operatorname{lcm}(n, h) \rangle$. The second isomorphism theorem gives $\langle \gcd(n,h) \rangle/\langle n \rangle \simeq \langle h \rangle/\langle \operatorname{lcm}(n,h) \rangle$, and both are cyclic of order $n/\gcd(n,h)$. Hence $nh = \gcd(n,h)\operatorname{lcm}(n,h)$.</p>
+<p><b>Exercise 10</b> (named in Example 16.7). Use one of the Isomorphism Theorems to prove that if $a, b \in \mathbb{Z}^+$ and $a \mid b$, then $|a\mathbb{Z}/b\mathbb{Z}| = b/a$.</p>
+
+<h2>4. Third isomorphism theorem</h2>
+<div class="box-res"><span class="lbl res">Theorem 16.8</span> If $H, K \trianglelefteq G$ and $K \le H$, then $G/H \simeq (G/K)/(H/K)$.
+<p class="note"><i>Proof.</i> $\phi(gK) = gH$ is well defined since $gK \subseteq gH$; it is a homomorphism, onto, with kernel $H/K$. Apply Theorem 16.2: $\mu((gK)(H/K)) = gH$. &#9670;</p></div>
+<p><b>Figure 16.9</b> (printed on page 148): an ellipse for $G$ with the cosets of $H$ and of $K$ drawn inside it. No labels; not redrawn.</p>
+<p><b>Example 16.10.</b> In $\mathbb{Z}_8$ with $H = \{0, 2, 4, 6\}$ and $K = \{0, 4\}$: $G/K = \{\{0,4\},\{1,5\},\{2,6\},\{3,7\}\}$, $G/H = \{\{0,2,4,6\},\{1,3,5,7\}\}$, $H/K = \{\{0,4\},\{2,6\}\}$, and $(G/K)/(H/K) = \{\{\{0,4\},\{2,6\}\},\{\{1,5\},\{3,7\}\}\}$. The isomorphism sends $\{\{0,4\},\{2,6\}\} \mapsto \{0,4,2,6\}$ and $\{\{1,5\},\{3,7\}\} \mapsto \{1,5,3,7\}$.</p>
+
+<h2>Notes on this section</h2>
+<p>Book items 16.1 to 16.10 and Figures 16.1 and 16.9 are covered. Exercise 10 is printed after the sentence that names it.</p>
+
+<div class="sec-title-full">Section 22: Rings and Fields (22.1&ndash;22.18)</div><div class="sec-sub">Printed pp. 185&ndash;191 (22.1&ndash;22.18; Exercises 30, 36, 37, 38, 45, 50 named in the text)</div>
+<h2>Prerequisites</h2>
+<ul>
+<li>Abelian groups; the additive group of a ring.</li>
+<li>Division algorithm and remainders (Module 2, Theorem 6.2).</li>
+<li>Plus Two recall: distributive law in school algebra (status OPEN, check against the Kerala text).</li>
+</ul>
+
+<h2>1. Rings</h2>
+<div class="box-eq"><span class="lbl eq">Definition 22.1</span> A <b>ring</b> $\langle R, +, \cdot \rangle$: (R1) $\langle R, + \rangle$ is an abelian group; (R2) multiplication is associative; (R3) for all $a, b, c \in R$, $a(b + c) = ab + ac$ and $(a + b)c = ac + bc$.</div>
+<p><b>Example 22.2.</b> $\mathbb{Z}$, $\mathbb{Q}$, $\mathbb{R}$, $\mathbb{C}$ are rings.</p>
+<p><b>Example 22.3.</b> $M_n(R)$ is a ring for any ring $R$; it is noncommutative for $n \ge 2$.</p>
+<p><b>Example 22.4.</b> $F = \{f : \mathbb{R} \to \mathbb{R}\}$ with pointwise operations is a ring.</p>
+<p><b>Exercise 36</b> (named in Example 22.4). Show that the multiplication defined on the set $F$ of functions in Example 22.4 satisfies axioms $\mathcal{R}_2$ and $\mathcal{R}_3$ for a ring.</p>
+<p><b>Example 22.5.</b> $n\mathbb{Z}$ is a ring.</p>
+<p><b>Example 22.6.</b> $\mathbb{Z}_n$ with multiplication modulo $n$ is a ring.</p>
+<p><b>Example 22.7.</b> Direct products of rings, by components, are rings.</p>
+
+<h2>2. Elementary properties</h2>
+<div class="box-res"><span class="lbl res">Theorem 22.8</span> In any ring: (1) $0a = a0 = 0$; (2) $a(-b) = (-a)b = -(ab)$; (3) $(-a)(-b) = ab$.
+<p class="note"><i>Proof.</i> (1) $a0 + a0 = a(0+0) = a0$ gives $a0 = 0$ by cancellation in $\langle R, + \rangle$. (2) $a(-b) + ab = a(-b + b) = 0$. (3) By (2) twice, $(-a)(-b) = -(-(ab)) = ab$. &#9670;</p></div>
+<p><b>Exercise 30</b> (named after Theorem 22.8). What is wrong with the following attempt at a proof of Property 2 in Theorem 22.8? $(-a)b = ((-1)a)b = (-1)(ab) = -(ab)$.</p>
+
+<h2>3. Homomorphisms and isomorphisms</h2>
+<div class="box-eq"><span class="lbl eq">Definition 22.9</span> A map $\phi : R \to R'$ of rings is a <b>homomorphism</b> if $\phi(a + b) = \phi(a) + \phi(b)$ and $\phi(ab) = \phi(a)\phi(b)$ for all $a, b$. Its <b>kernel</b> is $\{a \in R \mid \phi(a) = 0'\}$.</div>
+<p>$\phi$ is a group homomorphism of the additive groups, so one-to-one iff the kernel is $\{0\}$.</p>
+<p><b>Example 22.10.</b> The evaluation $\phi_a(f) = f(a)$ on $F$ is a ring homomorphism.</p>
+<p><b>Exercise 37</b> (named in Example 22.10). Show that the evaluation map $\phi_a$ of Example 22.10 is a ring homomorphism.</p>
+<p><b>Example 22.11.</b> $\mathbb{Z} \to \mathbb{Z}_n$, $a \mapsto a \bmod n$, is a ring homomorphism.</p>
+<div class="box-eq"><span class="lbl eq">Definition 22.12</span> A ring <b>isomorphism</b> is a bijective ring homomorphism.</div>
+<p><b>Exercise 38</b> (named after Definition 22.12). Complete the argument outlined after Definitions 22.12 to show that isomorphism gives an equivalence relation on a collection of rings.</p>
+<p><b>Example 22.13.</b> $x \mapsto 2x$ is a group isomorphism $\mathbb{Z} \to 2\mathbb{Z}$ but not a ring homomorphism.</p>
+
+<h2>4. Units and fields</h2>
+<div class="box-eq"><span class="lbl eq">Definition 22.14</span> A <b>commutative ring</b> has commutative multiplication; a <b>ring with unity</b> has a multiplicative identity $1$ (<b>unity</b>).</div>
+<p><b>Example 22.15.</b> If $\gcd(r, s) = 1$, $\mathbb{Z}_{rs} \simeq \mathbb{Z}_r \times \mathbb{Z}_s$ as rings.</p>
+<p><b>Exercise 45</b> (named in Example 22.15). Show that the multiplicative inverse of a unit in a ring with unity is unique.</p>
+<div class="box-eq"><span class="lbl eq">Definition 22.16</span> A <b>unit</b> of a ring with unity $1 \ne 0$ has a multiplicative inverse. A <b>division ring</b> has every nonzero element a unit. A <b>field</b> is a commutative division ring; a noncommutative one is a <b>strictly skew field</b>.</div>
+<p><b>Example 22.17.</b> The units of $\mathbb{Z}_{14}$ are $1, 3, 5, 9, 11, 13$.</p>
+<p><b>Example 22.18.</b> $\mathbb{Z}$ is not a field; $\mathbb{Q}$, $\mathbb{R}$ are.</p>
+<p><b>Exercise 50</b> (named after Example 22.18). Show that a subset $S$ of a ring $R$ gives a subring of $R$ if and only if $0 \in S$, $a - b \in S$ for all $a, b \in S$, and $ab \in S$ for all $a, b \in S$.</p>
+
+<h2>Notes on this section</h2>
+<p>Book items 22.1 to 22.18, with the named exercises (30, 36, 37, 38, 45, 50). Exercises 1 to 58 of the section are in the Module 4 excerpt. Factor rings (Section 30) are outside Module 4.</p>
+
+<div class="sec-title-full">Section 23: Integral Domains (23.1&ndash;23.14)</div><div class="sec-sub">Printed pp. 194&ndash;196 (23.1&ndash;23.14; Figure 23.10; Exercises 26 and 35 named in the text)</div>
+<h2>Prerequisites</h2>
+<ul>
+<li>Rings, units and fields (Section 22 notes).</li>
+<li>gcd and relative primeness (Module 2, Section 6).</li>
+<li>Plus Two recall: factorising a quadratic (status OPEN, check against the Kerala text).</li>
+</ul>
+
+<h2>1. Divisors of zero and cancellation</h2>
+<p><b>Example 23.1.</b> In $\mathbb{Z}_{12}$, $x^2 - 5x + 6 = (x - 2)(x - 3)$ and $(2)(6) = (3)(4) = 0$, so the equation has the roots $2, 3, 6, 11$.</p>
+<div class="box-eq"><span class="lbl eq">Definition 23.2</span> Nonzero $a, b$ in a ring $R$ with $ab = 0$ are <b>divisors of $0$</b> (or <b>$0$ divisors</b>).</div>
+<p>In $\mathbb{Z}_{12}$ the divisors of $0$ are $2, 3, 4, 6, 8, 9, 10$. A unit is never a divisor of $0$.</p>
+<div class="box-res"><span class="lbl res">Theorem 23.3</span> For $m \in \mathbb{Z}_n$, either $m = 0$; or $\gcd(m, n) = 1$ and $m$ is a unit; or $\gcd(m, n) \ne 1$ and $m$ is a $0$ divisor.
+<p class="note"><i>Proof.</i> If $d = \gcd(m, n) \ne 1$ and $m \ne 0$, then $m \cdot (n/d) = (m/d)n = 0$ in $\mathbb{Z}_n$, with $m$ and $n/d$ nonzero. If $\gcd(m, n) = 1$, write $an + bm = 1$, $b = nq + r$, $0 \le r \le n - 1$; then $rm = 1 - n(a + qm) = 1$ in $\mathbb{Z}_n$. &#9670;</p></div>
+<p><b>Example 23.4.</b> In $\mathbb{Z}_{20}$ the units are $1, 3, 7, 9, 11, 13, 17, 19$ and the $0$ divisors are $2, 4, 5, 6, 8, 10, 12, 14, 15, 16, 18$.</p>
+<div class="box-res"><span class="lbl res">Corollary 23.5</span> If $p$ is prime, every nonzero element of $\mathbb{Z}_p$ is a unit; $\mathbb{Z}_p$ is a field with no divisors of $0$.
+<p class="note"><i>Proof.</i> Apply Theorem 23.3 with $\gcd(m, p) = 1$ for $0 &lt; m \le p - 1$. &#9632;</p></div>
+<div class="box-res"><span class="lbl res">Theorem 23.6</span> Cancellation holds in a ring $R$ if and only if $R$ has no divisors of $0$.
+<p class="note"><i>Proof.</i> If $ab = 0$ with $a \ne 0$, cancellation applied to $ab = a0$ gives $b = 0$. Conversely, if $ab = ac$ with $a \ne 0$ and no divisors of $0$, then $a(b - c) = 0$ gives $b = c$. &#9670;</p></div>
+<p>In a ring with no divisors of $0$, $ax = b$ with $a \ne 0$ has at most one solution. In a commutative ring $b/a$ denotes $a^{-1}b = ba^{-1}$.</p>
+
+<h2>2. Integral domains</h2>
+<div class="box-eq"><span class="lbl eq">Definition 23.7</span> An <b>integral domain</b> is a commutative ring with unity $1 \ne 0$ and no divisors of $0$.</div>
+<p><b>Example 23.8.</b> $\mathbb{Z}$ and $\mathbb{Z}_p$ ($p$ prime) are integral domains; $\mathbb{Z}_n$ is not if $n$ is composite; a direct product $R \times S$ of nonzero rings is not, since $(r, 0)(0, s) = (0, 0)$.</p>
+<p><b>Example 23.9.</b> $\mathbb{Z}_2$ is an integral domain, but $M_2(\mathbb{Z}_2)$ has divisors of $0$: $\begin{pmatrix}1&0\\0&0\end{pmatrix}\begin{pmatrix}0&0\\1&0\end{pmatrix} = 0$. Every field is an integral domain.</p>
+<p><b>Figure 23.10.</b> A collection of rings as overlapping regions, numbered 1 to 6, with the labels Commutative rings, Rings with unity, Integral Domains and Fields as printed. Not redrawn.</p>
+<p><b>Exercise 26</b> (named in the text introducing Figure 23.10). Redraw Fig. 23.10 to include a subset corresponding to strictly skew fields.</p>
+<div class="box-res"><span class="lbl res">Theorem 23.11</span> Every finite integral domain is a field.
+<p class="note"><i>Proof.</i> For $a \ne 0$ the map $x \mapsto ax$ is one-to-one by cancellation, hence onto since $R$ is finite; so $ab = 1$ for some $b$. &#9632;</p></div>
+
+<h2>3. Characteristic</h2>
+<div class="box-eq"><span class="lbl eq">Definition 23.12</span> The least positive $n$ with $n \cdot a = 0$ for all $a \in R$ is the <b>characteristic</b> of $R$; if none exists, $R$ has characteristic $0$.</div>
+<p><b>Exercise 35</b> (named in the text after Definition 23.12). Show that the characteristic of an integral domain $D$ must be either $0$ or a prime $p$. [<i>Hint:</i> If the characteristic of $D$ is $mn$, consider $(m \cdot 1)(n \cdot 1)$ in $D$.]</p>
+<p><b>Example 23.13.</b> $\mathbb{Z}_n$ has characteristic $n$; $\mathbb{Z}, \mathbb{Q}, \mathbb{R}, \mathbb{C}$ have characteristic $0$.</p>
+<div class="box-res"><span class="lbl res">Theorem 23.14</span> In a ring with unity, the characteristic is $0$ if $n \cdot 1 \ne 0$ for all $n$, and otherwise the least $n$ with $n \cdot 1 = 0$.
+<p class="note"><i>Proof.</i> If $n \cdot 1 = 0$, then $n \cdot a = a(n \cdot 1) = 0$ for all $a$. &#9670;</p></div>
+
+<h2>Notes on this section</h2>
+<p>Book items 23.1 to 23.14, with Figure 23.10 and the named exercises (26 and 35). Exercises 1 to 36 of Section 23 are in the Module 4 excerpt.</p>
+
+</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Properties of Solids, Module I</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+  :root {
+    --page-bg: #d9d9d4;
+    --paper: #fdfdfb;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --page-bg: #2b2b2b;
+      --paper: #f4f3ee;
+      --ink: #111;
+      --rule: #444;
+      --note: #555;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page-bg: #2b2b2b;
+    --paper: #f4f3ee;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  body {
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--ink);
+    font-family: "Times New Roman", Times, "Liberation Serif", serif;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .sheet {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 12mm auto;
+    padding: 14mm 18mm 16mm;
+    box-sizing: border-box;
+    background: var(--paper);
+    box-shadow: 0 1px 6px rgba(0,0,0,.25);
+    position: relative;
+  }
+  .sheet + .sheet { margin-top: 0; }
+  .hdr {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: start;
+    font-size: 14px;
+  }
+  .code { font-size: 22px; font-weight: bold; letter-spacing: .5px; }
+  .pages { text-align: center; padding-top: 14px; }
+  .name { text-align: right; line-height: 2; }
+  .title { text-align: center; margin-top: 22px; }
+  .title .exam { font-size: 19px; font-weight: bold; letter-spacing: .3px; }
+  .title .sch { margin-top: 2px; }
+  .title .course { margin-top: 10px; font-size: 16px; }
+  .title .subject { margin-top: 6px; font-size: 16px; font-weight: bold; }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 16px;
+    font-size: 15px;
+  }
+  .sec { margin-top: 14px; }
+  .sec-head {
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    font-weight: bold;
+  }
+  .sec-head .num { font-weight: bold; }
+  .sec-head .body { font-weight: normal; }
+  .sec-head .body b { font-weight: bold; }
+  .sec-head .body i { font-style: italic; }
+  .sec-total { text-align: right; font-weight: normal; margin-top: 4px; }
+  .qs { margin-top: 6px; }
+  .q {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    margin-bottom: 7px;
+  }
+  .q .n { text-align: right; padding-right: 10px; }
+  .q p { margin: 0; }
+  .sub { margin-left: 22px; }
+  .cut { color: var(--note); }
+  .turn { text-align: right; font-weight: bold; margin-top: 26px; }
+  .fig {
+    display: block;
+    margin: 8px auto 2px 36px;
+    width: 230px;
+    height: auto;
+  }
+  .fig-cap { margin-left: 36px; font-size: 13px; color: var(--note); font-style: italic; }
+  .foot-note {
+    margin-top: 26px;
+    border-top: 1px solid var(--rule);
+    padding-top: 6px;
+    font-size: 12px;
+    color: var(--note);
+  }
+  .pno { text-align: center; font-size: 15px; margin-bottom: 4px; }
+  .pno-hdr { position: absolute; top: 10mm; right: 18mm; font-weight: bold; font-size: 14px; }
+  @media print {
+    @page { size: A4; margin: 0; }
+    body { background: #fff; }
+    .sheet { margin: 0; box-shadow: none; width: 210mm; height: 297mm; min-height: 0; page-break-after: always; }
+    .sheet:last-child { page-break-after: auto; }
+  }
+  @media (max-width: 720px) {
+    .sheet { width: auto; margin: 0; padding: 14px 16px; min-height: 0; }
+    .hdr { grid-template-columns: 1fr; gap: 6px; }
+    .name { text-align: left; }
+    .pages { text-align: left; padding-top: 0; }
+  }
+.sec-title, .topic { break-after: avoid; }
+@media print { .sheet { height: auto !important; min-height: 0 !important; } .sheet.key { break-before: page; } }
+.sheet:not(.key) .q p { font-size: 11px; line-height: 1.15; }
+.sheet:not(.key) { padding-top: 8mm; padding-bottom: 8mm; }
+.sheet:not(.key) .title { margin-top: 4px; }
+.sheet:not(.key) .topic { margin: 0; font-size: 11px; line-height: 1.1; }
+.sheet:not(.key) .sec-title { margin: 4px 0 2px; }
+.sheet:not(.key) .sec { margin-bottom: 2px; }
+.sheet:not(.key) .q { margin: 0; padding: 0; }
+.sheet:not(.key) .q .mk { font-size: 10.5px; }
+.sheet:not(.key) .topic, .sheet:not(.key) .sec-title { margin-top: 6px; }
+</style>
+<style>
+  .sec-title { font-weight: bold; margin-top: 16px; }
+  .sec-title .sub { font-weight: normal; font-style: italic; }
+  .lead { margin: 8px 0 4px; }
+  .placeholder {
+    margin: 8px 0 4px 36px; padding: 8px 10px;
+    border: 1px dashed var(--rule); font-size: 13px; color: var(--note);
+  }
+  .title .tl { margin-top: 4px; font-size: 16px; }
+  .title .tl.bold { font-weight: bold; }
+  body { font-size: 12px; line-height: 1.3; }
+  .sheet { padding: 0; }
+  .title .exam{font-size:15px;} .title .sch{font-size:13px;} .title .course,.title .subject,.title .tl{font-size:12px;}
+  .hdr .code{font-size:16px;}
+  .sec-title { margin-top: 8px; font-size: 13px; }
+  .topic { font-weight: bold; font-style: italic; margin: 6px 0 2px 0; font-size: 12px; }
+  .q { margin-bottom: 3px; grid-template-columns: 26px 1fr; }
+  .q-src { float:right; margin:1px 0 0 12px; font-size:11px; color: var(--note); font-style: italic; white-space:nowrap; }
+  .q p { display:inline; margin:0; }
+  .mk { font-weight: bold; white-space: nowrap; }
+  @page { size: A4; margin: 14mm 16mm; }
+  @media print { .sheet { margin:0; padding:0; box-shadow:none; width:auto; min-height:0; } body{background:#fff;} }
+</style>
+</head>
+<body>
+
+<div class="sheet">
+<div class="title">
+<div class="tl exam">FYUGP B.Sc. PHYSICS HONOURS</div>
+<div class="tl sch">PROPERTIES OF SOLIDS</div>
+<div class="tl course">Semester V &middot; Major Elective (Materials Science)</div>
+<div class="tl subject">MODULE IV: DIELECTRIC AND MAGNETIC PROPERTIES OF SOLIDS</div>
+<div class="tl course">Model questions on topics the past papers miss</div>
+</div>
+<div class="sec"><div class="sec-title">Section A: 1 mark each, answer all</div>
+<div class="topic">Susceptibility</div>
+<div class="q"><span class="n">1</span><div><p>Write the relation between the magnetisation $M$, the susceptibility $\chi$ and the field $H$. <span class="mk">(1 mark)</span></p></div></div>
+<div class="topic">Permeability</div>
+<div class="q"><span class="n">2</span><div><p>Write the relative permeability $\mu_r$ in terms of the susceptibility $\chi$. <span class="mk">(1 mark)</span></p></div></div>
+<div class="topic">Curie law</div>
+<div class="q"><span class="n">3</span><div><p>State the Curie law for a paramagnetic material and name the Curie constant. <span class="mk">(1 mark)</span></p></div></div>
+<div class="topic">Saturation magnetisation</div>
+<div class="q"><span class="n">4</span><div><p>Write the saturation magnetisation $M_s$ of a paramagnet with $N$ atoms per unit volume, Landé factor $g$ and total angular momentum $J$. <span class="mk">(1 mark)</span></p></div></div>
+</div>
+<div class="sec"><div class="sec-title">Section B: 2 marks each, answer all</div>
+<div class="topic">Curie–Weiss law</div>
+<div class="q"><span class="n">5</span><div><p>Write the Curie–Weiss law for a ferromagnet above its Curie temperature $T_C$, and define the Curie constant $C$ in terms of $\mu_0$, $T_C$ and $\lambda$. <span class="mk">(2 marks)</span></p></div></div>
+<div class="topic">Néel temperature</div>
+<div class="q"><span class="n">6</span><div><p>Write the relation between the Néel temperature $T_N$ and $\theta$ for an antiferromagnet, in terms of the interaction constants $\alpha$ and $\beta$. <span class="mk">(2 marks)</span></p></div></div>
+<div class="topic">Clausius–Mossotti relation</div>
+<div class="q"><span class="n">7</span><div><p>State the Clausius–Mossotti relation between the dielectric constant $\varepsilon_r$ and the atomic polarisability $\alpha$. <span class="mk">(2 marks)</span></p></div></div>
+<div class="topic">Total polarisability</div>
+<div class="q"><span class="n">8</span><div><p>Write the total polarisability $\alpha$ as the sum of its three contributions, and name them. <span class="mk">(2 marks)</span></p></div></div>
+</div>
+<div class="sec"><div class="sec-title">Section C: 4 marks each, answer all</div>
+<div class="topic">Diamagnetism</div>
+<div class="q"><span class="n">9</span><div><p>Derive the classical Langevin expression $\chi_{dia}=-\dfrac{N\mu_0Ze^2}{6m}\langle r^2\rangle$ for diamagnetism, starting from the change of orbital frequency under a field. <span class="mk">(4 marks)</span></p></div></div>
+<div class="topic">Paramagnetism</div>
+<div class="q"><span class="n">10</span><div><p>Show that for $x\ll1$ the Langevin function is $L(x)\cong x/3$, and hence derive the Curie law $\chi_{para}=C/T$. <span class="mk">(4 marks)</span></p></div></div>
+<div class="topic">Origin of permanent moment and g-factor</div>
+<div class="q"><span class="n">11</span><div><p>Explain the origin of the permanent magnetic moment of an atom. Write the Landé $g$-factor in terms of $J$, $S$ and $L$, and give its value for pure spin motion. <span class="mk">(4 marks)</span></p></div></div>
+<div class="topic">Antiferromagnetism and ferrimagnetism</div>
+<div class="q"><span class="n">12</span><div><p>Distinguish between antiferromagnetism and ferrimagnetism with a sketch of the sublattice moments, and state the sign of the exchange integral for each. <span class="mk">(4 marks)</span></p></div></div>
+<div class="topic">Local field</div>
+<div class="q"><span class="n">13</span><div><p>Derive the Lorentz local field $\mathbf{E}_{loc}=\mathbf{E}+\mathbf{P}/3\varepsilon_o$ for an atom of cubic symmetry, explaining each term. <span class="mk">(4 marks)</span></p></div></div>
+<div class="topic">Piezoelectricity</div>
+<div class="q"><span class="n">14</span><div><p>Explain piezoelectricity. Why must a piezoelectric crystal have no centre of inversion? Give one example of a crystal that is piezoelectric but not ferroelectric. <span class="mk">(4 marks)</span></p></div></div>
+</div>
+<div class="sec"><div class="sec-title">Section D: 10 marks each, answer any ONE</div>
+<div class="topic">Weiss theory</div>
+<div class="q"><span class="n">15</span><div><p>Explain the Weiss molecular field theory of ferromagnetism. Derive the Curie–Weiss law above $T_C$ and show that $T_C=\lambda Ng^2\mu_B^2J(J+1)/3k$. <span class="mk">(10 marks)</span></p></div></div>
+<div class="topic">Clausius–Mossotti relation and sources</div>
+<div class="q"><span class="n">16</span><div><p>Derive the Clausius–Mossotti relation $\dfrac{\varepsilon_r-1}{\varepsilon_r+2}=\dfrac{N\alpha}{3\varepsilon_o}$ from the local field. Explain the three sources of polarisability and how their contributions change with frequency. <span class="mk">(10 marks)</span></p></div></div>
+<div class="topic">Ferroelectricity</div>
+<div class="q"><span class="n">17</span><div><p>Explain ferroelectricity in barium titanate: the cubic and tetragonal structures, the polarisation catastrophe, and the Curie–Weiss-type variation $\varepsilon_r\cong\xi/(T-T_C)$ above the transition temperature. <span class="mk">(10 marks)</span></p></div></div>
+</div>
+</div>
+<div class="sheet key"><div class="title"><div class="tl subject">MODULE IV: MODEL ANSWERS</div><div class="tl course">For checking your work. Each answer shows the key step and the result.</div></div>
+<p class="key"><b>Section A.</b> <b>1.</b> $M=\chi H$ (book Eq. 8.1). <b>2.</b> $\mu_r=1+\chi$ (book Eq. 8.7). <b>3.</b> $\chi_{para}=C/T$ with $C=\mu_0N\mu^2/3k$ (book Eqs. 8.33, 8.34). <b>4.</b> $M_s=NgJ\mu_B$ (book Eq. 8.49).</p>
+<p class="key"><b>Section B.</b> <b>5.</b> $\chi=C/(T-T_C)$ with $C=\mu_0T_C/\lambda$ (book Eqs. 8.64, 8.65). <b>6.</b> $T_N/\theta=(\beta-\alpha)/(\beta+\alpha)$ (book Eq. 8.82). <b>7.</b> $(\varepsilon_r-1)/(\varepsilon_r+2)=N\alpha/3\varepsilon_o$ (book Eq. 9.12). <b>8.</b> $\alpha=\alpha_e+\alpha_i+\alpha_d$ (electronic, ionic, dipolar; book Eq. 9.32).</p>
+<p class="key"><b>Section C.</b> <b>9.</b> The orbital frequency changes by $eB/2m$ (Larmor). The induced moment is $\mu_a=-(Ze^2B/4m)\langle\rho^2\rangle$; with $\langle r^2\rangle=\tfrac32\langle\rho^2\rangle$ and $M=N\mu_a$ this gives Eq. 8.20 (book §8.3.1). <b>10.</b> $L(x)=\coth x-1/x\cong x/3$ for small $x$ (Eq. 8.32). With $M\cong N\mu^2B/3kT$, $\chi=\mu_0N\mu^2/3kT=C/T$ (Eqs. 8.33, 8.34). <b>11.</b> Origin: spin and orbital motion of unpaired electrons (book §8.2). $g=1+\dfrac{J(J+1)+S(S+1)-L(L+1)}{2J(J+1)}$ (Eq. 8.37); $g=2$ for pure spin. <b>12.</b> Antiferromagnet: equal and opposite sublattice moments, cancelling (no net moment). Ferrimagnet: unequal opposite moments, so a net moment. Exchange integral negative in both, with AB interaction dominant (book §8.6, §8.7). <b>13.</b> The applied field $\mathbf{E}_o$ plus the polarisation field $\mathbf{E}_p=-\mathbf{P}/3\varepsilon_o$ inside a cubic site, plus the field of the other polarised atoms (book Eq. 9.3 and §9.2). <b>14.</b> Piezoelectricity: stress gives a dipole (Eq. 9.39). Needs no centre of inversion (Fig. 9.6). Quartz is piezoelectric but not ferroelectric (book §9.7).</p>
+<p class="key"><b>Section D.</b> <b>15.</b> Molecular field $B_E=\lambda M$ (Eq. 8.52); $x=gJ\mu_B(B+\lambda M)/kT$ (Eq. 8.62); $\chi=C/(T-T_C)$ (Eq. 8.64), with $T_C$ from Eq. 8.66. <b>16.</b> Eq. (9.10) and (9.12) from $P=N\alpha(E+P/3\varepsilon_o)$ (Eq. 9.9). Sources: electronic (resonance at $\omega_o$, $\alpha_e=e^2/m(\omega_o^2-\omega^2)$), ionic ($e^2/\beta$), dipolar ($p^2/3kT$); dipolar disappears first at high frequency (book §9.4, §9.5). <b>17.</b> Cubic phase: centres of charge coincide. Tetragonal phase: Ti and Ba move up, O moves down, giving spontaneous polarisation (book §9.6, Fig. 9.5). Polarisation catastrophe when $\sum N_j\alpha_j=3\varepsilon_o$ (Eq. 9.34). Near $T_C$, $\varepsilon_r\cong\xi/(T-T_C)$ (Eq. 9.38).</p>
+<div class="sec"><div class="sec-title">Mapping to the syllabus and textbook</div>
+<table class="tbl" style="width:100%"><tr><th>Syllabus item</th><th>Topic</th><th>Puri and Babbar section</th><th>Model questions</th></tr>
+<tr><td>17</td><td style="text-align:left">Types of magnetism; origin of the permanent moment</td><td>8.1, 8.2</td><td>1, 2, 11</td></tr>
+<tr><td>18</td><td style="text-align:left">Diamagnetism and paramagnetism (classical); ferromagnetism (Weiss)</td><td>8.3, 8.4, 8.5</td><td>3, 4, 5, 9, 10, 15</td></tr>
+<tr><td>19</td><td style="text-align:left">Antiferromagnetism and ferrimagnetism (qualitative)</td><td>8.6, 8.7</td><td>6, 12</td></tr>
+<tr><td>20</td><td style="text-align:left">Polarisation, susceptibility, local field</td><td>9.1, 9.2</td><td>13</td></tr>
+<tr><td>21</td><td style="text-align:left">Dielectric constant, polarisability and its sources</td><td>9.3, 9.4, 9.5</td><td>7, 8, 16</td></tr>
+<tr><td>22</td><td style="text-align:left">Ferro- and piezoelectricity (qualitative)</td><td>9.6, 9.7</td><td>14, 17</td></tr>
+</table></div>
+<p class="key" style="font-size:12px">Questions are drafted for the gaps in the past papers (not from any past paper). Chapter questions and problems of the book are not used.</p>
+</div></body></html>

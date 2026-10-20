@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Griffiths 5th ed., Field of a polarized object (Griffiths 4.2, pp. 173–180)</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+  :root {
+    --page-bg: #d9d9d4;
+    --paper: #fdfdfb;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --page-bg: #2b2b2b;
+      --paper: #f4f3ee;
+      --ink: #111;
+      --rule: #444;
+      --note: #555;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page-bg: #2b2b2b;
+    --paper: #f4f3ee;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  body {
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--ink);
+    font-family: "Times New Roman", Times, "Liberation Serif", serif;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .sheet {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 12mm auto;
+    padding: 14mm 18mm 16mm;
+    box-sizing: border-box;
+    background: var(--paper);
+    box-shadow: 0 1px 6px rgba(0,0,0,.25);
+    position: relative;
+  }
+  .sheet + .sheet { margin-top: 0; }
+  .hdr {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: start;
+    font-size: 14px;
+  }
+  .code { font-size: 22px; font-weight: bold; letter-spacing: .5px; }
+  .pages { text-align: center; padding-top: 14px; }
+  .name { text-align: right; line-height: 2; }
+  .title { text-align: center; margin-top: 22px; }
+  .title .exam { font-size: 19px; font-weight: bold; letter-spacing: .3px; }
+  .title .sch { margin-top: 2px; }
+  .title .course { margin-top: 10px; font-size: 16px; }
+  .title .subject { margin-top: 6px; font-size: 16px; font-weight: bold; }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 16px;
+    font-size: 15px;
+  }
+  .sec { margin-top: 14px; }
+  .sec-head {
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    font-weight: bold;
+  }
+  .sec-head .num { font-weight: bold; }
+  .sec-head .body { font-weight: normal; }
+  .sec-head .body b { font-weight: bold; }
+  .sec-head .body i { font-style: italic; }
+  .sec-total { text-align: right; font-weight: normal; margin-top: 4px; }
+  .qs { margin-top: 6px; }
+  .q {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    margin-bottom: 7px;
+  }
+  .q .n { text-align: right; padding-right: 10px; }
+  .q p { margin: 0; }
+  .sub { margin-left: 22px; }
+  .cut { color: var(--note); }
+  .turn { text-align: right; font-weight: bold; margin-top: 26px; }
+  .fig {
+    display: block;
+    margin: 8px auto 2px 36px;
+    width: 230px;
+    height: auto;
+  }
+  .fig-cap { margin-left: 36px; font-size: 13px; color: var(--note); font-style: italic; }
+  .foot-note {
+    margin-top: 26px;
+    border-top: 1px solid var(--rule);
+    padding-top: 6px;
+    font-size: 12px;
+    color: var(--note);
+  }
+  .pno { text-align: center; font-size: 15px; margin-bottom: 4px; }
+  .pno-hdr { position: absolute; top: 10mm; right: 18mm; font-weight: bold; font-size: 14px; }
+  @media print {
+    @page { size: A4; margin: 0; }
+    body { background: #fff; }
+    .sheet { margin: 0; box-shadow: none; width: 210mm; height: 297mm; min-height: 0; page-break-after: always; }
+    .sheet:last-child { page-break-after: auto; }
+  }
+  @media (max-width: 720px) {
+    .sheet { width: auto; margin: 0; padding: 14px 16px; min-height: 0; }
+    .hdr { grid-template-columns: 1fr; gap: 6px; }
+    .name { text-align: left; }
+    .pages { text-align: left; padding-top: 0; }
+  }
+</style>
+<style>
+  .sheet.book { height: auto; min-height: 297mm; text-align: justify; hyphens: auto; }
+  .sheet.book p { margin: 6px 0; }
+  .rh { display: flex; justify-content: space-between; font-size: 12px; color: var(--note);
+        border-bottom: 1px solid var(--rule); padding-bottom: 3px; margin-bottom: 12px; }
+  .chap { display: flex; background: #8a8a86; color: #fff; margin: 4px 0 16px; }
+  .chap .cn { background: #b4b4ae; padding: 10px 18px; font-size: 26px; }
+  .chap .ct { padding: 12px 16px; font-size: 22px; font-weight: bold; }
+  h2.sec { font-size: 20px; margin: 18px 0 8px; border-bottom: 2px solid var(--rule); padding-bottom: 3px; }
+  h3.sub { font-size: 16px; margin: 14px 0 6px; border-bottom: 1px solid var(--rule); padding-bottom: 2px; }
+  .eq { margin: 10px 0; text-align: center; overflow: visible; }
+  mjx-container[display="true"], mjx-container { overflow: visible !important; max-width: 100%; }
+  .sheet.book, .sheet.book .eq { overflow: visible; }
+  .eq.boxed { border: 1px solid var(--ink); display: block; padding: 4px 8px; }
+  .prob { background: #ecece7; border: 1px solid var(--rule); padding: 8px 12px; margin: 10px 0; text-align: left; }
+  .prob p { margin: 5px 0; }
+  .ex, .ex-cont { border: 1px solid var(--rule); padding: 8px 12px; margin: 10px 0; text-align: left; }
+  .ex p, .ex-cont p { margin: 5px 0; }
+  .figbox { border: 1px dashed var(--rule); padding: 10px; color: var(--note); font-size: 13px; text-align: center; margin: 8px 0; font-style: italic; }
+  figure { margin: 8px 0; text-align: center; }
+  figure svg { width: 100%; max-width: 230px; height: auto; }
+  figure.single svg { max-width: 260px; }
+  figure figcaption { font-size: 12px; font-style: italic; color: var(--note); }
+  .figrow { display: flex; flex-wrap: wrap; justify-content: space-around; gap: 8px; }
+  .figrow > figure { flex: 1 1 180px; max-width: 240px; }
+  .fn { font-size: 12.5px; color: var(--note); margin: 6px 0; text-align: left; }
+  .cont { font-size: 12.5px; color: var(--note); font-style: italic; }
+  .gapnote { font-size: 13px; color: var(--note); font-style: italic; border-left: 3px solid var(--rule); padding: 2px 8px; margin: 4px 0 10px; }
+  .flag { color: #8a1c1c; font-weight: bold; }
+  .answer { font-size: 14px; }
+  .tbl { border-collapse: collapse; width: 100%; font-size: 13px; margin: 6px 0; }
+  .tbl td, .tbl th { border: 1px solid var(--rule); padding: 3px 6px; text-align: center; }
+  .tbl th { background: #ebebe6; }
+  .tblcap { font-size: 13px; margin-top: 8px; text-align: left; }
+  .pno { text-align: center; font-size: 14px; margin-top: 14px; }
+  .intro p, .intro li { font-size: 14px; text-align: left; }
+  .intro table { border-collapse: collapse; width: 100%; font-size: 14px; margin: 6px 0; }
+  .intro td, .intro th { border: 1px solid var(--rule); padding: 4px 8px; text-align: left; }
+  @media print {
+    .sheet.book { height: auto !important; min-height: 0 !important; page-break-after: always; }
+  }
+</style>
+</head>
+<body>
+<div class="sheet book" id="pdf-p08">
+  <div class="rh"><span>173</span><span>4.2 The Field of a Polarized Object</span></div>
+  <figure class="single"><svg viewBox="0 0 240 190" role="img" aria-label="Dipole inside a polarized body, vector to a field point" xmlns="http://www.w3.org/2000/svg"><defs><marker id="f48-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#111"/></marker><marker id="f48-ahr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8a1c1c"/></marker></defs><path d="M60,95 C60,45 100,30 130,40 C170,50 185,95 170,130 C160,165 110,170 85,150 C65,135 60,115 60,95 Z" fill="#dcdcd4" stroke="#111" stroke-width="1.4"/><circle cx="115" cy="100" r="3.5" fill="#111"/><line x1="115" y1="100" x2="115" y2="62" stroke="#111" stroke-width="1.8" marker-end="url(#f48-ah)"/><text x="120.00" y="66.00" font-size="14" font-family="Times New Roman, serif" font-style="italic" font-weight="bold">p</text><circle cx="205" cy="60" r="3" fill="#111"/><line x1="115" y1="100" x2="200" y2="63" stroke="#111" stroke-width="1.2" marker-end="url(#f48-ah)"/><text x="176.00" y="64.00" font-size="14" font-family="Times New Roman, serif" font-style="italic">ℛ</text><text x="122.00" y="110.00" font-size="12" font-family="Times New Roman, serif" font-style="italic">P dτ′</text></svg><figcaption>Fig. 4.8</figcaption></figure>
+  <div class="eq">$$V(\mathbf r) = \frac{1}{4\pi\epsilon_0}\int_V\frac{\mathbf P(\mathbf r')\cdot\hat{\boldsymbol{\mathcal R}}}{\mathcal R^2}\,d\tau'.\tag{4.9}$$</div>
+  <p>That <i>does</i> it, in principle. But a little sleight of hand casts this integral into a much more illuminating form. Observing that</p>
+  <div class="eq">$$\nabla'\!\left(\frac{1}{\mathcal R}\right) = \frac{\hat{\boldsymbol{\mathcal R}}}{\mathcal R^2},$$</div>
+  <p>where (unlike Prob. 1.13) the differentiation is with respect to the <i>source</i> coordinates ($\mathbf r'$), we have</p>
+  <div class="eq">$$V = \frac{1}{4\pi\epsilon_0}\int_V\mathbf P\cdot\nabla'\!\left(\frac{1}{\mathcal R}\right)d\tau'.$$</div>
+  <p>Integrating by parts, using product rule number 5 (inside the front cover), gives</p>
+  <div class="eq">$$V = \frac{1}{4\pi\epsilon_0}\left[\int_V\nabla'\cdot\!\left(\frac{\mathbf P}{\mathcal R}\right)d\tau' - \int_V\frac{1}{\mathcal R}(\nabla'\cdot\mathbf P)\,d\tau'\right],$$</div>
+  <p>or, invoking the divergence theorem,</p>
+  <div class="eq">$$V = \frac{1}{4\pi\epsilon_0}\oint_S\frac{1}{\mathcal R}\,\mathbf P\cdot d\mathbf a' - \frac{1}{4\pi\epsilon_0}\int_V\frac{1}{\mathcal R}(\nabla'\cdot\mathbf P)\,d\tau'.\tag{4.10}$$</div>
+  <p>The first term looks like the potential of a surface charge,</p>
+  <div class="eq boxed">$$\sigma_b \equiv \mathbf P\cdot\hat{\mathbf n}\tag{4.11}$$</div>
+  <p>(where $\hat{\mathbf n}$ is the normal unit vector), while the second term looks like the potential of a volume charge,</p>
+  <div class="eq boxed">$$\rho_b \equiv -\nabla\cdot\mathbf P.\tag{4.12}$$</div>
+  <p>With these definitions, Eq. 4.10 becomes</p>
+  <div class="eq">$$V(\mathbf r) = \frac{1}{4\pi\epsilon_0}\oint_S\frac{\sigma_b}{\mathcal R}\,da' + \frac{1}{4\pi\epsilon_0}\int_V\frac{\rho_b}{\mathcal R}\,d\tau'.\tag{4.13}$$</div>
+  <p>This means that the potential (and hence also the field) of a polarized object is the same as that produced by a volume charge density $\rho_b = -\nabla\cdot\mathbf P$ plus a surface charge density $\sigma_b = \mathbf P\cdot\hat{\mathbf n}$. Instead of integrating the <span class="cont">(continued on the next page)</span></p>
+  <div class="pno">173</div>
+</div>
+<div class="sheet book" id="pdf-p09">
+  <div class="rh"><span>174</span><span>4 Electric Fields in Matter</span></div>
+  <p>contributions of all the infinitesimal dipoles, as in Eq. 4.9, we could first find those <b>bound charges</b>, and then calculate the fields <i>they</i> produce, in the same way we calculate the field of any other volume and surface charges (for example, using Gauss’s law).</p>
+  <div class="ex">
+    <p><b>Example 4.2.</b> Find the electric field produced by a uniformly polarized sphere of radius $R$.</p>
+    <p><i>Solution.</i> We might as well choose the $z$-axis to coincide with the direction of polarization (Fig. 4.9). The volume bound charge density $\rho_b$ is zero, since <b>P</b> is uniform, but</p>
+    <div class="eq">$$\sigma_b = \mathbf P\cdot\hat{\mathbf n} = P\cos\theta,$$</div>
+    <p>where $\theta$ is the usual spherical coordinate. What we want, then, is the field produced by a charge density $P\cos\theta$ plastered over the surface of a sphere. But we already computed the potential of such a configuration (Eqs. 3.86 and 3.87):</p>
+    <div class="eq">$$V(r,\theta) = \begin{cases}\dfrac{P}{3\epsilon_0}\,r\cos\theta & \text{for } r\le R,\\[2mm] \dfrac{P}{3\epsilon_0}\dfrac{R^3}{r^2}\cos\theta & \text{for } r\ge R.\end{cases}$$</div>
+    <p>Since $r\cos\theta = z$, the field inside the sphere is uniform:</p>
+    <div class="eq">$$\mathbf E = -\nabla V = -\frac{P}{3\epsilon_0}\hat{\mathbf z} = -\frac{1}{3\epsilon_0}\mathbf P\quad\text{for } r&lt;R.\tag{4.14}$$</div>
+    <p>This remarkable result will be very useful in what follows. Outside the sphere the potential is identical to that of a perfect dipole at the origin,</p>
+    <div class="eq">$$V = \frac{1}{4\pi\epsilon_0}\frac{\mathbf p\cdot\hat{\mathbf r}}{r^2}\quad\text{for } r\ge R,\tag{4.15}$$</div>
+    <p>whose dipole moment is, not surprisingly, equal to the total dipole moment of the sphere:</p>
+    <div class="eq">$$\mathbf p = \frac{4}{3}\pi R^3\,\mathbf P.\tag{4.16}$$</div>
+    <p>The field of the uniformly polarized sphere is shown in Fig. 4.10.</p>
+    <figure class="single"><svg viewBox="0 0 220 200" role="img" aria-label="Uniformly polarized sphere with normal and angle theta" xmlns="http://www.w3.org/2000/svg"><defs><marker id="f49-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#111"/></marker><marker id="f49-ahr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8a1c1c"/></marker></defs><circle cx="110" cy="100" r="60" fill="#e8e8e2" stroke="#111" stroke-width="1.4"/><line x1="110" y1="125" x2="110" y2="25" stroke="#111" stroke-width="1.8" marker-end="url(#f49-ah)"/><text x="116.00" y="22.00" font-size="14" font-family="Times New Roman, serif" font-style="italic" font-weight="bold">P</text><line x1="110" y1="32" x2="110" y2="168" stroke="#111" stroke-width="1" stroke-dasharray="4 3"/><text x="118.00" y="176.00" font-size="13" font-family="Times New Roman, serif" font-style="italic">z</text><line x1="110" y1="100" x2="152.43" y2="57.57" stroke="#111" stroke-width="1"/><circle cx="152.43" cy="57.57" r="2.5" fill="#111"/><line x1="152.43" y1="57.57" x2="170.81" y2="39.19" stroke="#111" stroke-width="1.2" marker-end="url(#f49-ah)"/><text x="174.57" y="42.02" font-size="13" font-family="Times New Roman, serif" font-style="italic">n̂</text><path d="M110,78 A22,22 0 0 1 125.56,84.44" fill="none" stroke="#111"/><text x="140.00" y="86.00" font-size="13" font-family="Times New Roman, serif" font-style="italic">θ</text><text x="150.00" y="106.00" font-size="13" font-family="Times New Roman, serif" font-style="italic">R</text></svg><figcaption>Fig. 4.9</figcaption></figure>
+  </div>
+  <div class="pno">174</div>
+</div>
+<div class="sheet book" id="pdf-p10">
+  <div class="rh"><span>175</span><span>4.2 The Field of a Polarized Object</span></div>
+  <figure class="single"><svg viewBox="0 0 240 200" role="img" aria-label="Field lines of a uniformly polarized sphere" xmlns="http://www.w3.org/2000/svg"><defs><marker id="f410-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#111"/></marker><marker id="f410-ahr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8a1c1c"/></marker></defs><line x1="96" y1="68" x2="96" y2="132.01" stroke="#111" stroke-width="1.2" marker-end="url(#f410-ah)"/><line x1="112" y1="60.81" x2="112" y2="139.2" stroke="#111" stroke-width="1.2" marker-end="url(#f410-ah)"/><line x1="128" y1="60.81" x2="128" y2="139.2" stroke="#111" stroke-width="1.2" marker-end="url(#f410-ah)"/><line x1="144" y1="68" x2="144" y2="132.01" stroke="#111" stroke-width="1.2" marker-end="url(#f410-ah)"/><path d="M126.88,60.6 L127.09,59.83 L127.09,60.63 L127.3,59.86 L127.52,59.09 L127.74,58.32 L127.96,57.55 L128.18,56.78 L128.4,56.01 L128.62,55.24 L128.85,54.48 L129.08,53.71 L129.31,52.94 L129.54,52.18 L129.78,51.41 L130.02,50.65 L130.25,49.89 L130.49,49.12 L130.74,48.36 L130.98,47.6 L131.23,46.84 L131.47,46.08 L131.72,45.32 L131.97,44.56 L132.23,43.8 L132.48,43.04 L132.74,42.28 L132.99,41.52 L133.25,40.77 L133.52,40.01 L133.78,39.26 L134.04,38.5 L134.31,37.75 L134.58,36.99 L134.85,36.24 L135.12,35.49 L135.39,34.73 L135.66,33.98 L135.94,33.23 L136.22,32.48 L136.5,31.73 L136.78,30.98 L137.06,30.23 L137.34,29.49 L137.63,28.74 L137.92,27.99 L138.2,27.25 L138.49,26.5 L138.78,25.76 L139.08,25.01 L139.37,24.27 L139.67,23.52 L139.96,22.78 L140.26,22.04 L140.56,21.3 L140.86,20.56 L141.17,19.82 L141.47,19.08 L141.78,18.34 L142.08,17.6 L142.39,16.86 L142.7,16.12 L143.01,15.39 L143.33,14.65 L143.64,13.91 L143.96,13.18 L144.27,12.44 L144.59,11.71 L144.91,10.98 L145.23,10.24 L145.55,9.51 L145.88,8.78 L146.2,8.05 L146.53,7.32" fill="none" stroke="#111" stroke-width="1.1"/><line x1="135.66" y1="33.98" x2="135.94" y2="33.23" stroke="#111" stroke-width="1.1" marker-end="url(#f410-ah)"/><path d="M137.79,64.21 L138.31,63.61 L138.31,64.41 L138.84,63.81 L139.38,63.22 L139.92,62.63 L140.47,62.05 L141.02,61.47 L141.58,60.9 L142.14,60.33 L142.71,59.76 L143.28,59.2 L143.85,58.64 L144.43,58.09 L145.01,57.54 L145.6,56.99 L146.19,56.45 L146.78,55.92 L147.38,55.39 L147.98,54.86 L148.59,54.34 L149.2,53.82 L149.81,53.31 L150.43,52.8 L151.05,52.29 L151.67,51.79 L152.3,51.29 L152.93,50.8 L153.56,50.32 L154.2,49.83 L154.84,49.36 L155.49,48.88 L156.14,48.41 L156.79,47.95 L157.44,47.49 L158.1,47.03 L158.76,46.58 L159.43,46.14 L160.09,45.7 L160.76,45.26 L161.44,44.83 L162.11,44.4 L162.79,43.98 L163.47,43.56 L164.16,43.14 L164.84,42.73 L165.54,42.33 L166.23,41.93 L166.92,41.54 L167.62,41.15 L168.32,40.76 L169.03,40.38 L169.73,40 L170.44,39.63 L171.15,39.27 L171.87,38.9 L172.58,38.55 L173.3,38.2 L174.02,37.85 L174.75,37.51 L175.47,37.17 L176.2,36.84 L176.93,36.51 L177.66,36.19 L178.39,35.87 L179.13,35.56 L179.87,35.25 L180.61,34.95 L181.35,34.65 L182.1,34.36 L182.84,34.07 L183.59,33.78 L184.34,33.51 L185.09,33.23 L185.85,32.97 L186.6,32.7 L187.36,32.45 L188.12,32.19" fill="none" stroke="#111" stroke-width="1.1"/><line x1="160.76" y1="45.26" x2="161.44" y2="44.83" stroke="#111" stroke-width="1.1" marker-end="url(#f410-ah)"/><path d="M147.94,70.46 L147.94,71.26 L148.69,70.99 L149.45,70.74 L150.21,70.5 L150.98,70.27 L151.75,70.05 L152.52,69.84 L153.3,69.65 L154.08,69.47 L154.86,69.3 L155.64,69.14 L156.43,68.99 L157.22,68.86 L158.01,68.74 L158.8,68.64 L159.6,68.54 L160.39,68.46 L161.19,68.39 L161.99,68.34 L162.79,68.29 L163.59,68.27 L164.39,68.25 L165.19,68.25 L165.99,68.26 L166.79,68.29 L167.59,68.32 L168.38,68.38 L169.18,68.44 L169.98,68.52 L170.77,68.62 L171.56,68.72 L172.36,68.85 L173.14,68.98 L173.93,69.13 L174.71,69.3 L175.49,69.48 L176.27,69.67 L177.04,69.88 L177.81,70.1 L178.57,70.34 L179.33,70.59 L180.09,70.85 L180.84,71.14 L181.58,71.43 L182.32,71.74 L183.05,72.07 L183.77,72.41 L184.49,72.76 L185.2,73.13 L185.9,73.51 L186.59,73.91 L187.28,74.33 L187.95,74.76 L188.62,75.2 L189.28,75.66 L189.92,76.13 L190.56,76.62 L191.18,77.12 L191.79,77.63 L192.39,78.16 L192.98,78.7 L193.55,79.26 L194.11,79.83 L194.66,80.42 L195.19,81.01 L195.71,81.62 L196.21,82.25 L196.7,82.88 L197.17,83.53 L197.62,84.19 L198.05,84.86 L198.47,85.55 L198.87,86.24 L199.25,86.94 L199.61,87.66 L199.95,88.38 L200.27,89.11 L200.57,89.85 L200.85,90.6 L201.11,91.36 L201.35,92.12 L201.57,92.9 L201.76,93.67 L201.93,94.45 L202.08,95.24 L202.21,96.03 L202.31,96.82 L202.39,97.62 L202.45,98.42 L202.49,99.21 L202.5,100.01 L202.49,100.81 L202.45,101.61 L202.39,102.41 L202.31,103.21 L202.21,104 L202.08,104.79 L201.93,105.58 L201.75,106.36 L201.56,107.13 L201.34,107.9 L201.1,108.67 L200.84,109.42 L200.56,110.17 L200.26,110.91 L199.94,111.65 L199.6,112.37 L199.24,113.08 L198.85,113.79 L198.46,114.48 L198.04,115.16 L197.6,115.83 L197.15,116.49 L196.68,117.14 L196.19,117.77 L195.69,118.4 L195.17,119.01 L194.64,119.6 L194.09,120.19 L193.53,120.76 L192.96,121.32 L192.37,121.86 L191.77,122.39 L191.16,122.9 L190.53,123.4 L189.9,123.89 L189.25,124.36 L188.6,124.82 L187.93,125.26 L187.25,125.69 L186.57,126.1 L185.88,126.5 L185.17,126.88 L184.46,127.25 L183.75,127.61 L183.02,127.95 L182.29,128.27 L181.55,128.58 L180.81,128.88 L180.06,129.16 L179.31,129.42 L178.55,129.67 L177.78,129.91 L177.01,130.13 L176.24,130.34 L175.46,130.53 L174.68,130.71 L173.9,130.87 L173.12,131.02 L172.33,131.16 L171.54,131.28 L170.74,131.39 L169.95,131.48 L169.15,131.56 L168.36,131.63 L167.56,131.68 L166.76,131.72 L165.96,131.74 L165.16,131.75 L164.36,131.75 L163.56,131.73 L162.76,131.7 L161.96,131.66 L161.16,131.61 L160.37,131.54 L159.57,131.46 L158.78,131.36 L157.98,131.25 L157.19,131.13 L156.4,131 L155.62,130.86 L154.83,130.7 L154.05,130.53 L153.27,130.35 L152.49,130.15 L151.72,129.94 L150.95,129.72 L150.19,129.49 L149.42,129.25 L148.67,129 L147.91,128.73 L147.91,129.53" fill="none" stroke="#111" stroke-width="1.1"/><line x1="202.5" y1="100.01" x2="202.49" y2="100.81" stroke="#111" stroke-width="1.1" marker-end="url(#f410-ah)"/><path d="M154.42,79.63 L155.21,79.77 L155.21,80.57 L155.98,80.77 L156.75,80.99 L157.52,81.23 L158.27,81.49 L159.02,81.78 L159.76,82.09 L160.48,82.42 L161.2,82.78 L161.9,83.16 L162.59,83.56 L163.27,83.99 L163.93,84.44 L164.58,84.91 L165.21,85.41 L165.82,85.92 L166.41,86.46 L166.98,87.02 L167.53,87.61 L168.05,88.21 L168.55,88.83 L169.03,89.48 L169.48,90.14 L169.9,90.82 L170.29,91.52 L170.66,92.23 L170.99,92.96 L171.29,93.7 L171.56,94.45 L171.79,95.22 L171.99,95.99 L172.16,96.77 L172.29,97.56 L172.38,98.36 L172.44,99.16 L172.46,99.95 L172.44,100.75 L172.39,101.55 L172.3,102.35 L172.17,103.14 L172.01,103.92 L171.82,104.7 L171.59,105.46 L171.32,106.22 L171.02,106.96 L170.7,107.69 L170.34,108.41 L169.95,109.1 L169.53,109.79 L169.08,110.45 L168.61,111.09 L168.11,111.72 L167.59,112.33 L167.04,112.91 L166.47,113.47 L165.88,114.02 L165.28,114.54 L164.65,115.03 L164.01,115.51 L163.35,115.96 L162.67,116.39 L161.98,116.8 L161.28,117.18 L160.56,117.54 L159.84,117.87 L159.1,118.19 L158.36,118.48 L157.6,118.74 L156.84,118.99 L156.07,119.21 L155.3,119.4 L155.3,120.2 L154.51,120.35 L154.51,121.15" fill="none" stroke="#111" stroke-width="1.1"/><line x1="172.44" y1="100.75" x2="172.39" y2="101.55" stroke="#111" stroke-width="1.1" marker-end="url(#f410-ah)"/><path d="M159.14,90.95 L159.62,91.6 L160.06,92.26 L160.47,92.95 L160.84,93.66 L161.17,94.39 L161.46,95.13 L161.71,95.89 L161.92,96.66 L162.09,97.45 L162.21,98.24 L162.29,99.03 L162.32,99.83 L162.31,100.63 L162.25,101.43 L162.15,102.22 L162,103.01 L161.81,103.79 L161.57,104.55 L161.3,105.3 L160.98,106.04 L160.63,106.75 L160.23,107.45 L159.81,108.13 L159.35,108.78 L158.85,109.41" fill="none" stroke="#111" stroke-width="1.1"/><line x1="162.31" y1="100.63" x2="162.25" y2="101.43" stroke="#111" stroke-width="1.1" marker-end="url(#f410-ah)"/><path d="M159.34,92.87 L159.72,93.58 L160.07,94.3 L160.37,95.04 L160.64,95.79 L160.86,96.56 L161.03,97.34 L161.16,98.13 L161.25,98.93 L161.29,99.73 L161.28,100.53 L161.23,101.32 L161.13,102.12 L160.98,102.9 L160.79,103.68 L160.56,104.45 L160.28,105.2 L159.96,105.93 L159.6,106.65" fill="none" stroke="#111" stroke-width="1.1"/><line x1="161.29" y1="99.73" x2="161.28" y2="100.53" stroke="#111" stroke-width="1.1" marker-end="url(#f410-ah)"/><path d="M156.56,82.57 L156.56,83.37 L157.29,83.7 L158,84.05 L158.71,84.43 L159.4,84.83 L160.08,85.26 L160.73,85.72 L161.38,86.19 L162,86.7 L162.6,87.22 L163.18,87.77 L163.74,88.35 L164.27,88.94 L164.78,89.56 L165.26,90.2 L165.71,90.86 L166.13,91.54 L166.52,92.24 L166.88,92.96 L167.2,93.69 L167.49,94.43 L167.75,95.19 L167.97,95.96 L168.15,96.74 L168.29,97.53 L168.39,98.32 L168.45,99.12 L168.48,99.92 L168.46,100.72 L168.41,101.52 L168.31,102.31 L168.18,103.1 L168,103.88 L167.8,104.65 L167.55,105.42 L167.27,106.16 L166.95,106.9 L166.6,107.62 L166.21,108.32 L165.8,109 L165.35,109.67 L164.88,110.31 L164.37,110.93 L163.85,111.53 L163.29,112.11 L162.72,112.67 L162.12,113.2 L161.5,113.71 L160.86,114.19 L160.21,114.65 L159.54,115.08 L158.85,115.49 L158.15,115.88 L157.43,116.23 L156.7,116.57" fill="none" stroke="#111" stroke-width="1.1"/><line x1="168.48" y1="99.92" x2="168.46" y2="100.72" stroke="#111" stroke-width="1.1" marker-end="url(#f410-ah)"/><path d="M150.56,73.51 L151.35,73.36 L152.14,73.23 L152.93,73.12 L153.72,73.01 L154.52,72.93 L155.32,72.86 L156.11,72.8 L156.91,72.76 L157.71,72.74 L158.51,72.73 L159.31,72.74 L160.11,72.76 L160.91,72.8 L161.71,72.85 L162.51,72.92 L163.3,73.01 L164.09,73.11 L164.89,73.23 L165.67,73.37 L166.46,73.52 L167.24,73.69 L168.02,73.87 L168.79,74.08 L169.56,74.3 L170.33,74.53 L171.09,74.78 L171.84,75.06 L172.59,75.34 L173.33,75.65 L174.06,75.97 L174.78,76.31 L175.5,76.66 L176.21,77.04 L176.9,77.43 L177.59,77.84 L178.27,78.26 L178.94,78.7 L179.59,79.16 L180.24,79.64 L180.87,80.13 L181.48,80.64 L182.09,81.17 L182.67,81.71 L183.25,82.27 L183.8,82.84 L184.35,83.43 L184.87,84.03 L185.37,84.65 L185.86,85.29 L186.33,85.94 L186.78,86.6 L187.21,87.28 L187.61,87.97 L188,88.67 L188.36,89.38 L188.7,90.1 L189.02,90.84 L189.31,91.58 L189.58,92.34 L189.83,93.1 L190.04,93.87 L190.24,94.64 L190.41,95.42 L190.55,96.21 L190.66,97 L190.75,97.8 L190.81,98.6 L190.84,99.4 L190.85,100.2 L190.83,101 L190.78,101.79 L190.71,102.59 L190.61,103.38 L190.48,104.17 L190.33,104.96 L190.15,105.74 L189.94,106.51 L189.71,107.28 L189.45,108.04 L189.17,108.78 L188.87,109.52 L188.54,110.25 L188.19,110.97 L187.81,111.68 L187.42,112.37 L187,113.06 L186.56,113.73 L186.1,114.38 L185.62,115.02 L185.13,115.65 L184.61,116.26 L184.08,116.86 L183.53,117.44 L182.97,118.01 L182.39,118.56 L181.79,119.09 L181.18,119.61 L180.56,120.11 L179.92,120.6 L179.27,121.07 L178.61,121.52 L177.94,121.95 L177.26,122.37 L176.56,122.77 L175.86,123.15 L175.15,123.51 L174.43,123.86 L173.7,124.19 L172.96,124.5 L172.22,124.8 L171.47,125.08 L170.71,125.34 L169.95,125.59 L169.19,125.81 L168.41,126.03 L167.64,126.22 L166.86,126.4 L166.07,126.56 L165.29,126.7 L164.5,126.83 L163.71,126.94 L162.91,127.03 L162.12,127.11 L161.32,127.18 L160.52,127.22 L159.72,127.25 L158.92,127.27 L158.12,127.27 L157.32,127.25 L156.52,127.22 L155.72,127.17 L154.92,127.11 L154.13,127.03 L153.33,126.94 L152.54,126.83 L151.75,126.71 L150.96,126.57 L150.18,126.42 L150.18,127.22" fill="none" stroke="#111" stroke-width="1.1"/><line x1="190.83" y1="101" x2="190.78" y2="101.79" stroke="#111" stroke-width="1.1" marker-end="url(#f410-ah)"/><path d="M199.17,155.37 L198.37,155.38 L197.57,155.37 L196.77,155.36 L195.97,155.34 L195.17,155.32 L194.37,155.28 L193.57,155.24 L192.77,155.19 L191.98,155.14 L191.18,155.07 L190.38,155 L189.59,154.92 L188.79,154.84 L188,154.74 L187.2,154.64 L186.41,154.53 L185.62,154.42 L184.83,154.29 L184.04,154.16 L183.25,154.03 L182.46,153.88 L181.68,153.73 L180.89,153.57 L180.11,153.41 L179.33,153.23 L178.55,153.05 L177.77,152.86 L177,152.67 L176.22,152.47 L175.45,152.26 L174.68,152.04 L173.91,151.82 L173.15,151.59 L172.38,151.36 L171.62,151.11 L170.86,150.86 L170.1,150.61 L169.35,150.34 L168.59,150.07 L167.84,149.8 L167.09,149.51 L166.35,149.22 L165.61,148.93 L164.87,148.62 L164.13,148.31 L163.39,148 L162.66,147.68 L161.93,147.35 L161.21,147.01 L160.48,146.67 L159.76,146.32 L159.05,145.96 L158.33,145.6 L157.62,145.23 L156.92,144.86 L156.21,144.48 L155.51,144.09 L154.82,143.7 L154.12,143.3 L153.43,142.89 L152.75,142.48 L152.07,142.06 L151.39,141.63 L150.72,141.2 L150.05,140.77 L149.38,140.32 L148.72,139.87 L148.06,139.42 L147.41,138.96 L146.76,138.49 L146.11,138.02 L145.47,137.54 L144.84,137.05 L144.2,136.56 L143.58,136.06 L142.96,135.56 L142.34,135.05 L141.73,134.53 L141.12,134.01 L141.12,134.81" fill="none" stroke="#111" stroke-width="1.1"/><line x1="167.84" y1="149.8" x2="167.09" y2="149.51" stroke="#111" stroke-width="1.1" marker-end="url(#f410-ah)"/><path d="M158.51,188.72 L158.04,188.07 L157.58,187.41 L157.12,186.76 L156.65,186.11 L156.2,185.45 L155.74,184.8 L155.28,184.14 L154.83,183.48 L154.38,182.82 L153.93,182.16 L153.48,181.49 L153.04,180.83 L152.59,180.16 L152.15,179.5 L151.71,178.83 L151.27,178.16 L150.84,177.49 L150.4,176.82 L149.97,176.14 L149.54,175.47 L149.11,174.79 L148.68,174.12 L148.26,173.44 L147.84,172.76 L147.42,172.08 L147,171.4 L146.58,170.71 L146.17,170.03 L145.76,169.34 L145.35,168.65 L144.94,167.97 L144.54,167.28 L144.13,166.59 L143.73,165.89 L143.33,165.2 L142.93,164.51 L142.54,163.81 L142.15,163.11 L141.76,162.41 L141.37,161.71 L140.98,161.01 L140.6,160.31 L140.22,159.61 L139.84,158.9 L139.46,158.2 L139.09,157.49 L138.72,156.78 L138.35,156.07 L137.98,155.36 L137.62,154.65 L137.25,153.94 L136.89,153.22 L136.54,152.51 L136.18,151.79 L135.83,151.07 L135.48,150.35 L135.13,149.63 L134.79,148.91 L134.45,148.19 L134.11,147.46 L133.77,146.74 L133.44,146.01 L133.1,145.28 L132.77,144.55 L132.45,143.82 L132.13,143.09 L131.81,142.36 L131.49,141.62 L131.17,140.89 L130.86,140.15 L130.55,139.41 L130.25,138.67 L130.25,139.47 L129.95,138.73" fill="none" stroke="#111" stroke-width="1.1"/><line x1="142.54" y1="163.81" x2="142.15" y2="163.11" stroke="#111" stroke-width="1.1" marker-end="url(#f410-ah)"/><circle cx="120" cy="100" r="40" fill="#e8e8e2" stroke="#111" stroke-width="1.4"/><text x="116.00" y="104.00" font-size="13" font-family="Times New Roman, serif" font-style="italic">P</text><line x1="200" y1="60" x2="200" y2="22" stroke="#111" stroke-width="1.5" marker-end="url(#f410-ah)"/><text x="206.00" y="30.00" font-size="13" font-family="Times New Roman, serif" font-style="italic">P</text></svg><figcaption>Fig. 4.10</figcaption></figure>
+  <div class="prob">
+    <p><b>Problem 4.10.</b> A sphere of radius $R$ carries a polarization $\mathbf P(\mathbf r) = k\mathbf r$, where $k$ is a constant and $\mathbf r$ is the vector from the center. (a) Calculate the bound charges $\sigma_b$ and $\rho_b$. (b) Find the field inside and outside the sphere.</p>
+    <p><b>Problem 4.11.</b> A short cylinder, of radius $a$ and length $L$, carries a “frozen-in” uniform polarization <b>P</b>, parallel to its axis. Find the bound charge, and sketch the electric field (i) for $L\gg a$, (ii) for $L\ll a$, and (iii) for $L\approx a$. [This is known as a <b>bar electret</b>; it is the electrical analog to a bar magnet. In practice, only very special materials – barium titanate is the most “familiar” example – will hold a permanent electric polarization. That’s why you can’t buy electrets at the toy store.]</p>
+    <p><b>Problem 4.12.</b> Calculate the potential of a uniformly polarized sphere (Ex. 4.2) directly from Eq. 4.9.</p>
+  </div>
+
+  <h3 class="sub">4.2.2 Physical Interpretation of Bound Charges</h3>
+  <p>In the last section we found that the field of a polarized object is identical to the field that would be produced by a certain distribution of “bound charges,” $\sigma_b$ and $\rho_b$. But this conclusion emerged in the course of abstract manipulations of the integral in Eq. 4.9, and left us with no clue as to the physical meaning of these bound charges. Indeed, some authors give you the impression that bound charges are in some sense “fictitious” – mere bookkeeping devices used to facilitate the calculation of fields. Nothing could be further from the truth: $\rho_b$ and $\sigma_b$ represent <i>perfectly genuine accumulations of charge</i>. In this section I’ll explain how polarization leads to these charge distributions.</p>
+  <p>The basic idea is very simple: Suppose we have a long string of dipoles, as shown in Fig. 4.11. Along the line, the head of one effectively cancels the tail of its neighbor, but at the ends there are two charges left over: plus at the right-hand end and minus at the left. It is as if we had peeled off an electron at one end and carried it all the way down to the other end, though in fact no single electron made the whole trip – a lot of tiny displacements add up to one large one. We call the net charge at the ends <b>bound charge</b> to remind ourselves that it cannot be removed; in a dielectric every electron is attached to a specific atom or molecule. But apart from that, bound charge is no different from any other kind.</p>
+  <div class="pno">175</div>
+</div>
+<div class="sheet book" id="pdf-p11">
+  <div class="rh"><span>176</span><span>4 Electric Fields in Matter</span></div>
+  <figure class="single"><svg viewBox="0 0 260 170" role="img" aria-label="Head-to-tail dipoles leave bound charge at the ends" xmlns="http://www.w3.org/2000/svg"><defs><marker id="f411-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#111"/></marker><marker id="f411-ahr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8a1c1c"/></marker></defs><circle cx="20" cy="50" r="4" fill="#111"/><line x1="22" y1="50" x2="56" y2="50" stroke="#111" stroke-width="1.4" marker-end="url(#f411-ah)"/><text x="16.00" y="42.00" font-size="12" font-family="Times New Roman, serif">−</text><text x="54.00" y="42.00" font-size="12" font-family="Times New Roman, serif">+</text><circle cx="72" cy="50" r="4" fill="#111"/><line x1="74" y1="50" x2="108" y2="50" stroke="#111" stroke-width="1.4" marker-end="url(#f411-ah)"/><text x="68.00" y="42.00" font-size="12" font-family="Times New Roman, serif">−</text><text x="106.00" y="42.00" font-size="12" font-family="Times New Roman, serif">+</text><circle cx="124" cy="50" r="4" fill="#111"/><line x1="126" y1="50" x2="160" y2="50" stroke="#111" stroke-width="1.4" marker-end="url(#f411-ah)"/><text x="120.00" y="42.00" font-size="12" font-family="Times New Roman, serif">−</text><text x="158.00" y="42.00" font-size="12" font-family="Times New Roman, serif">+</text><circle cx="176" cy="50" r="4" fill="#111"/><line x1="178" y1="50" x2="212" y2="50" stroke="#111" stroke-width="1.4" marker-end="url(#f411-ah)"/><text x="172.00" y="42.00" font-size="12" font-family="Times New Roman, serif">−</text><text x="210.00" y="42.00" font-size="12" font-family="Times New Roman, serif">+</text><text x="120.00" y="24.00" font-size="11" font-family="Times New Roman, serif" text-anchor="middle" font-style="italic">each pair: head of one cancels tail of its neighbour</text><line x1="20" y1="120" x2="225" y2="120" stroke="#111" stroke-width="1"/><circle cx="20" cy="120" r="4" fill="#111"/><circle cx="225" cy="120" r="4" fill="#111"/><line x1="22" y1="120" x2="220" y2="120" stroke="#111" stroke-width="1.4" marker-end="url(#f411-ah)"/><text x="10.00" y="110.00" font-size="12" font-family="Times New Roman, serif" font-style="italic">−q</text><text x="230.00" y="110.00" font-size="12" font-family="Times New Roman, serif" font-style="italic">+q</text><text x="120.00" y="150.00" font-size="11" font-family="Times New Roman, serif" text-anchor="middle" font-style="italic">net effect: bound charge at the two ends</text></svg><figcaption>Fig. 4.11</figcaption></figure>
+  <p>To calculate the actual <i>amount</i> of bound charge resulting from a given polarization, examine a “tube” of dielectric parallel to <b>P</b>. The dipole moment of the tiny chunk shown in Fig. 4.12 is $P(Ad)$, where $A$ is the cross-sectional area of the tube and $d$ is the length of the chunk. In terms of the charge ($q$) at the end, this same dipole moment can be written as $qd$. The bound charge that piles up at the right-hand end of the tube is therefore</p>
+  <div class="eq">$$q = PA.$$</div>
+  <p>If the ends have been sliced off perpendicularly, the surface charge density is</p>
+  <div class="eq">$$\sigma_b = \frac{q}{A} = P.$$</div>
+  <p>For an oblique cut (Fig. 4.13), the <i>charge</i> is still the same, but $A = A_\text{end}\cos\theta$, so</p>
+  <div class="eq">$$\sigma_b = \frac{q}{A_\text{end}} = P\cos\theta = \mathbf P\cdot\hat{\mathbf n}.$$</div>
+  <p>The effect of the polarization, then, is to paint a bound charge $\sigma_b = \mathbf P\cdot\hat{\mathbf n}$ over the surface of the material. This is exactly what we found by more rigorous means in Section 4.2.1. But now we know where the bound charge comes from.</p>
+  <p>If the polarization is <i>nonuniform</i>, we get accumulations of bound charge <i>within</i> the material, as well as on the surface. A glance at Fig. 4.14 suggests <span class="cont">(continued on the next page)</span></p>
+  <div class="pno">176</div>
+</div>
+<div class="sheet book" id="pdf-p12">
+  <div class="rh"><span>177</span><span>4.2 The Field of a Polarized Object</span></div>
+  <figure class="single"><svg viewBox="0 0 240 215" role="img" aria-label="Diverging polarization with negative bound charge inside" xmlns="http://www.w3.org/2000/svg"><defs><marker id="f414-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#111"/></marker><marker id="f414-ahr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8a1c1c"/></marker></defs><circle cx="120" cy="100" r="45" fill="#e8e8e2" stroke="#111" stroke-width="1.4"/><line x1="165" y1="100" x2="199" y2="100" stroke="#111" stroke-width="1.3" marker-end="url(#f414-ah)"/><text x="205.00" y="104.00" font-size="12" font-family="Times New Roman, serif">+</text><line x1="151.82" y1="68.18" x2="175.86" y2="44.14" stroke="#111" stroke-width="1.3" marker-end="url(#f414-ah)"/><text x="178.93" y="41.07" font-size="12" font-family="Times New Roman, serif">+</text><line x1="120" y1="55" x2="120" y2="21" stroke="#111" stroke-width="1.3" marker-end="url(#f414-ah)"/><text x="116.00" y="15.00" font-size="12" font-family="Times New Roman, serif">+</text><line x1="88.18" y1="68.18" x2="64.14" y2="44.14" stroke="#111" stroke-width="1.3" marker-end="url(#f414-ah)"/><text x="53.07" y="41.07" font-size="12" font-family="Times New Roman, serif">+</text><line x1="75" y1="100" x2="41" y2="100" stroke="#111" stroke-width="1.3" marker-end="url(#f414-ah)"/><text x="27.00" y="104.00" font-size="12" font-family="Times New Roman, serif">+</text><line x1="88.18" y1="131.82" x2="64.14" y2="155.86" stroke="#111" stroke-width="1.3" marker-end="url(#f414-ah)"/><text x="53.07" y="166.93" font-size="12" font-family="Times New Roman, serif">+</text><line x1="120" y1="145" x2="120" y2="179" stroke="#111" stroke-width="1.3" marker-end="url(#f414-ah)"/><text x="116.00" y="193.00" font-size="12" font-family="Times New Roman, serif">+</text><line x1="151.82" y1="131.82" x2="175.86" y2="155.86" stroke="#111" stroke-width="1.3" marker-end="url(#f414-ah)"/><text x="178.93" y="166.93" font-size="12" font-family="Times New Roman, serif">+</text><text x="141.73" y="95.97" font-size="12" font-family="Times New Roman, serif">−</text><text x="132.28" y="82.97" font-size="12" font-family="Times New Roman, serif">−</text><text x="117.00" y="78.00" font-size="12" font-family="Times New Roman, serif">−</text><text x="101.72" y="82.97" font-size="12" font-family="Times New Roman, serif">−</text><text x="92.27" y="95.97" font-size="12" font-family="Times New Roman, serif">−</text><text x="92.27" y="112.03" font-size="12" font-family="Times New Roman, serif">−</text><text x="101.72" y="125.03" font-size="12" font-family="Times New Roman, serif">−</text><text x="117.00" y="130.00" font-size="12" font-family="Times New Roman, serif">−</text><text x="132.28" y="125.03" font-size="12" font-family="Times New Roman, serif">−</text><text x="141.73" y="112.03" font-size="12" font-family="Times New Roman, serif">−</text><text x="120.00" y="200.00" font-size="11" font-family="Times New Roman, serif" text-anchor="middle" font-style="italic">P diverges → net − bound charge inside</text></svg><figcaption>Fig. 4.14</figcaption></figure>
+  <p>that a diverging <b>P</b> results in a pileup of negative charge. Indeed, the net bound charge $\int\rho_b\,d\tau$ in a given volume is equal and opposite to the amount that has been pushed out through the surface. The latter (by the same reasoning we used before) is $\mathbf P\cdot\hat{\mathbf n}$ per unit area, so</p>
+  <div class="eq">$$\int_V\rho_b\,d\tau = -\oint_S\mathbf P\cdot d\mathbf a = -\int_V(\nabla\cdot\mathbf P)\,d\tau.$$</div>
+  <p>Since this is true for <i>any</i> volume, we have</p>
+  <div class="eq">$$\rho_b = -\nabla\cdot\mathbf P,$$</div>
+  <p>confirming, again, the more rigorous conclusion of Section 4.2.1.</p>
+  <div class="ex">
+    <p><b>Example 4.3.</b> There is another way of analyzing the uniformly polarized sphere (Ex. 4.2), which nicely illustrates the idea of a bound charge. What we have, really, is <i>two</i> spheres of charge: a positive sphere and a negative sphere. Without polarization the two are superimposed, and cancel completely. But when the material is uniformly polarized, all the plus charges move slightly upward (the $z$ direction), and all the minus charges move slightly downward (Fig. 4.15). The two spheres no longer coincide perfectly: at the top there’s a “cap” of leftover positive charge and at the bottom a cap of negative charge. This “leftover” charge is precisely the bound surface charge $\sigma_b$.</p>
+    <figure class="single"><svg viewBox="0 0 240 190" role="img" aria-label="Offset positive and negative spheres" xmlns="http://www.w3.org/2000/svg"><defs><marker id="f415-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#111"/></marker><marker id="f415-ahr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8a1c1c"/></marker></defs><circle cx="120" cy="107" r="50" fill="#d6d6f0" stroke="#111" stroke-width="1"/><circle cx="120" cy="93" r="50" fill="#f0d6d6" stroke="#111" stroke-width="1"/><text x="116.00" y="59.00" font-size="13" font-family="Times New Roman, serif">+</text><text x="115.00" y="149.00" font-size="13" font-family="Times New Roman, serif">−</text><line x1="180" y1="107" x2="180" y2="93" stroke="#111" stroke-width="1.3" marker-end="url(#f415-ah)"/><text x="186.00" y="106.00" font-size="13" font-family="Times New Roman, serif" font-style="italic">d</text><text x="120.00" y="180.00" font-size="11" font-family="Times New Roman, serif" text-anchor="middle" font-style="italic">two spheres offset by d leave caps: + on top, − below</text></svg><figcaption>Fig. 4.15</figcaption></figure>
+  </div>
+  <div class="pno">177</div>
+</div>
+<div class="sheet book" id="pdf-p13">
+  <div class="rh"><span>178</span><span>4 Electric Fields in Matter</span></div>
+  <div class="ex-cont">
+    <p>In Prob. 2.19, you calculated the field in the region of overlap between two oppositely charged spheres; the answer was</p>
+    <div class="eq">$$\mathbf E = -\frac{1}{4\pi\epsilon_0}\frac{q\mathbf d}{R^3},$$</div>
+    <p>where $q$ is the total charge of the positive sphere, $\mathbf d$ is the vector from the negative center to the positive center, and $R$ is the radius of the sphere. We can express this in terms of the polarization of the sphere, $\mathbf p = q\mathbf d = \left(\tfrac43\pi R^3\right)\mathbf P$, as</p>
+    <div class="eq">$$\mathbf E = -\frac{1}{3\epsilon_0}\mathbf P.$$</div>
+    <p>Meanwhile, for points <i>outside</i>, it is as though all the charge on each sphere were concentrated at the respective centers. We have, then, a dipole, with potential</p>
+    <div class="eq">$$V = \frac{1}{4\pi\epsilon_0}\frac{\mathbf p\cdot\hat{\mathbf r}}{r^2}.$$</div>
+    <p>(Remember that <b>d</b> is some small fraction of an atomic radius; Fig. 4.15 is grossly exaggerated.) These answers agree, of course, with the results of Ex. 4.2.</p>
+  </div>
+
+  <div class="prob">
+    <p><b>Problem 4.13.</b> A very long cylinder, of radius $a$, carries a uniform polarization <b>P</b> perpendicular to its axis. Find the electric field inside the cylinder. Show that the field <i>outside</i> the cylinder can be expressed in the form</p>
+    <div class="eq">$$\mathbf E(\mathbf r) = \frac{a^2}{2\epsilon_0 s^2}\left[2(\mathbf P\cdot\hat{\mathbf s})\hat{\mathbf s} - \mathbf P\right].$$</div>
+    <p>[<i>Careful:</i> I said “uniform,” not “radial”!]</p>
+    <p><b>Problem 4.14.</b> When you polarize a neutral dielectric, the charge moves a bit, but the <i>total</i> remains zero. This fact should be reflected in the bound charges $\sigma_b$ and $\rho_b$. Prove from Eqs. 4.11 and 4.12 that the total bound charge vanishes.</p>
+  </div>
+
+  <h3 class="sub">4.2.3 Microscopic and Macroscopic Fields</h3>
+  <p>I have been sloppy about the distinction between “pure” dipoles and “physical” dipoles.<sup>5</sup> In developing the theory of bound charges, I assumed we were working with the pure kind – indeed, I started with Eq. 4.8, the formula for the potential of a perfect dipole. And yet, an actual polarized dielectric consists of <i>physical</i> dipoles, albeit extremely tiny ones. What is more, I presumed to represent discrete molecular dipoles by a continuous density function <b>P</b>. How can I justify this method? <i>Outside</i> <span class="cont">(continued on the next page)</span></p>
+  <p class="fn"><sup>5</sup> This section can be skipped without loss of continuity.</p>
+  <div class="pno">178</div>
+</div>
+<div class="sheet book" id="pdf-p14">
+  <div class="rh"><span>179</span><span>4.2 The Field of a Polarized Object</span></div>
+  <p>the dielectric there is no real problem: here we are far away from the molecules ($\mathcal R$ is many times greater than the separation distance between plus and minus charges), so the dipole potential dominates overwhelmingly and the detailed “graininess” of the source is blurred by distance. <i>Inside</i> the dielectric, however, we can hardly pretend to be far from all the dipoles, and the procedure I used in Section 4.2.1 is open to serious challenge.</p>
+  <p>In fact, when you stop to think about it, the electric field inside matter must be fantastically complicated, on the microscopic level. If you happen to be very near an electron, the field is gigantic, whereas a short distance away it may be small or point in a totally different direction. Moreover, an instant later, as the charges move around, the field will have altered entirely. This true <b>microscopic</b> field would be utterly impossible to calculate; and it wouldn’t be of much interest if you <i>could</i>. Just as, for macroscopic purposes, we regard water as a continuous fluid, ignoring its molecular structure, so also we can ignore the microscopic bumps and wrinkles in the electric field inside matter, and concentrate on the <b>macroscopic</b> field. This is defined as the <i>average</i> field over regions large enough to contain many thousands of atoms (so that the uninteresting microscopic fluctuations are smoothed over), and yet small enough to ensure that we do not wash out any significant large-scale variations in the field. (In practice, this means we must average over regions much smaller than the dimensions of the object itself.) Ordinarily, the macroscopic field is what people <i>mean</i> when they speak of “the” field inside matter.<sup>6</sup></p>
+  <p>But <i>is</i> the macroscopic field what we actually get, when we use the methods of Section 4.2.1? The argument is subtle, so hang on. Suppose I want to calculate the macroscopic field at some point <b>r</b> within a dielectric (Fig. 4.16). I know I must average the true (microscopic) field over an appropriate volume, so let me draw a small sphere about <b>r</b>, of radius, say, a thousand times the size of a molecule. The macroscopic field at <b>r</b>, then, consists of two parts: the average field over the sphere due to all charges <i>outside</i>, plus the average due to all charges <i>inside</i>:</p>
+  <div class="eq">$$\mathbf E = \mathbf E_\text{out} + \mathbf E_\text{in}.$$</div>
+  <figure class="single"><svg viewBox="0 0 240 200" role="img" aria-label="Averaging sphere about a point inside a dielectric" xmlns="http://www.w3.org/2000/svg"><defs><marker id="f416-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#111"/></marker><marker id="f416-ahr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8a1c1c"/></marker></defs><circle cx="120" cy="100" r="60" fill="#e8e8e2" stroke="#111" stroke-width="1.4" stroke-dasharray="5 3"/><circle cx="120" cy="100" r="3.5" fill="#111"/><text x="106.00" y="118.00" font-size="14" font-family="Times New Roman, serif" font-style="italic" font-weight="bold">r</text><line x1="120" y1="100" x2="162.43" y2="142.43" stroke="#111" stroke-width="1.2" marker-end="url(#f416-ah)"/><text x="158.00" y="130.00" font-size="13" font-family="Times New Roman, serif" font-style="italic">R</text></svg><figcaption>Fig. 4.16</figcaption></figure>
+  <p class="fn"><sup>6</sup> In case the notion of macroscopic fields sounds suspicious to you, let me point out that you do exactly the same averaging whenever you speak of the <i>density</i> of a material.</p>
+  <div class="pno">179</div>
+</div>
+<div class="sheet book" id="pdf-p15">
+  <div class="rh"><span>180</span><span>4 Electric Fields in Matter</span></div>
+  <p>You proved in Prob. 3.51d that the average field (over a sphere), produced by charges <i>outside</i>, is equal to the field they produce at the center, so $\mathbf E_\text{out}$ is the field at <b>r</b> due to the dipoles exterior to the sphere. These are far enough away that we can safely use Eq. 4.9:</p>
+  <div class="eq">$$V_\text{out} = \frac{1}{4\pi\epsilon_0}\int_\text{outside}\frac{\mathbf P(\mathbf r')\cdot\hat{\boldsymbol{\mathcal R}}}{\mathcal R^2}\,d\tau'.\tag{4.17}$$</div>
+  <p>The dipoles <i>inside</i> the sphere are too close to treat in this fashion. But fortunately all we need is their <i>average</i> field, and that, according to Eq. 3.105, is</p>
+  <div class="eq">$$\mathbf E_\text{in} = -\frac{1}{4\pi\epsilon_0}\frac{\mathbf p}{R^3},$$</div>
+  <p>regardless of the details of the charge distribution within the sphere. The only relevant quantity is the total dipole moment, $\mathbf p = \left(\tfrac43\pi R^3\right)\mathbf P$:</p>
+  <div class="eq">$$\mathbf E_\text{in} = -\frac{1}{3\epsilon_0}\mathbf P.\tag{4.18}$$</div>
+  <p>Now, by assumption, the sphere is small enough that <b>P</b> does not vary significantly over its volume, so the term <i>left out</i> of the integral in Eq. 4.17 corresponds to the field at the center of a uniformly polarized sphere, to wit, $-(1/3\epsilon_0)\mathbf P$ (Eq. 4.14). But this is precisely what $\mathbf E_\text{in}$ (Eq. 4.18) puts back in! The macroscopic field, then, is given by the potential</p>
+  <div class="eq">$$V(\mathbf r) = \frac{1}{4\pi\epsilon_0}\int\frac{\mathbf P(\mathbf r')\cdot\hat{\boldsymbol{\mathcal R}}}{\mathcal R^2}\,d\tau',\tag{4.19}$$</div>
+  <p>where the integral runs over the <i>entire</i> volume of the dielectric. This is exactly what we used in Section 4.2.1; without realizing it, we were correctly calculating the averaged, macroscopic field, for points <i>inside</i> the dielectric.</p>
+  <p>You may have to reread the last couple of paragraphs for the argument to sink in. Notice that it all revolves around the curious fact that the average field over <i>any</i> sphere (due to the charge inside) is the same as the field at the center of a <i>uniformly polarized</i> sphere with the same total dipole moment. This means that no matter how crazy the actual microscopic charge configuration, we can replace it by a nice smooth distribution of perfect dipoles, if all we want is the macroscopic (average) field. Incidentally, while the argument ostensibly relies on the spherical shape I chose to average over, the macroscopic field is certainly independent of the geometry of the averaging region, and this is reflected in the final answer, Eq. 4.19. Presumably one could reproduce the same argument for a cube or an ellipsoid or whatever – the calculation might be more difficult, but the conclusion would be the same.</p>
+  <div class="pno">180</div>
+</div>
+</body>
+</html>

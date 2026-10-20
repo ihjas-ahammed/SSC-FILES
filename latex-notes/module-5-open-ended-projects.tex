@@ -1,0 +1,236 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb}
+\usepackage{amsthm}     % theorem environment used in the chapter example
+\newtheorem{theorem}{Theorem}
+\usepackage{multicol}   % columns, used in the poster-style example
+\usepackage{enumitem}   % control list spacing
+\usepackage{booktabs}   % table rules in the transliteration table
+
+% ---------------------------------------------------------------
+% MODULE V - Open Ended
+% Syllabus unit list: 1 Installation, 2 Overleaf, 3 Writing a chapter,
+% 4 Beamer slides and posters, 5 Transliteration (Sanskrit, Hindi,
+% Malayalam). The main compiled example uses pdflatex. Items that need
+% XeLaTeX or LuaLaTeX are marked and shown as listings only.
+% ---------------------------------------------------------------
+
+\title{Module V: Open-Ended Projects in \LaTeX}
+\author{Study Notes -- MAT5FS112}
+\date{}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+% ===============================================================
+\section{Installing LaTeX}
+% ===============================================================
+
+You need a \emph{distribution} (the engine plus packages) and an
+editor. The usual choices are:
+\begin{itemize}
+  \item \textbf{TeX Live} (Linux, macOS, Windows). On Arch Linux, install
+    \texttt{texlive-basic texlive-latex texlive-latexrecommended
+    texlive-latexextra texlive-fontsrecommended texlive-bibtexextra}
+    with \texttt{pacman}. On Debian or Ubuntu: \texttt{texlive-full}
+    (large, but complete).
+  \item \textbf{MiKTeX} (Windows), which installs missing packages on
+    demand.
+  \item \textbf{MacTeX} (macOS).
+\end{itemize}
+
+After installation, check the tools are on the path:
+\begin{verbatim}
+pdflatex --version
+bibtex --version
+makeindex --version
+\end{verbatim}
+
+A good editor (TeXstudio, TeXworks, VS Code with LaTeX Workshop, or
+Vim with a LaTeX plugin) builds the document and shows errors.
+
+% ===============================================================
+\section{Overleaf}
+% ===============================================================
+
+Overleaf (\texttt{overleaf.com}) is an online editor. It needs no
+installation, has collaborative editing and compiles the document on
+its servers. The steps are:
+\begin{enumerate}[noitemsep]
+  \item Create a free account and choose \emph{New Project}, then
+    \emph{Blank Project}.
+  \item Paste the code from any file in these notes into \texttt{main.tex}.
+  \item Press \emph{Recompile}. The PDF appears on the right, and the
+    compile log is under \emph{Logs and output}.
+  \item Use the menu \emph{Menu $\rightarrow$ Settings} to choose the
+    compiler (pdfLaTeX, XeLaTeX or LuaLaTeX) and the main file.
+\end{enumerate}
+
+Keep a local copy of your \texttt{.tex} file. Overleaf can be unavailable,
+and the same code compiles on a local TeX Live.
+
+% ===============================================================
+\section{Writing a chapter of a book}
+% ===============================================================
+
+A book uses the \texttt{report} class (or \texttt{book}), where the top
+level is \verb|\chapter|. The skeleton below is a template for a chapter
+of a textbook with theorems and equations:
+
+\begin{verbatim}
+\documentclass[11pt,a4paper]{report}
+\usepackage{amsmath,amsthm,amssymb}
+\newtheorem{theorem}{Theorem}[chapter]
+\begin{document}
+\chapter{Introduction to Sets}
+\section{Basic notions}
+\begin{theorem}
+...
+\end{theorem}
+\end{document}
+\end{verbatim}
+
+Here is the same structure, compiled, in this \texttt{article} file.
+\begin{theorem}[Sample result]
+Every finite set has finitely many subsets, namely $2^n$ for a set with
+$n$ elements.
+\end{theorem}
+
+\begin{proof}
+Each element is either in a subset or not, which gives two choices per
+element and $2^n$ choices in all.
+\end{proof}
+
+% ===============================================================
+\section{Slides with Beamer}
+% ===============================================================
+
+\texttt{beamer} is a document class for presentations. Each slide is a
+\verb|\frame|. The code below belongs in a file of its own that starts
+with \verb|\documentclass{beamer}|; it is shown here as a listing:
+
+\begin{verbatim}
+\documentclass{beamer}
+\usetheme{Madrid}
+\usecolortheme{beaver}
+\title{Linear Algebra Basics}
+\author{Your Name}
+\date{\today}
+\begin{document}
+\frame{\titlepage}
+\begin{frame}{Vector spaces}
+  \begin{block}{Definition}
+    A vector space is a set closed under addition and scalar multiplication.
+  \end{block}
+  \pause
+  \begin{itemize}
+    \item Eight axioms must hold.
+    \item Examples: $\mathbb{R}^n$, polynomials.
+  \end{itemize}
+\end{frame}
+\end{document}
+\end{verbatim}
+
+Key ideas:
+\begin{itemize}
+  \item \verb|\frame{...}| or \verb|\begin{frame}{Title}...\end{frame}|.
+  \item \verb|\pause| reveals the content in steps.
+  \item \verb|\begin{block}{...}| gives a highlighted box.
+\end{itemize}
+
+% ===============================================================
+\section{Posters}
+% ===============================================================
+
+A poster is a single large page with several columns. The
+\texttt{beamerposter} package is the usual tool. Without it, a
+poster-like layout can be built with \texttt{multicols} and a
+\texttt{minipage}. Here is a compiled version of a two-column poster
+section:
+
+\begin{multicols}{2}
+\section*{Motivation}
+Matrices describe linear maps. Their determinant measures how the
+map scales area:
+\[
+  \det\begin{pmatrix} a & b \\ c & d \end{pmatrix} = ad - bc.
+\]
+
+\section*{Result}
+A matrix is invertible if and only if its determinant is non-zero.
+\columnbreak
+\section*{Example}
+For $A = \begin{pmatrix} 2 & 1 \\ 1 & 3 \end{pmatrix}$, $\det A = 5 \neq 0$,
+so $A$ is invertible.
+\end{multicols}
+
+% ===============================================================
+\section{Transliteration of Indian languages}
+% ===============================================================
+
+Transliteration writes an Indian script in Latin letters. Scholarly
+Sanskrit uses IAST (International Alphabet of Sanskrit Transliteration),
+whose letters need diacritics. In \texttt{pdflatex} these are made
+with accent commands. This is compiled in this file:
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Command & Letter \\
+\midrule
+\verb|\={a}| & $\bar{a}$ as in \emph{R\={a}ma} \\
+\verb|\'{s}| & \'{s} as in \emph{\'{s}iva} \\
+\verb|\d{t}| & \d{t} as in \emph{\d{t}ha} \\
+\verb|\d{n}| & \d{n} as in \emph{Ka\d{n}a} \\
+\verb|\.{m}| & \.{m} as in \emph{Sa\.{m}sk\d{r}ta} \\
+\verb|\d{r}| & \d{r} as in \emph{\d{r}\d{s}i} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Example in running text: \emph{R\={a}m\={a}yana} and
+\emph{Bhagavad-g\={\i}t\={a}}.
+
+\subsection{Devanagari and Malayalam (XeLaTeX or LuaLaTeX)}
+
+Printing the script itself needs a Unicode engine and a font that has
+the glyphs. The usual setup is \texttt{fontspec} with
+\texttt{polyglossia}. This listing is \emph{not} compiled here, because
+it needs XeLaTeX and an installed font. Replace each placeholder with
+the word typed in a Unicode-capable editor:
+
+\begin{verbatim}
+\documentclass{article}
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setdefaultlanguage{hindi}              % or sanskrit, malayalam
+\newfontfamily\devanagarifont{Noto Serif Devanagari}
+\newfontfamily\malayalamfont{Noto Serif Malayalam}
+\begin{document}
+{\devanagarifont <Devanagari word>} \quad {\malayalamfont <Malayalam word>}
+\end{document}
+\end{verbatim}
+
+Compile with \verb|xelatex file.tex| (or \verb|lualatex|). Check the font
+names with \verb|fc-list| first, because they must match the installed
+font exactly.
+
+% ===============================================================
+\section{Checklist for an open-ended project}
+% ===============================================================
+
+\begin{enumerate}
+  \item Set up the distribution and the editor, and compile a test file.
+  \item Choose the document class (\texttt{article}, \texttt{report} or
+    \texttt{beamer}).
+  \item Add packages only as needed, and keep the preamble short.
+  \item Compile twice for references, the table of contents and the
+    list of figures.
+  \item Run BibTeX or makeindex when the document uses them.
+  \item Read the log: the first error line is the one to fix.
+\end{enumerate}
+
+\end{document}

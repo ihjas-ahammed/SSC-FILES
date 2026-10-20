@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Griffiths 7.3.2 How Maxwell fixed Ampère’s law (book pp. 336–339)</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+  :root {
+    --page-bg: #d9d9d4;
+    --paper: #fdfdfb;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --page-bg: #2b2b2b;
+      --paper: #f4f3ee;
+      --ink: #111;
+      --rule: #444;
+      --note: #555;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page-bg: #2b2b2b;
+    --paper: #f4f3ee;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  body {
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--ink);
+    font-family: "Times New Roman", Times, "Liberation Serif", serif;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .sheet {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 12mm auto;
+    padding: 14mm 18mm 16mm;
+    box-sizing: border-box;
+    background: var(--paper);
+    box-shadow: 0 1px 6px rgba(0,0,0,.25);
+    position: relative;
+  }
+  .sheet + .sheet { margin-top: 0; }
+  .hdr {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: start;
+    font-size: 14px;
+  }
+  .code { font-size: 22px; font-weight: bold; letter-spacing: .5px; }
+  .pages { text-align: center; padding-top: 14px; }
+  .name { text-align: right; line-height: 2; }
+  .title { text-align: center; margin-top: 22px; }
+  .title .exam { font-size: 19px; font-weight: bold; letter-spacing: .3px; }
+  .title .sch { margin-top: 2px; }
+  .title .course { margin-top: 10px; font-size: 16px; }
+  .title .subject { margin-top: 6px; font-size: 16px; font-weight: bold; }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 16px;
+    font-size: 15px;
+  }
+  .sec { margin-top: 14px; }
+  .sec-head {
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    font-weight: bold;
+  }
+  .sec-head .num { font-weight: bold; }
+  .sec-head .body { font-weight: normal; }
+  .sec-head .body b { font-weight: bold; }
+  .sec-head .body i { font-style: italic; }
+  .sec-total { text-align: right; font-weight: normal; margin-top: 4px; }
+  .qs { margin-top: 6px; }
+  .q {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    margin-bottom: 7px;
+  }
+  .q .n { text-align: right; padding-right: 10px; }
+  .q p { margin: 0; }
+  .sub { margin-left: 22px; }
+  .cut { color: var(--note); }
+  .turn { text-align: right; font-weight: bold; margin-top: 26px; }
+  .fig {
+    display: block;
+    margin: 8px auto 2px 36px;
+    width: 230px;
+    height: auto;
+  }
+  .fig-cap { margin-left: 36px; font-size: 13px; color: var(--note); font-style: italic; }
+  .foot-note {
+    margin-top: 26px;
+    border-top: 1px solid var(--rule);
+    padding-top: 6px;
+    font-size: 12px;
+    color: var(--note);
+  }
+  .pno { text-align: center; font-size: 15px; margin-bottom: 4px; }
+  .pno-hdr { position: absolute; top: 10mm; right: 18mm; font-weight: bold; font-size: 14px; }
+  @media print {
+    @page { size: A4; margin: 0; }
+    body { background: #fff; }
+    .sheet { margin: 0; box-shadow: none; width: 210mm; height: 297mm; min-height: 0; page-break-after: always; }
+    .sheet:last-child { page-break-after: auto; }
+  }
+  @media (max-width: 720px) {
+    .sheet { width: auto; margin: 0; padding: 14px 16px; min-height: 0; }
+    .hdr { grid-template-columns: 1fr; gap: 6px; }
+    .name { text-align: left; }
+    .pages { text-align: left; padding-top: 0; }
+  }
+</style>
+<style>
+  .sheet.book { height: auto; min-height: 297mm; text-align: justify; hyphens: auto; }
+  .sheet.book p { margin: 6px 0; }
+  .rh { display: flex; justify-content: space-between; font-size: 12px; color: var(--note);
+        border-bottom: 1px solid var(--rule); padding-bottom: 3px; margin-bottom: 12px; }
+  .chap { display: flex; background: #8a8a86; color: #fff; margin: 4px 0 16px; }
+  .chap .cn { background: #b4b4ae; padding: 10px 18px; font-size: 26px; }
+  .chap .ct { padding: 12px 16px; font-size: 22px; font-weight: bold; }
+  h2.sec { font-size: 20px; margin: 18px 0 8px; border-bottom: 2px solid var(--rule); padding-bottom: 3px; }
+  h3.sub { font-size: 16px; margin: 14px 0 6px; border-bottom: 1px solid var(--rule); padding-bottom: 2px; }
+  .eq { margin: 10px 0; text-align: center; overflow: visible; }
+  mjx-container[display="true"], mjx-container { overflow: visible !important; max-width: 100%; }
+  .sheet.book, .sheet.book .eq { overflow: visible; }
+  .eq.boxed { border: 1px solid var(--ink); display: block; padding: 4px 8px; }
+  .prob { background: #ecece7; border: 1px solid var(--rule); padding: 8px 12px; margin: 10px 0; text-align: left; }
+  .prob p { margin: 5px 0; }
+  .ex, .ex-cont { border: 1px solid var(--rule); padding: 8px 12px; margin: 10px 0; text-align: left; }
+  .ex p, .ex-cont p { margin: 5px 0; }
+  .figbox { border: 1px dashed var(--rule); padding: 10px; color: var(--note); font-size: 13px; text-align: center; margin: 8px 0; font-style: italic; }
+  figure { margin: 8px 0; text-align: center; }
+  figure > svg { width: 100%; max-width: 230px; height: auto; }
+  figure.single > svg { max-width: 260px; }
+  figure figcaption { font-size: 12px; font-style: italic; color: var(--note); }
+  .figrow { display: flex; flex-wrap: wrap; justify-content: space-around; gap: 8px; }
+  .figrow > figure { flex: 1 1 180px; max-width: 240px; }
+  .fn { font-size: 12.5px; color: var(--note); margin: 6px 0; text-align: left; }
+  .cont { font-size: 12.5px; color: var(--note); font-style: italic; }
+  .gapnote { font-size: 13px; color: var(--note); font-style: italic; border-left: 3px solid var(--rule); padding: 2px 8px; margin: 4px 0 10px; }
+  .flag { color: #8a1c1c; font-weight: bold; }
+  .answer { font-size: 14px; }
+  .tbl { border-collapse: collapse; width: 100%; font-size: 13px; margin: 6px 0; }
+  .tbl td, .tbl th { border: 1px solid var(--rule); padding: 3px 6px; text-align: center; }
+  .tbl th { background: #ebebe6; }
+  .tblcap { font-size: 13px; margin-top: 8px; text-align: left; }
+  .pno { text-align: center; font-size: 14px; margin-top: 14px; }
+  .intro p, .intro li { font-size: 14px; text-align: left; }
+  .intro table { border-collapse: collapse; width: 100%; font-size: 14px; margin: 6px 0; }
+  .intro td, .intro th { border: 1px solid var(--rule); padding: 4px 8px; text-align: left; }
+  @media print {
+    .sheet.book { height: auto !important; min-height: 0 !important; page-break-after: always; }
+  }
+  @media (max-width: 720px) {
+    .sheet.book .eq { overflow-x: auto; max-width: 100%; }
+    .sheet.book mjx-container[display="true"] { font-size: 85% !important; }
+    .sheet.book .figrow > figure { flex: 1 1 100%; max-width: 100%; }
+    .sheet.book { padding-left: 14px; padding-right: 14px; }
+  }
+</style>
+</head>
+<body>
+<!-- Book source, split from the Module 2 excerpt. Pages as printed in Griffiths 5th ed. -->
+<div class="sheet book" id="pdf-p39">
+  <div class="rh"><span>336</span><span>7 Electrodynamics</span></div>
+  <div class="figbox">Fig. 7.43: capacitor being charged by a battery through wires; an Ampèrian loop encircles one wire, with a plane surface and a balloon-shaped surface both bounded by it. Schematic; see PDF page.</div>
+  <p>its boundary. In this case, the <i>simplest</i> surface lies in the plane of the loop – the wire punctures this surface, so $I_{\text{enc}}=I$. Fine – but what if I draw instead the bubble-shaped surface in Fig. 7.43? <i>No</i> current passes through <i>this</i> surface, and I conclude that $I_{\text{enc}}=0$! We never had this problem in magnetostatics because the conflict arises only when charge is piling up somewhere (in this case, on the capacitor plates). But for <i>nonsteady</i> currents (such as this one) “the current enclosed by the loop” is an ill-defined notion; it depends entirely on what surface you use. (If this seems pedantic to you – “obviously one should use the plane surface” – remember that the Ampèrian loop could be some contorted shape that doesn’t even lie in a plane.)</p>
+  <p>Of course, we had no right to <i>expect</i> Ampère’s law to hold outside of magnetostatics; after all, we derived it from the Biot–Savart law. However, in Maxwell’s time there was no <i>experimental</i> reason to doubt that Ampère’s law was of wider validity. The flaw was a purely theoretical one, and Maxwell fixed it by purely theoretical arguments.</p>
+  <h3 class="sub">7.3.2 How Maxwell Fixed Ampère’s Law</h3>
+  <p>The problem is on the right-hand side of Eq. 7.45, which <i>should be</i> zero, but <i>isn’t</i>. Applying the continuity equation (Eq. 5.29) and Gauss’s law, the offending term can be rewritten:</p>
+  <div class="eq">$$\nabla\cdot\mathbf J=-\frac{\partial\rho}{\partial t}=-\frac{\partial}{\partial t}(\epsilon_0\nabla\cdot\mathbf E)=-\nabla\cdot\left(\epsilon_0\frac{\partial\mathbf E}{\partial t}\right).$$</div>
+  <p>If we were to combine $\epsilon_0(\partial\mathbf E/\partial t)$ with $\mathbf J$, in Ampère’s law, it would be just right to kill off the extra divergence:</p>
+  <div class="eq">$$\boxed{\nabla\times\mathbf B=\mu_0\mathbf J+\mu_0\epsilon_0\frac{\partial\mathbf E}{\partial t}.} \tag{7.46}$$</div>
+  <p>(Maxwell himself had other reasons for wanting to add this quantity to Ampère’s law. To him, the rescue of the continuity equation was a happy dividend rather than a primary motive. But today we recognize this</p>
+  <div class="pno">336</div>
+</div>
+<div class="sheet book" id="pdf-p40">
+  <div class="rh"><span>337</span><span>7.3 Maxwell’s Equations</span></div>
+  <p>argument as a far more compelling one than Maxwell’s, which was based on a now-discredited model of the ether.<sup>24</sup>)</p>
+  <p>Such a modification changes nothing, as far as magnetostatics is concerned: when $\mathbf E$ is constant, we still have $\nabla\times\mathbf B=\mu_0\mathbf J$. In fact, Maxwell’s term is hard to detect in ordinary electromagnetic experiments, where it must compete for attention with $\mathbf J$ – that’s why Faraday and the others never discovered it in the laboratory. However, it plays a crucial role in the propagation of electromagnetic waves, as we’ll see in Chapter 9.</p>
+  <p>Apart from curing the defect in Ampère’s law, Maxwell’s term has a certain aesthetic appeal: just as a changing <i>magnetic</i> field induces an <i>electric</i> field (Faraday’s law), so<sup>25</sup></p>
+  <div class="figbox"><b>a changing electric field induces a magnetic field.</b></div>
+  <p>Of course, theoretical convenience and aesthetic consistency are only <i>suggestive</i> – there might, after all, be other ways to doctor up Ampère’s law. The real confirmation of Maxwell’s theory came in 1888 with Hertz’s experiments on electromagnetic waves.</p>
+  <p>Maxwell called his extra term the <b>displacement current</b>:</p>
+  <div class="eq">$$\mathbf J_d\equiv\epsilon_0\frac{\partial\mathbf E}{\partial t}. \tag{7.47}$$</div>
+  <p>(It’s a misleading name; $\epsilon_0(\partial\mathbf E/\partial t)$ has nothing to do with current, except that it adds to $\mathbf J$ in Ampère’s law.) Let’s see now how displacement current resolves the paradox of the charging capacitor (Fig. 7.43). If the capacitor plates are very close together (I didn’t <i>draw</i> them that way, but the calculation is simpler if you assume this), then the electric field between them is</p>
+  <div class="eq">$$E=\frac{1}{\epsilon_0}\sigma=\frac{1}{\epsilon_0}\frac{Q}{A},$$</div>
+  <p>where $Q$ is the charge on the plate and $A$ is its area. Thus, between the plates,</p>
+  <div class="eq">$$\frac{\partial E}{\partial t}=\frac{1}{\epsilon_0A}\frac{dQ}{dt}=\frac{1}{\epsilon_0A}I.$$</div>
+  <p>Now, the “new, improved” Ampère’s law (Eq. 7.46) reads, in integral form,</p>
+  <div class="eq">$$\oint\mathbf B\cdot d\mathbf l=\mu_0I_{\text{enc}}+\mu_0\epsilon_0\int\left(\frac{\partial\mathbf E}{\partial t}\right)\cdot d\mathbf a. \tag{7.48}$$</div>
+  <p>If we choose the <i>flat</i> surface, then $E=0$ and $I_{\text{enc}}=I$. If, on the other hand, we use the balloon-shaped surface, then $I_{\text{enc}}=0$, but $\int(\partial\mathbf E/\partial t)\cdot d\mathbf a=I/\epsilon_0$. So we get the same answer for either surface, though in the first case it comes from the conduction current, and in the second from the displacement current.</p>
+  <p class="fn"><sup>24</sup> For the history of this subject, see A. M. Bork, <i>Am. J. Phys.</i> <b>31</b>, 854 (1963).</p>
+  <p class="fn"><sup>25</sup> See footnote 11 for commentary on the word “induce.” The same issue arises here: Should a changing electric field be regarded as an independent source of magnetic field (along with current)? In a proximate sense it does function as a source, but since the electric field itself was produced by charges and currents, they alone are the “ultimate” sources of $\mathbf E$ and $\mathbf B$. See S. E. Hill, <i>Phys. Teach.</i> <b>49</b>, 343 (2011); for a contrary view, see C. Savage, <i>Phys. Teach.</i> <b>50</b>, 226 (2012).</p>
+  <div class="pno">337</div>
+</div>
+<div class="sheet book" id="pdf-p41">
+  <div class="rh"><span>338</span><span>7 Electrodynamics</span></div>
+  <div class="ex">
+    <p><b>Example 7.15.</b> Imagine two concentric metal spherical shells (Fig. 7.44). The inner one (radius $a$) carries a charge $Q(t)$, and the outer one (radius $b$) an opposite charge $-Q(t)$. The space between them is filled with ohmic material of conductivity $\sigma$, so a radial current flows:</p>
+    <div class="eq">$$\mathbf J=\sigma\mathbf E=\sigma\frac{1}{4\pi\epsilon_0}\frac{Q}{r^2}\hat{\mathbf r},\qquad I=-\dot Q=\oint\mathbf J\cdot d\mathbf a=\frac{\sigma Q}{\epsilon_0}.$$</div>
+    <p>This configuration is spherically symmetrical, so the magnetic field has to be zero (the only direction it could possibly point is radial, and $\nabla\cdot\mathbf B=0\Rightarrow\oint\mathbf B\cdot d\mathbf a=B(4\pi r^2)=0$, so $\mathbf B=\mathbf 0$). What? I thought currents produce magnetic fields! Isn’t that what Biot–Savart and Ampère taught us? How can there be a $\mathbf J$ with no accompanying $\mathbf B$?</p>
+    <p><i>Solution.</i> This is not a static configuration: $Q$, $\mathbf E$, and $\mathbf J$ are all functions of time; Ampère and Biot–Savart do not apply. The displacement current</p>
+    <div class="eq">$$\mathbf J_d=\epsilon_0\frac{\partial\mathbf E}{\partial t}=\frac{1}{4\pi r^2}\dot Q\,\hat{\mathbf r}=-\sigma\frac{Q}{4\pi\epsilon_0r^2}\hat{\mathbf r}$$</div>
+    <p>exactly cancels the conduction current (in Eq. 7.46), and the magnetic field (determined by $\nabla\cdot\mathbf B=0$, $\nabla\times\mathbf B=\mathbf 0$) is indeed zero.</p>
+    <div class="figbox">Fig. 7.44: two concentric spherical shells, inner radius $a$ and outer radius $b$, with the conducting material between them and the current $\mathbf J$ directed radially outward. Schematic; see PDF page.</div>
+  </div>
+  <div class="prob">
+    <p><b>Problem 7.35.</b> A fat wire, radius $a$, carries a constant current $I$, uniformly distributed over its cross section. A narrow gap in the wire, of width $w\ll a$, forms a parallel-plate capacitor, as shown in Fig. 7.45. Find the magnetic field in the gap, at a distance $s\lt a$ from the axis.</p>
+    <div class="figbox">Fig. 7.45: fat wire of radius $a$ with a narrow gap of width $w$ forming a parallel-plate capacitor, carrying current $I$; plates marked $+\sigma$ and $-\sigma$. Schematic; see PDF page.</div>
+    <p><b>Problem 7.36.</b> The preceding problem was an artificial model for the charging capacitor, designed to avoid complications associated with the current spreading out over the surface of</p>
+  </div>
+  <div class="pno">338</div>
+</div>
+<div class="sheet book" id="pdf-p42">
+  <div class="rh"><span>339</span><span>7.3 Maxwell’s Equations</span></div>
+  <div class="prob">
+    <p>the plates. For a more realistic model, imagine <i>thin</i> wires that connect to the centers of the plates (Fig. 7.46a). Again, the current $I$ is constant, the radius of the capacitor is $a$, and the separation of the plates is $w\ll a$. Assume that the current flows out over the plates in such a way that the surface charge is uniform, at any given time, and is zero at $t=0$.</p>
+    <div class="figrow">
+      <figure><div class="figbox">Fig. 7.46(a): circular parallel plates of radius $a$ separated by $w$, with thin connecting wires carrying current $I$. Schematic; see PDF page.</div><figcaption>Fig. 7.46(a)</figcaption></figure>
+      <figure><div class="figbox">Fig. 7.46(b): cylindrical surface, open at the right-hand end, extending through the plate and outside the capacitor. Schematic; see PDF page.</div><figcaption>Fig. 7.46(b)</figcaption></figure>
+    </div>
+    <p>(a) Find the electric field between the plates, as a function of $t$.<br>
+    (b) Find the displacement current through a circle of radius $s$ in the plane midway between the plates. Using this circle as your “Ampèrian loop,” and the flat surface that spans it, find the magnetic field at a distance $s$ from the axis.<br>
+    (c) Repeat part (b), but this time use the cylindrical surface in Fig. 7.46b, which is open at the right-hand end and extends to the left through the plate and terminates outside the capacitor. Notice that the displacement current through this surface is zero, and there are two contributions to $I_{\text{enc}}$.<sup>26</sup></p>
+    <p><b>Problem 7.37.</b> Refer to Prob. 7.17, to which the correct answer was</p>
+    <div class="eq">$$\mathbf E(s,t)=\frac{\mu_0I_0\omega}{2\pi}\sin(\omega t)\ln\left(\frac{a}{s}\right)\hat{\mathbf z}.$$</div>
+    <p>(a) Find the displacement current density $\mathbf J_d$.<br>
+    (b) Integrate it to get the total displacement current, $I_d=\int\mathbf J_d\cdot d\mathbf a$.<br>
+    (c) Compare $I_d$ and $I$. (What’s their ratio?) If the outer cylinder were, say, 2 mm in diameter, how high would the frequency have to be, for $I_d$ to be 1 percent of $I$? [This problem is designed to indicate why Faraday never discovered displacement currents, and why it is ordinarily safe to ignore them unless the frequency is extremely high.]</p>
+    <p><b>Problem 7.38.</b> A conducting spherical shell (radius $R$, centered at the origin) is being charged by a steady current $I$ flowing up the $z$-axis and connected to the “south pole,” where it spreads out uniformly over the surface (see Fig. 7.47). The total charge on the sphere, at time $t$, is $Q(t)=It$. Find the magnetic field at a point $(r,\theta,\phi)$ exterior to the sphere. First decide what <i>direction</i> you think $\mathbf B$ points; then apply the Ampère/Maxwell law in integral form</p>
+  </div>
+  <p class="fn"><sup>26</sup> This problem raises an interesting quasi-philosophical question: If you measure $\mathbf B$ in the laboratory, have you detected the effects of displacement current (as (b) would suggest), or merely confirmed the effects of ordinary currents (as (c) implies)? See D. F. Bartlett, <i>Am. J. Phys.</i> <b>58</b>, 1168 (1990).</p>
+  <div class="pno">339</div>
+</div>
+</body>
+</html>

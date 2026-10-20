@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Griffiths 9.1.3 Boundary conditions: reflection and transmission (book pp. 396–399)</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+  :root {
+    --page-bg: #d9d9d4;
+    --paper: #fdfdfb;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --page-bg: #2b2b2b;
+      --paper: #f4f3ee;
+      --ink: #111;
+      --rule: #444;
+      --note: #555;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page-bg: #2b2b2b;
+    --paper: #f4f3ee;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  body {
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--ink);
+    font-family: "Times New Roman", Times, "Liberation Serif", serif;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .sheet {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 12mm auto;
+    padding: 14mm 18mm 16mm;
+    box-sizing: border-box;
+    background: var(--paper);
+    box-shadow: 0 1px 6px rgba(0,0,0,.25);
+    position: relative;
+  }
+  .sheet + .sheet { margin-top: 0; }
+  .hdr {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: start;
+    font-size: 14px;
+  }
+  .code { font-size: 22px; font-weight: bold; letter-spacing: .5px; }
+  .pages { text-align: center; padding-top: 14px; }
+  .name { text-align: right; line-height: 2; }
+  .title { text-align: center; margin-top: 22px; }
+  .title .exam { font-size: 19px; font-weight: bold; letter-spacing: .3px; }
+  .title .sch { margin-top: 2px; }
+  .title .course { margin-top: 10px; font-size: 16px; }
+  .title .subject { margin-top: 6px; font-size: 16px; font-weight: bold; }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 16px;
+    font-size: 15px;
+  }
+  .sec { margin-top: 14px; }
+  .sec-head {
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    font-weight: bold;
+  }
+  .sec-head .num { font-weight: bold; }
+  .sec-head .body { font-weight: normal; }
+  .sec-head .body b { font-weight: bold; }
+  .sec-head .body i { font-style: italic; }
+  .sec-total { text-align: right; font-weight: normal; margin-top: 4px; }
+  .qs { margin-top: 6px; }
+  .q {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    margin-bottom: 7px;
+  }
+  .q .n { text-align: right; padding-right: 10px; }
+  .q p { margin: 0; }
+  .sub { margin-left: 22px; }
+  .cut { color: var(--note); }
+  .turn { text-align: right; font-weight: bold; margin-top: 26px; }
+  .fig {
+    display: block;
+    margin: 8px auto 2px 36px;
+    width: 230px;
+    height: auto;
+  }
+  .fig-cap { margin-left: 36px; font-size: 13px; color: var(--note); font-style: italic; }
+  .foot-note {
+    margin-top: 26px;
+    border-top: 1px solid var(--rule);
+    padding-top: 6px;
+    font-size: 12px;
+    color: var(--note);
+  }
+  .pno { text-align: center; font-size: 15px; margin-bottom: 4px; }
+  .pno-hdr { position: absolute; top: 10mm; right: 18mm; font-weight: bold; font-size: 14px; }
+  @media print {
+    @page { size: A4; margin: 0; }
+    body { background: #fff; }
+    .sheet { margin: 0; box-shadow: none; width: 210mm; height: 297mm; min-height: 0; page-break-after: always; }
+    .sheet:last-child { page-break-after: auto; }
+  }
+  @media (max-width: 720px) {
+    .sheet { width: auto; margin: 0; padding: 14px 16px; min-height: 0; }
+    .hdr { grid-template-columns: 1fr; gap: 6px; }
+    .name { text-align: left; }
+    .pages { text-align: left; padding-top: 0; }
+  }
+</style>
+<style>
+  .sheet.book { height: auto; min-height: 297mm; text-align: justify; hyphens: auto; }
+  .sheet.book p { margin: 6px 0; }
+  .rh { display: flex; justify-content: space-between; font-size: 12px; color: var(--note);
+        border-bottom: 1px solid var(--rule); padding-bottom: 3px; margin-bottom: 12px; }
+  .chap { display: flex; background: #8a8a86; color: #fff; margin: 4px 0 16px; }
+  .chap .cn { background: #b4b4ae; padding: 10px 18px; font-size: 26px; }
+  .chap .ct { padding: 12px 16px; font-size: 22px; font-weight: bold; }
+  h2.sec { font-size: 20px; margin: 18px 0 8px; border-bottom: 2px solid var(--rule); padding-bottom: 3px; }
+  h3.sub { font-size: 16px; margin: 14px 0 6px; border-bottom: 1px solid var(--rule); padding-bottom: 2px; }
+  .eq { margin: 10px 0; text-align: center; overflow: visible; }
+  mjx-container[display="true"], mjx-container { overflow: visible !important; max-width: 100%; }
+  .sheet.book, .sheet.book .eq { overflow: visible; }
+  .eq.boxed { border: 1px solid var(--ink); display: block; padding: 4px 8px; }
+  .prob { background: #ecece7; border: 1px solid var(--rule); padding: 8px 12px; margin: 10px 0; text-align: left; }
+  .prob p { margin: 5px 0; }
+  .ex, .ex-cont { border: 1px solid var(--rule); padding: 8px 12px; margin: 10px 0; text-align: left; }
+  .ex p, .ex-cont p { margin: 5px 0; }
+  .figbox { border: 1px dashed var(--rule); padding: 10px; color: var(--note); font-size: 13px; text-align: center; margin: 8px 0; font-style: italic; }
+  figure { margin: 8px 0; text-align: center; }
+  figure > svg { width: 100%; max-width: 230px; height: auto; }
+  figure.single > svg { max-width: 260px; }
+  figure figcaption { font-size: 12px; font-style: italic; color: var(--note); }
+  .figrow { display: flex; flex-wrap: wrap; justify-content: space-around; gap: 8px; }
+  .figrow > figure { flex: 1 1 180px; max-width: 240px; }
+  .fn { font-size: 12.5px; color: var(--note); margin: 6px 0; text-align: left; }
+  .cont { font-size: 12.5px; color: var(--note); font-style: italic; }
+  .gapnote { font-size: 13px; color: var(--note); font-style: italic; border-left: 3px solid var(--rule); padding: 2px 8px; margin: 4px 0 10px; }
+  .flag { color: #8a1c1c; font-weight: bold; }
+  .answer { font-size: 14px; }
+  .tbl { border-collapse: collapse; width: 100%; font-size: 13px; margin: 6px 0; }
+  .tbl td, .tbl th { border: 1px solid var(--rule); padding: 3px 6px; text-align: center; }
+  .tbl th { background: #ebebe6; }
+  .tblcap { font-size: 13px; margin-top: 8px; text-align: left; }
+  .pno { text-align: center; font-size: 14px; margin-top: 14px; }
+  .intro p, .intro li { font-size: 14px; text-align: left; }
+  .intro table { border-collapse: collapse; width: 100%; font-size: 14px; margin: 6px 0; }
+  .intro td, .intro th { border: 1px solid var(--rule); padding: 4px 8px; text-align: left; }
+  @media print {
+    .sheet.book { height: auto !important; min-height: 0 !important; page-break-after: always; }
+  }
+  @media (max-width: 720px) {
+    .sheet.book .eq { overflow-x: auto; max-width: 100%; }
+    .sheet.book mjx-container[display="true"] { font-size: 85% !important; }
+    .sheet.book .figrow > figure { flex: 1 1 100%; max-width: 100%; }
+    .sheet.book { padding-left: 14px; padding-right: 14px; }
+  }
+</style>
+</head>
+<body>
+<!-- Book source for Module 3. Transcribed sheet by sheet from the full Griffiths PDF; printed page numbers in each sheet header. -->
+<div class="sheet book" id="pdf-p421"><div class="rh"><span>397</span><span>9.1 Waves in One Dimension</span></div>
+<p>The incident wave $\tilde f_I(z,t)$ is a sinusoidal oscillation that extends (in principle) all the way back to $z=-\infty$, and has been doing so for all of history. The same goes for $\tilde f_R$ and $\tilde f_T$ (except that the latter, of course, extends to $z=+\infty$). <i>All parts of the system are oscillating at the same frequency $\omega$</i> (a frequency determined by the person at $z=-\infty$, who is shaking the string in the first place). Since the wave velocities are different in the two strings, however, the wavelengths and wave numbers are also different:</p>
+<div class="eq">$$\frac{\lambda_1}{\lambda_2}=\frac{k_2}{k_1}=\frac{v_1}{v_2}.\qquad(9.24)$$</div>
+<p>Of course, this situation is pretty artificial – what’s more, with incident and reflected waves of infinite extent traveling on the same piece of string, it’s going to be hard for a spectator to tell them apart. You might therefore prefer to consider an incident wave of <i>finite</i> extent – say, the pulse shown in Fig. 9.5. You can work out the details for yourself, if you like (Prob. 9.5). The trouble with this approach is that no <i>finite</i> pulse is truly sinusoidal. The waves in Fig. 9.5 may <i>look</i> like sine functions, but they’re not: they’re little <i>pieces</i> of sines, joined onto an entirely different function (namely, zero). Like any other waves, they can be built up as <i>linear combinations</i> of true sinusoidal functions (Eq. 9.20), but only by putting together a whole range of frequencies and wavelengths. If you want a <i>single</i> incident frequency (as we shall in the electromagnetic case), you must let your waves extend to infinity. (In practice, if you use a very long pulse, with many oscillations, it will be <i>close</i> to the ideal of a single frequency.)</p>
+<p>For a sinusoidal incident wave, then, the net disturbance of the string is</p>
+<div class="eq">$$\tilde f(z,t)=\begin{cases}\tilde A_Ie^{i(k_1z-\omega t)}+\tilde A_Re^{i(-k_1z-\omega t)} & \text{for } z<0,\\ \tilde A_Te^{i(k_2z-\omega t)} & \text{for } z>0.\end{cases}\qquad(9.25)$$</div>
+<p>At the join ($z=0$), the displacement just slightly to the left ($z=0^-$) must equal the displacement slightly to the right ($z=0^+$) – else there would be a break in the string. Mathematically, $f(z,t)$ is <i>continuous</i> at $z=0$:</p>
+<div class="eq">$$f(0^-,t)=f(0^+,t).\qquad(9.26)$$</div>
+<p>If the knot itself is of negligible mass, then the <i>derivative</i> of $f$ must <i>also</i> be continuous:</p>
+<div class="eq">$$\left.\frac{\partial f}{\partial z}\right|_{0^-}=\left.\frac{\partial f}{\partial z}\right|_{0^+}.\qquad(9.27)$$</div>
+<figure class="fig"><div class="figbox">Fig. 9.5 (book): (a) incident pulse on string 1 with speed $v_1$; (b) reflected and transmitted pulses, with speeds $v_1$ and $v_2$. [Figure not transcribed here.]</div></figure>
+</div>
+<div class="sheet book" id="pdf-p422"><div class="rh"><span>398</span><span>9 Electromagnetic Waves</span></div>
+<figure class="fig"><div class="figbox">Fig. 9.6 (book): (a) discontinuous slope, so a net force acts on the knot; (b) continuous slope, no force on the knot. [Figure not transcribed here.]</div></figure>
+<p>Otherwise there would be a net force on the knot, and therefore an infinite acceleration (Fig. 9.6). These boundary conditions apply directly to the real wave function $f(z,t)$. But since the imaginary part of $\tilde f$ differs from the real part only in the replacement of cosine by sine (Eq. 9.15), it follows that the complex wave function $\tilde f(z,t)$ obeys the same rules:</p>
+<div class="eq">$$\tilde f(0^-,t)=\tilde f(0^+,t),\qquad\left.\frac{\partial\tilde f}{\partial z}\right|_{0^-}=\left.\frac{\partial\tilde f}{\partial z}\right|_{0^+}.\qquad(9.28)$$</div>
+<p>When applied to Eq. 9.25, these boundary conditions determine the outgoing amplitudes ($\tilde A_R$ and $\tilde A_T$) in terms of the incoming one ($\tilde A_I$):</p>
+<div class="eq">$$\tilde A_I+\tilde A_R=\tilde A_T,\qquad k_1(\tilde A_I-\tilde A_R)=k_2\tilde A_T,$$</div>
+<p>from which it follows that</p>
+<div class="eq">$$\tilde A_R=\frac{k_1-k_2}{k_1+k_2}\tilde A_I,\qquad\tilde A_T=\frac{2k_1}{k_1+k_2}\tilde A_I.\qquad(9.29)$$</div>
+<p>Or, in terms of the velocities (Eq. 9.24):</p>
+<div class="eq">$$\tilde A_R=\frac{v_2-v_1}{v_2+v_1}\tilde A_I,\qquad\tilde A_T=\frac{2v_2}{v_2+v_1}\tilde A_I.\qquad(9.30)$$</div>
+<p>The real amplitudes and phases, then, are related by</p>
+<div class="eq">$$A_Re^{i\delta_R}=\frac{v_2-v_1}{v_2+v_1}A_Ie^{i\delta_I},\qquad A_Te^{i\delta_T}=\frac{2v_2}{v_2+v_1}A_Ie^{i\delta_I}.\qquad(9.31)$$</div>
+<p>If the second string is lighter than the first ($\mu_2<\mu_1$, so that $v_2>v_1$), all three waves have the same phase angle ($\delta_R=\delta_T=\delta_I$), and the outgoing amplitudes are</p>
+<div class="eq">$$A_R=\frac{v_2-v_1}{v_2+v_1}A_I,\qquad A_T=\frac{2v_2}{v_2+v_1}A_I.\qquad(9.32)$$</div>
+<p>If the second string is heavier than the first ($v_2<v_1$), the reflected wave is out of phase by $180^\circ$ ($\delta_R+\pi=\delta_T=\delta_I$). In other words, since</p>
+<div class="eq">$$\cos(-k_1z-\omega t+\delta_I-\pi)=-\cos(-k_1z-\omega t+\delta_I),$$</div>
+<p>the reflected wave is “upside down.” The amplitudes in this case are</p>
+<div class="eq">$$A_R=\frac{v_1-v_2}{v_2+v_1}A_I,\qquad A_T=\frac{2v_2}{v_2+v_1}A_I.\qquad(9.33)$$</div>
+</div>
+<div class="sheet book" id="pdf-p423"><div class="rh"><span>399</span><span>9.1 Waves in One Dimension</span></div>
+<p>In particular, if the second string is infinitely massive – or, what amounts to the same thing, if the first string is simply tied to an immovable post at the end – then</p>
+<div class="eq">$$A_R=A_I\qquad\text{and}\qquad A_T=0.$$</div>
+<p>Naturally, in this case there is no transmitted wave – all of it reflects back.</p>
+<div class="prob"><p><b>Problem 9.5.</b> Suppose you send an incident wave of specified shape, $g_I(z-v_1t)$, down string 1. It gives rise to a reflected wave, $h_R(z+v_1t)$, and a transmitted wave, $g_T(z-v_2t)$. By imposing the boundary conditions 9.26 and 9.27, find $h_R$ and $g_T$.</p>
+<p><b>Problem 9.6.</b> (a) Formulate an appropriate boundary condition, to replace Eq. 9.27, for the case of two strings under tension $T$ joined by a knot of mass $m$. (b) Find the amplitude and phase of the reflected and transmitted waves for the case where the knot has mass $m$ and the second string is massless.</p>
+<p><b>Problem 9.7.</b> Suppose string 2 is embedded in a viscous medium (such as molasses), which imposes a drag force that is proportional to its (transverse) speed: $\Delta F_{\rm drag}=-\gamma\,(\partial f/\partial t)\,\Delta z$. (a) Derive the modified wave equation describing the motion of the string. (b) Solve this equation, assuming the string vibrates at the incident frequency $\omega$. That is, look for solutions of the form $\tilde f(z,t)=e^{-i\omega t}\tilde F(z)$. (c) Show that the waves are attenuated (that is, their amplitude decreases with increasing $z$). Find the characteristic penetration distance, at which the amplitude is $1/e$ of its original value, in terms of $\gamma$, $T$, $\mu$, and $\omega$. (d) If a wave of amplitude $A_I$, phase $\delta_I=0$, and frequency $\omega$ is incident from the left (string 1), find the reflected wave’s amplitude and phase.</p></div>
+<h3 class="sub">9.1.4 Polarization</h3>
+<p>The waves that travel down a string when you shake it are called <b>transverse</b>, because the displacement is perpendicular to the direction of propagation. If the string is reasonably elastic, it is also possible to stimulate <b>compression</b> waves, by giving the string little tugs. Compression waves are hard to see on a string, but if you try it with a slinky they’re quite noticeable (Fig. 9.7). These waves are called <b>longitudinal</b>, because the displacement from equilibrium is along the direction of propagation. Sound waves, which are nothing but compression waves in air, are longitudinal; electromagnetic waves, as we shall see, are transverse.</p>
+
+</body>
+</html>

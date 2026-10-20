@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module I: Getting Started with LaTeX</title>
+<style>
+:root{--ink:#1c2230;--muted:#5d6577;--accent:#1f4fbf;--rule:#d9dee8;--code:#f3f5f9;--note:#eef3ff;--warn:#fff6e5}
+*{box-sizing:border-box}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;background:#fff;color:var(--ink);font:17px/1.65 Georgia,"Times New Roman",serif}
+main{max-width:46rem;margin:0 auto;padding:2.5rem 1.25rem 4rem}
+header.title{border-bottom:3px solid var(--accent);margin-bottom:2rem;padding-bottom:1rem}
+header.title h1{font:700 2rem/1.2 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;margin:0 0 .3rem}
+header.title .meta{font:.95rem system-ui,sans-serif;color:var(--muted)}
+nav.toc{background:var(--note);border-radius:8px;padding:1rem 1.3rem;margin-bottom:2rem;font:.95rem/1.7 system-ui,sans-serif}
+nav.toc strong{display:block;margin-bottom:.3rem}
+nav.toc ol{margin:0;padding-left:1.2rem}
+nav.toc a{color:var(--accent);text-decoration:none}
+h2{font:700 1.45rem/1.3 system-ui,sans-serif;margin:2.6rem 0 .8rem;padding-bottom:.35rem;border-bottom:1px solid var(--rule);color:var(--accent)}
+h3{font:600 1.1rem/1.3 system-ui,sans-serif;margin:1.6rem 0 .5rem}
+p{margin:.7rem 0}
+code{font:.88em/1.4 "DejaVu Sans Mono",Consolas,monospace;background:var(--code);padding:.08em .3em;border-radius:4px}
+pre{background:var(--code);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:6px;padding:.9rem 1rem;overflow-x:auto;font:.86rem/1.5 "DejaVu Sans Mono",Consolas,monospace;white-space:pre}
+pre code{background:none;padding:0;font:inherit}
+.callout{background:var(--note);border-left:4px solid var(--accent);padding:.7rem 1rem;border-radius:6px;margin:1.2rem 0}
+.callout.warn{background:var(--warn);border-color:#d99a14}
+.callout strong{font-family:system-ui,sans-serif}
+table{border-collapse:collapse;margin:1rem 0;width:100%;font-size:.95rem}
+th,td{border-bottom:1px solid var(--rule);padding:.45rem .7rem;text-align:left;vertical-align:top}
+th{font:600 .85rem system-ui,sans-serif;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);border-bottom:2px solid var(--ink)}
+ol,ul{padding-left:1.4rem}
+li{margin:.25rem 0}
+dt{font-weight:700;margin-top:.6rem}
+dd{margin:.15rem 0 .4rem 1.2rem}
+.index-box{border:1px solid var(--rule);border-radius:6px;padding:.6rem 1rem;display:inline-block;margin:.5rem 0}
+.bib{padding-left:1.6rem}
+.bib li{margin:.5rem 0}
+footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--rule);color:var(--muted);font:.85rem system-ui,sans-serif}
+@media print{
+  @page{size:A4;margin:16mm 18mm}
+  body{font-size:11pt}
+  main{max-width:none;padding:0}
+  h2,h3{break-after:avoid}
+  pre,table,.callout,nav.toc{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<main>
+
+<header class="title">
+  <h1>Module I: Getting Started with LaTeX</h1>
+  <div class="meta">Study Notes &middot; MAT5FS112 &middot; Syllabus units 1&ndash;4</div>
+</header>
+
+<nav class="toc">
+  <strong>Contents</strong>
+  <ol>
+    <li><a href="#what">What is LaTeX?</a></li>
+    <li><a href="#anatomy">Anatomy of a document</a></li>
+    <li><a href="#commands">Commands, environments and special characters</a></li>
+    <li><a href="#structure">Document structure</a></li>
+    <li><a href="#bib">Bibliography</a></li>
+    <li><a href="#index">Index</a></li>
+  </ol>
+</nav>
+
+<h2 id="what">1. What is LaTeX?</h2>
+
+<p><strong>LaTeX</strong> is a <em>markup language</em> built on top of the TeX typesetting engine. You write a plain text <code>.tex</code> file that describes the <em>structure</em> of a document (title, sections, lists, equations); the engine decides how it looks on the page.</p>
+
+<p>The workflow is:</p>
+<ol>
+  <li>Write source code in a <code>.tex</code> file (any text editor, or Overleaf).</li>
+  <li>Compile it: <code>pdflatex file.tex</code>.</li>
+  <li>Open the resulting <code>file.pdf</code>.</li>
+</ol>
+
+<p>Compilation also creates helper files (<code>.aux</code>, <code>.log</code>, <code>.toc</code>). Always read the <code>.log</code> file when an error appears; the <em>first</em> error is the one that matters.</p>
+
+<h2 id="anatomy">2. Anatomy of a document</h2>
+
+<p>Every LaTeX file has two parts:</p>
+<dl>
+  <dt>Preamble</dt>
+  <dd>Everything before <code>\begin{document}</code>. It sets the document class, loads packages and defines global settings.</dd>
+  <dt>Body</dt>
+  <dd>Everything between <code>\begin{document}</code> and <code>\end{document}</code>. This is the content you read.</dd>
+</dl>
+
+<h3>2.1 The smallest document</h3>
+<pre><code>\documentclass{article}
+\begin{document}
+Hello, world!
+\end{document}</code></pre>
+
+<h3>2.2 Document classes and options</h3>
+<p>The class decides the overall look: <code>article</code> (papers, assignments), <code>report</code> (long documents with chapters), <code>book</code>, and <code>beamer</code> (slides, Module V). Options go in square brackets:</p>
+<pre><code>\documentclass[11pt,a4paper]{article}</code></pre>
+
+<h3>2.3 Packages</h3>
+<p>Packages add features. Load them in the preamble:</p>
+<pre><code>\usepackage[margin=2.5cm]{geometry}   % page margins</code></pre>
+
+<h2 id="commands">3. Commands, environments and special characters</h2>
+
+<p>A <em>command</em> starts with a backslash: <code>\textbf{bold}</code>. An <em>environment</em> is a block delimited by <code>\begin{name}</code> and <code>\end{name}</code>. Environments must be closed in the reverse order in which they were opened.</p>
+
+<p>Some characters have special meaning and must be escaped:</p>
+
+<table>
+  <thead><tr><th>You type</th><th>You get</th></tr></thead>
+  <tbody>
+    <tr><td><code>\%</code></td><td>%</td></tr>
+    <tr><td><code>\$</code></td><td>$</td></tr>
+    <tr><td><code>\&amp;</code></td><td>&amp;</td></tr>
+    <tr><td><code>\#</code></td><td>#</td></tr>
+    <tr><td><code>\_</code></td><td>_</td></tr>
+    <tr><td><code>\{</code> and <code>\}</code></td><td>{ and }</td></tr>
+    <tr><td><code>\textbackslash</code></td><td>\</td></tr>
+    <tr><td><code>\textasciitilde</code></td><td>~</td></tr>
+  </tbody>
+</table>
+
+<div class="callout"><strong>Comments.</strong> A <code>%</code> starts a comment: everything after it on that line is ignored by the compiler.</div>
+
+<h2 id="structure">4. Document structure</h2>
+
+<h3>4.1 Title block</h3>
+<p>The title block is built from three commands in the preamble and one in the body:</p>
+<pre><code>\title{My Title}
+\author{Author Name}
+\date{\today}          % or \date{} for no date
+\maketitle             % in the body</code></pre>
+
+<h3>4.2 Sectioning</h3>
+<p>Sectioning commands number and title parts of the document: <code>\section</code>, <code>\subsection</code>, <code>\subsubsection</code>, <code>\paragraph</code>. Adding a star (<code>\section*</code>) removes the number and the table-of-contents entry.</p>
+
+<h3>4.3 Table of contents</h3>
+<p><code>\tableofcontents</code> prints the contents page. It needs <em>two</em> compilations: the first writes the entries to a <code>.toc</code> file, the second reads them back.</p>
+
+<h3>4.4 Lists</h3>
+<p>Bullets with <code>itemize</code>. The <code>multicols</code> environment (from the <code>multicol</code> package) sets a list in columns:</p>
+<pre><code>\begin{multicols}{3}
+\textbf{itemize} (bullets)
+\begin{itemize}
+  \item apples
+  \item oranges
+\end{itemize}
+\end{multicols}</code></pre>
+
+<p>Numbered lists with <code>enumerate</code>; nesting is numbered differently at each level:</p>
+<pre><code>\begin{enumerate}
+  \item First numbered item.
+  \item Second numbered item.
+    \begin{enumerate}
+      \item Nested items are numbered differently.
+    \end{enumerate}
+\end{enumerate}</code></pre>
+
+<p>A description list with <code>description</code>:</p>
+<pre><code>\begin{description}
+  \item[Term] an explanation of the term.
+\end{description}</code></pre>
+
+<h2 id="bib">5. Bibliography</h2>
+
+<h3>5.1 Hand-written bibliography (compiles as it is)</h3>
+<p>For a short list, <code>thebibliography</code> is enough. Each entry is introduced by <code>\bibitem</code> and cited with <code>\cite</code>. Here the citation <code>\cite{lamport}</code> and <code>\cite{knuth}</code> is resolved in this file.</p>
+
+<pre><code>\begin{thebibliography}{9}
+  \bibitem{lamport} Leslie Lamport, \emph{\LaTeX: A Document
+    Preparation System}, 2nd ed., Addison-Wesley, 1994.
+  \bibitem{knuth} Donald E. Knuth, \emph{The \TeX book},
+    Addison-Wesley, 1984.
+\end{thebibliography}</code></pre>
+
+<p>Rendered:</p>
+<ol class="bib">
+  <li>Leslie Lamport, <em>LaTeX: A Document Preparation System</em>, 2nd ed., Addison-Wesley, 1994.</li>
+  <li>Donald E. Knuth, <em>The TeXbook</em>, Addison-Wesley, 1984.</li>
+</ol>
+
+<h3>5.2 BibTeX database (for real projects)</h3>
+<p>For larger projects, keep references in a separate <code>.bib</code> file and let BibTeX format them. The database <code>refs.bib</code> looks like this:</p>
+<pre><code>@book{lamport1994,
+  author    = {Leslie Lamport},
+  title     = {\LaTeX: A Document Preparation System},
+  edition   = {2nd},
+  publisher = {Addison-Wesley},
+  year      = {1994}
+}</code></pre>
+
+<p>The document then uses:</p>
+<pre><code>\bibliographystyle{plain}
+\bibliography{refs}        % refers to refs.bib, placed at the end</code></pre>
+
+<div class="callout"><strong>Build order.</strong> <code>pdflatex</code>, then <code>bibtex</code>, then <code>pdflatex</code>, then <code>pdflatex</code> again.</div>
+
+<h2 id="index">6. Index</h2>
+
+<p>Mark index entries in the text with <code>\index{term}</code>. Print the index at the end with <code>\printindex</code> (it needs <code>\makeindex</code> in the preamble). Here two terms are marked: <span class="index-box">LaTeX &middot; preamble</span></p>
+
+<p>The index is produced in three steps: <code>pdflatex</code>, <code>makeindex</code>, <code>pdflatex</code>.</p>
+
+<footer>MAT5FS112 &middot; Module I study notes</footer>
+
+</main>
+</body>
+</html>

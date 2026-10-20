@@ -1,0 +1,682 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Structured notes: Module 3, electromagnetic waves</title>
+<script>
+window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+  @page { size: A4; margin: 16mm; }
+  :root { --ink:#1B2631; --muted:#5D6D7E; --rule:#AEB6BF; --paper:#FFFFFF; --bound:#B9770E; --res:#117A65; --eq:#1F618D; --idb:#A04000; --hi:#FDF2E9; }
+  body { margin:0; background:var(--paper); color:var(--ink); font-family:"Times New Roman", Times, "Liberation Serif", serif; font-size:12.5pt; line-height:1.5; }
+  main { max-width:760px; margin:0 auto; padding:14px; }
+  h1 { font-size:20pt; margin:0 0 4px; color:var(--eq); }
+  .meta { color:var(--muted); font-size:10.5pt; margin-bottom:10px; }
+  h2 { font-size:14pt; margin:22px 0 6px; color:var(--eq); border-bottom:2px solid var(--eq); padding-bottom:2px; break-after:avoid; }
+  h3 { font-size:12.5pt; margin:14px 0 4px; color:var(--res); break-after:avoid; }
+  p, li { margin:5px 0; }
+  ul { margin:4px 0 4px 22px; padding:0; }
+  .eq { margin:8px 0; text-align:center; }
+  .box-eq { background:#EAF2F8; border-left:4px solid var(--eq); padding:6px 10px; margin:8px 0; }
+  .box-res { background:#E9F7EF; border-left:4px solid var(--res); padding:6px 10px; margin:8px 0; }
+  .box-id { background:var(--hi); border-left:4px solid var(--idb); padding:6px 10px; margin:8px 0; }
+  .lbl { font-weight:bold; font-size:10.5pt; text-transform:uppercase; letter-spacing:.3px; }
+  .lbl.res { color:var(--res); } .lbl.eq { color:var(--eq); } .lbl.id { color:var(--idb); }
+  .note { font-size:11.5pt; color:var(--muted); margin:4px 0; }
+  .bg { font-size:10.5pt; color:var(--muted); font-style:italic; }
+  .bound { color:var(--bound); font-weight:bold; }
+  .fig { margin:12px 0; text-align:center; break-inside:avoid; }
+  .fig svg { display:block; width:100%; max-width:320px; height:auto; margin:0 auto; }
+  .fig figcaption { font-size:10.5pt; color:var(--muted); font-style:italic; margin-top:3px; }
+  @media print { .keep { break-inside: avoid; } }
+
+  .box-recall { background:#FEF9E7; border-left:4px solid #B9770E; padding:6px 10px; margin:8px 0; }
+  .box-recall ol { margin:4px 0 4px 20px; padding:0; }
+  .lbl.recall { color:#B9770E; }
+  .figsvg { display:block; width:100%; max-width:240px; height:auto; margin:0 auto; }
+  .fig img { display:block; width:100%; max-width:240px; height:auto; margin:0 auto; }
+  .box-res p, .box-eq p { margin:4px 0; }
+  .sec-body { column-count: 2; column-gap: 22px; column-rule: 1px solid #AEB6BF; }
+  .sec-body .eq, .sec-body .box-eq, .sec-body .fig { break-inside: avoid; }
+  .sec-body .box-res, .sec-body .box-recall { box-decoration-break: clone; }
+  .sec-body .fig img, .sec-body .figsvg { max-height: 130px; width: auto; max-width: 220px; }
+  .sec-body h3 { break-after: avoid; }
+  .sec-body p, .sec-body li { font-size: 11pt; }
+  .sec-body .eq { font-size: 0.93em; }
+  .sec-body .longeq mjx-container[display="true"] { font-size: 0.72em !important; }
+  .sec-body mjx-container[display="true"] { font-size: 0.85em !important; max-width: 100%; }
+  .sec-bar { background:#1F618D; color:#fff; font-size:13pt; font-weight:bold; padding:6px 10px; margin:16px 0 6px; column-span: all; break-after: avoid; }
+  main { max-width: none; margin: 0; padding: 0 14px; }
+  @page { size: A4; margin: 16mm; }
+  @media print { h2 { break-after: avoid; } }
+</style>
+</head>
+<body>
+<main>
+<h1>Structured notes: Module 3, electromagnetic waves</h1>
+<div class="meta">Griffiths, <i>Introduction to Electrodynamics</i> (5th ed.), §8.1.2 and Chapter 9. Figures are redrawn for these notes, not copied from the book; the book figure number is in each caption. Sections 4 (§9.3.3) and 5 (§9.4, §9.5) are background, beyond the syllabus list. Problems are not included.</div>
+<div class="sec-bar">Section 1: energy and Poynting’s theorem (Griffiths 8.1.2)</div>
+<h2>8.1.2 Poynting’s theorem</h2>
+<div class="sec-body">
+<div class="bg">Source: <i>book-sources/m3-s812-poynting.html</i>, Griffiths pp. 363–367. Equations 8.5–8.12 and Example 8.1 in full. Problems 8.1–8.4 are not included.</div>
+
+<h3>Prerequisites</h3>
+<ul>
+<li>Divergence theorem; product rule for $\nabla\cdot(\mathbf E\times\mathbf B)$ (pre-math M13, M14).</li>
+<li>Faraday’s law $\nabla\times\mathbf E=-\partial\mathbf B/\partial t$ and the Ampère–Maxwell law (Module 2, Section 7.3).</li>
+<li>Field energy densities from Eqs. 2.45 and 7.44.</li>
+</ul>
+
+<h3>1. Energy density of the fields</h3>
+<p>The work to assemble a static charge distribution is $W_e=\frac{\epsilon_0}{2}\int E^2\,d\tau$ (Eq. 2.45). The work to establish currents against the back emf is $W_m=\frac{1}{2\mu_0}\int B^2\,d\tau$ (Eq. 7.44). Taking the integrands as densities gives the energy per unit volume:</p>
+<div class="box-res"><span class="lbl res">Result 8.1.1: energy density</span>
+<div class="eq">$$u=\frac12\left(\epsilon_0E^2+\frac{1}{\mu_0}B^2\right)\tag{8.5}$$</div></div>
+
+<h3>2. Rate of work on the charges</h3>
+<p>The Lorentz force on a charge $q$ does work $dW=\mathbf F\cdot d\mathbf l=q(\mathbf E+\mathbf v\times\mathbf B)\cdot\mathbf v\,dt=q\mathbf E\cdot\mathbf v\,dt$, since $\mathbf v\times\mathbf B\perp\mathbf v$. With $q\to\rho\,d\tau$ and $\rho\mathbf v\to\mathbf J$, the rate of work on all charges in volume $\mathcal V$ is</p>
+<div class="eq">$$\frac{dW}{dt}=\int_{\mathcal V}(\mathbf E\cdot\mathbf J)\,d\tau\tag{8.6}$$</div>
+<p>Hence $\mathbf E\cdot\mathbf J$ is the power per unit volume delivered to the charges.</p>
+
+<h3>3. Elimination of $\mathbf J$</h3>
+<p>By the Ampère–Maxwell law, $\mathbf J$ is replaced by fields:</p>
+<div class="eq">$$\begin{aligned}\mathbf E\cdot\mathbf J &= \frac{1}{\mu_0}\mathbf E\cdot(\nabla\times\mathbf B) \\  &-\epsilon_0\,\mathbf E\cdot\frac{\partial\mathbf E}{\partial t}\end{aligned}$$</div>
+<p>The product rule $\nabla\cdot(\mathbf E\times\mathbf B)=\mathbf B\cdot(\nabla\times\mathbf E)-\mathbf E\cdot(\nabla\times\mathbf B)$, with Faraday’s law, gives</p>
+<div class="eq">$$\begin{aligned}\mathbf E\cdot(\nabla\times\mathbf B) &= -\mathbf B\cdot\frac{\partial\mathbf B}{\partial t} \\  &-\nabla\cdot(\mathbf E\times\mathbf B)\end{aligned}$$</div>
+<p>Each time derivative of a square is written as</p>
+<div class="eq">$$\begin{gathered}\mathbf B\cdot\frac{\partial\mathbf B}{\partial t}=\frac12\frac{\partial}{\partial t}(B^2) \\ \mathbf E\cdot\frac{\partial\mathbf E}{\partial t}=\frac12\frac{\partial}{\partial t}(E^2)\end{gathered} \tag{8.7}$$</div>
+<p>Combining,</p>
+<div class="eq">$$\begin{aligned}\mathbf E\cdot\mathbf J &= -\frac12\frac{\partial}{\partial t}\left(\epsilon_0E^2+\frac{1}{\mu_0}B^2\right) \\  &-\frac{1}{\mu_0}\nabla\cdot(\mathbf E\times\mathbf B)\end{aligned} \tag{8.8}$$</div>
+
+<h3>4. Poynting’s theorem</h3>
+<p>Inserting Eq. 8.8 into Eq. 8.6 and applying the divergence theorem to the second term:</p>
+<div class="eq">$$\begin{aligned}\frac{dW}{dt} &= -\frac{d}{dt}\int_{\mathcal V}u\,d\tau \\  &-\frac{1}{\mu_0}\oint_S(\mathbf E\times\mathbf B)\cdot d\mathbf a\end{aligned} \tag{8.9}$$</div>
+<p>The work done on the charges equals the decrease of field energy in $\mathcal V$, less the energy flowing out through $S$. This is Poynting’s theorem, the work–energy theorem of electrodynamics.</p>
+
+<h3>5. Poynting vector</h3>
+<div class="box-res"><span class="lbl res">Result 8.1.2: energy flux density</span>
+<div class="eq">$$\mathbf S\equiv\frac{1}{\mu_0}(\mathbf E\times\mathbf B)\tag{8.10}$$</div>
+<p>$\mathbf S\cdot d\mathbf a$ is the energy per unit time crossing $d\mathbf a$. The compact form is</p>
+<div class="eq">$$\begin{aligned}\frac{dW}{dt} &= -\frac{d}{dt}\int_{\mathcal V}u\,d\tau \\  &-\oint_S\mathbf S\cdot d\mathbf a\end{aligned} \tag{8.11}$$</div></div>
+<p>Footnote 4 (book): Eq. 8.9 applies to closed surfaces only. The power through an open surface is the natural interpretation of $\int\mathbf S\cdot d\mathbf a$, but not a consequence of Eq. 8.9. The location of energy is not determined in electrodynamics (Section 2.4.4).</p>
+
+<h3>6. Local conservation in empty space</h3>
+<p>With no charge in $\mathcal V$, $dW/dt=0$. From Eq. 8.11, $\int\partial_tu\,d\tau=-\oint\mathbf S\cdot d\mathbf a=-\int\nabla\cdot\mathbf S\,d\tau$. Since $\mathcal V$ is arbitrary,</p>
+<div class="box-res"><span class="lbl res">Result 8.1.3: continuity equation for energy</span>
+<div class="eq">$$\frac{\partial u}{\partial t}=-\nabla\cdot\mathbf S\tag{8.12}$$</div>
+<p>$u$ corresponds to $\rho$ and $\mathbf S$ to $\mathbf J$ in the charge continuity equation Eq. 8.4.</p></div>
+<p>Electromagnetic energy alone is not conserved in general, because the fields exchange energy with the charges.</p>
+
+<h3>7. Example 8.1: resistive wire (book)</h3>
+<p>Uniform field along a wire of length $L$ and radius $a$: $E=V/L$. Circumferential field at the surface: $B=\mu_0I/2\pi a$. Magnitude of the Poynting vector:</p>
+<div class="eq">$$\begin{aligned}S &= \frac{1}{\mu_0}\cdot\frac{V}{L}\cdot\frac{\mu_0I}{2\pi a} \\  &= \frac{VI}{2\pi aL}\end{aligned}$$</div>
+<p>$\mathbf E\times\mathbf B$ is radial, and the direction is inward. Over the lateral surface, of area $2\pi aL$:</p>
+<div class="eq">$$\int\mathbf S\cdot d\mathbf a=S(2\pi aL)=VI$$</div>
+<p>This agrees with the Joule heating obtained in Section 7.1.1.</p>
+<figure class="fig"><img src="final/m3-s812-wire.jpg" alt="m3 s812 wire"><figcaption>Fig. 8.1 (book): a resistive wire carrying current I; E along the wire, B circumferential, S radially inward.</figcaption></figure>
+<p>Problems 8.1–8.4 apply the same theorem to cables, a capacitor gap and a charging sphere. They are outside these notes.</p>
+</div>
+<div class="sec-bar">Section 2: waves in one dimension (Griffiths 9.1)</div>
+<h2>9.1.1–9.1.2 The wave equation and sinusoidal waves</h2>
+<div class="sec-body">
+<div class="bg">Source: <i>book-sources/m3-sec2-wave1d.html</i>, Griffiths pp. 390–396. Equations 9.1–9.20 in full. Problems 9.1–9.4 are listed, not worked.</div>
+
+<h3>Prerequisites</h3>
+<ul>
+<li>Chain rule for functions of $z-vt$ (pre-math M7).</li>
+<li>Euler’s formula (pre-math M5).</li>
+<li>Newton’s second law and small-angle approximations for a string (Plus Two mechanics).</li>
+</ul>
+
+<h3>1. Definition and the general form</h3>
+<p>A wave is a disturbance of a continuous medium that propagates with a fixed shape at constant velocity. Refinements (absorption, dispersion, spreading in two or three dimensions, standing waves) are set aside for the one-dimensional case shown in Fig. 9.1.</p>
+<figure class="fig"><img src="final/m3-sec2-shift.jpg" alt="m3 sec2 shift"><figcaption>Fig. 9.1 (book): a wave of fixed shape at t = 0 and at a later time, shifted to the right by vt.</figcaption></figure>
+<p>With $g(z)\equiv f(z,0)$, the displacement at $z$ at time $t$ equals the initial displacement at $z-vt$:</p>
+<div class="eq">$$f(z,t)=f(z-vt,0)=g(z-vt)\tag{9.1}$$</div>
+<p>A function whose dependence on $z$ and $t$ is confined to the combination $z-vt$ is a wave of fixed shape moving in the $+z$ direction at speed $v$. The functions $f_1=Ae^{-b(z-vt)^2}$, $f_2=A\sin[b(z-vt)]$ and $f_3=A/[b(z-vt)^2+1]$ are waves. The functions $f_4=Ae^{-b(bz^2+vt)}$ and $f_5=A\sin(bz)\cos(bvt)$ are not.</p>
+
+<h3>2. Derivation of the wave equation</h3>
+<p>Net transverse force on a segment of string of length $\Delta z$ under tension $T$, with small angles:</p>
+<div class="eq">$$\begin{aligned}\Delta F &= T\sin\theta' \\  &-T\sin\theta\approx T\,\frac{\partial^2f}{\partial z^2}\Delta z\end{aligned}$$</div>
+<p>Newton’s second law with mass per unit length $\mu$ gives $\Delta F=\mu\,\Delta z\,\partial^2f/\partial t^2$. Therefore small transverse disturbances obey</p>
+<div class="box-res"><span class="lbl res">Result 9.1: wave equation on a string</span>
+<div class="eq">$$\begin{gathered}\frac{\partial^2f}{\partial z^2}=\frac{1}{v^2}\frac{\partial^2f}{\partial t^2} \\ v=\sqrt{\frac{T}{\mu}}\end{gathered} \tag{9.2}$$</div>
+<div class="eq">$$v=\sqrt{\frac{T}{\mu}}\tag{9.3}$$</div></div>
+<figure class="fig"><img src="final/m3-sec2-string.jpg" alt="m3 sec2 string"><figcaption>Fig. 9.2 (book): a string segment between z and z + Δz, with tension T at angles θ and θ′.</figcaption></figure>
+
+<h3>3. Solutions</h3>
+<p>Set $u=z-vt$. Then $\partial f/\partial z=dg/du$, $\partial f/\partial t=-v\,dg/du$, $\partial^2f/\partial z^2=d^2g/du^2$ and $\partial^2f/\partial t^2=v^2\,d^2g/du^2$. Substitution into Eq. 9.2 confirms that any function of the form</p>
+<div class="eq">$$f(z,t)=g(z-vt)\tag{9.4}$$</div>
+<p>is a solution, for any differentiable $g$. Changing the sign of $v$ gives a wave to the left:</p>
+<div class="eq">$$f(z,t)=h(z+vt)\tag{9.5}$$</div>
+<p>Since Eq. 9.2 is linear, the general solution is the sum:</p>
+<div class="eq">$$f(z,t)=g(z-vt)+h(z+vt)\tag{9.6}$$</div>
+<p>Every solution of Eq. 9.2 takes this form (book). Note 1 of the book observes that the solution class is far larger than for an ordinary second-order ODE, which admits two independent solutions; a PDE has no such restriction.</p>
+
+<h3>4. Sinusoidal waves</h3>
+<p>The sinusoidal wave is</p>
+<div class="eq">$$f(z,t)=A\cos[k(z-vt)+\delta]\tag{9.7}$$</div>
+<p>with $A$ the amplitude, $\delta$ the phase constant, and $\delta/k$ the delay of the central maximum. Wavelength and period:</p>
+<div class="eq">$$\lambda=\frac{2\pi}{k}\tag{9.8}$$</div>
+<div class="eq">$$T=\frac{2\pi}{kv}\tag{9.9}$$</div>
+<figure class="fig"><img src="final/m3-sec2-sinusoid.jpg" alt="m3 sec2 sinusoid"><figcaption>Fig. 9.3 (book): a sinusoidal wave at t = 0, with amplitude A, wavelength λ and the central maximum at δ/k.</figcaption></figure>
+<div class="box-recall"><span class="lbl recall">Plus Two recall: speed of a wave</span>
+<p><b>Recall.</b> From Class 12: speed $=$ frequency $\times$ wavelength.</p>
+<p><b>Re-derive.</b></p><ol>
+<li>In one period the wave advances by one wavelength: $v=\lambda/T$.</li>
+<li>Frequency is the reciprocal of period: $\nu=1/T$.</li>
+<li>Hence $\nu=v/\lambda$; using Eq. 9.9 for $T$ gives $\nu=kv/2\pi$.</li></ol>
+<p><b>Saved.</b> $\nu=kv/2\pi=v/\lambda=1/T$ Eq. 9.10.</p></div>
+<div class="eq">$$\nu=\frac{kv}{2\pi}=\frac{v}{\lambda}=\frac1T\tag{9.10}$$</div>
+<div class="box-res"><span class="lbl res">Result 9.2: angular frequency</span>
+<div class="eq">$$\omega=2\pi\nu=kv\tag{9.11}$$</div>
+<div class="eq">$$f(z,t)=A\cos(kz-\omega t+\delta)\tag{9.12}$$</div></div>
+<p>Leftward propagation: $f=A\cos(kz+\omega t-\delta)$ Eq. 9.13 $=A\cos(-kz-\omega t+\delta)$ Eq. 9.14. Changing the sign of $k$ reverses the direction and leaves the other parameters unchanged.</p>
+
+<h3>5. Complex notation</h3>
+<p>By Euler’s formula Eq. 9.15,</p>
+<div class="eq">$$f(z,t)=\mathrm{Re}\left[Ae^{i(kz-\omega t+\delta)}\right]\tag{9.16}$$</div>
+<p>Define $\tilde f(z,t)=\tilde Ae^{i(kz-\omega t)}$ Eq. 9.17 with $\tilde A=Ae^{i\delta}$. Then $f=\mathrm{Re}\,\tilde f$ Eq. 9.18.</p>
+<p><i>Example 9.1.</i> Waves of equal $k$ and $\omega$ add by adding complex amplitudes:</p>
+<div class="eq">$$A_3e^{i\delta_3}=A_1e^{i\delta_1}+A_2e^{i\delta_2}\tag{9.19}$$</div>
+<p>Restriction: the method is linear and does not extend to products, since $\mathrm{Re}(\tilde f_1\tilde f_2)\ne\mathrm{Re}\tilde f_1\,\mathrm{Re}\tilde f_2$. Quadratic quantities must use real fields.</p>
+
+<h3>6. General waves</h3>
+<p>Any wave is a superposition of sinusoids over all wave numbers, with $k$ allowed to be negative to include both directions:</p>
+<div class="eq">$$\tilde f(z,t)=\int_{-\infty}^{\infty}\tilde A(k)e^{i(kz-\omega t)}\,dk\tag{9.20}$$</div>
+<p>The coefficients are given by Fourier theory (Prob. 9.34). The book then restricts all further work to sinusoidal waves, since the behaviour of a general wave follows from it. Problems 9.3 and 9.4 are outside these notes.</p>
+</div>
+<h2>9.1.3 Reflection and transmission on a string</h2>
+<div class="sec-body">
+<div class="bg">Source: <i>book-sources/m3-sec2-bc.html</i>, Griffiths pp. 396–399. Equations 9.21–9.33 in full. <b>Background</b>: beyond the syllabus list (items 9–14 use §9.1.1, §9.1.2 and §9.1.4). Problems 9.5–9.7 not worked.</div>
+
+<h3>Prerequisites</h3>
+<ul>
+<li>Sinusoidal waves and complex amplitudes (§9.1.2).</li>
+<li>Continuity of a function and of its first derivative at a point.</li>
+</ul>
+
+<h3>1. Setup</h3>
+<p>Two strings of equal tension $T$ and mass densities $\mu_1$, $\mu_2$ are joined at $z=0$. Wave speeds: $v_1=\sqrt{T/\mu_1}$, $v_2=\sqrt{T/\mu_2}$.</p>
+<h3>2. Incident, reflected and transmitted waves</h3>
+<div class="eq">$$\tilde f_I=\tilde A_Ie^{i(k_1z-\omega t)}\quad(z\lt 0)\tag{9.21}$$</div>
+<div class="eq">$$\tilde f_R=\tilde A_Re^{i(-k_1z-\omega t)}\quad(z\lt 0)\tag{9.22}$$</div>
+<div class="eq">$$\tilde f_T=\tilde A_Te^{i(k_2z-\omega t)}\quad(z>0)\tag{9.23}$$</div>
+<p>Common frequency $\omega$; wavelength ratio $\lambda_1/\lambda_2=k_2/k_1=v_1/v_2$ Eq. 9.24.</p>
+<figure class="fig"><img src="final/m3-sec2-pulse.jpg" alt="m3 sec2 pulse"><figcaption>Fig. 9.5 (book): a pulse incident on a knot at z = 0, with the reflected and transmitted pulses.</figcaption></figure>
+<p>A finite pulse is a superposition of sinusoids (Eq. 9.20); a single frequency requires infinite extent. The net disturbance is</p>
+<div class="eq longeq">$$\tilde f(z,t)=\begin{cases}\tilde A_Ie^{i(k_1z-\omega t)}+\tilde A_Re^{i(-k_1z-\omega t)}, & z\lt 0\\ \tilde A_Te^{i(k_2z-\omega t)}, & z>0\end{cases}\tag{9.25}$$</div>
+
+<h3>3. Matching conditions</h3>
+<div class="box-res"><span class="lbl res">Result 9.3: junction conditions</span>
+<div class="eq">$$f(0^-,t)=f(0^+,t)\tag{9.26}$$</div>
+<div class="eq longeq">$$\left.\frac{\partial f}{\partial z}\right|_{0^-}=\left.\frac{\partial f}{\partial z}\right|_{0^+}\tag{9.27}$$</div></div>
+<p>Eq. 9.27 holds for a massless knot; a mismatch would give an infinite acceleration (Fig. 9.6). The same conditions hold for $\tilde f$ Eq. 9.28:</p>
+<div class="eq">$$\begin{gathered}\tilde f(0^-,t)=\tilde f(0^+,t) \\ \left.\frac{\partial\tilde f}{\partial z}\right|_{0^-}=\left.\frac{\partial\tilde f}{\partial z}\right|_{0^+}\end{gathered} \tag{9.28}$$</div>
+
+<h3>4. Amplitudes</h3>
+<p>Continuity: $\tilde A_I+\tilde A_R=\tilde A_T$. Slope: $k_1(\tilde A_I-\tilde A_R)=k_2\tilde A_T$. Hence</p>
+<div class="eq">$$\begin{gathered}\tilde A_R=\frac{k_1-k_2}{k_1+k_2}\tilde A_I \\ \tilde A_T=\frac{2k_1}{k_1+k_2}\tilde A_I\end{gathered} \tag{9.29}$$</div>
+<p>In terms of speeds (via 9.24):</p>
+<div class="eq">$$\begin{gathered}\tilde A_R=\frac{v_2-v_1}{v_2+v_1}\tilde A_I \\ \tilde A_T=\frac{2v_2}{v_2+v_1}\tilde A_I\end{gathered} \tag{9.30}$$</div>
+<p>With real amplitudes and phases:</p>
+<div class="eq">$$\begin{gathered}A_Re^{i\delta_R}=\frac{v_2-v_1}{v_2+v_1}A_Ie^{i\delta_I} \\ A_Te^{i\delta_T}=\frac{2v_2}{v_2+v_1}A_Ie^{i\delta_I}\end{gathered} \tag{9.31}$$</div>
+<p><i>Case $v_2>v_1$:</i> no phase change; $A_R=\frac{v_2-v_1}{v_2+v_1}A_I$, $A_T=\frac{2v_2}{v_2+v_1}A_I$ Eq. 9.32.</p>
+<p><i>Case $v_2\lt v_1$:</i> reflected phase shifted by $\pi$ (“upside down”); $A_R=\frac{v_1-v_2}{v_2+v_1}A_I$, $A_T=\frac{2v_2}{v_2+v_1}A_I$ Eq. 9.33.</p>
+<p><i>Fixed end</i> ($v_2\to0$ relative): $A_R=A_I$, $A_T=0$, full reflection.</p>
+</div>
+<h2>9.1.4 Polarization of transverse waves</h2>
+<div class="sec-body">
+<div class="bg">Source: <i>book-sources/m3-sec2-polar.html</i>, Griffiths pp. 399–401. Equations 9.34–9.39 in full. Problem 9.8 (circular polarization) described, not worked.</div>
+
+<h3>Prerequisites</h3>
+<ul>
+<li>Dot product of vectors (pre-math M9, M10).</li>
+<li>Sinusoidal waves (§9.1.2).</li>
+</ul>
+
+<h3>1. Transverse and longitudinal waves</h3>
+<p>In a transverse wave the displacement is perpendicular to the direction of propagation. In a longitudinal (compression) wave the displacement is along it (Fig. 9.7). Sound is longitudinal; electromagnetic waves are transverse.</p>
+
+<h3>2. Polarization states</h3>
+<p>For propagation along $z$, there are two independent transverse displacement directions. Vertical:</p>
+<div class="eq">$$\tilde{\mathbf f}^v=\tilde Ae^{i(kz-\omega t)}\hat x\tag{9.34}$$</div>
+<p>Horizontal:</p>
+<div class="eq">$$\tilde{\mathbf f}^h=\tilde Ae^{i(kz-\omega t)}\hat y\tag{9.35}$$</div>
+<p>General direction in the $xy$ plane, described by a unit vector $\hat n$:</p>
+<div class="eq">$$\tilde{\mathbf f}=\tilde Ae^{i(kz-\omega t)}\hat n\tag{9.36}$$</div>
+<div class="box-res"><span class="lbl res">Result 9.4: transversality and polarization angle</span>
+<div class="eq">$$\hat n\cdot\hat z=0\tag{9.37}$$</div>
+<div class="eq">$$\hat n=\cos\theta\,\hat x+\sin\theta\,\hat y\tag{9.38}$$</div></div>
+<figure class="fig"><img src="final/m3-sec2-polar-vec.jpg" alt="m3 sec2 polar vec"><figcaption>Fig. 9.8c (book): a wave polarized along n̂, at angle θ to the x axis in the xy plane.</figcaption></figure>
+<p>Superposition of two orthogonal components:</p>
+<div class="eq">$$\begin{aligned}\tilde{\mathbf f} &= (\tilde A\cos\theta)e^{i(kz-\omega t)}\hat x \\  &+(\tilde A\sin\theta)e^{i(kz-\omega t)}\hat y\end{aligned} \tag{9.39}$$</div>
+
+<h3>3. Remarks</h3>
+<ul>
+<li>Reversing $\hat n$ and advancing the phase constant by $180^\circ$ gives the same wave (footnote 4).</li>
+<li>Equal amplitudes with a $90^\circ$ phase difference give circular polarization. Problem 9.8 covers the sense of rotation and how to produce each sense; the optics names are right and left circular polarization.</li>
+<li>The book does not use a complex $\hat n$ for elliptical polarization.</li>
+</ul>
+</div>
+<div class="sec-bar">Section 3: electromagnetic waves in vacuum (Griffiths 9.2)</div>
+<h2>9.2.1 The wave equation for E and B</h2>
+<div class="sec-body">
+<div class="bg">Source: <i>book-sources/m3-sec3-wave-eq.html</i> and the end of <i>m3-sec2-polar.html</i>, Griffiths pp. 401–402. Equations 9.40–9.43 in full.</div>
+
+<h3>Prerequisites</h3>
+<ul>
+<li>Maxwell’s equations in vacuum (Module 2, Section 7.3).</li>
+<li>Identity $\nabla\times(\nabla\times\mathbf A)=\nabla(\nabla\cdot\mathbf A)-\nabla^2\mathbf A$ (pre-math M13).</li>
+</ul>
+
+<h3>1. Maxwell’s equations in empty space</h3>
+<div class="eq">$$\begin{gathered}\text{(i)}\ \nabla\cdot\mathbf E=0 \\ \text{(iii)}\ \nabla\times\mathbf E=-\frac{\partial\mathbf B}{\partial t}\end{gathered}$$</div>
+<div class="eq">$$\begin{gathered}\text{(ii)}\ \nabla\cdot\mathbf B=0 \\ \text{(iv)}\ \nabla\times\mathbf B=\mu_0\epsilon_0\frac{\partial\mathbf E}{\partial t}\end{gathered} \tag{9.40}$$</div>
+
+<h3>2. Uncoupling</h3>
+<p>The curl of (iii), using (iv) and (i):</p>
+<div class="eq">$$\begin{aligned}\nabla\times(\nabla\times\mathbf E) &= \nabla(\nabla\cdot\mathbf E)-\nabla^2\mathbf E \\  &= -\mu_0\epsilon_0\frac{\partial^2\mathbf E}{\partial t^2}\end{aligned}$$</div>
+<p>The curl of (iv), using (iii) and (ii), gives the same form for $\mathbf B$. Hence</p>
+<div class="box-res"><span class="lbl res">Result 9.6: decoupled wave equations</span>
+<div class="eq">$$\begin{gathered}\nabla^2\mathbf E=\mu_0\epsilon_0\frac{\partial^2\mathbf E}{\partial t^2} \\ \nabla^2\mathbf B=\mu_0\epsilon_0\frac{\partial^2\mathbf B}{\partial t^2}\end{gathered} \tag{9.41}$$</div></div>
+<p>These are second-order equations. Each component satisfies $\nabla^2f=(1/v^2)\,\partial^2f/\partial t^2$.</p>
+
+<h3>3. Speed</h3>
+<div class="box-recall"><span class="lbl recall">Plus Two recall: speed of light from $\epsilon_0$ and $\mu_0$</span>
+<p><b>Recall.</b> From Class 12: electromagnetic waves travel in vacuum at $c=1/\sqrt{\epsilon_0\mu_0}$.</p>
+<p><b>Re-derive.</b></p><ol>
+<li>For a wave $f(z-vt)$, Eq. 9.2 gives $\partial^2f/\partial z^2=(1/v^2)\partial^2f/\partial t^2$.</li>
+<li>Comparing with Eq. 9.41 gives $1/v^2=\mu_0\epsilon_0$.</li>
+<li>So $v=1/\sqrt{\mu_0\epsilon_0}$.</li></ol>
+<p><b>Saved.</b> $c=1/\sqrt{\epsilon_0\mu_0}$ Eq. 9.43.</p></div>
+<div class="box-res"><span class="lbl res">Result 9.7: speed in vacuum</span>
+<div class="eq">$$v=\frac{1}{\sqrt{\epsilon_0\mu_0}}=3.00\times10^8\ \text{m/s}\tag{9.42}$$</div>
+<div class="eq">$$c=\frac{1}{\sqrt{\epsilon_0\mu_0}}\tag{9.43}$$</div></div>
+<p>The number is the measured speed of light, so light is an electromagnetic wave (footnote 6 of the book).</p>
+
+<h3>4. Role of the displacement current</h3>
+<p>The term $\mu_0\epsilon_0\,\partial\mathbf E/\partial t$ in (iv) is what makes waves possible. Without it there is no wave equation. The constants $\epsilon_0$ and $\mu_0$ are measured with static charges and steady currents, which have nothing to do with light, yet they fix $c$.</p>
+</div>
+<h2>9.2.2 Monochromatic plane waves</h2>
+<div class="sec-body">
+<div class="bg">Source: <i>book-sources/m3-sec3-plane.html</i>, Griffiths pp. 402–406. Equations 9.44–9.53, Table 9.1 and Example 9.2 in full. Problem 9.9 not worked. Figures redrawn.</div>
+
+<h3>Prerequisites</h3>
+<ul>
+<li>Complex exponentials, real part (§9.1.2).</li>
+<li>Faraday’s law (Eq. 9.40, iii); dot and cross products (pre-math M8–M10).</li>
+</ul>
+
+<h3>1. Definitions</h3>
+<p>Monochromatic: a single frequency $\omega$. Plane wave: uniform over each plane perpendicular to the direction of travel $z$ (Fig. 9.9). Then</p>
+<div class="eq">$$\begin{gathered}\tilde{\mathbf E}(z,t)=\tilde{\mathbf E}_0e^{i(kz-\omega t)} \\ \tilde{\mathbf B}(z,t)=\tilde{\mathbf B}_0e^{i(kz-\omega t)}\end{gathered} \tag{9.44}$$</div>
+<p>with $\omega=ck$.</p>
+<p>Table 9.1 (book), the electromagnetic spectrum, is reproduced in the study version.</p>
+
+<h3>2. Transversality and amplitude relations</h3>
+<p>Substituting Eq. 9.44 into $\nabla\cdot\mathbf E=0$ and $\nabla\cdot\mathbf B=0$:</p>
+<div class="eq">$$(\tilde E_0)_z=(\tilde B_0)_z=0\tag{9.45}$$</div>
+<p>Faraday’s law then gives</p>
+<div class="eq">$$\begin{gathered}-k(\tilde E_0)_y=\omega(\tilde B_0)_x \\ k(\tilde E_0)_x=\omega(\tilde B_0)_y\end{gathered} \tag{9.46}$$</div>
+<div class="eq">$$\tilde{\mathbf B}_0=\frac{k}{\omega}(\hat z\times\tilde{\mathbf E}_0)\tag{9.47}$$</div>
+<div class="box-recall"><span class="lbl recall">Plus Two recall: transverse, in-phase fields</span>
+<p><b>Recall.</b> From Class 12: $\mathbf E$ and $\mathbf B$ are in phase, mutually perpendicular, and perpendicular to the direction of travel.</p>
+<p><b>Re-derive.</b></p><ol>
+<li>Take $\tilde{\mathbf E}_0=E_0\hat x$. By Eq. 9.47, $\tilde{\mathbf B}_0=(k/\omega)E_0(\hat z\times\hat x)=(k/\omega)E_0\hat y$.</li>
+<li>Faraday’s law gives $kE_0=\omega B_0$.</li>
+<li>Both fields carry the phase $kz-\omega t$, so they are in phase.</li></ol>
+<p><b>Saved.</b> $B_0=\frac{k}{\omega}E_0=\frac{E_0}{c}$ Eq. 9.48.</p></div>
+<div class="box-res"><span class="lbl res">Result 9.8: amplitude relation</span>
+<div class="eq">$$B_0=\frac{k}{\omega}E_0=\frac{1}{c}E_0\tag{9.48}$$</div></div>
+
+<h3>3. Example 9.2</h3>
+<p>For $\mathbf E$ along $x$, $\mathbf B$ is along $y$. Real fields:</p>
+<div class="eq boxed">$$\begin{aligned}\mathbf E(z,t)&=E_0\cos(kz-\omega t+\delta)\hat x,\\ \mathbf B(z,t)&=\frac1cE_0\cos(kz-\omega t+\delta)\hat y\end{aligned}\tag{9.49}$$</div>
+<p>Polarization is named by the direction of $\mathbf E$ (Fig. 9.10).</p>
+<figure class="fig"><img src="final/m3-sec3-paradigm.jpg" alt="m3 sec3 paradigm"><figcaption>Fig. 9.10 (book): monochromatic plane wave with E along x and B along y, traveling along z.</figcaption></figure>
+
+<h3>4. Propagation vector</h3>
+<p>For direction $\hat k$, the propagation vector $\mathbf k=k\hat k$ and the phase $\mathbf k\cdot\mathbf r$ (Fig. 9.11):</p>
+<div class="eq">$$\begin{gathered}\tilde{\mathbf E}(\mathbf r,t)=\tilde E_0e^{i(\mathbf k\cdot\mathbf r-\omega t)}\hat n \\ \tilde{\mathbf B}(\mathbf r,t)=\frac1c\tilde E_0e^{i(\mathbf k\cdot\mathbf r-\omega t)}(\hat k\times\hat n)=\frac1c\hat k\times\tilde{\mathbf E}\end{gathered} \tag{9.50}$$</div>
+<p>Transversality: $\hat n\cdot\hat k=0$ Eq. 9.51. Real fields:</p>
+<div class="eq longeq">$$\mathbf E(\mathbf r,t)=E_0\cos(\mathbf k\cdot\mathbf r-\omega t+\delta)\hat n\tag{9.52}$$</div>
+<div class="eq longeq">$$\mathbf B(\mathbf r,t)=\frac1cE_0\cos(\mathbf k\cdot\mathbf r-\omega t+\delta)(\hat k\times\hat n)\tag{9.53}$$</div>
+<figure class="fig"><img src="final/m3-sec3-kvec.jpg" alt="m3 sec3 kvec"><figcaption>Fig. 9.11 (book): the propagation vector k and the position vector r; the phase is k · r.</figcaption></figure>
+<p>Problem 9.9 is outside these notes.</p>
+</div>
+<h2>9.2.3 Energy and momentum in electromagnetic waves</h2>
+<div class="sec-body">
+<div class="bg">Source: <i>book-sources/m3-sec3-energy.html</i>, Griffiths pp. 406–408. Equations 9.54–9.65 in full; footnotes 9–11. Problem 9.10 described; Problems 9.11–9.13 listed, not worked.</div>
+
+<h3>Prerequisites</h3>
+<ul>
+<li>$u$ and $\mathbf S$ from Section 8.1.2 (Eqs. 8.5, 8.10); the momentum density result (Eq. 8.29).</li>
+<li>Average of $\cos^2$ over a period, $\tfrac12$ (pre-math M4).</li>
+</ul>
+
+<h3>1. Energy density</h3>
+<div class="eq">$$u=\frac12\left(\epsilon_0E^2+\frac{1}{\mu_0}B^2\right)\tag{9.54}$$</div>
+<p>For a monochromatic plane wave, $B^2=E^2/c^2=\mu_0\epsilon_0E^2$ Eq. 9.55. The two terms are equal:</p>
+<div class="box-recall"><span class="lbl recall">Plus Two recall: electric energy density</span>
+<p><b>Recall.</b> From Class 12: a field $E$ in vacuum stores $\tfrac12\epsilon_0E^2$ per unit volume.</p>
+<p><b>Re-derive.</b></p><ol>
+<li>The magnetic term of Eq. 9.54 is $\tfrac{1}{2\mu_0}B^2$.</li>
+<li>With $B=E/c$ and $c^2=1/\epsilon_0\mu_0$, this is $\tfrac12\epsilon_0E^2$.</li>
+<li>The two halves are equal.</li></ol>
+<p><b>Saved.</b></p></div>
+<div class="eq">$$u=\epsilon_0E^2=\epsilon_0E_0^2\cos^2(kz-\omega t+\delta)\tag{9.56}$$</div>
+
+<h3>2. Poynting vector of a plane wave</h3>
+<div class="box-res"><span class="lbl res">Result 9.9: energy flux</span>
+<div class="eq">$$\mathbf S=\frac{1}{\mu_0}(\mathbf E\times\mathbf B)\tag{9.57}$$</div>
+<div class="eq">$$\mathbf S=c\epsilon_0E_0^2\cos^2(kz-\omega t+\delta)\hat z=cu\,\hat z\tag{9.58}$$</div></div>
+<p>The flux equals $cu$ because in time $\Delta t$ the energy $uAc\Delta t$ crosses an area $A$.</p>
+<figure class="fig"><img src="final/m3-sec3-cylinder.jpg" alt="m3 sec3 cylinder"><figcaption>Fig. 9.12 (book): a cylinder of cross section A and length cΔt; the energy in it crosses A in time Δt.</figcaption></figure>
+
+<h3>3. Momentum density</h3>
+<div class="eq">$$\mathbf g=\frac{1}{c^2}\mathbf S\tag{9.59}$$</div>
+<div class="eq">$$\begin{aligned}\mathbf g &= \frac{1}{c}\epsilon_0E_0^2\cos^2(kz-\omega t+\delta)\hat z \\  &= \frac{1}{c}u\,\hat z\end{aligned} \tag{9.60}$$</div>
+<p>Footnote 9: $\mathrm{Re}(\tilde u)\neq u$ for the complex form, so energy densities are always computed from the real fields.</p>
+
+<h3>4. Averages and intensity</h3>
+<p>Because the period (about $10^{-15}$ s) is much shorter than any measurement, the averages over a cycle are used (footnote 10: $\langle\cos^2\rangle=\tfrac12$):</p>
+<div class="eq">$$\langle u\rangle=\frac12\epsilon_0E_0^2\tag{9.61}$$</div>
+<div class="eq">$$\langle\mathbf S\rangle=\frac12c\epsilon_0E_0^2\hat z\tag{9.62}$$</div>
+<div class="eq">$$\langle\mathbf g\rangle=\frac{1}{2c}\epsilon_0E_0^2\hat z\tag{9.63}$$</div>
+<div class="box-res"><span class="lbl res">Result 9.10: intensity</span>
+<div class="eq boxed">$$I\equiv\langle S\rangle=\frac12c\epsilon_0E_0^2\tag{9.64}$$</div></div>
+
+<h3>5. Radiation pressure</h3>
+<div class="eq">$$\begin{aligned}P &= \frac{1}{A}\frac{\Delta p}{\Delta t} \\  &= \frac12\epsilon_0E_0^2 \\  &= \frac{I}{c}\end{aligned} \tag{9.65}$$</div>
+<p>With $\Delta p=\langle g\rangle Ac\,\Delta t$ for a perfect absorber. A perfect reflector gives $2I/c$. The qualitative account with the Lorentz force is incomplete (footnote 11; Problem 9.11).</p>
+<div class="prob"><p>Problem 9.10: sunlight at 1300 W/m$^2$ on an absorber and on a reflector. Problems 9.11–9.13 are outside these notes.</p></div>
+</div>
+<div class="sec-bar">Section 4: electromagnetic waves in matter (Griffiths 9.3)</div>
+<h2>9.3.1–9.3.2 Propagation in linear media; normal incidence</h2>
+<div class="sec-body">
+<div class="bg">Source: <i>book-sources/m3-sec4-linear.html</i> and <i>m3-sec4-oblique.html</i> (Eqs. 9.87–9.89), Griffiths pp. 408–412. Equations 9.66–9.89 in full; footnotes 13–16; Problems 9.14–9.15 described.</div>
+
+<h3>Prerequisites</h3>
+<ul>
+<li>Vacuum Maxwell equations (Eq. 9.40) and plane-wave relations Eq. 9.46–Eq. 9.48.</li>
+<li>Interface conditions (Eq. 7.74, given as 9.75).</li>
+<li>Permittivity and permeability of matter (pre-physics P12, P13).</li>
+</ul>
+
+<h3>1. Maxwell’s equations in linear media</h3>
+<div class="eq">$$\begin{gathered}\text{(i)}\ \nabla\cdot\mathbf D=0 \\ \text{(iii)}\ \nabla\times\mathbf E=-\frac{\partial\mathbf B}{\partial t}\end{gathered}$$</div>
+<div class="eq">$$\begin{gathered}\text{(ii)}\ \nabla\cdot\mathbf B=0 \\ \text{(iv)}\ \nabla\times\mathbf H=\frac{\partial\mathbf D}{\partial t}\end{gathered} \tag{9.66}$$</div>
+<p>Linear constitutive relations: $\mathbf D=\epsilon\mathbf E$, $\mathbf H=\mathbf B/\mu$ Eq. 9.67. For a homogeneous medium:</p>
+<div class="eq">$$\begin{gathered}\text{(i)}\ \nabla\cdot\mathbf E=0 \\ \text{(iii)}\ \nabla\times\mathbf E=-\frac{\partial\mathbf B}{\partial t}\end{gathered}$$</div>
+<div class="eq">$$\begin{gathered}\text{(ii)}\ \nabla\cdot\mathbf B=0 \\ \text{(iv)}\ \nabla\times\mathbf B=\mu\epsilon\frac{\partial\mathbf E}{\partial t}\end{gathered} \tag{9.68}$$</div>
+
+<h3>2. Speed and index</h3>
+<div class="box-recall"><span class="lbl recall">Plus Two recall: refractive index</span>
+<p><b>Recall.</b> From Class 12: $n=c/v$.</p>
+<p><b>Re-derive.</b></p><ol>
+<li>Replacing $\mu_0\epsilon_0$ by $\mu\epsilon$ in the vacuum wave equation gives $v^2=1/\mu\epsilon$.</li>
+<li>Writing $v=c/n$, $n=c/v=\sqrt{\mu\epsilon/\mu_0\epsilon_0}$.</li></ol>
+<p><b>Saved.</b> $v=c/n$ Eq. 9.69.</p></div>
+<div class="eq">$$\begin{gathered}v=\frac{1}{\sqrt{\epsilon\mu}}=\frac{c}{n} \\ n\equiv\sqrt{\frac{\epsilon\mu}{\epsilon_0\mu_0}}\end{gathered} \tag{9.69}$$</div>
+<div class="eq">$$n\approx\sqrt{\epsilon_r}\tag{9.71}$$</div>
+<p>Index of refraction Eq. 9.70 and the dielectric constant $\epsilon_r$ (Eq. 4.34). Since $\epsilon_r>1$, light is slower in matter. Footnote 13: the induced dipole fields combine with the original field into a single wave with a new speed (the Ewald–Oseen theorem); transparency follows. Footnote 14: $\epsilon_r$ may depend on frequency, so static values give the wrong $n$ (water: 8.9 static, 1.33 for visible light).</p>
+
+<h3>3. Energy and flux</h3>
+<div class="eq">$$u=\frac12\left(\epsilon E^2+\frac1\mu B^2\right)\tag{9.72}$$</div>
+<div class="eq">$$\mathbf S=\frac1\mu(\mathbf E\times\mathbf B)\tag{9.73}$$</div>
+<p>Plane wave: $\omega=kv$ Eq. 9.11, $B_0=E_0/v$ (9.48 with $c\to v$), and</p>
+<div class="box-res"><span class="lbl res">Result 9.11: intensity in a medium</span>
+<div class="eq boxed">$$I=\frac12\epsilon vE_0^2\tag{9.74}$$</div></div>
+
+<h3>4. Interface conditions</h3>
+<div class="eq">$$\begin{gathered}\text{(i)}\ \epsilon_1E_1^\perp=\epsilon_2E_2^\perp \\ \text{(iii)}\ \mathbf E_1^\parallel=\mathbf E_2^\parallel\end{gathered}$$</div>
+<div class="eq">$$\begin{gathered}\text{(ii)}\ B_1^\perp=B_2^\perp \\ \text{(iv)}\ \frac{1}{\mu_1}\mathbf B_1^\parallel=\frac{1}{\mu_2}\mathbf B_2^\parallel\end{gathered} \tag{9.75}$$</div>
+
+<h3>5. Normal incidence</h3>
+<p>Interface in the $xy$ plane. Incident, reflected and transmitted waves (Fig. 9.13):</p>
+<div class="eq">$$\begin{gathered}\tilde{\mathbf E}_I=\tilde E_{0I}e^{i(k_1z-\omega t)}\hat x \\ \tilde{\mathbf B}_I=\frac1{v_1}\tilde E_{0I}e^{i(k_1z-\omega t)}\hat y\end{gathered} \tag{9.76}$$</div>
+<figure class="fig"><img src="final/m3-sec4-normal.jpg" alt="m3 sec4 normal"><figcaption>Fig. 9.13 (book): normal incidence on the interface between medium 1 and medium 2.</figcaption></figure>
+<div class="eq">$$\begin{gathered}\tilde{\mathbf E}_R=\tilde E_{0R}e^{i(-k_1z-\omega t)}\hat x \\ \tilde{\mathbf B}_R=-\frac1{v_1}\tilde E_{0R}e^{i(-k_1z-\omega t)}\hat y\end{gathered} \tag{9.77}$$</div>
+<div class="eq">$$\begin{gathered}\tilde{\mathbf E}_T=\tilde E_{0T}e^{i(k_2z-\omega t)}\hat x \\ \tilde{\mathbf B}_T=\frac1{v_2}\tilde E_{0T}e^{i(k_2z-\omega t)}\hat y\end{gathered} \tag{9.78}$$</div>
+<p>Minus sign in $\tilde{\mathbf B}_R$: required by Eq. 9.50. Conditions (iii) and (iv) at $z=0$:</p>
+<div class="eq">$$\tilde E_{0I}+\tilde E_{0R}=\tilde E_{0T}\tag{9.79}$$</div>
+<div class="eq longeq">$$\frac1{\mu_1}\left(\frac1{v_1}\tilde E_{0I}-\frac1{v_1}\tilde E_{0R}\right)=\frac1{\mu_2}\frac1{v_2}\tilde E_{0T}\tag{9.80}$$</div>
+<p>Writing $\tilde E_{0I}-\tilde E_{0R}=\beta\tilde E_{0T}$ Eq. 9.81, $\beta\equiv\mu_1v_1/\mu_2v_2=\mu_1n_2/\mu_2n_1$ Eq. 9.82. Solving:</p>
+<div class="box-res"><span class="lbl res">Result 9.12: normal-incidence amplitudes</span>
+<div class="eq">$$\begin{gathered}\tilde E_{0R}=\left(\frac{1-\beta}{1+\beta}\right)\tilde E_{0I} \\ \tilde E_{0T}=\left(\frac{2}{1+\beta}\right)\tilde E_{0I}\end{gathered} \tag{9.83}$$</div>
+<div class="eq">$$\begin{gathered}\tilde E_{0R}=\left(\frac{v_2-v_1}{v_2+v_1}\right)\tilde E_{0I} \\ \tilde E_{0T}=\left(\frac{2v_2}{v_2+v_1}\right)\tilde E_{0I}\end{gathered} \tag{9.84}$$</div></div>
+<p>Real amplitudes Eq. 9.85, and in terms of indices Eq. 9.86:</p>
+<div class="eq">$$\begin{gathered}E_{0R}=\left|\frac{v_2-v_1}{v_2+v_1}\right|E_{0I} \\ E_{0T}=\left(\frac{2v_2}{v_2+v_1}\right)E_{0I}\end{gathered} \tag{9.85}$$</div>
+<div class="eq">$$\begin{gathered}E_{0R}=\left|\frac{n_1-n_2}{n_1+n_2}\right|E_{0I} \\ E_{0T}=\left(\frac{2n_1}{n_1+n_2}\right)E_{0I}\end{gathered} \tag{9.86}$$</div>
+
+<h3>6. Coefficients</h3>
+<div class="eq">$$R=\left(\frac{n_1-n_2}{n_1+n_2}\right)^2\tag{9.87}$$</div>
+<div class="eq">$$T=\frac{4n_1n_2}{(n_1+n_2)^2}\tag{9.88}$$</div>
+<div class="eq">$$R+T=1\tag{9.89}$$</div>
+<p>Check: air to glass gives $R=0.04$, $T=0.96$. Problems 9.14 and 9.15 are outside these notes.</p>
+</div>
+<h2>9.3.3 Reflection and transmission at oblique incidence</h2>
+<div class="sec-body">
+<div class="bg">Source: <i>book-sources/m3-sec4-oblique.html</i>, Griffiths pp. 411–418. Equations 9.90–9.118 in full; footnotes 17–19. <b>Background</b> (beyond the syllabus list). Problems 9.16–9.19 listed, not worked.</div>
+
+<h3>Prerequisites</h3>
+<ul>
+<li>Normal incidence and the interface conditions (§9.3.2).</li>
+<li>Snell’s law (pre-physics P5); wave vectors and $\mathbf k\cdot\mathbf r$ (pre-math M10).</li>
+</ul>
+
+<h3>1. Waves</h3>
+<div class="eq">$$\begin{gathered}\tilde{\mathbf E}_I=\tilde{\mathbf E}_{0I}e^{i(\mathbf k_I\cdot\mathbf r-\omega t)} \\ \tilde{\mathbf B}_I=\frac{1}{v_1}(\hat k_I\times\tilde{\mathbf E}_I)\end{gathered} \tag{9.90}$$</div>
+<div class="eq">$$\begin{gathered}\tilde{\mathbf E}_R=\tilde{\mathbf E}_{0R}e^{i(\mathbf k_R\cdot\mathbf r-\omega t)} \\ \tilde{\mathbf B}_R=\frac{1}{v_1}(\hat k_R\times\tilde{\mathbf E}_R)\end{gathered} \tag{9.91}$$</div>
+<figure class="fig"><img src="final/m3-sec4-oblique.jpg" alt="m3 sec4 oblique"><figcaption>Fig. 9.14 (book): oblique incidence; wave vectors k_I, k_R, k_T and angles θ_I, θ_R, θ_T to the normal.</figcaption></figure>
+<div class="eq">$$\begin{gathered}\tilde{\mathbf E}_T=\tilde{\mathbf E}_{0T}e^{i(\mathbf k_T\cdot\mathbf r-\omega t)} \\ \tilde{\mathbf B}_T=\frac{1}{v_2}(\hat k_T\times\tilde{\mathbf E}_T)\end{gathered} \tag{9.92}$$</div>
+<p>Common frequency $\omega$ (footnote 17: linear media only). Wave numbers:</p>
+<div class="eq">$$\begin{gathered}k_Iv_1=k_Rv_1=k_Tv_2=\omega \\ k_I=k_R=\frac{v_2}{v_1}k_T=\frac{n_1}{n_2}k_T\end{gathered} \tag{9.93}$$</div>
+
+<h3>2. Matching exponentials</h3>
+<p>The matching condition Eq. 9.75 must hold for all $x$, $y$ and $t$. So the exponential factors must agree on the plane $z=0$:</p>
+<div class="eq">$$\begin{gathered}\mathbf k_I\cdot\mathbf r=\mathbf k_R\cdot\mathbf r=\mathbf k_T\cdot\mathbf r \\ \text{when } z=0\end{gathered} \tag{9.95}$$</div>
+<div class="eq longeq">$$\begin{aligned}x(k_I)_x+y(k_I)_y&=x(k_R)_x+y(k_R)_y\\ &=x(k_T)_x+y(k_T)_y\end{aligned}\tag{9.96}$$</div>
+<p>Separating the $x$ and $y$ coefficients:</p>
+<div class="eq">$$(k_I)_y=(k_R)_y=(k_T)_y\tag{9.97}$$</div>
+<div class="eq">$$(k_I)_x=(k_R)_x=(k_T)_x\tag{9.98}$$</div>
+
+<h3>3. Laws of geometrical optics</h3>
+<div class="box-res"><span class="lbl res">Result 9.13: the three laws</span>
+<p><b>First law.</b> The three wave vectors and the normal lie in one plane, the plane of incidence.</p>
+<p><b>Second law.</b> From Eq. 9.98, $k_I\sin\theta_I=k_R\sin\theta_R=k_T\sin\theta_T$ Eq. 9.99, so</p>
+<div class="eq">$$\theta_I=\theta_R\tag{9.100}$$</div>
+<p><b>Third law (Snell).</b></p>
+<div class="eq">$$\frac{\sin\theta_T}{\sin\theta_I}=\frac{n_1}{n_2}\tag{9.101}$$</div></div>
+<p>Only the general form of the boundary condition Eq. 9.94 was used. So these laws hold for any wave that crosses an interface, including water and sound waves.</p>
+
+<h3>4. Amplitude conditions</h3>
+<div class="eq">$$\begin{gathered}\epsilon_1(\tilde{\mathbf E}_{0I}+\tilde{\mathbf E}_{0R})_z=\epsilon_2(\tilde{\mathbf E}_{0T})_z \\ (\tilde{\mathbf B}_{0I}+\tilde{\mathbf B}_{0R})_z=(\tilde{\mathbf B}_{0T})_z\end{gathered} \tag{9.102}$$</div>
+<p>together with the $x$- and $y$-components of $(\tilde{\mathbf E}_{0I}+\tilde{\mathbf E}_{0R})$ and of $\frac1{\mu}(\tilde{\mathbf B}_{0I}+\tilde{\mathbf B}_{0R})$ (9.102, pairs of equations).</p>
+
+<h3>5. Polarization parallel to the plane of incidence</h3>
+<div class="eq longeq">$$\epsilon_1(-\tilde E_{0I}\sin\theta_I+\tilde E_{0R}\sin\theta_R)=\epsilon_2(-\tilde E_{0T}\sin\theta_T)\tag{9.103}$$</div>
+<div class="eq longeq">$$\tilde E_{0I}\cos\theta_I+\tilde E_{0R}\cos\theta_R=\tilde E_{0T}\cos\theta_T\tag{9.104}$$</div>
+<div class="eq longeq">$$\frac{1}{\mu_1v_1}(\tilde E_{0I}-\tilde E_{0R})=\frac{1}{\mu_2v_2}\tilde E_{0T}\tag{9.105}$$</div>
+<p>Using the laws above, Eq. 9.103 and Eq. 9.105 give</p>
+<div class="eq">$$\tilde E_{0I}-\tilde E_{0R}=\beta\tilde E_{0T}\tag{9.106}$$</div>
+<div class="eq">$$\beta\equiv\frac{\mu_1v_1}{\mu_2v_2}=\frac{\mu_1n_2}{\mu_2n_1}\tag{9.107}$$</div>
+<p>and Eq. 9.104 gives</p>
+<div class="eq">$$\tilde E_{0I}+\tilde E_{0R}=\alpha\tilde E_{0T}\tag{9.108}$$</div>
+<div class="eq">$$\alpha\equiv\frac{\cos\theta_T}{\cos\theta_I}\tag{9.109}$$</div>
+<div class="box-res"><span class="lbl res">Result 9.14: Fresnel equations, parallel polarization</span>
+<div class="eq">$$\begin{gathered}\tilde E_{0R}=\left(\frac{\alpha-\beta}{\alpha+\beta}\right)\tilde E_{0I} \\ \tilde E_{0T}=\left(\frac{2}{\alpha+\beta}\right)\tilde E_{0I}\end{gathered} \tag{9.110}$$</div></div>
+<div class="eq">$$\begin{aligned}\alpha &= \frac{\sqrt{1-\sin^2\theta_T}}{\cos\theta_I} \\  &= \frac{\sqrt{1-[(n_1/n_2)\sin\theta_I]^2}}{\cos\theta_I}\end{aligned} \tag{9.111}$$</div>
+<p>Normal incidence gives $\alpha=1$ and recovers Eq. 9.83. Grazing incidence gives total reflection.</p>
+
+<h3>6. Brewster’s angle</h3>
+<p>The reflected amplitude vanishes when $\alpha=\beta$, which gives</p>
+<div class="eq">$$\sin^2\theta_B=\frac{1-\beta^2}{(n_1/n_2)^2-\beta^2}\tag{9.112}$$</div>
+<p>For $\mu_1\approx\mu_2$: $\tan\theta_B\approx n_2/n_1$ Eq. 9.113. The reflected beam is then polarized perpendicular to the plane of incidence (footnote 19).</p>
+
+<h3>7. Intensities and coefficients</h3>
+<div class="eq">$$I_I=\frac12\epsilon_1v_1E_{0I}^2\cos\theta_I\tag{9.114}$$</div>
+<div class="eq">$$\begin{gathered}I_R=\frac12\epsilon_1v_1E_{0R}^2\cos\theta_R \\ I_T=\frac12\epsilon_2v_2E_{0T}^2\cos\theta_T\end{gathered} \tag{9.115}$$</div>
+<div class="box-res"><span class="lbl res">Result 9.15: coefficients (parallel polarization)</span>
+<div class="eq">$$R=\left(\frac{\alpha-\beta}{\alpha+\beta}\right)^2\tag{9.116}$$</div>
+<div class="eq">$$T=\alpha\beta\left(\frac{2}{\alpha+\beta}\right)^2\tag{9.117}$$</div></div>
+<div class="eq">$$I_I=I_T+I_R\tag{9.118}$$</div>
+<p>Hence $R+T=1$. $R$ vanishes and $T$ reaches 1 at Brewster’s angle.</p>
+<p>Problems 9.16–9.19 are outside these notes.</p>
+</div>
+<div class="sec-bar">Section 5, background beyond the syllabus list: absorption, dispersion and guided waves (Griffiths 9.4, 9.5)</div>
+<h2>9.4 Absorption and dispersion (background)</h2>
+<div class="sec-body">
+<div class="bg">Source: <i>book-sources/m3-sec4-oblique.html</i> (p. 418), <i>m3-bg-absorption.html</i>, Griffiths pp. 418–430. <b>Background</b>, beyond the syllabus list. Equations 9.119–9.176 in full. Problems 9.20–9.27 listed, not worked.</div>
+
+<h3>Prerequisites</h3>
+<ul>
+<li>Complex wave numbers and the real part (§9.1.2).</li>
+<li>Ohm’s law (Module 1 and Plus Two current electricity).</li>
+</ul>
+
+<h3>1. Conductors (§9.4.1)</h3>
+<div class="eq">$$\mathbf J_f=\sigma\mathbf E\tag{9.119}$$</div>
+<div class="eq">$$\begin{gathered}\text{(i)}\ \nabla\cdot\mathbf E=\frac{1}{\epsilon}\rho_f \\ \text{(iii)}\ \nabla\times\mathbf E=-\frac{\partial\mathbf B}{\partial t}\end{gathered}$$</div>
+<div class="eq">$$\begin{gathered}\text{(ii)}\ \nabla\cdot\mathbf B=0 \\ \text{(iv)}\ \nabla\times\mathbf B=\mu\sigma\mathbf E+\mu\epsilon\frac{\partial\mathbf E}{\partial t}\end{gathered} \tag{9.120}$$</div>
+<p>Continuity of free charge gives $\nabla\cdot\mathbf J_f=-\partial\rho_f/\partial t$ Eq. 9.121, and with Ohm’s and Gauss’s laws</p>
+<div class="eq">$$\rho_f(t)=e^{-(\sigma/\epsilon)t}\rho_f(0)\tag{9.122}$$</div>
+<p>so free charge relaxes to zero in $\tau=\epsilon/\sigma$ (footnote 20). Then $\rho_f=0$ and</p>
+<div class="eq">$$\begin{gathered}\text{(i)}\ \nabla\cdot\mathbf E=0 \\ \text{(iii)}\ \nabla\times\mathbf E=-\frac{\partial\mathbf B}{\partial t}\end{gathered}$$</div>
+<div class="eq">$$\begin{gathered}\text{(ii)}\ \nabla\cdot\mathbf B=0 \\ \text{(iv)}\ \nabla\times\mathbf B=\mu\epsilon\frac{\partial\mathbf E}{\partial t}+\mu\sigma\mathbf E\end{gathered} \tag{9.123}$$</div>
+<div class="box-res"><span class="lbl res">Result 9.16: modified wave equations</span>
+<div class="eq">$$\begin{gathered}\nabla^2\mathbf E=\mu\epsilon\frac{\partial^2\mathbf E}{\partial t^2}+\mu\sigma\frac{\partial\mathbf E}{\partial t} \\ \nabla^2\mathbf B=\mu\epsilon\frac{\partial^2\mathbf B}{\partial t^2}+\mu\sigma\frac{\partial\mathbf B}{\partial t}\end{gathered} \tag{9.124}$$</div></div>
+<p>Plane-wave solutions $\tilde{\mathbf E}=\tilde{\mathbf E}_0e^{i(\tilde kz-\omega t)}$ Eq. 9.125 require $\tilde k^2=\mu\epsilon\omega^2+i\mu\sigma\omega$ Eq. 9.126. With $\tilde k=k+i\kappa$ Eq. 9.127:</p>
+<div class="eq">$$\begin{gathered}k\equiv\omega\sqrt{\frac{\epsilon\mu}{2}}\left[\sqrt{1+\left(\frac{\sigma}{\epsilon\omega}\right)^2}+1\right]^{1/2} \\ \kappa\equiv\omega\sqrt{\frac{\epsilon\mu}{2}}\left[\sqrt{1+\left(\frac{\sigma}{\epsilon\omega}\right)^2}-1\right]^{1/2}\end{gathered} \tag{9.128}$$</div>
+<p>Attenuated fields Eq. 9.129, skin depth $d=1/\kappa$ Eq. 9.130, and</p>
+<div class="eq">$$\begin{gathered}\lambda=\frac{2\pi}{k} \\ v=\frac{\omega}{k} \\ n=\frac{ck}{\omega}\end{gathered} \tag{9.131}$$</div>
+<p>With $\mathbf E$ along $x$ Eq. 9.132, $\tilde{\mathbf B}=(\tilde k/\omega)\tilde E_0e^{-\kappa z}e^{i(kz-\omega t)}\hat y$ Eq. 9.133. Polar form $\tilde k=Ke^{i\phi}$ Eq. 9.134, with</p>
+<div class="eq longeq">$$K\equiv|\tilde k|=\omega\sqrt{\epsilon\mu\sqrt{1+\left(\frac{\sigma}{\epsilon\omega}\right)^2}} \tag{9.135}$$</div>
+<div class="eq">$$\phi\equiv\tan^{-1}(\kappa/k)\tag{9.136}$$</div>
+<p>Hence the complex amplitudes are related by $B_0e^{i\delta_B}=(Ke^{i\phi}/\omega)E_0e^{i\delta_E}$ Eq. 9.137, and the phase difference and amplitude ratio are</p>
+<div class="eq">$$\delta_B-\delta_E=\phi\tag{9.138}$$</div>
+<div class="eq">$$\begin{aligned}\frac{B_0}{E_0} &= \frac{K}{\omega} \\  &= \sqrt{\epsilon\mu\sqrt{1+\left(\frac{\sigma}{\epsilon\omega}\right)^2}}\end{aligned} \tag{9.139}$$</div>
+<div class="box-res"><span class="lbl res">Result 9.17: real fields in a conductor</span>
+<div class="eq">$$\begin{gathered}\mathbf E(z,t)=E_0e^{-\kappa z}\cos(kz-\omega t+\delta_E)\hat x \\ \mathbf B(z,t)=B_0e^{-\kappa z}\cos(kz-\omega t+\delta_E+\phi)\hat y\end{gathered} \tag{9.140}$$</div></div>
+
+<h3>2. Reflection at a conducting surface (§9.4.2)</h3>
+<div class="eq">$$\begin{gathered}\text{(i)}\ \epsilon_1E_1^\perp-\epsilon_2E_2^\perp=\sigma_f \\ \text{(iii)}\ \mathbf E_1^\parallel-\mathbf E_2^\parallel=0\end{gathered}$$</div>
+<div class="eq">$$\begin{gathered}\text{(ii)}\ B_1^\perp-B_2^\perp=0 \\ \text{(iv)}\ \frac{1}{\mu_1}\mathbf B_1^\parallel-\frac{1}{\mu_2}\mathbf B_2^\parallel=\mathbf K_f\times\hat{\mathbf n}\end{gathered} \tag{9.141}$$</div>
+<div class="eq">$$\begin{gathered}\tilde{\mathbf E}_I=\tilde E_{0I}e^{i(k_1z-\omega t)}\hat x \\ \tilde{\mathbf B}_I=\frac{1}{v_1}\tilde E_{0I}e^{i(k_1z-\omega t)}\hat y\end{gathered} \tag{9.142}$$</div>
+<div class="eq">$$\begin{gathered}\tilde{\mathbf E}_R=\tilde E_{0R}e^{i(-k_1z-\omega t)}\hat x \\ \tilde{\mathbf B}_R=-\frac{1}{v_1}\tilde E_{0R}e^{i(-k_1z-\omega t)}\hat y\end{gathered} \tag{9.143}$$</div>
+<div class="eq">$$\begin{gathered}\tilde{\mathbf E}_T=\tilde E_{0T}e^{i(\tilde k_2z-\omega t)}\hat x \\ \tilde{\mathbf B}_T=\frac{\tilde k_2}{\omega}\tilde E_{0T}e^{i(\tilde k_2z-\omega t)}\hat y\end{gathered} \tag{9.144}$$</div>
+<div class="eq">$$\tilde E_{0I}+\tilde E_{0R}=\tilde E_{0T}\tag{9.145}$$</div>
+<div class="eq longeq">$$\frac{1}{\mu_1v_1}(\tilde E_{0I}-\tilde E_{0R})-\frac{\tilde k_2}{\mu_2\omega}\tilde E_{0T}=0\tag{9.146}$$</div>
+<div class="eq">$$\begin{gathered}\tilde E_{0I}-\tilde E_{0R}=\tilde\beta\tilde E_{0T} \\ \tilde\beta\equiv\frac{\mu_1v_1}{\mu_2\omega}\tilde k_2\end{gathered} \tag{9.147}$$</div>
+<div class="eq">$$\begin{gathered}\tilde E_{0R}=\left(\frac{1-\tilde\beta}{1+\tilde\beta}\right)\tilde E_{0I} \\ \tilde E_{0T}=\left(\frac{2}{1+\tilde\beta}\right)\tilde E_{0I}\end{gathered} \tag{9.149}$$</div>
+<p>Here $\tilde\beta$ is defined by Eq. 9.148. For a perfect conductor, $\tilde E_{0R}=-\tilde E_{0I}$ and $\tilde E_{0T}=0$ Eq. 9.150. Problem 9.23 is outside these notes.</p>
+
+<h3>3. Dispersion (§9.4.3)</h3>
+<div class="eq">$$v=\frac{\omega}{k}\tag{9.151}$$</div>
+<div class="eq">$$v_g=\frac{d\omega}{dk}\tag{9.152}$$</div>
+<p>Model: spring force $-m\omega_0^2x$ Eq. 9.153, damping $-m\gamma\,dx/dt$ Eq. 9.154, driving $qE_0\cos\omega t$ Eq. 9.155, equation of motion Eq. 9.156. Complex steady state Eq. 9.157 with $\tilde x=\tilde x_0e^{-i\omega t}$ Eq. 9.158 gives</p>
+<div class="eq">$$\tilde x_0=\frac{q/m}{\omega_0^2-\omega^2-i\gamma\omega}E_0\tag{9.159}$$</div>
+<div class="eq">$$\begin{aligned}\tilde p(t) &= q\tilde x(t) \\  &= \frac{q^2/m}{\omega_0^2-\omega^2-i\gamma\omega}E_0e^{-i\omega t}\end{aligned} \tag{9.160}$$</div>
+<p>Summing over electrons of each type with $N$ molecules per unit volume:</p>
+<div class="eq longeq">$$\tilde{\mathbf P}=\frac{Nq^2}{m}\left(\sum_j\frac{f_j}{\omega_j^2-\omega^2-i\gamma_j\omega}\right)\tilde{\mathbf E}\tag{9.161}$$</div>
+<div class="eq">$$\tilde{\mathbf P}=\epsilon_0\tilde\chi_e\tilde{\mathbf E}\tag{9.162}$$</div>
+<div class="eq">$$\begin{aligned}\tilde\epsilon_r &= \frac{\tilde\epsilon}{\epsilon_0} \\  &= 1 \\  &+\frac{Nq^2}{m\epsilon_0}\sum_j\frac{f_j}{\omega_j^2-\omega^2-i\gamma_j\omega}\end{aligned} \tag{9.163}$$</div>
+<div class="eq longeq">$$\nabla^2\tilde{\mathbf E}=\tilde\epsilon\mu_0\frac{\partial^2\tilde{\mathbf E}}{\partial t^2}\tag{9.164}$$</div>
+<div class="eq">$$\tilde{\mathbf E}(z,t)=\tilde{\mathbf E}_0e^{i(\tilde kz-\omega t)}\tag{9.165}$$</div>
+<div class="eq">$$\tilde k\equiv\sqrt{\tilde\epsilon\mu_0}\,\omega\tag{9.166}$$</div>
+<div class="eq">$$\tilde k=k+i\kappa\tag{9.167}$$</div>
+<div class="eq longeq">$$\tilde{\mathbf E}(z,t)=\tilde{\mathbf E}_0e^{-\kappa z}e^{i(kz-\omega t)}\tag{9.168}$$</div>
+<div class="eq">$$\alpha\equiv2\kappa\tag{9.169}$$</div>
+<div class="eq">$$n=\frac{ck}{\omega}\tag{9.170}$$</div>
+<p>For gases, $\sqrt{1+\varepsilon}\approx1+\tfrac12\varepsilon$ gives</p>
+<div class="eq longeq">$$\tilde k=\frac{\omega}{c}\sqrt{\tilde\epsilon_r}\approx\frac{\omega}{c}\left[1+\frac{Nq^2}{2m\epsilon_0}\sum_j\frac{f_j}{\omega_j^2-\omega^2-i\gamma_j\omega}\right]\tag{9.171}$$</div>
+<div class="eq">$$\begin{aligned}&n\approx1 \\  &+\frac{Nq^2}{2m\epsilon_0}\sum_j\frac{f_j(\omega_j^2-\omega^2)}{(\omega_j^2-\omega^2)^2+\gamma_j^2\omega^2}\end{aligned} \tag{9.172}$$</div>
+<div class="eq longeq">$$\alpha\approx\frac{Nq^2\omega^2}{m\epsilon_0c}\sum_j\frac{f_j\gamma_j}{(\omega_j^2-\omega^2)^2+\gamma_j^2\omega^2}\tag{9.173}$$</div>
+<p>Normal dispersion (index rising with $\omega$) holds away from resonance; anomalous dispersion occurs near each resonance (Fig. 9.22). With damping neglected and $\omega\lt \omega_j$:</p>
+<div class="eq">$$n=1+\frac{Nq^2}{2m\epsilon_0}\sum_j\frac{f_j}{\omega_j^2-\omega^2}\tag{9.174}$$</div>
+<div class="eq">$$\begin{aligned}n &= 1 \\  &+\left(\frac{Nq^2}{2m\epsilon_0}\sum_j\frac{f_j}{\omega_j^2}\right) \\  &+\omega^2\left(\frac{Nq^2}{2m\epsilon_0}\sum_j\frac{f_j}{\omega_j^4}\right)\end{aligned} \tag{9.175}$$</div>
+<div class="box-res"><span class="lbl res">Result 9.18: Cauchy’s formula</span>
+<div class="eq">$$n=1+A\left(1+\frac{B}{\lambda^2}\right)\tag{9.176}$$</div></div>
+<p>$A$ is the coefficient of refraction and $B$ the coefficient of dispersion. Problems 9.24–9.27 are outside these notes.</p>
+</div>
+<h2>9.5 Guided waves (background)</h2>
+<div class="sec-body">
+<div class="bg">Source: <i>book-sources/m3-bg-guided.html</i> (and p. 430 in <i>m3-bg-absorption.html</i>), Griffiths pp. 430–441. <b>Background</b>, beyond the syllabus list. Equations 9.177–9.208 in full. Problems 9.28–9.44 listed, not worked.</div>
+
+<h3>Prerequisites</h3>
+<ul>
+<li>Maxwell’s equations in vacuum (Eq. 9.40).</li>
+<li>Vector identities for the divergence and curl (pre-math M13).</li>
+<li>Separation of variables in a partial differential equation.</li>
+</ul>
+
+<h3>1. Hollow wave guides (§9.5.1)</h3>
+<p>Perfect conductor walls. At the inner surface:</p>
+<div class="eq">$$\text{(i)}\ \mathbf E^\parallel=\mathbf 0,\qquad\text{(ii)}\ B^\perp=0\tag{9.177}$$</div>
+<p>Monochromatic fields travelling down the guide, with real $k$ (footnote 27 on surface charges):</p>
+<div class="eq">$$\begin{gathered}\text{(i)}\ \tilde{\mathbf E}(x,y,z,t)=\tilde{\mathbf E}_0(x,y)e^{i(kz-\omega t)} \\ \text{(ii)}\ \tilde{\mathbf B}(x,y,z,t)=\tilde{\mathbf B}_0(x,y)e^{i(kz-\omega t)}\end{gathered} \tag{9.178}$$</div>
+<p>Maxwell’s equations in the interior:</p>
+<div class="eq">$$\begin{gathered}\text{(i)}\ \nabla\cdot\mathbf E=0 \\ \text{(iii)}\ \nabla\times\mathbf E=-\frac{\partial\mathbf B}{\partial t}\end{gathered}$$</div>
+<div class="eq">$$\begin{gathered}\text{(ii)}\ \nabla\cdot\mathbf B=0 \\ \text{(iv)}\ \nabla\times\mathbf B=\frac{1}{c^2}\frac{\partial\mathbf E}{\partial t}\end{gathered} \tag{9.179}$$</div>
+<p>Confined waves are not transverse in general. The longitudinal components are needed to satisfy (9.177):</p>
+<div class="eq">$$\begin{gathered}\tilde{\mathbf E}_0=E_x\hat x+E_y\hat y+E_z\hat z \\ \tilde{\mathbf B}_0=B_x\hat x+B_y\hat y+B_z\hat z\end{gathered} \tag{9.180}$$</div>
+<p>Substituting into (iii) and (iv) gives six relations (9.181):</p>
+<div class="eq">$$\begin{gathered}\text{(i)}\ \frac{\partial E_y}{\partial x}-\frac{\partial E_x}{\partial y}=i\omega B_z \\ \text{(iv)}\ \frac{\partial B_y}{\partial x}-\frac{\partial B_x}{\partial y}=-\frac{i\omega}{c^2}E_z\end{gathered}$$</div>
+<div class="eq">$$\begin{gathered}\text{(ii)}\ \frac{\partial E_z}{\partial y}-ikE_y=i\omega B_x \\ \text{(v)}\ \frac{\partial B_z}{\partial y}-ikB_y=-\frac{i\omega}{c^2}E_x\end{gathered}$$</div>
+<div class="eq">$$\begin{gathered}\text{(iii)}\ ikE_x-\frac{\partial E_z}{\partial x}=i\omega B_y \\ \text{(vi)}\ ikB_x-\frac{\partial B_z}{\partial x}=-\frac{i\omega}{c^2}E_y\end{gathered} \tag{9.181}$$</div>
+<p>Four of these solve for the transverse components (9.182):</p>
+<div class="eq">$$\begin{gathered}\text{(i)}\ E_x=\frac{i}{(\omega/c)^2-k^2}\left(k\frac{\partial E_z}{\partial x}+\omega\frac{\partial B_z}{\partial y}\right) \\ \text{(ii)}\ E_y=\frac{i}{(\omega/c)^2-k^2}\left(k\frac{\partial E_z}{\partial y}-\omega\frac{\partial B_z}{\partial x}\right)\end{gathered}$$</div>
+<div class="eq longeq">$$\text{(iii)}\ B_x=\frac{i}{(\omega/c)^2-k^2}\left(k\frac{\partial B_z}{\partial x}-\frac{\omega}{c^2}\frac{\partial E_z}{\partial y}\right)$$</div>
+<div class="eq longeq">$$\text{(iv)}\ B_y=\frac{i}{(\omega/c)^2-k^2}\left(k\frac{\partial B_z}{\partial y}+\frac{\omega}{c^2}\frac{\partial E_z}{\partial x}\right)\tag{9.182}$$</div>
+<p>So only $E_z$ and $B_z$ need solving. They satisfy (9.183):</p>
+<div class="eq">$$\begin{gathered}\text{(i)}\ \left[\frac{\partial^2}{\partial x^2}+\frac{\partial^2}{\partial y^2}+(\omega/c)^2-k^2\right]E_z=0 \\ \text{(ii)}\ \left[\frac{\partial^2}{\partial x^2}+\frac{\partial^2}{\partial y^2}+(\omega/c)^2-k^2\right]B_z=0\end{gathered} \tag{9.183}$$</div>
+<p>$E_z=0$: TE. $B_z=0$: TM. Both zero: TEM, which a hollow guide cannot carry (footnote 29). Eq. 9.181 is indeterminate for TEM waves, where $k=\omega/c$.</p>
+
+<h3>2. TE modes of a rectangular guide (§9.5.2)</h3>
+<p>Separation of variables, $B_z=X(x)Y(y)$, gives (9.184) and (9.185):</p>
+<div class="eq">$$\begin{gathered}\text{(i)}\ \frac{1}{X}\frac{d^2X}{dx^2}=-k_x^2 \\ \text{(ii)}\ \frac{1}{Y}\frac{d^2Y}{dy^2}=-k_y^2\end{gathered} \tag{9.184}$$</div>
+<div class="eq">$$-k_x^2-k_y^2+(\omega/c)^2-k^2=0\tag{9.185}$$</div>
+<div class="box-res"><span class="lbl res">Result 9.19: allowed transverse wave numbers</span>
+<div class="eq">$$k_x=\frac{m\pi}{a}\tag{9.186}$$</div>
+<div class="eq">$$k_y=\frac{n\pi}{b}\tag{9.187}$$</div></div>
+<div class="eq">$$B_z=B_0\cos(m\pi x/a)\cos(n\pi y/b)\tag{9.188}$$</div>
+<p>This is the TE$_{mn}$ mode (with $a\ge b$, and at least one of $m$, $n$ nonzero). From (9.185):</p>
+<div class="eq">$$k=\sqrt{(\omega/c)^2-\pi^2\left[(m/a)^2+(n/b)^2\right]}\tag{9.189}$$</div>
+<p>Cutoff: if $\omega\lt \omega_{mn}$ the fields are attenuated (9.190):</p>
+<div class="eq">$$\omega_{mn}\equiv c\pi\sqrt{(m/a)^2+(n/b)^2}\tag{9.190}$$</div>
+<p>The lowest cutoff is</p>
+<div class="eq">$$\omega_{10}=c\pi/a\tag{9.191}$$</div>
+<p>The wave number in terms of cutoff is (9.192):</p>
+<div class="eq">$$k=\frac1c\sqrt{\omega^2-\omega_{mn}^2}\tag{9.192}$$</div>
+<div class="eq">$$v=\frac{\omega}{k}=\frac{c}{\sqrt{1-(\omega_{mn}/\omega)^2}}\tag{9.193}$$</div>
+<div class="eq">$$v_g=\frac{1}{dk/d\omega}=c\sqrt{1-(\omega_{mn}/\omega)^2}\lt c\tag{9.194}$$</div>
+<p>The phase velocity $v$ exceeds $c$, but energy moves at $v_g\lt c$ (Prob. 9.31). Figure 9.25 (book) shows the same result as a plane wave bouncing between the walls at angle $\theta$, with $\mathbf k'=(\pi m/a)\hat x+(\pi n/b)\hat y+k\hat z$ and $\cos\theta=k/|\mathbf k'|$.</p>
+
+<h3>3. The coaxial line (§9.5.3)</h3>
+<p>The central wire and the sheath allow $E_z=B_z=0$. Then (9.181) gives</p>
+<div class="eq">$$k=\frac{\omega}{c}\tag{9.195}$$</div>
+<div class="eq">$$cB_y=E_x,\qquad cB_x=-E_y\tag{9.196}$$</div>
+<p>and the transverse fields obey the two-dimensional electrostatic and magnetostatic equations (9.197):</p>
+<div class="eq">$$\begin{gathered}\frac{\partial E_x}{\partial x}+\frac{\partial E_y}{\partial y}=0 \\ \frac{\partial E_y}{\partial x}-\frac{\partial E_x}{\partial y}=0 \\ \frac{\partial B_x}{\partial x}+\frac{\partial B_y}{\partial y}=0 \\ \frac{\partial B_y}{\partial x}-\frac{\partial B_x}{\partial y}=0\end{gathered} \tag{9.197}$$</div>
+<p>The solution with cylindrical symmetry (9.198) is borrowed from the line charge and the straight current:</p>
+<div class="eq">$$\begin{gathered}\mathbf E_0(s,\phi)=\frac{A}{s}\hat s \\ \mathbf B_0(s,\phi)=\frac{A}{cs}\hat\phi\end{gathered} \tag{9.198}$$</div>
+<div class="eq">$$\begin{gathered}\mathbf E(s,\phi,z,t)=\frac{A\cos(kz-\omega t)}{s}\hat s \\ \mathbf B(s,\phi,z,t)=\frac{A\cos(kz-\omega t)}{cs}\hat\phi\end{gathered} \tag{9.199}$$</div>
+
+<h3>4. Chapter-end problems used in the notes</h3>
+<p>The equations in the “More Problems on Chapter 9” section are given in the book source. Those used in these notes are: the Fourier inversion theorem (Prob. 9.34, Eq. 9.200); the slab transmission coefficient (Prob. 9.38, Eq. 9.201); the critical angle (Prob. 9.41, Eq. 9.202); the evanescent wave (Prob. 9.41, Eqs. 9.203–9.205); the resonant cavity (Prob. 9.42, Eq. 9.206); and optical tweezers (Prob. 9.44, Eqs. 9.207–9.208). Problems are not worked here.</p>
+<div class="eq">$$\begin{aligned}\tilde\phi(z) &= \int_{-\infty}^{\infty}\tilde\Phi(k)e^{ikz}\,dk\quad\Leftrightarrow\quad\tilde\Phi(k) \\  &= \frac{1}{2\pi}\int_{-\infty}^{\infty}\tilde\phi(z)e^{-ikz}\,dz\end{aligned} \tag{9.200}$$</div>
+<div class="eq longeq">$$\begin{aligned}T^{-1}&=\frac{1}{4n_1n_3}\Big[(n_1+n_3)^2\\ &\quad+\frac{(n_1^2-n_2^2)(n_2^2-n_3^2)}{n_2^2}\sin^2\!\Big(\frac{n_2\omega d}{c}\Big)\Big]\end{aligned}\tag{9.201}$$</div>
+<div class="eq">$$\theta_c\equiv\sin^{-1}(n_2/n_1)\tag{9.202}$$</div>
+<div class="eq longeq">$$\tilde{\mathbf E}_T(\mathbf r,t)=\tilde{\mathbf E}_{0T}e^{-\kappa z}e^{i(kx-\omega t)}\tag{9.203}$$</div>
+<div class="eq">$$\begin{gathered}\kappa\equiv\frac{\omega}{c}\sqrt{(n_1\sin\theta_I)^2-n_2^2} \\ \text{and} \\ k\equiv\frac{\omega n_1}{c}\sin\theta_I\end{gathered} \tag{9.204}$$</div>
+<div class="eq longeq">$$\begin{aligned}\mathbf E(\mathbf r,t)&=E_0e^{-\kappa z}\cos(kx-\omega t)\hat y,\\ \mathbf B(\mathbf r,t)&=\frac{E_0}{\omega}e^{-\kappa z}\big[\kappa\sin(kx-\omega t)\hat x+k\cos(kx-\omega t)\hat z\big]\end{aligned}\tag{9.205}$$</div>
+<div class="eq">$$\omega_{lmn}=c\pi\sqrt{(l/d)^2+(m/a)^2+(n/b)^2}\tag{9.206}$$</div>
+<div class="eq longeq">$$\mathbf F=\alpha\left[\frac12\nabla E^2+\frac{\partial}{\partial t}(\mathbf E\times\mathbf B)\right]\tag{9.207}$$</div>
+<div class="eq">$$\mathbf F=\frac{\alpha}{2}\nabla E^2\tag{9.208}$$</div>
+</div>
+</main>
+</body>
+</html>

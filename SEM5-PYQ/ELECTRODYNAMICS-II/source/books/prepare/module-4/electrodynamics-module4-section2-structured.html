@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Structured notes: Section 2: charge in C-R and L-C circuits; leakage (Murugeshan 12.3 to 12.5)</title>
+<script>
+window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+  @page { size: A4; margin: 16mm; }
+  :root { --ink:#1B2631; --muted:#5D6D7E; --rule:#AEB6BF; --paper:#FFFFFF; --bound:#B9770E; --res:#117A65; --eq:#1F618D; --idb:#A04000; --hi:#FDF2E9; }
+  body { margin:0; background:var(--paper); color:var(--ink); font-family:"Times New Roman", Times, "Liberation Serif", serif; font-size:12.5pt; line-height:1.5; }
+  main { max-width:760px; margin:0 auto; padding:14px; }
+  h1 { font-size:20pt; margin:0 0 4px; color:var(--eq); }
+  .meta { color:var(--muted); font-size:10.5pt; margin-bottom:10px; }
+  h2 { font-size:14pt; margin:22px 0 6px; color:var(--eq); border-bottom:2px solid var(--eq); padding-bottom:2px; break-after:avoid; }
+  h3 { font-size:12.5pt; margin:14px 0 4px; color:var(--res); break-after:avoid; }
+  p, li { margin:5px 0; }
+  ul { margin:4px 0 4px 22px; padding:0; }
+  .eq { margin:8px 0; text-align:center; }
+  .box-eq { background:#EAF2F8; border-left:4px solid var(--eq); padding:6px 10px; margin:8px 0; }
+  .box-res { background:#E9F7EF; border-left:4px solid var(--res); padding:6px 10px; margin:8px 0; }
+  .box-id { background:var(--hi); border-left:4px solid var(--idb); padding:6px 10px; margin:8px 0; }
+  .lbl { font-weight:bold; font-size:10.5pt; text-transform:uppercase; letter-spacing:.3px; }
+  .lbl.res { color:var(--res); } .lbl.eq { color:var(--eq); } .lbl.id { color:var(--idb); }
+  .note { font-size:11.5pt; color:var(--muted); margin:4px 0; }
+  .bg { font-size:10.5pt; color:var(--muted); font-style:italic; }
+  .bound { color:var(--bound); font-weight:bold; }
+  .fig { margin:12px 0; text-align:center; break-inside:avoid; }
+  .fig svg { display:block; width:100%; max-width:320px; height:auto; margin:0 auto; }
+  .fig figcaption { font-size:10.5pt; color:var(--muted); font-style:italic; margin-top:3px; }
+  @media print { .keep { break-inside: avoid; } }
+
+  .box-recall { background:#FEF9E7; border-left:4px solid #B9770E; padding:6px 10px; margin:8px 0; }
+  .box-recall ol { margin:4px 0 4px 20px; padding:0; }
+  .lbl.recall { color:#B9770E; }
+  .figsvg { display:block; width:100%; max-width:240px; height:auto; margin:0 auto; }
+  .fig img { display:block; width:100%; max-width:240px; height:auto; margin:0 auto; }
+  .box-res p, .box-eq p { margin:4px 0; }
+  .sec-body { column-count: 2; column-gap: 22px; column-rule: 1px solid #AEB6BF; }
+  .sec-body .eq, .sec-body .box-eq, .sec-body .fig { break-inside: avoid; }
+  .sec-body .box-res, .sec-body .box-recall { box-decoration-break: clone; }
+  .sec-body .fig img, .sec-body .figsvg { max-height: 130px; width: auto; max-width: 220px; }
+  .sec-body h3 { break-after: avoid; }
+  .sec-body p, .sec-body li { font-size: 11pt; }
+  .sec-body .eq { font-size: 0.93em; }
+  .sec-body .longeq mjx-container[display="true"] { font-size: 0.72em !important; }
+  .sec-body mjx-container[display="true"] { font-size: 0.85em !important; max-width: 100%; }
+  .sec-bar { background:#1F618D; color:#fff; font-size:13pt; font-weight:bold; padding:6px 10px; margin:16px 0 6px; column-span: all; break-after: avoid; }
+  main { max-width: none; margin: 0; padding: 0 14px; }
+  @page { size: A4; margin: 16mm; }
+  @media print { h2 { break-after: avoid; } }
+</style>
+</head>
+<body>
+<main>
+<h1>Structured notes: Section 2: charge in C-R and L-C circuits; leakage (Murugeshan 12.3 to 12.5)</h1>
+<div class="meta">Murugeshan, <i>Electricity and Magnetism</i> (10th ed.), Ch. 12 §12.1 and §12.2 (Module 4, syllabus item 15–16). Figures are drawn for these notes from the book formulas; the book figure number is in each caption. Problems are not included.</div>
+<h2>12.3 Growth and decay of charge in a C-R circuit</h2>
+<div class="sec-body">
+<div class="bg">Source: <i>book-sources/m4-s2-cr-lc.html</i>, Murugeshan pp. 315–317 (printed). Syllabus items 15 and 16. Equations (a)(1)–(a)(3) and (b)(1)–(b)(3) are given in full.</div>
+
+<h3>Prerequisites</h3>
+<ul>
+<li>$Q=CV$ and the p.d. across a capacitor (pre-physics P3).</li>
+<li>First-order equations solved by separation of variables (pre-math M4).</li>
+</ul>
+
+<h3>1. Charging</h3>
+<div class="box-recall"><span class="lbl recall">Recall (Plus Two)</span> $Q=CV$, so the p.d. across the capacitor is $Q/C$. The emf is shared between the capacitor and the resistor in series.</div>
+<p>A capacitor $C$ and a resistance $R$ are connected to an emf $E$ through a key (Fig. 12.6). $Q$ denotes the charge on $C$ at time $t$, and $I=dQ/dt$.</p>
+<figure class="fig"><img src="final/m4-s2-cr-circuit.jpg" alt="m4 s2 cr circuit"><figcaption>Fig. 12.6 (book): capacitor C, resistance R, Morse key K and cell E in series.</figcaption></figure>
+<div class="eq">$$E = \frac{Q}{C} + RI\tag{12.3(a)(1)}$$</div>
+
+<h3>2. Final charge</h3>
+<p>At the maximum charge $Q_0$, $dQ/dt=0$ and $E=Q_0/C$.</p>
+
+<h3>3. Variables separated</h3>
+<div class="eq longeq">$$\begin{aligned}(Q_0 - Q) &= CR\frac{dQ}{dt}\\ \frac{dQ}{Q_0 - Q} &= \frac{dt}{CR}\end{aligned}\tag{12.3(a)(2)}$$</div>
+
+<h3>4. Solution</h3>
+<p>With $Q=0$ at $t=0$,</p>
+<div class="eq">$$Q = Q_0\left(1 - e^{-t/CR}\right)\tag{12.3(a)(3)}$$</div>
+<p>The time constant is $CR$. At $t=CR$ the charge is $0.632\,Q_0$.</p>
+<figure class="fig"><img src="final/m4-s2-cr-growth.jpg" alt="m4 s2 cr growth"><figcaption>Fig. 12.7 (book): charge against time; growth to Q₀ and discharge from Q₀ are complementary.</figcaption></figure>
+
+<h3>5. Discharging</h3>
+<p>With $E=0$ and the capacitor charged to $Q_0$,</p>
+<div class="eq">$$R\frac{dQ}{dt} + \frac{Q}{C} = 0\tag{12.3(b)(1)}$$</div>
+<div class="eq">$$Q = Q_0 e^{-t/CR}\tag{12.3(b)(2)}$$</div>
+<div class="eq longeq">$$\begin{aligned}I &= \frac{dQ}{dt} = -\frac{Q_0}{CR}e^{-t/CR}\\ &= -\frac{Q}{CR}\end{aligned}\tag{12.3(b)(3)}$$</div>
+<p>At $t=CR$, $Q = 0.368\,Q_0$; the time constant is also the time to fall to $1/e$.</p>
+
+<h3>6. Worked examples (printed pp. 316–317)</h3>
+<p>(1) With $R=2\ \text{M}\Omega$ and $t=0.5$ s for $Q/Q_0=3/4$, Eq. (a)(3) gives $C=0.18\ \mu$F. (2) For $C=0.1\ \mu$F and $R=10\ \text{M}\Omega$, the p.d. halves in $CR\ln 2=0.6931$ s.</p>
+</div>
+<h2>12.4 Measurement of high resistance by leakage (background)</h2>
+<div class="sec-body">
+<div class="bg"><b>Background.</b> Outside the Module 4 items (15–22). Kept because it applies the discharge law of §12.3. The book numbers no equations in this section. Source: <i>book-sources/m4-s2-cr-lc.html</i>, Murugeshan pp. 318–319 (printed).</div>
+
+<h3>1. Principle</h3>
+<p>A capacitor of capacitance $C$ and initial charge $Q_0$ discharges through a resistance $R$ for a time $t$. From §12.3 the remaining charge is $Q = Q_0e^{-t/CR}$, so</p>
+<div class="eq">$$R = \frac{t}{C\log_e(Q_0/Q)} = \frac{t}{2.3026\,C\log_{10}(Q_0/Q)}$$</div>
+<p>A high $R$ gives a slow discharge. Measuring $Q_0/Q$ then determines $R$.</p>
+
+<h3>2. Circuit and procedure</h3>
+<p>$C$ is a capacitor of known value, $R$ the high resistance, B.G. a ballistic galvanometer, $E$ a cell, and $K_1$, $K_2$, $K_3$ tap keys (Fig. 12.8).</p>
+<figure class="fig"><img src="final/m4-s2-leak-circuit.jpg" alt="m4 s2 leak circuit"><figcaption>Fig. 12.8 (book): capacitor C, high resistance R, ballistic galvanometer B.G., cell E and keys K1, K2, K3.</figcaption></figure>
+<p>(<i>i</i>) The capacitor is charged through $K_1$ and then discharged through the galvanometer, giving a throw $\theta_0\propto Q_0$. (<i>ii</i>) The capacitor is charged again, allowed to leak through $R$ for a time $t$, and then discharged through the galvanometer, giving a throw $\theta\propto Q$. Since $Q_0/Q = \theta_0/\theta$,</p>
+<div class="eq">$$R = \frac{t}{2.3026\,C\log_{10}(\theta_0/\theta)}$$</div>
+
+<h3>3. Graph</h3>
+<p>$\log_{10}(\theta_0/\theta)$ plotted against $t$ is a straight line through the origin (Fig. 12.9). Its slope gives $t/\log_{10}(\theta_0/\theta)$, which with $C$ known gives $R$.</p>
+<figure class="fig"><img src="final/m4-s2-leak-graph.jpg" alt="m4 s2 leak graph"><figcaption>Fig. 12.9 (book): straight line of log10(θ0/θ) against t; the slope gives t / log10(θ0/θ).</figcaption></figure>
+
+<h3>4. Worked examples (printed pp. 318–319)</h3>
+<p>(1) $C=2\ \mu$F, $R=100\ \text{M}\Omega$, $Q_0/Q=2$: $t=2.3026\,CR\log_{10}2=138.7$ s. (2) $C=0.2\ \mu$F, throws of 12 cm and 6 cm, $t=2$ s: $R=14.43\ \text{M}\Omega$.</p>
+</div>
+<h2>12.5 Charging and discharging of a capacitor through an inductance</h2>
+<div class="sec-body">
+<div class="bg">Source: <i>book-sources/m4-s2-cr-lc.html</i>, Murugeshan pp. 319–321 (printed). Syllabus items 15 and 16. Charging equations are tagged (i)(1)–(4) and discharge equations (ii)(1)–(4), following the book’s separate numbering. Section 12.6 onwards is not included.</div>
+
+<h3>Prerequisites</h3>
+<ul>
+<li>Charge and p.d. of a capacitor; self-inductance and back emf (pre-physics P2, P3).</li>
+<li>Simple harmonic motion (pre-math H2).</li>
+</ul>
+
+<h3>1. Charging</h3>
+<p>Let $C$ and $L$ be joined to an emf $E$ through a key (Fig. 12.10), and $Q$ the charge on $C$ at time $t$.</p>
+<figure class="fig"><img src="final/m4-s2-lc-charge.jpg" alt="m4 s2 lc charge"><figcaption>Fig. 12.10 (book): capacitor C and inductance L joined through a Morse key to a cell E.</figcaption></figure>
+<div class="eq">$$L\frac{dI}{dt} + \frac{Q}{C} = E\tag{12.5(i)(1)}$$</div>
+<p>With $I=dQ/dt$, and $Q_0=CE$, this becomes</p>
+<div class="eq longeq">$$\begin{aligned}L\frac{d^2Q}{dt^2} + \frac{Q}{C} &= E\\ \frac{d^2Q}{dt^2} + \frac{1}{LC}(Q - Q_0) &= 0\end{aligned}\tag{12.5(i)(2)}$$</div>
+<p>which is simple harmonic motion with period</p>
+<div class="eq">$$T = 2\pi\sqrt{LC}\tag{12.5(i)(3)}$$</div>
+<div class="eq">$$\nu = \frac{1}{2\pi\sqrt{LC}}\tag{12.5(i)(4)}$$</div>
+
+<h3>2. Discharge</h3>
+<p>With no external emf (Fig. 12.11),</p>
+<div class="eq longeq">$$\begin{aligned}\frac{Q}{C} + L\frac{dI}{dt} &= 0\\ \frac{d^2Q}{dt^2} + \frac{Q}{LC} &= 0\end{aligned}\tag{12.5(ii)(1)}$$</div>
+<p>whose general solution, with $\omega=1/\sqrt{LC}$, is</p>
+<div class="eq">$$Q = A\sin(\omega t+\theta)\tag{12.5(ii)(2)}$$</div>
+<p>With $Q=Q_0$ at $t=0$ and $\theta=\pi/2$,</p>
+<div class="eq">$$Q = Q_0\sin\left(\frac{t}{\sqrt{LC}} + \frac{\pi}{2}\right)\tag{12.5(ii)(3)}$$</div>
+<div class="eq">$$\nu = \frac{\omega}{2\pi} = \frac{1}{2\pi\sqrt{LC}}\tag{12.5(ii)(4)}$$</div>
+<figure class="fig"><img src="final/m4-s2-lc-osc.jpg" alt="m4 s2 lc osc"><figcaption>Undamped oscillation of charge, Q = Q₀ sin(t/√LC + π/2), period T = 2π√LC (book, §12.5).</figcaption></figure>
+
+<h3>3. Energy</h3>
+<p>The energy alternates between the electric field of $C$ and the magnetic field of $L$.</p>
+<figure class="fig"><img src="final/m4-s2-lc-energy.jpg" alt="m4 s2 lc energy"><figcaption>Energy alternates between the electric field of C and the magnetic field of L (book, §12.5).</figcaption></figure>
+</div>
+</main>
+</body>
+</html>

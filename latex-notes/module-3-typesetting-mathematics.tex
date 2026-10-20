@@ -1,0 +1,188 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}    % align, matrices, \text, \operatorname
+\usepackage{amssymb}    % extra symbols, \mathbb, \nexists
+
+% ---------------------------------------------------------------
+% MODULE III - Typesetting Mathematics
+% Syllabus units 8-11 (Text 1, Tutorial VIII.1 to VIII.8).
+% Compiles with a single run of pdflatex.
+% ---------------------------------------------------------------
+
+\title{Module III: Typesetting Mathematics}
+\author{Study Notes -- MAT5FS112}
+\date{}
+
+\begin{document}
+\maketitle
+
+% ===============================================================
+\section{Basic mathematical equations}
+% ===============================================================
+
+\subsection{Inline and displayed}
+
+Put maths between single \verb|$| signs to keep it in the sentence:
+the area is $A = \pi r^2$. Use \verb|\[ ... \]| (or the
+\texttt{equation*} environment) for a centred display:
+\[
+  \int_0^1 x^2\,dx = \frac{1}{3}.
+\]
+
+\subsection{Numbered equations and labels}
+
+The \texttt{equation} environment numbers the formula. A \verb|\label|
+lets you refer to it with \verb|\eqref|:
+\begin{equation}
+  E = mc^2 \label{eq:einstein}
+\end{equation}
+Equation~\eqref{eq:einstein} is the mass--energy relation.
+
+\subsection{Scripts, fractions and roots}
+
+\begin{verbatim}
+x^{2}          x_{i}          x_{i}^{2}       % superscript, subscript
+\frac{a+b}{c}  \sqrt{x}       \sqrt[3]{x}     % fraction, roots
+\binom{n}{k}                                  % binomial coefficient
+\end{verbatim}
+
+Rendered: $x^{2}$, $x_{i}$, $x_{i}^{2}$, $\frac{a+b}{c}$,
+$\sqrt{x}$, $\sqrt[3]{x}$, $\binom{n}{k}$.
+
+Braces group several symbols. Without them, only the next character is
+affected: \verb|x^12| gives $x^1 2$, while \verb|x^{12}| gives $x^{12}$.
+
+% ===============================================================
+\section{Groups of equations and numbering}
+% ===============================================================
+
+\texttt{align} lines up several equations at the \verb|&| character.
+Each row ends with \verb|\\|. \texttt{align} numbers every row; the
+starred version \texttt{align*} numbers none.
+
+\begin{align}
+  (a+b)^2 &= a^2 + 2ab + b^2 \label{eq:sq} \\
+  (a-b)^2 &= a^2 - 2ab + b^2 \nonumber
+\end{align}
+
+Row~\eqref{eq:sq} is numbered and the second row is not, because
+\verb|\nonumber| suppresses its number. A single row with a custom label
+uses \verb|\tag{name}|:
+\begin{equation}
+  \sin^2\theta + \cos^2\theta = 1 \tag{$\star$}
+\end{equation}
+
+% ===============================================================
+\section{Matrices, dots, delimiters and affixed symbols}
+% ===============================================================
+
+\subsection{Matrices}
+
+Inside a display, the \texttt{pmatrix} (round brackets), \texttt{bmatrix}
+(square), \texttt{vmatrix} (determinant bars) and \texttt{Bmatrix}
+(curly braces) environments set matrices. Rows use \verb|\\| and
+columns use \verb|&|.
+
+\[
+  A = \begin{pmatrix} 1 & 2 & 3 \\ 0 & -1 & 4 \\ 5 & 6 & 0 \end{pmatrix},
+  \qquad
+  \det\begin{vmatrix} a & b \\ c & d \end{vmatrix} = ad - bc.
+\]
+
+\subsection{Dots}
+
+\[
+  x_1, x_2, \ldots, x_n \qquad
+  a_{11} + \cdots + a_{nn} \qquad
+  \vdots \quad \ddots
+\]
+
+Use \verb|\ldots| on the baseline, \verb|\cdots| for centred dots
+between operators, \verb|\vdots| and \verb|\ddots| for vertical and
+diagonal dots.
+
+\subsection{Delimiters}
+
+Brackets that grow with their content use \verb|\left| and \verb|\right|:
+\[
+  \left( \frac{x}{y} \right)^{2} \qquad
+  \left[ \sum_{k=1}^{n} k \right] \qquad
+  \left\{ x \in \mathbb{R} : x > 0 \right\}
+\]
+
+Each \verb|\left| needs a matching \verb|\right|; use \verb|\right.|
+when you want an invisible closing delimiter.
+
+\subsection{Affixed symbols (accents and decorations)}
+
+\[
+  \hat{x} \quad \bar{x} \quad \vec{v} \quad \dot{x} \quad \ddot{x}
+  \quad \tilde{a} \quad \overline{AB} \quad \underline{ab}
+  \quad \overbrace{a+b+c}^{\text{sum}} \quad \underbrace{x+y}_{\text{pair}}
+\]
+
+% ===============================================================
+\section{Operators, relations and symbols}
+% ===============================================================
+
+\subsection{Greek letters}
+
+Lowercase letters are the name with a backslash: \verb|\alpha|,
+\verb|\beta|, \verb|\gamma|, \verb|\theta|, \verb|\lambda|,
+\verb|\pi|, \verb|\sigma|, \verb|\omega|. Capital letters are
+\verb|\Gamma|, \verb|\Delta|, \verb|\Theta|, \verb|\Lambda|,
+\verb|\Sigma|, \verb|\Omega|. Rendered: $\alpha, \beta, \gamma, \theta,
+\lambda, \pi, \sigma, \omega$ and $\Gamma, \Delta, \Theta, \Omega$.
+
+\subsection{Big operators and limits}
+
+\[
+  \sum_{n=1}^{\infty} \frac{1}{n^2} = \frac{\pi^2}{6}, \qquad
+  \prod_{i=1}^{n} i = n!, \qquad
+  \lim_{x \to 0} \frac{\sin x}{x} = 1
+\]
+
+\subsection{Named functions}
+
+Use \verb|\sin|, \verb|\cos|, \verb|\log|, \verb|\det| and \verb|\max|
+rather than italic letters. For a name that LaTeX does not provide,
+use \verb|\operatorname{name}| (from \texttt{amsmath}):
+$\operatorname{sech}\,x = \dfrac{1}{\cosh x}$.
+
+\subsection{Relations, arrows and set notation}
+
+\[
+  x \le y, \quad x \ne y, \quad x \approx y, \quad
+  f\colon A \to B, \quad x \mapsto x^2
+\]
+\[
+  a \in A, \quad A \subseteq B, \quad A \cup B, \quad A \cap B, \quad
+  \forall\, \varepsilon > 0\ \exists\, \delta > 0
+\]
+
+\subsection{Text and font inside maths}
+
+\begin{verbatim}
+$\text{if } x > 0$        % text inside maths, uses the document font
+$\mathrm{d}x$             % upright d for differentials
+$\mathbf{v}$              % bold vector
+$\mathbb{R}, \mathbb{N}$  % blackboard bold (amssymb)
+$\mathcal{L}$             % calligraphic
+\end{verbatim}
+
+Rendered: $\text{if } x > 0$, $\int f\,\mathrm{d}x$, $\mathbf{v}$,
+$\mathbb{R}, \mathbb{N}$, $\mathcal{L}$.
+
+% ===============================================================
+\section{A worked example combining the tools}
+% ===============================================================
+
+Let $A$ be a $2 \times 2$ matrix with eigenvalues $\lambda_1, \lambda_2$.
+Then
+\begin{align*}
+  \operatorname{tr}(A) &= \sum_{i=1}^{2} \lambda_i, \\
+  \det(A)              &= \prod_{i=1}^{2} \lambda_i .
+\end{align*}
+
+\end{document}

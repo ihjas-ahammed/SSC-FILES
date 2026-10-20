@@ -1,0 +1,403 @@
+Reading additional input from stdin...
+OpenAI Codex v0.161.0
+--------
+workdir: /home/ihjas/Documents/GitHub/SSC-FILES/SEM5-PYQ/ELECTRODYNAMICS-II/source/books/prepare/module-1/diagrams
+model: gpt-6.1-sol
+provider: openai
+approval: never
+sandbox: workspace-write [workdir, /tmp, $TMPDIR]
+reasoning effort: high
+reasoning summaries: none
+session id: 01a13b80-2fce-7da3-b5fd-5efcebe9b147
+--------
+user
+Read SPEC.md in this folder and write every SVG it lists into this folder, using the exact file names and the global style. Write only the SVG files. Validate each with rsvg-convert (rsvg-convert -o /tmp/check-NAME.png FILE). Fix parse errors. When finished, print one line per file: name, viewBox, and OK or ERROR.
+codex
+I’ll read `SPEC.md`, create the listed SVGs with its global style, and validate each with `rsvg-convert`.
+
+exec
+/bin/bash -lc "pwd; rg --files -g 'SPEC.md' -g 'AGENTS.md' -g '*.svg' -g '"'!node_modules'"'" in /home/ihjas/Documents/GitHub/SSC-FILES/SEM5-PYQ/ELECTRODYNAMICS-II/source/books/prepare/module-1/diagrams
+ succeeded in 0ms:
+/home/ihjas/Documents/GitHub/SSC-FILES/SEM5-PYQ/ELECTRODYNAMICS-II/source/books/prepare/module-1/diagrams
+SPEC.md
+
+exec
+/bin/bash -lc 'cat SPEC.md' in /home/ihjas/Documents/GitHub/SSC-FILES/SEM5-PYQ/ELECTRODYNAMICS-II/source/books/prepare/module-1/diagrams
+ succeeded in 0ms:
+# Diagram spec: Polarization notes (Griffiths 5th ed. §4.1 and §4.2)
+
+Write each SVG listed below into this folder (`diagrams/`) under the exact file name. Write nothing else. Each file must be a standalone SVG 1.1 document that renders with `rsvg-convert`. Check each file with `rsvg-convert -o /tmp/check.png <file>` and fix any parse error.
+
+## Global style (apply to every file)
+
+- Root: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="..." role="img" aria-label="...">` with the viewBox given per figure. No width/height attributes. Transparent background (no full-page rect).
+- Ink colour `#1B2631`. Stroke widths: outlines 1.4, field and force arrows 1.8, dipole axis 2.2, dimension and guide lines 1.0 dashed `4 3`.
+- Font: `font-family="Liberation Serif, Times New Roman, serif"`. Labels 13 px. Subscripts and superscripts use `<tspan baseline-shift="sub" font-size="9">`. Variables are italic (`font-style="italic"`). Greek letters as Unicode (ε, θ, σ, ρ, τ, α).
+- Colour roles (use these exactly):
+  - Positive charge `+q`: fill `#C0392B`; its label fill `#C0392B`.
+  - Negative charge `−q`: fill `#1F618D`; its label fill `#1F618D`.
+  - Applied field **E**: stroke and fill `#117A65`; label bold italic `#117A65`.
+  - Dipole **p** and the dipole axis: stroke `#7D3C98`; label italic `#7D3C98`.
+  - Forces **F**: stroke `#D35400`; labels `#D35400`.
+  - Polarization **P** and bound charge σb, ρb: stroke `#B9770E`; labels `#B9770E`.
+  - Sphere / ball / cloud fill `#FDF2E9`, stroke `#A04000`.
+  - Dielectric block / tube fill `#EAF2F8`, stroke `#1B2631`.
+  - Guides, radius lines, averaging spheres: stroke `#7F8C8D`, dashed.
+  - Result boxes fill `#E9F7EF`, stroke `#117A65`. Equation boxes fill `#EAF2F8`, stroke `#1F618D`. Identity boxes fill `#FDF2E9`, stroke `#A04000`.
+- Arrowheads: one `<marker>` per colour, `markerUnits="userSpaceOnUse"`, `markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"`, path `M0,0 L9,4.5 L0,9 z`. Give each marker a unique id prefixed with the file's figure code (for example `s1a-ink`).
+- Text never overlaps a line, a circle, or another label. Keep at least 6 px margin to the viewBox edge.
+- Use `&#8722;` or the Unicode minus `−` for minus signs.
+
+## Section 1 (§4.1) figures: regenerate
+
+### s1-atom.svg  viewBox 0 0 300 210
+Electron cloud model of Example 4.1.
+- Cloud: circle centre (150,100) r 80, fill `#FDF2E9`, stroke `#A04000`.
+- Cloud centre: small hollow circle (150,100) r 3, stroke ink.
+- Radius a: dashed line from (150,100) to (93.4,43.4), colour `#7F8C8D`; label italic "a" at (106,58).
+- Nucleus: filled circle (180,100) r 5, fill `#C0392B`; label "+q" at (188,92), colour `#C0392B`.
+- Cloud label "−q cloud" at (236,52), colour `#1F618D`.
+- Displacement d: dimension line (150,128)–(180,128) with end ticks; label italic "d" at (161,146).
+- Applied field: green arrow from (20,24) to (80,24); label bold italic "E" at (40,16), colour `#117A65`.
+
+### s1-dipole-torque.svg  viewBox 0 0 260 210
+Permanent dipole in a uniform field at θ = 40°.
+- Centre (130,110). Half-length 50. Positive end (168.3,77.9); negative end (91.7,142.1).
+- Dipole axis: line between the ends, colour `#7D3C98`, width 2.2.
+- +q filled circle r 5 at the positive end (fill `#C0392B`); −q filled circle r 5 at the negative end (fill `#1F618D`).
+- Dipole moment p: purple arrow from (130,110) along the axis toward the positive end, length 30 (end point about (153,91)); italic "p" label purple, placed clear of the axis.
+- Applied field E: green arrow from (20,30) to (100,30) (horizontal); label bold italic "E".
+- Angle θ: arc of radius 25 centred (130,110) from the horizontal direction to the direction of p; label italic "θ".
+- Forces: orange arrow F₊ from just right of the positive end to 40 px to the right; orange arrow F₋ from the negative end 40 px to the left. Labels "F₊" and "F₋" in orange, with a subscript.
+- Bottom caption inside the viewBox (y ≈ 196): "Net force zero; torque turns p toward E", 12 px, ink colour, centred.
+
+### s1-energy-graph.svg  viewBox 0 0 300 220
+Graph of U = −pE cos θ against θ from 0° to 180°.
+- Axes: y-axis from (40,28) to (40,182); x-axis from (40,182) to (250,182). Ink colour.
+- Curve: polyline through (40,170) (73.3,162) (106.7,140) (140,110) (173.3,80) (206.7,58) (240,50), stroke `#7D3C98`, width 2.2.
+- Zero line: dashed grey horizontal at y = 110 from x = 40 to 250.
+- Lowest point (40,170): filled dot, colour `#7D3C98`.
+- Ticks and labels: "0", "90°", "180°" below the x-axis at x = 40, 140, 240 (y 198). "−pE" at (4,174); "+pE" at (4,54). Axis letters italic: "θ" at (256,186), "U" at (26,24).
+- Equation label "U = −pE cos θ" at (50,44), 13 px, colour `#7D3C98`.
+
+### s1-nonuniform.svg  viewBox 0 0 260 190
+Dipole in a field that is stronger at the positive end.
+- Dipole axis from (90,110) to (170,110), ink colour, width 2.
+- −q: hollow circle (fill `#FFFFFF`, stroke `#1F618D`, width 2) r 6 at (90,110). +q: filled `#C0392B` r 6 at (170,110).
+- Field arrows (green, above): E₊ from (170,70) to (230,70) (length 60); E₋ from (90,70) to (120,70) (length 30). Labels "E₊" and "E₋" in green, bold italic E.
+- Force arrows (orange, below): F₊ from (170,150) to (230,150) (length 60); F₋ from (90,150) to (120,150) (length 30). Labels "F₊" and "F₋" in orange.
+- Bottom text at (130,182), centred, 13 px: "E₊ > E₋, so F₊ > F₋: net force to the right".
+
+### s1-polarized-block.svg  viewBox 0 0 300 200
+Block of aligned dipoles in a field.
+- Block rectangle (40,40) w 220 h 110, fill `#EAF2F8`, stroke ink.
+- Green field arrow E above the block: (40,22) to (110,22), label "E" at (70,14).
+- Dipoles: a 5 × 3 grid of short purple arrows, each 18 px long, centred at x = 70, 110, 150, 190, 230 and y = 65, 100, 135. Each arrow points right (along E). Stroke `#7D3C98`, width 2, arrowhead purple.
+- Bottom label at (150,172): "P = N p" (italic P, colour `#B9770E`), 14 px, centred.
+- Second line at (150,188): "dipoles per unit volume × dipole moment", 12 px, centred.
+
+## Section 2 (§4.2) figures: new and regenerated
+
+### s2-dipole-sum.svg  viewBox 0 0 320 220
+Geometry of Eq. 4.9: a dipole element at the source point, and the vector to the field point.
+- Source element: small purple arrow (dipole P dτ′) centred at (90,150), pointing along +x, length 26. Label italic "P dτ′" beside it, purple, placed below the arrow.
+- Field point: filled ink dot at (250,60). Label bold italic "r" beside it.
+- Origin: small cross at (30,190) with label "origin" in ink, 12 px.
+- Vector 𝓡 from source to field point: solid line (90,150) to (250,60), colour `#117A65` (label italic bold "𝓡" in green near the midpoint, offset up-left).
+- Unit vector R̂ arrow (short, green) at the midpoint, perpendicular offset, label "R̂".
+- Angle guide: dashed line from the source point horizontally to the right; angle θ between that horizontal and 𝓡 shown as a small arc of radius 28, label italic "θ".
+- Caption inside the viewBox at (160,212), 12 px, centred: "V = (1/4πε₀) ∫ P·R̂ / R² dτ′"
+
+### s2-derivation-flow.svg  viewBox 0 0 320 240
+Flowchart of the derivation of Eqs. 4.10–4.13. Six boxes, arranged 3 per row, with arrows.
+- Row 1 (y 22–62): box A "Eq. 4.9: dipole sum" (fill `#EAF2F8`); box B "∇′(1/𝓡) = R̂/𝓡²" (fill `#FDF2E9`); box C "Integrate by parts" (fill `#FDF2E9`).
+- Row 2 (y 128–168): box D "Divergence theorem" (fill `#FDF2E9`); box E "Eq. 4.10: surface + volume terms" (fill `#EAF2F8`); box F "Eq. 4.13: σb and ρb" (fill `#E9F7EF`, stroke `#117A65`).
+- Each box is 92 px wide and 40 px tall, with 12 px centred text (two lines allowed).
+- Arrows A→B, B→C, C down to D (curved or elbow path), D→E, E→F, all ink colour with arrowheads.
+- Under box F, a small line of text (y 196, 12 px): "σb = P·n̂ on the surface", and (y 212): "ρb = −∇·P in the volume". Colour `#B9770E` for the σb and ρb symbols.
+
+### s2-pillbox-divergence.svg  viewBox 0 0 300 200
+Why ρb = −∇·P: flux of P through a small box.
+- Box (dashed outline, ink) from (80,50) to (220,150) (volume element).
+- Left face: P arrows pointing into the box (amber), length 22, drawn at x = 80, y = 75, 100, 125.
+- Right face: P arrows pointing out of the box, length 40 (larger), at x = 220, y = 75, 100, 125.
+- Labels: "P in" at (60,40) and "P out" at (236,40), amber. Note "out > in" on the right.
+- Inside the box, centred at (150,105): "−" sign, 16 px, colour `#1F618D`, with caption under the box at (150,176): "∮P·da > 0 ⇒ ρb = −∇·P < 0 inside" (13 px, ink).
+
+### s2-dipole-chain.svg  viewBox 0 0 320 160
+Chain of dipoles: interior ends cancel, end charges remain.
+- Six dipoles in a row along x, centres at x = 60, 100, 140, 180, 220, 260, y = 80. Each dipole: −q (blue filled r 4) at x − 10, +q (red filled r 4) at x + 10, with a thin purple connecting line.
+- Between neighbours, the + of one and − of the next are drawn touching (cancel): mark each shared pair with a small dotted grey circle r 6 (colour `#7F8C8D`).
+- At the left end: an unpaired −q (blue, r 5) at x = 40, y = 80, label "−" bold; at the right end: unpaired +q (red, r 5) at x = 280, label "+".
+- Label "bound charge" under each end (y 110), 12 px.
+- Amber P arrow above the chain from (40,50) to (280,50), label italic "P" at (160,42).
+- Caption at (160,140): "Interior charges cancel; only the end charges remain" (12 px, ink).
+
+### s2-oblique-tube.svg  viewBox 0 0 320 200
+Bound charge on an oblique cut of a tube (§4.2.2).
+- Tube parallelogram: points (60,60) (190,60) (240,140) (110,140), fill `#EAF2F8`, stroke ink.
+- Left end: vertical dimension line at x = 40 from y = 60 to 140 with label "A" (cross-section area) at (28,104).
+- P arrow inside: amber, from (80,100) to (170,100), label italic "P" at (120,92).
+- Oblique right end: from (190,60) to (240,140). Outward normal n̂ drawn at its midpoint (215,100) as a short amber arrow, label italic "n̂".
+- Angle θ between P and n̂ shown as an arc of radius 22 at (215,100) area, label "θ" (small).
+- + marks along the oblique end (red, bold, 3 small "+"s at (196,80), (212,100), (228,120)).
+- Formula text under the figure at (160,178), 13 px, centred: "A_end = A / cos θ,  σb = P cos θ = P·n̂". Use subscripts. Colour `#B9770E` for σb and P.
+
+### s2-sphere-field.svg  viewBox 0 0 320 240
+Uniformly polarized sphere: field inside and outside (Eqs. 4.14–4.16).
+- Sphere: circle centre (160,120) r 70, fill `#FDF2E9`, stroke `#A04000`.
+- P arrow inside: amber, from (120,120) to (200,120)? Use (110,120) to (210,120), label italic bold "P" at (216,116).
+- Field inside: three parallel green arrows pointing LEFT (opposite P), at y = 100, 120, 140, from x 170 to 130, each 40 px. Label bold italic "E = −P/3ε₀" in green under the sphere at (160,206).
+- Top cap label "+σb" in red at (160,40), above the sphere. Bottom cap label "−σb" in blue at (160,228), below the sphere.
+- Field label "E = −P/3ε₀" in green at (160,200), between the sphere and the bottom label.
+- Outside: 4 green curved lines (dipole-like) from the upper pole to the lower pole, drawn as quadratic curves bulging outward on both sides of the sphere (for example M160,50 Q250,120 160,190 and M160,50 Q70,120 160,190). Stroke `#117A65`, width 1.4, dashed for the two outer ones.
+- Caption (not in SVG).
+
+### s2-averaging-sphere.svg  viewBox 0 0 260 200
+Averaging sphere for the macroscopic field (§4.2.3, background).
+- Dashed circle centre (130,100) r 60, stroke `#7F8C8D`, fill `#EAF2F8` at 60% opacity.
+- Centre point: filled ink dot, label italic bold "r" at (138,94).
+- Inside the circle: four small purple dipole arrows around the centre (each 16 px long, at angles 30°, 120°, 210°, 300° from the centre at radius 28), label in the box: none.
+- Outside the circle (outside dashed boundary): two small red + and two blue − circles placed at radius 80, at angles 60° and 240° (red) and 150° and 330° (blue).
+- Labels at bottom (y 186, 12 px, centred): "E = E_out + E_in: outside charges and inside dipoles". Colours: E in green.
+
+exec
+/bin/bash -lc 'for d in /home /home/ihjas /home/ihjas/Documents /home/ihjas/Documents/GitHub /home/ihjas/Documents/GitHub/SSC-FILES /home/ihjas/Documents/GitHub/SSC-FILES/SEM5-PYQ /home/ihjas/Documents/GitHub/SSC-FILES/SEM5-PYQ/ELECTRODYNAMICS-II /home/ihjas/Documents/GitHub/SSC-FILES/SEM5-PYQ/ELECTRODYNAMICS-II/source /home/ihjas/Documents/GitHub/SSC-FILES/SEM5-PYQ/ELECTRODYNAMICS-II/source/books /home/ihjas/Documents/GitHub/SSC-FILES/SEM5-PYQ/ELECTRODYNAMICS-II/source/books/prepare /home/ihjas/Documents/GitHub/SSC-FILES/SEM5-PYQ/ELECTRODYNAMICS-II/source/books/prepare/module-1 /home/ihjas/Documents/GitHub/SSC-FILES/SEM5-PYQ/ELECTRODYNAMICS-II/source/books/prepare/module-1/diagrams; do if [ -f "$d/AGENTS.md" ]; then cat "$d/AGENTS.md"; fi; done' in /home/ihjas/Documents/GitHub/SSC-FILES/SEM5-PYQ/ELECTRODYNAMICS-II/source/books/prepare/module-1/diagrams
+ succeeded in 77ms:
+exec
+/bin/bash -lc "command -v rsvg-convert; fc-match 'Liberation Serif'; python -c 'import PIL; print(PIL.__version__)'" in /home/ihjas/Documents/GitHub/SSC-FILES/SEM5-PYQ/ELECTRODYNAMICS-II/source/books/prepare/module-1/diagrams
+ succeeded in 0ms:
+/usr/bin/rsvg-convert
+LiberationSerif-Regular.ttf: "Liberation Serif" "Regular"
+12.3.0
+
+codex
+The spec lists 12 SVGs. A few coordinates would cause labels or arrows to overlap; I’ll make small spacing adjustments while preserving the requested viewBoxes, colours, and figure content.
+
+exec
+/bin/bash -lc "python <<'PY'
+from pathlib import Path
+from html import escape
+INK='#1B2631'; POS='#C0392B'; NEG='#1F618D'; E='#117A65'; P='#7D3C98'; F='#D35400'; B='#B9770E'; GUIDE='#7F8C8D'
+class SVG:
+ def __init__(self,name,code,w,h,label,colors):
+  self.name=name; self.code=code
+  self.parts=[f'<?xml version=\"1.0\" encoding=\"UTF-8\"?>\\n<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" viewBox=\"0 0 {w} {h}\" role=\"img\" aria-label=\"{escape(label,quote=True)}\" font-family=\"Liberation Serif, Times New Roman, serif\" font-size=\"13\" fill=\"{INK}\">', '<defs>']
+  for key,color in colors.items():
+   self.parts.append(f'<marker id=\"{code}-{key}\" markerUnits=\"userSpaceOnUse\" markerWidth=\"9\" markerHeight=\"9\" refX=\"8\" refY=\"4.5\" orient=\"auto\"><path d=\"M0,0 L9,4.5 L0,9 z\" fill=\"{color}\"/></marker>')
+  self.parts.append('</defs>')
+ def add(self,s): self.parts.append(s)
+ def line(self,x1,y1,x2,y2,color=INK,width=1.4,arrow=None,dash=None):
+  extra=(f' marker-end=\"url(#{self.code}-{arrow})\"' if arrow else '')+(f' stroke-dasharray=\"{dash}\"' if dash else '')
+  self.add(f'<line x1=\"{x1}\" y1=\"{y1}\" x2=\"{x2}\" y2=\"{y2}\" stroke=\"{color}\" stroke-width=\"{width}\"{extra}/>')
+ def path(self,d,color=INK,width=1.4,arrow=None,dash=None):
+  extra=(f' marker-end=\"url(#{self.code}-{arrow})\"' if arrow else '')+(f' stroke-dasharray=\"{dash}\"' if dash else '')
+  self.add(f'<path d=\"{d}\" fill=\"none\" stroke=\"{color}\" stroke-width=\"{width}\"{extra}/>')
+ def circle(self,x,y,r,fill,stroke=None,width=1.4,dash=None,opacity=None):
+  extra=(f' stroke=\"{stroke}\" stroke-width=\"{width}\"' if stroke else '')+(f' stroke-dasharray=\"{dash}\"' if dash else '')+(f' fill-opacity=\"{opacity}\"' if opacity else '')
+  self.add(f'<circle cx=\"{x}\" cy=\"{y}\" r=\"{r}\" fill=\"{fill}\"{extra}/>')
+ def text(self,x,y,s,color=INK,size=13,anchor='start',italic=False,bold=False):
+  extra=(' font-style=\"italic\"' if italic else '')+(' font-weight=\"bold\"' if bold else '')
+  self.add(f'<text x=\"{x}\" y=\"{y}\" fill=\"{color}\" font-size=\"{size}\" text-anchor=\"{anchor}\"{extra}>{s}</text>')
+ def rect(self,x,y,w,h,fill,stroke=INK): self.add(f'<rect x=\"{x}\" y=\"{y}\" width=\"{w}\" height=\"{h}\" fill=\"{fill}\" stroke=\"{stroke}\" stroke-width=\"1.4\"/>')
+ def save(self): Path(self.name).write_text('\\n'.join(self.parts+['</svg>'])+'\\n')
+def sub(s): return f'<tspan baseline-shift=\"sub\" font-size=\"9\">{s}</tspan>'
+def sup(s): return f'<tspan baseline-shift=\"super\" font-size=\"9\">{s}</tspan>'
+def var(s,color=None,bold=False): return f'<tspan font-style=\"italic\"'+(f' fill=\"{color}\"' if color else '')+(' font-weight=\"bold\"' if bold else '')+f'>{s}</tspan>'
+
+s=SVG('s1-atom.svg','s1a',300,210,'Electron cloud of radius a with a nucleus displaced by d in an applied electric field',{'field':E})
+s.circle(150,100,80,'#FDF2E9','#A04000'); s.line(150,100,93.4,43.4,GUIDE,1,dash='4 3'); s.circle(150,100,3,'none',INK)
+s.text(109,51,'a',italic=True); s.circle(180,100,5,POS); s.text(188,92,'+q',POS); s.text(236,52,'−q cloud',NEG)
+s.line(150,128,180,128,GUIDE,1,dash='4 3')
+for x in (150,180): s.line(x,123,x,133,GUIDE,1)
+s.text(161,146,'d',italic=True); s.line(20,24,80,24,E,1.8,'field'); s.text(40,16,'E',E,italic=True,bold=True); s.save()
+
+s=SVG('s1-dipole-torque.svg','s1b',260,210,'Dipole at forty degrees in a uniform field with equal opposite forces and an aligning torque',{'field':E,'dipole':P,'force':F})
+s.line(91.7,142.1,168.3,77.9,P,2.2); s.circle(168.3,77.9,5,POS); s.circle(91.7,142.1,5,NEG)
+s.text(160,64,'+q',POS); s.text(84,162,'−q',NEG)
+s.line(130,110,153,90.7,P,1.8,'dipole'); s.text(132,87,'p',P,italic=True)
+s.line(20,30,100,30,E,1.8,'field'); s.text(55,21,'E',E,italic=True,bold=True)
+s.line(132,110,164,110,GUIDE,1,dash='4 3'); s.path('M155,110 A25,25 0 0 0 149.15,93.93',GUIDE,1,dash='4 3'); s.text(163,104,'θ',italic=True)
+s.line(177,77.9,217,77.9,F,1.8,'force'); s.text(194,66,'F'+sub('+'),F,anchor='middle',italic=True)
+s.line(83,142.1,43,142.1,F,1.8,'force'); s.text(60,130,'F'+sub('−'),F,anchor='middle',italic=True)
+s.text(130,196,'Net force zero; torque turns '+var('p')+' toward '+var('E'),size=12,anchor='middle'); s.save()
+
+s=SVG('s1-energy-graph.svg','s1c',300,220,'Potential energy U equals minus p E cosine theta, increasing from minus p E to plus p E',{'ink':INK})
+s.line(40,28,40,182); s.line(40,182,250,182); s.line(40,110,250,110,GUIDE,1,dash='4 3')
+s.add(f'<polyline points=\"40,170 73.3,162 106.7,140 140,110 173.3,80 206.7,58 240,50\" fill=\"none\" stroke=\"{P}\" stroke-width=\"2.2\"/>'); s.circle(40,170,3,P)
+for x,label in ((40,'0'),(140,'90°'),(240,'180°')):
+ s.line(x,182,x,186,INK,1.4); s.text(x,201,label,anchor='middle')
+s.text(6,174,'−pE',italic=True); s.text(6,54,'+pE',italic=True); s.text(256,186,'θ',italic=True); s.text(26,24,'U',italic=True); s.text(50,44,'U = −pE cos θ',P,italic=True); s.save()
+
+s=SVG('s1-nonuniform.svg','s1d',260,190,'Dipole with larger field and force at the positive end in a nonuniform field',{'field':E,'force':F})
+s.line(90,110,170,110,INK,2); s.circle(90,110,6,'#FFFFFF',NEG,2); s.circle(170,110,6,POS)
+s.text(90,99,'−q',NEG,anchor='middle'); s.text(170,99,'+q',POS,anchor='middle')
+for x,end,sign in ((90,120,'−'),(170,230,'+')):
+ s.line(x,70,end,70,E,1.8,'field'); s.text((x+end)/2,57,'E'+sub(sign),E,anchor='middle',italic=True,bold=True)
+ s.line(x,150,end,150,F,1.8,'force'); s.text((x+end)/2,139,'F'+sub(sign),F,anchor='middle',italic=True)
+s.text(130,182,'E'+sub('+')+' &gt; E'+sub('−')+', so F'+sub('+')+' &gt; F'+sub('−')+': net force to the right',size=13,anchor='middle'); s.save()
+
+s=SVG('s1-polarized-block.svg','s1e',300,200,'A block of fifteen dipoles aligned with the applied field, with polarization P equals N p',{'field':E,'dipole':P})
+s.rect(40,40,220,110,'#EAF2F8'); s.line(40,22,110,22,E,1.8,'field'); s.text(70,14,'E',E,italic=True,bold=True)
+for y in (65,100,135):
+ for x in (70,110,150,190,230): s.line(x-9,y,x+9,y,P,2,'dipole')
+s.text(150,172,var('P',B)+' = '+var('N')+' '+var('p',P),size=14,anchor='middle'); s.text(150,188,'dipoles per unit volume × dipole moment',size=12,anchor='middle'); s.save()
+
+s=SVG('s2-dipole-sum.svg','s2a',320,220,'Source dipole P d tau prime and separation vector to the field point r',{'dipole':P,'field':E})
+s.line(26,190,34,190,INK,1.4); s.line(30,186,30,194,INK,1.4); s.text(41,193,'origin',size=12)
+s.line(90,150,250,60,E,1.8); s.circle(250,60,3,INK); s.text(260,57,'r',italic=True,bold=True)
+s.line(77,150,103,150,P,2.2,'dipole'); s.text(69,174,'P dτ′',P,italic=True)
+s.line(105,150,147,150,GUIDE,1,dash='4 3'); s.path('M118,150 A28,28 0 0 0 114.4,136.27',GUIDE,1,dash='4 3'); s.text(129,140,'θ',italic=True)
+s.text(153,89,'𝓡',E,italic=True,bold=True); s.line(172,122,198.2,107.3,E,1.8,'field'); s.text(200,133,'R̂',E,italic=True,bold=True)
+s.text(160,212,'V = (1/4πε'+sub('0')+') ∫ '+var('P')+'·R̂ / R'+sup('2')+' dτ′',size=12,anchor='middle'); s.save()
+
+s=SVG('s2-derivation-flow.svg','s2b',320,240,'Six steps from the dipole sum to surface and volume bound charge densities',{'ink':INK})
+boxes=[(10,22,'#EAF2F8',NEG,['Eq. 4.9:','dipole sum']),(114,22,'#FDF2E9','#A04000',['∇′(1/𝓡) = R̂/𝓡'+sup('2')]),(218,22,'#FDF2E9','#A04000',['Integrate','by parts']),(10,128,'#FDF2E9','#A04000',['Divergence','theorem']),(114,128,'#EAF2F8',NEG,['Eq. 4.10: surface','+ volume terms']),(218,128,'#E9F7EF',E,['Eq. 4.13:','σ'+sub('b')+' and ρ'+sub('b')])]
+for x,y,fill,stroke,lines in boxes:
+ s.rect(x,y,92,40,fill,stroke)
+ for i,txt in enumerate(lines): s.text(x+46,y+(25 if len(lines)==1 else 16+15*i),txt,size=12,anchor='middle')
+for y in (42,148):
+ s.line(103,y,112,y,INK,1.8,'ink'); s.line(207,y,216,y,INK,1.8,'ink')
+s.path('M264,63 V92 Q264,100 256,100 H64 Q56,100 56,108 V126',INK,1.8,'ink')
+s.text(160,196,var('σ',B)+f'<tspan fill=\"{B}\">'+sub('b')+'</tspan>'+' = '+var('P',B)+'·n̂ on the surface',size=12,anchor='middle')
+s.text(160,212,var('ρ',B)+f'<tspan fill=\"{B}\">'+sub('b')+'</tspan>'+' = −∇·'+var('P',B)+' in the volume',size=12,anchor='middle'); s.save()
+
+s=SVG('s2-pillbox-divergence.svg','s2c',300,200,'More polarization flux exits than enters a volume, leaving negative bound charge inside',{'polarization':B})
+s.add(f'<rect x=\"80\" y=\"50\" width=\"140\" height=\"100\" fill=\"none\" stroke=\"{INK}\" stroke-width=\"1\" stroke-dasharray=\"4 3\"/>')
+for y in (75,100,125): s.line(58,y,80,y,B,1.8,'polarization'); s.line(220,y,260,y,B,1.8,'polarization')
+s.text(60,40,var('P')+' in',B); s.text(236,40,var('P')+' out',B); s.text(242,146,'out &gt; in',B,size=12)
+s.text(150,105,'−',NEG,size=16,anchor='middle'); s.text(150,176,'∮'+var('P')+'·d'+var('a')+' &gt; 0 ⇒ ρ'+sub('b')+' = −∇·'+var('P')+' &lt; 0 inside',size=13,anchor='middle'); s.save()
+
+s=SVG('s2-dipole-chain.svg','s2d',320,160,'Six aligned dipoles whose neighbouring charges cancel, leaving bound charge at the ends',{'polarization':B})
+# Touching charges at each shared pair make the cancellation explicit.
+for i,c in enumerate((60,100,140,180,220,260)):
+ left=c-10 if i==0 else c-16; right=c+10 if i==5 else c+16
+ s.line(left,80,right,80,P,1.4); s.circle(left,80,4,NEG); s.circle(right,80,4,POS)
+for x in (80,120,160,200,240): s.circle(x,80,6,'none',GUIDE,1,dash='1 2')
+s.circle(40,80,5,NEG); s.circle(280,80,5,POS); s.text(29,84,'−',NEG,bold=True,anchor='end'); s.text(291,84,'+',POS,bold=True)
+s.text(46,110,'bound charge',size=12,anchor='middle'); s.text(274,110,'bound charge',size=12,anchor='middle')
+s.line(40,50,280,50,B,1.8,'polarization'); s.text(160,42,'P',B,italic=True,anchor='middle')
+s.text(160,140,'Interior charges cancel; only the end charges remain',size=12,anchor='middle'); s.save()
+
+s=SVG('s2-oblique-tube.svg','s2e',320,200,'Polarization flux through an oblique end gives surface bound charge sigma b equals P dot the outward normal',{'polarization':B})
+s.add(f'<polygon points=\"60,60 190,60 240,140 110,140\" fill=\"#EAF2F8\" stroke=\"{INK}\" stroke-width=\"1.4\"/>')
+s.line(40,60,40,140,GUIDE,1,dash='4 3'); s.line(35,60,45,60,GUIDE,1); s.line(35,140,45,140,GUIDE,1); s.text(28,104,'A',italic=True,anchor='end')
+s.line(80,100,170,100,B,1.8,'polarization'); s.text(120,92,'P',B,italic=True)
+s.line(215,100,253.2,76.1,B,1.8,'polarization'); s.text(259,73,'n̂',B,italic=True)
+s.line(224,100,250,100,GUIDE,1,dash='4 3'); s.path('M237,100 A22,22 0 0 0 233.66,88.34',GUIDE,1,dash='4 3'); s.text(246,105,'θ',size=12,italic=True)
+for x,y in ((196,80),(212,100),(228,120)): s.text(x-6,y+5,'+',POS,size=12,bold=True,anchor='end')
+s.text(160,178,var('A')+sub('end')+' = '+var('A')+' / cos θ,  '+var('σ',B)+f'<tspan fill=\"{B}\">'+sub('b')+'</tspan>'+' = '+var('P',B)+' cos θ = '+var('P',B)+'·n̂',size=13,anchor='middle'); s.save()
+
+s=SVG('s2-sphere-field.svg','s2f',320,240,'Uniformly polarized sphere with an opposing internal field and curved external field lines',{'field':E,'polarization':B})
+s.circle(160,120,70,'#FDF2E9','#A04000')
+for d,dash in [('M160,50 C262,50 262,190 160,190',None),('M160,50 C58,50 58,190 160,190',None),('M160,50 C306,40 306,200 160,190','4 3'),('M160,50 C14,40 14,200 160,190','4 3')]: s.path(d,E,1.4,dash=dash)
+# Separate the central field arrow by six pixels from the polarization axis.
+s.line(110,120,210,120,B,1.8,'polarization'); s.text(216,116,'P',B,italic=True,bold=True)
+for y in (100,128,148): s.line(170,y,130,y,E,1.8,'field')
+s.text(160,40,'+σ'+sub('b'),POS,anchor='middle'); s.text(160,228,'−σ'+sub('b'),NEG,anchor='middle')
+s.text(160,206,'E = −P/3ε'+sub('0'),E,anchor='middle',italic=True,bold=True); s.save()
+
+s=SVG('s2-averaging-sphere.svg','s2g',260,200,'Averaging sphere containing four dipoles, with four charges outside the averaging boundary',{'dipole':P})
+s.circle(130,100,60,'#EAF2F8',GUIDE,1,dash='4 3',opacity='0.6'); s.circle(130,100,3,INK); s.text(138,94,'r',italic=True,bold=True)
+from math import sin,cos,radians
+for angle in (30,120,210,300):
+ a=radians(angle); x=130+28*cos(a); y=100-28*sin(a); s.line(round(x-8*cos(a),2),round(y+8*sin(a),2),round(x+8*cos(a),2),round(y-8*sin(a),2),P,2.2,'dipole')
+for angle,color in ((60,POS),(240,POS),(150,NEG),(330,NEG)):
+ a=radians(angle); x=130+80*cos(a); y=100-80*sin(a); s.circle(round(x,2),round(y,2),4,color)
+s.text(130,184,var('E',E)+' = '+var('E',E)+sub('out')+' + '+var('E',E)+sub('in')+': outside charges',size=12,anchor='middle'); s.text(130,196,'and inside dipoles',size=12,anchor='middle'); s.save()
+PY" in /home/ihjas/Documents/GitHub/SSC-FILES/SEM5-PYQ/ELECTRODYNAMICS-II/source/books/prepare/module-1/diagrams
+ succeeded in 0ms:
+exec
+/bin/bash -lc "python <<'PY'
+from pathlib import Path
+p=Path('s2-averaging-sphere.svg')
+s=p.read_text().replace('y=\"184\"','y=\"178\"').replace('y=\"196\"','y=\"192\"')
+p.write_text(s)
+PY
+for file in *.svg; do rsvg-convert -o \"/tmp/check-"'${file%.svg}.png" "$file"; done
+python <<'"'PY'
+from pathlib import Path
+from PIL import Image, ImageDraw
+files=sorted(Path('.').glob('*.svg'))
+canvas=Image.new('RGB',(1020,1100),'white'); draw=ImageDraw.Draw(canvas)
+for i,p in enumerate(files):
+ im=Image.open('/tmp/check-'+p.stem+'.png').convert('RGBA')
+ x=(i%3)*340; y=(i//3)*275
+ draw.text((x+10,y+8),p.name,fill='black')
+ canvas.paste(im,(x+(340-im.width)//2,y+30),im)
+canvas.save('/tmp/check-all.png')
+PY" in /home/ihjas/Documents/GitHub/SSC-FILES/SEM5-PYQ/ELECTRODYNAMICS-II/source/books/prepare/module-1/diagrams
+ succeeded in 660ms:
+exec
+/bin/bash -lc "python <<'PY'
+from pathlib import Path
+p=Path('s2-averaging-sphere.svg')
+s=p.read_text()
+start=s.index('<text x=\"130\" y=\"178\"')
+s=s[:start]+'''<text x=\"130\" y=\"186\" fill=\"#1B2631\" font-size=\"12\" text-anchor=\"middle\" textLength=\"248\" lengthAdjust=\"spacingAndGlyphs\"><tspan fill=\"#117A65\" font-style=\"italic\">E</tspan> = <tspan fill=\"#117A65\" font-style=\"italic\">E</tspan><tspan baseline-shift=\"sub\" font-size=\"9\">out</tspan> + <tspan fill=\"#117A65\" font-style=\"italic\">E</tspan><tspan baseline-shift=\"sub\" font-size=\"9\">in</tspan>: outside charges and inside dipoles</text>
+</svg>
+'''
+p.write_text(s)
+p=Path('s2-derivation-flow.svg')
+s=p.read_text()
+s=s.replace('<text x=\"160\" y=\"47\" fill=\"#1B2631\" font-size=\"12\" text-anchor=\"middle\">∇′(1/𝓡) = R̂/𝓡<tspan baseline-shift=\"super\" font-size=\"9\">2</tspan></text>', '<text x=\"160\" y=\"38\" fill=\"#1B2631\" font-size=\"12\" text-anchor=\"middle\">∇′(1/𝓡) =</text>\\n<text x=\"160\" y=\"53\" fill=\"#1B2631\" font-size=\"12\" text-anchor=\"middle\">R̂/𝓡<tspan baseline-shift=\"super\" font-size=\"9\">2</tspan></text>')
+p.write_text(s)
+PY
+python <<'PY'
+from pathlib import Path
+import re, subprocess, xml.etree.ElementTree as ET
+spec=Path('SPEC.md').read_text()
+expected=re.findall(r'"'^### ('"\\S+\\.svg)\\s+viewBox ([\\d ]+)"'$'"',spec,re.M)
+assert len(expected)==12
+assert set(p.name for p in Path('.').glob('*.svg'))==set(n for n,v in expected)
+for name,viewbox in expected:
+ root=ET.parse(name).getroot()
+ assert root.get('viewBox')==viewbox
+ assert root.get('width') is None and root.get('height') is None
+ assert root.get('role')=='img' and root.get('aria-label')
+ result=subprocess.run(['rsvg-convert','-o','/tmp/check-'+name[:-4]+'.png',name],capture_output=True,text=True)
+ print(f'{name}, {viewbox}, '+('OK' if result.returncode==0 else 'ERROR'))
+ if result.stderr: print(result.stderr)
+PY" in /home/ihjas/Documents/GitHub/SSC-FILES/SEM5-PYQ/ELECTRODYNAMICS-II/source/books/prepare/module-1/diagrams
+ succeeded in 561ms:
+s1-atom.svg, 0 0 300 210, OK
+s1-dipole-torque.svg, 0 0 260 210, OK
+s1-energy-graph.svg, 0 0 300 220, OK
+s1-nonuniform.svg, 0 0 260 190, OK
+s1-polarized-block.svg, 0 0 300 200, OK
+s2-dipole-sum.svg, 0 0 320 220, OK
+s2-derivation-flow.svg, 0 0 320 240, OK
+s2-pillbox-divergence.svg, 0 0 300 200, OK
+s2-dipole-chain.svg, 0 0 320 160, OK
+s2-oblique-tube.svg, 0 0 320 200, OK
+s2-sphere-field.svg, 0 0 320 240, OK
+s2-averaging-sphere.svg, 0 0 260 200, OK
+
+codex
+s1-atom.svg, 0 0 300 210, OK  
+s1-dipole-torque.svg, 0 0 260 210, OK  
+s1-energy-graph.svg, 0 0 300 220, OK  
+s1-nonuniform.svg, 0 0 260 190, OK  
+s1-polarized-block.svg, 0 0 300 200, OK  
+s2-dipole-sum.svg, 0 0 320 220, OK  
+s2-derivation-flow.svg, 0 0 320 240, OK  
+s2-pillbox-divergence.svg, 0 0 300 200, OK  
+s2-dipole-chain.svg, 0 0 320 160, OK  
+s2-oblique-tube.svg, 0 0 320 200, OK  
+s2-sphere-field.svg, 0 0 320 240, OK  
+s2-averaging-sphere.svg, 0 0 260 200, OK
+tokens used
+44,729
+s1-atom.svg, 0 0 300 210, OK  
+s1-dipole-torque.svg, 0 0 260 210, OK  
+s1-energy-graph.svg, 0 0 300 220, OK  
+s1-nonuniform.svg, 0 0 260 190, OK  
+s1-polarized-block.svg, 0 0 300 200, OK  
+s2-dipole-sum.svg, 0 0 320 220, OK  
+s2-derivation-flow.svg, 0 0 320 240, OK  
+s2-pillbox-divergence.svg, 0 0 300 200, OK  
+s2-dipole-chain.svg, 0 0 320 160, OK  
+s2-oblique-tube.svg, 0 0 320 200, OK  
+s2-sphere-field.svg, 0 0 320 240, OK  
+s2-averaging-sphere.svg, 0 0 260 200, OK
+CODEX_DONE 0

@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Griffiths 8.1.2 Poynting’s theorem (book pp. 363–367)</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+  :root {
+    --page-bg: #d9d9d4;
+    --paper: #fdfdfb;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --page-bg: #2b2b2b;
+      --paper: #f4f3ee;
+      --ink: #111;
+      --rule: #444;
+      --note: #555;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page-bg: #2b2b2b;
+    --paper: #f4f3ee;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  body {
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--ink);
+    font-family: "Times New Roman", Times, "Liberation Serif", serif;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .sheet {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 12mm auto;
+    padding: 14mm 18mm 16mm;
+    box-sizing: border-box;
+    background: var(--paper);
+    box-shadow: 0 1px 6px rgba(0,0,0,.25);
+    position: relative;
+  }
+  .sheet + .sheet { margin-top: 0; }
+  .hdr {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: start;
+    font-size: 14px;
+  }
+  .code { font-size: 22px; font-weight: bold; letter-spacing: .5px; }
+  .pages { text-align: center; padding-top: 14px; }
+  .name { text-align: right; line-height: 2; }
+  .title { text-align: center; margin-top: 22px; }
+  .title .exam { font-size: 19px; font-weight: bold; letter-spacing: .3px; }
+  .title .sch { margin-top: 2px; }
+  .title .course { margin-top: 10px; font-size: 16px; }
+  .title .subject { margin-top: 6px; font-size: 16px; font-weight: bold; }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 16px;
+    font-size: 15px;
+  }
+  .sec { margin-top: 14px; }
+  .sec-head {
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    font-weight: bold;
+  }
+  .sec-head .num { font-weight: bold; }
+  .sec-head .body { font-weight: normal; }
+  .sec-head .body b { font-weight: bold; }
+  .sec-head .body i { font-style: italic; }
+  .sec-total { text-align: right; font-weight: normal; margin-top: 4px; }
+  .qs { margin-top: 6px; }
+  .q {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    margin-bottom: 7px;
+  }
+  .q .n { text-align: right; padding-right: 10px; }
+  .q p { margin: 0; }
+  .sub { margin-left: 22px; }
+  .cut { color: var(--note); }
+  .turn { text-align: right; font-weight: bold; margin-top: 26px; }
+  .fig {
+    display: block;
+    margin: 8px auto 2px 36px;
+    width: 230px;
+    height: auto;
+  }
+  .fig-cap { margin-left: 36px; font-size: 13px; color: var(--note); font-style: italic; }
+  .foot-note {
+    margin-top: 26px;
+    border-top: 1px solid var(--rule);
+    padding-top: 6px;
+    font-size: 12px;
+    color: var(--note);
+  }
+  .pno { text-align: center; font-size: 15px; margin-bottom: 4px; }
+  .pno-hdr { position: absolute; top: 10mm; right: 18mm; font-weight: bold; font-size: 14px; }
+  @media print {
+    @page { size: A4; margin: 0; }
+    body { background: #fff; }
+    .sheet { margin: 0; box-shadow: none; width: 210mm; height: 297mm; min-height: 0; page-break-after: always; }
+    .sheet:last-child { page-break-after: auto; }
+  }
+  @media (max-width: 720px) {
+    .sheet { width: auto; margin: 0; padding: 14px 16px; min-height: 0; }
+    .hdr { grid-template-columns: 1fr; gap: 6px; }
+    .name { text-align: left; }
+    .pages { text-align: left; padding-top: 0; }
+  }
+</style>
+<style>
+  .sheet.book { height: auto; min-height: 297mm; text-align: justify; hyphens: auto; }
+  .sheet.book p { margin: 6px 0; }
+  .rh { display: flex; justify-content: space-between; font-size: 12px; color: var(--note);
+        border-bottom: 1px solid var(--rule); padding-bottom: 3px; margin-bottom: 12px; }
+  .chap { display: flex; background: #8a8a86; color: #fff; margin: 4px 0 16px; }
+  .chap .cn { background: #b4b4ae; padding: 10px 18px; font-size: 26px; }
+  .chap .ct { padding: 12px 16px; font-size: 22px; font-weight: bold; }
+  h2.sec { font-size: 20px; margin: 18px 0 8px; border-bottom: 2px solid var(--rule); padding-bottom: 3px; }
+  h3.sub { font-size: 16px; margin: 14px 0 6px; border-bottom: 1px solid var(--rule); padding-bottom: 2px; }
+  .eq { margin: 10px 0; text-align: center; overflow: visible; }
+  mjx-container[display="true"], mjx-container { overflow: visible !important; max-width: 100%; }
+  .sheet.book, .sheet.book .eq { overflow: visible; }
+  .eq.boxed { border: 1px solid var(--ink); display: block; padding: 4px 8px; }
+  .prob { background: #ecece7; border: 1px solid var(--rule); padding: 8px 12px; margin: 10px 0; text-align: left; }
+  .prob p { margin: 5px 0; }
+  .ex, .ex-cont { border: 1px solid var(--rule); padding: 8px 12px; margin: 10px 0; text-align: left; }
+  .ex p, .ex-cont p { margin: 5px 0; }
+  .figbox { border: 1px dashed var(--rule); padding: 10px; color: var(--note); font-size: 13px; text-align: center; margin: 8px 0; font-style: italic; }
+  figure { margin: 8px 0; text-align: center; }
+  figure > svg { width: 100%; max-width: 230px; height: auto; }
+  figure.single > svg { max-width: 260px; }
+  figure figcaption { font-size: 12px; font-style: italic; color: var(--note); }
+  .figrow { display: flex; flex-wrap: wrap; justify-content: space-around; gap: 8px; }
+  .figrow > figure { flex: 1 1 180px; max-width: 240px; }
+  .fn { font-size: 12.5px; color: var(--note); margin: 6px 0; text-align: left; }
+  .cont { font-size: 12.5px; color: var(--note); font-style: italic; }
+  .gapnote { font-size: 13px; color: var(--note); font-style: italic; border-left: 3px solid var(--rule); padding: 2px 8px; margin: 4px 0 10px; }
+  .flag { color: #8a1c1c; font-weight: bold; }
+  .answer { font-size: 14px; }
+  .tbl { border-collapse: collapse; width: 100%; font-size: 13px; margin: 6px 0; }
+  .tbl td, .tbl th { border: 1px solid var(--rule); padding: 3px 6px; text-align: center; }
+  .tbl th { background: #ebebe6; }
+  .tblcap { font-size: 13px; margin-top: 8px; text-align: left; }
+  .pno { text-align: center; font-size: 14px; margin-top: 14px; }
+  .intro p, .intro li { font-size: 14px; text-align: left; }
+  .intro table { border-collapse: collapse; width: 100%; font-size: 14px; margin: 6px 0; }
+  .intro td, .intro th { border: 1px solid var(--rule); padding: 4px 8px; text-align: left; }
+  @media print {
+    .sheet.book { height: auto !important; min-height: 0 !important; page-break-after: always; }
+  }
+  @media (max-width: 720px) {
+    .sheet.book .eq { overflow-x: auto; max-width: 100%; }
+    .sheet.book mjx-container[display="true"] { font-size: 85% !important; }
+    .sheet.book .figrow > figure { flex: 1 1 100%; max-width: 100%; }
+    .sheet.book { padding-left: 14px; padding-right: 14px; }
+  }
+</style>
+</head>
+<body>
+<!-- Book source for Module 3. Transcribed sheet by sheet from the full Griffiths PDF; printed page numbers in each sheet header. -->
+<div class="sheet book" id="pdf-p387"><div class="rh"><span>363</span><span>8.1 Charge and Energy</span></div>
+<p>It serves as a constraint on the sources ($\rho$ and $\mathbf J$). They can’t be just <i>any</i> old functions – they have to respect conservation of charge.<sup>1</sup></p>
+<p>The purpose of this chapter is to develop the corresponding equations for local conservation of energy and momentum. In the process (and perhaps more important) we will learn how to express the energy density and the momentum density (the analogs to $\rho$), as well as the energy “current” and the momentum “current” (analogous to $\mathbf J$).</p>
+<h3 class="sub">8.1.2 Poynting’s Theorem</h3>
+<p>In Chapter 2, we found that the work necessary to assemble a static charge distribution (against the Coulomb repulsion of like charges) is (Eq. 2.45)</p>
+<div class="eq">$$W_e=\frac{\epsilon_0}{2}\int E^2\,d\tau,$$</div>
+<p>where $\mathbf E$ is the resulting electric field. Likewise, the work required to get currents going (against the back emf) is (Eq. 7.44)</p>
+<div class="eq">$$W_m=\frac{1}{2\mu_0}\int B^2\,d\tau,$$</div>
+<p>where $\mathbf B$ is the resulting magnetic field. This suggests that the total energy stored in electromagnetic fields, per unit volume, is</p>
+<div class="eq boxed">$$u=\frac12\left(\epsilon_0E^2+\frac{1}{\mu_0}B^2\right).\qquad(8.5)$$</div>
+<p>In this section I will confirm Eq. 8.5, and develop the energy conservation law for electrodynamics.</p>
+<p>Suppose we have some charge and current configuration which, at time $t$, produces fields $\mathbf E$ and $\mathbf B$. In the next instant, $dt$, the charges move around a bit. <i>Question:</i> How much work, $dW$, is done by the electromagnetic forces acting on these charges, in the interval $dt$? According to the Lorentz force law, the work done on a charge $q$ is</p>
+<div class="eq">$$dW=\mathbf F\cdot d\mathbf l=q(\mathbf E+\mathbf v\times\mathbf B)\cdot\mathbf v\,dt=q\mathbf E\cdot\mathbf v\,dt.$$</div>
+<p>In terms of the charge and current <i>densities</i>, $q\to\rho\,d\tau$ and $\rho\mathbf v\to\mathbf J$,<sup>2</sup> so the rate at which work is done on all the charges in a volume $\mathcal V$ is</p>
+<div class="eq">$$\frac{dW}{dt}=\int_{\mathcal V}(\mathbf E\cdot\mathbf J)\,d\tau.\qquad(8.6)$$</div>
+<div class="fn"><sup>1</sup> The continuity equation is the <i>only</i> such constraint. Any functions $\rho(\mathbf r,t)$ and $\mathbf J(\mathbf r,t)$ consistent with Eq. 8.4 constitute possible charge and current densities, in the sense of admitting solutions to Maxwell’s equations.<br><sup>2</sup> Of course, if charges of both signs are present, the <i>net</i> charge density can be zero even when the current is <i>not</i> – in fact, this is the case for ordinary current-carrying wires. We should really treat the positive and negative charges separately, and combine the two to get Eq. 8.6, with $\mathbf J=\rho_+\mathbf v_++\rho_-\mathbf v_-$. See Chapter 5, footnote 8.</div>
+</div>
+<div class="sheet book" id="pdf-p388"><div class="rh"><span>364</span><span>8 Conservation Laws</span></div>
+<p>Evidently, $\mathbf E\cdot\mathbf J$ is the work done per unit time, per unit volume – which is to say, the <i>power</i> delivered per unit volume. We can express this quantity in terms of the fields alone, using the Ampère–Maxwell law to eliminate $\mathbf J$:<sup>3</sup></p>
+<div class="eq">$$\mathbf E\cdot\mathbf J=\frac{1}{\mu_0}\mathbf E\cdot(\nabla\times\mathbf B)-\epsilon_0\mathbf E\cdot\frac{\partial\mathbf E}{\partial t}.$$</div>
+<p>Product rule says</p>
+<div class="eq">$$\nabla\cdot(\mathbf E\times\mathbf B)=\mathbf B\cdot(\nabla\times\mathbf E)-\mathbf E\cdot(\nabla\times\mathbf B).$$</div>
+<p>Invoking Faraday’s law ($\nabla\times\mathbf E=-\partial\mathbf B/\partial t$), it follows that</p>
+<div class="eq">$$\mathbf E\cdot(\nabla\times\mathbf B)=-\mathbf B\cdot\frac{\partial\mathbf B}{\partial t}-\nabla\cdot(\mathbf E\times\mathbf B).$$</div>
+<p>Meanwhile,</p>
+<div class="eq">$$\mathbf B\cdot\frac{\partial\mathbf B}{\partial t}=\frac12\frac{\partial}{\partial t}(B^2)\quad\text{and}\quad\mathbf E\cdot\frac{\partial\mathbf E}{\partial t}=\frac12\frac{\partial}{\partial t}(E^2),\qquad(8.7)$$</div>
+<p>so</p>
+<div class="eq">$$\mathbf E\cdot\mathbf J=-\frac12\frac{\partial}{\partial t}\left(\epsilon_0E^2+\frac{1}{\mu_0}B^2\right)-\frac{1}{\mu_0}\nabla\cdot(\mathbf E\times\mathbf B).\qquad(8.8)$$</div>
+<p>Putting this into Eq. 8.6, and applying the divergence theorem to the second term, we have</p>
+<div class="eq">$$\frac{dW}{dt}=-\frac{d}{dt}\int_{\mathcal V}\frac12\left(\epsilon_0E^2+\frac{1}{\mu_0}B^2\right)d\tau-\frac{1}{\mu_0}\oint_S(\mathbf E\times\mathbf B)\cdot d\mathbf a,\qquad(8.9)$$</div>
+<p>where $S$ is the surface bounding $\mathcal V$. This is Poynting’s theorem; it is the “work-energy theorem” of electrodynamics. The first integral on the right is the total energy stored in the fields, $\int u\,d\tau$ (Eq. 8.5). The second term evidently represents the rate at which energy is transported out of $\mathcal V$, across its boundary surface, by the electromagnetic fields. Poynting’s theorem says, then, that <i>the work done on the charges by the electromagnetic force is equal to the decrease in energy remaining in the fields, less the energy that flowed out through the surface.</i></p>
+<p>The <i>energy per unit time, per unit area</i>, transported by the fields is called the <b>Poynting vector</b>:</p>
+<div class="eq boxed">$$\mathbf S\equiv\frac{1}{\mu_0}(\mathbf E\times\mathbf B).\qquad(8.10)$$</div>
+<p>Specifically, $\mathbf S\cdot d\mathbf a$ is the energy per unit time crossing the infinitesimal surface $d\mathbf a$ – the energy <i>flux</i> (so $\mathbf S$ is the energy flux density).<sup>4</sup> We will see <span class="cont">(continued on the next sheet)</span></p>
+<div class="fn"><sup>3</sup> As you will discover, this is a standard move in field theory: get rid of the <i>sources</i> ($\rho$ and $\mathbf J$) in favor of the <i>fields</i> ($\mathbf E$ and $\mathbf B$), using the field equations (Gauss and Ampère–Maxwell).<br><sup>4</sup> If you’re very fastidious, you’ll notice a small gap in the logic here: we know from Eq. 8.9 that $\oint\mathbf S\cdot d\mathbf a$ is the total power passing through a <i>closed</i> surface, but this does not prove that $\int\mathbf S\cdot d\mathbf a$ is the power passing through any <i>open</i> surface (there could be an extra term that integrates to zero over all closed surfaces). This is, however, the obvious and natural interpretation; as always, the precise <i>location</i> of energy is not really determined in electrodynamics (see Section 2.4.4).</div>
+</div>
+<div class="sheet book" id="pdf-p389"><div class="rh"><span>365</span><span>8.1 Charge and Energy</span></div>
+<p>many applications of the Poynting vector in Chapters 9 and 11, but for the moment I am mainly interested in using it to express Poynting’s theorem more compactly:</p>
+<div class="eq boxed">$$\frac{dW}{dt}=-\frac{d}{dt}\int_{\mathcal V}u\,d\tau-\oint_S\mathbf S\cdot d\mathbf a.\qquad(8.11)$$</div>
+<p>What if <i>no</i> work is done on the charges in $\mathcal V$ – what if, for example, $\mathcal V$ is in a region of empty space, where there <i>is</i> no charge? In that case $dW/dt=0$, so</p>
+<div class="eq">$$\int\frac{\partial u}{\partial t}\,d\tau=-\oint_S\mathbf S\cdot d\mathbf a=-\int_{\mathcal V}(\nabla\cdot\mathbf S)\,d\tau,$$</div>
+<p>and hence</p>
+<div class="eq boxed">$$\frac{\partial u}{\partial t}=-\nabla\cdot\mathbf S.\qquad(8.12)$$</div>
+<p>This is the “continuity equation” for <i>energy</i>: $u$ (energy density) plays the role of $\rho$ (charge density), and $\mathbf S$ takes the part of $\mathbf J$ (current density). It expresses local conservation of electromagnetic energy.</p>
+<p>In <i>general</i>, though, electromagnetic energy by itself is <i>not</i> conserved (nor is the mechanical energy of the charges). Of course not! The fields do work on the charges, and the charges create fields – energy is tossed back and forth between them. In the overall energy economy, you must include the contributions of both the matter and the fields.</p>
+<div class="ex"><p><b>Example 8.1.</b> When current flows down a resistive wire, work is done, which shows up as Joule heating of the wire (Eq. 7.7). Though there are certainly <i>easier</i> ways to do it, the energy per unit time delivered to the wire can be calculated using the Poynting vector. Assuming it’s uniform, the electric field inside the wire is</p>
+<div class="eq">$$E=\frac{V}{L},$$</div>
+<p>where $V$ is the potential difference between the ends and $L$ is the length of the wire (Fig. 8.1). The magnetic field is “circumferential”; at the surface (radius $a$) it has the value</p>
+<div class="eq">$$B=\frac{\mu_0I}{2\pi a}.$$</div>
+<p>Accordingly, the magnitude of the Poynting vector is</p>
+<div class="eq">$$S=\frac{1}{\mu_0}\,\frac{V}{L}\,\frac{\mu_0I}{2\pi a}=\frac{VI}{2\pi aL},$$</div>
+<p>and it points radially inward. The energy per unit time passing in through the surface of the wire is therefore</p>
+<div class="eq">$$\int\mathbf S\cdot d\mathbf a=S(2\pi aL)=VI,$$</div>
+</div>
+</div>
+<div class="sheet book" id="pdf-p390"><div class="rh"><span>366</span><span>8 Conservation Laws</span></div>
+<p>which is exactly what we concluded, on much more direct grounds, in Section 7.1.1.<sup>5</sup></p>
+<div class="figbox">Fig. 8.1 (book): a wire of length $L$ with current $I$ flowing down it; $\mathbf E$ along the wire, $\mathbf B$ circumferential at radius $a$, and $\mathbf S$ pointing radially inward. [Figure not transcribed here.]</div>
+<div class="prob"><p><b>Problem 8.1.</b> Calculate the power (energy per unit time) transported down the cables of Ex. 7.14 and Prob. 7.65, assuming the two conductors are held at potential difference $V$, and carry current $I$ (down one and back up the other).</p>
+<p><b>Problem 8.2.</b> Imagine two infinite parallel nonconducting planes, a distance $d$ apart, carrying equal and opposite uniform surface charges $\pm\sigma$. A point charge $q$ is at rest in the space between them, a distance $z_0$ above the $-\sigma$ surface. The electric field is $\mathbf E=\mathbf E_\sigma+\mathbf E_q$. The <i>total</i> field energy is infinite, but the <b>interaction energy</b> (subtracting off the portions due to $\sigma$ alone and $q$ alone) is finite.</p>
+<p>(a) Calculate the interaction energy of this configuration.<br>(b) Compare the interaction energy to the potential energy of $q$ (take it to be zero at the center between the planes).<br>(c) From the gradient of the interaction energy determine the force on $q$ (no surprise).<sup>6</sup></p>
+<p><b>Problem 8.3.</b> Consider the charging capacitor in Prob. 7.35.</p>
+<p>(a) Find the electric and magnetic fields in the gap, as functions of the distance $s$ from the axis and the time $t$. (Assume the charge is zero at $t=0$.)<br>(b) Find the energy density $u_{\rm em}$ and the Poynting vector $\mathbf S$ in the gap. Note especially the <i>direction</i> of $\mathbf S$. Check that Eq. 8.12 is satisfied.<br>(c) Determine the total energy in the gap, as a function of time. Calculate the total power flowing into the gap, by integrating the Poynting vector over the appropriate surface. Check that the power input is equal to the rate of increase of energy in the gap (Eq. 8.9 – in this case $W=0$, because there is no charge in the gap). [If you’re worried about the fringing fields, do it for a volume of radius $b<a$ well inside the gap.]</p></div>
+<div class="fn"><sup>5</sup> What about energy flow <i>down</i> the wire? For a discussion, see M. K. Harbola, <i>Am. J. Phys.</i> 78, 1203 (2010). For a more sophisticated geometry, see B. S. Davis and L. Kaplan, <i>Am. J. Phys.</i> 79, 1155 (2011).<br><sup>6</sup> For commentary, see R. C. Hilborn, <i>Am. J. Phys.</i> 84, 531 (2016).</div>
+</div>
+<div class="sheet book" id="pdf-p391"><div class="rh"><span>367</span><span>8.2 Momentum</span></div>
+<div class="prob"><p><b>Problem 8.4.</b> For the charging sphere in Prob. 7.38:</p>
+<p>(a) find the Poynting vector;<br>(b) find the energy density in the fields;<br>(c) check that the electromagnetic energy is locally conserved (Eq. 8.12), except on the negative $z$-axis;<br>(d) on the negative $z$-axis, however, external work is being done on the current – pushing the charges in against the electric field. Calculate the external power delivered, and show that it is equal to the rate of increase of the energy in the fields.<sup>7</sup></p></div>
+<div class="fn"><sup>7</sup> T. H. Boyer, <i>Am. J. Phys.</i> 87, 729 (2019).</div>
+</div>
+
+</body>
+</html>

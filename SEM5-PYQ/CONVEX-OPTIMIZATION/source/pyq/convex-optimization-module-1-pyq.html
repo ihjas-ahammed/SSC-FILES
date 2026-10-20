@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Convex Optimization: Module I</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+  :root {
+    --page-bg: #d9d9d4;
+    --paper: #fdfdfb;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --page-bg: #2b2b2b;
+      --paper: #f4f3ee;
+      --ink: #111;
+      --rule: #444;
+      --note: #555;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page-bg: #2b2b2b;
+    --paper: #f4f3ee;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  body {
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--ink);
+    font-family: "Times New Roman", Times, "Liberation Serif", serif;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .sheet {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 12mm auto;
+    padding: 14mm 18mm 16mm;
+    box-sizing: border-box;
+    background: var(--paper);
+    box-shadow: 0 1px 6px rgba(0,0,0,.25);
+    position: relative;
+  }
+  .sheet + .sheet { margin-top: 0; }
+  .hdr {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: start;
+    font-size: 14px;
+  }
+  .code { font-size: 22px; font-weight: bold; letter-spacing: .5px; }
+  .pages { text-align: center; padding-top: 14px; }
+  .name { text-align: right; line-height: 2; }
+  .title { text-align: center; margin-top: 22px; }
+  .title .exam { font-size: 19px; font-weight: bold; letter-spacing: .3px; }
+  .title .sch { margin-top: 2px; }
+  .title .course { margin-top: 10px; font-size: 16px; }
+  .title .subject { margin-top: 6px; font-size: 16px; font-weight: bold; }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 16px;
+    font-size: 15px;
+  }
+  .sec { margin-top: 14px; }
+  .sec-head {
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    font-weight: bold;
+  }
+  .sec-head .num { font-weight: bold; }
+  .sec-head .body { font-weight: normal; }
+  .sec-head .body b { font-weight: bold; }
+  .sec-head .body i { font-style: italic; }
+  .sec-total { text-align: right; font-weight: normal; margin-top: 4px; }
+  .qs { margin-top: 6px; }
+  .q {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    margin-bottom: 7px;
+  }
+  .q .n { text-align: right; padding-right: 10px; }
+  .q p { margin: 0; }
+  .sub { margin-left: 22px; }
+  .cut { color: var(--note); }
+  .turn { text-align: right; font-weight: bold; margin-top: 26px; }
+  .fig {
+    display: block;
+    margin: 8px auto 2px 36px;
+    width: 230px;
+    height: auto;
+  }
+  .fig-cap { margin-left: 36px; font-size: 13px; color: var(--note); font-style: italic; }
+  .foot-note {
+    margin-top: 26px;
+    border-top: 1px solid var(--rule);
+    padding-top: 6px;
+    font-size: 12px;
+    color: var(--note);
+  }
+  .pno { text-align: center; font-size: 15px; margin-bottom: 4px; }
+  .pno-hdr { position: absolute; top: 10mm; right: 18mm; font-weight: bold; font-size: 14px; }
+  @media print {
+    @page { size: A4; margin: 0; }
+    body { background: #fff; }
+    .sheet { margin: 0; box-shadow: none; width: 210mm; height: 297mm; min-height: 0; page-break-after: always; }
+    .sheet:last-child { page-break-after: auto; }
+  }
+  @media (max-width: 720px) {
+    .sheet { width: auto; margin: 0; padding: 14px 16px; min-height: 0; }
+    .hdr { grid-template-columns: 1fr; gap: 6px; }
+    .name { text-align: left; }
+    .pages { text-align: left; padding-top: 0; }
+  }
+.sec-title, .topic { break-after: avoid; }
+</style>
+<style>
+  .sec-title { font-weight: bold; margin-top: 16px; }
+  .sec-title .sub { font-weight: normal; font-style: italic; }
+  .lead { margin: 8px 0 4px; }
+  .placeholder {
+    margin: 8px 0 4px 36px; padding: 8px 10px;
+    border: 1px dashed var(--rule); font-size: 13px; color: var(--note);
+  }
+  .title .tl { margin-top: 4px; font-size: 16px; }
+  .title .tl.bold { font-weight: bold; }
+  body { font-size: 12px; line-height: 1.3; }
+  .sheet { padding: 0; }
+  .title .exam{font-size:15px;} .title .sch{font-size:13px;} .title .course,.title .subject,.title .tl{font-size:12px;}
+  .hdr .code{font-size:16px;}
+  .sec-title { margin-top: 8px; font-size: 13px; }
+  .topic { font-weight: bold; font-style: italic; margin: 6px 0 2px 0; font-size: 12px; }
+  .q { margin-bottom: 3px; grid-template-columns: 26px 1fr; }
+  .q-src { float:right; margin:1px 0 0 12px; font-size:11px; color: var(--note); font-style: italic; white-space:nowrap; }
+  .q p { display:inline; margin:0; }
+  .mk { font-weight: bold; white-space: nowrap; }
+  @page { size: A4; margin: 14mm 16mm; }
+  @media print { .sheet { margin:0; padding:0; box-shadow:none; width:auto; min-height:0; } body{background:#fff;} }
+</style>
+<style>@media print { .sheet { height:auto !important; min-height:0 !important; page-break-after: auto; } .sheet.key { page-break-before: always; } }</style>
+</head>
+
+<body>
+<div class="sheet">
+<div class="title">
+<div class="tl exam">FYUGP B.Sc. MATHEMATICS HONOURS</div>
+<div class="tl sch">CONVEX OPTIMIZATION (MAT5EJ303 (2))</div>
+<div class="tl course">Semester V &middot; Elective (Specialisation: Data Science)</div>
+<div class="tl subject">MODULE 1: REVIEW OF MULTIVARIABLE CALCULUS</div>
+<div class="tl course">Past questions</div>
+</div>
+<div class="sec"><div class="sec-title">Section A: 1 to 3 marks</div>
+<div class="topic">Directional derivatives</div>
+<div class="q"><span class="n">1</span><div><span class="q-src">March 2022</span><p>Find the directional derivative of $f(x, y) = x^2 \sin 2y$ at $\left(1, \frac{\pi}{2}\right)$ in the direction of $\vec{v} = 3\hat{i} - 4\hat{j}$. <span class="mk">(3 marks)</span></p></div></div>
+<div class="topic">Gradient</div>
+<div class="q"><span class="n">2</span><div><span class="q-src">March 2023</span><p>Find the gradient of $f(x, y) = y \ln x + xy^2$ at the point $(1, 2)$. <span class="mk">(2 marks)</span></p></div></div>
+<div class="q"><span class="n">3</span><div><span class="q-src">March 2024</span><p>Find the gradient of $f(x, y) = x^2 + y^2 + 1$ at the point $(1, 2)$. Use the resutl to find the directional derivative of $f$ at $(1, 2)$ in the direction from $(1, 2)$ to $(2, 3)$. <span class="cut">[as printed]</span> <span class="mk">(2 marks)</span></p></div></div>
+<div class="topic">Jacobian</div>
+<div class="q"><span class="n">4</span><div><span class="q-src">March 2022</span><p>Find the Jacobian for the change of variables defined by $x = r\cos\theta$, $y = r\sin\theta$. <span class="mk">(3 marks)</span></p></div></div>
+<div class="topic">Stationary points and relative extrema</div>
+<div class="q"><span class="n">5</span><div><span class="q-src">March 2022</span><p>Find the relative extrema of the function $f(x, y) = x^2 + y^2 - 2x + 4y$. <span class="mk">(3 marks)</span></p></div></div>
+<div class="q"><span class="n">6</span><div><span class="q-src">March 2023</span><p>Find the relative extrema of $f(x, y) = 1 - \left(x^2 + y^2\right)^{1/3}$. <span class="mk">(2 marks)</span></p></div></div>
+<div class="q"><span class="n">7</span><div><span class="q-src">March 2024</span><p>Find the critical points of $f(x, y) = -x^3 + 4xy - 2y^2 + 1$. <span class="mk">(2 marks)</span></p></div></div>
+</div>
+<div class="sec"><div class="sec-title">Section B: 4 to 6 marks</div>
+<div class="topic">Chain rule</div>
+<div class="q"><span class="n">8</span><div><span class="q-src">March 2025</span><p>Use the chain rule to find $\dfrac{dw}{dt}$, where $w = 2x^3y^2z$, $x = t$, $y = \cos t$, $z = t\sin t$. <span class="mk">(5 marks)</span></p></div></div>
+<div class="topic">Stationary points and relative extrema</div>
+<div class="q"><span class="n">9</span><div><span class="q-src">March 2022</span><p>Find the relative extrema of $f(x, y) = -x^3 + 4xy - 2y^2 + 1$. <span class="mk">(6 marks)</span></p></div></div>
+<div class="q"><span class="n">10</span><div><span class="q-src">March 2023</span><p>Find the relative extrema of $f(x, y) = 2x^2 + y^2 + 8x - 6y + 20$. <span class="mk">(5 marks)</span></p></div></div>
+<div class="q"><span class="n">11</span><div><span class="q-src">April 2026</span><p>Find the relative extrema of $f(x, y) = x^3 + y^2 - 2xy + 7x - 8y + 2$. <span class="mk">(5 marks)</span></p></div></div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Griffiths 5th ed., Polarization (Griffiths 4.1, pp. 166–172)</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+  :root {
+    --page-bg: #d9d9d4;
+    --paper: #fdfdfb;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --page-bg: #2b2b2b;
+      --paper: #f4f3ee;
+      --ink: #111;
+      --rule: #444;
+      --note: #555;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page-bg: #2b2b2b;
+    --paper: #f4f3ee;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  body {
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--ink);
+    font-family: "Times New Roman", Times, "Liberation Serif", serif;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .sheet {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 12mm auto;
+    padding: 14mm 18mm 16mm;
+    box-sizing: border-box;
+    background: var(--paper);
+    box-shadow: 0 1px 6px rgba(0,0,0,.25);
+    position: relative;
+  }
+  .sheet + .sheet { margin-top: 0; }
+  .hdr {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: start;
+    font-size: 14px;
+  }
+  .code { font-size: 22px; font-weight: bold; letter-spacing: .5px; }
+  .pages { text-align: center; padding-top: 14px; }
+  .name { text-align: right; line-height: 2; }
+  .title { text-align: center; margin-top: 22px; }
+  .title .exam { font-size: 19px; font-weight: bold; letter-spacing: .3px; }
+  .title .sch { margin-top: 2px; }
+  .title .course { margin-top: 10px; font-size: 16px; }
+  .title .subject { margin-top: 6px; font-size: 16px; font-weight: bold; }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 16px;
+    font-size: 15px;
+  }
+  .sec { margin-top: 14px; }
+  .sec-head {
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    font-weight: bold;
+  }
+  .sec-head .num { font-weight: bold; }
+  .sec-head .body { font-weight: normal; }
+  .sec-head .body b { font-weight: bold; }
+  .sec-head .body i { font-style: italic; }
+  .sec-total { text-align: right; font-weight: normal; margin-top: 4px; }
+  .qs { margin-top: 6px; }
+  .q {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    margin-bottom: 7px;
+  }
+  .q .n { text-align: right; padding-right: 10px; }
+  .q p { margin: 0; }
+  .sub { margin-left: 22px; }
+  .cut { color: var(--note); }
+  .turn { text-align: right; font-weight: bold; margin-top: 26px; }
+  .fig {
+    display: block;
+    margin: 8px auto 2px 36px;
+    width: 230px;
+    height: auto;
+  }
+  .fig-cap { margin-left: 36px; font-size: 13px; color: var(--note); font-style: italic; }
+  .foot-note {
+    margin-top: 26px;
+    border-top: 1px solid var(--rule);
+    padding-top: 6px;
+    font-size: 12px;
+    color: var(--note);
+  }
+  .pno { text-align: center; font-size: 15px; margin-bottom: 4px; }
+  .pno-hdr { position: absolute; top: 10mm; right: 18mm; font-weight: bold; font-size: 14px; }
+  @media print {
+    @page { size: A4; margin: 0; }
+    body { background: #fff; }
+    .sheet { margin: 0; box-shadow: none; width: 210mm; height: 297mm; min-height: 0; page-break-after: always; }
+    .sheet:last-child { page-break-after: auto; }
+  }
+  @media (max-width: 720px) {
+    .sheet { width: auto; margin: 0; padding: 14px 16px; min-height: 0; }
+    .hdr { grid-template-columns: 1fr; gap: 6px; }
+    .name { text-align: left; }
+    .pages { text-align: left; padding-top: 0; }
+  }
+</style>
+<style>
+  .sheet.book { height: auto; min-height: 297mm; text-align: justify; hyphens: auto; }
+  .sheet.book p { margin: 6px 0; }
+  .rh { display: flex; justify-content: space-between; font-size: 12px; color: var(--note);
+        border-bottom: 1px solid var(--rule); padding-bottom: 3px; margin-bottom: 12px; }
+  .chap { display: flex; background: #8a8a86; color: #fff; margin: 4px 0 16px; }
+  .chap .cn { background: #b4b4ae; padding: 10px 18px; font-size: 26px; }
+  .chap .ct { padding: 12px 16px; font-size: 22px; font-weight: bold; }
+  h2.sec { font-size: 20px; margin: 18px 0 8px; border-bottom: 2px solid var(--rule); padding-bottom: 3px; }
+  h3.sub { font-size: 16px; margin: 14px 0 6px; border-bottom: 1px solid var(--rule); padding-bottom: 2px; }
+  .eq { margin: 10px 0; text-align: center; overflow: visible; }
+  mjx-container[display="true"], mjx-container { overflow: visible !important; max-width: 100%; }
+  .sheet.book, .sheet.book .eq { overflow: visible; }
+  .eq.boxed { border: 1px solid var(--ink); display: block; padding: 4px 8px; }
+  .prob { background: #ecece7; border: 1px solid var(--rule); padding: 8px 12px; margin: 10px 0; text-align: left; }
+  .prob p { margin: 5px 0; }
+  .ex, .ex-cont { border: 1px solid var(--rule); padding: 8px 12px; margin: 10px 0; text-align: left; }
+  .ex p, .ex-cont p { margin: 5px 0; }
+  .figbox { border: 1px dashed var(--rule); padding: 10px; color: var(--note); font-size: 13px; text-align: center; margin: 8px 0; font-style: italic; }
+  figure { margin: 8px 0; text-align: center; }
+  figure svg { width: 100%; max-width: 230px; height: auto; }
+  figure.single svg { max-width: 260px; }
+  figure figcaption { font-size: 12px; font-style: italic; color: var(--note); }
+  .figrow { display: flex; flex-wrap: wrap; justify-content: space-around; gap: 8px; }
+  .figrow > figure { flex: 1 1 180px; max-width: 240px; }
+  .fn { font-size: 12.5px; color: var(--note); margin: 6px 0; text-align: left; }
+  .cont { font-size: 12.5px; color: var(--note); font-style: italic; }
+  .gapnote { font-size: 13px; color: var(--note); font-style: italic; border-left: 3px solid var(--rule); padding: 2px 8px; margin: 4px 0 10px; }
+  .flag { color: #8a1c1c; font-weight: bold; }
+  .answer { font-size: 14px; }
+  .tbl { border-collapse: collapse; width: 100%; font-size: 13px; margin: 6px 0; }
+  .tbl td, .tbl th { border: 1px solid var(--rule); padding: 3px 6px; text-align: center; }
+  .tbl th { background: #ebebe6; }
+  .tblcap { font-size: 13px; margin-top: 8px; text-align: left; }
+  .pno { text-align: center; font-size: 14px; margin-top: 14px; }
+  .intro p, .intro li { font-size: 14px; text-align: left; }
+  .intro table { border-collapse: collapse; width: 100%; font-size: 14px; margin: 6px 0; }
+  .intro td, .intro th { border: 1px solid var(--rule); padding: 4px 8px; text-align: left; }
+  @media print {
+    .sheet.book { height: auto !important; min-height: 0 !important; page-break-after: always; }
+  }
+  .recall { border: 1px solid var(--rule); border-left: 4px solid #6b6b63; background: #f1f1ec; padding: 6px 10px; margin: 8px 0; font-size: 13.5px; text-align: left; }
+  .recall .rh2 { font-weight: bold; font-size: 13px; color: var(--note); margin-bottom: 3px; }
+  .recall ul { margin: 2px 0; padding-left: 18px; }
+  .recall li { margin: 3px 0; }
+  .recall .tag { font-family: monospace; font-size: 12px; color: var(--note); margin-right: 4px; }
+</style>
+</head>
+<body>
+<div class="sheet book" id="pdf-p01">
+  <div class="rh"><span>166 (chapter opener)</span><span>4 Electric Fields in Matter</span></div>
+  <div class="chap"><span class="cn">4</span><span class="ct">Electric Fields in Matter</span></div>
+  <h2 class="sec">4.1 Polarization</h2>
+  <h3 class="sub">4.1.1 Dielectrics</h3>
+  <div class="recall">
+    <div class="rh2">Recall: concepts this section assumes (added for this course; not from Griffiths)</div>
+    <ul>
+      <li><span class="tag">P1</span> Charge comes in two kinds. Like charges repel and unlike charges attract. The SI unit is the coulomb (C). The electron carries $-e = -1.6\times10^{-19}\ \text{C}$.</li>
+      <li><span class="tag">P2</span> In a conductor, some electrons are free to move through the whole body. In an insulator, every charge is bound to an atom or molecule and can only shift slightly. Griffiths calls the insulators <b>dielectrics</b>.</li>
+      <li>In a conductor in electrostatic equilibrium, the field inside is zero. In a dielectric, a field is present and it shifts the bound charges, so the two behave differently.</li>
+      <li><span class="tag">P7</span> The electric field is $\mathbf E = \mathbf F/q$: the force per unit positive test charge, in the direction of the force on a positive charge.</li>
+    </ul>
+  </div>
+  <p>In this chapter, we shall study electric fields in matter. Matter, of course, comes in many varieties – solids, liquids, gases, metals, woods, glasses – and these substances do not all respond in the same way to electrostatic fields. Nevertheless, most everyday objects belong (at least, in good approximation) to one of two large classes: <b>conductors</b> and <b>insulators</b> (or <b>dielectrics</b>). We have already talked about conductors; these are substances that contain an “unlimited” supply of charges that are free to move about through the material. In practice, what this ordinarily means is that many of the electrons (one or two per atom, in a typical metal) are not associated with any particular nucleus, but roam around in response to applied fields.</p>
+  <p>In dielectrics, by contrast, all charges are attached to specific atoms or molecules – they’re on a tight leash, and all they can do is move a bit <i>within</i> the atom or molecule. Such microscopic displacements are not as dramatic as the wholesale rearrangement of charge in a conductor, but their cumulative effects account for the characteristic behavior of dielectric materials. There are actually <i>two</i> principal mechanisms by which electric fields can distort the charge distribution of a dielectric atom or molecule: <i>stretching</i> and <i>rotating</i>. In the next two sections I’ll discuss these processes.</p>
+  <h3 class="sub">4.1.2 Induced Dipoles</h3>
+  <div class="recall">
+    <div class="rh2">Recall: concepts this section assumes (added for this course; not from Griffiths)</div>
+    <ul>
+      <li><span class="tag">P3</span> An atom has a nucleus of $Z$ protons (charge $+e$ each) and $Z$ electrons (charge $-e$ each), so it is neutral overall. The electrons form a cloud around the nucleus.</li>
+      <li><span class="tag">P4</span> Atomic sizes are of order $10^{-10}\ \text{m}$, and $1\ \text{\AA} = 10^{-10}\ \text{m}$. The Bohr radius is $a \approx 0.53\ \text{\AA}$, and Prob. 4.1 uses the half-angstrom value.</li>
+      <li><span class="tag">P5</span> Two forces balance when they are equal and opposite, so the net force is zero.</li>
+      <li><span class="tag">P6</span> Coulomb's law: the force between point charges is $F = \dfrac{1}{4\pi\epsilon_0}\dfrac{q_1 q_2}{r^2}$, along the line joining them, where $\dfrac{1}{4\pi\epsilon_0} \approx 9\times10^{9}\ \text{N m}^2/\text{C}^2$.</li>
+      <li><span class="tag">P7</span> The field of a point charge $q$ at distance $r$ is $E = \dfrac{1}{4\pi\epsilon_0}\dfrac{q}{r^2}$, radially outward for $q > 0$.</li>
+      <li><span class="tag">Gauss</span> Gauss's law: $\oint \mathbf E\cdot d\mathbf a = Q_{\text{enc}}/\epsilon_0$. For a uniformly charged sphere of total charge $Q$ and radius $a$, the field at radius $s < a$ is radial with magnitude $E = \dfrac{1}{4\pi\epsilon_0}\dfrac{Q s}{a^3}$. This is the field Example 4.1 uses. The enclosed charge at radius $s$ is $Qs^3/a^3$.</li>
+      <li><span class="tag">P10</span> A vector can be resolved into components. If $\mathbf E$ makes an angle $\theta$ with a direction $\hat n$, then $E_\parallel = E\cos\theta$ and $E_\perp = E\sin\theta$.</li>
+      <li><span class="tag">P11</span> A neutral atom with no permanent dipole acquires one only because the field separates the centres of its positive and negative charge.</li>
+      <li><span class="tag">P18</span> A strong enough field can pull electrons off the atom. This is ionisation, and it is why a strongly stressed dielectric can conduct.</li>
+      <li><span class="tag">Units</span> From $\mathbf p = \alpha\mathbf E$, with $p$ in C·m and $E$ in N/C, the unit of $\alpha$ is C²·m/N. Table 4.1 gives $\alpha/4\pi\epsilon_0$ in $10^{-30}\ \text{m}^3$, which is the same unit with $4\pi\epsilon_0$ removed.</li>
+      <li><span class="tag">M1 M2 M3</span> Algebra: rearrange $\mathbf p = \alpha\mathbf E$ to $\alpha = p/E$; simplify fractions such as $\dfrac{qd}{a^3}$; laws of exponents, including $a^{-n} = 1/a^{n}$ and $(a^m)^n = a^{mn}$.</li>
+      <li><span class="tag">M4</span> Scientific notation: $6.1\times10^{-30} = 6.1 \div 10^{30}$. When multiplying or dividing powers of 10, add or subtract the exponents.</li>
+      <li><span class="tag">M5</span> Volume of a sphere: $v = \dfrac{4}{3}\pi r^3$. With this, $\alpha = 4\pi\epsilon_0 a^3 = 3\epsilon_0 v$ (Eq. 4.2) follows directly.</li>
+      <li><span class="tag">M8 M9</span> Trigonometry: $\cos\theta$ and $\sin\theta$ give the components. An obtuse angle such as $105^\circ$ lies between $90^\circ$ and $180^\circ$; its supplement is $180^\circ - 105^\circ = 75^\circ$.</li>
+      <li><span class="tag">M10 M11</span> Coordinate geometry: a straight line through the origin has zero intercept. In Eq. 4.1, $\mathbf p$ against $\mathbf E$ is a straight line through the origin with slope $\alpha$.</li>
+      <li><span class="tag">M12</span> For small $x$: $(1+x)^n \approx 1 + nx$ and $e^{x} \approx 1 + x$. Prob. 4.2 uses $e^{-2r/a} \approx 1 - 2r/a$ for $r \ll a$.</li>
+      <li><span class="tag">M14</span> Derivatives: $\dfrac{d}{dx}x^n = nx^{n-1}$, and $\dfrac{d}{dr}e^{-2r/a} = -\dfrac{2}{a}e^{-2r/a}$.</li>
+      <li><span class="tag">M18</span> A matrix times a vector gives a vector: $p_x = \alpha_{xx}E_x + \alpha_{xy}E_y + \alpha_{xz}E_z$ uses the first row of the matrix. Eq. 4.3 is this product written out for $p_x$, $p_y$ and $p_z$.</li>
+      <li><span class="tag">M7</span> Symbols used here: $\alpha$ (alpha), $\epsilon_0$ (epsilon-naught), $\theta$ (theta), $\rho$ (rho), $\tau$ (tau), $\sigma$ (sigma).</li>
+    </ul>
+  </div>
+  <p>What happens to a neutral atom when it is placed in an electric field <b>E</b>? Your first guess might well be: “Absolutely nothing – since the atom is not charged, the field has no effect on it.” But that is incorrect. Although the atom <i>as a whole</i> is electrically neutral, there <i>is</i> a positively charged core (the nucleus) and a negatively charged electron cloud surrounding it. These two regions of charge within the atom are influenced by the field: the nucleus is pushed in the direction of the field, and the electrons the opposite way. In principle, if the field is large enough, it can pull the atom apart completely, <b>ionizing</b> it (the substance then becomes a conductor). With less extreme fields, however, an equilibrium is soon established, for if the center of the electron cloud does not coincide with the nucleus, these positive <span class="cont">(continued on the next page)</span></p>
+  <div class="pno">166</div>
+</div>
+<div class="sheet book" id="pdf-p02">
+  <div class="rh"><span>167</span><span>4.1 Polarization</span></div>
+  <p>and negative charges attract one another, and that holds the atom together. The two opposing forces (<b>E</b> pulling the electrons and nucleus apart, their mutual attraction drawing them back together) reach a balance, leaving the atom <b>polarized</b>, with plus charge shifted slightly one way, and minus the other. The atom now has a tiny dipole moment <b>p</b>, which points in the <i>same direction as</i> <b>E</b>. Typically, this induced dipole moment is approximately proportional to the field (as long as the latter is not too strong):</p>
+  <div class="eq">$$\mathbf p = \alpha\mathbf E. \tag{4.1}$$</div>
+  <p>The constant of proportionality $\alpha$ is called <b>atomic polarizability</b>. Its value depends on the detailed structure of the atom in question. Table 4.1 lists some experimentally determined atomic polarizabilities.</p>
+
+  <div class="tblcap"><b>Table 4.1.</b> Atomic polarizabilities ($\alpha/4\pi\epsilon_0$, in units of $10^{-30}\ \text{m}^3$). Data from <i>Handbook of Chemistry and Physics</i>, 91st ed., CRC Press, Boca Raton (2010).</div>
+  <table class="tbl">
+    <tr><td>H</td><td>He</td><td>Li</td><td>Be</td><td>C</td><td>Ne</td><td>Na</td><td>Ar</td><td>K</td><td>Cs</td></tr>
+    <tr class="v"><td>0.667</td><td>0.205</td><td>24.3</td><td>5.60</td><td>1.67</td><td>0.396</td><td>24.1</td><td>1.64</td><td>43.4</td><td>59.4</td></tr>
+  </table>
+
+  <div class="ex">
+    <p><b>Example 4.1.</b> A primitive model for an atom consists of a point nucleus ($+q$) surrounded by a uniformly charged spherical cloud ($-q$) of radius $a$ (Fig. 4.1). Calculate the atomic polarizability of such an atom.</p>
+    <p><i>Solution.</i> In the presence of an external field $\mathbf E$, the nucleus will be shifted slightly to the right and the electron cloud to the left, as shown in Fig. 4.2. (Because the actual displacements involved are extremely small, as you’ll find in Prob. 4.1, it is reasonable to assume that the electron cloud retains its spherical shape.) Say that equilibrium occurs when the nucleus is displaced a distance $d$ from the center of the sphere. At that point, the external field pushing the nucleus to the right exactly balances the internal field pulling it to the left: $E = E_e$, where $E_e$ is the field produced by the electron cloud. Now the field at a distance $d$ from the center of a uniformly charged sphere is</p>
+    <div class="eq">$$E_e = \frac{1}{4\pi\epsilon_0}\frac{qd}{a^3}$$</div>
+    <div class="figrow">
+      <figure>
+        <svg viewBox="0 0 200 170" role="img" aria-label="Fig. 4.1: point nucleus +q inside a uniformly charged sphere of charge -q and radius a">
+          <circle cx="100" cy="80" r="62" fill="#e8e8e2" stroke="#111" stroke-width="1.4"/>
+          <circle cx="100" cy="80" r="3.5" fill="#111"/>
+          <text x="108" y="74" font-size="13" font-family="Times New Roman, serif">+q</text>
+          <line x1="100" y1="80" x2="150" y2="34" stroke="#111"/>
+          <text x="124" y="46" font-size="13" font-style="italic" font-family="Times New Roman, serif">a</text>
+          <text x="82" y="152" font-size="13" font-family="Times New Roman, serif">−q</text>
+        </svg>
+        <figcaption>Fig. 4.1</figcaption>
+      </figure>
+      <figure>
+        <svg viewBox="0 0 200 170" role="img" aria-label="Fig. 4.2: nucleus displaced by d to the right of the centre of the electron cloud, field E to the right">
+          <circle cx="100" cy="80" r="62" fill="#e8e8e2" stroke="#111" stroke-width="1.4"/>
+          <circle cx="100" cy="80" r="3" fill="#111"/>
+          <circle cx="124" cy="80" r="3.5" fill="#111"/>
+          <text x="128" y="68" font-size="13" font-family="Times New Roman, serif">+q</text>
+          <text x="104" y="98" font-size="12" font-style="italic" font-family="Times New Roman, serif">d</text>
+          <text x="44" y="118" font-size="13" font-family="Times New Roman, serif">−q</text>
+          <line x1="40" y1="160" x2="120" y2="160" stroke="#111" stroke-width="1.6"/>
+          <polygon points="120,160 110,155 110,165" fill="#111"/>
+          <text x="86" y="152" font-size="13" font-style="italic" font-weight="bold" font-family="Times New Roman, serif">E</text>
+        </svg>
+        <figcaption>Fig. 4.2</figcaption>
+      </figure>
+    </div>
+  </div>
+  <div class="pno">167</div>
+</div>
+<div class="sheet book" id="pdf-p03">
+  <div class="rh"><span>4 Electric Fields in Matter</span><span>168</span></div>
+  <div class="exp-cont">
+    <p>(Prob. 2.13). At equilibrium, then,</p>
+    <div class="eq">$$E = \frac{1}{4\pi\epsilon_0}\frac{qd}{a^3},\qquad\text{or}\qquad p = qd = (4\pi\epsilon_0 a^3)E.$$</div>
+    <p>The atomic polarizability is therefore</p>
+    <div class="eq">$$\alpha = 4\pi\epsilon_0 a^3 = 3\epsilon_0 v, \tag{4.2}$$</div>
+    <p>where $v$ is the volume of the atom. Although this atomic model is extremely crude, the result (Eq. 4.2) is not too bad – it’s accurate to within a factor of 4 or so for many simple atoms.</p>
+  </div>
+
+  <p>For molecules the situation is not quite so simple, because frequently they polarize more readily in some directions than in others. Carbon dioxide (Fig. 4.3), for instance, has a polarizability of $4.5\times10^{-40}\ \text{C}^2\,\text{m/N}$ when you apply the field along the axis of the molecule, but only $2\times10^{-40}$ for fields perpendicular to this direction. When the field is at some angle to the axis, you must resolve it into parallel and perpendicular components, and multiply each by the pertinent polarizability:</p>
+  <div class="eq">$$\mathbf p = \alpha_\perp\mathbf E_\perp + \alpha_\parallel\mathbf E_\parallel.$$</div>
+  <p>In that case the induced dipole moment may not even be in the same <i>direction</i> as <b>E</b>. And CO<sub>2</sub> is relatively simple, as molecules go, since the atoms at least arrange themselves in a straight line; for a completely asymmetrical molecule, Eq. 4.1 is replaced by the most general linear relation between <b>E</b> and <b>p</b>:</p>
+  <div class="eq">$$\left.\begin{aligned} p_x &= \alpha_{xx}E_x + \alpha_{xy}E_y + \alpha_{xz}E_z,\\ p_y &= \alpha_{yx}E_x + \alpha_{yy}E_y + \alpha_{yz}E_z,\\ p_z &= \alpha_{zx}E_x + \alpha_{zy}E_y + \alpha_{zz}E_z. \end{aligned}\right\}\tag{4.3}$$</div>
+  <p>The set of nine constants $\alpha_{ij}$ constitute the <b>polarizability tensor</b> for the molecule. Their values depend on the orientation of the axes you use, though it is always possible to choose “principal” axes such that all the off-diagonal terms ($\alpha_{xy}$, $\alpha_{zx}$, etc.) vanish, leaving just three nonzero polarizabilities: $\alpha_{xx}$, $\alpha_{yy}$, and $\alpha_{zz}$.</p>
+
+  <figure class="single">
+    <svg viewBox="0 0 240 110" role="img" aria-label="Fig. 4.3: CO2 molecule, three atoms O C O in a straight line">
+      <circle cx="50" cy="55" r="34" fill="#e8e8e2" stroke="#111" stroke-width="1.4"/>
+      <circle cx="120" cy="55" r="34" fill="#d4d4cc" stroke="#111" stroke-width="1.4"/>
+      <circle cx="190" cy="55" r="34" fill="#e8e8e2" stroke="#111" stroke-width="1.4"/>
+      <text x="45" y="61" font-size="15" font-family="Times New Roman, serif">O</text>
+      <text x="115" y="61" font-size="15" font-family="Times New Roman, serif">C</text>
+      <text x="185" y="61" font-size="15" font-family="Times New Roman, serif">O</text>
+    </svg>
+    <figcaption>Fig. 4.3</figcaption>
+  </figure>
+  <div class="pno">168</div>
+</div>
+<div class="sheet book" id="pdf-p04">
+  <div class="rh"><span>169</span><span>4.1 Polarization</span></div>
+  <div class="prob"><p><b>Problem 4.1.</b> A hydrogen atom (with the Bohr radius of half an angstrom) is situated between two metal plates 1 mm apart, which are connected to opposite terminals of a 500 V battery. What fraction of the atomic radius does the separation distance $d$ amount to, roughly? Estimate the voltage you would need with this apparatus to ionize the atom. [Use the value of $\alpha$ in Table 4.1. <i>Moral:</i> The displacements we’re talking about are <i>minute</i>, even on an atomic scale.]</p>
+  <p><b>Problem 4.2.</b> According to quantum mechanics, the electron cloud for a hydrogen atom in its ground state has a charge density</p>
+  <div class="eq">$$\rho(r) = \frac{q}{\pi a^3}e^{-2r/a},$$</div>
+  <p>where $q$ is the charge of the electron and $a$ is the Bohr radius. Find the atomic polarizability of such an atom. [<i>Hint:</i> First calculate the electric field of the electron cloud, $E_e(r)$; then expand the exponential, assuming $r \ll a$.]<sup>1</sup></p>
+  <p><b>Problem 4.3.</b> According to Eq. 4.1, the induced dipole moment of an atom is proportional to the external field. This is a “rule of thumb,” not a fundamental law, and it is easy to concoct exceptions – in theory. Suppose, for example, the charge density of the electron cloud were proportional to the distance from the center, out to a radius $R$. To what power of $E$ would $p$ be proportional in that case? Find the condition on $\rho(r)$ such that Eq. 4.1 will hold in the weak-field limit.</p>
+  <p><b>Problem 4.4.</b> A point charge $q$ is situated a large distance $r$ from a neutral atom of polarizability $\alpha$. Find the force of attraction between them.</p></div>
+  <p class="fn"><sup>1</sup> For a more sophisticated approach, see W. A. Bowers, <i>Am. J. Phys.</i> <b>54</b>, 347 (1986).</p>
+
+  <h3 class="sub">4.1.3 Alignment of Polar Molecules</h3>
+  <div class="recall">
+    <div class="rh2">Recall: concepts this section assumes (added for this course; not from Griffiths)</div>
+    <ul>
+      <li><span class="tag">P8</span> A dipole is two equal and opposite charges $\pm q$ separated by $d$. Its moment is $\mathbf p = q\mathbf d$, pointing from $-$ to $+$. The unit is C·m.</li>
+      <li><span class="tag">P9</span> Torque is $\boldsymbol\tau = \mathbf r\times\mathbf F$, with magnitude $rF\sin\theta$ and direction given by the right-hand rule. In a uniform field the two forces on a dipole are equal and opposite, so the net force is zero, but the torque is $\mathbf p\times\mathbf E$.</li>
+      <li><span class="tag">P9 M16</span> Cross product: $|\mathbf A\times\mathbf B| = AB\sin\theta$, perpendicular to both $\mathbf A$ and $\mathbf B$. Dot product: $\mathbf A\cdot\mathbf B = AB\cos\theta$. Eq. 4.4 uses the cross product; Eq. 4.6 uses the dot product.</li>
+      <li><span class="tag">P13 P14</span> Work is force times displacement. For a rotation through $\theta$, the work is $\int \tau\,d\theta$. Potential energy of a charge is $U = qV$. For a permanent dipole in a uniform field, Eq. 4.6 gives $U = -\mathbf p\cdot\mathbf E$.</li>
+      <li><span class="tag">P16</span> Water is bent at about $105^\circ$. The oxygen end carries a net negative charge, so water has a permanent dipole. A symmetric linear molecule such as CO₂ has no net dipole in its ground state.</li>
+      <li><span class="tag">M15</span> Components: $\mathbf A = A_x\hat x + A_y\hat y + A_z\hat z$, with magnitude $|\mathbf A| = \sqrt{A_x^2 + A_y^2 + A_z^2}$.</li>
+      <li><span class="tag">M19 P17</span> Partial derivative: $\partial f/\partial x$ differentiates with respect to $x$ and treats $y$ and $z$ as constants. The gradient is $\nabla = \hat x\,\partial_x + \hat y\,\partial_y + \hat z\,\partial_z$. The force in a non-uniform field, Eq. 4.5, is $(\mathbf p\cdot\nabla)\mathbf E$. This is beyond Plus Two, so learn it before this subsection.</li>
+    </ul>
+  </div>
+  <p>The neutral atom discussed in Section 4.1.2 had no dipole moment to start with; <b>p</b> was <i>induced</i> by the applied field. Some molecules have built-in, permanent dipole moments. In the water molecule, for example, the electrons tend to cluster around the oxygen atom (Fig. 4.4), and since the molecule is bent at $105^\circ$, this leaves a negative charge at the vertex and a net positive charge on the opposite side. (The dipole moment of water is unusually large: $6.1\times10^{-30}$ C m; in fact, this is what accounts for its effectiveness as a solvent.) What happens when such molecules (called <b>polar molecules</b>) are placed in an electric field?</p>
+  <p>If the field is uniform, the <i>force</i> on the positive end, $\mathbf F_+ = q\mathbf E$, exactly cancels the force on the negative end, $\mathbf F_- = -q\mathbf E$ (Fig. 4.5). However, there will be a <i>torque</i>:</p>
+  <div class="eq">$$\mathbf N = (\mathbf r_+\times\mathbf F_+) + (\mathbf r_-\times\mathbf F_-) = \left[\left(\tfrac{d}{2}\right)\times(q\mathbf E)\right] + \left[\left(-\tfrac{d}{2}\right)\times(-q\mathbf E)\right] = q\mathbf d\times\mathbf E.$$</div>
+  <div class="pno">169</div>
+</div>
+<div class="sheet book" id="pdf-p05">
+  <div class="rh"><span>170</span><span>4 Electric Fields in Matter</span></div>
+  <figure class="figrow">
+    <figure>
+      <svg viewBox="0 0 200 170" role="img" aria-label="Fig. 4.4: water molecule, O at the vertex of a 105 degree bend, two H atoms, dipole p pointing up from O">
+        <circle cx="100" cy="112" r="34" fill="#d4d4cc" stroke="#111" stroke-width="1.4"/>
+        <circle cx="52" cy="50" r="20" fill="#e8e8e2" stroke="#111" stroke-width="1.2"/>
+        <circle cx="148" cy="50" r="20" fill="#e8e8e2" stroke="#111" stroke-width="1.2"/>
+        <line x1="100" y1="112" x2="52" y2="50" stroke="#111" stroke-dasharray="4 3"/>
+        <line x1="100" y1="112" x2="148" y2="50" stroke="#111" stroke-dasharray="4 3"/>
+        <text x="36" y="54" font-size="12" font-family="Times New Roman, serif">H+</text>
+        <text x="152" y="54" font-size="12" font-family="Times New Roman, serif">H+</text>
+        <text x="93" y="116" font-size="13" font-family="Times New Roman, serif">O−</text>
+        <text x="97" y="92" font-size="11" font-family="Times New Roman, serif">105°</text>
+        <line x1="100" y1="82" x2="100" y2="20" stroke="#111" stroke-width="1.6"/>
+        <polygon points="100,14 95,26 105,26" fill="#111"/>
+        <text x="106" y="20" font-size="13" font-weight="bold" font-family="Times New Roman, serif">p</text>
+      </svg>
+      <figcaption>Fig. 4.4</figcaption>
+    </figure>
+    <figure>
+      <svg viewBox="0 0 200 170" role="img" aria-label="Fig. 4.5: dipole with charge +q and -q separated by d in a uniform field E, forces F+ and F- cancel">
+        <circle cx="150" cy="40" r="3.5" fill="#111"/>
+        <circle cx="60" cy="110" r="3.5" fill="#111"/>
+        <line x1="60" y1="110" x2="150" y2="40" stroke="#111"/>
+        <text x="152" y="32" font-size="13" font-style="italic" font-family="Times New Roman, serif">+q</text>
+        <text x="40" y="128" font-size="13" font-style="italic" font-family="Times New Roman, serif">−q</text>
+        <text x="106" y="66" font-size="13" font-style="italic" font-family="Times New Roman, serif">d</text>
+        <line x1="150" y1="40" x2="186" y2="40" stroke="#111" stroke-width="1.6"/>
+        <polygon points="186,40 178,36 178,44" fill="#111"/>
+        <text x="180" y="28" font-size="12" font-family="Times New Roman, serif">F+</text>
+        <line x1="60" y1="110" x2="22" y2="110" stroke="#111" stroke-width="1.6"/>
+        <polygon points="22,110 30,106 30,114" fill="#111"/>
+        <text x="8" y="100" font-size="12" font-family="Times New Roman, serif">F−</text>
+        <line x1="70" y1="150" x2="130" y2="150" stroke="#111" stroke-width="1.6"/>
+        <polygon points="130,150 122,146 122,154" fill="#111"/>
+        <text x="90" y="166" font-size="13" font-weight="bold" font-family="Times New Roman, serif">E</text>
+      </svg>
+      <figcaption>Fig. 4.5</figcaption>
+    </figure>
+  </figure>
+
+  <p>Thus a dipole $\mathbf p = q\mathbf d$ in a uniform field $\mathbf E$ experiences a torque</p>
+  <div class="eq boxed">$$\mathbf N = \mathbf p\times\mathbf E. \tag{4.4}$$</div>
+  <p>Notice that <b>N</b> is in such a direction as to line <b>p</b> up <i>parallel</i> to <b>E</b>; a polar molecule that is free to rotate will swing around until it points in the direction of the applied field.</p>
+  <p>If the field is <i>nonuniform</i>, so that $\mathbf F_+$ does not exactly balance $\mathbf F_-$, there will be a net <i>force</i> on the dipole, in addition to the torque. Of course, <b>E</b> must change rather abruptly for there to be significant variation in the space of one molecule, so this is not ordinarily a major consideration in discussing the behavior of dielectrics. Nevertheless, the formula for the force on a dipole in a nonuniform field is of some interest:</p>
+  <div class="eq">$$\mathbf F = \mathbf F_+ + \mathbf F_- = q(\mathbf E_+ - \mathbf E_-) = q(\Delta\mathbf E),$$</div>
+  <p>where $\Delta\mathbf E$ represents the difference between the field at the plus end and the field at the minus end. Assuming the dipole is very short, we may use Eq. 1.35 to approximate the small change in $E_x$:</p>
+  <div class="eq">$$\Delta E_x \equiv (\nabla E_x)\cdot\mathbf d,$$</div>
+  <p>with corresponding formulas for $E_y$ and $E_z$. More compactly, $\Delta\mathbf E = (\mathbf d\cdot\nabla)\mathbf E$, and therefore<sup>2</sup></p>
+  <div class="eq boxed">$$\mathbf F = (\mathbf p\cdot\nabla)\mathbf E. \tag{4.5}$$</div>
+  <p>For a “perfect” dipole of infinitesimal length, Eq. 4.4 gives the torque <i>about the center of the dipole</i> even in a nonuniform field; about any <i>other</i> point, $\mathbf N = (\mathbf p\times\mathbf E) + (\mathbf r\times\mathbf F)$.</p>
+  <p class="fn"><sup>2</sup> In the present context, Eq. 4.5 could be written more conveniently as $\mathbf F = \nabla(\mathbf p\cdot\mathbf E)$. However, it is safer to stick with $(\mathbf p\cdot\nabla)\mathbf E$, because we will be applying the formula to materials in which the dipole moment (per unit volume) is itself a function of position and this alternative expression would imply (incorrectly) that <b>p</b> too is to be differentiated.</p>
+  <div class="pno">170</div>
+</div>
+<div class="sheet book" id="pdf-p06">
+  <div class="rh"><span>171</span><span>4.1 Polarization</span></div>
+  <div class="prob"><p><b>Problem 4.5.</b> In Fig. 4.6, <b>p</b><sub>1</sub> and <b>p</b><sub>2</sub> are (perfect) dipoles a distance $r$ apart. What is the torque on <b>p</b><sub>1</sub> due to <b>p</b><sub>2</sub>? What is the torque on <b>p</b><sub>2</sub> due to <b>p</b><sub>1</sub>? [<i>Comment:</i> In each case, I want the torque on the dipole <i>about its own center</i>. If it bothers you that the answers are not equal and opposite, see Prob. 4.29.]</p>
+  <figure class="single"><svg viewBox="0 0 240 70" role="img" aria-label="Fig. 4.6: dipoles p1 and p2 a distance r apart"><line x1="40" y1="36" x2="200" y2="36" stroke="#111" stroke-dasharray="4 3"/><line x1="40" y1="8" x2="40" y2="60" stroke="#111" stroke-width="1.6"/><polygon points="40,8 35,18 45,18" fill="#111"/><line x1="200" y1="36" x2="222" y2="36" stroke="#111" stroke-width="1.6"/><polygon points="222,36 214,32 214,40" fill="#111"/><text x="26" y="66" font-size="13" font-family="Times New Roman, serif">p1</text><text x="200" y="60" font-size="13" font-family="Times New Roman, serif">p2</text><text x="112" y="30" font-size="13" font-style="italic" font-family="Times New Roman, serif">r</text></svg><figcaption>Fig. 4.6</figcaption></figure>
+  <p><b>Problem 4.6.</b> A (perfect) dipole <b>p</b> is situated a distance $z$ above an infinite grounded conducting plane (Fig. 4.7). The dipole makes an angle $\theta$ with the perpendicular to the plane. Find the torque on <b>p</b>. If the dipole is free to rotate, in what orientation will it come to rest?</p>
+  <figure class="single"><svg viewBox="0 0 240 175" role="img" aria-label="Dipole above a grounded conducting plane" xmlns="http://www.w3.org/2000/svg"><defs><marker id="f47-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#111"/></marker><marker id="f47-ahr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8a1c1c"/></marker></defs><rect x="20" y="150" width="200" height="14" fill="#c9c9c2" stroke="#111" stroke-width="1.4"/><line x1="110" y1="150" x2="110" y2="107" stroke="#111" stroke-width="1.4" stroke-dasharray="4 3"/><line x1="110" y1="95" x2="132.94" y2="62.23" stroke="#111" stroke-width="2" marker-end="url(#f47-ah)"/><circle cx="110" cy="95" r="3.5" fill="#111"/><text x="144.68" y="54.23" font-size="14" font-family="Times New Roman, serif" font-style="italic" font-weight="bold">p</text><line x1="170" y1="150" x2="170" y2="95" stroke="#111" stroke-width="1"/><line x1="170" y1="97" x2="170" y2="148" stroke="#111" stroke-width="1" marker-end="url(#f47-ah)"/><text x="176.00" y="125.00" font-size="14" font-family="Times New Roman, serif" font-style="italic">z</text><line x1="110" y1="60" x2="110" y2="150" stroke="#111" stroke-width="1" stroke-dasharray="3 3"/><path d="M110,71 A24,24 0 0 1 123.77,75.34" fill="none" stroke="#111" stroke-width="1"/><text x="84.00" y="69.00" font-size="13" font-family="Times New Roman, serif" text-anchor="end" font-style="italic">θ</text></svg><figcaption>Fig. 4.7</figcaption></figure>
+  <p><b>Problem 4.7.</b> Show that the energy of a permanent<sup>3</sup> ideal dipole <b>p</b>, in an electric field <b>E</b>, is given by</p>
+  <div class="eq boxed">$$U = -\mathbf p\cdot\mathbf E. \tag{4.6}$$</div>
+  <p><b>Problem 4.8.</b> Show that the interaction energy of two ideal dipoles separated by a displacement <b>r</b> is</p>
+  <div class="eq">$$U = \frac{1}{4\pi\epsilon_0}\frac{1}{r^3}\left[\mathbf p_1\cdot\mathbf p_2 - 3(\mathbf p_1\cdot\hat{\mathbf r})(\mathbf p_2\cdot\hat{\mathbf r})\right].\tag{4.7}$$</div>
+  <p>[<i>Hint:</i> Use Prob. 4.7 and Eq. 3.104.]</p>
+  <p><b>Problem 4.9.</b> A dipole <b>p</b> is a distance $r$ from a point charge $q$, and oriented so that <b>p</b> makes an angle $\theta$ with the vector <b>r</b> from $q$ to <b>p</b>.</p>
+  <p>(a) What is the force on <b>p</b>?<br>(b) What is the force on $q$?</p></div>
+  <p class="fn"><sup>3</sup> This means fixed in <i>magnitude</i>. Beware of applying Eq. 4.6 to an induced dipole (Eq. 4.1) – it’s not incorrect, but it is not the whole story. See Prob. 4.32.</p>
+
+  <h3 class="sub">4.1.4 Polarization</h3>
+  <div class="recall">
+    <div class="rh2">Recall: concepts this section assumes (added for this course; not from Griffiths)</div>
+    <ul>
+      <li><span class="tag">P12</span> Polarization $\mathbf P$ is dipole moment per unit volume, with unit C/m². If $N$ identical dipoles $\mathbf p$ lie in unit volume and all point the same way, $\mathbf P = N\mathbf p$.</li>
+      <li><span class="tag">P15</span> Molecules move at random because of temperature. Their typical thermal energy is of order $k_BT$, about $0.026\ \text{eV}$ at room temperature. This randomness is why permanent dipoles are never fully aligned.</li>
+      <li>Both mechanisms give a net dipole along $\mathbf E$. Induced dipoles point along $\mathbf E$ (Eq. 4.1), and permanent dipoles tend to turn toward $\mathbf E$ (Eq. 4.4).</li>
+      <li>Some materials keep their polarization after the field is removed. Griffiths mentions this only in passing; it is outside the course's first module.</li>
+    </ul>
+  </div>
+  <p>In the previous two sections, we considered the effect of an external electric field on an individual atom or molecule. We are now in a position to answer (qualitatively) the original question: What happens to a piece of dielectric material when it is placed in an electric field? If the substance consists of neutral atoms (or nonpolar molecules), the field will induce in each a tiny <span class="cont">(continued on the next page)</span></p>
+  <div class="pno">171</div>
+</div>
+<div class="sheet book" id="pdf-p07">
+  <div class="rh"><span>172</span><span>4 Electric Fields in Matter</span></div>
+  <p>dipole moment, pointing in the same direction as the field.<sup>4</sup> If the material is made up of polar molecules, each permanent dipole will experience a torque, tending to line it up along the field direction. (Random thermal motions compete with this process, so the alignment is never complete, especially at higher temperatures, and disappears almost at once when the field is removed.)</p>
+  <p>Notice that these two mechanisms produce the same basic result: <i>a lot of little dipoles pointing along the direction of the field</i> – the material becomes <b>polarized</b>. A convenient measure of this effect is</p>
+  <div class="eq">$$\mathbf P \equiv \text{dipole moment per unit volume},$$</div>
+  <p>which is called the <b>polarization</b>. From now on we shall not worry much about how the polarization <i>got</i> there. Actually, the two mechanisms I described are not as clear-cut as I tried to pretend. Even in polar molecules there will be some polarization by displacement (though generally it is a lot easier to rotate a molecule than to stretch it, so the second mechanism dominates). It’s even possible in some materials to “freeze in” polarization, so that it persists after the field is removed. But let’s forget for a moment about the cause of the polarization; we’re going to study the field that a chunk of polarized material <i>itself</i> produces. Then, in Section 4.3, we’ll put it all together: the original field, which was <i>responsible</i> for <b>P</b>, plus the new field, which is <i>due to</i> <b>P</b>.</p>
+
+  <h2 class="sec">4.2 The Field of a Polarized Object</h2>
+  <h3 class="sub">4.2.1 Bound Charges</h3>
+  <p>Suppose we have a piece of polarized material – that is, an object containing a lot of microscopic dipoles lined up. The dipole moment per unit volume <b>P</b> is given. <i>Question:</i> What is the field produced by this object (not the field that may have <i>caused</i> the polarization, but the field the polarization <i>itself</i> causes)? Well, we know what the field of an individual dipole looks like, so why not chop the material up into infinitesimal dipoles and integrate to get the total? As usual, it’s easier to work with the potential. For a single dipole <b>p</b> (Eq. 3.99),</p>
+  <div class="eq">$$V(\mathbf r) = \frac{1}{4\pi\epsilon_0}\frac{\mathbf p\cdot\hat{\boldsymbol{\mathcal{R}}}}{\mathcal R^2},\tag{4.8}$$</div>
+  <p>where $\boldsymbol{\mathcal R}$ is the vector from the dipole to the point at which we are evaluating the potential (Fig. 4.8). In the present context, we have a dipole moment $\mathbf p = \mathbf P\,d\tau'$ in each volume element $d\tau'$, so the total potential is<sup>4</sup></p>
+  <p class="fn"><sup>4</sup> In asymmetric molecules, the induced dipole moment may not be parallel to the field, but if the molecules are randomly oriented, the perpendicular contributions will <i>average</i> to zero. Within a single crystal, the orientations are certainly <i>not</i> random, and we would have to treat this case separately.</p>
+  <div class="pno">172</div>
+</div>
+</body>
+</html>

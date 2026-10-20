@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Study notes: Convex Optimization, Module I</title>
+<script>
+window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+@page { size: A4; margin: 15mm 15mm; }
+:root { --ink:#1B2631; --muted:#5D6D7E; --rule:#AEB6BF; --eq:#1F618D; --res:#117A65; --recall:#8A6D1A; --idb:#A04000; }
+body { margin:0; color:var(--ink); font-family:"Times New Roman", Times, "Liberation Serif", serif; font-size:11pt; line-height:1.42; }
+main { width:100%; }
+h1 { font-size:17pt; margin:0 0 3px; color:var(--eq); }
+.meta { color:var(--muted); font-size:9.5pt; margin-bottom:8px; border-bottom:1px solid var(--rule); padding-bottom:5px; }
+.sec-body { column-count:2; column-gap:16px; column-rule:0.5px solid var(--rule); }
+h2 { font-size:12.5pt; margin:12px 0 4px; color:var(--eq); border-bottom:1.5px solid var(--eq); padding-bottom:1px; break-after:avoid; column-span:none; }
+h3 { font-size:10.8pt; margin:8px 0 2px; color:var(--res); break-after:avoid; }
+p, li { margin:3px 0; }
+ul, ol { margin:3px 0 3px 18px; padding:0; }
+.eq { margin:5px 0; text-align:center; break-inside:avoid; font-size:10.5pt; }
+.box-eq { background:#EAF2F8; border-left:3px solid var(--eq); padding:4px 7px; margin:5px 0; break-inside:avoid; }
+.box-res { background:#E9F7EF; border-left:3px solid var(--res); padding:4px 7px; margin:5px 0; break-inside:avoid; }
+.box-recall { background:#FDF6E3; border-left:3px solid var(--recall); padding:4px 7px; margin:6px 0; break-inside:avoid; font-size:10.2pt; }
+.lbl { font-weight:bold; font-size:9.6pt; text-transform:uppercase; letter-spacing:.3px; }
+.lbl.eq { color:var(--eq); } .lbl.res { color:var(--res); }
+.box-recall .lbl { color:var(--recall); }
+table.tbl { border-collapse:collapse; margin:5px auto; font-size:10pt; break-inside:avoid; }
+table.tbl td, table.tbl th { border:1px solid var(--rule); padding:2px 7px; text-align:center; }
+table.tbl caption { font-size:9.5pt; color:var(--muted); caption-side:top; margin-bottom:2px; }
+.note { font-size:9.5pt; color:var(--muted); }
+.sec-title-full { column-span:all; font-size:14pt; font-weight:bold; color:var(--eq); border-bottom:2px solid var(--eq); margin:14px 0 6px; break-after:avoid; }
+.sec-sub { column-span:all; font-size:10pt; color:var(--muted); font-style:italic; margin:0 0 4px; }
+</style>
+</head>
+<body>
+<main>
+<h1>Study notes: Convex Optimization, Module I</h1>
+<div class="meta">Binmore, <i>Mathematical Analysis: A Straightforward Approach</i> (2nd ed., 1982), Chapter 19, Vector derivatives. Numbers are the book&rsquo;s own. Figures are described in words, not drawn yet. Exercises are not included in the notes. Student notes in my own words; every numbered item is kept with its book number.</div>
+<div class="sec-body">
+<div class="sec-title-full">Section 1: Directional and partial derivatives</div><div class="sec-sub">Binmore 2nd ed., printed pp. 190&ndash;195 (19.1&ndash;19.5)</div>
+<h2>Before you start</h2>
+<ul>
+<li>A <b>unit vector</b> has length 1, so $\|\mathbf{u}\| = 1$. A vector $(a, b)$ has length $\sqrt{a^2 + b^2}$.</li>
+<li>The <b>derivative</b> of a function of one variable is the limit $\displaystyle \lim_{t \to 0} \frac{g(t) - g(0)}{t}$, when it exists (Binmore §10.1).</li>
+<li>A <b>function of two variables</b> $f(x_1, x_2)$ has a graph, the surface $y = f(x_1, x_2)$, over the plane.</li>
+</ul>
+
+<h2>Section 1. Directional and partial derivatives</h2>
+
+<h3>19.1 Directional derivatives</h3>
+<p>Take two vectors $\boldsymbol{\xi}$ and $\mathbf{u}$ in $\mathbb{R}^n$. Read $\boldsymbol{\xi}$ as a point and $\mathbf{u}$ as a direction, with $\|\mathbf{u}\| = 1$. The points $\mathbf{x} = \boldsymbol{\xi} + t\mathbf{u}$, for real $t$, form the straight line through $\boldsymbol{\xi}$ in the direction $\mathbf{u}$. The number $t$ is the distance from $\boldsymbol{\xi}$ to $\mathbf{x}$ along that line.</p>
+<p>Let $f : \mathbb{R}^n \to \mathbb{R}$, and define $F(t) = f(\boldsymbol{\xi} + t\mathbf{u})$. For $n = 2$ we can see what $F$ means. Cut the surface $y = f(\mathbf{x})$ by a vertical plane through $\boldsymbol{\xi}$ that is parallel to $\mathbf{u}$. The cut is the curve $y = F(t)$, with $\boldsymbol{\xi}$ at $t = 0$ [figure described in the book].</p>
+<p>The slope of that cut at $t = 0$ is $F'(0)$. It is the rate at which the surface rises at $\boldsymbol{\xi}$ when we move in the direction $\mathbf{u}$.</p>
+<div class="box-eq"><span class="lbl eq">Directional derivative</span><br>The directional derivative of $f$ at $\boldsymbol{\xi}$ in the direction $\mathbf{u}$ is written $D_{\mathbf{u}} f(\boldsymbol{\xi})$, and
+$$D_{\mathbf{u}} f(\boldsymbol{\xi}) = \lim_{t \to 0} \frac{f(\boldsymbol{\xi} + t\mathbf{u}) - f(\boldsymbol{\xi})}{t}.$$</div>
+<p>The same symbol is used when $\mathbf{u}$ is not a unit vector, or when $f$ has vector values. The slope picture then no longer applies, but the limit still makes sense.</p>
+
+<h3>19.2 Example</h3>
+<p>Let $f(x_1, x_2) = x_1 x_2$. We want the slope of the surface at $(1, 2)$ in the direction $(3, 4)$.</p>
+<p>The vector $(3, 4)$ has length 5, so first replace it by the unit vector $\mathbf{u} = (3/5, 4/5)$, which points the same way. With $\boldsymbol{\xi} = (1, 2)$:</p>
+<div class="eq">$$\frac{f(\boldsymbol{\xi} + t\mathbf{u}) - f(\boldsymbol{\xi})}{t} = \frac{(1 + 3t/5)(2 + 4t/5) - 2}{t}$$
+$$= \frac{2t + 12t^2/25}{t} = 2 + \frac{12t}{25}.$$</div>
+<div class="box-res"><span class="lbl res">Result</span><br>As $t \to 0$ this tends to $2$. So the slope of $y = x_1 x_2$ at $(1, 2)$ in the direction $(3, 4)$ is $2$.</div>
+<p>The curve $x_1 x_2 = 2$ is a <i>contour</i> of $f$. Every point of the surface above this contour is at the same height. The direction $(1, -2)$ is tangent to the contour, and the book asks you to check that the directional derivative at $(1, 2)$ in that direction is zero.</p>
+
+<h3>19.3 Partial derivatives</h3>
+<p>Let $f : \mathbb{R}^n \to \mathbb{R}$. To keep the notation short, take $n = 2$. The general case is the same. For $\boldsymbol{\xi} = (\xi_1, \xi_2)$, the <i>partial derivatives</i> of $f$ at $\boldsymbol{\xi}$ are defined when the limits exist:</p>
+<div class="box-eq"><span class="lbl eq">Partial derivatives</span><br>
+$$f_1(\xi_1, \xi_2) = \lim_{h \to 0} \frac{f(\xi_1 + h, \xi_2) - f(\xi_1, \xi_2)}{h}.$$
+$$f_2(\xi_1, \xi_2) = \lim_{k \to 0} \frac{f(\xi_1, \xi_2 + k) - f(\xi_1, \xi_2)}{k}.$$</div>
+<p>In practice you do not need the limits. To find $f_1$, differentiate with respect to $x_1$ and treat $x_2$ as a constant. To find $f_2$, do the reverse. This is ordinary differentiation in one variable at a time.</p>
+
+<h3>19.4 Examples</h3>
+<p><b>(i)</b> Let $f(x_1, x_2) = x_1^2 x_2 + x_2^3 x_1$. Then $f_1 = 2x_1 x_2 + x_2^3$ and $f_2 = x_1^2 + 3x_2^2 x_1$.</p>
+<p><b>(ii)</b> Let $g(x_1, x_2) = \sin(x_1 x_2 + x_2^2)$. Then $g_1 = x_2 \cos(x_1 x_2 + x_2^2)$ and $g_2 = (x_1 + 2x_2)\cos(x_1 x_2 + x_2^2)$.</p>
+<p><b>(iii)</b> Let $h(x_1, x_2, x_3) = x_1 + x_2 x_3$, a function on $\mathbb{R}^3$. Then $h_1 = 1$, $h_2 = x_3$ and $h_3 = x_2$.</p>
+<p>The geometric meaning: let $\mathbf{i} = (1, 0)$ and $\mathbf{j} = (0, 1)$, the unit vectors along the two axes. Taking $t \to 0$ in the definition of the directional derivative gives</p>
+<div class="eq">$$D_{\mathbf{i}} f(\boldsymbol{\xi}) = f_1(\xi_1, \xi_2), \qquad D_{\mathbf{j}} f(\boldsymbol{\xi}) = f_2(\xi_1, \xi_2).$$</div>
+<p>So $f_1(\xi_1, \xi_2)$ is the slope of the surface at $\boldsymbol{\xi}$ in the $x_1$-direction, and $f_2(\xi_1, \xi_2)$ is the slope in the $x_2$-direction. Cut the surface by the plane $x_2 = \xi_2$: the graph $y = f(x_1, \xi_2)$ on that plane has slope $f_1(\xi_1, \xi_2)$ at $x_1 = \xi_1$ [figures described in the book].</p>
+
+<h3>19.5 Notation</h3>
+<p>A partial derivative has several notations, and you need to read all of them. The book writes $f_{x_1}(\xi_1, \xi_2)$ for $f_1(\xi_1, \xi_2)$, and similarly for $f_2$. When $y = f(x_1, x_2)$, it writes $\dfrac{\partial y}{\partial x_1}$ for $f_1(x_1, x_2)$ and $\dfrac{\partial y}{\partial x_2}$ for $f_2(x_1, x_2)$.</p>
+<p>The $\partial y / \partial x_1$ form is easy to misread. The letters $x_1$ and $x_2$ serve both as the point where we evaluate and as the variables we differentiate with respect to. This does not matter in examples, but it causes trouble in proofs. When several variables are present, say which one is held fixed: $\left(\dfrac{\partial y}{\partial x_1}\right)_{x_2}$ means differentiate with respect to $x_1$, treating $x_2$ as a constant.</p>
+
+<h2>What to take from this section</h2>
+<ul>
+<li>A directional derivative is the slope of the surface $y = f(\mathbf{x})$ at a point, in a chosen direction $\mathbf{u}$. Use a unit vector for $\mathbf{u}$ [19.1, 19.2].</li>
+<li>The partial derivatives $f_1$ and $f_2$ are the directional derivatives along the two axes [19.3, 19.4].</li>
+<li>To compute a partial derivative, differentiate in one variable and treat the others as constants [19.3, 19.4].</li>
+<li>Check the length of the direction vector first. If it is not 1, normalise it [19.2].</li>
+</ul>
+
+</div>
+</main>
+</body>
+</html>

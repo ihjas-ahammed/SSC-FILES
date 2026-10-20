@@ -1,0 +1,682 @@
+=== src/m3/prepare_03_sec72.html === <!-- UNIT 2: BARTLE §7.2 (T10-T19) --> <section
+class="page"> <div class="kicker"
+style="font-size:8pt;font-weight:800;letter-spacing:.12em;color:#0072B2">UNIT 2 · BARTLE
+§7.2</div> <h1>Riemann Integrable Functions</h1> <hr>
+<!-- T10 (K10) --> <div class="topic-head"><span class="tid">T10</span><h2>The Cauchy
+Criterion for integrability</h2></div> <p class="oneline">Testing integrability without knowing the
+value L in advance (Bartle Theorem 7.2.1; PYQ MAT-21 Q8).</p> <div class="box def"><span
+class="lab">Theorem 7.2.1 · Cauchy Criterion (Bartle p. 208) · say it word for word</span>A
+function f : [a,b] \to \mathbb{R} belongs to \mathcal{R}[a,b] if and only if for every \varepsilon > 0
+there exists \eta_\varepsilon > 0 such that if \dot P and \dot Q are any tagged partitions of [a,b]
+with \lVert P\rVert < \eta_\varepsilon and \lVert Q\rVert < \eta_\varepsilon, then
+\lvert S(f;\dot P) - S(f;\dot Q)\rvert < \varepsilon.
+<span class="say">In plain words: f is integrable if and only if, whatever \varepsilon > 0 you are
+handed, you can find a mesh bound \eta_\varepsilon > 0 so that any two Riemann sums with
+mesh <\eta_\varepsilon are within \varepsilon of each other—without ever naming L.</span>
+</div> <div class="box hyp"><span class="lab">Hypotheses · Theorem 7.2.1</span><ul>
+<li>\lvert S(f;\dot P) - S(f;\dot Q)\rvert < \varepsilon holds for <b>all</b> pairs of tagged
+partitions \dot P, \dot Q with \lVert P\rVert, \lVert Q\rVert < \eta_\varepsilon<span
+class="fails">for Dirichlet's function <span class="cx">C7</span>, two partitions with the same
+tiny mesh still give \lvert S(f;\dot P) - S(f;\dot Q)\rvert = \lvert 1 - 0\rvert = 1 \not< 1/2</span></li>
+<li>completeness of \mathbb{R} (Cauchy Convergence Criterion 3.5.5 for sequences in
+\mathbb{R})<span class="fails">used in the (\Leftarrow) direction to guarantee that the Cauchy
+sequence of numbers (S(f;\dot P_m)) converges to a real limit A \in \mathbb{R}</span></li>
+</ul></div> <div class="box skel"><span class="lab">Skeleton · use the Cauchy Criterion to
+prove f \in \mathcal{R}[a,b]</span>Let \varepsilon > 0 be given. Choose \eta_\varepsilon = $
+<span class="gap">?</span> $ > 0. Let \dot P, \dot Q be any tagged partitions of [a,b] with \lVert
+P\rVert < \eta_\varepsilon and \lVert Q\rVert < \eta_\varepsilon. Then \lvert S(f;\dot P) - S(f;\dot
+Q)\rvert \le $ <span class="gap">?</span> $ < \varepsilon. By the Cauchy Criterion (Theorem
+7.2.1), f \in \mathcal{R}[a,b]. ∎</div> <div class="kw"><span>Know</span><span>(\Rightarrow)
+f \in \mathcal{R}[a,b] with integral L. (\Leftarrow) For each \varepsilon > 0 there is
+\eta_\varepsilon > 0 making \lvert S(f;\dot P) - S(f;\dot Q)\rvert <
+\varepsilon.</span><span>Want</span><span>(\Rightarrow) Produce \eta_\varepsilon.
+(\Leftarrow) Construct the limit A \in \mathbb{R} using \varepsilon = 1/n and prove \int_a^b f =
+A.</span></div> <div class="box scratch"><span class="lab">Scratch · how (\Leftarrow) builds
+the missing number A</span> <p>Take \varepsilon = 1/n to get mesh bounds \delta_n > 0,
+forced decreasing (\delta_n \ge \delta_{n+1}). Pick one tagged partition \dot P_n with \lVert
+P_n\rVert < \delta_n. For m > n, both \dot P_m and \dot P_n have norm < \delta_n, so \lvert
+S(f;\dot P_m) - S(f;\dot P_n)\rvert < 1/n: the real sequence a_m = S(f;\dot P_m) is Cauchy! Call
+its limit A. Then any \dot Q with \lVert Q\rVert < \delta_K is within 1/K of S(f;\dot P_K), which is
+within 1/K of A; choose K > 2/\varepsilon.</p> </div> </section>
+<section class="page"> <div class="box proof"><span class="lab">Proof of Theorem 7.2.1
+(Bartle p. 208)</span> <p><b>(\Rightarrow)</b></p> <div class="steps"> <div class="step">If f
+\in \mathcal{R}[a,b] with integral L, let \eta_\varepsilon := \delta_{\varepsilon/2} > 0 be the
+number from Definition 7.1.1 corresponding to \varepsilon/2. If \dot P, \dot Q have \lVert P\rVert
+< \eta_\varepsilon and \lVert Q\rVert < \eta_\varepsilon, then \lvert S(f;\dot P) - L\rvert <
+\varepsilon/2 and \lvert S(f;\dot Q) - L\rvert < \varepsilon/2.<span class="why">Definition 7.1.1
+applied twice with tolerance \varepsilon/2.</span></div> <div class="step">By the Triangle
+Inequality,
+
+\lvert S(f;\dot P) - S(f;\dot Q)\rvert = \lvert S(f;\dot P) - L + L - S(f;\dot Q)\rvert \le \lvert S(f;\dot P)
+- L\rvert + \lvert L - S(f;\dot Q)\rvert < \varepsilon/2 + \varepsilon/2 = \varepsilon.
+<span class="why">Add and subtract L, then apply the Triangle Inequality (P05).</span></div>
+</div> <p><b>(\Leftarrow)</b></p> <div class="steps"> <div class="step">For each n \in
+\mathbb{N}, let \delta_n > 0 be the number \eta_{1/n} such that whenever \dot P and \dot Q
+have norms <\delta_n, we have \lvert S(f;\dot P) - S(f;\dot Q)\rvert < 1/n. We may assume
+\delta_n \ge \delta_{n+1} for all n (otherwise replace \delta_n by \delta'_n :=
+\min\{\delta_1,\dots,\delta_n\}).<span class="why">Hypothesis applied with \varepsilon = 1/n;
+taking running minimums keeps \delta_n decreasing so finer partitions satisfy all earlier
+bounds.</span></div> <div class="step">For each n \in \mathbb{N}, choose a tagged partition
+\dot P_n with \lVert P_n\rVert < \delta_n. If m > n, then \lVert P_m\rVert < \delta_m \le \delta_n
+and \lVert P_n\rVert < \delta_n, so
+\lvert S(f;\dot P_m) - S(f;\dot P_n)\rvert < 1/n.
+<span class="why">Both \dot P_m and \dot P_n have norm <\delta_n, so Step 1 applies to the
+pair (\dot P_m, \dot P_n).</span></div> <div class="step">Consequently, the sequence (S(f;\dot
+P_m))_{m=1}^\infty is a Cauchy sequence in \mathbb{R}. By the Cauchy Convergence Criterion
+for sequences (Theorem 3.5.5, P06), this sequence converges in \mathbb{R}; let A := \lim_m
+S(f;\dot P_m).<span class="why">Completeness of \mathbb{R} (P06).</span></div> <div
+class="step">Passing to the limit in Step 2 as m \to \infty gives \lvert S(f;\dot P_n) - A\rvert \le
+1/n for all n \in \mathbb{N}.<span class="why">Order property of sequence limits (strict < 1/n
+becomes \le 1/n in the limit).</span></div> <div class="step">To see that A is the Riemann
+integral of f, given \varepsilon > 0, choose K \in \mathbb{N} with K > 2/\varepsilon (so 1/K <
+\varepsilon/2). If \dot Q is any tagged partition with \lVert Q\rVert < \delta_K, then
+\lvert S(f;\dot Q) - A\rvert \le \lvert S(f;\dot Q) - S(f;\dot P_K)\rvert + \lvert S(f;\dot P_K) - A\rvert <
+\frac{1}{K} + \frac{1}{K} = \frac{2}{K} < \varepsilon.
+Since \varepsilon > 0 is arbitrary, f \in \mathcal{R}[a,b] with \int_a^b f = A. <span
+class="qed">∎</span><span class="why">Archimedean property (P13), Step 1 for (\dot Q, \dot
+P_K), Step 4 for n=K, and Triangle Inequality.</span></div> </div> </div> <div class="box
+idea"><span class="lab">Worked example · Bartle Example 7.2.2(a)</span> <p>Let g(x) = 2 on
+[0,1] and 3 on (1,3] as in Example 7.1.4(b). For any \dot P, \dot Q with \lVert P\rVert < \delta and
+\lVert Q\rVert < \delta, we showed 8 - 5\delta \le S(g;\dot P) \le 8 + 5\delta and 8 - 5\delta \le
+S(g;\dot Q) \le 8 + 5\delta. Subtracting gives \lvert S(g;\dot P) - S(g;\dot Q)\rvert \le 10\delta.
+Given \varepsilon > 0, choose \eta_\varepsilon := \varepsilon/20; then \lVert P\rVert, \lVert
+Q\rVert < \eta_\varepsilon \Rightarrow \lvert S(g;\dot P) - S(g;\dot Q)\rvert \le 10(\varepsilon/20)
+= \varepsilon/2 < \varepsilon. By Theorem 7.2.1, g \in \mathcal{R}[0,3].</p> </div> <p
+class="small">In the model paper: <span class="chip q">Q23</span> (PYQ MAT-21 Q8).</p>
+</section>
+<!-- T11 (K11) --> <section class="page"> <div class="topic-head"><span
+class="tid">T11</span><h2>Dirichlet's function (and relatives) are not integrable</h2></div> <p
+class="oneline">Negating the Cauchy Criterion to prove f \notin \mathcal{R}[a,b] (Bartle
+Example 7.2.2(b), Exercises 7.2.1–7.2.2; PYQ MAT-22 Q4, MAT-22 MCQ 17, MAT-21 MCQ 12,
+16).</p> <figure> {{fig:F08_dirichlet_tags}} <figcaption><b>What to notice:</b> On the exact
+same partition of [0,1], choosing rational tags puts every rectangle at height 1 (S=1), while
+choosing irrational tags puts every rectangle at height 0 (S=0). <b>What it does not prove:</b>
+One partition is not enough; because rationals and irrationals are dense in every subinterval no
+matter how small \eta > 0 is, the gap \lvert 1 - 0\rvert = 1 \ge 1/2 never shrinks.</figcaption>
+</figure> <div class="box def"><span class="lab">Negation of Cauchy Criterion (Bartle Ex
+7.2.1) & Example 7.2.2(b) <span class="cx">C7</span></span> <p><b>Negation of 7.2.1:</b> f
+
+\notin \mathcal{R}[a,b] if and only if there exists \varepsilon_0 > 0 such that for every \eta > 0 (or
+for every n \in \mathbb{N} with \eta = 1/n) there exist tagged partitions \dot P and \dot Q with
+\lVert P\rVert < \eta and \lVert Q\rVert < \eta such that \lvert S(f;\dot P) - S(f;\dot Q)\rvert \ge
+\varepsilon_0.</p> <p><b>Example 7.2.2(b) (Dirichlet's function):</b> Let f(x) := 1 if x \in [0,1] is
+rational and f(x) := 0 if x \in [0,1] is irrational. Then f \notin \mathcal{R}[0,1].</p> <span
+class="say">In plain words: to disprove integrability, pick one fixed positive gap \varepsilon_0
+(like 1/2) and show that no matter how fine the mesh \eta is, you can still find two taggings \dot
+P, \dot Q whose sums differ by at least \varepsilon_0.</span> </div> <div class="box
+skel"><span class="lab">Skeleton · prove f \notin \mathcal{R}[a,b] via Cauchy
+Criterion</span>Take \varepsilon_0 = $ <span class="gap">?</span> $ > 0. Given any \eta > 0,
+choose a partition P of [a,b] with \lVert P\rVert < \eta. Form \dot P by choosing rational tags t_i
+\in I_i, giving $S(f;\dot P) = $ <span class="gap">?</span>, and form \dot Q by choosing
+irrational tags s_i \in I_i, giving $S(f;\dot Q) = $ <span class="gap">?</span>. Then \lvert
+S(f;\dot P) - S(f;\dot Q)\rvert \ge \varepsilon_0. By the Cauchy Criterion (7.2.1), f \notin
+\mathcal{R}[a,b]. ∎</div> <div class="box proof"><span class="lab">Proof that Dirichlet's
+function is not in \mathcal{R}[0,1] (Bartle p. 209)</span> <div class="steps"> <div
+class="step">Take \varepsilon_0 := \tfrac12 > 0, and let \eta > 0 be arbitrary. Choose any
+partition P = \{[x_{i-1},x_i]\}_{i=1}^n of [0,1] with \lVert P\rVert < \eta (for instance, an equal
+partition with n > 1/\eta).<span class="why">Set the fixed gap \varepsilon_0 = 1/2 and let the
+opponent hand us any \eta > 0.</span></div> <div class="step">By the density of \mathbb{Q} in
+\mathbb{R}, each subinterval [x_{i-1},x_i] contains a rational tag t_i. Let \dot P be P with these
+rational tags; then f(t_i) = 1 for all i, so
+S(f;\dot P) = \sum_{i=1}^n 1\cdot(x_i - x_{i-1}) = 1 - 0 = 1.
+<span class="why">Density of rationals (P14) and telescoping sum (M01).</span></div> <div
+class="step">By the density of \mathbb{R}\setminus\mathbb{Q} in \mathbb{R}, each subinterval
+[x_{i-1},x_i] contains an irrational tag s_i. Let \dot Q be P with these irrational tags; then f(s_i) =
+0 for all i, so S(f;\dot Q) = 0.<span class="why">Density of irrationals (P14).</span></div> <div
+class="step">Both \lVert P\rVert < \eta and \lVert Q\rVert < \eta, yet \lvert S(f;\dot P) - S(f;\dot
+Q)\rvert = \lvert 1 - 0\rvert = 1 \ge \tfrac12 = \varepsilon_0. Thus the Cauchy Criterion 7.2.1 fails,
+and f \notin \mathcal{R}[0,1]. <span class="qed">∎</span><span class="why">Negation of
+Theorem 7.2.1.</span></div> </div> </div> <div class="box idea"><span class="lab">Worked
+example · h(x) = x + 1 on rationals, 0 on irrationals (Bartle Ex 7.2.2; PYQ MAT-21 MCQ
+16)</span> <p>Let h(x) := x + 1 for x \in [0,1] \cap \mathbb{Q} and h(x) := 0 for x \in [0,1]
+\setminus \mathbb{Q}. Take \varepsilon_0 := 1. For any \eta > 0, choose a partition P of [0,1]
+with \lVert P\rVert < \eta. If \dot P has all rational tags t_i \in [x_{i-1},x_i], then h(t_i) = t_i + 1 \ge
+1 on [0,1], so S(h;\dot P) = \sum_{i=1}^n (t_i + 1)(x_i - x_{i-1}) \ge \sum_{i=1}^n 1\cdot(x_i x_{i-1}) = 1. If \dot Q has all irrational tags, then S(h;\dot Q) = 0. Hence \lvert S(h;\dot P) S(h;\dot Q)\rvert \ge 1 = \varepsilon_0, so h \notin \mathcal{R}[0,1].</p> </div> <div class="box
+trap"><span class="lab">Your intuition will lie to you here</span> <p>"There are vastly more
+irrationals than rationals, so Dirichlet's function is 'almost always 0' and its integral should be 0."
+That is true for the <b>Lebesgue</b> integral (taught in postgraduate Measure Theory), which
+gives 0. It is <b>false</b> for the Riemann integral, because Riemann sums let an opponent
+pick rational tags in every subinterval!</p> </div> <p class="small">In the model paper: <span
+class="chip q">Q24</span> (PYQ MAT-22 Q4, MAT-22 MCQ 17, MAT-21 MCQ 12, 16).</p>
+</section>
+<!-- T12 (K12) --> <section class="page"> <div class="topic-head"><span
+class="tid">T12</span><h2>The Squeeze Theorem for integrals</h2></div> <p
+class="oneline">Proving f \in \mathcal{R}[a,b] by trapping f between two simpler integrable
+
+functions \alpha_\varepsilon \le f \le \omega_\varepsilon (Bartle Theorem 7.2.3, Example
+7.2.6(b); PYQ MTS-26 Q18, MTS-22 Q6, MAT-21 Q7).</p> <figure> {{fig:F05_squeeze_step}}
+<figcaption><b>What to notice:</b> On [0,1] with n=4, the line h(x)=x is trapped between the
+lower step function \alpha_4 (integral 3/8) and upper step function \omega_4 (integral 5/8); the
+shaded gap consists of 4 squares of area (1/4)^2=1/16, giving
+\int_0^1(\omega_4-\alpha_4)=1/4=1/n. <b>What it does not prove:</b> One picture for n=4
+does not prove h\in\mathcal{R}[0,1]; the Squeeze Theorem requires
+\int_0^1(\omega_n-\alpha_n) = 1/n < \varepsilon for every \varepsilon>0 by choosing n >
+1/\varepsilon.</figcaption> </figure> <div class="box def"><span class="lab">Theorem 7.2.3 ·
+Squeeze Theorem (Bartle p. 209) · say it word for word</span>Let f : [a,b] \to \mathbb{R}. Then
+f \in \mathcal{R}[a,b] if and only if for every \varepsilon > 0 there exist functions
+\alpha_\varepsilon and \omega_\varepsilon in \mathcal{R}[a,b] with
+\alpha_\varepsilon(x) \le f(x) \le \omega_\varepsilon(x) \quad \text{for all } x \in [a,b]
+and such that
+\int_a^b (\omega_\varepsilon - \alpha_\varepsilon) < \varepsilon.
+<span class="say">In plain words: instead of wrestling with all possible tags of f, trap f between
+a floor function \alpha_\varepsilon \in \mathcal{R}[a,b] and a ceiling function \omega_\varepsilon
+\in \mathcal{R}[a,b] whose integrals are within \varepsilon of each other.</span> </div> <div
+class="box hyp"><span class="lab">Hypotheses · Theorem 7.2.3</span><ul>
+<li>\alpha_\varepsilon, \omega_\varepsilon \in \mathcal{R}[a,b] with \alpha_\varepsilon(x) \le f(x)
+\le \omega_\varepsilon(x) for all x \in [a,b]<span class="fails">if \alpha_\varepsilon,
+\omega_\varepsilon are not themselves integrable, trapping f between them tells us
+nothing</span></li> <li>\int_a^b (\omega_\varepsilon - \alpha_\varepsilon) < \varepsilon holds
+for <b>every</b> \varepsilon > 0 (so \alpha_\varepsilon, \omega_\varepsilon must be adjusted
+as \varepsilon shrinks)<span class="fails"><b>Bartle Ex 7.2.4 trap:</b> one fixed pair like
+\alpha(x) = -x and \omega(x) = x on [0,1] satisfies -x \le f(x) \le x, but \int_0^1 (\omega - \alpha) =
+\int_0^1 2x\,dx = 1, which is NOT < \varepsilon for \varepsilon \le 1. Indeed, f(x) = x on
+\mathbb{Q} and -x on irrationals satisfies -x \le f(x) \le x yet f \notin \mathcal{R}[0,1]!</span></li>
+</ul></div> <div class="box skel"><span class="lab">Skeleton · prove f \in \mathcal{R}[a,b]
+using the Squeeze Theorem</span>Let \varepsilon > 0 be given. Define \alpha_\varepsilon,
+\omega_\varepsilon \in \mathcal{R}[a,b] by <span class="gap">?</span>. Then
+\alpha_\varepsilon(x) \le f(x) \le \omega_\varepsilon(x) on [a,b], and \int_a^b
+(\omega_\varepsilon - \alpha_\varepsilon) = $ <span class="gap">?</span> $ < \varepsilon. By
+the Squeeze Theorem (7.2.3), f \in \mathcal{R}[a,b]. ∎</div> </section>
+<section class="page"> <div class="kw"><span>Know</span><span>(\Leftarrow) For every
+\varepsilon > 0, \alpha_\varepsilon \le f \le \omega_\varepsilon with
+\alpha_\varepsilon,\omega_\varepsilon \in \mathcal{R}[a,b] and \int_a^b(\omega_\varepsilon \alpha_\varepsilon) < \varepsilon.</span><span>Want</span><span>Show \lvert S(f;\dot P) S(f;\dot Q)\rvert < 3\varepsilon when \lVert P\rVert, \lVert Q\rVert < \delta_\varepsilon, and
+invoke the Cauchy Criterion 7.2.1.</span></div> <div class="box proof"><span
+class="lab">Proof of Theorem 7.2.3 (Bartle pp. 209–210)</span> <p><b>(\Rightarrow)</b></p>
+<div class="steps"> <div class="step">If f \in \mathcal{R}[a,b], simply take \alpha_\varepsilon :=
+f and \omega_\varepsilon := f for all \varepsilon > 0; then \int_a^b (\omega_\varepsilon \alpha_\varepsilon) = \int_a^b 0 = 0 < \varepsilon.<span class="why">Trivial choice when f is
+already known to be integrable.</span></div> </div> <p><b>(\Leftarrow)</b></p> <div
+class="steps"> <div class="step">Let \varepsilon > 0. Since \alpha_\varepsilon,
+\omega_\varepsilon \in \mathcal{R}[a,b], there exists \delta_\varepsilon > 0 such that if \dot P is
+any tagged partition with \lVert P\rVert < \delta_\varepsilon, then
+
+\left\lvert S(\alpha_\varepsilon;\dot P) - \int_a^b \alpha_\varepsilon\right\rvert < \varepsilon \quad
+\text{and} \quad \left\lvert S(\omega_\varepsilon;\dot P) - \int_a^b \omega_\varepsilon\right\rvert
+< \varepsilon.
+<span class="why">Definition 7.1.1 applied to \alpha_\varepsilon and \omega_\varepsilon,
+taking the minimum of the two deltas (M08).</span></div> <div class="step">Unpacking these
+two inequalities gives \int_a^b \alpha_\varepsilon - \varepsilon < S(\alpha_\varepsilon;\dot P)
+and S(\omega_\varepsilon;\dot P) < \int_a^b \omega_\varepsilon + \varepsilon. Since
+\alpha_\varepsilon(x) \le f(x) \le \omega_\varepsilon(x) on [a,b], we have
+S(\alpha_\varepsilon;\dot P) \le S(f;\dot P) \le S(\omega_\varepsilon;\dot P), and therefore
+\int_a^b \alpha_\varepsilon - \varepsilon < S(f;\dot P) < \int_a^b \omega_\varepsilon +
+\varepsilon.
+<span class="why">Pointwise inequality \alpha_\varepsilon \le f \le \omega_\varepsilon
+preserves Riemann sums (P02).</span></div> <div class="step">If \dot Q is any other tagged
+partition with \lVert Q\rVert < \delta_\varepsilon, then the same bounds hold for S(f;\dot Q):
+\int_a^b \alpha_\varepsilon - \varepsilon < S(f;\dot Q) < \int_a^b \omega_\varepsilon +
+\varepsilon.
+<span class="why">Step 2 applied to \dot Q.</span></div> <div class="step">Subtracting the
+two inequalities and using linearity (Theorem 7.1.5) together with \int_a^b(\omega_\varepsilon \alpha_\varepsilon) < \varepsilon gives
+\lvert S(f;\dot P) - S(f;\dot Q)\rvert < \int_a^b \omega_\varepsilon - \int_a^b \alpha_\varepsilon +
+2\varepsilon = \int_a^b (\omega_\varepsilon - \alpha_\varepsilon) + 2\varepsilon < \varepsilon +
+2\varepsilon = 3\varepsilon.
+<span class="why">Two numbers in (A-\varepsilon, B+\varepsilon) are within
+(B-A)+2\varepsilon of each other; Theorem 7.1.5(a),(b).</span></div> <div class="step">Since
+\varepsilon > 0 is arbitrary, the Cauchy Criterion (Theorem 7.2.1) implies that f \in
+\mathcal{R}[a,b]. <span class="qed">∎</span><span class="why">Theorem 7.2.1 (replacing
+\varepsilon by \varepsilon/3 if desired).</span></div> </div> </div> <div class="box idea"><span
+class="lab">Worked example · Squeeze applied to h(x)=x on [0,1] (Bartle Example
+7.2.6(b))</span> <p>Partition [0,1] into n equal pieces using P_n = (0, \tfrac1n, \tfrac2n, \dots,
+\tfrac{n-1}{n}, 1). On [\tfrac{k-1}{n}, \tfrac{k}{n}) for k=1,\dots,n-1 (and on [\tfrac{n-1}{n},1] for
+k=n), define step functions \alpha_n(x) := \tfrac{k-1}{n} (the minimum of x on the piece) and
+\omega_n(x) := \tfrac{k}{n} (the maximum of x on the piece). By Theorem 7.2.5 and P03,</p>
+<p>
+\int_0^1 \alpha_n = \frac{1}{n}\left(0 + \frac{1}{n} + \cdots + \frac{n-1}{n}\right) =
+\frac{1}{n^2}\cdot\frac{(n-1)n}{2} = \frac{1}{2}\left(1 - \frac{1}{n}\right),
+</p> <p>
+\int_0^1 \omega_n = \frac{1}{n}\left(\frac{1}{n} + \frac{2}{n} + \cdots + \frac{n}{n}\right) =
+\frac{1}{n^2}\cdot\frac{n(n+1)}{2} = \frac{1}{2}\left(1 + \frac{1}{n}\right).
+</p> <p>Since \alpha_n \le h \le \omega_n and \int_0^1(\omega_n - \alpha_n) = \tfrac1n <
+\varepsilon for any n > 1/\varepsilon, Theorem 7.2.3 gives h \in \mathcal{R}[0,1]. Moreover,
+\tfrac12(1 - \tfrac1n) \le \int_0^1 h \le \tfrac12(1 + \tfrac1n) for all n \in \mathbb{N} forces \int_0^1
+x\,dx = \tfrac12.</p> </div> <p class="small">In the model paper: <span class="chip
+q">Q25</span> (PYQ MTS-26 Q18, MTS-22 Q6, MAT-21 Q7).</p> </section>
+<!-- T13 (K13) & T14 (K14) --> <section class="page"> <div class="topic-head"><span
+class="tid">T13</span><h2>Elementary step functions \varphi_J</h2></div> <p
+class="oneline">A single flat block of height 1 on a subinterval J with endpoints c < d has
+integral d - c (Bartle Lemma 7.2.4, Ex 7.1.13; PYQ MAT-21 MCQ 10).</p> <div class="box
+def"><span class="lab">Lemma 7.2.4 · Elementary Step Functions (Bartle p. 210) · say it word
+
+for word</span>If J is a subinterval of [a,b] having endpoints c < d, and if \varphi_J(x) := 1 for x
+\in J and \varphi_J(x) := 0 elsewhere on [a,b], then \varphi_J \in \mathcal{R}[a,b] and \int_a^b
+\varphi_J = d - c. <span class="say">In plain words: whether the subinterval J is closed [c,d],
+open (c,d), or half-open [c,d) or (c,d], the indicator function \varphi_J is integrable and its
+integral is simply the length d - c of J.</span> </div> <div class="box skel"><span
+class="lab">Skeleton · prove Lemma 7.2.4</span>First let J = [c,d]. For any \dot P with \lVert
+P\rVert < \delta, the union of subintervals with tag in [c,d] contains [c+\delta,d-\delta] and lies
+inside [c-\delta,d+\delta], so (d-c) - 2\delta \le S(\varphi_{[c,d]};\dot P) \le (d-c) + 2\delta. Choose
+\delta_\varepsilon = \varepsilon/4 to get \lvert S - (d-c)\rvert < \varepsilon. The other three
+intervals (c,d), [c,d), (c,d] differ from [c,d] at at most 2 endpoints, so Theorem 7.1.3 gives the
+same integral d - c. ∎</div> <div class="box proof"><span class="lab">Proof of Lemma 7.2.4 &
+Exercise 7.1.13 (Bartle p. 210)</span> <div class="steps"> <div class="step">First suppose J =
+[c,d] with a \le c < d \le b. Let \dot P be any tagged partition of [a,b] with \lVert P\rVert < \delta,
+and let \dot P_1 be the subset of subintervals whose tags belong to [c,d].<span
+class="why">Outside \dot P_1, \varphi_{[c,d]}(t_i) = 0, so S(\varphi_{[c,d]};\dot P) =
+S(\varphi_{[c,d]};\dot P_1).</span></div> <div class="step">By M10 (Exercise 7.1.5), the union
+U_1 of the subintervals in \dot P_1 satisfies [c+\delta, d-\delta] \subseteq U_1 \subseteq
+[c-\delta, d+\delta]. Since \varphi_{[c,d]}(t_i) = 1 on \dot P_1, we have
+(d - c) - 2\delta \le S(\varphi_{[c,d]};\dot P) \le (d - c) + 2\delta, \quad \text{so} \quad \lvert
+S(\varphi_{[c,d]};\dot P) - (d - c)\rvert \le 2\delta.
+<span class="why">Length of [c+\delta,d-\delta] is (d-c)-2\delta and length of [c-\delta,d+\delta]
+is (d-c)+2\delta.</span></div> <div class="step">Given \varepsilon > 0, choose
+\delta_\varepsilon := \varepsilon/4 > 0; then \lVert P\rVert < \delta_\varepsilon \Rightarrow \lvert
+S(\varphi_{[c,d]};\dot P) - (d - c)\rvert \le 2(\varepsilon/4) = \varepsilon/2 < \varepsilon. Hence
+\varphi_{[c,d]} \in \mathcal{R}[a,b] and \int_a^b \varphi_{[c,d]} = d - c.<span
+class="why">Definition 7.1.1 with L = d - c.</span></div> <div class="step">If J is (c,d), [c,d), or
+(c,d], then \varphi_J differs from \varphi_{[c,d]} only at one or both of the endpoints c, d (at most
+two points). By Theorem 7.1.3, \varphi_J \in \mathcal{R}[a,b] and \int_a^b \varphi_J = \int_a^b
+\varphi_{[c,d]} = d - c. <span class="qed">∎</span><span class="why">Changing a function at
+finitely many points (Theorem 7.1.3, T06).</span></div> </div> </div> <div class="box
+check"><span class="lab">Check yourself · PYQ MAT-21 MCQ 10</span> <div class="q">Let g
+: [0,4] \to \mathbb{R} be g(x) = 3 for 0 \le x \le 2 and g(x) = 2 for 2 < x \le 4. Express g using
+elementary step functions and find \int_0^4 g.</div> <div class="a">g = 3\varphi_{[0,2]} +
+2\varphi_{(2,4]}. By Lemma 7.2.4 and linearity (7.1.5), \int_0^4 g = 3(2 - 0) + 2(4 - 2) = 6 + 4 =
+10.</div> </div> <p class="small">In the model paper: <span class="chip q">Q8</span> (PYQ
+MAT-21 MCQ 10).</p> </section>
+<section class="page"> <div class="topic-head"><span class="tid">T14</span><h2>Step
+functions are integrable</h2></div> <p class="oneline">Every step function is a linear
+combination of elementary step functions \varphi_{J_j} (Bartle Theorem 7.2.5, Example 7.2.6(a);
+PYQ MTS-26 Q5, MAT-22 Q16).</p> <figure> {{fig:F16_elementary_steps}}
+<figcaption><b>What to notice:</b> The step function g of Example 7.1.4(b) splits into
+2\varphi_{[0,1]} (area 2\times 1=2) plus 3\varphi_{(1,3]} (area 3\times 2=6), so \int_0^3 g = 2 + 6
+= 8 without touching \varepsilon or \delta. <b>What it does not prove:</b> This formula only
+works for a finite sum of interval indicators; a function that jumps infinitely often is not a step
+function.</figcaption> </figure> <div class="box def"><span class="lab">Theorem 7.2.5 ·
+Integrability of Step Functions (Bartle p. 210, eqs. (4)–(5))</span>If \varphi : [a,b] \to \mathbb{R}
+is a step function, then \varphi \in \mathcal{R}[a,b]. Moreover, if \varphi = \sum_{j=1}^m
+k_j\varphi_{J_j} where J_j has endpoints c_j < d_j, then
+
+\int_a^b \varphi = \sum_{j=1}^m k_j(d_j - c_j).
+<span class="say">In plain words: every step function is integrable, and its integral is the sum of
+(constant height k_j) \times (interval length d_j - c_j).</span> </div> <div class="box
+hyp"><span class="lab">Hypotheses · Theorem 7.2.5</span><ul> <li>\varphi is a <b>step
+function</b> on [a,b]: [a,b] is the union of <b>finitely many</b> non-overlapping intervals
+J_1,\dots,J_m on each of which \varphi is constant (Definition 5.4.9)<span
+class="fails"><b>Bartle Ex 7.2.6 non-example:</b> taking only finitely many values is NOT
+enough to be a step function! Dirichlet's function <span class="cx">C7</span> takes only two
+values (0 and 1), yet the sets \mathbb{Q}\cap[0,1] and [0,1]\setminus\mathbb{Q} are not finite
+unions of intervals, and f \notin \mathcal{R}[0,1].</span></li> </ul></div> <div class="box
+proof"><span class="lab">Proof of Theorem 7.2.5 (Bartle pp. 210–211)</span> <div
+class="steps"> <div class="step">By Definition 5.4.9 (and Exercise 7.2.5), [a,b] is the union of
+finitely many non-overlapping subintervals J_1, \dots, J_m with endpoints c_j \le d_j such that
+\varphi(x) = k_j on J_j. Disjointness of the pieces (up to single endpoints, which can be
+absorbed into one piece or treated as single-point intervals) allows us to write
+\varphi = \sum_{j=1}^m k_j\varphi_{J_j},
+where each \varphi_{J_j} is an elementary step function on [a,b].<span
+class="why">Decomposition into indicator functions (M06).</span></div> <div class="step">By
+Lemma 7.2.4, each \varphi_{J_j} belongs to \mathcal{R}[a,b] and satisfies \int_a^b \varphi_{J_j}
+= d_j - c_j.<span class="why">Lemma 7.2.4 (T13).</span></div> <div class="step">By
+Theorem 7.1.5(a) and (b) (applied inductively to the finite sum of m terms, Exercise 7.1.7), the
+linear combination \varphi = \sum_{j=1}^m k_j\varphi_{J_j} belongs to \mathcal{R}[a,b] and
+\int_a^b \varphi = \sum_{j=1}^m k_j\int_a^b \varphi_{J_j} = \sum_{j=1}^m k_j(d_j - c_j). \quad
+\blacksquare
+<span class="why">Linearity of the integral (Theorem 7.1.5, T07).</span></div> </div> </div>
+<div class="box idea"><span class="lab">Worked examples · Bartle Example 7.2.6(a) &
+Exercise 7.2.7</span> <p><b>1. Example 7.2.6(a):</b> The function g(x) = 2 on [0,1] and g(x)
+= 3 on (1,3] of Example 7.1.4(b) is the step function 2\varphi_{[0,1]} + 3\varphi_{(1,3]}, so
+Theorem 7.2.5 immediately gives \int_0^3 g = 2(1 - 0) + 3(3 - 1) = 8 in one line!</p> <p><b>2.
+Every Riemann sum is the integral of a step function (Bartle Ex 7.2.7):</b> Given any f : [a,b] \to
+\mathbb{R} and any tagged partition \dot P = \{([x_{i-1},x_i],t_i)\}_{i=1}^n, define the step
+function \varphi(x) := f(t_i) on [x_{i-1},x_i) for i=1,\dots,n-1 and \varphi(x) := f(t_n) on
+[x_{n-1},x_n]. By Theorem 7.2.5, \int_a^b \varphi = \sum_{i=1}^n f(t_i)(x_i - x_{i-1}) = S(f;\dot
+P).</p> </div> <p class="small">In the model paper: <span class="chip q">Q26</span> (PYQ
+MTS-26 Q5, MAT-22 Q16).</p> </section>
+<!-- T15 (K15) --> <section class="page"> <div class="topic-head"><span
+class="tid">T15</span><h2>Continuous functions on [a,b] are integrable</h2></div> <p
+class="oneline">Uniform Continuity + Max–Min + Step functions + Squeeze = Theorem 7.2.7
+(PYQ MTS-25 Q18, MAT-21 Q30, MTS-22 Q19, MAT-22 MCQ 21, 23, MAT-21 MCQ 15).</p>
+<figure> {{fig:F06_cont_min_max_steps}} <figcaption><b>What to notice:</b> On each
+subinterval I_i, the continuous function f(x)=\sin x attains its minimum at u_i (floor step
+\alpha_\varepsilon) and maximum at v_i (ceiling step \omega_\varepsilon); uniform continuity
+makes every vertical gap f(v_i)-f(u_i) < \varepsilon/(b-a) once \lVert P\rVert < \delta_\varepsilon.
+<b>What it does not prove:</b> Continuity on an open interval (a,b) is not enough (1/x on (0,1]
+is not integrable).</figcaption> </figure> <div class="box def"><span class="lab">Theorem 7.2.7
+· Integrability of Continuous Functions (Bartle p. 212) · say it word for word</span>If f : [a,b] \to
+\mathbb{R} is continuous on [a,b], then f \in \mathcal{R}[a,b]. <span class="say">In plain words:
+every continuous function on a closed bounded interval is Riemann integrable.</span> </div>
+
+<div class="box hyp"><span class="lab">Hypotheses & Converse · Theorem 7.2.7</span><ul>
+<li>f is <b>continuous</b> on [a,b]<span class="fails">Dirichlet <span class="cx">C7</span> is
+defined on [0,1] and bounded, but discontinuous everywhere and \notin
+\mathcal{R}[0,1]</span></li> <li>the interval [a,b] is <b>closed and bounded</b><span
+class="fails">f(x) = 1/x on (0,1] with f(0) = 0 <span class="cx">C16</span> is continuous on the
+half-open interval (0,1], yet unbounded and \notin \mathcal{R}[0,1]</span></li>
+<li><b>Converse is FALSE (PYQ MAT-22 MCQ 21):</b> f \in \mathcal{R}[a,b] does <b>not</b>
+imply f is continuous or uniformly continuous on [a,b]<span class="fails">the step function g of
+7.1.4(b), \operatorname{sgn} <span class="cx">C9</span>, and Thomae's function <span
+class="cx">C8</span> are all in \mathcal{R}[a,b] but discontinuous (and hence not uniformly
+continuous)</span></li> </ul></div> <div class="kw"><span>Know</span><span>f is
+continuous on the closed bounded interval [a,b]; \varepsilon > 0 is
+given.</span><span>Want</span><span>Construct step functions \alpha_\varepsilon \le f \le
+\omega_\varepsilon on [a,b] with \int_a^b(\omega_\varepsilon - \alpha_\varepsilon) <
+\varepsilon, then apply the Squeeze Theorem 7.2.3.</span></div> <div class="box
+scratch"><span class="lab">Scratch · why we need Uniform Continuity (5.4.3) AND Max–Min
+(5.3.4)</span> <p>On I_i = [x_{i-1},x_i], we want step heights \alpha_\varepsilon(x) = \min_{I_i}
+f = f(u_i) and \omega_\varepsilon(x) = \max_{I_i} f = f(v_i). How do we know u_i, v_i exist?
+Because f is continuous on the closed bounded interval I_i (<b>Max–Min Theorem 5.3.4</b>).
+Then \int_a^b(\omega_\varepsilon - \alpha_\varepsilon) = \sum_{i=1}^n (f(v_i) - f(u_i))(x_i x_{i-1}). To make this sum < \varepsilon, we need f(v_i) - f(u_i) < \varepsilon/(b-a) on
+<b>every</b> subinterval at once. Since \lvert v_i - u_i\rvert \le x_i - x_{i-1} \le \lVert P\rVert, the
+<b>Uniform Continuity Theorem 5.4.3</b> gives one \delta_\varepsilon > 0 that works across all
+i=1,\dots,n simultaneously!</p> </div> <div class="box proof"><span class="lab">Proof of
+Theorem 7.2.7 (Bartle p. 212)</span> <div class="steps"> <div class="step">By the Uniform
+Continuity Theorem 5.4.3 (P08), since f is continuous on the closed bounded interval [a,b], f is
+uniformly continuous on [a,b]. Therefore, given any \varepsilon > 0, there exists
+\delta_\varepsilon > 0 such that if u, v \in [a,b] and \lvert u - v\rvert < \delta_\varepsilon, then
+\lvert f(u) - f(v)\rvert < \frac{\varepsilon}{b - a}.
+<span class="why">Uniform Continuity Theorem 5.4.3 applied with tolerance \varepsilon/(b-a) >
+0.</span></div> <div class="step">Let P = \{I_i\}_{i=1}^n be a partition of [a,b] with \lVert P\rVert
+< \delta_\varepsilon, where I_i = [x_{i-1},x_i].<span class="why">Choose an equal partition with
+n > (b-a)/\delta_\varepsilon so every subinterval has length <\delta_\varepsilon.</span></div>
+<div class="step">Since f is continuous on each closed bounded subinterval I_i, the
+Maximum–Minimum Theorem 5.3.4 (P07) implies that there exist points u_i, v_i \in I_i where f
+attains its minimum and maximum values on I_i, respectively: f(u_i) \le f(x) \le f(v_i) for all x \in
+I_i.<span class="why">Maximum–Minimum Theorem 5.3.4 on each I_i =
+[x_{i-1},x_i].</span></div> <div class="step">Define the step function \alpha_\varepsilon : [a,b]
+\to \mathbb{R} by \alpha_\varepsilon(x) := f(u_i) for x \in [x_{i-1},x_i) (i=1,\dots,n-1) and
+\alpha_\varepsilon(x) := f(u_n) for x \in [x_{n-1},x_n]. Similarly, define \omega_\varepsilon(x) :=
+f(v_i) for x \in [x_{i-1},x_i) (i=1,\dots,n-1) and \omega_\varepsilon(x) := f(v_n) for x \in
+[x_{n-1},x_n]. Then \alpha_\varepsilon, \omega_\varepsilon \in \mathcal{R}[a,b] by Theorem
+7.2.5, and
+\alpha_\varepsilon(x) \le f(x) \le \omega_\varepsilon(x) \quad \text{for all } x \in [a,b].
+<span class="why">Construction of disjoint half-open intervals and Theorem 7.2.5
+(T14).</span></div> <div class="step">Since u_i, v_i \in I_i and \lVert P\rVert <
+\delta_\varepsilon, we have \lvert u_i - v_i\rvert \le x_i - x_{i-1} < \delta_\varepsilon, so f(v_i) f(u_i) < \varepsilon/(b-a) by Step 1. Using formula (5) of Theorem 7.2.5,
+
+0 \le \int_a^b (\omega_\varepsilon - \alpha_\varepsilon) = \sum_{i=1}^n \big(f(v_i) - f(u_i)\big)(x_i
+- x_{i-1}) < \sum_{i=1}^n \frac{\varepsilon}{b-a}(x_i - x_{i-1}) = \frac{\varepsilon}{b-a}(b-a) =
+\varepsilon.
+<span class="why">Step-function integral formula (T14), Step 1 bound, and telescoping
+\sum(x_i - x_{i-1}) = b-a (M01).</span></div> <div class="step">Since \varepsilon > 0 is
+arbitrary, the Squeeze Theorem 7.2.3 implies that f \in \mathcal{R}[a,b]. <span
+class="qed">∎</span><span class="why">Squeeze Theorem 7.2.3 (T12).</span></div> </div>
+</div> </section>
+<section class="page"> <div class="box idea"><span class="lab">Where each hypothesis was
+used & Two classic exam applications</span> <p><b>Where hypotheses were used:</b>
+Continuity of f and closedness/boundedness of [a,b] were used in Step 1 (Uniform Continuity
+Theorem 5.4.3) and in Step 3 (Maximum–Minimum Theorem 5.3.4 on each I_i).</p>
+<p><b>Application 1 · f \ge 0 continuous and \int_a^b f = 0 \Rightarrow f \equiv 0 (Bartle Ex
+7.2.8–9; PYQ MAT-22 MCQ 23, Q18):</b> Suppose for contradiction that f(c) > 0 for some c \in
+[a,b]. By continuity at c with \varepsilon = \tfrac12 f(c) > 0, there is a subinterval J = [c_1, d_1]
+\subseteq [a,b] of length d_1 - c_1 > 0 containing c on which f(x) > \tfrac12 f(c). Then the
+elementary step function satisfies 0 \le \tfrac12 f(c)\varphi_J(x) \le f(x) on [a,b], so by Theorem
+7.1.5(c) and Lemma 7.2.4, \int_a^b f \ge \tfrac12 f(c)(d_1 - c_1) > 0, contradicting \int_a^b f = 0!
+Hence f(x) = 0 for <b>all</b> x \in [a,b]. (Continuity cannot be dropped: f(0)=1 and f(x)=0 on
+(0,1] has f \ge 0 and \int_0^1 f = 0, yet f(0) \ne 0.)</p> <p><b>Application 2 · Mean Value
+Theorem for Integrals (Bartle Ex 7.2.16, Q20):</b> If f is continuous on [a,b] (a < b), then by
+Max–Min (5.3.4) f attains its minimum m and maximum M on [a,b]. Since m \le f(x) \le M,
+Theorem 7.1.5(c) gives m(b-a) \le \int_a^b f \le M(b-a), so k := \frac{1}{b-a}\int_a^b f \in [m,M].
+By Bolzano's Intermediate Value Theorem 5.3.7, there exists c \in [a,b] with f(c) = k, i.e. \int_a^b
+f = f(c)(b-a).</p> </div> <p class="small">In the model paper: <span class="chip
+q">Q18</span>, <span class="chip q">Q20</span>, <span class="chip q">Q37</span> (PYQ
+MTS-25 Q18, MAT-21 Q30, MTS-22 Q19, MAT-22 MCQ 21, 23, MAT-21 MCQ 15).</p>
+</section>
+<!-- T16 (K16) --> <section class="page"> <div class="topic-head"><span
+class="tid">T16</span><h2>Monotone functions on [a,b] are integrable</h2></div> <p
+class="oneline">Even with countably many jumps, an increasing or decreasing function on [a,b]
+is integrable because the staircase gap telescopes (Bartle Theorem 7.2.8; PYQ MTS-26 Q19,
+MAT-22 Q30, MAT-22 MCQ 22).</p> <figure> {{fig:F07_monotone_staircase}}
+<figcaption><b>What to notice:</b> For the increasing function f(x)=x^2 on [0,1] with n=4 equal
+pieces, sliding all four error rectangles (\omega-\alpha) horizontally stacks them into a single
+column of width (b-a)/n = 1/4 and height f(1)-f(0) = 1, so \int_0^1(\omega-\alpha) = 1/4. <b>What
+it does not prove:</b> The picture shows n=4; the proof works by choosing n >
+(b-a)(f(b)-f(a))/\varepsilon for any \varepsilon > 0.</figcaption> </figure> <div class="box
+def"><span class="lab">Theorem 7.2.8 · Integrability of Monotone Functions (Bartle p. 212) ·
+say it word for word</span>If f : [a,b] \to \mathbb{R} is monotone on [a,b], then f \in
+\mathcal{R}[a,b]. <span class="say">In plain words: every increasing or decreasing function on
+a closed bounded interval [a,b] is Riemann integrable.</span> </div> <div class="box
+hyp"><span class="lab">Hypotheses & Converse · Theorem 7.2.8</span><ul> <li>f is
+<b>monotone</b> (increasing or decreasing) on the closed bounded interval [a,b]<span
+class="fails">if f is only monotone on the open interval (0,1], e.g. f(x) = 1/x on (0,1] with f(0)=0
+<span class="cx">C16</span>, f is unbounded and \notin \mathcal{R}[0,1]. On a closed interval
+[a,b], a monotone function is automatically bounded between f(a) and f(b)!</span></li>
+<li><b>Converse is FALSE (PYQ MAT-22 MCQ 22):</b> f \in \mathcal{R}[a,b] does <b>not</b>
+
+imply f is monotone on [a,b]<span class="fails">f(x) = \sin x on [0,\pi] and f(x) = x^2 on [-1,1] are
+continuous (hence in \mathcal{R}) but not monotone; Thomae's function <span
+class="cx">C8</span> is not monotone on any subinterval</span></li> </ul></div> <div
+class="kw"><span>Know</span><span>f is increasing on [a,b] (for decreasing f, apply to -f and
+use Theorem 7.1.5(a)); \varepsilon > 0 is given.</span><span>Want</span><span>On n equal
+subintervals of length (b-a)/n, define step functions \alpha \le f \le \omega with
+\int_a^b(\omega-\alpha) = \frac{b-a}{n}(f(b)-f(a)) < \varepsilon.</span></div> <div class="box
+proof"><span class="lab">Proof of Theorem 7.2.8 (Bartle p. 212)</span> <div class="steps">
+<div class="step">Assume f is increasing on I = [a,b] (if f is decreasing, then -f is increasing, so
+-f \in \mathcal{R}[a,b] and hence f = -(-f) \in \mathcal{R}[a,b] by Theorem 7.1.5(a)). For n \in
+\mathbb{N}, partition I = [a,b] into n equal subintervals I_k = [x_{k-1},x_k] of length x_k - x_{k-1}
+= (b-a)/n for k=1,\dots,n.<span class="why">Equal widths (b-a)/n allow us to factor out the
+common width and telescope the heights.</span></div> <div class="step">Since f is increasing
+on I_k, its minimum on I_k is attained at the left endpoint x_{k-1} and its maximum at the right
+endpoint x_k: f(x_{k-1}) \le f(x) \le f(x_k) for all x \in I_k.<span class="why">Definition of
+increasing function (P10)—no continuity needed!</span></div> <div class="step">Define step
+functions \alpha, \omega : [a,b] \to \mathbb{R} by \alpha(x) := f(x_{k-1}) and \omega(x) := f(x_k)
+for x \in [x_{k-1},x_k) (k=1,\dots,n-1), and \alpha(x) := f(x_{n-1}), \omega(x) := f(x_n) for x \in
+[x_{n-1},x_n]. Then \alpha, \omega \in \mathcal{R}[a,b] by Theorem 7.2.5 and \alpha(x) \le f(x)
+\le \omega(x) on [a,b].<span class="why">Step-function integrability (Theorem 7.2.5,
+T14).</span></div> <div class="step">By Theorem 7.2.5,
+\int_a^b \alpha = \frac{b-a}{n}\big(f(x_0) + f(x_1) + \cdots + f(x_{n-1})\big), \quad \int_a^b \omega
+= \frac{b-a}{n}\big(f(x_1) + \cdots + f(x_{n-1}) + f(x_n)\big).
+Subtracting and cancelling the interior terms f(x_1),\dots,f(x_{n-1}) gives
+\int_a^b (\omega - \alpha) = \frac{b-a}{n}\big(f(x_n) - f(x_0)\big) = \frac{b-a}{n}\big(f(b) - f(a)\big).
+<span class="why">Telescoping sum (M01, M05) with x_0 = a and x_n = b.</span></div> <div
+class="step">Given \varepsilon > 0, choose n \in \mathbb{N} such that n >
+(b-a)(f(b)-f(a))/\varepsilon. Then \int_a^b (\omega - \alpha) < \varepsilon. By the Squeeze
+Theorem 7.2.3, f \in \mathcal{R}[a,b]. <span class="qed">∎</span><span
+class="why">Archimedean property (P13) and Squeeze Theorem 7.2.3 (T12).</span></div>
+</div> </div> <div class="box idea"><span class="lab">Worked example · Staircase for f(x) =
+x^2 on [0,1] with n=4</span> <p>With P_4 = (0, \tfrac14, \tfrac12, \tfrac34, 1), the function f(x) =
+x^2 is increasing on [0,1]. The lower step heights are 0, \tfrac1{16}, \tfrac14, \tfrac9{16} and
+upper step heights are \tfrac1{16}, \tfrac14, \tfrac9{16}, 1, so:</p> <p>
+\int_0^1 \alpha = \frac14\left(0 + \frac1{16} + \frac4{16} + \frac9{16}\right) = \frac{14}{64} =
+0.21875, \qquad \int_0^1 \omega = \frac14\left(\frac1{16} + \frac4{16} + \frac9{16} + 1\right) =
+\frac{30}{64} = 0.46875.
+</p> <p>Their difference is 0.46875 - 0.21875 = 0.25 = \frac{1-0}{4}(f(1)-f(0)), trapping the exact
+value \int_0^1 x^2\,dx = \tfrac13 \approx 0.3333.</p> </div> <p class="small">In the model
+paper: <span class="chip q">Q38</span> (PYQ MTS-26 Q19, MAT-22 Q30, MAT-22 MCQ
+22).</p> </section>
+<!-- T17 (K17) --> <section class="page"> <div class="topic-head"><span
+class="tid">T17</span><h2>The Additivity Theorem</h2></div> <p class="oneline">Splitting an
+integral at an interior point c \in (a,b) (Bartle Theorem 7.2.9; PYQ MTS-26 Q25, MAT-22 Q37a,
+MTS-22 Q25).</p> <figure> {{fig:F13_additivity_split}} <figcaption><b>What to notice:</b>
+When c=1 falls inside the k-th subinterval [x_{k-1},x_k]=[0.8,1.3] of \dot Q, we split that
+subinterval at c into ([0.8,1],1) and ([1,1.3],1) with tag c; only that single rectangle changes, by
+at most 2M(x_k-x_{k-1}) < \varepsilon/3. <b>What it does not prove:</b> You must prove both
+
+directions (\Leftarrow) and (\Rightarrow), and in (\Leftarrow) you must handle Case (ii) where c
+is not a partition point.</figcaption> </figure> <div class="box def"><span class="lab">Theorem
+7.2.9 · Additivity Theorem (Bartle p. 213, eq. (6)) · say it word for word</span>Let f : [a,b] \to
+\mathbb{R} and let c \in (a,b). Then f \in \mathcal{R}[a,b] if and only if its restrictions to [a,c] and
+to [c,b] are both Riemann integrable. In this case
+\int_a^b f = \int_a^c f + \int_c^b f.
+<span class="say">In plain words: f is integrable on the whole interval [a,b] if and only if it is
+integrable on the left piece [a,c] and on the right piece [c,b], and the whole integral is the sum of
+the two piece integrals.</span> </div> <div class="box hyp"><span class="lab">Hypotheses ·
+Theorem 7.2.9</span><ul> <li>for (\Leftarrow): <b>both</b> restrictions f|_{[a,c]} \in
+\mathcal{R}[a,c] and f|_{[c,b]} \in \mathcal{R}[c,b]<span class="fails">if f=0 on [0,1] and
+f=\text{Dirichlet} <span class="cx">C7</span> on [1,2], then f|_{[0,1]} \in \mathcal{R}[0,1] but
+f|_{[1,2]} \notin \mathcal{R}[1,2], so f \notin \mathcal{R}[0,2]</span></li> <li>boundedness of f on
+[a,b] in (\Leftarrow)<span class="fails">since f|_{[a,c]} \in \mathcal{R}[a,c] and f|_{[c,b]} \in
+\mathcal{R}[c,b], Theorem 7.1.6 implies each piece is bounded, so f is bounded on [a,b] by
+some M > 0 (state this in the exam—it carries a mark!)</span></li> </ul></div> <div
+class="kw"><span>Know</span><span>(\Leftarrow) f_1 = f|_{[a,c]} \in \mathcal{R}[a,c] with
+integral L_1, f_2 = f|_{[c,b]} \in \mathcal{R}[c,b] with integral L_2. (\Rightarrow) f \in
+\mathcal{R}[a,b].</span><span>Want</span><span>(\Leftarrow) Show \lvert S(f;\dot Q) (L_1+L_2)\rvert < \varepsilon for \lVert Q\rVert < \delta_\varepsilon. (\Rightarrow) Use Cauchy
+7.2.1 by adjoining the same tagged partition of [c,b] to \dot P_1, \dot Q_1.</span></div> <div
+class="box scratch"><span class="lab">Scratch · the three \varepsilon/3 errors in (\Leftarrow)
+Case (ii)</span> <p>When c \in (x_{k-1},x_k) is not a partition point of \dot Q, split I_k at c with
+tag c on both halves to get \dot Q_1 on [a,c] and \dot Q_2 on [c,b]. All other intervals match! So
+S(f;\dot Q) - S(f_1;\dot Q_1) - S(f_2;\dot Q_2) = f(t_k)(x_k-x_{k-1}) - f(c)(c-x_{k-1}) - f(c)(x_k-c) =
+(f(t_k) - f(c))(x_k - x_{k-1}). Bound this by 2M\lVert Q\rVert < \varepsilon/3 by choosing
+\delta_\varepsilon = \min\{\delta', \delta'', \varepsilon/(6M)\}.</p> </div> </section>
+<section class="page"> <div class="box proof"><span class="lab">Proof of Theorem 7.2.9
+(Bartle pp. 213–214)</span> <p><b>(\Leftarrow)</b></p> <div class="steps"> <div
+class="step">Suppose f_1 := f|_{[a,c]} \in \mathcal{R}[a,c] with integral L_1 and f_2 := f|_{[c,b]}
+\in \mathcal{R}[c,b] with integral L_2. Given \varepsilon > 0, choose \delta' > 0 such that \lVert
+P_1\rVert < \delta' \Rightarrow \lvert S(f_1;\dot P_1) - L_1\rvert < \varepsilon/3, and choose
+\delta'' > 0 such that \lVert P_2\rVert < \delta'' \Rightarrow \lvert S(f_2;\dot P_2) - L_2\rvert <
+\varepsilon/3.<span class="why">Definition 7.1.1 applied to f_1 and f_2 with tolerance
+\varepsilon/3.</span></div> <div class="step">By Theorem 7.1.6, f_1 is bounded on [a,c] and
+f_2 is bounded on [c,b], so f is bounded on [a,b]. Choose M > 0 such that \lvert f(x)\rvert \le M for
+all x \in [a,b] (if f \equiv 0, take M = 1), and define
+\delta_\varepsilon := \min\left\{\delta',\, \delta'',\, \frac{\varepsilon}{6M}\right\} > 0.
+Let \dot Q = \{(I_i,t_i)\}_{i=1}^m be any tagged partition of [a,b] with \lVert Q\rVert <
+\delta_\varepsilon.<span class="why">Boundedness Theorem 7.1.6 on each piece; three-way
+minimum (M08).</span></div> <div class="step"><b>Case (i): c is a partition point of \dot
+Q.</b> Split \dot Q at c into a tagged partition \dot Q_1 of [a,c] and a tagged partition \dot Q_2
+of [c,b]. Since S(f;\dot Q) = S(f_1;\dot Q_1) + S(f_2;\dot Q_2) and \lVert Q_1\rVert < \delta', \lVert
+Q_2\rVert < \delta'', the Triangle Inequality and Step 1 give
+\lvert S(f;\dot Q) - (L_1 + L_2)\rvert \le \lvert S(f_1;\dot Q_1) - L_1\rvert + \lvert S(f_2;\dot Q_2) L_2\rvert < \frac{\varepsilon}{3} + \frac{\varepsilon}{3} < \varepsilon.
+<span class="why">When c is already a cut point, no rectangle straddles c.</span></div> <div
+class="step"><b>Case (ii): c is not a partition point of \dot Q.</b> Then c \in (x_{k-1},x_k) for
+
+some k \le m. Define tagged partitions \dot Q_1 of [a,c] and \dot Q_2 of [c,b] by
+\dot Q_1 := \{(I_1,t_1),\dots,(I_{k-1},t_{k-1}),([x_{k-1},c],c)\}, \quad \dot Q_2 :=
+\{([c,x_k],c),(I_{k+1},t_{k+1}),\dots,(I_m,t_m)\}.
+<span class="why">Cut the straddling interval [x_{k-1},x_k] at c, using c as the tag for both
+pieces.</span></div> <div class="step">Since (c - x_{k-1}) + (x_k - c) = x_k - x_{k-1}, all terms
+of S(f;\dot Q) and S(f_1;\dot Q_1) + S(f_2;\dot Q_2) cancel except the k-th term, giving
+S(f;\dot Q) - S(f_1;\dot Q_1) - S(f_2;\dot Q_2) = \big(f(t_k) - f(c)\big)(x_k - x_{k-1}),
+and therefore \lvert S(f;\dot Q) - S(f_1;\dot Q_1) - S(f_2;\dot Q_2)\rvert \le (\lvert f(t_k)\rvert +
+\lvert f(c)\rvert)(x_k - x_{k-1}) \le 2M\lVert Q\rVert < 2M\cdot\frac{\varepsilon}{6M} =
+\frac{\varepsilon}{3}.<span class="why">Triangle Inequality, \lvert f\rvert \le M, and \lVert Q\rVert
+< \varepsilon/(6M).</span></div> <div class="step">Since \lVert Q_1\rVert \le \lVert Q\rVert <
+\delta' and \lVert Q_2\rVert \le \lVert Q\rVert < \delta'', Step 1 gives \lvert S(f_1;\dot Q_1) L_1\rvert < \varepsilon/3 and \lvert S(f_2;\dot Q_2) - L_2\rvert < \varepsilon/3. By the Triangle
+Inequality,
+\lvert S(f;\dot Q) - (L_1 + L_2)\rvert \le \lvert S(f;\dot Q) - S(f_1;\dot Q_1) - S(f_2;\dot Q_2)\rvert
++ \lvert S(f_1;\dot Q_1) - L_1\rvert + \lvert S(f_2;\dot Q_2) - L_2\rvert < \frac{\varepsilon}{3} +
+\frac{\varepsilon}{3} + \frac{\varepsilon}{3} = \varepsilon.
+Since \varepsilon > 0 is arbitrary, f \in \mathcal{R}[a,b] and \int_a^b f = L_1 + L_2 = \int_a^c f +
+\int_c^b f.<span class="why">Three-part Triangle Inequality and Definition 7.1.1 (uniqueness
+7.1.2 identifies the integral as L_1 + L_2).</span></div> </div> <p><b>(\Rightarrow)</b></p>
+<div class="steps"> <div class="step">Suppose f \in \mathcal{R}[a,b] and let \varepsilon > 0 be
+given. By the Cauchy Criterion 7.2.1, there exists \eta_\varepsilon > 0 such that tagged
+partitions \dot P, \dot Q of [a,b] with norms <\eta_\varepsilon satisfy \lvert S(f;\dot P) - S(f;\dot
+Q)\rvert < \varepsilon.<span class="why">Cauchy Criterion 7.2.1 (\Rightarrow) applied to f on
+[a,b].</span></div> <div class="step">Let \dot P_1, \dot Q_1 be any tagged partitions of [a,c]
+with \lVert P_1\rVert < \eta_\varepsilon and \lVert Q_1\rVert < \eta_\varepsilon. Choose a single
+tagged partition \dot R of [c,b] with \lVert R\rVert < \eta_\varepsilon, and adjoin \dot R to \dot P_1
+and \dot Q_1 to obtain tagged partitions \dot P = \dot P_1 \cup \dot R and \dot Q = \dot Q_1 \cup
+\dot R of [a,b] with \lVert P\rVert < \eta_\varepsilon and \lVert Q\rVert < \eta_\varepsilon.<span
+class="why">Using the exact same \dot R on [c,b] makes the [c,b] sums cancel when we
+subtract!</span></div> <div class="step">Then S(f_1;\dot P_1) - S(f_1;\dot Q_1) =
+\big(S(f_1;\dot P_1) + S(f;\dot R)\big) - \big(S(f_1;\dot Q_1) + S(f;\dot R)\big) = S(f;\dot P) S(f;\dot Q), so
+\lvert S(f_1;\dot P_1) - S(f_1;\dot Q_1)\rvert = \lvert S(f;\dot P) - S(f;\dot Q)\rvert < \varepsilon.
+By the Cauchy Criterion 7.2.1, f_1 \in \mathcal{R}[a,c]. By the same argument, f_2 \in
+\mathcal{R}[c,b]. Finally, the formula \int_a^b f = \int_a^c f + \int_c^b f follows from the
+(\Leftarrow) part already proved. <span class="qed">∎</span><span class="why">Cauchy
+Criterion 7.2.1 (\Leftarrow) on [a,c] and [c,b], then apply (\Leftarrow) for the
+equality.</span></div> </div> </div> <p class="small">In the model paper: <span class="chip
+q">Q39</span> (PYQ MTS-26 Q25, MAT-22 Q37a, MTS-22 Q25).</p> </section>
+<!-- T18 (K18) --> <section class="page"> <div class="topic-head"><span
+class="tid">T18</span><h2>Restriction and subdivision corollaries</h2></div> <p
+class="oneline">Restricting f \in \mathcal{R}[a,b] to [c,d] \subseteq [a,b] and splitting [a,b] at m
+points (Bartle Corollaries 7.2.10–7.2.11, Exercises 7.2.11–7.2.13; PYQ MAT-22 Q37b, MAT-22
+MCQ 24, 25, MAT-21 MCQ 18).</p> <div class="box def"><span class="lab">Corollary 7.2.10 &
+Corollary 7.2.11 (Bartle p. 214) · say them word for word</span> <p><b>Corollary 7.2.10:</b> If
+f \in \mathcal{R}[a,b] and if [c,d] \subseteq [a,b], then the restriction of f to [c,d] is in
+\mathcal{R}[c,d].</p> <p><b>Corollary 7.2.11:</b> If f \in \mathcal{R}[a,b] and if a = c_0 < c_1 <
+
+\cdots < c_m = b, then the restrictions of f to each subinterval [c_{i-1},c_i] are Riemann
+integrable and
+\int_a^b f = \sum_{i=1}^m \int_{c_{i-1}}^{c_i} f.
+</p> <span class="say">In plain words: integrability is inherited by every closed subinterval [c,d]
+\subseteq [a,b], and an integral splits across any finite chain of cut points c_0 < c_1 < \cdots <
+c_m.</span> </div> <div class="box proof"><span class="lab">Proofs of Corollaries 7.2.10 and
+7.2.11 (Bartle p. 214)</span> <div class="steps"> <div class="step"><b>Proof of 7.2.10 (PYQ
+MAT-22 Q37b):</b> Let f \in \mathcal{R}[a,b] and a \le c < d \le b. If c > a, then c \in (a,b), so
+Theorem 7.2.9 (\Rightarrow) implies that the restriction f|_{[c,b]} belongs to \mathcal{R}[c,b] (if c
+= a, this holds by hypothesis). Next, if d < b, then d \in (c,b), so applying Theorem 7.2.9
+(\Rightarrow) to f|_{[c,b]} at the point d shows that the restriction f|_{[c,d]} belongs to
+\mathcal{R}[c,d] (if d = b, we already have f|_{[c,b]} \in \mathcal{R}[c,b]). <span
+class="qed">∎</span><span class="why">Two applications of the (\Rightarrow) direction of the
+Additivity Theorem 7.2.9 (T17).</span></div> <div class="step"><b>Proof of 7.2.11 (by
+induction on m; omitted in Bartle):</b> For m = 1, [c_0,c_1] = [a,b], which is trivial; for m = 2, this
+is Theorem 7.2.9. Assume the result holds for m - 1 subintervals. Given a = c_0 < c_1 < \cdots <
+c_{m-1} < c_m = b, apply Theorem 7.2.9 at c = c_{m-1} \in (a,b): f is integrable on [a,c_{m-1}]
+and on [c_{m-1},c_m], with
+\int_a^b f = \int_a^{c_{m-1}} f + \int_{c_{m-1}}^{c_m} f.
+Applying the induction hypothesis to f|_{[a,c_{m-1}]} on a = c_0 < \cdots < c_{m-1} gives \int_a^b
+f = \sum_{i=1}^m \int_{c_{i-1}}^{c_i} f. <span class="qed">∎</span><span
+class="why">Mathematical induction on m using Theorem 7.2.9.</span></div> </div> </div>
+<div class="box idea"><span class="lab">Important Exam Result · Integrable on every [c,b]
+(Bartle Ex 7.2.11–7.2.13; PYQ MAT-22 MCQ 24, 25, Q28)</span> <p><b>Statement (Bartle Ex
+7.2.11):</b> If f is <b>bounded</b> by M on [a,b] and f|_{[c,b]} \in \mathcal{R}[c,b] for every c \in
+(a,b), then f \in \mathcal{R}[a,b] and \lim_{c\to a^+} \int_c^b f = \int_a^b f.</p> <p><b>Proof:</b>
+Given \varepsilon > 0, choose c \in (a,b) with c - a < \varepsilon/(4M). Define \alpha_c(x) := -M
+and \omega_c(x) := M on [a,c), and \alpha_c(x) := \omega_c(x) := f(x) on [c,b]. By Theorem
+7.2.9 (\Leftarrow), \alpha_c, \omega_c \in \mathcal{R}[a,b], \alpha_c \le f \le \omega_c, and
+\int_a^b(\omega_c - \alpha_c) = \int_a^c 2M + \int_c^b 0 = 2M(c-a) < \varepsilon/2 < \varepsilon.
+By the Squeeze Theorem 7.2.3, f \in \mathcal{R}[a,b]. Moreover, \big\lvert\int_a^b f - \int_c^b
+f\big\rvert = \big\lvert\int_a^c f\big\rvert \le M(c-a) \to 0 as c \to a^+.</p> <p><b>Application to
+\sin(1/x) (Bartle Ex 7.2.12; PYQ MAT-22 MCQ 25):</b> Let g(x) := \sin(1/x) for x \in (0,1] and
+g(0) := 0. Then \lvert g(x)\rvert \le 1 on [0,1] (bounded!), and for every c \in (0,1), g is continuous
+on [c,1] and hence in \mathcal{R}[c,1] by Theorem 7.2.7. By Exercise 7.2.11, g \in
+\mathcal{R}[0,1].</p> <p><b>Why boundedness cannot be dropped (Bartle Ex 7.2.13):</b> f(x)
+= 1/x on (0,1], f(0)=0 <span class="cx">C16</span> is continuous (hence in \mathcal{R}[c,1])
+for every c \in (0,1), but f is unbounded on [0,1], so f \notin \mathcal{R}[0,1].</p> </div> <p
+class="small">In the model paper: <span class="chip q">Q27</span> (PYQ MAT-22 Q37b),
+<span class="chip q">Q28</span> (PYQ MAT-22 MCQ 24, 25, MAT-21 MCQ 18).</p>
+</section>
+<!-- T19 (K19) --> <section class="page"> <div class="topic-head"><span
+class="tid">T19</span><h2>Oriented integrals and additivity for any three points</h2></div> <p
+class="oneline">Defining \int_\beta^\alpha f := -\int_\alpha^\beta f and \int_\alpha^\alpha f := 0
+so additivity holds in any order (Bartle Definition 7.2.12, Theorem 7.2.13).</p> <div class="box
+def"><span class="lab">Definition 7.2.12 & Theorem 7.2.13 (Bartle pp. 214–215, eq. (8)) · say
+them word for word</span> <p><b>Definition 7.2.12:</b> If f \in \mathcal{R}[a,b] and if \alpha,
+\beta \in [a,b] with \alpha < \beta, we define
+
+\int_\beta^\alpha f := -\int_\alpha^\beta f \qquad \text{and} \qquad \int_\alpha^\alpha f := 0.
+</p> <p><b>Theorem 7.2.13:</b> If f \in \mathcal{R}[a,b] and if \alpha, \beta, \gamma are any
+numbers in [a,b], then
+\int_\alpha^\beta f = \int_\alpha^\gamma f + \int_\gamma^\beta f,
+in the sense that the existence of any two of these integrals implies the existence of the third
+and the equality.</p> <span class="say">In plain words: integrating backwards from \beta to
+\alpha flips the sign, integrating from \alpha to \alpha gives 0, and with those two conventions
+\int_\alpha^\beta f = \int_\alpha^\gamma f + \int_\gamma^\beta f holds no matter which of \alpha,
+\beta, \gamma is smallest, middle, or largest.</span> </div> <div class="box proof"><span
+class="lab">Proof of Theorem 7.2.13 (Bartle pp. 214–215)</span> <div class="steps"> <div
+class="step">If any two of the numbers \alpha, \beta, \gamma are equal, the formula
+\int_\alpha^\beta f = \int_\alpha^\gamma f + \int_\gamma^\beta f holds immediately by Definition
+7.2.12 (for instance, if \gamma = \beta, it reads \int_\alpha^\beta f = \int_\alpha^\beta f + 0; if
+\alpha = \beta, it reads 0 = \int_\alpha^\gamma f - \int_\alpha^\gamma f).<span
+class="why">Definition 7.2.12 handles all cases with repeated points.</span></div> <div
+class="step">Assume \alpha, \beta, \gamma are all distinct. For any triple, define the cyclic sum
+L(\alpha, \beta, \gamma) := \int_\alpha^\beta f + \int_\beta^\gamma f + \int_\gamma^\alpha f.
+Since \int_\gamma^\alpha f = -\int_\alpha^\gamma f, the desired equation \int_\alpha^\beta f =
+\int_\alpha^\gamma f + \int_\gamma^\beta f holds if and only if L(\alpha, \beta, \gamma) =
+0.<span class="why">Move \int_\alpha^\gamma f + \int_\gamma^\beta f to the left-hand side
+using \int_\alpha^\gamma f = -\int_\gamma^\alpha f.</span></div> <div class="step">When
+\alpha < \gamma < \beta, the Additivity Theorem 7.2.9 gives \int_\alpha^\beta f =
+\int_\alpha^\gamma f + \int_\gamma^\beta f, so L(\alpha, \beta, \gamma) = 0.<span
+class="why">Theorem 7.2.9 (T17) for the standard ordering \alpha < \gamma <
+\beta.</span></div> <div class="step">Cycling the three letters leaves the sum unchanged:
+L(\beta, \gamma, \alpha) = L(\gamma, \alpha, \beta) = L(\alpha, \beta, \gamma). Swapping two
+adjacent letters reverses the orientation of every integral and negates the sum: L(\beta, \alpha,
+\gamma) = L(\alpha, \gamma, \beta) = L(\gamma, \beta, \alpha) = -L(\alpha, \beta,
+\gamma).<span class="why">Commutativity of addition and \int_u^v f = -\int_v^u
+f.</span></div> <div class="step">Every one of the 6 possible orderings of three distinct
+numbers is obtained from \alpha < \gamma < \beta by a cyclic shift or a swap, so L(\alpha,
+\beta, \gamma) = 0 for all configurations of \alpha, \beta, \gamma. <span
+class="qed">∎</span><span class="why">0 and -0 are both 0.</span></div> </div> </div> <div
+class="box idea"><span class="lab">Worked example · Numerical check for \alpha = 3, \beta =
+1, \gamma = 0 (Model Paper Q9)</span> <p>Let f(x) = x on [0,3], and take \alpha = 3, \beta = 1,
+\gamma = 0 (so \gamma < \beta < \alpha). Using \int_a^b x\,dx = \tfrac12(b^2 - a^2) and
+Definition 7.2.12:</p> <ul> <li>Left-hand side: \displaystyle\int_3^1 x\,dx = -\int_1^3 x\,dx =
+-\tfrac12(3^2 - 1^2) = -4.</li> <li>Right-hand side: \displaystyle\int_3^0 x\,dx + \int_0^1 x\,dx =
+-\int_0^3 x\,dx + \int_0^1 x\,dx = -\tfrac92 + \tfrac12 = -4. Both sides equal -4.</li> </ul> </div>
+<p class="small">In the model paper: <span class="chip q">Q9</span>.</p> </section>
+=== NOTES / DOUBTS (STAGE 2 OF 6) ===
+●​ Completed Stage 2 (src/m3/prepare_03_sec72.html): covers Unit 2 (Bartle §7.2, topics
+T10–T19 corresponding to K10–K19), including all figure placeholders
+(F08_dirichlet_tags, F05_squeeze_step, F16_elementary_steps,
+F06_cont_min_max_steps, F07_monotone_staircase, F13_additivity_split), word-for-word
+theorems, hypotheses boxes with counterexamples, skeletons, scratch work, step-by-step
+proofs with .why justifications, and the known issue on Theorem 7.2.9 (M>0 bound from
+7.1.6).
+
+●​ Next up in Stage 3: src/m3/prepare_04_sec73.html (Unit 3: Bartle §7.3, topics T20–T32,
+plus Counterexample library page, "Which tool?" mixed drill, Theorem sheet, Recall plan,
+and PYQ → topic table).
+●​ Reminder for Stage 6: Please paste or attach figs.py and figs_m2.py before or when
+requesting Stage 6 so src/m3/figs_m3.py can be generated using the exact S and Plot
+classes.
+
+

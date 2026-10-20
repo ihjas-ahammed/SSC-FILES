@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bartle &amp; Sherbert, Introduction to Real Analysis (4th ed.), Sections 5.1 and 5.3 with exercises</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+  :root {
+    --page-bg: #d9d9d4;
+    --paper: #fdfdfb;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --page-bg: #2b2b2b;
+      --paper: #f4f3ee;
+      --ink: #111;
+      --rule: #444;
+      --note: #555;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page-bg: #2b2b2b;
+    --paper: #f4f3ee;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  body {
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--ink);
+    font-family: "Times New Roman", Times, "Liberation Serif", serif;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .sheet {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 12mm auto;
+    padding: 14mm 18mm 16mm;
+    box-sizing: border-box;
+    background: var(--paper);
+    box-shadow: 0 1px 6px rgba(0,0,0,.25);
+    position: relative;
+  }
+  .sheet + .sheet { margin-top: 0; }
+  .hdr {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: start;
+    font-size: 14px;
+  }
+  .code { font-size: 22px; font-weight: bold; letter-spacing: .5px; }
+  .pages { text-align: center; padding-top: 14px; }
+  .name { text-align: right; line-height: 2; }
+  .title { text-align: center; margin-top: 22px; }
+  .title .exam { font-size: 19px; font-weight: bold; letter-spacing: .3px; }
+  .title .sch { margin-top: 2px; }
+  .title .course { margin-top: 10px; font-size: 16px; }
+  .title .subject { margin-top: 6px; font-size: 16px; font-weight: bold; }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 16px;
+    font-size: 15px;
+  }
+  .sec { margin-top: 14px; }
+  .sec-head {
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    font-weight: bold;
+  }
+  .sec-head .num { font-weight: bold; }
+  .sec-head .body { font-weight: normal; }
+  .sec-head .body b { font-weight: bold; }
+  .sec-head .body i { font-style: italic; }
+  .sec-total { text-align: right; font-weight: normal; margin-top: 4px; }
+  .qs { margin-top: 6px; }
+  .q {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    margin-bottom: 7px;
+  }
+  .q .n { text-align: right; padding-right: 10px; }
+  .q p { margin: 0; }
+  .sub { margin-left: 22px; }
+  .cut { color: var(--note); }
+  .turn { text-align: right; font-weight: bold; margin-top: 26px; }
+  .fig {
+    display: block;
+    margin: 8px auto 2px 36px;
+    width: 230px;
+    height: auto;
+  }
+  .fig-cap { margin-left: 36px; font-size: 13px; color: var(--note); font-style: italic; }
+  .foot-note {
+    margin-top: 26px;
+    border-top: 1px solid var(--rule);
+    padding-top: 6px;
+    font-size: 12px;
+    color: var(--note);
+  }
+  .pno { text-align: center; font-size: 15px; margin-bottom: 4px; }
+  .pno-hdr { position: absolute; top: 10mm; right: 18mm; font-weight: bold; font-size: 14px; }
+  @media print {
+    @page { size: A4; margin: 0; }
+    body { background: #fff; }
+    .sheet { margin: 0; box-shadow: none; width: 210mm; height: 297mm; min-height: 0; page-break-after: always; }
+    .sheet:last-child { page-break-after: auto; }
+  }
+  @media (max-width: 720px) {
+    .sheet { width: auto; margin: 0; padding: 14px 16px; min-height: 0; }
+    .hdr { grid-template-columns: 1fr; gap: 6px; }
+    .name { text-align: left; }
+    .pages { text-align: left; padding-top: 0; }
+  }
+</style>
+<style>
+  .ra-sec { font-size: 18px; margin: 4px 0 12px; border-bottom: 1px solid var(--rule); padding-bottom: 4px; }
+  .ra-sub { font-size: 16px; margin: 16px 0 6px; border-bottom: 1px solid var(--rule); padding-bottom: 3px; }
+  .ra-ex { font-size: 16px; margin: 18px 0 8px; border-bottom: 1px solid var(--rule); padding-bottom: 3px; }
+  .sheet p { margin: 0 0 9px; text-align: justify; }
+  .sheet ol.ex { margin: 6px 0 0 0; padding-left: 26px; }
+  .sheet ol.ex > li { margin-bottom: 7px; }
+  .sheet ol.sub-ex { list-style: none; padding-left: 26px; margin: 3px 0 4px; }
+  .sheet ol.sub-ex > li { margin-bottom: 3px; }
+  .figph { border: 1px dashed var(--rule); color: var(--note); text-align: center; padding: 28px 8px; margin: 10px 0 2px; font-style: italic; }
+  .sheet p.fig-cap { margin: 0 0 12px; margin-left: 0; text-align: center; font-size: 13px; color: var(--note); font-style: italic; }
+  .sheet p.foot { font-size: 12px; color: var(--note); border-top: 1px solid var(--rule); padding-top: 4px; margin-top: 14px; }
+  .sheet p.end-note { font-size: 12px; color: var(--note); font-style: italic; margin-top: 16px; }
+  table.ra-tbl { border-collapse: collapse; margin: 6px auto 10px; font-size: 14px; }
+  table.ra-tbl th, table.ra-tbl td { border: 1px solid var(--rule); padding: 3px 9px; text-align: center; }
+  table.ra-tbl th { font-weight: bold; }
+  .contents table { border-collapse: collapse; width: 100%; font-size: 14px; margin: 6px 0 10px; }
+  .contents th, .contents td { border: 1px solid var(--rule); padding: 4px 6px; text-align: left; vertical-align: top; }
+  .contents ul { margin: 4px 0 8px 18px; padding: 0; }
+  .contents li { margin-bottom: 3px; }
+  .contents p { text-align: left; }
+</style>
+</head>
+<body>
+<div class="sheet book contents" id="contents">
+  <div class="pno-hdr">Contents</div>
+  <h2 class="ra-sec">Bartle &amp; Sherbert, <i>Introduction to Real Analysis</i> (4th ed.): Sections 5.1 and 5.3, with exercises</h2>
+  <p>Source: <i>real-analysis-by-bartle.pdf</i> (417 pages) in the <i>2026 2/REAL ANALYSIS 2</i> folder. Book page = PDF page &minus; 15, so each sheet is headed with the printed page number. The text is transcribed from the page images and checked word by word against the book&rsquo;s text layer. The maths is typeset in MathJax from the printed notation.</p>
+  <table>
+    <tr><th>Section</th><th>Printed pages</th><th>PDF pages</th><th>Content</th></tr>
+    <tr><td>5.1 Continuous Functions</td><td>125&ndash;130</td><td>140&ndash;145</td><td>Definitions 5.1.1, 5.1.5; Theorem 5.1.2; Criteria 5.1.3, 5.1.4; Examples 5.1.6&ndash;5.1.8; Exercises 1&ndash;15</td></tr>
+    <tr><td>5.3 Continuous Functions on Intervals</td><td>134&ndash;141</td><td>149&ndash;156</td><td>Definitions 5.3.1, 5.3.3; Theorems 5.3.2, 5.3.4, 5.3.5, 5.3.7, 5.3.9, 5.3.10; Example 5.3.6; Corollary 5.3.8; Warning; Exercises 1&ndash;19</td></tr>
+  </table>
+  <p><b>Left out, on purpose</b> (the book text around these sections):</p>
+  <ul>
+    <li>Printed p. 125, top: the chapter 5 opening paragraph (&ldquo;The notion of a gauge&hellip;&rdquo;, &ldquo;Monotone functions&hellip;&rdquo;). It belongs to the chapter opener, not to Section 5.1.</li>
+    <li>Printed p. 130 (from &ldquo;Section 5.2&rdquo;) to p. 133, and printed p. 134 (exercises 4&ndash;15 of Section 5.2): Section 5.2 and its exercises.</li>
+    <li>Printed p. 141 (from &ldquo;Section 5.4&rdquo;): Section 5.4, Uniform Continuity.</li>
+  </ul>
+  <p><b>Conventions:</b></p>
+  <ul>
+    <li>Theorem, definition, and example numbers are the book&rsquo;s own, as printed. Exercise numbers are the book&rsquo;s numbers, too.</li>
+    <li>Figures are not reproduced. Each one is a dashed placeholder with the printed caption below it. The book&rsquo;s figure images are not copied into this file.</li>
+    <li>Footnote 1 of Theorem 5.3.2 is printed on p. 135 and kept there.</li>
+    <li>The Section 5.3 exercises run from p. 140 to p. 141; exercises 15&ndash;19 are on p. 141.</li>
+    <li>Bold is used for the terms the book sets in bold in a definition. Italic is used for emphasis as printed.</li>
+  </ul>
+  <p><b>Sheets in this file:</b> 1 contents sheet, then 14 book pages in order: printed 125&ndash;130 and 134&ndash;141.</p>
+</div>
+<div class="sheet book" id="pdf-p140">
+  <div class="pno-hdr">p. 125</div>
+
+<h2 class="ra-sec">Section 5.1&nbsp;&nbsp;Continuous Functions</h2>
+<p>In this section, which is very similar to Section 4.1, we will define what it means to say that a function is continuous at a point, or on a set. This notion of continuity is one of the central concepts of mathematical analysis, and it will be used in almost all of the following material in this book. Consequently, it is essential that the reader master it.</p>
+<p><b>5.1.1 Definition</b> Let \(A \subseteq \mathbb{R}\), let \(f : A \to \mathbb{R}\), and let \(c \in A\). We say that \(f\) is <b>continuous at <i>c</i></b> if, given any number \(\varepsilon \gt 0\), there exists \(\delta \gt 0\) such that if \(x\) is any point of \(A\) satisfying \(|x - c| \lt \delta\), then \(|f(x) - f(c)| \lt \varepsilon\).</p>
+<p>If \(f\) fails to be continuous at \(c\), then we say that \(f\) is <b>discontinuous at <i>c</i></b>.</p>
+<p>As with the definition of limit, the definition of continuity at a point can be formulated very nicely in terms of neighborhoods. This is done in the next result. We leave the verification as an important exercise for the reader. See Figure 5.1.1.</p>
+<div class="figph">[Figure 5.1.1 &mdash; diagram not reproduced]</div>
+<p class="fig-cap">Figure 5.1.1&nbsp;&nbsp;Given \(V_\varepsilon(f(c))\), a neighborhood \(V_\delta(c)\) is to be determined</p>
+<p><b>5.1.2 Theorem</b> A function \(f : A \to \mathbb{R}\) is continuous at a point \(c \in A\) if and only if given any \(\varepsilon\)-neighborhood \(V_\varepsilon(f(c))\) of \(f(c)\) there exists a \(\delta\)-neighborhood \(V_\delta(c)\) of \(c\) such that if \(x\) is any point of \(A \cap V_\delta(c)\), then \(f(x)\) belongs to \(V_\varepsilon(f(c))\), that is,
+\[ f(A \cap V_\delta(c)) \subseteq V_\varepsilon(f(c)). \]</p>
+<p><b>Remarks</b> (1) If \(c \in A\) is a cluster point of \(A\), then a comparison of Definitions 4.1.4 and 5.1.1 show that \(f\) is continuous at \(c\) if and only if
+\[ f(c) = \lim_{x \to c} f(x). \tag{1} \]
+</p>
+
+</div>
+<div class="sheet book" id="pdf-p141">
+  <div class="pno-hdr">p. 126</div>
+
+<p>Thus, if \(c\) is a cluster point of \(A\), then three conditions must hold for \(f\) to be continuous at \(c\):
+(i) \(f\) must be defined at \(c\) (so that \(f(c)\) makes sense),
+(ii) the limit of \(f\) at \(c\) must exist in \(\mathbb{R}\) (so that \(\lim_{x \to c} f(x)\) makes sense), and
+(iii) these two values must be equal.</p>
+<p>(2) If \(c \in A\) is not a cluster point of \(A\), then there exists a neighborhood \(V_\delta(c)\) of \(c\) such that \(A \cap V_\delta(c) = \{c\}\). Thus we conclude that a function \(f\) is automatically continuous at a point \(c \in A\) that is not a cluster point of \(A\). Such points are often called &ldquo;isolated points&rdquo; of \(A\). They are of little practical interest to us, since they have no relation to a limiting process. Since continuity is automatic for such points, we generally test for continuity only at cluster points. Thus we regard condition (1) as being characteristic for continuity at \(c\).</p>
+<p>A slight modification of the proof of Theorem 4.1.8 for limits yields the following sequential version of continuity at a point.</p>
+<p><b>5.1.3 Sequential Criterion for Continuity</b> A function \(f : A \to \mathbb{R}\) is continuous at the point \(c \in A\) if and only if for every sequence \((x_n)\) in \(A\) that converges to \(c\), the sequence \((f(x_n))\) converges to \(f(c)\).</p>
+<p>The following Discontinuity Criterion is a consequence of the last theorem. It should be compared with the Divergence Criterion 4.1.9(a) with \(L = f(c)\). Its proof should be written out in detail by the reader.</p>
+<p><b>5.1.4 Discontinuity Criterion</b> Let \(A \subseteq \mathbb{R}\), let \(f : A \to \mathbb{R}\), and let \(c \in A\). Then \(f\) is discontinuous at \(c\) if and only if there exists a sequence \((x_n)\) in \(A\) such that \((x_n)\) converges to \(c\), but the sequence \((f(x_n))\) does not converge to \(f(c)\).</p>
+<p>So far we have discussed continuity at a <i>point</i>. To talk about the continuity of a function on a <i>set</i>, we will simply require that the function be continuous at each point of the set. We state this formally in the next definition.</p>
+<p><b>5.1.5 Definition</b> Let \(A \subseteq \mathbb{R}\) and let \(f : A \to \mathbb{R}\). If \(B\) is a subset of \(A\), we say that \(f\) is <b>continuous on the set <i>B</i></b> if \(f\) is continuous at every point of \(B\).</p>
+<p><b>5.1.6 Examples</b> (a) The constant function \(f(x) := b\) is continuous on \(\mathbb{R}\).
+It was seen in Example 4.1.7(a) that if \(c \in \mathbb{R}\), then \(\lim_{x \to c} f(x) = b\). Since \(f(c) = b\), we have \(\lim_{x \to c} f(x) = f(c)\), and thus \(f\) is continuous at every point \(c \in \mathbb{R}\). Therefore \(f\) is continuous on \(\mathbb{R}\).</p>
+<p>(b) \(g(x) := x\) is continuous on \(\mathbb{R}\).
+It was seen in Example 4.1.7(b) that if \(c \in \mathbb{R}\), then we have \(\lim_{x \to c} g = c\). Since \(g(c) = c\), then \(g\) is continuous at every point \(c \in \mathbb{R}\). Thus \(g\) is continuous on \(\mathbb{R}\).</p>
+<p>(c) \(h(x) := x^2\) is continuous on \(\mathbb{R}\).
+It was seen in Example 4.1.7(c) that if \(c \in \mathbb{R}\), then we have \(\lim_{x \to c} h = c^2\). Since \(h(c) = c^2\), then \(h\) is continuous at every point \(c \in \mathbb{R}\). Thus \(h\) is continuous on \(\mathbb{R}\).</p>
+<p>(d) \(\varphi(x) := 1/x\) is continuous on \(A := \{x \in \mathbb{R} : x \gt 0\}\).
+It was seen in Example 4.1.7(d) that if \(c \in A\), then we have \(\lim_{x \to c} \varphi = 1/c\). Since \(\varphi(c) = 1/c\), this shows that \(\varphi\) is continuous at every point \(c \in A\). Thus \(\varphi\) is continuous on \(A\).</p>
+
+</div>
+<div class="sheet book" id="pdf-p142">
+  <div class="pno-hdr">p. 127</div>
+
+<p>(e) \(\varphi(x) := 1/x\) is not continuous at \(x = 0\).
+Indeed, if \(\varphi(x) = 1/x\) for \(x \gt 0\), then \(\varphi\) is not defined for \(x = 0\), so it cannot be continuous there. Alternatively, it was seen in Example 4.1.10(a) that \(\lim_{x \to 0} \varphi\) does not exist in \(\mathbb{R}\), so \(\varphi\) cannot be continuous at \(x = 0\).</p>
+<p>(f) The signum function \(\operatorname{sgn}\) is not continuous at \(0\).
+The signum function was defined in Example 4.1.10(b), where it was also shown that \(\lim_{x \to 0} \operatorname{sgn}(x)\) does not exist in \(\mathbb{R}\). Therefore \(\operatorname{sgn}\) is not continuous at \(x = 0\) (even though \(\operatorname{sgn} 0\) is defined). It is an exercise to show that \(\operatorname{sgn}\) is continuous at every point \(c \neq 0\).</p>
+<p><b>Note</b> In the next two examples, we introduce functions that played a significant role in the development of real analysis. Discontinuities are emphasized and it is not possible to graph either of them satisfactorily. The intuitive idea of drawing a curve in the plane to represent a function simply does not apply, and plotting a handful of points gives only a hint of their character. In the nineteenth century, these functions clearly demonstrated the need for a precise and rigorous treatment of the basic concepts of analysis. They will reappear in later sections.</p>
+<p>(g) Let \(A := \mathbb{R}\) and let \(f\) be Dirichlet&rsquo;s &ldquo;discontinuous function&rdquo; defined by
+\[ f(x) := \begin{cases} 1 &amp; \text{if } x \text{ is rational,} \\ 0 &amp; \text{if } x \text{ is irrational.} \end{cases} \]
+We claim that \(f\) is <i>not continuous at any point of</i> \(\mathbb{R}\). (This function was introduced in 1829 by P. G. L. Dirichlet.)
+Indeed, if \(c\) is a rational number, let \((x_n)\) be a sequence of irrational numbers that converges to \(c\). (Corollary 2.4.9 to the Density Theorem 2.4.8 assures us that such a sequence does exist.) Since \(f(x_n) = 0\) for all \(n \in \mathbb{N}\), we have \(\lim(f(x_n)) = 0\), while \(f(c) = 1\). Therefore \(f\) is not continuous at the rational number \(c\).
+On the other hand, if \(b\) is an irrational number, let \((y_n)\) be a sequence of rational numbers that converge to \(b\). (The Density Theorem 2.4.8 assures us that such a sequence does exist.) Since \(f(y_n) = 1\) for all \(n \in \mathbb{N}\), we have \(\lim(f(y_n)) = 1\), while \(f(b) = 0\). Therefore \(f\) is not continuous at the irrational number \(b\).
+Since every real number is either rational or irrational, we deduce that \(f\) is not continuous at any point in \(\mathbb{R}\).</p>
+<div class="figph">[Figure 5.1.2 &mdash; graph not reproduced]</div>
+<p class="fig-cap">Figure 5.1.2&nbsp;&nbsp;Thomae&rsquo;s function</p>
+
+</div>
+<div class="sheet book" id="pdf-p143">
+  <div class="pno-hdr">p. 128</div>
+
+<p>(h) Let \(A := \{x \in \mathbb{R} : x \gt 0\}\). For any irrational number \(x \gt 0\) we define \(h(x) := 0\). For a rational number in \(A\) of the form \(m/n\), with natural numbers \(m, n\) having no common factors except 1, we define \(h(m/n) := 1/n\). (We also define \(h(0) := 1\).)
+We claim that \(h\) is continuous at every irrational number in \(A\), and is discontinuous at every rational number in \(A\). (This function was introduced in 1875 by K. J. Thomae.)
+Indeed, if \(a \gt 0\) is rational, let \((x_n)\) be a sequence of irrational numbers in \(A\) that converges to \(a\). Then \(\lim(h(x_n)) = 0\), while \(h(a) \gt 0\). Hence \(h\) is discontinuous at \(a\).
+On the other hand, if \(b\) is an irrational number and \(\varepsilon \gt 0\), then (by the Archimedean Property) there is a natural number \(n_0\) such that \(1/n_0 \lt \varepsilon\). There are only a finite number of rationals with denominator less than \(n_0\) in the interval \((b - 1, b + 1)\). (Why?) Hence \(\delta \gt 0\) can be chosen so small that the neighborhood \((b - \delta, b + \delta)\) contains no rational numbers with denominator less than \(n_0\). It then follows that for \(|x - b| \lt \delta\), \(x \in A\), we have \(|h(x) - h(b)| = |h(x)| \le 1/n_0 \lt \varepsilon\). Thus \(h\) is continuous at the irrational number \(b\).
+Consequently, we deduce that Thomae&rsquo;s function \(h\) is continuous precisely at the irrational points in \(A\). (See Figure 5.1.2.) &#9633;</p>
+<p><b>5.1.7 Remarks</b> (a) Sometimes a function \(f : A \to \mathbb{R}\) is not continuous at a point \(c\) because it is not defined at this point. However, if the function \(f\) has a limit \(L\) at the point \(c\) and if we define \(F\) on \(A \cup \{c\} \to \mathbb{R}\) by
+\[ F(x) := \begin{cases} L &amp; \text{for } x = c, \\ f(x) &amp; \text{for } x \in A, \end{cases} \]
+then \(F\) is continuous at \(c\). To see this, one needs to check that \(\lim_{x \to c} F = L\), but this follows (why?), since \(\lim_{x \to c} f = L\).
+(b) If a function \(g : A \to \mathbb{R}\) does not have a limit at \(c\), then there is no way that we can obtain a function \(G : A \cup \{c\} \to \mathbb{R}\) that is continuous at \(c\) by defining
+\[ G(x) := \begin{cases} C &amp; \text{for } x = c, \\ g(x) &amp; \text{for } x \in A. \end{cases} \]
+To see this, observe that if \(\lim_{x \to c} G\) exists and equals \(C\), then \(\lim_{x \to c} g\) must also exist and equal \(C\).</p>
+<p><b>5.1.8 Examples</b> (a) The function \(g(x) := \sin(1/x)\) for \(x \neq 0\) (see Figure 4.1.3) does not have a limit at \(x = 0\) (see Example 4.1.10(c)). Thus there is no value that we can assign at \(x = 0\) to obtain a continuous extension of \(g\) at \(x = 0\).</p>
+<p>(b) Let \(f(x) := x \sin(1/x)\) for \(x \neq 0\). (See Figure 5.1.3.) It was seen in Example 4.2.8(f) that \(\lim_{x \to 0} (x \sin(1/x)) = 0\). Therefore it follows from Remark 5.1.7(a) that if we define \(F : \mathbb{R} \to \mathbb{R}\) by
+\[ F(x) := \begin{cases} 0 &amp; \text{for } x = 0, \\ x \sin(1/x) &amp; \text{for } x \neq 0, \end{cases} \]
+then \(F\) is continuous at \(x = 0\). &#9633;</p>
+
+</div>
+<div class="sheet book" id="pdf-p144">
+  <div class="pno-hdr">p. 129</div>
+
+<div class="figph">[Figure 5.1.3 &mdash; graph not reproduced]</div>
+<p class="fig-cap">Figure 5.1.3&nbsp;&nbsp;Graph of \(f(x) = x \sin(1/x)\) (\(x \neq 0\))</p>
+<h3 class="ra-ex">Exercises for Section 5.1</h3>
+<ol class="ex">
+<li value="1">Prove the Sequential Criterion 5.1.3.</li>
+<li value="2">Establish the Discontinuity Criterion 5.1.4.</li>
+<li value="3">Let \(a \lt b \lt c\). Suppose that \(f\) is continuous on \([a, b]\), that \(g\) is continuous on \([b, c]\), and that \(f(b) = g(b)\). Define \(h\) on \([a, c]\) by \(h(x) := f(x)\) for \(x \in [a, b]\) and \(h(x) := g(x)\) for \(x \in [b, c]\). Prove that \(h\) is continuous on \([a, c]\).</li>
+<li>If \(x \in \mathbb{R}\), we define \([\![x]\!]\) to be the greatest integer \(n \in \mathbb{Z}\) such that \(n \le x\). (Thus, for example, \([\![8.3]\!] = 8\), \([\![\pi]\!] = 3\), \([\![-\pi]\!] = -4\).) The function \(x \mapsto [\![x]\!]\) is called the <b>greatest integer function</b>. Determine the points of continuity of the following functions:
+<ol class="sub-ex">
+<li>(a) \(f(x) := [\![x]\!]\),</li>
+<li>(b) \(g(x) := x[\![x]\!]\),</li>
+<li>(c) \(h(x) := [\![\sin x]\!]\),</li>
+<li>(d) \(k(x) := [\![1/x]\!]\) (\(x \neq 0\)).</li>
+</ol></li>
+<li value="5">Let \(f\) be defined for all \(x \in \mathbb{R}\), \(x \neq 2\), by \(f(x) = (x^2 + x - 6)/(x - 2)\). Can \(f\) be defined at \(x = 2\) in such a way that \(f\) is continuous at this point?</li>
+<li value="6">Let \(A \subseteq \mathbb{R}\) and let \(f : A \to \mathbb{R}\) be continuous at a point \(c \in A\). Show that for any \(\varepsilon \gt 0\), there exists a neighborhood \(V_\delta(c)\) of \(c\) such that if \(x, y \in A \cap V_\delta(c)\), then \(|f(x) - f(y)| \lt \varepsilon\).</li>
+<li value="7">Let \(f : \mathbb{R} \to \mathbb{R}\) be continuous at \(c\) and let \(f(c) \gt 0\). Show that there exists a neighborhood \(V_\delta(c)\) of \(c\) such that if \(x \in V_\delta(c)\), then \(f(x) \gt 0\).</li>
+<li value="8">Let \(f : \mathbb{R} \to \mathbb{R}\) be continuous on \(\mathbb{R}\) and let \(S := \{x \in \mathbb{R} : f(x) = 0\}\) be the &ldquo;zero set&rdquo; of \(f\). If \((x_n)\) is in \(S\) and \(x = \lim(x_n)\), show that \(x \in S\).</li>
+<li value="9">Let \(A \subseteq B \subseteq \mathbb{R}\), let \(f : B \to \mathbb{R}\) and let \(g\) be the restriction of \(f\) to \(A\) (that is, \(g(x) = f(x)\) for \(x \in A\)).
+<ol class="sub-ex">
+<li>(a) If \(f\) is continuous at \(c \in A\), show that \(g\) is continuous at \(c\).</li>
+<li>(b) Show by example that if \(g\) is continuous at \(c\), it need not follow that \(f\) is continuous at \(c\).</li>
+</ol></li>
+<li value="10">Show that the absolute value function \(f(x) := |x|\) is continuous at every point \(c \in \mathbb{R}\).</li>
+<li value="11">Let \(K \gt 0\) and let \(f : \mathbb{R} \to \mathbb{R}\) satisfy the condition \(|f(x) - f(y)| \le K|x - y|\) for all \(x, y \in \mathbb{R}\). Show that \(f\) is continuous at every point \(c \in \mathbb{R}\).</li>
+<li value="12">Suppose that \(f : \mathbb{R} \to \mathbb{R}\) is continuous on \(\mathbb{R}\) and that \(f(r) = 0\) for every rational number \(r\). Prove that \(f(x) = 0\) for all \(x \in \mathbb{R}\).</li>
+<li value="13">Define \(g : \mathbb{R} \to \mathbb{R}\) by \(g(x) := 2x\) for \(x\) rational, and \(g(x) := x + 3\) for \(x\) irrational. Find all points at which \(g\) is continuous.</li>
+</ol>
+
+</div>
+<div class="sheet book" id="pdf-p145">
+  <div class="pno-hdr">p. 130</div>
+
+<ol class="ex">
+<li value="14">Let \(A := (0, \infty)\) and let \(k : A \to \mathbb{R}\) be defined as follows. For \(x \in A\), \(x\) irrational, we define \(k(x) = 0\); for \(x \in A\) rational and of the form \(x = m/n\) with natural numbers \(m, n\) having no common factors except 1, we define \(k(x) := n\). Prove that \(k\) is unbounded on every open interval in \(A\). Conclude that \(k\) is not continuous at any point of \(A\). (See Example 5.1.6(h).)</li>
+<li value="15">Let \(f : (0, 1) \to \mathbb{R}\) be bounded but such that \(\lim_{x \to 0} f\) does not exist. Show that there are two sequences \((x_n)\) and \((y_n)\) in \((0, 1)\) with \(\lim(x_n) = 0 = \lim(y_n)\), but such that \((f(x_n))\) and \((f(y_n))\) exist but are not equal.</li>
+</ol>
+<p class="end-note">End of Section 5.1 and its exercises. The text that follows on the page is Section 5.2, which is not part of this excerpt.</p>
+
+</div>
+<div class="sheet book" id="pdf-p149">
+  <div class="pno-hdr">p. 134</div>
+
+<h2 class="ra-sec">Section 5.3&nbsp;&nbsp;Continuous Functions on Intervals</h2>
+<p>Functions that are continuous on intervals have a number of very important properties that are not possessed by general continuous functions. In this section, we will establish some deep results that are of considerable importance and that will be applied later. Alternative proofs of these results will be given in Section 5.5.</p>
+<p><b>5.3.1 Definition</b> A function \(f : A \to \mathbb{R}\) is said to be <b>bounded on <i>A</i></b> if there exists a constant \(M \gt 0\) such that \(|f(x)| \le M\) for all \(x \in A\).</p>
+<p>In other words, a function is bounded on a set if its range is a bounded set in \(\mathbb{R}\). To say that a function is <i>not</i> bounded on a given set is to say that no particular number can serve as a bound for its range. In exact language, a function \(f\) is not bounded on the set \(A\) if given any \(M \gt 0\), there exists a point \(x_M \in A\) such that \(|f(x_M)| \gt M\). We often say that \(f\) is <b>unbounded on <i>A</i></b> in this case.</p>
+<p>For example, the function \(f\) defined on the interval \(A := (0, \infty)\) by \(f(x) := 1/x\) is not bounded on \(A\) because for any \(M \gt 0\) we can take the point \(x_M := 1/(M + 1)\) in \(A\) to get \(f(x_M) = 1/x_M = M + 1 \gt M\). This example shows that continuous functions need not be</p>
+
+</div>
+<div class="sheet book" id="pdf-p150">
+  <div class="pno-hdr">p. 135</div>
+
+<p>bounded. In the next theorem, however, we show that continuous functions on a certain type of interval are necessarily bounded.</p>
+<p><b>5.3.2 Boundedness Theorem</b><sup>1</sup> Let \(I := [a, b]\) be a closed bounded interval and let \(f : I \to \mathbb{R}\) be continuous on \(I\). Then \(f\) is bounded on \(I\).</p>
+<p><b>Proof.</b> Suppose that \(f\) is not bounded on \(I\). Then, for any \(n \in \mathbb{N}\) there is a number \(x_n \in I\) such that \(|f(x_n)| \gt n\). Since \(I\) is bounded, the sequence \(X := (x_n)\) is bounded. Therefore, the Bolzano-Weierstrass Theorem 3.4.8 implies that there is a subsequence \(X&prime; = (x_{n_r})\) of \(X\) that converges to a number \(x\). Since \(I\) is closed and the elements of \(X&prime;\) belong to \(I\), it follows from Theorem 3.2.6 that \(x \in I\). Then \(f\) is continuous at \(x\), so that \((f(x_{n_r}))\) converges to \(f(x)\). We then conclude from Theorem 3.2.2 that the convergent sequence \((f(x_{n_r}))\) must be bounded. But this is a contradiction since
+\[ |f(x_{n_r})| \gt n_r \ge r \quad \text{for } r \in \mathbb{N}. \]
+Therefore the supposition that the continuous function \(f\) is not bounded on the closed bounded interval \(I\) leads to a contradiction. &#9633;</p>
+<p>To show that each hypothesis of the Boundedness Theorem is needed, we can construct examples that show the conclusion fails if any one of the hypotheses is relaxed.
+(i) The interval must be bounded. The function \(f(x) := x\) for \(x\) in the unbounded, closed interval \(A := [0, \infty)\) is continuous but not bounded on \(A\).
+(ii) The interval must be closed. The function \(g(x) := 1/x\) for \(x\) in the half-open interval \(B := (0, 1]\) is continuous but not bounded on \(B\).
+(iii) The function must be continuous. The function \(h\) defined on the closed interval \(C := [0, 1]\) by \(h(x) := 1/x\) for \(x \in (0, 1]\) and \(h(0) := 1\) is discontinuous and unbounded on \(C\).</p>
+<h3 class="ra-sub">The Maximum-Minimum Theorem</h3>
+<p><b>5.3.3 Definition</b> Let \(A \subseteq \mathbb{R}\) and let \(f : A \to \mathbb{R}\). We say that \(f\) <b>has an absolute maximum on <i>A</i></b> if there is a point \(x^* \in A\) such that
+\[ f(x^*) \ge f(x) \quad \text{for all } x \in A. \]
+We say that \(f\) <b>has an absolute minimum on <i>A</i></b> if there is a point \(x_* \in A\) such that
+\[ f(x_*) \le f(x) \quad \text{for all } x \in A. \]
+We say that \(x^*\) is an <b>absolute maximum point</b> for \(f\) on \(A\), and that \(x_*\) is an <b>absolute minimum point</b> for \(f\) on \(A\), if they exist.</p>
+<p>We note that a continuous function on a set \(A\) does not necessarily have an absolute maximum or an absolute minimum on the set. For example, \(f(x) := 1/x\) has neither an absolute maximum nor an absolute minimum on the set \(A := (0, \infty)\). (See Figure 5.3.1.) There can be no absolute maximum for \(f\) on \(A\) since \(f\) is not bounded above on \(A\), and there is no point at which \(f\) attains the value \(0 = \inf\{f(x) : x \in A\}\). The same function has</p>
+<p class="foot"><sup>1</sup>This theorem, as well as 5.3.4, is true for an arbitrary closed bounded set. For these developments, see Sections 11.2 and 11.3.</p>
+
+</div>
+<div class="sheet book" id="pdf-p151">
+  <div class="pno-hdr">p. 136</div>
+
+<div class="figph">[Figure 5.3.1 &mdash; graph not reproduced]</div>
+<p class="fig-cap">Figure 5.3.1&nbsp;&nbsp;The function \(f(x) = 1/x\) (\(x \gt 0\))</p>
+<div class="figph">[Figure 5.3.2 &mdash; graph not reproduced]</div>
+<p class="fig-cap">Figure 5.3.2&nbsp;&nbsp;The function \(g(x) = x^2\) (\(|x| \le 1\))</p>
+<p>neither an absolute maximum nor an absolute minimum when it is restricted to the set \((0, 1)\), while it has <i>both</i> an absolute maximum and an absolute minimum when it is restricted to the set \([1, 2]\). In addition, \(f(x) = 1/x\) has an absolute maximum but no absolute minimum when restricted to the set \([1, \infty)\), but no absolute maximum and no absolute minimum when restricted to the set \((1, \infty)\).</p>
+<p>It is readily seen that if a function has an absolute maximum point, then this point is not necessarily uniquely determined. For example, the function \(g(x) := x^2\) defined for \(x \in A := [-1, +1]\) has the two points \(x = \pm 1\) giving the absolute maximum on \(A\), and the single point \(x = 0\) yielding its absolute minimum on \(A\). (See Figure 5.3.2.) To pick an extreme example, the constant function \(h(x) := 1\) for \(x \in \mathbb{R}\) is such that <i>every</i> point of \(\mathbb{R}\) is both an absolute maximum and an absolute minimum point for \(h\).</p>
+<p><b>5.3.4 Maximum-Minimum Theorem</b> Let \(I := [a, b]\) be a closed bounded interval and let \(f : I \to \mathbb{R}\) be continuous on \(I\). Then \(f\) has an absolute maximum and an absolute minimum on \(I\).</p>
+<p><b>Proof.</b> Consider the nonempty set \(f(I) := \{f(x) : x \in I\}\) of values of \(f\) on \(I\). In Theorem 5.3.2 it was established that \(f(I)\) is a bounded subset of \(\mathbb{R}\). Let \(s^* := \sup f(I)\) and \(s_* := \inf f(I)\). We claim that there exist points \(x^*\) and \(x_*\) in \(I\) such that \(s^* = f(x^*)\) and \(s_* = f(x_*)\). We will establish the existence of the point \(x^*\), leaving the proof of the existence of \(x_*\) to the reader.</p>
+<p>Since \(s^* = \sup f(I)\), if \(n \in \mathbb{N}\), then the number \(s^* - 1/n\) is not an upper bound of the set \(f(I)\). Consequently there exists a number \(x_n \in I\) such that
+\[ s^* - \frac{1}{n} \lt f(x_n) \le s^* \quad \text{for all } n \in \mathbb{N}. \tag{1} \]
+Since \(I\) is bounded, the sequence \(X := (x_n)\) is bounded. Therefore, by the Bolzano-Weierstrass Theorem 3.4.8, there is a subsequence \(X&prime; = (x_{n_r})\) of \(X\) that converges to some number \(x^*\). Since the elements of \(X&prime;\) belong to \(I = [a, b]\), it follows from Theorem 3.2.6 that \(x^* \in I\). Therefore \(f\) is continuous at \(x^*\) so that \(\lim(f(x_{n_r})) = f(x^*)\). Since it follows from (1) that
+\[ s^* - \frac{1}{n_r} \lt f(x_{n_r}) \le s^* \quad \text{for all } r \in \mathbb{N}, \]
+we conclude from the Squeeze Theorem 3.2.7 that \(\lim(f(x_{n_r})) = s^*\). Therefore we have
+\[ f(x^*) = \lim(f(x_{n_r})) = s^* = \sup f(I). \]
+We conclude that \(x^*\) is an absolute maximum point of \(f\) on \(I\). &#9633;</p>
+
+</div>
+<div class="sheet book" id="pdf-p152">
+  <div class="pno-hdr">p. 137</div>
+
+<p>The next result is the theoretical basis for locating roots of a continuous function by means of sign changes of the function. The proof also provides an algorithm, known as the <b>Bisection Method</b>, for the calculation of roots to a specified degree of accuracy and can be readily programmed for a computer. It is a standard tool for finding solutions of equations of the form \(f(x) = 0\), where \(f\) is a continuous function. An alternative proof of the theorem is indicated in Exercise 5.3.11.</p>
+<p><b>5.3.5 Location of Roots Theorem</b> Let \(I = [a, b]\) and let \(f : I \to \mathbb{R}\) be continuous on \(I\). If \(f(a) \lt 0 \lt f(b)\), or if \(f(a) \gt 0 \gt f(b)\), then there exists a number \(c \in (a, b)\) such that \(f(c) = 0\).</p>
+<p><b>Proof.</b> We assume that \(f(a) \lt 0 \lt f(b)\). We will generate a sequence of intervals by successive bisections. Let \(I_1 := [a_1, b_1]\), where \(a_1 := a\), \(b_1 := b\), and let \(p_1\) be the midpoint \(p_1 := \tfrac{1}{2}(a_1 + b_1)\). If \(f(p_1) = 0\), we take \(c := p_1\) and we are done. If \(f(p_1) \gt 0\), then we set \(a_2 := a_1\), \(b_2 := p_1\), while if \(f(p_1) \lt 0\), then we set \(a_2 := p_1\), \(b_2 := b_1\). In either case, we let \(I_2 := [a_2, b_2]\); then we have \(I_2 \subseteq I_1\) and \(f(a_2) \lt 0\), \(f(b_2) \gt 0\).
+We continue the bisection process. Suppose that the intervals \(I_1, I_2, \ldots, I_k\) have been obtained by successive bisection in the same manner. Then we have \(f(a_k) \lt 0\) and \(f(b_k) \gt 0\), and we set \(p_k := \tfrac{1}{2}(a_k + b_k)\). If \(f(p_k) = 0\), we take \(c := p_k\) and we are done. If \(f(p_k) \gt 0\), we set \(a_{k+1} := a_k\), \(b_{k+1} := p_k\), while if \(f(p_k) \lt 0\), we set \(a_{k+1} := p_k\), \(b_{k+1} := b_k\). In either case, we let \(I_{k+1} := [a_{k+1}, b_{k+1}]\); then \(I_{k+1} \subseteq I_k\) and \(f(a_{k+1}) \lt 0\), \(f(b_{k+1}) \gt 0\).
+If the process terminates by locating a point \(p_n\) such that \(f(p_n) = 0\), then we are done. If the process does not terminate, then we obtain a nested sequence of closed bounded intervals \(I_n := [a_n, b_n]\) such that for every \(n \in \mathbb{N}\) we have
+\[ f(a_n) \lt 0 \quad \text{and} \quad f(b_n) \gt 0. \]
+Furthermore, since the intervals are obtained by repeated bisection, the length of \(I_n\) is equal to \(b_n - a_n = (b - a)/2^{n-1}\). It follows from the Nested Intervals Property 2.5.2 that there exists a point \(c\) that belongs to \(I_n\) for all \(n \in \mathbb{N}\). Since \(a_n \le c \le b_n\) for all \(n \in \mathbb{N}\) and \(\lim(b_n - a_n) = 0\), it follows that \(\lim(a_n) = c = \lim(b_n)\). Since \(f\) is continuous at \(c\), we have
+\[ \lim \big(f(a_n)\big) = f(c) = \lim \big(f(b_n)\big). \]
+The fact that \(f(a_n) \lt 0\) for all \(n \in \mathbb{N}\) implies that \(f(c) = \lim(f(a_n)) \le 0\). Also, the fact that \(f(b_n) \gt 0\) for all \(n \in \mathbb{N}\) implies that \(f(c) = \lim(f(b_n)) \ge 0\). Thus, we conclude that \(f(c) = 0\). Consequently, \(c\) is a root of \(f\). &#9633;</p>
+<p>The following example illustrates how the Bisection Method for finding roots is applied in a systematic fashion.</p>
+<p><b>5.3.6 Example</b> The equation \(f(x) = xe^x - 2 = 0\) has a root \(c\) in the interval \([0, 1]\), because \(f\) is continuous on this interval and \(f(0) = -2 \lt 0\) and \(f(1) = e - 2 \gt 0\). Using a calculator we construct the following table, where the sign of \(f(p_n)\) determines the interval at the next step. The far right column is an upper bound on the error when \(p_n\) is used to approximate the root \(c\), because we have
+\[ |p_n - c| \le \tfrac{1}{2}(b_n - a_n) = 1/2^n. \]</p>
+
+</div>
+<div class="sheet book" id="pdf-p153">
+  <div class="pno-hdr">p. 138</div>
+
+<p>We will find an approximation \(p_n\) with error less than \(10^{-2}\).</p>
+<table class="ra-tbl">
+<tr><th>\(n\)</th><th>\(a_n\)</th><th>\(b_n\)</th><th>\(p_n\)</th><th>\(f(p_n)\)</th><th>\(\tfrac{1}{2}(b_n - a_n)\)</th></tr>
+<tr><td>1</td><td>0</td><td>1</td><td>.5</td><td>\(-1.176\)</td><td>.5</td></tr>
+<tr><td>2</td><td>.5</td><td>1</td><td>.75</td><td>\(-.412\)</td><td>.25</td></tr>
+<tr><td>3</td><td>.75</td><td>1</td><td>.875</td><td>\(+.099\)</td><td>.125</td></tr>
+<tr><td>4</td><td>.75</td><td>.875</td><td>.8125</td><td>\(-.169\)</td><td>.0625</td></tr>
+<tr><td>5</td><td>.8125</td><td>.875</td><td>.84375</td><td>\(-.0382\)</td><td>.03125</td></tr>
+<tr><td>6</td><td>.84375</td><td>.875</td><td>.859375</td><td>\(+.0296\)</td><td>.015625</td></tr>
+<tr><td>7</td><td>.84375</td><td>.859375</td><td>.8515625</td><td>&mdash;</td><td>.0078125</td></tr>
+</table>
+<p>We have stopped at \(n = 7\), obtaining \(c \approx p_7 = .8515625\) with error less than \(.0078125\). This is the first step in which the error is less than \(10^{-2}\). The decimal place values of \(p_7\) past the second place cannot be taken seriously, but we can conclude that \(.843 \lt c \lt .860\). &#9633;</p>
+<h3 class="ra-sub">Bolzano&rsquo;s Theorem</h3>
+<p>The next result is a generalization of the Location of Roots Theorem. It assures us that a continuous function on an interval takes on (at least once) any number that lies between two of its values.</p>
+<p><b>5.3.7 Bolzano&rsquo;s Intermediate Value Theorem</b> Let \(I\) be an interval and let \(f : I \to \mathbb{R}\) be continuous on \(I\). If \(a, b \in I\) and if \(k \in \mathbb{R}\) satisfies \(f(a) \lt k \lt f(b)\), then there exists a point \(c \in I\) between \(a\) and \(b\) such that \(f(c) = k\).</p>
+<p><b>Proof.</b> Suppose that \(a \lt b\) and let \(g(x) := f(x) - k\); then \(g(a) \lt 0 \lt g(b)\). By the Location of Roots Theorem 5.3.5 there exists a point \(c\) with \(a \lt c \lt b\) such that \(0 = g(c) = f(c) - k\). Therefore \(f(c) = k\).
+If \(b \lt a\), let \(h(x) := k - f(x)\) so that \(h(b) \lt 0 \lt h(a)\). Therefore there exists a point \(c\) with \(b \lt c \lt a\) such that \(0 = h(c) = k - f(c)\), whence \(f(c) = k\). &#9633;</p>
+<p><b>5.3.8 Corollary</b> Let \(I = [a, b]\) be a closed, bounded interval and let \(f : I \to \mathbb{R}\) be continuous on \(I\). If \(k \in \mathbb{R}\) is any number satisfying
+\[ \inf f(I) \le k \le \sup f(I), \]
+then there exists a number \(c \in I\) such that \(f(c) = k\).</p>
+<p><b>Proof.</b> It follows from the Maximum-Minimum Theorem 5.3.4 that there are points \(c_*\) and \(c^*\) in \(I\) such that
+\[ \inf f(I) = f(c_*) \le k \le f(c^*) = \sup f(I). \]
+The conclusion now follows from Bolzano&rsquo;s Theorem 5.3.7. &#9633;</p>
+<p>The next theorem summarizes the main results of this section. It states that the image of a closed bounded interval under a continuous function is also a closed bounded interval. The endpoints of the <b>image interval</b> are the absolute minimum and absolute maximum values of the function, and the statement that all values between the absolute minimum and the absolute maximum values belong to the image is a way of describing Bolzano&rsquo;s Intermediate Value Theorem.</p>
+
+</div>
+<div class="sheet book" id="pdf-p154">
+  <div class="pno-hdr">p. 139</div>
+
+<p><b>5.3.9 Theorem</b> Let \(I\) be a closed bounded interval and let \(f : I \to \mathbb{R}\) be continuous on \(I\). Then the set \(f(I) = \{f(x) : x \in I\}\) is a closed bounded interval.</p>
+<p><b>Proof.</b> If we let \(m := \inf f(I)\) and \(M := \sup f(I)\), then we know from the Maximum-Minimum Theorem 5.3.4 that \(m\) and \(M\) belong to \(f(I)\). Moreover, we have \(f(I) \subseteq [m, M]\). If \(k\) is any element of \([m, M]\), then it follows from the preceding corollary that there exists a point \(c \in I\) such that \(k = f(c)\). Hence, \(k \in f(I)\) and we conclude that \([m, M] \subseteq f(I)\). Therefore, \(f(I)\) is the interval \([m, M]\). &#9633;</p>
+<p><b>Warning</b> If \(I := [a, b]\) is an interval and \(f : I \to \mathbb{R}\) is continuous on \(I\), we have proved that \(f(I)\) is the interval \([m, M]\). We have <i>not</i> proved (and it is not always true) that \(f(I)\) is the interval \([f(a), f(b)]\). (See Figure 5.3.3.) &#9633;</p>
+<div class="figph">[Figure 5.3.3 &mdash; diagram not reproduced]</div>
+<p class="fig-cap">Figure 5.3.3&nbsp;&nbsp;\(f(I) = [m, M]\)</p>
+<p>The preceding theorem is a &ldquo;preservation&rdquo; theorem in the sense that it states that the continuous image of a closed bounded interval is a set of the same type. The next theorem extends this result to general intervals. However, it should be noted that although the continuous image of an interval is shown to be an interval, it is <i>not</i> true that the image interval necessarily has the <i>same form</i> as the domain interval. For example, the continuous image of an open interval need not be an open interval, and the continuous image of an unbounded closed interval need not be a closed interval. Indeed, if \(f(x) := 1/(x^2 + 1)\) for \(x \in \mathbb{R}\), then \(f\) is continuous on \(\mathbb{R}\) [see Example 5.2.3(b)]. It is easy to see that if \(I_1 := (-1, 1)\), then \(f(I_1) = (\tfrac{1}{2}, 1]\), which is not an open interval. Also, if \(I_2 := [0, \infty)\), then \(f(I_2) = (0, 1]\), which is not a closed interval. (See Figure 5.3.4.)</p>
+<div class="figph">[Figure 5.3.4 &mdash; graph not reproduced]</div>
+<p class="fig-cap">Figure 5.3.4&nbsp;&nbsp;Graph of \(f(x) = 1/(x^2 + 1)\) (\(x \in \mathbb{R}\))</p>
+
+</div>
+<div class="sheet book" id="pdf-p155">
+  <div class="pno-hdr">p. 140</div>
+
+<p>To prove the Preservation of Intervals Theorem 5.3.10, we will use Theorem 2.5.1 characterizing intervals.</p>
+<p><b>5.3.10 Preservation of Intervals Theorem</b> Let \(I\) be an interval and let \(f : I \to \mathbb{R}\) be continuous on \(I\). Then the set \(f(I)\) is an interval.</p>
+<p><b>Proof.</b> Let \(\alpha, \beta \in f(I)\) with \(\alpha \lt \beta\); then there exist points \(a, b \in I\) such that \(\alpha = f(a)\) and \(\beta = f(b)\). Further, it follows from Bolzano&rsquo;s Theorem 5.3.7 that if \(k \in (\alpha, \beta)\) then there exists a number \(c \in I\) with \(k = f(c) \in f(I)\). Therefore \([\alpha, \beta] \subseteq f(I)\), showing that \(f(I)\) possesses property (1) of Theorem 2.5.1. Therefore \(f(I)\) is an interval. &#9633;</p>
+<h3 class="ra-ex">Exercises for Section 5.3</h3>
+<ol class="ex">
+<li value="1">Let \(I := [a, b]\) and let \(f : I \to \mathbb{R}\) be a continuous function such that \(f(x) \gt 0\) for each \(x \in I\). Prove that there exists a number \(\alpha \gt 0\) such that \(f(x) \ge \alpha\) for all \(x \in I\).</li>
+<li value="2">Let \(I := [a, b]\) and let \(f : I \to \mathbb{R}\) and \(g : I \to \mathbb{R}\) be continuous functions on \(I\). Show that the set \(E := \{x \in I : f(x) = g(x)\}\) has the property that if \((x_n) \subseteq E\) and \(x_n \to x_0\), then \(x_0 \in E\).</li>
+<li value="3">Let \(I := [a, b]\) and let \(f : I \to \mathbb{R}\) be a continuous function on \(I\) such that for each \(x \in I\) there exists \(y\) in \(I\) such that \(|f(y)| \le \tfrac{1}{2}|f(x)|\). Prove there exists a point \(c\) in \(I\) such that \(f(c) = 0\).</li>
+<li value="4">Show that every polynomial of odd degree with real coefficients has at least one real root.</li>
+<li value="5">Show that the polynomial \(p(x) := x^4 + 7x^3 - 9\) has at least two real roots. Use a calculator to locate these roots to within two decimal places.</li>
+<li value="6">Let \(f\) be continuous on the interval \([0, 1]\) to \(\mathbb{R}\) and such that \(f(0) = f(1)\). Prove that there exists a point \(c\) in \([0, \tfrac{1}{2}]\) such that \(f(c) = f(c + \tfrac{1}{2})\). [Hint: Consider \(g(x) := f(x) - f(x + \tfrac{1}{2})\).] Conclude that there are, at any time, antipodal points on the earth&rsquo;s equator that have the same temperature.</li>
+<li value="7">Show that the equation \(x = \cos x\) has a solution in the interval \([0, \pi/2]\). Use the Bisection Method and a calculator to find an approximate solution of this equation, with error less than \(10^{-3}\).</li>
+<li value="8">Show that the function \(f(x) := 2 \ln x + \sqrt{x} - 2\) has a root in the interval \([1, 2]\). Use the Bisection Method and a calculator to find the root with error less than \(10^{-2}\).</li>
+<li value="9">(a) The function \(f(x) := (x - 1)(x - 2)(x - 3)(x - 4)(x - 5)\) has five roots in the interval \([0, 7]\). If the Bisection Method is applied on this interval, which of the roots is located?
+<br>(b) Same question for \(g(x) := (x - 2)(x - 3)(x - 4)(x - 5)(x - 6)\) on the interval \([0, 7]\).</li>
+<li value="10">If the Bisection Method is used on an interval of length 1 to find \(p_n\) with error \(|p_n - c| \lt 10^{-5}\), determine the least value of \(n\) that will assure this accuracy.</li>
+<li value="11">Let \(I := [a, b]\), let \(f : I \to \mathbb{R}\) be continuous on \(I\), and assume that \(f(a) \lt 0\), \(f(b) \gt 0\). Let \(W := \{x \in I : f(x) \lt 0\}\), and let \(w := \sup W\). Prove that \(f(w) = 0\). (This provides an alternative proof of Theorem 5.3.5.)</li>
+<li value="12">Let \(I := [0, \pi/2]\) and let \(f : I \to \mathbb{R}\) be defined by \(f(x) := \sup\{x^2, \cos x\}\) for \(x \in I\). Show there exists an absolute minimum point \(x_0 \in I\) for \(f\) on \(I\). Show that \(x_0\) is a solution to the equation \(\cos x = x^2\).</li>
+<li value="13">Suppose that \(f : \mathbb{R} \to \mathbb{R}\) is continuous on \(\mathbb{R}\) and that \(\lim_{x \to -\infty} f = 0\) and \(\lim_{x \to \infty} f = 0\). Prove that \(f\) is bounded on \(\mathbb{R}\) and attains either a maximum or minimum on \(\mathbb{R}\). Give an example to show that both a maximum and a minimum need not be attained.</li>
+<li value="14">Let \(f : \mathbb{R} \to \mathbb{R}\) be continuous on \(\mathbb{R}\) and let \(\beta \in \mathbb{R}\). Show that if \(x_0 \in \mathbb{R}\) is such that \(f(x_0) \lt \beta\), then there exists a \(\delta\)-neighborhood \(U\) of \(x_0\) such that \(f(x) \lt \beta\) for all \(x \in U\).</li>
+</ol>
+
+</div>
+<div class="sheet book" id="pdf-p156">
+  <div class="pno-hdr">p. 141</div>
+
+<ol class="ex" start="15">
+<li value="15">Examine which open [respectively, closed] intervals are mapped by \(f(x) := x^2\) for \(x \in \mathbb{R}\) onto open [respectively, closed] intervals.</li>
+<li value="16">Examine the mapping of open [respectively, closed] intervals under the functions \(g(x) := 1/(x^2 + 1)\) and \(h(x) := x^3\) for \(x \in \mathbb{R}\).</li>
+<li value="17">If \(f : [0, 1] \to \mathbb{R}\) is continuous and has only rational [respectively, irrational] values, must \(f\) be constant? Prove your assertion.</li>
+<li value="18">Let \(I := [a, b]\) and let \(f : I \to \mathbb{R}\) be a (not necessarily continuous) function with the property that for every \(x \in I\), the function \(f\) is bounded on a neighborhood \(V_{\delta_x}(x)\) of \(x\) (in the sense of Definition 4.2.1). Prove that \(f\) is bounded on \(I\).</li>
+<li value="19">Let \(J := (a, b)\) and let \(g : J \to \mathbb{R}\) be a continuous function with the property that for every \(x \in J\), the function \(g\) is bounded on a neighborhood \(V_{\delta_x}(x)\) of \(x\). Show by example that \(g\) is not necessarily bounded on \(J\).</li>
+</ol>
+
+</div>
+</body>
+</html>

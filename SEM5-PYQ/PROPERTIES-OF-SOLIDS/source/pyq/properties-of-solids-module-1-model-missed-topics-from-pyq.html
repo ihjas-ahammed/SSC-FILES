@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Properties of Solids, Module I</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+  :root {
+    --page-bg: #d9d9d4;
+    --paper: #fdfdfb;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --page-bg: #2b2b2b;
+      --paper: #f4f3ee;
+      --ink: #111;
+      --rule: #444;
+      --note: #555;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page-bg: #2b2b2b;
+    --paper: #f4f3ee;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  body {
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--ink);
+    font-family: "Times New Roman", Times, "Liberation Serif", serif;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .sheet {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 12mm auto;
+    padding: 14mm 18mm 16mm;
+    box-sizing: border-box;
+    background: var(--paper);
+    box-shadow: 0 1px 6px rgba(0,0,0,.25);
+    position: relative;
+  }
+  .sheet + .sheet { margin-top: 0; }
+  .hdr {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: start;
+    font-size: 14px;
+  }
+  .code { font-size: 22px; font-weight: bold; letter-spacing: .5px; }
+  .pages { text-align: center; padding-top: 14px; }
+  .name { text-align: right; line-height: 2; }
+  .title { text-align: center; margin-top: 22px; }
+  .title .exam { font-size: 19px; font-weight: bold; letter-spacing: .3px; }
+  .title .sch { margin-top: 2px; }
+  .title .course { margin-top: 10px; font-size: 16px; }
+  .title .subject { margin-top: 6px; font-size: 16px; font-weight: bold; }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 16px;
+    font-size: 15px;
+  }
+  .sec { margin-top: 14px; }
+  .sec-head {
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    font-weight: bold;
+  }
+  .sec-head .num { font-weight: bold; }
+  .sec-head .body { font-weight: normal; }
+  .sec-head .body b { font-weight: bold; }
+  .sec-head .body i { font-style: italic; }
+  .sec-total { text-align: right; font-weight: normal; margin-top: 4px; }
+  .qs { margin-top: 6px; }
+  .q {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    margin-bottom: 7px;
+  }
+  .q .n { text-align: right; padding-right: 10px; }
+  .q p { margin: 0; }
+  .sub { margin-left: 22px; }
+  .cut { color: var(--note); }
+  .turn { text-align: right; font-weight: bold; margin-top: 26px; }
+  .fig {
+    display: block;
+    margin: 8px auto 2px 36px;
+    width: 230px;
+    height: auto;
+  }
+  .fig-cap { margin-left: 36px; font-size: 13px; color: var(--note); font-style: italic; }
+  .foot-note {
+    margin-top: 26px;
+    border-top: 1px solid var(--rule);
+    padding-top: 6px;
+    font-size: 12px;
+    color: var(--note);
+  }
+  .pno { text-align: center; font-size: 15px; margin-bottom: 4px; }
+  .pno-hdr { position: absolute; top: 10mm; right: 18mm; font-weight: bold; font-size: 14px; }
+  @media print {
+    @page { size: A4; margin: 0; }
+    body { background: #fff; }
+    .sheet { margin: 0; box-shadow: none; width: 210mm; height: 297mm; min-height: 0; page-break-after: always; }
+    .sheet:last-child { page-break-after: auto; }
+  }
+  @media (max-width: 720px) {
+    .sheet { width: auto; margin: 0; padding: 14px 16px; min-height: 0; }
+    .hdr { grid-template-columns: 1fr; gap: 6px; }
+    .name { text-align: left; }
+    .pages { text-align: left; padding-top: 0; }
+  }
+.sec-title, .topic { break-after: avoid; }
+@media print { .sheet { height: auto !important; min-height: 0 !important; } .sheet.key { break-before: page; } }
+</style>
+<style>
+  .sec-title { font-weight: bold; margin-top: 16px; }
+  .sec-title .sub { font-weight: normal; font-style: italic; }
+  .lead { margin: 8px 0 4px; }
+  .placeholder {
+    margin: 8px 0 4px 36px; padding: 8px 10px;
+    border: 1px dashed var(--rule); font-size: 13px; color: var(--note);
+  }
+  .title .tl { margin-top: 4px; font-size: 16px; }
+  .title .tl.bold { font-weight: bold; }
+  body { font-size: 12px; line-height: 1.3; }
+  .sheet { padding: 0; }
+  .title .exam{font-size:15px;} .title .sch{font-size:13px;} .title .course,.title .subject,.title .tl{font-size:12px;}
+  .hdr .code{font-size:16px;}
+  .sec-title { margin-top: 8px; font-size: 13px; }
+  .topic { font-weight: bold; font-style: italic; margin: 6px 0 2px 0; font-size: 12px; }
+  .q { margin-bottom: 3px; grid-template-columns: 26px 1fr; }
+  .q-src { float:right; margin:1px 0 0 12px; font-size:11px; color: var(--note); font-style: italic; white-space:nowrap; }
+  .q p { display:inline; margin:0; }
+  .mk { font-weight: bold; white-space: nowrap; }
+  @page { size: A4; margin: 14mm 16mm; }
+  @media print { .sheet { margin:0; padding:0; box-shadow:none; width:auto; min-height:0; } body{background:#fff;} }
+</style>
+</head>
+<body>
+
+<div class="sheet">
+<div class="title">
+<div class="tl exam">FYUGP B.Sc. PHYSICS HONOURS</div>
+<div class="tl sch">PROPERTIES OF SOLIDS</div>
+<div class="tl course">Semester V &middot; Major Elective (Materials Science)</div>
+<div class="tl subject">MODULE 1: CRYSTAL STRUCTURE</div>
+<div class="tl course">Model questions on topics the past papers miss</div>
+</div>
+<div class="sec"><div class="sec-title">Section A: 1 mark each, answer all</div>
+<div class="topic">Primitive translation vectors</div>
+<div class="q"><span class="n">1</span><div><p>Define a primitive translation vector. <span class="mk">(1 mark)</span></p></div></div>
+<div class="topic">Point groups and Bravais lattices</div>
+<div class="q"><span class="n">2</span><div><p>How many point groups are possible in three-dimensional space? <span class="mk">(1 mark)</span></p></div></div>
+<div class="q"><span class="n">3</span><div><p>How many distinct Bravais lattices are possible in three dimensions? <span class="mk">(1 mark)</span></p></div></div>
+<div class="topic">Coordination and the simple cubic structure</div>
+<div class="q"><span class="n">4</span><div><p>What is the coordination number of a simple cubic lattice? <span class="mk">(1 mark)</span></p></div></div>
+<div class="topic">Lattice directions</div>
+<div class="q"><span class="n">5</span><div><p>How many members does the family of face diagonals <110> of a cube have? <span class="mk">(1 mark)</span></p></div></div>
+<div class="q"><span class="n">6</span><div><p>How many members does the family of body diagonals <111> of a cube have? <span class="mk">(1 mark)</span></p></div></div>
+</div>
+<div class="sec"><div class="sec-title">Section B: 2 marks each, answer all</div>
+<div class="topic">Symmetry operations</div>
+<div class="q"><span class="n">7</span><div><p>State the permitted values of <i>n</i> for an <i>n</i>-fold rotation axis of a lattice. <span class="mk">(2 marks)</span></p></div></div>
+<div class="q"><span class="n">8</span><div><p>Name the two-dimensional point groups of the rectangular crystal system. <span class="mk">(2 marks)</span></p></div></div>
+<div class="topic">Unit cell and basis</div>
+<div class="q"><span class="n">9</span><div><p>Find the effective number of lattice points in the conventional cell of a body-centred cubic lattice. <span class="mk">(2 marks)</span></p></div></div>
+<div class="q"><span class="n">10</span><div><p>State the basis of the sodium chloride structure with respect to a face-centred cubic lattice. <span class="mk">(2 marks)</span></p></div></div>
+</div>
+<div class="sec"><div class="sec-title">Section C: 4 marks each, answer all</div>
+<div class="topic">Angles between planes and reciprocal lattice</div>
+<div class="q"><span class="n">11</span><div><p>Find the angle between the normals to the (100) and (110) planes of a cubic crystal. <span class="mk">(4 marks)</span></p></div></div>
+<div class="topic">Reciprocal lattice</div>
+<div class="q"><span class="n">12</span><div><p>Obtain the reciprocal lattice vectors of a simple cubic lattice of lattice constant <i>a</i>. <span class="mk">(4 marks)</span></p></div></div>
+<div class="topic">Packing fraction</div>
+<div class="q"><span class="n">13</span><div><p>Find the packing fraction of a simple cubic structure. <span class="mk">(4 marks)</span></p></div></div>
+<div class="topic">Zinc blende structure</div>
+<div class="q"><span class="n">14</span><div><p>Describe the zinc blende structure. State its lattice and basis, its coordination number, and the nearest-neighbour distance in terms of the lattice constant <i>a</i>. <span class="mk">(4 marks)</span></p></div></div>
+<div class="topic">Brillouin zones</div>
+<div class="q"><span class="n">15</span><div><p>Show that the first Brillouin zone of a two-dimensional square lattice of side <i>a</i> is a square of side 2π/<i>a</i>. <span class="mk">(4 marks)</span></p></div></div>
+<div class="topic">Simple cubic structure</div>
+<div class="q"><span class="n">16</span><div><p>A simple cubic lattice has lattice constant <i>a</i>. Find the number of nearest neighbours of an atom and the nearest-neighbour distance. <span class="mk">(4 marks)</span></p></div></div>
+</div>
+<div class="sec"><div class="sec-title">Section D: 10 marks each, answer any one</div>
+<div class="topic">Sodium chloride structure</div>
+<div class="q"><span class="n">17</span><div><p>Describe the sodium chloride structure as a face-centred cubic lattice with a two-ion basis. Give the positions of the Na<sup>+</sup> and Cl<sup>−</sup> ions in the unit cell, state the number of molecules per unit cell, and show that the lattice constant of touching ions of radii <i>r</i><sub>+</sub> and <i>r</i><sub>−</sub> is <i>a</i> = 2(<i>r</i><sub>+</sub> + <i>r</i><sub>−</sub>). <span class="mk">(10 marks)</span></p></div></div>
+<div class="topic">Symmetry operations</div>
+<div class="q"><span class="n">18</span><div><p>Show that a lattice cannot have a five-fold rotation axis. List the permitted rotation axes, and list the five distinct two-dimensional Bravais lattices. <span class="mk">(10 marks)</span></p></div></div>
+</div>
+</div>
+<div class="sheet key"><div class="title"><div class="tl subject">MODULE 1: MODEL ANSWERS</div><div class="tl course">For checking your work. Each answer shows the key step and the result.</div></div>
+<p class="key"><b>Section A.</b> <b>1.</b> A translation vector is <b>T</b> = <i>n</i><sub>1</sub><b>a</b> + <i>n</i><sub>2</sub><b>b</b> + <i>n</i><sub>3</sub><b>c</b>. It is primitive when the coefficients <i>n</i><sub>1</sub>, <i>n</i><sub>2</sub>, <i>n</i><sub>3</sub> are integers (book §1.2). <b>2.</b> 32 point groups (book §1.6). <b>3.</b> 14 Bravais lattices (book §1.7). <b>4.</b> 6 (book §1.10.2: each atom touches six neighbours along the cube edges). <b>5.</b> 12 members (book §1.8). <b>6.</b> 8 members (book §1.8).</p>
+<p class="key"><b>Section B.</b> <b>7.</b> <i>n</i> = 1, 2, 3, 4 or 6 (book §1.5, Eqs. 1.3 and 1.4). <b>8.</b> 1m and 2mm (book Table 1.1). <b>9.</b> N = N<sub>i</sub> + N<sub>f</sub>/2 + N<sub>c</sub>/8 = 1 + 0 + 8/8 = 2 (book §1.7, Eq. 1.5: the body-centre point is inside the cell and counts 1; each of the eight corners counts 1/8). <b>10.</b> Na<sup>+</sup> at (0, 0, 0) and Cl<sup>−</sup> at (<i>a</i>/2, 0, 0) of an fcc lattice (book §1.13).</p>
+<p class="key"><b>Section C.</b> <b>11.</b> Normal to (100) is [100]; normal to (110) is [110]. cos&theta; = 1/&radic;2, so &theta; = 45° (book §1.8, Eq. 1.6). <b>12.</b> Reciprocal lattice of a simple cubic lattice is simple cubic: <b>a</b>* = (2&pi;/<i>a</i>)<b>i</b>, <b>b</b>* = (2&pi;/<i>a</i>)<b>j</b>, <b>c</b>* = (2&pi;/<i>a</i>)<b>k</b> (book §2.4.2, Eq. 2.21). <b>13.</b> Simple cubic: <i>a</i> = 2<i>r</i>, one atom per cell, so <i>f</i> = (4/3)&pi;<i>r</i><sup>3</sup>/<i>a</i><sup>3</sup> = &pi;/6 &asymp; 0.52 (book §1.10.2). <b>14.</b> An fcc lattice with a two-atom basis: one atom at (0, 0, 0) and one at (<i>a</i>/4)(1, 1, 1). Coordination number 4; nearest-neighbour distance &radic;3<i>a</i>/4 (book §1.11 and §1.12). <b>15.</b> The condition from the Ewald-type relation (Eq. 2.31) for <i>h</i> = &plusmn;1, <i>k</i> = 0 gives <i>k<sub>x</sub></i> = &plusmn;&pi;/<i>a</i>, and for <i>h</i> = 0, <i>k</i> = &plusmn;1 gives <i>k<sub>y</sub></i> = &plusmn;&pi;/<i>a</i>. These four lines bound a square of side 2&pi;/<i>a</i> (book §2.7, Fig. 2.14). <b>16.</b> 6 nearest neighbours at distance <i>a</i> (book Problem 5 of chapter 1, printed answer 6, <i>a</i>).</p>
+<p class="key"><b>Section D.</b> <b>17.</b> Na<sup>+</sup> at (0,0,0), (&frac12;,&frac12;,0), (&frac12,0,&frac12), (0,&frac12,&frac12); Cl<sup>−</sup> at (&frac12,&frac12,&frac12), (0,0,&frac12), (0,&frac12,0), (&frac12,0,0). Four molecules per cell. Along a cube edge the ions touch: <i>a</i> = 2(<i>r</i><sub>+</sub> + <i>r</i><sub>−</sub>) (book §1.13 and Example 1.5). <b>18.</b> Lattice translation requires cos&theta; = (<i>m</i> − 1)/2 with |cos&theta;| &le; 1, so <i>m</i> = 3, 2, 1, 0, −1. This gives &theta; = 0°, 60°, 90°, 120°, 180°, and <i>n</i> = 1, 6, 4, 3, 2 (book §1.5, Eq. 1.4). Five is not allowed. The five two-dimensional Bravais lattices are oblique, rectangular primitive, rectangular centred, square and hexagonal (book §1.7 and Table 1.1).</p>
+<div class="sec"><div class="sec-title">Mapping to the syllabus and textbook</div>
+<table class="tbl" style="width:100%"><tr><th>Syllabus item</th><th>Topic</th><th>Puri and Babbar section</th><th>Model questions</th></tr>
+<tr><td>1</td><td style="text-align:left">Crystal lattice, translation vectors, unit cell and basis</td><td>§1.2, §1.3, §1.4</td><td>1</td></tr>
+<tr><td>2</td><td style="text-align:left">Symmetry operations, point groups and space groups</td><td>§1.5, §1.6</td><td>2, 7, 8, 18</td></tr>
+<tr><td>3</td><td style="text-align:left">Bravais lattices, lattice directions and planes, interplanar spacing</td><td>§1.7, §1.8, §1.9</td><td>3, 5, 6, 11, 18</td></tr>
+<tr><td>4</td><td style="text-align:left">Simple crystal structures with examples</td><td>§1.10 to §1.13</td><td>4, 9, 10, 13, 14, 16, 17</td></tr>
+<tr><td>5</td><td style="text-align:left">X-ray diffraction, reciprocal lattice, Brillouin zones</td><td>§2.4, §2.7</td><td>12, 15</td></tr>
+</table></div>
+<p class="key" style="font-size:12px">Questions are drafted for the gaps in the past papers (not from any past paper). Section 2.3 (X-ray diffraction methods) is outside the Module I scope, so no question uses it.</p>
+</div></body></html>

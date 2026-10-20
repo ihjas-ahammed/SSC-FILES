@@ -365,3 +365,16 @@ The user reviewed the built Module 2 prepare PDF and will start a new session to
 - 7 Codes and maps: NOT done. Needs the user's decision.
 - 8 Out of scope: "Outside this module" table removed. The practicum-numbered examples (Ex 6.1.8(c), x²sin(1/x²)) are kept: they are in-scope exam material and the model paper uses them.
 - Built: `python3 build.py 2 prepare` gives 139 pages (was 135). Paper and answer key untouched. Not mailed.
+
+**Applied in the 2026-10-13 follow-up session (status now):**
+- 1 Page breaks: DONE. The three thin pages (P02 check box, T03 skeleton, T05 skeleton) and the lone P03 habit box were fixed by trimming text and narrowing the Carathéodory figure (`.fig-narrow`). No page is under 60 words. Prepare now 136 pp.
+- 2 Extra lines: NOT done. Still needs the user to name the lines (e.g. "Check: ε = 0.01 …" and "In the model paper: Q1 (this example)").
+- 6 Spacing: partly done. Index rows and the short pages are fixed; gaps under boxes not reviewed page by page.
+- 7 Codes and maps: NOT done. Needs the user's decision.
+- Trimmed wording (check if it matters): the P02 trap no longer carries the Bartle note about sin′ = cos and §8.3; the P03 remind rows and the P03 "habit" box are shorter; the P03 oneline is shorter; the T03 theorem groups (a) and (b) on one line.
+- Paper and answer key untouched.
+
+## Model day paper (from the study-plan screenshot)
+- Trigger: the user uploads a screenshot of the study plan and says "create model day paper". Method: `create-model-day-paper.md` (this folder). Builder: `build_model_paper.py`, which takes a JSON paper and writes the HTML and PDF. Each paper is a `model-paper-<N>.json` in this folder.
+- Scope is the syllabus's section list, checked against the book excerpt headings. A question whose section is not listed is out, even when the topic sounds right. Do not pad a paper with out-of-scope questions.
+- Layout: copy the university paper for this subject (under `GitHub/SSC-FILES/PYQ/` or `ssc-v3/fyug/`), including its marks, ceilings and time. No name or register-number block.

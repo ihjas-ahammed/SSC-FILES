@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module V: Open-Ended Projects in LaTeX</title>
+<style>
+:root{--ink:#1c2230;--muted:#5d6577;--accent:#1f4fbf;--rule:#d9dee8;--code:#f3f5f9;--note:#eef3ff;--warn:#fff6e5}
+*{box-sizing:border-box}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;background:#fff;color:var(--ink);font:17px/1.65 Georgia,"Times New Roman",serif}
+main{max-width:46rem;margin:0 auto;padding:2.5rem 1.25rem 4rem}
+header.title{border-bottom:3px solid var(--accent);margin-bottom:2rem;padding-bottom:1rem}
+header.title h1{font:700 2rem/1.2 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;margin:0 0 .3rem}
+header.title .meta{font:.95rem system-ui,sans-serif;color:var(--muted)}
+nav.toc{background:var(--note);border-radius:8px;padding:1rem 1.3rem;margin-bottom:2rem;font:.95rem/1.7 system-ui,sans-serif}
+nav.toc strong{display:block;margin-bottom:.3rem}
+nav.toc ol{margin:0;padding-left:1.2rem}
+nav.toc a{color:var(--accent);text-decoration:none}
+h2{font:700 1.45rem/1.3 system-ui,sans-serif;margin:2.6rem 0 .8rem;padding-bottom:.35rem;border-bottom:1px solid var(--rule);color:var(--accent)}
+h3{font:600 1.1rem/1.3 system-ui,sans-serif;margin:1.6rem 0 .5rem}
+p{margin:.7rem 0}
+code{font:.88em/1.4 "DejaVu Sans Mono",Consolas,monospace;background:var(--code);padding:.08em .3em;border-radius:4px}
+pre{background:var(--code);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:6px;padding:.9rem 1rem;overflow-x:auto;font:.86rem/1.5 "DejaVu Sans Mono",Consolas,monospace;white-space:pre}
+pre code{background:none;padding:0;font:inherit}
+pre.listing-only{border-left-color:#d99a14}
+.callout{background:var(--note);border-left:4px solid var(--accent);padding:.7rem 1rem;border-radius:6px;margin:1.2rem 0}
+.callout.warn{background:var(--warn);border-color:#d99a14}
+.callout strong{font-family:system-ui,sans-serif}
+.tag{display:inline-block;font:600 .72rem system-ui,sans-serif;text-transform:uppercase;letter-spacing:.05em;background:#fde9c4;color:#7a4b00;border-radius:4px;padding:.1rem .45rem;vertical-align:middle}
+.thm{border-left:3px solid var(--ink);padding:.2rem 0 .2rem 1rem;margin:1.1rem 0}
+.thm .head{font:700 .97rem system-ui,sans-serif;margin-bottom:.2rem}
+.proof{margin:.8rem 0 1rem 1rem;font-size:.97rem}
+.proof .head{font-style:italic;font-family:system-ui,sans-serif}
+.proof .qed{float:right}
+ol,ul{padding-left:1.4rem}
+li{margin:.3rem 0}
+table{border-collapse:collapse;margin:1rem 0;width:100%;font-size:.95rem}
+th,td{padding:.45rem .7rem;text-align:left}
+table.book{border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+table.book thead th{border-bottom:1px solid var(--ink);font:600 .85rem system-ui,sans-serif;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+table.book tbody tr+tr td{border-top:1px solid var(--rule)}
+.center{text-align:center}
+.ctr{text-align:center}
+.caption{font:600 .9rem system-ui,sans-serif;color:var(--muted);margin:.4rem 0 .6rem;text-align:center}
+.translit{font-size:1.02em}
+/* mock Beamer slide */
+.slide{border:1px solid #9aa3b5;border-radius:6px;overflow:hidden;margin:1.2rem auto;max-width:34rem;aspect-ratio:16/10;display:flex;flex-direction:column;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.slide .bar{background:#7a1f1f;color:#fff;font:600 1rem system-ui,sans-serif;padding:.5rem .9rem}
+.slide .body{padding:.7rem 1rem;font-size:.95rem;overflow:hidden}
+.slide .block{border:1px solid #7a1f1f;border-radius:4px;margin:.4rem 0;overflow:hidden}
+.slide .block .bh{background:#7a1f1f;color:#fff;font:600 .82rem system-ui,sans-serif;padding:.2rem .5rem}
+.slide .block .bb{padding:.35rem .5rem;font-size:.9rem}
+.slide .pause{font:.72rem system-ui,sans-serif;color:var(--muted);margin-top:.3rem}
+/* two-column poster */
+.poster{columns:2;column-gap:1.5rem;border:1px solid var(--rule);border-radius:6px;padding:1rem 1.2rem;margin:1rem 0;font-size:.95rem;column-rule:1px solid var(--rule)}
+.poster h4{font:700 .95rem system-ui,sans-serif;color:var(--accent);margin:.2rem 0 .3rem;break-after:avoid}
+.poster p{margin:.3rem 0}
+.math{font-family:"Latin Modern Math","STIX Two Math","Cambria Math","Times New Roman",serif;text-align:center;font-size:1.08rem;margin:.6rem 0}
+.inline-m{font-family:"Latin Modern Math","STIX Two Math","Cambria Math","Times New Roman",serif}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:.2rem 1rem;font:.95rem/1.5 system-ui,sans-serif;margin:.6rem 0}
+.kv code{justify-self:start}
+footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--rule);color:var(--muted);font:.85rem system-ui,sans-serif}
+@media print{
+  @page{size:A4;margin:16mm 18mm}
+  body{font-size:11pt}
+  main{max-width:none;padding:0}
+  h2,h3{break-after:avoid}
+  pre,table,.callout,.thm,.slide,.poster,.kv{break-inside:avoid}
+  .poster{columns:2}
+}
+</style>
+</head>
+<body>
+<main>
+
+<header class="title">
+  <h1>Module V: Open-Ended Projects in LaTeX</h1>
+  <div class="meta">Study Notes &middot; MAT5FS112 &middot; Installation, Overleaf, chapters, slides, posters, transliteration</div>
+</header>
+
+<nav class="toc">
+  <strong>Contents</strong>
+  <ol>
+    <li><a href="#install">Installing LaTeX</a></li>
+    <li><a href="#overleaf">Overleaf</a></li>
+    <li><a href="#chapter">Writing a chapter of a book</a></li>
+    <li><a href="#beamer">Slides with Beamer</a></li>
+    <li><a href="#posters">Posters</a></li>
+    <li><a href="#translit">Transliteration of Indian languages</a></li>
+    <li><a href="#checklist">Checklist for an open-ended project</a></li>
+  </ol>
+</nav>
+
+<h2 id="install">1. Installing LaTeX</h2>
+
+<p>You need a <em>distribution</em> (the engine plus packages) and an editor. The usual choices are:</p>
+<ul>
+  <li><strong>TeX Live</strong> (Linux, macOS, Windows). On Arch Linux, install <code>texlive-basic texlive-latex texlive-latexrecommended texlive-latexextra texlive-fontsrecommended texlive-bibtexextra</code> with <code>pacman</code>. On Debian or Ubuntu: <code>texlive-full</code> (large, but complete).</li>
+  <li><strong>MiKTeX</strong> (Windows), which installs missing packages on demand.</li>
+  <li><strong>MacTeX</strong> (macOS).</li>
+</ul>
+
+<p>After installation, check the tools are on the path:</p>
+<pre><code>pdflatex --version
+bibtex --version
+makeindex --version</code></pre>
+
+<p>A good editor (TeXstudio, TeXworks, VS Code with LaTeX Workshop, or Vim with a LaTeX plugin) builds the document and shows errors.</p>
+
+<h2 id="overleaf">2. Overleaf</h2>
+
+<p>Overleaf (<code>overleaf.com</code>) is an online editor. It needs no installation, has collaborative editing and compiles the document on its servers. The steps are:</p>
+<ol>
+  <li>Create a free account and choose <em>New Project</em>, then <em>Blank Project</em>.</li>
+  <li>Paste the code from any file in these notes into <code>main.tex</code>.</li>
+  <li>Press <em>Recompile</em>. The PDF appears on the right, and the compile log is under <em>Logs and output</em>.</li>
+  <li>Use the menu <em>Menu &rarr; Settings</em> to choose the compiler (pdfLaTeX, XeLaTeX or LuaLaTeX) and the main file.</li>
+</ol>
+
+<div class="callout"><strong>Keep a local copy.</strong> Keep a local copy of your <code>.tex</code> file. Overleaf can be unavailable, and the same code compiles on a local TeX Live.</div>
+
+<h2 id="chapter">3. Writing a chapter of a book</h2>
+
+<p>A book uses the <code>report</code> class (or <code>book</code>), where the top level is <code>\chapter</code>. The skeleton below is a template for a chapter of a textbook with theorems and equations:</p>
+
+<pre><code>\documentclass[11pt,a4paper]{report}
+\usepackage{amsmath,amsthm,amssymb}
+\newtheorem{theorem}{Theorem}[chapter]
+\begin{document}
+\chapter{Introduction to Sets}
+\section{Basic notions}
+\begin{theorem}
+...
+\end{theorem}
+\end{document}</code></pre>
+
+<p>Here is the same structure, compiled, in this <code>article</code> file.</p>
+
+<div class="thm">
+  <div class="head">Theorem 1 (Sample result)</div>
+  <p>Every finite set has finitely many subsets, namely 2<sup><i>n</i></sup> for a set with <i>n</i> elements.</p>
+</div>
+
+<div class="proof">
+  <div class="head">Proof.</div>
+  <p>Each element is either in a subset or not, which gives two choices per element and 2<sup><i>n</i></sup> choices in all. <span class="qed">&#8718;</span></p>
+</div>
+
+<h2 id="beamer">4. Slides with Beamer</h2>
+
+<p><code>beamer</code> is a document class for presentations. Each slide is a <code>\frame</code>. The code below belongs in a file of its own that starts with <code>\documentclass{beamer}</code>; it is shown here as a listing <span class="tag">listing only</span>:</p>
+
+<pre class="listing-only"><code>\documentclass{beamer}
+\usetheme{Madrid}
+\usecolortheme{beaver}
+\title{Linear Algebra Basics}
+\author{Your Name}
+\date{\today}
+\begin{document}
+\frame{\titlepage}
+\begin{frame}{Vector spaces}
+  \begin{block}{Definition}
+    A vector space is a set closed under addition and scalar multiplication.
+  \end{block}
+  \pause
+  \begin{itemize}
+    \item Eight axioms must hold.
+    \item Examples: $\mathbb{R}^n$, polynomials.
+  \end{itemize}
+\end{frame}
+\end{document}</code></pre>
+
+<p>A mock-up of the <code>Vector spaces</code> frame, after the first step of <code>\pause</code>:</p>
+<div class="slide" aria-label="Mock Beamer slide">
+  <div class="bar">Vector spaces</div>
+  <div class="body">
+    <div class="block"><div class="bh">Definition</div><div class="bb">A vector space is a set closed under addition and scalar multiplication.</div></div>
+    <div class="pause">[ \pause : the list below appears on the next click ]</div>
+  </div>
+</div>
+
+<p>Key ideas:</p>
+<ul>
+  <li><code>\frame{...}</code> or <code>\begin{frame}{Title}...\end{frame}</code>.</li>
+  <li><code>\pause</code> reveals the content in steps.</li>
+  <li><code>\begin{block}{...}</code> gives a highlighted box.</li>
+</ul>
+
+<h2 id="posters">5. Posters</h2>
+
+<p>A poster is a single large page with several columns. The <code>beamerposter</code> package is the usual tool. Without it, a poster-like layout can be built with <code>multicols</code> and a <code>minipage</code>. Here is a compiled version of a two-column poster section:</p>
+
+<pre><code>\begin{multicols}{2}
+\section*{Motivation}
+Matrices describe linear maps. Their determinant measures how the
+map scales area:
+\[
+  \det\begin{pmatrix} a &amp; b \\ c &amp; d \end{pmatrix} = ad - bc.
+\]
+
+\section*{Result}
+A matrix is invertible if and only if its determinant is non-zero.
+\columnbreak
+\section*{Example}
+For $A = \begin{pmatrix} 2 &amp; 1 \\ 1 &amp; 3 \end{pmatrix}$, $\det A = 5 \neq 0$,
+so $A$ is invertible.
+\end{multicols}</code></pre>
+
+<div class="poster">
+  <h4>Motivation</h4>
+  <p>Matrices describe linear maps. Their determinant measures how the map scales area:</p>
+  <div class="math">det [a b; c d] = ad &minus; bc.</div>
+
+  <h4>Result</h4>
+  <p>A matrix is invertible if and only if its determinant is non-zero.</p>
+  <div style="break-before:column"></div>
+  <h4>Example</h4>
+  <p>For <span class="inline-m"><i>A</i> = [2 1; 1 3]</span>, <span class="inline-m">det <i>A</i> = 5 &ne; 0</span>, so <span class="inline-m"><i>A</i></span> is invertible.</p>
+</div>
+
+<h2 id="translit">6. Transliteration of Indian languages</h2>
+
+<p>Transliteration writes an Indian script in Latin letters. Scholarly Sanskrit uses IAST (International Alphabet of Sanskrit Transliteration), whose letters need diacritics. In <code>pdflatex</code> these are made with accent commands. This is compiled in the source file:</p>
+
+<pre><code>\begin{center}
+\begin{tabular}{ll}
+\toprule
+Command &amp; Letter \\
+\midrule
+\verb|\={a}| &amp; $\bar{a}$ as in \emph{R\={a}ma} \\
+\verb|\'{s}| &amp; \'{s} as in \emph{\'{s}iva} \\
+\verb|\d{t}| &amp; \d{t} as in \emph{\d{t}ha} \\
+\verb|\d{n}| &amp; \d{n} as in \emph{Ka\d{n}a} \\
+\verb|\.{m}| &amp; \.{m} as in \emph{Sa\.{m}sk\d{r}ta} \\
+\verb|\d{r}| &amp; \d{r} as in \emph{\d{r}\d{s}i} \\
+\bottomrule
+\end{tabular}
+\end{center}</code></pre>
+
+<table class="book translit">
+  <thead><tr><th>Command</th><th class="ctr">Letter</th><th>Example</th></tr></thead>
+  <tbody>
+    <tr><td><code>\={a}</code></td><td class="ctr"><span class="inline-m">ā</span></td><td>as in <em>Rāma</em></td></tr>
+    <tr><td><code>\'{s}</code></td><td class="ctr">ś</td><td>as in <em>śiva</em></td></tr>
+    <tr><td><code>\d{t}</code></td><td class="ctr">ṭ</td><td>as in <em>ṭha</em></td></tr>
+    <tr><td><code>\d{n}</code></td><td class="ctr">ṇ</td><td>as in <em>Kaṇa</em></td></tr>
+    <tr><td><code>\.{m}</code></td><td class="ctr">ṁ</td><td>as in <em>Saṁskṛta</em></td></tr>
+    <tr><td><code>\d{r}</code></td><td class="ctr">ṛ</td><td>as in <em>ṛṣi</em></td></tr>
+  </tbody>
+</table>
+
+<p>Example in running text: <em>Rāmāyaṇa</em> and <em>Bhagavad-gītā</em>.</p>
+
+<h3>6.1 Devanagari and Malayalam (XeLaTeX or LuaLaTeX)</h3>
+
+<p>Printing the script itself needs a Unicode engine and a font that has the glyphs. The usual setup is <code>fontspec</code> with <code>polyglossia</code>. This listing is <em>not</em> compiled in these notes, because it needs XeLaTeX and an installed font. Replace each placeholder with the word typed in a Unicode-capable editor: <span class="tag">listing only</span></p>
+
+<pre class="listing-only"><code>\documentclass{article}
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setdefaultlanguage{hindi}              % or sanskrit, malayalam
+\newfontfamily\devanagarifont{Noto Serif Devanagari}
+\newfontfamily\malayalamfont{Noto Serif Malayalam}
+\begin{document}
+{\devanagarifont &lt;Devanagari word&gt;} \quad {\malayalamfont &lt;Malayalam word&gt;}
+\end{document}</code></pre>
+
+<p>Compile with <code>xelatex file.tex</code> (or <code>lualatex</code>). Check the font names with <code>fc-list</code> first, because they must match the installed font exactly.</p>
+
+<h2 id="checklist">7. Checklist for an open-ended project</h2>
+
+<ol>
+  <li>Set up the distribution and the editor, and compile a test file.</li>
+  <li>Choose the document class (<code>article</code>, <code>report</code> or <code>beamer</code>).</li>
+  <li>Add packages only as needed, and keep the preamble short.</li>
+  <li>Compile twice for references, the table of contents and the list of figures.</li>
+  <li>Run BibTeX or makeindex when the document uses them.</li>
+  <li>Read the log: the first error line is the one to fix.</li>
+</ol>
+
+<footer>MAT5FS112 &middot; Module V study notes</footer>
+
+</main>
+</body>
+</html>

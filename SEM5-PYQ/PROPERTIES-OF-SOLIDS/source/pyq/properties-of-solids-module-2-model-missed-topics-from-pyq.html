@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Properties of Solids, Module I</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+  :root {
+    --page-bg: #d9d9d4;
+    --paper: #fdfdfb;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --page-bg: #2b2b2b;
+      --paper: #f4f3ee;
+      --ink: #111;
+      --rule: #444;
+      --note: #555;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page-bg: #2b2b2b;
+    --paper: #f4f3ee;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  body {
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--ink);
+    font-family: "Times New Roman", Times, "Liberation Serif", serif;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .sheet {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 12mm auto;
+    padding: 14mm 18mm 16mm;
+    box-sizing: border-box;
+    background: var(--paper);
+    box-shadow: 0 1px 6px rgba(0,0,0,.25);
+    position: relative;
+  }
+  .sheet + .sheet { margin-top: 0; }
+  .hdr {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: start;
+    font-size: 14px;
+  }
+  .code { font-size: 22px; font-weight: bold; letter-spacing: .5px; }
+  .pages { text-align: center; padding-top: 14px; }
+  .name { text-align: right; line-height: 2; }
+  .title { text-align: center; margin-top: 22px; }
+  .title .exam { font-size: 19px; font-weight: bold; letter-spacing: .3px; }
+  .title .sch { margin-top: 2px; }
+  .title .course { margin-top: 10px; font-size: 16px; }
+  .title .subject { margin-top: 6px; font-size: 16px; font-weight: bold; }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 16px;
+    font-size: 15px;
+  }
+  .sec { margin-top: 14px; }
+  .sec-head {
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    font-weight: bold;
+  }
+  .sec-head .num { font-weight: bold; }
+  .sec-head .body { font-weight: normal; }
+  .sec-head .body b { font-weight: bold; }
+  .sec-head .body i { font-style: italic; }
+  .sec-total { text-align: right; font-weight: normal; margin-top: 4px; }
+  .qs { margin-top: 6px; }
+  .q {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    margin-bottom: 7px;
+  }
+  .q .n { text-align: right; padding-right: 10px; }
+  .q p { margin: 0; }
+  .sub { margin-left: 22px; }
+  .cut { color: var(--note); }
+  .turn { text-align: right; font-weight: bold; margin-top: 26px; }
+  .fig {
+    display: block;
+    margin: 8px auto 2px 36px;
+    width: 230px;
+    height: auto;
+  }
+  .fig-cap { margin-left: 36px; font-size: 13px; color: var(--note); font-style: italic; }
+  .foot-note {
+    margin-top: 26px;
+    border-top: 1px solid var(--rule);
+    padding-top: 6px;
+    font-size: 12px;
+    color: var(--note);
+  }
+  .pno { text-align: center; font-size: 15px; margin-bottom: 4px; }
+  .pno-hdr { position: absolute; top: 10mm; right: 18mm; font-weight: bold; font-size: 14px; }
+  @media print {
+    @page { size: A4; margin: 0; }
+    body { background: #fff; }
+    .sheet { margin: 0; box-shadow: none; width: 210mm; height: 297mm; min-height: 0; page-break-after: always; }
+    .sheet:last-child { page-break-after: auto; }
+  }
+  @media (max-width: 720px) {
+    .sheet { width: auto; margin: 0; padding: 14px 16px; min-height: 0; }
+    .hdr { grid-template-columns: 1fr; gap: 6px; }
+    .name { text-align: left; }
+    .pages { text-align: left; padding-top: 0; }
+  }
+.sec-title, .topic { break-after: avoid; }
+@media print { .sheet { height: auto !important; min-height: 0 !important; } .sheet.key { break-before: page; } }
+</style>
+<style>
+  .sec-title { font-weight: bold; margin-top: 16px; }
+  .sec-title .sub { font-weight: normal; font-style: italic; }
+  .lead { margin: 8px 0 4px; }
+  .placeholder {
+    margin: 8px 0 4px 36px; padding: 8px 10px;
+    border: 1px dashed var(--rule); font-size: 13px; color: var(--note);
+  }
+  .title .tl { margin-top: 4px; font-size: 16px; }
+  .title .tl.bold { font-weight: bold; }
+  body { font-size: 12px; line-height: 1.3; }
+  .sheet { padding: 0; }
+  .title .exam{font-size:15px;} .title .sch{font-size:13px;} .title .course,.title .subject,.title .tl{font-size:12px;}
+  .hdr .code{font-size:16px;}
+  .sec-title { margin-top: 8px; font-size: 13px; }
+  .topic { font-weight: bold; font-style: italic; margin: 6px 0 2px 0; font-size: 12px; }
+  .q { margin-bottom: 3px; grid-template-columns: 26px 1fr; }
+  .q-src { float:right; margin:1px 0 0 12px; font-size:11px; color: var(--note); font-style: italic; white-space:nowrap; }
+  .q p { display:inline; margin:0; }
+  .mk { font-weight: bold; white-space: nowrap; }
+  @page { size: A4; margin: 14mm 16mm; }
+  @media print { .sheet { margin:0; padding:0; box-shadow:none; width:auto; min-height:0; } body{background:#fff;} }
+</style>
+</head>
+<body>
+
+<div class="sheet">
+<div class="title">
+<div class="tl exam">FYUGP B.Sc. PHYSICS HONOURS</div>
+<div class="tl sch">PROPERTIES OF SOLIDS</div>
+<div class="tl course">Semester V &middot; Major Elective (Materials Science)</div>
+<div class="tl subject">MODULE II: FREE ELECTRON THEORY AND BAND THEORY</div>
+<div class="tl course">Model questions on topics the past papers miss</div>
+</div>
+<div class="sec"><div class="sec-title">Section A: 1 mark each, answer all</div>
+<div class="topic">Bloch functions</div>
+<div class="q"><span class="n">1</span><div><p>What is a Bloch function? Write its form in terms of a periodic function $u_k(x)$. <span class="mk">(1 mark)</span></p></div></div>
+<div class="topic">Fermi function</div>
+<div class="q"><span class="n">2</span><div><p>Write the Fermi–Dirac occupation $f(E)$ at 0 K for $E<E_{F0}$ and for $E>E_{F0}$. <span class="mk">(1 mark)</span></p></div></div>
+<div class="topic">Velocity in a band</div>
+<div class="q"><span class="n">3</span><div><p>Write the group velocity of an electron in a band in terms of $E(k)$. <span class="mk">(1 mark)</span></p></div></div>
+<div class="topic">Number of states in a band</div>
+<div class="q"><span class="n">4</span><div><p>How many electrons can a single band of a crystal of $N$ primitive cells hold? <span class="mk">(1 mark)</span></p></div></div>
+</div>
+<div class="sec"><div class="sec-title">Section B: 2 marks each, answer all</div>
+<div class="topic">Free electron gas, 3D</div>
+<div class="q"><span class="n">5</span><div><p>Write the number of electrons $N$ of a three-dimensional free electron gas in terms of the volume $V$ and the Fermi energy $E_F$ at 0 K. <span class="mk">(2 marks)</span></p></div></div>
+<div class="topic">Fermi temperature</div>
+<div class="q"><span class="n">6</span><div><p>Define the Fermi temperature $T_F$ and give its relation with the Fermi energy. <span class="mk">(2 marks)</span></p></div></div>
+<div class="topic">Average kinetic energy</div>
+<div class="q"><span class="n">7</span><div><p>State the relation between the average kinetic energy per electron and the Fermi energy $E_{F0}$ for a three-dimensional free electron gas at 0 K. <span class="mk">(2 marks)</span></p></div></div>
+<div class="topic">Free electron gas, 1D box</div>
+<div class="q"><span class="n">8</span><div><p>For a free electron gas in a one-dimensional box of length $L$ with $N$ electrons, show that the top filled level gives $E_F=\dfrac{\hbar^2}{2m}\left(\dfrac{N\pi}{2L}\right)^2$. <span class="mk">(2 marks)</span></p></div></div>
+</div>
+<div class="sec"><div class="sec-title">Section C: 4 marks each, answer all</div>
+<div class="topic">Density of states</div>
+<div class="q"><span class="n">9</span><div><p>Show that the density of states of a three-dimensional free electron gas is $D(E)=\dfrac{V}{2\pi^2}\left(\dfrac{2m}{\hbar^2}\right)^{3/2}E^{1/2}$. Count the states inside a sphere of radius $k$ in $k$-space. <span class="mk">(4 marks)</span></p></div></div>
+<div class="topic">Fermi function</div>
+<div class="q"><span class="n">10</span><div><p>Show that the Fermi function equals $\tfrac12$ at $E=E_F$ for any temperature, and explain why only electrons within about $k_BT$ of $E_F$ are excited. <span class="mk">(4 marks)</span></p></div></div>
+<div class="topic">Effective mass</div>
+<div class="q"><span class="n">11</span><div><p>Show that the effective mass of an electron in a band is $m^*=\hbar^2/(d^2E/dk^2)$, starting from the acceleration produced by a field. <span class="mk">(4 marks)</span></p></div></div>
+<div class="q"><span class="n">12</span><div><p>For $E=-E_0\cos ka$, show that the effective mass at $k=0$ is $m^*=\hbar^2/(E_0a^2)$. <span class="mk">(4 marks)</span></p></div></div>
+<div class="topic">Filled band and conduction</div>
+<div class="q"><span class="n">13</span><div><p>Explain why a completely filled band has zero effective number of free electrons, using $N_{\text{eff}}=\dfrac{2Lm}{\pi\hbar^2}\left(\dfrac{dE}{dk}\right)_{k_1}$. <span class="mk">(4 marks)</span></p></div></div>
+<div class="topic">Kronig–Penney model</div>
+<div class="q"><span class="n">14</span><div><p>State the Kronig–Penney condition $P\dfrac{\sin\alpha a}{\alpha a}+\cos\alpha a=\cos ka$. Give the limits $P\to0$ and $P\to\infty$ and what each gives. <span class="mk">(4 marks)</span></p></div></div>
+</div>
+<div class="sec"><div class="sec-title">Section D: 10 marks each, answer any ONE</div>
+<div class="topic">Free electron gas, 3D</div>
+<div class="q"><span class="n">15</span><div><p>Derive the Fermi energy $E_{F0}$, the average kinetic energy $E_0=\tfrac35E_{F0}$, and the density of states $D(E)$ of a three-dimensional free electron gas at 0 K. <span class="mk">(10 marks)</span></p></div></div>
+<div class="topic">Kronig–Penney model</div>
+<div class="q"><span class="n">16</span><div><p>Derive the Kronig–Penney dispersion relation $P\dfrac{\sin\alpha a}{\alpha a}+\cos\alpha a=\cos ka$ in the delta-function limit, state how allowed and forbidden bands follow from it, and discuss the limits of large and small $P$. <span class="mk">(10 marks)</span></p></div></div>
+<div class="topic">Metals, insulators and semiconductors</div>
+<div class="q"><span class="n">17</span><div><p>Using the band picture, distinguish between a metal, an intrinsic semiconductor and an insulator. Show that the effective number of free electrons in a completely filled band is zero and that it is largest when the band is filled up to the point of inflexion. <span class="mk">(10 marks)</span></p></div></div>
+</div>
+</div>
+<div class="sheet key"><div class="title"><div class="tl subject">MODULE II: MODEL ANSWERS</div><div class="tl course">For checking your work. Each answer shows the key step and the result.</div></div>
+<p class="key"><b>Section A.</b> <b>1.</b> $u_k(x)$ is periodic with the lattice period, and $\psi(x)=e^{ikx}u_k(x)$ (book Eq. 6.4). <b>2.</b> $f(E)=1$ for $E<E_{F0}$ and $f(E)=0$ for $E>E_{F0}$ (book Eq. 5.29). <b>3.</b> $v_g=\dfrac{1}{\hbar}\dfrac{dE}{dk}$ (book Eq. 6.49). <b>4.</b> $2N$ electrons (two spins in each of the $N$ $k$-states of the band; book §6.3.2).</p>
+<p class="key"><b>Section B.</b> <b>5.</b> $N=\dfrac{V}{3\pi^2}\left(\dfrac{2mE_F}{\hbar^2}\right)^{3/2}$ (book Eq. 5.37). <b>6.</b> $T_F=E_F/k_B$ (book §5.3.1). <b>7.</b> $E_{F0}$ and $E_0$ are related by $E_0=\tfrac35E_{F0}$ (book §5.2.2). <b>8.</b> $E_n=n^2h^2/8mL^2$; the top level $n_F=N/2$ gives $E_F=\dfrac{\hbar^2}{2m}\left(\dfrac{N\pi}{2L}\right)^2$ (book Eqs. 5.10, 5.12, 5.13).</p>
+<p class="key"><b>Section C.</b> <b>9.</b> Count the $k$-states in a sphere of radius $k$: $2\cdot\tfrac43\pi k^3/(2\pi/L)^3=\dfrac{L^3}{3\pi^2}k^3=N$. With $k=\sqrt{2mE}/\hbar$ and $N(E)=\dfrac{V}{3\pi^2}\left(\dfrac{2mE}{\hbar^2}\right)^{3/2}$, differentiate: $D(E)=dN/dE$ gives Eq. 5.40. <b>10.</b> At $E=E_F$, $f=1/[e^0+1]=\tfrac12$ for any $T$. At $T>0$ electrons within about $k_BT$ of $E_F$ can jump to empty states; those deeper cannot (book §5.2.2). <b>11.</b> $a=\dfrac{e\mathcal E}{\hbar^2}\dfrac{d^2E}{dk^2}$ (book Eq. 6.53); comparing with $a=e\mathcal E/m$ gives $m^*=\hbar^2/(d^2E/dk^2)$ (Eq. 6.55). <b>12.</b> $d^2E/dk^2=E_0a^2\cos ka$, which is $E_0a^2$ at $k=0$. So $m^*=\hbar^2/(E_0a^2)$. <b>13.</b> At a completely filled band $k_1=\pi/a$ and $dE/dk=0$ there, so $N_{\text{eff}}=0$ (book Eq. 6.59). $N_{\text{eff}}$ is largest when $dE/dk$ is largest, at the inflexion point. <b>14.</b> Condition (6.39). $P\to0$: $\cos\alpha a=\cos ka$, so $\alpha=k$, the free electron case with all energies allowed. $P\to\infty$: $\sin\alpha a=0$, so $\alpha a=\pm n\pi$, which gives levels (book §6.3).</p>
+<p class="key"><b>Section D.</b> <b>15.</b> $E_{F0}=\dfrac{\hbar^2}{2m}(3\pi^2 n)^{2/3}$ (5.47) from $N=\int_0^{E_{F0}}D\,dE$; $E_0=\tfrac1N\int_0^{E_{F0}}E\,D\,dE=\tfrac35E_{F0}$; $D(E)$ as Eq. (5.40). <b>16.</b> Bloch form and the Wronskian give $\lambda^2-(\alpha_1+\beta_2)\lambda+1=0$; in the delta limit (6.37) with $P$ (6.38), giving Eq. (6.39). Allowed bands where the left side lies in $[-1,1]$; forbidden otherwise (Fig. 6.3). Limits as C14. <b>17.</b> Metal: partly filled band, $N_{\text{eff}}\neq0$. Insulator: full bands with a wide gap (diamond about 6 eV). Intrinsic semiconductor: full band with a narrow gap (about 1 eV), conduction by thermal excitation. Full band: $N_{\text{eff}}=0$ (6.59); maximum at the inflexion point.</p>
+<div class="sec"><div class="sec-title">Mapping to the syllabus and textbook</div>
+<table class="tbl" style="width:100%"><tr><th>Syllabus item</th><th>Topic</th><th>Puri and Babbar section</th><th>Model questions</th></tr>
+<tr><td>6</td><td style="text-align:left">Drude–Lorentz classical theory</td><td>5.1</td><td>none (covered by the past papers)</td></tr>
+<tr><td>7</td><td style="text-align:left">Sommerfeld theory, one-dimensional box</td><td>5.2.1 (Eqs. 5.10–5.13)</td><td>8</td></tr>
+<tr><td>8</td><td style="text-align:left">Fermi energy, total energy, density of states</td><td>5.2.2, 5.3</td><td>2, 5, 9, 15</td></tr>
+<tr><td>9</td><td style="text-align:left">Application of the free electron gas model</td><td>5.3, 5.3.1</td><td>6, 7</td></tr>
+<tr><td>10</td><td style="text-align:left">Bloch theorem, Kronig–Penney, velocity and effective mass</td><td>6.1–6.4</td><td>1, 3, 11, 12, 14, 16</td></tr>
+<tr><td>11</td><td style="text-align:left">Metals, insulators and semiconductors</td><td>6.5</td><td>4, 13, 17</td></tr>
+</table></div>
+<p class="key" style="font-size:12px">Questions are drafted for the gaps in the past papers (not from any past paper). Section 2.3 (X-ray diffraction methods) is outside the Module I scope, so no question uses it.</p>
+</div></body></html>

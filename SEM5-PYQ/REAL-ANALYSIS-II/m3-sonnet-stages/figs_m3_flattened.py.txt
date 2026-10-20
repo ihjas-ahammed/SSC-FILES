@@ -1,0 +1,169 @@
+"""Module 3 figures: The Riemann integral (Bartle & Sherbert 4e,
+§7.1–§7.3). Follows brief §8 (F01–F18) and the colour/helper conventions of figs.py and
+figs_m2.py. Each function returns an SVG string (placed inside
+<figure>{{fig:NAME}}<figcaption>...</figcaption></figure>).""" import math from figs import *
+def F01_partition_norm(): p = Plot(-0.2, 4.3, -0.9, 0.8, 360, 145, (18, 12, 14, 18)) p.seg(0, 0, 4, 0,
+INK, 2.2) pts = [0, 1, 1.5, 2, 3.4, 4] for i, x in enumerate(pts): p.line(p.X(x), p.Y(0) - 5, p.X(x),
+p.Y(0) + 5, INK, 1.6) p.dot(p.X(x), p.Y(0), BLUE, 3.0) p.lab(x, 0.35, f'x{sub(i)}={x:g}', INK, 9.5)
+gaps = [(0, 1, '1', GREEN), (1, 1.5, '.5', GREEN), (1.5, 2, '.5', GREEN), (2, 3.4, '‖P‖ = 1.4',
+ORANGE), (3.4, 4, '.6', GREEN)] for a, b, lab, col in gaps: p.brace_x(a, b, -0.32, lab, col, dy=13,
+size=9.5) p.vband(2, 3.4, ORANGE, 0.16, -0.12, 0.18) p.lab(2.7, 0.62, f'I{sub(4)} = [2, 3.4]',
+ORANGE, 10) return p.svg()
+def F02_tagged_riemann_sum(): p = Plot(-0.08, 1.08, -0.15, 1.08, 360, 200, (28, 12, 14, 24)) f =
+
+lambda x: x * x p.axes() pts = [0, 0.2, 0.5, 0.7, 1.0] tags = [0.1, 0.5, 0.6, 0.9] for (a, b), t in
+zip(zip(pts, pts[1:]), tags): p.box(a, b, f(t), AMBER, 0.34, AMBER) p.seg(t, 0, t, f(t), PURPLE,
+1.1, '3 2') p.dot(p.X(t), p.Y(0), PURPLE, 2.6) p.dot(p.X(t), p.Y(f(t)), PURPLE, 3.0) p.curve(f, 0, 1,
+BLUE, 2.4) for x in pts: p.xtick(x, f'{x:g}', size=9.5) p.ytick(1, '1', size=9.5) p.lab(0.05, 0.92, 'f(x) =
+x²', BLUE, 10.5, 'start') p.lab(0.05, 0.74, 'tags tᵢ (purple dots)', PURPLE, 10, 'start') p.lab(0.05,
+0.56, 'S(f; Ṗ) = 0.392 (∫ = 1/3)', AMBER, 10, 'start') return p.svg()
+def _tag_panel(tags, title, s_val): p = Plot(-0.06, 1.06, -0.18, 1.08, 176, 125, (20, 10, 8, 18)) f =
+lambda x: x * x p.axes(xlab='', ylab='') pts = [0, 0.25, 0.5, 0.75, 1.0] for (a, b), t in zip(zip(pts,
+pts[1:]), tags): p.box(a, b, f(t), AMBER, 0.34, AMBER) p.dot(p.X(t), p.Y(f(t)), PURPLE, 2.5)
+p.hline(1 / 3, INK, 1.0, '3 3', 0, 1) p.curve(f, 0, 1, BLUE, 2.0) p.lab(0.04, 0.92, title, INK, 9.5,
+'start') p.lab(0.04, 0.70, f'S = {s_val}', ORANGE, 9.5, 'start') return p
+def F03_four_tag_rules(): p1 = _tag_panel([0, 0.25, 0.5, 0.75], 'left tags', '0.2188') p2 =
+_tag_panel([0.25, 0.5, 0.75, 1.0], 'right tags', '0.4688') p3 = _tag_panel([0.125, 0.375, 0.625,
+0.875], 'midpoints', '0.3281') p4 = _tag_panel([0.2, 0.3, 0.7, 0.8], 'random tags', '0.3150') return
+stack([(p1, 0, 0), (p2, 182, 0), (p3, 0, 130), (p4, 182, 130)], 360, 260)
+def F04_mesh_vs_count(): p = Plot(-0.06, 1.06, -1.1, 1.1, 360, 160, (18, 12, 14, 16)) p.seg(0,
+0.45, 1, 0.45, INK, 2.0) for x in [0, 0.25, 0.5, 0.75, 1.0]: p.line(p.X(x), p.Y(0.45) - 4, p.X(x),
+p.Y(0.45) + 4, BLUE, 1.6) p.dot(p.X(x), p.Y(0.45), BLUE, 2.8) p.brace_x(0.25, 0.5, 0.15,
+f'‖P{sub("a")}‖ = 0.25', GREEN, dy=12, size=9.5) p.lab(0, 0.78, f'P{sub("a")}: n = 4 equal pieces',
+BLUE, 10, 'start')
+p.vband(0.3, 1.0, PINK, 0.20, -0.68, -0.32) p.seg(0, -0.5, 1, -0.5, INK, 2.0) for x in [0, 0.1, 0.2,
+0.3, 1.0]: p.line(p.X(x), p.Y(-0.5) - 4, p.X(x), p.Y(-0.5) + 4, PINK, 1.6) p.dot(p.X(x), p.Y(-0.5),
+PINK, 2.8) p.brace_x(0.3, 1.0, -0.82, f'‖P{sub("b")}‖ = 0.70', ORANGE, dy=12, size=9.5) p.lab(0,
+-0.18, f'P{sub("b")}: n = 4 pieces, wide gap [0.3, 1]', PINK, 10, 'start') return p.svg()
+def F05_squeeze_step(): p = Plot(-0.08, 1.08, -0.15, 1.12, 360, 205, (28, 12, 14, 24)) p.axes()
+for k in range(1, 5): a, b = (k - 1) / 4, k / 4 lo, hi = (k - 1) / 4, k / 4 p.box(a, b, lo, SKY, 0.28, BLUE)
+p.poly([(a, lo), (b, lo), (b, hi), (a, hi)], ORANGE, 0.32, stroke=ORANGE, w=1.2) p.seg(a, lo, b, lo,
+BLUE, 2.2) p.seg(a, hi, b, hi, ORANGE, 2.2) p.curve(lambda x: x, 0, 1, INK, 2.2) for x in [0, 0.25,
+0.5, 0.75, 1.0]: p.xtick(x, f'{x:g}', size=9.5) p.ytick(1, '1', size=9.5) p.lab(0.04, 0.96, f'ω{sub(4)}
+(upper, ∫ = 5/8)', ORANGE, 10, 'start') p.lab(0.04, 0.78, f'α{sub(4)} (lower, ∫ = 3/8)', BLUE, 10,
+'start') p.lab(0.04, 0.60, '4 gap squares: ∫(ω−α) = 1/4 = 1/n', INK, 10, 'start') return p.svg()
+def F06_cont_min_max_steps(): p = Plot(-0.2, 3.35, -0.18, 1.18, 360, 200, (26, 12, 14, 24))
+p.axes() s2 = math.sqrt(0.5) pieces = [(0, math.pi / 4, 0, s2, 0, math.pi / 4), (math.pi / 4, math.pi /
+2, s2, 1.0, math.pi / 4, math.pi / 2), (math.pi / 2, 3 * math.pi / 4, s2, 1.0, 3 * math.pi / 4, math.pi /
+2), (3 * math.pi / 4, math.pi, 0, s2, math.pi, 3 * math.pi / 4)] for a, b, lo, hi, u, v in pieces: p.box(a,
+b, lo, SKY, 0.25, BLUE) p.poly([(a, lo), (b, lo), (b, hi), (a, hi)], ORANGE, 0.26, stroke=ORANGE,
+w=1.1) p.seg(a, lo, b, lo, BLUE, 2.0) p.seg(a, hi, b, hi, ORANGE, 2.0) p.dot(p.X(u), p.Y(lo),
+BLUE, 2.8) p.dot(p.X(v), p.Y(hi), ORANGE, 2.8) p.curve(math.sin, 0, math.pi, INK, 2.2)
+p.xtick(math.pi / 2, 'π/2', size=9.5) p.xtick(math.pi, 'π', size=9.5) p.ytick(1, '1', size=9.5)
+p.lab(0.08, 1.06, 'ω_ε = f(vᵢ) (max on Iᵢ)', ORANGE, 9.5, 'start') p.lab(0.08, 0.88, 'α_ε = f(uᵢ) (min
+on Iᵢ)', BLUE, 9.5, 'start') p.lab(2.15, 1.06, 'f(x) = sin x', INK, 10, 'start') return p.svg()
+def F07_monotone_staircase(): p1 = Plot(-0.08, 1.08, -0.16, 1.12, 230, 195, (24, 12, 10, 22)) f =
+lambda x: x * x p1.axes() for k in range(1, 5): a, b = (k - 1) / 4, k / 4 lo, hi = f(a), f(b) p1.box(a, b,
+lo, SKY, 0.26, BLUE) p1.poly([(a, lo), (b, lo), (b, hi), (a, hi)], ORANGE, 0.34, stroke=ORANGE,
+w=1.2) p1.curve(f, 0, 1, BLUE, 2.2) p1.xtick(1, '1', size=9.5) p1.ytick(1, '1', size=9.5) p1.lab(0.05,
+0.95, 'f(x) = x² (n = 4)', BLUE, 9.5, 'start') p1.lab(0.05, 0.76, '4 gap blocks ω − α', ORANGE, 9.5,
+'start')
+p2 = Plot(-0.1, 0.6, -0.16, 1.12, 125, 195, (18, 12, 10, 22)) p2.axes(xlab='', ylab='') for k in
+
+range(1, 5): lo, hi = f((k - 1) / 4), f(k / 4) p2.poly([(0.1, lo), (0.35, lo), (0.35, hi), (0.1, hi)],
+ORANGE, 0.38, stroke=ORANGE, w=1.2) p2.brace_x(0.1, 0.35, -0.08, '1/4', GREEN, dy=11,
+size=9) p2.brace_y(0, 1, 0.38, 'f(1)−f(0)=1', ORANGE, dx=4, size=8.5) p2.lab(0.22, 1.05,
+'stacked = 1/4', INK, 9.5) return stack([(p1, 0, 0), (p2, 232, 0)], 360, 195)
+def F08_dirichlet_tags(): pts = [i / 6 for i in range(7)] p1 = Plot(-0.06, 1.06, -0.22, 1.25, 360, 115,
+(26, 8, 14, 18)) p1.axes(xlab='', ylab='y') for a, b in zip(pts, pts[1:]): p1.box(a, b, 1.0, AMBER,
+0.32, AMBER) t = (a + b) / 2 p1.dot(p1.X(t), p1.Y(1.0), BLUE, 2.8) p1.hline(1.0, BLUE, 1.6, '2 3',
+0, 1) p1.hline(0.0, PINK, 1.6, '2 3', 0, 1) p1.ytick(1, '1', size=9.5) p1.lab(0.5, 1.10, 'Rational tags tᵢ
+∈ ℚ: every f(tᵢ) = 1 ⇒ S(f; Ṗ) = 1', BLUE, 9.8)
+p2 = Plot(-0.06, 1.06, -0.22, 1.25, 360, 115, (26, 8, 14, 18)) p2.axes(xlab='x', ylab='y') for a, b in
+zip(pts, pts[1:]): t = a + 0.52 * (b - a) p2.dot(p2.X(t), p2.Y(0.0), PINK, 2.8) p2.hline(1.0, BLUE,
+1.6, '2 3', 0, 1) p2.hline(0.0, PINK, 1.6, '2 3', 0, 1) p2.ytick(1, '1', size=9.5) p2.xtick(1, '1',
+size=9.5) p2.lab(0.5, 0.55, 'Irrational tags sᵢ ∉ ℚ: every f(sᵢ) = 0 ⇒ S(f; Q̇) = 0', PINK, 9.8) return
+stack([(p1, 0, 0), (p2, 0, 115)], 360, 230)
+def F09_thomae_popcorn(): p = Plot(-0.06, 1.06, -0.14, 1.12, 360, 200, (28, 12, 14, 24))
+p.axes(ylab='h') p.hband(0, 0.2, GREEN, 0.16, 0, 1) p.hline(0.2, ORANGE, 1.3, '4 3', 0, 1) for n
+in range(6, 15): for m in range(1, n): if math.gcd(m, n) == 1: p.dot(p.X(m / n), p.Y(1 / n), SKY,
+1.7) e_pts = [(0, 1.0), (1, 1.0)] for n in range(2, 6): for m in range(1, n): if math.gcd(m, n) == 1:
+e_pts.append((m / n, 1 / n)) for x, y in e_pts: p.hole(x, y, ORANGE, 4.4) p.dot(p.X(x), p.Y(y),
+BLUE, 2.6) p.xtick(0.5, '1/2', size=9.5) p.xtick(1.0, '1', size=9.5) p.ytick(0.2, '1/5', ORANGE,
+size=9.5) p.ytick(0.5, '1/2', size=9.5) p.ytick(1.0, '1', size=9.5) p.lab(0.5, 0.92, '11 circled points in
+E = {h(x) ≥ 1/5}', ORANGE, 9.8) p.lab(0.5, 0.08, 'outside E: h(x) < ε/2 = 1/5', GREEN, 9.5) return
+p.svg()
+def F10_sgn_indefinite(): p1 = Plot(-1.15, 1.15, -1.35, 1.35, 360, 120, (26, 8, 14, 16))
+p1.axes(xlab='', ylab='f') p1.seg(-1, -1, 0, -1, BLUE, 2.4) p1.seg(0, 1, 1, 1, BLUE, 2.4) p1.hole(0,
+-1, BLUE, 3.0) p1.hole(0, 1, BLUE, 3.0) p1.dot(p1.X(0), p1.Y(0), BLUE, 3.0) p1.ytick(1, '1',
+size=9) p1.ytick(-1, '−1', size=9) p1.lab(-0.95, 1.05, 'f(x) = sgn x (jumps at 0)', BLUE, 9.8, 'start')
+p2 = Plot(-1.15, 1.15, -1.25, 1.25, 360, 130, (26, 8, 14, 20)) p2.axes(xlab='x', ylab='F')
+p2.curve(abs, -1, 1, PURPLE, 2.4) p2.curve(lambda x: abs(x) - 1, -1, 1, ORANGE, 1.8, '4 3')
+p2.dot(p2.X(0), p2.Y(0), PINK, 3.4) p2.dot(p2.X(0), p2.Y(-1), PINK, 3.4) p2.xtick(-1, '−1', size=9)
+p2.xtick(1, '1', size=9) p2.lab(-0.62, 0.72, 'slope −1', PURPLE, 9.5) p2.lab(0.62, 0.72, 'slope +1',
+PURPLE, 9.5) p2.lab(0.08, -0.92, 'F(x) = |x| − 1 (corner at 0)', ORANGE, 9.5, 'start') return
+stack([(p1, 0, 0), (p2, 0, 120)], 360, 250)
+def F11_area_sliver(): p = Plot(-0.1, 2.1, -0.2, 2.1, 360, 195, (26, 12, 14, 24)) f = lambda t: t c, h,
+eps = 1.0, 0.35, 0.25 p.axes(xlab='t', ylab='f(t)') p.hband(f(c) - eps, f(c) + eps, ORANGE, 0.14, 0,
+2.0) p.area(f, c, c + h, AMBER, 0.42) p.box(c, c + h, f(c), GREEN, 0.18, GREEN) p.box(c, c + h,
+f(c) + eps, ORANGE, 0.12, ORANGE) p.curve(f, 0, 2.0, BLUE, 2.4) p.xtick(c, 'c', size=9.5)
+p.xtick(c + h, 'c+h', size=9.5) p.ytick(f(c), 'f(c)', size=9.5) p.lab(0.08, 1.82, 'sliver area = F(c+h) −
+F(c)', AMBER, 10, 'start') p.lab(0.08, 1.54, '(f(c)−ε)h ≤ ∫ f ≤ (f(c)+ε)h', ORANGE, 9.8, 'start') return
+p.svg()
+def F12_substitution_panels(): p1 = Plot(-0.2, 4.3, -0.2, 2.15, 178, 190, (22, 12, 8, 22)) g =
+lambda t: math.sin(math.sqrt(t)) / math.sqrt(t) if t > 1e-4 else 1.0 p1.axes(xlab='t', ylab='y')
+p1.area(g, 1, 4, AMBER, 0.34) p1.curve(g, 0.01, 1.0, PINK, 1.6, '3 3') p1.curve(g, 1.0, 4.0,
+BLUE, 2.3) p1.xtick(1, '1', size=9) p1.xtick(4, '4', size=9) p1.ytick(1, '1', size=9) p1.lab(0.15, 1.92,
+'sin√t / √t on [1,4]', BLUE, 9.5, 'start') p1.lab(1.2, 0.32, 'area 1.913', AMBER, 9.2, 'start')
+p2 = Plot(-0.1, 2.3, -0.2, 2.15, 178, 190, (22, 12, 10, 22)) f = lambda x: 2 * math.sin(x)
+p2.axes(xlab='x', ylab='y') p2.area(f, 1, 2, AMBER, 0.34) p2.curve(f, 0, 2.2, PURPLE, 2.3)
+p2.xtick(1, '1', size=9) p2.xtick(2, '2', size=9) p2.ytick(2, '2', size=9) p2.lab(0.1, 1.92, '2 sin x on
+
+[1,2] (x=√t)', PURPLE, 9.5, 'start') p2.lab(1.05, 0.55, 'area 1.913', AMBER, 9.2, 'start') return
+stack([(p1, 0, 0), (p2, 182, 0)], 360, 190)
+def F13_additivity_split(): f = lambda x: x * x p1 = Plot(-0.1, 2.15, -0.4, 4.3, 176, 190, (22, 12, 8,
+22)) p1.axes(xlab='x', ylab='y') p1.area(f, 0, 1, SKY, 0.38) p1.area(f, 1, 2, AMBER, 0.38)
+p1.vline(1, INK, 1.4, '3 2', 0, 1) p1.curve(f, 0, 2, BLUE, 2.2) p1.xtick(1, 'c=1', size=9) p1.xtick(2,
+'2', size=9) p1.lab(0.08, 3.8, '∫₀¹ = 1/3', BLUE, 9.5, 'start') p1.lab(0.08, 3.1, '∫₁² = 7/3', ORANGE,
+9.5, 'start')
+p2 = Plot(-0.1, 2.15, -0.4, 4.3, 178, 190, (20, 12, 10, 22)) p2.axes(xlab='x', ylab='') p2.box(0, 0.8,
+f(0.5), SKY, 0.25, BLUE) p2.box(0.8, 1.0, f(1.0), AMBER, 0.40, ORANGE) p2.box(1.0, 1.3, f(1.0),
+AMBER, 0.40, ORANGE) p2.box(1.3, 2.0, f(1.6), SKY, 0.25, BLUE) p2.vline(1.0, PINK, 1.6, '3 2',
+0, 2.2) p2.curve(f, 0, 2, BLUE, 2.0) p2.xtick(0.8, 'x ₋₁', size=8.5) p2.xtick(1.0, 'c', PINK, size=9)
+p2.xtick(1.3, 'x ', size=8.5) p2.lab(0.06, 3.8, 'Case (ii): split I at c', PINK, 9.2, 'start')
+p2.lab(0.06, 3.1, 'error ≤ 2M‖Q‖', ORANGE, 9.2, 'start') return stack([(p1, 0, 0), (p2, 182, 0)],
+360, 190)
+def F14_taylor_remainder(): p = Plot(-0.08, 1.18, -0.2, 3.0, 360, 200, (26, 12, 14, 24)) p.axes() t1
+= lambda x: 1 + x t2 = lambda x: 1 + x + 0.5 * x * x p.curve(t1, 0, 1, GREEN, 1.8, '4 3')
+p.curve(t2, 0, 1, PURPLE, 2.0, '2 2') p.curve(math.exp, 0, 1, BLUE, 2.4) p.seg(1.0, 2.0, 1.0,
+math.e, ORANGE, 2.6) p.seg(1.05, 2.5, 1.05, math.e, PINK, 2.6) p.dot(p.X(1), p.Y(math.e),
+BLUE, 3.0) p.dot(p.X(1), p.Y(2.5), PURPLE, 2.8) p.dot(p.X(1), p.Y(2.0), GREEN, 2.8) p.xtick(1,
+'1', size=9.5) p.ytick(1, '1', size=9.5) p.ytick(math.e, 'e', BLUE, size=9.5) p.lab(0.05, 2.72, 'f(x) =
+eˣ', BLUE, 10, 'start') p.lab(0.05, 2.35, f'T{sub(1)}(x) = 1+x (R{sub(1)} = e−2)', GREEN, 9.5,
+'start') p.lab(0.05, 1.98, f'T{sub(2)}(x) = 1+x+x²/2 (R{sub(2)} = e−5/2)', PURPLE, 9.5, 'start')
+return p.svg()
+def F15_step_jump_strip(): p = Plot(-0.15, 3.15, -0.35, 3.6, 360, 195, (24, 12, 14, 24)) p.axes() d
+= 0.7 p.vband(1 - d, 1 + d, GREEN, 0.16, 0, 3.3) p.vline(1 - d, GREEN, 1.2, '3 3', 0, 3.3) p.vline(1
++ d, GREEN, 1.2, '3 3', 0, 3.3) p.box(0, 0.7, 2, SKY, 0.28, BLUE) p.box(0.7, 1.3, 2, SKY, 0.28,
+BLUE) p.box(1.3, 1.8, 3, AMBER, 0.28, ORANGE) p.box(1.8, 2.4, 3, AMBER, 0.28, ORANGE)
+p.box(2.4, 3.0, 3, AMBER, 0.28, ORANGE) p.seg(0, 2, 1, 2, BLUE, 2.6) p.seg(1, 3, 3, 3, BLUE,
+2.6) p.dot(p.X(1), p.Y(2), BLUE, 3.2) p.hole(1, 3, BLUE, 3.2) p.xtick(1 - d, '1−δ', GREEN, size=9)
+p.xtick(1, '1', size=9.5) p.xtick(1 + d, '1+δ', GREEN, size=9) p.xtick(3, '3', size=9.5) p.ytick(2, '2',
+size=9.5) p.ytick(3, '3', size=9.5) p.lab(1.55, 3.35, 'jump strip [1−δ, 1+δ]: |S − 8| ≤ 5δ', GREEN,
+9.8, 'start') return p.svg()
+def _step_piece(a, b, h, col, title, area_txt): p = Plot(-0.2, 3.2, -0.4, 3.6, 116, 170, (18, 10, 8, 20))
+p.axes(xlab='', ylab='') p.box(a, b, h, col, 0.34, col) p.seg(a, h, b, h, col, 2.4) p.xtick(1, '1',
+size=8.5) p.xtick(3, '3', size=8.5) p.lab(0.1, 3.3, title, col, 9.2, 'start') p.lab(0.1, 2.65, area_txt,
+INK, 9.0, 'start') return p
+def F16_elementary_steps(): p1 = step_piece(0, 1, 2, BLUE, '2φ{[0,1]}', 'area = 2·1 = 2') p2 =
+step_piece(1, 3, 3, ORANGE, '3φ{(1,3]}', 'area = 3·2 = 6') p3 = Plot(-0.2, 3.2, -0.4, 3.6, 118, 170,
+(18, 10, 8, 20)) p3.axes(xlab='', ylab='') p3.box(0, 1, 2, BLUE, 0.34, BLUE) p3.box(1, 3, 3,
+ORANGE, 0.34, ORANGE) p3.seg(0, 2, 1, 2, BLUE, 2.4) p3.seg(1, 3, 3, 3, ORANGE, 2.4)
+p3.xtick(1, '1', size=8.5) p3.xtick(3, '3', size=8.5) p3.lab(0.1, 3.3, 'g = sum', INK, 9.2, 'start')
+p3.lab(0.1, 2.65, '∫₀³ g = 8', GREEN, 9.2, 'start') return stack([(p1, 0, 0), (p2, 120, 0), (p3, 240,
+0)], 360, 170)
+def F17_rationals_cover(): p = Plot(-0.15, 1.15, -0.5, 1.2, 360, 155, (18, 12, 14, 18)) p.seg(0, 0,
+1, 0, INK, 2.2) rats = [(0.0, 0.12, f'r{sub(1)}=0', 'ε/2', 0.35), (1.0, 0.06, f'r{sub(2)}=1', 'ε/4', 0.35),
+(0.5, 0.03, f'r{sub(3)}=1/2', 'ε/8', 0.35), (1 / 3, 0.015, f'r{sub(4)}=1/3', 'ε/16', 0.68)] for r, hw, rlab,
+wlab, y_iv in rats: p.vband(r - hw, r + hw, ORANGE, 0.24, -0.08, y_iv) p.seg(r - hw, y_iv, r + hw,
+y_iv, ORANGE, 2.0) p.dot(p.X(r), p.Y(0), BLUE, 3.0) p.lab(r, -0.28, rlab, BLUE, 9.2) p.lab(r, y_iv
+
++ 0.14, wlab, ORANGE, 9.0) p.lab(0.5, 1.02, 'Total cover length = ε/2 + ε/4 + ε/8 + ··· = ε', INK,
+10) return p.svg()
+def F18_lipschitz_bound(): p = Plot(-0.1, 2.1, -0.25, 2.25, 360, 190, (26, 12, 14, 24)) f = lambda
+t: t w, z, M = 0.5, 1.5, 2.0 p.axes(xlab='t', ylab='f(t)') p.box(w, z, M, ORANGE, 0.16, ORANGE)
+p.area(f, w, z, AMBER, 0.42) p.hline(M, ORANGE, 1.2, '4 3', 0, 2.0) p.curve(f, 0, 2.0, BLUE, 2.4)
+p.xtick(w, 'w', size=9.5) p.xtick(z, 'z', size=9.5) p.ytick(M, 'M=2', ORANGE, size=9.5)
+p.brace_x(w, z, -0.14, 'z − w', GREEN, dy=12, size=9.5) p.lab(0.08, 1.72, 'F(z) − F(w) = ∫_w^z f',
+AMBER, 10, 'start') p.lab(0.08, 1.42, '|F(z) − F(w)| ≤ M|z − w|', ORANGE, 10, 'start') return
+p.svg()

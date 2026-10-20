@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Study notes: Complex Analysis I, Module 1, section 1.1</title>
+<script>
+window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>@page { size: A4; margin: 15mm 15mm; }
+:root { --ink:#1B2631; --muted:#5D6D7E; --rule:#AEB6BF; --eq:#1F618D; --res:#117A65; --recall:#8A6D1A; --idb:#A04000; }
+body { margin:0; color:var(--ink); font-family:"Times New Roman", Times, "Liberation Serif", serif; font-size:11pt; line-height:1.42; }
+main { width:100%; }
+h1 { font-size:17pt; margin:0 0 3px; color:var(--eq); }
+.meta { color:var(--muted); font-size:9.5pt; margin-bottom:8px; border-bottom:1px solid var(--rule); padding-bottom:5px; }
+.sec-body { column-count:2; column-gap:16px; column-rule:0.5px solid var(--rule); }
+h2 { font-size:12.5pt; margin:12px 0 4px; color:var(--eq); border-bottom:1.5px solid var(--eq); padding-bottom:1px; break-after:avoid; column-span:none; }
+h3 { font-size:10.8pt; margin:8px 0 2px; color:var(--res); break-after:avoid; }
+p, li { margin:3px 0; }
+ul, ol { margin:3px 0 3px 18px; padding:0; }
+.eq { margin:5px 0; text-align:center; break-inside:avoid; font-size:10.5pt; }
+.box-eq { background:#EAF2F8; border-left:3px solid var(--eq); padding:4px 7px; margin:5px 0; break-inside:avoid; }
+.box-res { background:#E9F7EF; border-left:3px solid var(--res); padding:4px 7px; margin:5px 0; break-inside:avoid; }
+.box-recall { background:#FDF6E3; border-left:3px solid var(--recall); padding:4px 7px; margin:6px 0; break-inside:avoid; font-size:10.2pt; }
+.lbl { font-weight:bold; font-size:9.6pt; text-transform:uppercase; letter-spacing:.3px; }
+.lbl.eq { color:var(--eq); } .lbl.res { color:var(--res); }
+.box-recall .lbl { color:var(--recall); }
+table.tbl { border-collapse:collapse; margin:5px auto; font-size:10pt; break-inside:avoid; }
+table.tbl td, table.tbl th { border:1px solid var(--rule); padding:2px 7px; text-align:center; }
+table.tbl caption { font-size:9.5pt; color:var(--muted); caption-side:top; margin-bottom:2px; }
+.note { font-size:9.5pt; color:var(--muted); }
+.sec-title-full { column-span:all; font-size:14pt; font-weight:bold; color:var(--eq); border-bottom:2px solid var(--eq); margin:14px 0 6px; break-after:avoid; }
+.sec-sub { column-span:all; font-size:10pt; color:var(--muted); font-style:italic; margin:0 0 4px; }
+</style>
+</head>
+<body>
+<main>
+<h1>Study notes: Complex Analysis I, Module 1, section 1.1</h1>
+<div class="meta">Zill and Shanahan, <i>Complex Analysis: A First Course with Applications</i> (3rd ed.), Section 1.1, printed pp. 3&ndash;9. Numbers are the book&rsquo;s own. No figures in this section. Exercises 1.1 are not included, except Problem 55, which Remark (i) names. Student notes in my own words; every definition, example and displayed equation is kept with its book number.</div>
+<div class="sec-body">
+<h2>Before you start</h2>
+<ul>
+<li>You can add, subtract and multiply real numbers, and you know that $(a + b)^2 = a^2 + 2ab + b^2$. Complex arithmetic uses the same rules, plus one new fact: $i^2 = -1$.</li>
+<li>Two real numbers are equal only when both their parts agree. For complex numbers this idea needs a formal statement (Definition 1.1.2 below).</li>
+<li>The real numbers can be ordered (you can say one is bigger than another). Complex numbers cannot. Remark (i) below explains this, and it is the first warning that complex analysis is not just real analysis with an extra symbol.</li>
+</ul>
+
+<h2>Section 1.1: Complex numbers and their properties</h2>
+
+<h3>Why complex numbers were needed</h3>
+<p>Early algebra produced equations such as $x^2 + 2x + 2 = 0$ whose &ldquo;solutions&rdquo; contain $\sqrt{-1}$. Mathematicians resisted these numbers for centuries. The name &ldquo;imaginary&rdquo; comes from that resistance. In the eighteenth century Gauss gave the imaginary numbers a logical footing by treating them as an extension of the real numbers. This section sets out their definitions and arithmetic.</p>
+
+<h3>The imaginary unit and the complex number</h3>
+<p>The symbol $i$ was first a disguise for $\sqrt{-1}$. Today we define $i$ by the single property $i^2 = -1$. A complex number is built from two real numbers using $i$.</p>
+<div class="box-eq"><span class="lbl eq">Definition 1.1.1</span><br>A complex number is any number $z = a + ib$, where $a$ and $b$ are real numbers and $i$ is the imaginary unit.</div>
+<p>The notations $a + ib$ and $a + bi$ mean the same thing. The real number $a$ is the <b>real part</b> of $z$, written $\operatorname{Re}(z)$. The real number $b$ is the <b>imaginary part</b>, written $\operatorname{Im}(z)$. Note that $\operatorname{Im}(z)$ is a real number: for $z = 4 - 9i$, $\operatorname{Re}(z) = 4$ and $\operatorname{Im}(z) = -9$, not $-9i$. A real multiple of $i$, such as $6i$, is a <b>pure imaginary</b> number.</p>
+
+<h3>Equality</h3>
+<div class="box-eq"><span class="lbl eq">Definition 1.1.2</span><br>Complex numbers $z_1 = a_1 + ib_1$ and $z_2 = a_2 + ib_2$ are equal, $z_1 = z_2$, when $a_1 = a_2$ and $b_1 = b_2$.</div>
+<p>Put in terms of $\operatorname{Re}$ and $\operatorname{Im}$: $z_1 = z_2$ exactly when $\operatorname{Re}(z_1) = \operatorname{Re}(z_2)$ and $\operatorname{Im}(z_1) = \operatorname{Im}(z_2)$. Every real number $a$ is the complex number $a + 0i$, so $\mathbb{R}$ sits inside $\mathbb{C}$ as a subset. The whole collection of complex numbers is written $\mathbb{C}$.</p>
+
+<h3>Addition, subtraction, multiplication and division</h3>
+<p>For $z_1 = a_1 + ib_1$ and $z_2 = a_2 + ib_2$ the four operations are:</p>
+<ul>
+<li><b>Addition:</b> $z_1 + z_2 = (a_1 + a_2) + i(b_1 + b_2)$.</li>
+<li><b>Subtraction:</b> $z_1 - z_2 = (a_1 - a_2) + i(b_1 - b_2)$.</li>
+<li><b>Multiplication:</b> $z_1 z_2 = a_1a_2 - b_1b_2 + i(b_1a_2 + a_1b_2)$.</li>
+<li><b>Division:</b> $\dfrac{z_1}{z_2} = \dfrac{a_1a_2 + b_1b_2}{a_2^2 + b_2^2} + i\,\dfrac{b_1a_2 - a_1b_2}{a_2^2 + b_2^2}$, provided $z_2 \ne 0$ (that is, $a_2 \ne 0$ or $b_2 \ne 0$).</li>
+</ul>
+<p>Commutative, associative and distributive laws all hold for complex numbers. So you do not need to memorise the formulas above. Two rules are enough: to add or subtract, work on real parts and imaginary parts separately; to multiply, expand with the distributive law and replace $i^2$ by $-1$.</p>
+
+<h3>Worked example: addition and multiplication</h3>
+<p><b>Example 1.</b> Let $z_1 = 2 + 4i$ and $z_2 = -3 + 8i$. Then:</p>
+<ul>
+<li>(a) Add the real parts and the imaginary parts: $z_1 + z_2 = (2 - 3) + (4 + 8)i = -1 + 12i$.</li>
+<li>(b) Expand with the distributive law, one factor at a time, then use $i^2 = -1$:</li>
+</ul>
+<div class="eq">$$z_1 z_2 = -6 - 12i + 16i + 32i^2 = -38 + 4i.$$</div>
+
+<h3>Zero and unity</h3>
+<p>The complex zero is $0 + 0i$ and the complex unity is $1 + 0i$. Zero does nothing when added: $z + 0 = (a + ib) + (0 + 0i) = a + ib = z$. Unity does nothing when multiplied: $z \cdot 1 = (a + ib)(1 + 0i) = a + ib = z$.</p>
+
+<h3>The conjugate</h3>
+<p>The <b>conjugate</b> $\bar{z}$ of $z = a + ib$ is $\bar{z} = a - ib$: flip the sign of the imaginary part. For example $\overline{6 + 3i} = 6 - 3i$ and $\overline{-5 - i} = -5 + i$. A real number is its own conjugate: $\bar{7} = 7$.</p>
+<p>Conjugation respects addition and subtraction, and it also respects multiplication, division and taking the conjugate twice:</p>
+<div class="eq">$$\overline{z_1 + z_2} = \bar{z}_1 + \bar{z}_2, \qquad \overline{z_1 - z_2} = \bar{z}_1 - \bar{z}_2. \tag{1}$$</div>
+<div class="eq">$$\overline{z_1 z_2} = \bar{z}_1 \bar{z}_2, \qquad \overline{\left(\frac{z_1}{z_2}\right)} = \frac{\bar{z}_1}{\bar{z}_2}, \qquad \bar{\bar{z}} = z. \tag{2}$$</div>
+<p>So the conjugate of any finite sum or product is the sum or product of the conjugates.</p>
+<p>Two results from the definitions are used again and again:</p>
+<div class="eq">$$z + \bar{z} = (a + ib) + (a - ib) = 2a. \tag{3}$$</div>
+<div class="eq">$$z\bar{z} = (a + ib)(a - ib) = a^2 + b^2. \tag{4}$$</div>
+<p>Equation (3) gives a real number. Equation (4) gives a real number too, and it is always $\ge 0$. Equation (4) is the key to division, as the next heading shows.</p>
+<p>The difference $z - \bar{z}$ is pure imaginary:</p>
+<div class="eq">$$z - \bar{z} = (a + ib) - (a - ib) = 2ib. \tag{5}$$</div>
+<p>Since $a = \operatorname{Re}(z)$ and $b = \operatorname{Im}(z)$, equations (3) and (5) give two formulas for the parts of $z$:</p>
+<div class="eq">$$\operatorname{Re}(z) = \frac{z + \bar{z}}{2} \qquad \text{and} \qquad \operatorname{Im}(z) = \frac{z - \bar{z}}{2i}. \tag{6}$$</div>
+
+<h3>Division</h3>
+<p>To divide $z_1$ by $z_2$, multiply the top and bottom by $\bar{z}_2$. The bottom becomes $z_2\bar{z}_2$, which is real by (4), so the result is easy to write as $a + ib$:</p>
+<div class="eq">$$\frac{z_1}{z_2} = \frac{z_1}{z_2}\cdot\frac{\bar{z}_2}{\bar{z}_2} = \frac{z_1\bar{z}_2}{z_2\bar{z}_2}. \tag{7}$$</div>
+<p><b>Example 2.</b> Let $z_1 = 2 - 3i$ and $z_2 = 4 + 6i$. Multiply by $\bar{z}_2 = 4 - 6i$ and use (4) on the bottom:</p>
+<div class="eq">$$\frac{z_1}{z_2} = \frac{(2 - 3i)(4 - 6i)}{4^2 + 6^2} = \frac{-10 - 24i}{52} = -\frac{5}{26} - \frac{6}{13}i.$$</div>
+<p>The last step divides the real and imaginary parts of the numerator by $52$ and reduces each fraction.</p>
+
+<h3>Additive and multiplicative inverses</h3>
+<p>Every complex $z = a + ib$ has one additive inverse, $-z = -a - ib$, and $z + (-z) = 0$. Every <i>nonzero</i> complex $z$ has exactly one multiplicative inverse $z^{-1}$, with $zz^{-1} = 1$. The inverse is the reciprocal $1/z$.</p>
+<p><b>Example 3.</b> Find the reciprocal of $z = 2 - 3i$. Multiply top and bottom by the conjugate $2 + 3i$:</p>
+<div class="eq">$$\frac{1}{z} = \frac{1}{2 - 3i}\cdot\frac{2 + 3i}{2 + 3i} = \frac{2 + 3i}{4 + 9} = \frac{2}{13} + \frac{3}{13}i.$$</div>
+<p>Check it yourself: $(2 - 3i)\left(\frac{2}{13} + \frac{3}{13}i\right) = 1$.</p>
+
+<h3>What is different from real analysis</h3>
+<p><b>Remarks.</b> Two differences matter from the start.</p>
+<ol type="i">
+<li><b>No order.</b> Real numbers can be compared with $<$. Complex numbers cannot, unless both are real. A statement such as $z_1 < z_2$ or $z_2 \ge z_1$ means nothing in $\mathbb{C}$ unless $z_1$ and $z_2$ are real. The book asks you to see why in Problem 55, which is printed in full below because Remark (i) names it. So when you see $z_1 = \alpha z_2$ with $\alpha > 0$, the inequality forces $\alpha$ to be real.
+<div class="box-eq"><span class="lbl eq">Problem 55 (named in Remark (i))</span><br>A number system is called an <i>ordered system</i> if it has a subset $P$ with two properties. First, for any nonzero number $x$ in the system, either $x$ or $-x$ is in $P$, but not both. Second, if $x$ and $y$ are in $P$, then both $xy$ and $x + y$ are in $P$. In the real numbers $P$ is the set of positive numbers, and $x > y$ means $x - y \in P$. Discuss why the complex numbers have no such subset $P$. [Hint: consider $i$ and $-i$.]</div>
+</li>
+<li><b>Impossible in the reals, ordinary in $\mathbb{C}$.</b> In real analysis $e^x = -2$ and $\sin x = 5$ have no solutions for real $x$. When $x$ is a complex variable, both statements are correct and ordinary. See Example 3 in Section 4.1 and Example 2 in Section 4.3 of the book.</li>
+</ol>
+<p>The book points out more differences throughout the text. Keep this list in mind when a later result looks odd.</p>
+
+</div>
+</main>
+</body>
+</html>

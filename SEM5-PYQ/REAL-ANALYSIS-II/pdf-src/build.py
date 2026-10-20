@@ -9,13 +9,13 @@ src/m<N>/<part>*.html  ->  {{fig:NAME}} replaced by SVG (figs_m<N>.py, then figs
                        ->  TeX pre-rendered by render.js (KaTeX)
                        ->  printed by headless Chrome to ../real-analysis-2-module-<N>-<file>.pdf
 """
-import re, subprocess, sys, glob, os
+import re, subprocess, sys, glob, os, shutil
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 OUT = HERE.parent
-NODE = sorted(glob.glob(os.path.expanduser('~/.nvm/versions/node/*/bin/node')))[-1]
-CHROME = 'google-chrome'
+NODE = (sorted(glob.glob(os.path.expanduser('~/.nvm/versions/node/*/bin/node'))) or [shutil.which('node')])[-1]
+CHROME = shutil.which('google-chrome') or shutil.which('google-chrome-stable') or 'google-chrome'
 TARGETS = {'prepare': 'prepare', 'paper': 'pyq+model', 'answers': 'answerkey'}
 
 sys.path.insert(0, str(HERE))

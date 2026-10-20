@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module III: Typesetting Mathematics</title>
+<style>
+:root{--ink:#1c2230;--muted:#5d6577;--accent:#1f4fbf;--rule:#d9dee8;--code:#f3f5f9;--note:#eef3ff;--warn:#fff6e5}
+*{box-sizing:border-box}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;background:#fff;color:var(--ink);font:17px/1.65 Georgia,"Times New Roman",serif}
+main{max-width:46rem;margin:0 auto;padding:2.5rem 1.25rem 4rem}
+header.title{border-bottom:3px solid var(--accent);margin-bottom:2rem;padding-bottom:1rem}
+header.title h1{font:700 2rem/1.2 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;margin:0 0 .3rem}
+header.title .meta{font:.95rem system-ui,sans-serif;color:var(--muted)}
+nav.toc{background:var(--note);border-radius:8px;padding:1rem 1.3rem;margin-bottom:2rem;font:.95rem/1.7 system-ui,sans-serif}
+nav.toc strong{display:block;margin-bottom:.3rem}
+nav.toc ol{margin:0;padding-left:1.2rem}
+nav.toc a{color:var(--accent);text-decoration:none}
+h2{font:700 1.45rem/1.3 system-ui,sans-serif;margin:2.6rem 0 .8rem;padding-bottom:.35rem;border-bottom:1px solid var(--rule);color:var(--accent)}
+h3{font:600 1.1rem/1.3 system-ui,sans-serif;margin:1.6rem 0 .5rem}
+p{margin:.7rem 0}
+code{font:.88em/1.4 "DejaVu Sans Mono",Consolas,monospace;background:var(--code);padding:.08em .3em;border-radius:4px}
+pre{background:var(--code);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:6px;padding:.9rem 1rem;overflow-x:auto;font:.86rem/1.5 "DejaVu Sans Mono",Consolas,monospace;white-space:pre}
+pre code{background:none;padding:0;font:inherit}
+.callout{background:var(--note);border-left:4px solid var(--accent);padding:.7rem 1rem;border-radius:6px;margin:1.2rem 0}
+.callout strong{font-family:system-ui,sans-serif}
+/* display maths: rendered by hand in HTML, the LaTeX source sits in the code block above it */
+.math{font-family:"Latin Modern Math","STIX Two Math","Cambria Math","Times New Roman",serif;font-size:1.12rem;text-align:center;margin:1rem 0;padding:.6rem .5rem;overflow-x:auto;border:1px dashed var(--rule);border-radius:6px}
+.math .row{display:block;margin:.35rem 0}
+.math .tag{float:right;color:var(--muted)}
+.math .vec{display:inline-block;text-align:center;vertical-align:middle;margin:0 .15rem}
+.math .frac{display:inline-block;text-align:center;vertical-align:middle}
+.math .frac>span{display:block;padding:0 .25rem}
+.math .frac>span:first-child{border-bottom:1px solid currentColor}
+.math .big{font-size:1.5em;vertical-align:middle}
+.matrix{display:inline-grid;grid-auto-rows:auto;vertical-align:middle;border-left:2px solid currentColor;border-right:2px solid currentColor;border-radius:4px;padding:0 .35rem;margin:0 .2rem}
+.matrix>span{text-align:center;padding:.1rem .55rem}
+.matrix.paren{border:none;border-left:none;border-right:none;padding:0 .2rem}
+.inline-m{font-family:"Latin Modern Math","STIX Two Math","Cambria Math","Times New Roman",serif;font-style:normal}
+table{border-collapse:collapse;margin:1rem 0;width:100%;font-size:.95rem}
+th,td{border-bottom:1px solid var(--rule);padding:.45rem .7rem;text-align:left}
+th{font:600 .85rem system-ui,sans-serif;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);border-bottom:2px solid var(--ink)}
+ul,ol{padding-left:1.4rem}
+li{margin:.25rem 0}
+.greek{font-family:"Latin Modern Math","STIX Two Math","Cambria Math","Times New Roman",serif;font-size:1.15em}
+.cells{display:grid;grid-template-columns:repeat(auto-fit,minmax(9rem,1fr));gap:.5rem;margin:1rem 0}
+.cells div{border:1px solid var(--rule);border-radius:6px;padding:.5rem .7rem;font-size:.92rem}
+.cells code{display:block;margin-bottom:.2rem}
+footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--rule);color:var(--muted);font:.85rem system-ui,sans-serif}
+@media print{
+  @page{size:A4;margin:16mm 18mm}
+  body{font-size:11pt}
+  main{max-width:none;padding:0}
+  h2,h3{break-after:avoid}
+  pre,table,.callout,.math,.cells{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<main>
+
+<header class="title">
+  <h1>Module III: Typesetting Mathematics</h1>
+  <div class="meta">Study Notes &middot; MAT5FS112 &middot; Syllabus units 8&ndash;11</div>
+</header>
+
+<nav class="toc">
+  <strong>Contents</strong>
+  <ol>
+    <li><a href="#basic">Basic mathematical equations</a></li>
+    <li><a href="#groups">Groups of equations and numbering</a></li>
+    <li><a href="#matrices">Matrices, dots, delimiters and affixed symbols</a></li>
+    <li><a href="#symbols">Operators, relations and symbols</a></li>
+    <li><a href="#worked">A worked example combining the tools</a></li>
+  </ol>
+</nav>
+
+<h2 id="basic">1. Basic mathematical equations</h2>
+
+<h3>1.1 Inline and displayed</h3>
+<p>Put maths between single <code>$</code> signs to keep it in the sentence: the area is <span class="inline-m">A = &pi;r<sup>2</sup></span>. Use <code>\[ ... \]</code> (or the <code>equation*</code> environment) for a centred display:</p>
+
+<pre><code>$A = \pi r^2$
+
+\[
+  \int_0^1 x^2\,dx = \frac{1}{3}.
+\]</code></pre>
+
+<div class="math">
+  <span class="row">&int;<sub>0</sub><sup>1</sup> x<sup>2</sup> dx = <span class="frac"><span>1</span><span>3</span></span>.</span>
+</div>
+
+<h3>1.2 Numbered equations and labels</h3>
+<p>The <code>equation</code> environment numbers the formula. A <code>\label</code> lets you refer to it with <code>\eqref</code>:</p>
+
+<pre><code>\begin{equation}
+  E = mc^2 \label{eq:einstein}
+\end{equation}
+Equation~\eqref{eq:einstein} is the mass--energy relation.</code></pre>
+
+<div class="math"><span class="row">E = mc<sup>2</sup> <span class="tag">(1)</span></span></div>
+
+<p>Equation (1) is the mass&ndash;energy relation.</p>
+
+<h3>1.3 Scripts, fractions and roots</h3>
+<pre><code>x^{2}          x_{i}          x_{i}^{2}       % superscript, subscript
+\frac{a+b}{c}  \sqrt{x}       \sqrt[3]{x}     % fraction, roots
+\binom{n}{k}                                  % binomial coefficient</code></pre>
+
+<p>Rendered: <span class="inline-m">x<sup>2</sup></span>, <span class="inline-m">x<sub>i</sub></span>, <span class="inline-m">x<sub>i</sub><sup>2</sup></span>, <span class="inline-m">(a+b)/c</span>, <span class="inline-m">&radic;x</span>, <span class="inline-m">&#8731;x</span>, <span class="inline-m">C(n,k)</span>.</p>
+
+<div class="callout"><strong>Braces group symbols.</strong> Without them, only the next character is affected: <code>x^12</code> gives <span class="inline-m">x<sup>1</sup>2</span>, while <code>x^{12}</code> gives <span class="inline-m">x<sup>12</sup></span>.</div>
+
+<h2 id="groups">2. Groups of equations and numbering</h2>
+
+<p><code>align</code> lines up several equations at the <code>&amp;</code> character. Each row ends with <code>\\</code>. <code>align</code> numbers every row; the starred version <code>align*</code> numbers none.</p>
+
+<pre><code>\begin{align}
+  (a+b)^2 &amp;= a^2 + 2ab + b^2 \label{eq:sq} \\
+  (a-b)^2 &amp;= a^2 - 2ab + b^2 \nonumber
+\end{align}</code></pre>
+
+<div class="math">
+  <span class="row">(a+b)<sup>2</sup> = a<sup>2</sup> + 2ab + b<sup>2</sup> <span class="tag">(2)</span></span>
+  <span class="row">(a&minus;b)<sup>2</sup> = a<sup>2</sup> &minus; 2ab + b<sup>2</sup></span>
+</div>
+
+<p>Row (2) is numbered and the second row is not, because <code>\nonumber</code> suppresses its number. A single row with a custom label uses <code>\tag{name}</code>:</p>
+
+<pre><code>\begin{equation}
+  \sin^2\theta + \cos^2\theta = 1 \tag{$\star$}
+\end{equation}</code></pre>
+
+<div class="math"><span class="row">sin<sup>2</sup>&theta; + cos<sup>2</sup>&theta; = 1 <span class="tag">(&#9733;)</span></span></div>
+
+<h2 id="matrices">3. Matrices, dots, delimiters and affixed symbols</h2>
+
+<h3>3.1 Matrices</h3>
+<p>Inside a display, the <code>pmatrix</code> (round brackets), <code>bmatrix</code> (square), <code>vmatrix</code> (determinant bars) and <code>Bmatrix</code> (curly braces) environments set matrices. Rows use <code>\\</code> and columns use <code>&amp;</code>.</p>
+
+<pre><code>\[
+  A = \begin{pmatrix} 1 &amp; 2 &amp; 3 \\ 0 &amp; -1 &amp; 4 \\ 5 &amp; 6 &amp; 0 \end{pmatrix},
+  \qquad
+  \det\begin{vmatrix} a &amp; b \\ c &amp; d \end{vmatrix} = ad - bc.
+\]</code></pre>
+
+<div class="math">
+  <span class="row">
+    <i>A</i> = <span class="matrix paren"><span>1&nbsp;&nbsp;&nbsp;2&nbsp;&nbsp;&nbsp;3</span><span>0&nbsp;&nbsp;&minus;1&nbsp;&nbsp;&nbsp;4</span><span>5&nbsp;&nbsp;&nbsp;6&nbsp;&nbsp;&nbsp;0</span></span>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    det <span class="matrix"><span>a&nbsp;&nbsp;b</span><span>c&nbsp;&nbsp;d</span></span> = ad &minus; bc.
+  </span>
+</div>
+
+<h3>3.2 Dots</h3>
+<pre><code>\[
+  x_1, x_2, \ldots, x_n \qquad
+  a_{11} + \cdots + a_{nn} \qquad
+  \vdots \quad \ddots
+\]</code></pre>
+
+<p>Use <code>\ldots</code> on the baseline, <code>\cdots</code> for centred dots between operators, <code>\vdots</code> and <code>\ddots</code> for vertical and diagonal dots.</p>
+
+<div class="math"><span class="row">x<sub>1</sub>, x<sub>2</sub>, &hellip;, x<sub>n</sub> &nbsp;&nbsp; a<sub>11</sub> + &sdot;&sdot;&sdot; + a<sub>nn</sub> &nbsp;&nbsp; &vellip; &nbsp; &#8945;</span></div>
+
+<h3>3.3 Delimiters</h3>
+<p>Brackets that grow with their content use <code>\left</code> and <code>\right</code>:</p>
+<pre><code>\[
+  \left( \frac{x}{y} \right)^{2} \qquad
+  \left[ \sum_{k=1}^{n} k \right] \qquad
+  \left\{ x \in \mathbb{R} : x > 0 \right\}
+\]</code></pre>
+
+<div class="math"><span class="row"><span class="big">(</span><span class="frac"><span>x</span><span>y</span></span><span class="big">)</span><sup>2</sup> &nbsp;&nbsp; <span class="big">[</span>&sum;<sub>k=1</sub><sup>n</sup> k<span class="big">]</span> &nbsp;&nbsp; <span class="big">{</span> x &isin; &#8477; : x &gt; 0 <span class="big">}</span></span></div>
+
+<p>Each <code>\left</code> needs a matching <code>\right</code>; use <code>\right.</code> when you want an invisible closing delimiter.</p>
+
+<h3>3.4 Affixed symbols (accents and decorations)</h3>
+<pre><code>\[
+  \hat{x} \quad \bar{x} \quad \vec{v} \quad \dot{x} \quad \ddot{x}
+  \quad \tilde{a} \quad \overline{AB} \quad \underline{ab}
+  \quad \overbrace{a+b+c}^{\text{sum}} \quad \underbrace{x+y}_{\text{pair}}
+\]</code></pre>
+
+<div class="math"><span class="row">x&#770; &nbsp; x&#772; &nbsp; v&#8407; &nbsp; ẋ &nbsp; ẍ &nbsp; ã &nbsp; A&#773;B&#773; &nbsp; a&#817;b&#817;</span></div>
+
+<h2 id="symbols">4. Operators, relations and symbols</h2>
+
+<h3>4.1 Greek letters</h3>
+<p>Lowercase letters are the name with a backslash: <code>\alpha</code>, <code>\beta</code>, <code>\gamma</code>, <code>\theta</code>, <code>\lambda</code>, <code>\pi</code>, <code>\sigma</code>, <code>\omega</code>. Capital letters are <code>\Gamma</code>, <code>\Delta</code>, <code>\Theta</code>, <code>\Lambda</code>, <code>\Sigma</code>, <code>\Omega</code>.</p>
+<p>Rendered: <span class="greek">&alpha;, &beta;, &gamma;, &theta;, &lambda;, &pi;, &sigma;, &omega;</span> and <span class="greek">&Gamma;, &Delta;, &Theta;, &Omega;</span>.</p>
+
+<h3>4.2 Big operators and limits</h3>
+<pre><code>\[
+  \sum_{n=1}^{\infty} \frac{1}{n^2} = \frac{\pi^2}{6}, \qquad
+  \prod_{i=1}^{n} i = n!, \qquad
+  \lim_{x \to 0} \frac{\sin x}{x} = 1
+\]</code></pre>
+
+<div class="math"><span class="row">&sum;<sub>n=1</sub><sup>&infin;</sup> 1/n<sup>2</sup> = &pi;<sup>2</sup>/6, &nbsp;&nbsp; &prod;<sub>i=1</sub><sup>n</sup> i = n!, &nbsp;&nbsp; lim<sub>x&rarr;0</sub> sin x / x = 1</span></div>
+
+<h3>4.3 Named functions</h3>
+<p>Use <code>\sin</code>, <code>\cos</code>, <code>\log</code>, <code>\det</code> and <code>\max</code> rather than italic letters. For a name that LaTeX does not provide, use <code>\operatorname{name}</code> (from <code>amsmath</code>): <code>$\operatorname{sech}\,x = \dfrac{1}{\cosh x}$</code>.</p>
+
+<h3>4.4 Relations, arrows and set notation</h3>
+<pre><code>\[
+  x \le y, \quad x \ne y, \quad x \approx y, \quad
+  f\colon A \to B, \quad x \mapsto x^2
+\]
+\[
+  a \in A, \quad A \subseteq B, \quad A \cup B, \quad A \cap B, \quad
+  \forall\, \varepsilon > 0\ \exists\, \delta > 0
+\]</code></pre>
+
+<div class="math"><span class="row">x &le; y, &nbsp; x &ne; y, &nbsp; x &asymp; y, &nbsp; f: A &rarr; B, &nbsp; x &#8614; x<sup>2</sup></span>
+<span class="row">a &isin; A, &nbsp; A &sube; B, &nbsp; A &cup; B, &nbsp; A &cap; B, &nbsp; &forall; &epsilon; &gt; 0 &exist; &delta; &gt; 0</span></div>
+
+<h3>4.5 Text and font inside maths</h3>
+<pre><code>$\text{if } x &gt; 0$        % text inside maths, uses the document font
+$\mathrm{d}x$             % upright d for differentials
+$\mathbf{v}$              % bold vector
+$\mathbb{R}, \mathbb{N}$  % blackboard bold (amssymb)
+$\mathcal{L}$             % calligraphic</code></pre>
+
+<p>Rendered: <span class="inline-m">if x &gt; 0</span>, <span class="inline-m">&int; f(x) d<i>x</i></span> (upright <i>d</i>), <span class="inline-m"><b>v</b></span>, <span class="inline-m">&#8477;, &#8469;</span>, <span class="inline-m">&#8466;</span>.</p>
+
+<div class="cells">
+  <div><code>\text{}</code> text inside maths</div>
+  <div><code>\mathrm{}</code> upright letters</div>
+  <div><code>\mathbf{}</code> bold</div>
+  <div><code>\mathbb{}</code> blackboard bold</div>
+  <div><code>\mathcal{}</code> calligraphic</div>
+</div>
+
+<h2 id="worked">5. A worked example combining the tools</h2>
+
+<p>Let <span class="inline-m"><i>A</i></span> be a 2 &times; 2 matrix with eigenvalues <span class="inline-m">&lambda;<sub>1</sub>, &lambda;<sub>2</sub></span>. Then</p>
+
+<pre><code>\begin{align*}
+  \operatorname{tr}(A) &amp;= \sum_{i=1}^{2} \lambda_i, \\
+  \det(A)              &amp;= \prod_{i=1}^{2} \lambda_i .
+\end{align*}</code></pre>
+
+<div class="math">
+  <span class="row">tr(A) = &sum;<sub>i=1</sub><sup>2</sup> &lambda;<sub>i</sub>,</span>
+  <span class="row">det(A) = &prod;<sub>i=1</sub><sup>2</sup> &lambda;<sub>i</sub>.</span>
+</div>
+
+<footer>MAT5FS112 &middot; Module III study notes</footer>
+
+</main>
+</body>
+</html>

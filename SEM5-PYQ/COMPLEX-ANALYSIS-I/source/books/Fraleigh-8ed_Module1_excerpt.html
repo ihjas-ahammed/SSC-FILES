@@ -1,0 +1,983 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fraleigh, A First Course in Abstract Algebra (8th ed.), Module 1 excerpt</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+  :root {
+    --page-bg: #d9d9d4;
+    --paper: #fdfdfb;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --page-bg: #2b2b2b;
+      --paper: #f4f3ee;
+      --ink: #111;
+      --rule: #444;
+      --note: #555;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page-bg: #2b2b2b;
+    --paper: #f4f3ee;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  body {
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--ink);
+    font-family: "Times New Roman", Times, "Liberation Serif", serif;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .sheet {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 12mm auto;
+    padding: 14mm 18mm 16mm;
+    box-sizing: border-box;
+    background: var(--paper);
+    box-shadow: 0 1px 6px rgba(0,0,0,.25);
+    position: relative;
+  }
+  .sheet + .sheet { margin-top: 0; }
+  .hdr {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: start;
+    font-size: 14px;
+  }
+  .code { font-size: 22px; font-weight: bold; letter-spacing: .5px; }
+  .pages { text-align: center; padding-top: 14px; }
+  .name { text-align: right; line-height: 2; }
+  .title { text-align: center; margin-top: 22px; }
+  .title .exam { font-size: 19px; font-weight: bold; letter-spacing: .3px; }
+  .title .sch { margin-top: 2px; }
+  .title .course { margin-top: 10px; font-size: 16px; }
+  .title .subject { margin-top: 6px; font-size: 16px; font-weight: bold; }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 16px;
+    font-size: 15px;
+  }
+  .sec { margin-top: 14px; }
+  .sec-head {
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    font-weight: bold;
+  }
+  .sec-head .num { font-weight: bold; }
+  .sec-head .body { font-weight: normal; }
+  .sec-head .body b { font-weight: bold; }
+  .sec-head .body i { font-style: italic; }
+  .sec-total { text-align: right; font-weight: normal; margin-top: 4px; }
+  .qs { margin-top: 6px; }
+  .q {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    margin-bottom: 7px;
+  }
+  .q .n { text-align: right; padding-right: 10px; }
+  .q p { margin: 0; }
+  .sub { margin-left: 22px; }
+  .cut { color: var(--note); }
+  .turn { text-align: right; font-weight: bold; margin-top: 26px; }
+  .fig {
+    display: block;
+    margin: 8px auto 2px 36px;
+    width: 230px;
+    height: auto;
+  }
+  .fig-cap { margin-left: 36px; font-size: 13px; color: var(--note); font-style: italic; }
+  .foot-note {
+    margin-top: 26px;
+    border-top: 1px solid var(--rule);
+    padding-top: 6px;
+    font-size: 12px;
+    color: var(--note);
+  }
+  .pno { text-align: center; font-size: 15px; margin-bottom: 4px; }
+  .pno-hdr { position: absolute; top: 10mm; right: 18mm; font-weight: bold; font-size: 14px; }
+  @media print {
+    @page { size: A4; margin: 0; }
+    body { background: #fff; }
+    .sheet { margin: 0; box-shadow: none; width: 210mm; height: 297mm; min-height: 0; page-break-after: always; }
+    .sheet:last-child { page-break-after: auto; }
+  }
+  @media (max-width: 720px) {
+    .sheet { width: auto; margin: 0; padding: 14px 16px; min-height: 0; }
+    .hdr { grid-template-columns: 1fr; gap: 6px; }
+    .name { text-align: left; }
+    .pages { text-align: left; padding-top: 0; }
+  }
+</style>
+<style>
+  .sheet.book { height: auto; min-height: 297mm; text-align: justify; hyphens: auto; }
+  .sheet.book p { margin: 6px 0; }
+  .rh { display: flex; justify-content: space-between; font-size: 12px; color: var(--note);
+        border-bottom: 1px solid var(--rule); padding-bottom: 3px; margin-bottom: 12px; }
+  .chap { display: flex; background: #8a8a86; color: #fff; margin: 4px 0 16px; }
+  .chap .cn { background: #b4b4ae; padding: 10px 18px; font-size: 26px; }
+  .chap .ct { padding: 12px 16px; font-size: 22px; font-weight: bold; }
+  h2.sec { font-size: 20px; margin: 18px 0 8px; border-bottom: 2px solid var(--rule); padding-bottom: 3px; }
+  h3.sub { font-size: 16px; margin: 14px 0 6px; border-bottom: 1px solid var(--rule); padding-bottom: 2px; }
+  .eq { margin: 10px 0; text-align: center; overflow: visible; }
+  mjx-container[display="true"], mjx-container { overflow: visible !important; max-width: 100%; }
+  .sheet.book, .sheet.book .eq { overflow: visible; }
+  .eq.boxed { border: 1px solid var(--ink); display: block; padding: 4px 8px; }
+  .prob { background: #ecece7; border: 1px solid var(--rule); padding: 8px 12px; margin: 10px 0; text-align: left; }
+  .prob p { margin: 5px 0; }
+  .ex, .ex-cont { border: 1px solid var(--rule); padding: 8px 12px; margin: 10px 0; text-align: left; }
+  .ex p, .ex-cont p { margin: 5px 0; }
+  .figbox { border: 1px dashed var(--rule); padding: 10px; color: var(--note); font-size: 13px; text-align: center; margin: 8px 0; font-style: italic; }
+  figure { margin: 8px 0; text-align: center; }
+  figure > svg { width: 100%; max-width: 230px; height: auto; }
+  figure.single > svg { max-width: 260px; }
+  figure figcaption { font-size: 12px; font-style: italic; color: var(--note); }
+  .figrow { display: flex; flex-wrap: wrap; justify-content: space-around; gap: 8px; }
+  .figrow > figure { flex: 1 1 180px; max-width: 240px; }
+  .fn { font-size: 12.5px; color: var(--note); margin: 6px 0; text-align: left; }
+  .cont { font-size: 12.5px; color: var(--note); font-style: italic; }
+  .gapnote { font-size: 13px; color: var(--note); font-style: italic; border-left: 3px solid var(--rule); padding: 2px 8px; margin: 4px 0 10px; }
+  .flag { color: #8a1c1c; font-weight: bold; }
+  .answer { font-size: 14px; }
+  .tbl { border-collapse: collapse; width: 100%; font-size: 13px; margin: 6px 0; }
+  .tbl td, .tbl th { border: 1px solid var(--rule); padding: 3px 6px; text-align: center; }
+  .tbl th { background: #ebebe6; }
+  .tblcap { font-size: 13px; margin-top: 8px; text-align: left; }
+  .pno { text-align: center; font-size: 14px; margin-top: 14px; }
+  .intro p, .intro li { font-size: 14px; text-align: left; }
+  .intro table { border-collapse: collapse; width: 100%; font-size: 14px; margin: 6px 0; }
+  .intro td, .intro th { border: 1px solid var(--rule); padding: 4px 8px; text-align: left; }
+  @media print {
+    .sheet.book { height: auto !important; min-height: 0 !important; page-break-after: always; }
+  }
+  @media (max-width: 720px) {
+    .sheet.book .eq { overflow-x: auto; max-width: 100%; }
+    .sheet.book mjx-container[display="true"] { font-size: 85% !important; }
+    .sheet.book .figrow > figure { flex: 1 1 100%; max-width: 100%; }
+    .sheet.book { padding-left: 14px; padding-right: 14px; }
+  }
+</style>
+<style>
+  /* additions for the Fraleigh excerpt */
+  .sheet.book .rh span:first-child { font-style: normal; }
+  .num { font-weight: bold; margin-right: 4px; }
+  .secno { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--note); margin-right: 8px; }
+  .sec-rule { border-top: 1px solid var(--rule); margin: 14px 0 6px; }
+  .axiom { margin: 6px 0 2px; }
+  .toc-part { margin: 14px 0 18px; font-size: 14px; line-height: 1.6; }
+  .chap .cn { font-weight: bold; margin-right: 12px; letter-spacing: .1em; }
+  .tbl { border-collapse: collapse; margin: 8px auto 10px; font-size: 14px; }
+  .tbl th, .tbl td { border: 1px solid var(--rule); padding: 3px 9px; text-align: center; min-width: 26px; }
+  .tbl th { font-weight: bold; background: rgba(0,0,0,.03); }
+  .tbl.small th, .tbl.small td { padding: 2px 7px; font-size: 13px; }
+  .tbl.center { margin-left: auto; margin-right: auto; }
+  .tbl.float-r { float: right; margin: 4px 0 8px 18px; }
+  .tbl-row { display: flex; flex-wrap: wrap; gap: 18px; justify-content: center; align-items: flex-start; margin: 8px 0; }
+  .tbl caption { caption-side: top; text-align: center; margin-bottom: 4px; font-size: 13px; }
+  .exl { margin: 6px 0 6px 26px; padding-left: 4px; }
+  .exl > li { margin-bottom: 6px; }
+  .exl-plain, .conds { margin: 6px 0 6px 26px; }
+  ol.alpha { list-style: lower-alpha; margin: 4px 0 4px 22px; }
+  ol.tf { list-style: none; margin: 6px 0 6px 6px; }
+  ol.tf > li::before { content: "____ "; }
+  ul.bul, ul.plain { margin: 4px 0 4px 24px; }
+  ul.plain { list-style: none; margin-left: 12px; }
+  .indent { text-indent: 22px; }
+  .center { text-align: center; }
+  .hbox { border: 2px double var(--rule); padding: 8px 12px 10px; margin: 12px 0 14px; clear: both; }
+  .hbox-title { font-weight: bold; margin-bottom: 4px; }
+  .hbox-cols { columns: 2; column-gap: 22px; font-size: 14px; line-height: 1.42; text-align: justify; }
+  .hbox-cols p { margin: 0 0 6px; }
+  .fn { font-size: 12px; color: var(--note); border-top: 1px solid var(--rule); margin-top: 18px; padding-top: 6px; }
+  sup { font-size: 75%; }
+  @media (max-width: 720px) { .hbox-cols { columns: 1; } }
+</style>
+</head>
+<body>
+<div class="sheet book intro" id="contents">
+  <div class="rh"><span>Contents</span><span>Fraleigh, <i>A First Course in Abstract Algebra</i> (8th ed.)</span></div>
+  <h2 class="sec">Module 1 excerpt, page by page</h2>
+  <p>This file converts a 21-page excerpt, PDF pages 28&ndash;48 of the 8th edition copy on disk (<i>A First Course in Abstract Algebra</i>, John B. Fraleigh, 449 PDF pages). The printed page is the PDF page minus 17 (PDF 28 = printed 11; PDF 48 = printed 31). Each excerpt page is one sheet, headed with the printed page number.</p>
+  <p><b>Edition warning.</b> The syllabus (MAT5CJ302) names the <b>7th edition</b> (Pearson, 2003) and cites its section numbers (2.1&ndash;2.25, 3.1&ndash;3.17, 4.1 on). The file on disk is the <b>8th edition</b>, which renumbers the sections. The 8th edition&rsquo;s own front matter says Section 1 is former Section 2, Section 2 is former Section 4, and Section 3 is former Section 1. Section 16 is former Section 3 (isomorphism theorems). The syllabus item numbers below are therefore matched by content, not by number. Check the 7th edition before relying on any printed number in the notes.</p>
+  <table>
+    <tr><th>Excerpt pages</th><th>Printed pages</th><th>Content (8th edition)</th></tr>
+    <tr><td>1</td><td>11</td><td>Part I opener, Section 1 begins (Binary Operations, 1.1&ndash;1.2)</td></tr>
+    <tr><td>2&ndash;5</td><td>12&ndash;15</td><td>Section 1: 1.3&ndash;1.23 (operations, closure, commutative, associative, identity, tables)</td></tr>
+    <tr><td>6&ndash;7</td><td>16&ndash;17</td><td>Section 1: 1.24&ndash;1.30 (tables, words of warning); Exercises 1 begin</td></tr>
+    <tr><td>8&ndash;9</td><td>18&ndash;19</td><td>Exercises 1 (printed 21&ndash;34 on p. 18, 35&ndash;44 on p. 19); Section 2 Groups begins on p. 19</td></tr>
+    <tr><td>10&ndash;13</td><td>20&ndash;23</td><td>Section 2: definition of a group (2.1), examples 2.2&ndash;2.15, first elementary properties</td></tr>
+    <tr><td>14&ndash;17</td><td>24&ndash;27</td><td>Section 2: cancellation, uniqueness, linear equations, corollary 2.19, one-sided axioms, group isomorphisms (2.20&ndash;2.25)</td></tr>
+    <tr><td>18&ndash;21</td><td>28&ndash;31</td><td>Section 2 end; Exercises 2 (1&ndash;45) with Table 2.29 and the Proof synopsis</td></tr>
+  </table>
+  <p><b>Where the sections fall</b> (excerpt page = printed page &minus; 10):</p>
+  <table>
+    <tr><th>8th-ed section</th><th>Printed pages</th><th>Excerpt pages</th><th>Syllabus item (7th ed.)</th></tr>
+    <tr><td>Section 1 Binary Operations, 1.1&ndash;1.12</td><td>11&ndash;13</td><td>1&ndash;3</td><td>1 (2.1&ndash;2.10)</td></tr>
+    <tr><td>Section 1, 1.13&ndash;1.30 (identity, inverses, tables, warnings)</td><td>14&ndash;16</td><td>4&ndash;6</td><td>2 (2.11&ndash;2.25)</td></tr>
+    <tr><td>Section 1 Exercises 1 (1&ndash;44)</td><td>17&ndash;19</td><td>7&ndash;9</td><td>1&ndash;2 (exercises)</td></tr>
+    <tr><td>Section 2 Groups, 2.1&ndash;2.14 (definition, examples)</td><td>19&ndash;24</td><td>9&ndash;14</td><td>5 (4.1&ndash;4.14)</td></tr>
+    <tr><td>Section 2, 2.15&ndash;2.19 (elementary properties)</td><td>23&ndash;25</td><td>13&ndash;15</td><td>6 (4.15 on)</td></tr>
+    <tr><td>Section 2, 2.20&ndash;2.25 (group tables, group isomorphisms)</td><td>25&ndash;27</td><td>15&ndash;17</td><td>3&ndash;4 (3.1&ndash;3.17, by content only; see warning)</td></tr>
+    <tr><td>Section 2 Exercises 2 (1&ndash;45) and Proof synopsis</td><td>28&ndash;31</td><td>18&ndash;21</td><td>5&ndash;6 (exercises)</td></tr>
+  </table>
+  <p><b>Scope.</b> Syllabus items 1&ndash;6 are covered by 8th-edition Sections 1 and 2 (printed 11&ndash;31) with their exercises. Section 1 is kept as far as printed page 19, which opens Section 2. The 7th-edition &ldquo;Isomorphic Binary Structures&rdquo; (syllabus 3.1&ndash;3.17) has no separate section in the 8th edition. Its content is only partly covered by the group-isomorphism material of Section 2 (printed 25&ndash;27), so items 3&ndash;4 are <b>partly covered</b>.</p>
+  <p><b>Not in this excerpt:</b> printed pages 1&ndash;10 (front matter, preface, contents); Section 0 (Sets and Relations); Section 3 Abelian Examples onward (printed 32 on); the Historical Notes are kept where they fall.</p>
+  <p><b>Conventions:</b></p>
+  <ul>
+    <li>Numbers are the book&rsquo;s own (1.1, 2.16, Table 2.21, Exercise 33 and so on).</li>
+    <li>Exercises are kept in full, with the printed numbering. The exercises for Section 1 run from printed page 17 and are finished on page 19.</li>
+    <li>Tables are HTML tables with MathJax entries. Tables printed with blanks keep the blanks. Printed &ldquo;?&rdquo; marks are kept.</li>
+    <li>Historical notes are in boxes (<i>Historical Note</i>), as printed.</li>
+    <li>Figures: the isometry example (2.13) and the matrix examples are described in the text. No figure is redrawn in this excerpt.</li>
+    <li>Maths is in MathJax. Notation is kept as printed.</li>
+  </ul>
+  <p>This is a personal study copy. The text is &copy; the publisher; do not redistribute.</p>
+  <div class="pno">i</div>
+</div>
+<div class="sheet book" id="pdf-p28">
+  <div class="rh"><span>Part I &middot; Groups and Subgroups</span><span>11</span></div>
+  <div class="chap"><span class="cn">PART I</span><span class="ct">Groups and Subgroups</span></div>
+  <div class="toc-part">
+    <div>Section 1 &nbsp; Binary Operations</div>
+    <div>Section 2 &nbsp; Groups</div>
+    <div>Section 3 &nbsp; Abelian Examples</div>
+    <div>Section 4 &nbsp; Nonabelian Examples</div>
+    <div>Section 5 &nbsp; Subgroups</div>
+    <div>Section 6 &nbsp; Cyclic Groups</div>
+    <div>Section 7 &nbsp; Generating Sets and Cayley Digraphs</div>
+  </div>
+  <h2 class="sec"><span class="secno">Section 1</span> Binary Operations</h2>
+  <p>The transition from elementary school arithmetic to high school algebra involves using letters to represent unknown numbers and studying the basic properties of equations and expressions. The two main binary operations used in high school algebra are addition and multiplication. Abstract algebra takes the next step in abstraction. Not only are the variables unknown, but the actual operations involved may be unknown! We will study sets that have binary operations with properties similar to those of addition and multiplication of numbers. In Part I, our goal will be to develop some of the basic properties of a group. In this section we start our investigation of groups by defining binary operations, naming properties possessed by some binary operations, and giving examples.</p>
+  <h3 class="sub">Definitions and Examples</h3>
+  <p>The first step in our journey to understand groups is to give a precise mathematical definition of a binary operation that generalizes the familiar addition and multiplication of numbers. Recall that for any set $S$, Definition 0.4 defines the set $S \times S$ to contain all ordered pairs $(a, b)$ with $a, b \in S$.</p>
+  <p><span class="num">1.1 Definition</span> A <b>binary operation</b> $\ast$ on a set $S$ is a function mapping $S \times S$ into $S$. For each $(a, b) \in S \times S$, we will denote the element $\ast((a, b))$ of $S$ by $a \ast b$.</p>
+  <p>Intuitively, we may regard a binary operation $\ast$ on $S$ as assigning, to each ordered pair $(a, b)$ of elements of $S$, an element $a \ast b$ of $S$.</p>
+  <p><i>Binary</i> refers to the fact that we are mapping <i>pairs</i> of elements from $S$ into $S$. We could also define a ternary operation as a function mapping triples of elements of $S$ to $S$, but we will have no need for this type of operation. Throughout this book we will often drop the term binary and use the term operation to mean binary operation.</p>
+  <p><span class="num">1.2 Example</span> Our usual addition $+$ is an operation on the set $\mathbb{R}$. Our usual multiplication $\cdot$ is a different operation on $\mathbb{R}$. In this example, we could replace $\mathbb{R}$ by any of the sets $\mathbb{C}, \mathbb{Z}, \mathbb{R}^+$, or $\mathbb{Z}^+$. &#9650;</p>
+  <div class="pno">11</div>
+</div>
+
+<div class="sheet book" id="pdf-p29">
+  <div class="rh"><span>Part I &middot; Groups and Subgroups</span><span>12</span></div>
+  <p>Note that we require an operation on a set $S$ to be defined for <i>every</i> ordered pair $(a, b)$ of elements from $S$.</p>
+  <p><span class="num">1.3 Example</span> Let $M(\mathbb{R})$ be the set of all matrices<sup>&dagger;</sup> with real entries. The usual matrix addition $+$ is <i>not</i> an operation on this set since $A + B$ is not defined for an ordered pair $(A, B)$ of matrices having different numbers of rows or of columns. &#9650;</p>
+  <p>Sometimes an operation on $S$ provides an operation on a subset $H$ of $S$ also. We make a formal definition.</p>
+  <p><span class="num">1.4 Definition</span> Let $\ast$ be an operation on $S$ and let $H$ be a subset of $S$. The subset $H$ is <b>closed under</b> $\ast$ if for all $a, b \in H$ we also have $a \ast b \in H$. In this case, the operation on $H$ given by restricting $\ast$ to $H$ is the <b>induced operation</b> of $\ast$ on $H$. &#9632;</p>
+  <p>By our very definition of an operation $\ast$ on $S$, the set $S$ is closed under $\ast$, but a subset may not be, as the following example shows.</p>
+  <p><span class="num">1.5 Example</span> Our usual addition $+$ on the set $\mathbb{R}$ of real numbers does not induce an operation on the set $\mathbb{R}^*$ of nonzero real numbers because $2 \in \mathbb{R}^*$ and $-2 \in \mathbb{R}^*$, but $2 + (-2) = 0$ and $0 \notin \mathbb{R}^*$. Thus $\mathbb{R}^*$ is not closed under $+$. &#9650;</p>
+  <p>In our text, we will often have occasion to decide whether a subset $H$ of $S$ is closed under a binary operation $\ast$ on $S$. To arrive at a correct conclusion, <i>we have to know what it means for an element to be in $H$</i>, and to use this fact. Students often have trouble here. Be sure you understand the next example.</p>
+  <p><span class="num">1.6 Example</span> Let $+$ and $\cdot$ be the usual operations of addition and multiplication on the set $\mathbb{Z}$, and let $H = \{n^2 \mid n \in \mathbb{Z}^+\}$. Determine whether $H$ is closed under (a) addition and (b) multiplication.</p>
+  <p>For part (a), we need only observe that $1^2 = 1$ and $2^2 = 4$ are in $H$, but that $1 + 4 = 5$ and $5 \notin H$. Thus $H$ is not closed under addition.</p>
+  <p>For part (b), suppose that $r \in H$ and $s \in H$. Using what it means for $r$ and $s$ to be in $H$, we see that there must be integers $n$ and $m$ in $\mathbb{Z}^+$ such that $r = n^2$ and $s = m^2$. Consequently, $rs = n^2 m^2 = (nm)^2$. By the characterization of elements in $H$ and the fact that $nm \in \mathbb{Z}^+$, this means that $rs \in H$, so $H$ is closed under multiplication. &#9650;</p>
+  <p><span class="num">1.7 Example</span> Let $F$ be the set of all real-valued functions $f$ having as domain the set $\mathbb{R}$ of real numbers. We are familiar from calculus with the operations $+$, $-$, $\cdot$, and $\circ$ on $F$. Namely, for each ordered pair $(f, g)$ of functions in $F$, we define for each $x \in \mathbb{R}$</p>
+  <div class="eq">$$\begin{array}{rl}
+f + g &\text{ by } (f + g)(x) = f(x) + g(x) \qquad \text{addition,}\\
+f - g &\text{ by } (f - g)(x) = f(x) - g(x) \qquad \text{subtraction,}\\
+f \cdot g &\text{ by } (f \cdot g)(x) = f(x)g(x) \qquad \text{multiplication, and}\\
+f \circ g &\text{ by } (f \circ g)(x) = f(g(x)) \qquad \text{composition.}
+\end{array}$$</div>
+  <p>All four of these functions are again real valued with domain $\mathbb{R}$, so $F$ is closed under all four operations $+$, $-$, $\cdot$, and $\circ$. &#9650;</p>
+  <p>The operations described in the examples above are very familiar to you. In this text, we want to <i>abstract</i> basic structural concepts from our familiar algebra. To emphasize this concept of <i>abstraction</i> from the familiar, we should illustrate these structural concepts with unfamiliar examples.</p>
+  <div class="fn"><sup>&dagger;</sup> Most students of abstract algebra have studied linear algebra and are familiar with matrices and matrix operations. For the benefit of those students, examples involving matrices are often given. The reader who is not familiar with matrices can either skip all references to them or turn to the Appendix at the back of the text, where there is a short summary.</div>
+  <div class="pno">12</div>
+</div>
+
+<div class="sheet book" id="pdf-p30">
+  <div class="rh"><span>Section 1 &middot; Binary Operations</span><span>13</span></div>
+  <p>size this concept of <i>abstraction</i> from the familiar, we should illustrate these structural concepts with unfamiliar examples. The most important method of describing a particular binary operation $\ast$ on a given set is to characterize the element $a \ast b$ assigned to each pair $(a, b)$ by some property defined in terms of $a$ and $b$.</p>
+  <p><span class="num">1.8 Example</span> On $\mathbb{Z}^+$, we define an operation $\ast$ by $a \ast b$ equals the smaller of $a$ and $b$, or the common value if $a = b$. Thus $2 \ast 11 = 2$; $15 \ast 10 = 10$; and $3 \ast 3 = 3$. &#9650;</p>
+  <p><span class="num">1.9 Example</span> On $\mathbb{Z}^+$, we define an operation $\ast'$ by $a \ast' b = a$. Thus $2 \ast' 3 = 2$; $25 \ast' 10 = 25$; and $5 \ast' 5 = 5$. &#9650;</p>
+  <p><span class="num">1.10 Example</span> On $\mathbb{Z}^+$, we define an operation $\ast''$ by $a \ast'' b = (a \ast b) + 2$, where $\ast$ is defined in Example 1.8. Thus $4 \ast'' 7 = 6$; $25 \ast'' 9 = 11$; and $6 \ast'' 6 = 8$. &#9650;</p>
+  <p>It may seem that these examples are of no importance, but in fact they are used millions of times each day. For example, consider the GPS navigational system installed in most cars and cell phones. It searches alternative driving routes, computes the travel time, and determines which route takes less time. The operation in Example 1.8 is programmed into GPS systems and it plays an essential role.</p>
+  <p>Examples 1.8 and 1.9 were chosen to demonstrate that an operation may or may not depend on the order of the given pair. Thus in Example 1.8, $a \ast b = b \ast a$ for all $a, b \in \mathbb{Z}^+$, and in Example 1.9 this is not the case, for $5 \ast' 7 = 5$ but $7 \ast' 5 = 7$.</p>
+  <p><span class="num">1.11 Definition</span> An operation $\ast$ on a set $S$ is <b>commutative</b> (if and only if) $a \ast b = b \ast a$ for all $a, b \in S$. &#9632;</p>
+  <p>As was pointed out in Section 0, it is customary in mathematics to omit the words <i>and only if</i> from a definition. Definitions are always understood to be if and only if statements. <i>Theorems are not always if and only if statements, and no such convention is ever used for theorems.</i></p>
+  <p>Now suppose we wish to consider an expression of the form $a \ast b \ast c$. A binary operation $\ast$ enables us to combine only two elements, and here we have three. The obvious attempts to combine the three elements are to form either $(a \ast b) \ast c$ or $a \ast (b \ast c)$. With $\ast$ defined as in Example 1.8, $(2 \ast 5) \ast 9$ is computed by $2 \ast 5 = 2$ and then $2 \ast 9 = 2$. Likewise, $2 \ast (5 \ast 9)$ is computed by $5 \ast 9 = 5$ and then $2 \ast 5 = 2$. Hence $(2 \ast 5) \ast 9 = 2 \ast (5 \ast 9)$, and it is not hard to see that for this $\ast$,</p>
+  <div class="eq">$$(a \ast b) \ast c = a \ast (b \ast c),$$</div>
+  <p>so there is no ambiguity in writing $a \ast b \ast c$. But for $\ast''$ of Example 1.10,</p>
+  <div class="eq">$$(2 \ast'' 5) \ast'' 9 = 4 \ast'' 9 = 6,$$</div>
+  <p>while</p>
+  <div class="eq">$$2 \ast'' (5 \ast'' 9) = 2 \ast'' 7 = 4.$$</div>
+  <p>Thus $(a \ast'' b) \ast'' c$ need not equal $a \ast'' (b \ast'' c)$, and the expression $a \ast'' b \ast'' c$ is ambiguous.</p>
+  <p><span class="num">1.12 Definition</span> An operation on a set $S$ is <b>associative</b> if $(a \ast b) \ast c = a \ast (b \ast c)$ for all $a, b, c \in S$. &#9632;</p>
+  <p>It can be shown that if $\ast$ is associative, then longer expressions such as $a \ast b \ast c \ast d$ are not ambiguous. Parentheses may be inserted in any fashion for purposes of computation; the final results of two such computations will be the same.</p>
+  <div class="pno">13</div>
+</div>
+
+<div class="sheet book" id="pdf-p31">
+  <div class="rh"><span>Part I &middot; Groups and Subgroups</span><span>14</span></div>
+  <p>Composition of functions mapping $\mathbb{R}$ into $\mathbb{R}$ was reviewed in Example 1.7. For any set $S$ and any functions $f$ and $g$ mapping $S$ into $S$, we similarly define the composition $f \circ g$ of $g$ followed by $f$ as the function mapping $S$ into $S$ such that $(f \circ g)(x) = f(g(x))$ for all $x \in S$. Some of the most important binary operations we consider are defined using composition of functions. It is important to know that function composition is always associative whenever it is defined.</p>
+  <p><span class="num">1.13 Theorem</span> <b>(Associativity of Composition)</b> Let $S$ be a set and let $f$, $g$, and $h$ be functions mapping $S$ into $S$. Then $f \circ (g \circ h) = (f \circ g) \circ h$.</p>
+  <p><i>Proof.</i> To show these two functions are equal, we must show that they give the same assignment to each $x \in S$. Computing we find that</p>
+  <div class="eq">$$(f \circ (g \circ h))(x) = f((g \circ h)(x)) = f(g(h(x)))$$</div>
+  <p>and</p>
+  <div class="eq">$$((f \circ g) \circ h)(x) = (f \circ g)(h(x)) = f(g(h(x))),$$</div>
+  <p>so the same element $f(g(h(x)))$ of $S$ is indeed obtained. &#9670;</p>
+  <p>As an example of using Theorem 1.13 to save work, recall that it is a fairly painful exercise in summation notation to show that multiplication of $n \times n$ matrices is an associative operation. If, in a linear algebra course, we first show that there is a one-to-one correspondence between matrices and linear transformations and that multiplication of matrices corresponds to the composition of the linear transformations (functions), we obtain this associativity at once from Theorem 1.13.</p>
+  <p>There is another property that an operation on a set may have that is of particular importance in algebra. The numbers 0 and 1 play special roles as real numbers because for any real number $a$, $a + 0 = a$ and $a \times 1 = a$. Because of these properties, 0 is called the <i>additive identity</i> in $\mathbb{R}$ and 1 is called the <i>multiplicative identity</i> in $\mathbb{R}$. In general we have the following definition of an identity.</p>
+  <p><span class="num">1.14 Definition</span> Let $S$ be a set with binary operation $\ast$. If $e \in S$ has the property that for all $a \in S$, $a \ast e = e \ast a = a$, then $e$ is called an <b>identity element for</b> $\ast$. &#9632;</p>
+  <p>We included both conditions $a \ast e = a$ and $e \ast a = a$ in the definition of an identity because we are not assuming that the operation on $S$ is commutative. Of course, if the operation is commutative, such as $+$ and $\times$ on the real numbers, then we would only have to check one of the conditions and the other follows from commutativity.</p>
+  <p><span class="num">1.15 Theorem</span> <b>(Uniqueness of Identity)</b> A set with binary operation $\ast$ has at most one identity element.</p>
+  <p><i>Proof.</i> We need to show that there cannot be two different identity elements. To do this, we assume that both $e$ and $e'$ are identities and show that $e = e'$. Consider the element $e \ast e'$. Since $e$ is an identity, $e \ast e' = e'$. But $e \ast e' = e$ because $e'$ is also an identity. Therefore $e = e'$. &#9670;</p>
+  <p><span class="num">1.16 Example</span> Continuing with Example 1.7, let $F$ be the set of all functions mapping the real numbers to the real numbers. We verify that the function defined by $\iota(x) = x$ is the identity for the operation function composition. Let $f \in F$. Then $f \circ \iota(x) = f(\iota(x)) = f(x)$ and $\iota \circ f(x) = \iota(f(x)) = f(x)$.</p>
+  <p>The function $m(x) = 1$ is the identity for the operation function multiplication, $a(x) = 0$ is the identity for function addition, but function subtraction has no identity element. &#9650;</p>
+  <div class="pno">14</div>
+</div>
+
+<div class="sheet book" id="pdf-p32">
+  <div class="rh"><span>Section 1 &middot; Binary Operations</span><span>15</span></div>
+  <p>The last property that we consider in this section is the existence of inverse elements. For addition, the inverse of a real number $a$ is $-a$. Using multiplication, the inverse of a nonzero real number $a$ is $\frac{1}{a}$. We now give the formal definition of an inverse for an element $x$.</p>
+  <p><span class="num">1.17 Definition</span> If $\ast$ is an operation on the set $S$ and $S$ has an identity $e$, then for any $x \in S$, the inverse of $x$ is an element $x'$ such that $x \ast x' = x' \ast x = e$. &#9632;</p>
+  <p><span class="num">1.18 Example</span> Continuing with Example 1.16, let $F$ be the set of functions mapping the real numbers to the real numbers with operation function composition. We have two definitions for the inverse of a function $f \in F$, the usual definition of an inverse function and Definition 1.17. The two definitions match since both say that an inverse for $f$ is a function $f'$ such that $f \circ f' = f' \circ f = \iota$. So $f \in F$ has an inverse if and only if $f$ is one-to-one and onto. &#9650;</p>
+  <h3 class="sub">Tables</h3>
+  <p>For a finite set, a binary operation on the set can be defined by means of a table in which the elements of the set are listed across the top as heads of columns and at the left side as heads of rows. We always require that the elements of the set be listed as heads across the top in the same order as heads down the left side. The next example illustrates the use of a table to define a binary operation.</p>
+  <p><span class="num">1.19 Example</span> Table 1.20 defines the binary operation $\ast$ on $S = \{a, b, c\}$ by the following rule:</p>
+  <div class="eq">$$(\text{ith entry on the left}) \ast (\text{jth entry on the top}) = (\text{entry in the } i\text{th row and } j\text{th column of the table body}).$$</div>
+  <p>Thus $a \ast b = c$ and $b \ast a = a$, so $\ast$ is not commutative. &#9650;</p>
+  <table class="tbl">
+    <caption><b>1.20 Table</b></caption>
+    <tr><th>$\ast$</th><th>$a$</th><th>$b$</th><th>$c$</th></tr>
+    <tr><th>$a$</th><td>$b$</td><td>$c$</td><td>$b$</td></tr>
+    <tr><th>$b$</th><td>$a$</td><td>$c$</td><td>$b$</td></tr>
+    <tr><th>$c$</th><td>$c$</td><td>$b$</td><td>$a$</td></tr>
+  </table>
+  <p>We can easily see that a binary operation defined by a table is commutative if and only if the entries in the table are symmetric with respect to the diagonal that starts at the upper left corner of the table and terminates at the lower right corner.</p>
+  <p><span class="num">1.21 Example</span> Complete Table 1.22 so that $\ast$ is a commutative operation on the set $S = \{a, b, c, d\}$.</p>
+  <p><i>Solution.</i> From Table 1.22, we see that $b \ast a = d$. For $\ast$ to be commutative, we must have $a \ast b = d$ also. Thus we place $d$ in the appropriate square defining $a \ast b$, which is located symmetrically across the diagonal in Table 1.23 from the square defining $b \ast a$. We obtain the rest of Table 1.23 in this fashion to give our solution. &#9650;</p>
+  <div class="tbl-row">
+    <table class="tbl">
+      <caption><b>1.22 Table</b></caption>
+      <tr><th>$\ast$</th><th>$a$</th><th>$b$</th><th>$c$</th><th>$d$</th></tr>
+      <tr><th>$a$</th><td>$b$</td><td></td><td></td><td></td></tr>
+      <tr><th>$b$</th><td>$d$</td><td>$a$</td><td></td><td></td></tr>
+      <tr><th>$c$</th><td>$a$</td><td>$c$</td><td>$d$</td><td></td></tr>
+      <tr><th>$d$</th><td>$a$</td><td>$b$</td><td>$b$</td><td>$c$</td></tr>
+    </table>
+    <table class="tbl">
+      <caption><b>1.23 Table</b> (completed)</caption>
+      <tr><th>$\ast$</th><th>$a$</th><th>$b$</th><th>$c$</th><th>$d$</th></tr>
+      <tr><th>$a$</th><td>$b$</td><td>$d$</td><td>$a$</td><td>$a$</td></tr>
+      <tr><th>$b$</th><td>$d$</td><td>$a$</td><td>$c$</td><td>$b$</td></tr>
+      <tr><th>$c$</th><td>$a$</td><td>$c$</td><td>$d$</td><td>$b$</td></tr>
+      <tr><th>$d$</th><td>$a$</td><td>$b$</td><td>$b$</td><td>$c$</td></tr>
+    </table>
+  </div>
+  <div class="pno">15</div>
+</div>
+<div class="sheet book" id="pdf-p33">
+  <div class="rh"><span>Part I &middot; Groups and Subgroups</span><span>16</span></div>
+  <p><span class="num">1.24 Example</span> When an operation has an identity element, it is customary to put the identity first in the list of heads. This makes the first row and the first column match the head row and head column as seen in Table 1.25. &#9650;</p>
+  <table class="tbl small">
+    <caption><b>1.25 Table</b></caption>
+    <tr><th>$\ast$</th><th>$e$</th><th>$a$</th><th>$b$</th><th>$c$</th></tr>
+    <tr><th>$e$</th><td>$e$</td><td>$a$</td><td>$b$</td><td>$c$</td></tr>
+    <tr><th>$a$</th><td>$a$</td><td>$c$</td><td>$c$</td><td>$a$</td></tr>
+    <tr><th>$b$</th><td>$b$</td><td>$a$</td><td>$e$</td><td>$c$</td></tr>
+    <tr><th>$c$</th><td>$c$</td><td>$e$</td><td>$a$</td><td>$b$</td></tr>
+  </table>
+  <h3 class="sub">Some Words of Warning</h3>
+  <p>Classroom experience shows the chaos that may result if a student is given a set and asked to define some binary operation on it. Remember that in an attempt to define a binary operation $\ast$ on a set S we must be sure that</p>
+  <ol class="conds">
+    <li><i>exactly one element is assigned to each possible ordered pair of elements of $S$,</i></li>
+    <li><i>for each ordered pair of elements of $S$, the element assigned to it is again in $S$.</i></li>
+  </ol>
+  <p>Regarding Condition 1, a student will often make an attempt that assigns an element of $S$ to &ldquo;most&rdquo; ordered pairs, but for a few pairs, determines no element. In this event, $\ast$ is <b>not everywhere defined</b> on $S$. It may also happen that for some pairs, the attempt could assign any of several elements of $S$, that is, there is ambiguity. In any case of ambiguity, $\ast$ is <b>not well defined</b>. If Condition 2 is violated, then $S$ is <b>not closed under</b> $\ast$.</p>
+  <p><span class="num">1.26 Example</span> On which of the sets $\mathbb{Q}$, $\mathbb{Q}^*$, and $\mathbb{Z}^+$ does the formula $a \ast b = a/b$ define an operation? Note that this formula does not make sense in the case that $b = 0$. So for example, $2 \ast 0 = 2/0$ is not defined, which means Condition 1 is not satisfied. So $\ast$ is not an operation on $\mathbb{Q}$.</p>
+  <p>If we throw out 0, we do have an operation on $\mathbb{Q}^*$ since both Conditions 1 and 2 are satisfied. That is, for any $a, b \in \mathbb{Q}^*$, $a \ast b = a/b$ is a nonzero rational number.</p>
+  <p>The set $\mathbb{Z}^+$ does not include 0, but there is another issue. For example, $1 \ast 2 = 1/2 \notin \mathbb{Z}^+$, which means that Condition 2 is violated and $\ast$ is not an operation on $\mathbb{Z}^+$. &#9650;</p>
+  <p>Following are several illustrations of attempts to define operations on sets. Some of them need some work! The symbol $\ast$ is used for the attempted operation in all these examples.</p>
+  <p><span class="num">1.27 Example</span> Let $F$ be the set of all real-valued functions with domain $\mathbb{R}$ as in Example 1.7. Suppose we &ldquo;define&rdquo; $\ast$ to give the usual quotient of $f$ by $g$, that is, $f \ast g = h$, where $h(x) = f(x)/g(x)$. Here Condition 2 is violated, for the functions in $F$ are defined for <i>all</i> real numbers, and for some $g \in F$, $g(x)$ and $h(x)$ would not be defined at those numbers in $\mathbb{R}$. For example, if $f(x) = \cos x$ and $g(x) = x^2$, then $h(0)$ is undefined, so $h \notin F$. &#9650;</p>
+  <p><span class="num">1.28 Example</span> Let $F$ be as in Example 1.27 and let $f \ast g = h$, where $h$ is the function greater than both $f$ and $g$. This &ldquo;definition&rdquo; is extremely vague. In the first place, we have not defined what it means for one function to be greater than another. Even if we had, any sensible definition would result in there being many functions greater than both $f$ and $g$, and $\ast$ would still be <i>not well defined</i>. &#9650;</p>
+  <p><span class="num">1.29 Example</span> Let $S$ be a set consisting of 20 people, no two of whom are of the same height. Define $\ast$ by $a \ast b = c$, where $c$ is the tallest person among the 20 in $S$. This is a perfectly good binary operation on the set, although not a particularly interesting one. &#9650;</p>
+  <p><span class="num">1.30 Example</span> Let $S$ be as in Example 1.29 and let $a \ast b = c$, where $c$ is the shortest person in $S$ who is taller than both $a$ and $b$. This $\ast$ is <i>not everywhere defined</i>, since if either $a$ or $b$ is the tallest person in the set, $a \ast b$ is not determined. &#9650;</p>
+  <div class="pno">16</div>
+</div>
+
+<div class="sheet book" id="pdf-p34">
+  <div class="rh"><span>Section 1 &middot; Exercises</span><span>17</span></div>
+  <h2 class="sec">Exercises 1</h2>
+  <h3 class="sub">Computations</h3>
+  <p>Exercises 1 through 4 concern the binary operation $\ast$ defined on $S = \{a, b, c, d, e\}$ by means of Table 1.31.</p>
+  <ol class="exl" start="1">
+    <li>Compute $b \ast d$, $c \ast c$, and $[(a \ast c) \ast e] \ast a$.</li>
+    <li>Compute $(a \ast b) \ast c$ and $a \ast (b \ast c)$. Can you say on the basis of this computation whether $\ast$ is associative?</li>
+    <li>Compute $(b \ast d) \ast c$ and $b \ast (d \ast c)$. Can you say on the basis of this computation whether $\ast$ is associative?</li>
+    <li>Is $\ast$ commutative? Why?</li>
+    <li>Complete Table 1.32 so as to define a commutative binary operation $\ast$ on $S = \{a, b, c, d\}$.</li>
+    <li>Table 1.33 can be completed to define an associative binary operation $\ast$ on $S = \{a, b, c, d\}$. Assume this is possible and compute the missing entries. Does $S$ have an identity element?</li>
+  </ol>
+  <div class="tbl-row">
+    <table class="tbl small">
+      <caption><b>1.31 Table</b></caption>
+      <tr><th>$\ast$</th><th>$a$</th><th>$b$</th><th>$c$</th><th>$d$</th><th>$e$</th></tr>
+      <tr><th>$a$</th><td>$a$</td><td>$b$</td><td>$c$</td><td>$b$</td><td>$d$</td></tr>
+      <tr><th>$b$</th><td>$b$</td><td>$c$</td><td>$a$</td><td>$e$</td><td>$c$</td></tr>
+      <tr><th>$c$</th><td>$c$</td><td>$a$</td><td>$b$</td><td>$b$</td><td>$a$</td></tr>
+      <tr><th>$d$</th><td>$b$</td><td>$e$</td><td>$b$</td><td>$e$</td><td>$d$</td></tr>
+      <tr><th>$e$</th><td>$d$</td><td>$b$</td><td>$a$</td><td>$d$</td><td>$c$</td></tr>
+    </table>
+    <table class="tbl small">
+      <caption><b>1.32 Table</b></caption>
+      <tr><th>$\ast$</th><th>$a$</th><th>$b$</th><th>$c$</th><th>$d$</th></tr>
+      <tr><th>$a$</th><td>$a$</td><td>$a$</td><td>$b$</td><td>$c$</td></tr>
+      <tr><th>$b$</th><td>$b$</td><td>$d$</td><td></td><td>$c$</td></tr>
+      <tr><th>$c$</th><td>$c$</td><td>$a$</td><td>$d$</td><td>$b$</td></tr>
+      <tr><th>$d$</th><td>$d$</td><td></td><td></td><td>$a$</td></tr>
+    </table>
+    <table class="tbl small">
+      <caption><b>1.33 Table</b></caption>
+      <tr><th>$\ast$</th><th>$a$</th><th>$b$</th><th>$c$</th><th>$d$</th></tr>
+      <tr><th>$a$</th><td>$a$</td><td>$b$</td><td>$c$</td><td>$d$</td></tr>
+      <tr><th>$b$</th><td>$b$</td><td>$a$</td><td>$c$</td><td>$d$</td></tr>
+      <tr><th>$c$</th><td>$c$</td><td>$d$</td><td>$c$</td><td>$d$</td></tr>
+      <tr><th>$d$</th><td>$d$</td><td></td><td></td><td></td></tr>
+    </table>
+  </div>
+  <p>In Exercises 7 through 11, determine whether the operation $\ast$ is associative, whether the operation is commutative, and whether the set has an identity element.</p>
+  <ol class="exl" start="7">
+    <li>$\ast$ defined on $\mathbb{Z}$ by letting $a \ast b = a - b$</li>
+    <li>$\ast$ defined on $\mathbb{Q}$ by letting $a \ast b = 2ab + 3$</li>
+    <li>$\ast$ defined on $\mathbb{Z}$ by letting $a \ast b = ab + a + b$</li>
+    <li>$\ast$ defined on $\mathbb{Z}^+$ by letting $a \ast b = 2^{ab}$</li>
+    <li>$\ast$ defined on $\mathbb{Z}^+$ by letting $a \ast b = a^b$</li>
+    <li>Let $S$ be a set having exactly one element. How many different binary operations can be defined on $S$? Answer the question if $S$ has exactly 2 elements; exactly 3 elements; exactly $n$ elements.</li>
+    <li>How many different commutative binary operations can be defined on a set of 2 elements? on a set of 3 elements? on a set of $n$ elements?</li>
+    <li>How many different binary operations on a set $S$ with $n$ elements have the property that for all $x \in S$, $x \ast x = x$?</li>
+    <li>How many different binary operations on a set $S$ with $n$ elements have an identity element?</li>
+  </ol>
+  <h3 class="sub">Concepts</h3>
+  <p>In Exercises 16 through 19, correct the definition of the italicized term without reference to the text, if correction is needed, so that it is in a form acceptable for publication.</p>
+  <ol class="exl" start="16">
+    <li>A binary operation $\ast$ is <i>commutative</i> if and only if $a \ast b = b \ast a$.</li>
+    <li>A binary operation $\ast$ on a set $S$ is <i>associative</i> if and only if, for all $a, b, c \in S$, we have $(b \ast c) \ast a = b \ast (c \ast a)$.</li>
+    <li>A subset $H$ of a set $S$ is <i>closed</i> under a binary operation $\ast$ on $S$ if and only if $(a \ast b) \in H$ for all $a, b \in H$.</li>
+    <li>An identity in the set $S$ with operation $\ast$ is an element $e \in S$ such that $a \ast e = e \ast a = a$.</li>
+    <li>Is there an example of a set $S$, a binary operation on $S$, and two different elements $e_1, e_2 \in S$ such that for all $a \in S$, $e_1 \ast a = a$ and $a \ast e_2 = a$? If so, give an example and if not, prove there is not one.</li>
+  </ol>
+  <div class="pno">17</div>
+</div>
+
+<div class="sheet book" id="pdf-p35">
+  <div class="rh"><span>Part I &middot; Groups and Subgroups</span><span>18</span></div>
+  <p>In Exercises 21 through 26, determine whether the definition of $\ast$ does give a binary operation on the set. In the event that $\ast$ is not a binary operation, state whether Condition 1, Condition 2, or both conditions regarding defining binary operations are violated.</p>
+  <ol class="exl" start="21">
+    <li>On $\mathbb{Z}^+$, define $a \ast b = b^a$.</li>
+    <li>On $\mathbb{R}^+$, define $\ast$ by letting $a \ast b = 2a - b$.</li>
+    <li>On $\mathbb{R}^+$, define $\ast$ by $a \ast b$ to be the minimum of $a$ and $b - 1$ if they are different and their common value if they are the same.</li>
+    <li>On $\mathbb{R}$, define $a \ast b$ to be the number $c$ so that $c^b = a$.</li>
+    <li>On $\mathbb{Z}^+$, define $\ast$ by letting $a \ast b = c$, where $c$ is at least 5 more than $a + b$.</li>
+    <li>On $\mathbb{Z}^+$, define $\ast$ by letting $a \ast b = c$, where $c$ is the largest integer less than the product of $a$ and $b$.</li>
+    <li>Let $H$ be the subset of $M_2(\mathbb{R})$ consisting of all matrices of the form $\begin{pmatrix} a & -b \\ b & a \end{pmatrix}$ for $a, b \in \mathbb{R}$. Is $H$ closed under (a) matrix addition? (b) matrix multiplication?</li>
+    <li>Determine whether each of the following is true or false.
+      <ol class="alpha">
+        <li>If $\ast$ is any binary operation on any set $S$, then $a \ast a = a$ for all $a \in S$.</li>
+        <li>If $\ast$ is any commutative binary operation on any set $S$, then $a \ast (b \ast c) = (b \ast c) \ast a$ for all $a, b, c \in S$.</li>
+        <li>If $\ast$ is any associative binary operation on any set $S$, then $a \ast (b \ast c) = a \ast a$ for all $a, b, c \in S$.</li>
+        <li>The only binary operations of any importance are those defined on sets of numbers.</li>
+        <li>A binary operation $\ast$ on a set $S$ is commutative if there exist $a, b \in S$ such that $a \ast b = b \ast a$.</li>
+        <li>Every binary operation defined on a set having exactly one element is both commutative and associative.</li>
+        <li>A binary operation on a set $S$ assigns at least one element of $S$ to each ordered pair of elements of $S$.</li>
+        <li>A binary operation on a set $S$ assigns at most one element of $S$ to each ordered pair of elements of $S$.</li>
+        <li>A binary operation on a set $S$ assigns exactly one element of $S$ to each ordered pair of elements of $S$.</li>
+        <li>A binary operation on a set $S$ may assign more than one element of $S$ to some ordered pair of elements of $S$.</li>
+        <li>For any binary operation $\ast$ on the set $S$, if $a, b, c \in S$ and $a \ast b = a \ast c$, then $b = c$.</li>
+        <li>For any binary operation $\ast$ on the set $S$, there is an element $e \in S$ such that for all $x \in S$, $x \ast e = x$.</li>
+        <li>There is an operation on the set $S = \{e_1, e_2, a\}$ so that for all $x \in S$, $e_1 \ast x = e_2 \ast x = x$.</li>
+        <li>Identity elements are always called $e$.</li>
+      </ol>
+    </li>
+    <li>Give a set different from any of those described in the examples of the text and not a set of numbers. Define two different binary operations $\ast$ and $\ast'$ on this set. Be sure that your set is <i>well defined</i>.</li>
+  </ol>
+  <h3 class="sub">Theory</h3>
+  <ol class="exl" start="30">
+    <li>Prove that if $\ast$ is an associative and commutative binary operation on a set $S$, then
+      <div class="eq">$$(a \ast b) \ast (c \ast d) = [(d \ast c) \ast a] \ast b$$</div>
+      for all $a, b, c, d \in S$. Assume the associative law only for triples in the definition, that is, assume only $(x \ast y) \ast z = x \ast (y \ast z)$ for all $x, y, z \in S$.</li>
+  </ol>
+  <p>In Exercises 31 and 32, either prove the statement or give a counterexample.</p>
+  <ol class="exl" start="31">
+    <li>Every binary operation on a set consisting of a single element is both commutative and associative.</li>
+    <li>Every commutative binary operation on a set having just two elements is associative.</li>
+  </ol>
+  <p>Let $F$ be the set of all real-valued functions having as domain the set $\mathbb{R}$ of all real numbers. Example 1.7 defined the binary operations $+$, $-$, $\cdot$, and $\circ$ on $F$. In Exercises 33 through 41, either prove the given statement or give a counterexample.</p>
+  <ol class="exl" start="33">
+    <li>Function addition $+$ on $F$ is associative.</li>
+    <li>Function subtraction $-$ on $F$ is commutative.</li>
+  </ol>
+  <div class="pno">18</div>
+</div>
+<div class="sheet book" id="pdf-p36">
+  <div class="rh"><span>Section 2 &middot; Groups</span><span>19</span></div>
+  <ol class="exl" start="35">
+    <li>Function subtraction $-$ on $F$ is associative.</li>
+    <li>Under function subtraction $-$, $F$ has an identity.</li>
+    <li>Under function multiplication $\cdot$, $F$ has an identity.</li>
+    <li>Function multiplication $\cdot$ on $F$ is commutative.</li>
+    <li>Function multiplication $\cdot$ on $F$ is associative.</li>
+    <li>Function composition $\circ$ on $F$ is commutative.</li>
+    <li>If $\ast$ and $\ast'$ are any two binary operations on a set $S$, then
+      <div class="eq">$$a \ast (b \ast' c) = (a \ast b) \ast' (a \ast c) \qquad \text{for all } a, b, c \in S.$$</div></li>
+    <li>Suppose that $\ast$ is an associative binary operation on a set $S$. Let $H = \{a \in S \mid a \ast x = x \ast a \text{ for all } x \in S\}$. Show that $H$ is closed under $\ast$. (We think of $H$ as consisting of all elements of $S$ that <i>commute</i> with every element in $S$.)</li>
+    <li>Suppose that $\ast$ is an associative and commutative binary operation on a set $S$. Show that $H = \{a \in S \mid a \ast a = a\}$ is closed under $\ast$. (The elements of $H$ are <i>idempotents</i> of the binary operation $\ast$.)</li>
+    <li>Let $S$ be a set and let $\ast$ be a binary operation on $S$ satisfying the two laws
+      <ul class="bul">
+        <li>$x \ast x = x$ for all $x \in S$, and</li>
+        <li>$(x \ast y) \ast z = (y \ast z) \ast x$ for all $x, y, z \in S$.</li>
+      </ul>
+      Show that $\ast$ is associative and commutative. (This is problem B-1 on the 1971 Putnam Competition.)</li>
+  </ol>
+  <div class="sec-rule"></div>
+  <h2 class="sec"><span class="secno">Section 2</span> Groups</h2>
+  <p>In high school algebra, one of the key objectives is to learn how to solve equations. Even before learning algebra, students in elementary school are given problems like $5 + \square = 2$ or $2 \times \square = 3$, which become $5 + x = 2$ and $2x = 3$ in high school algebra. Let us closely examine the steps we use to solve these equations:</p>
+  <div class="eq">$$\begin{array}{rrl}
+5 + x &= 2, & \text{given,}\\
+-5 + (5 + x) &= -5 + 2, & \text{adding } -5,\\
+(-5 + 5) + x &= -5 + 2, & \text{associative law,}\\
+0 + x &= -5 + 2, & \text{computing } -5 + 5,\\
+x &= -5 + 2, & \text{property of } 0,\\
+x &= -3, & \text{computing } -5 + 2.
+\end{array}$$</div>
+  <p>Strictly speaking, we have not shown here that $-3$ is a solution, but rather that it is the only possibility for a solution. To show that $-3$ is a solution, one merely computes $5 + (-3)$. A similar analysis could be made for the equation $2x = 3$ in the rational numbers with the operation of multiplication:</p>
+  <div class="eq">$$\begin{array}{rrl}
+2x &= 3, & \text{given,}\\
+\frac{1}{2}(2x) &= \frac{1}{2}(3), & \text{multiplying by } \frac{1}{2},\\
+(\frac{1}{2} \cdot 2)x &= \frac{1}{2}3, & \text{associative law,}\\
+1 \cdot x &= \frac{1}{2}3, & \text{computing } \frac{1}{2}2,\\
+x &= \frac{1}{2}3, & \text{property of } 1,\\
+x &= \frac{3}{2}, & \text{computing } \frac{1}{2}3.
+\end{array}$$</div>
+  <p>Now suppose that we have a set with a binary operation $\ast$. What properties does the operation need to have in order to solve an equation of the form $a \ast x = b$ where $a$ and $b$ are fixed elements of $S$? Both equations $5 + x = 2$ and $2x = 3$ have this form; the</p>
+  <div class="pno">19</div>
+</div>
+
+<div class="sheet book" id="pdf-p37">
+  <div class="rh"><span>Part I &middot; Groups and Subgroups</span><span>20</span></div>
+  <p>first uses the operation $+$, and the second uses the operation $\times$. By examining the steps used we can see what properties of the operation $\ast$ are required as summarized in the table below.</p>
+  <table class="tbl center">
+    <tr><th>Property</th><th>$+$</th><th>$\times$</th></tr>
+    <tr><th>Associative Property</th><td>$-5 + (5 + x) = (-5 + 5) + x$</td><td>$\frac{1}{2}(2x) = (\frac{1}{2} \cdot 2)x$</td></tr>
+    <tr><th>Identity Element</th><td>$0\colon\ 0 + x = x$</td><td>$1\colon\ 1 \cdot x = x$</td></tr>
+    <tr><th>Inverse Element</th><td>$-5\colon\ -5 + 5 = 0$</td><td>$\frac{1}{2}\colon\ \frac{1}{2} \cdot 2 = 1$</td></tr>
+  </table>
+  <p>If $S$ is a set with an operation $\ast$ satisfying these three properties, then an equation of the form $a \ast x = b$ could be solved for $x$ using exactly the same steps used to solve $5 + x = 2$ or $2x = 3$. These three essential properties are all that is required in order to have a group. We are now ready to present the precise definition.</p>
+  <h3 class="sub">Definition and Examples</h3>
+  <p><span class="num">2.1 Definition</span> A <b>group</b> $\langle G, \ast \rangle$ is a set $G$, closed under a binary operation $\ast$, such that the following axioms are satisfied:</p>
+  <p class="axiom">$\mathcal{G}_1$: For all $a, b, c \in G$, we have</p>
+  <div class="eq">$$(a \ast b) \ast c = a \ast (b \ast c). \qquad \textbf{associativity of } \ast$$</div>
+  <p class="axiom">$\mathcal{G}_2$: There is an element $e$ in $G$ such that for all $x \in G$,</p>
+  <div class="eq">$$e \ast x = x \ast e = x. \qquad \textbf{identity element } e \textbf{ for } \ast$$</div>
+  <p class="axiom">$\mathcal{G}_3$: Corresponding to each $a \in G$, there is an element $a'$ in $G$ such that</p>
+  <div class="eq">$$a \ast a' = a' \ast a = e. \qquad \textbf{inverse } a' \textbf{ of } a \quad &#9632;$$</div>
+  <p><span class="num">2.2 Example</span> $\langle \mathbb{R}, + \rangle$ is a group with identity element 0 and the inverse of any real number $a$ is $-a$. However, $\langle \mathbb{R}, \cdot \rangle$ is not a group since 0 has no multiplicative inverse. We were still able to solve $2x = 3$ in the example above because $\langle \mathbb{R}^*, \cdot \rangle$ is a group since multiplication of real numbers is associative, 1 is an identity, and every real number except 0 has an inverse. &#9650;</p>
+  <p>It is often convenient to say that $G$ is a group under the operation $\ast$ rather than write $\langle G, \ast \rangle$ is a group. At times, there is only one obvious operation that makes $\langle G, \ast \rangle$ a group. In this case, we may abuse notation and say that $G$ is a group. For example, if we say that $\mathbb{R}$ is a group, we mean that $\mathbb{R}$ is a group under addition.</p>
+  <p><span class="num">2.3 Definition</span> A group $G$ is <b>abelian</b> if its binary operation is commutative. &#9632;</p>
+  <p>Let us give some examples of some sets with binary operations that give groups and also of some that do not give groups.</p>
+  <p><span class="num">2.4 Example</span> The set $\mathbb{Z}^+$ under addition is <i>not</i> a group. There is no identity element for $+$ in $\mathbb{Z}^+$. &#9650;</p>
+  <p><span class="num">2.5 Example</span> The set of all nonnegative integers (including 0) under addition is still <i>not</i> a group. There is an identity element 0, but no inverse for 2. &#9650;</p>
+  <div class="pno">20</div>
+</div>
+
+<div class="sheet book" id="pdf-p38">
+  <div class="rh"><span>Section 2 &middot; Groups</span><span>21</span></div>
+  <div class="hbox">
+    <div class="hbox-title">Historical Note</div>
+    <div class="hbox-cols">
+      <p>There are three historical roots of the development of abstract group theory evident in the mathematical literature of the nineteenth century: the theory of algebraic equations, number theory, and geometry. All three of these areas used group-theoretic methods of reasoning, although the methods were considerably more explicit in the first area than in the other two.</p>
+      <p>One of the central themes of geometry in the nineteenth century was the search for invariants under various types of geometric transformations. Gradually attention became focused on the transformations themselves, which in many cases can be thought of as elements of groups.</p>
+      <p>In number theory, already in the eighteenth century Leonhard Euler had considered the remainders on division of powers $a^n$ by a fixed prime $p$. These remainders have &ldquo;group&rdquo; properties.</p>
+      <p>Similarly, Carl F. Gauss, in his <i>Disquisitiones Arithmeticae</i> (1800), dealt extensively with quadratic forms $ax^2 + 2bxy + cy^2$, and in particular showed that equivalence classes of these forms under composition possessed what amounted to group properties.</p>
+      <p>Finally, the theory of algebraic equations provided the most explicit prefiguring of the group concept. Joseph-Louis Lagrange (1736&ndash;1813) in fact initiated the study of permutations of the roots of an equation as a tool for solving it. These permutations, of course, were ultimately considered as elements of a group.</p>
+      <p>It was Walther von Dyck (1856&ndash;1934) and Heinrich Weber (1842&ndash;1913) who in 1882 were able independently to combine the three historical roots and give clear definitions of the notion of an abstract group.</p>
+    </div>
+  </div>
+  <p><span class="num">2.6 Example</span> The familiar additive properties of integers and of rational, real, and complex numbers show that $\mathbb{Z}$, $\mathbb{Q}$, $\mathbb{R}$, and $\mathbb{C}$ under addition are abelian groups. &#9650;</p>
+  <p><span class="num">2.7 Example</span> The set $\mathbb{Z}^+$ under multiplication is <i>not</i> a group. There is an identity 1, but no inverse of 3. &#9650;</p>
+  <div class="hbox">
+    <div class="hbox-title">Historical Note</div>
+    <div class="hbox-cols">
+      <p>Commutative groups are called <i>abelian</i> in honor of the Norwegian mathematician Niels Henrik Abel (1802&ndash;1829). Abel was interested in the question of solvability of polynomial equations. In a paper written in 1828, he proved that if all the roots of such an equation can be expressed as rational functions $f, g, \ldots, h$ of one of them, say $x$, and if for any two of these roots, $f(x)$ and $g(x)$, the relation $f(g(x)) = g(f(x))$ always holds, then the equation is solvable by radicals. Abel showed that each of these functions in fact permutes the roots of the equation; hence, these functions are elements of the group of permutations of the roots. It was this property of commutativity in these permutation groups associated with solvable equations that led Camille Jordan in his 1870 treatise on algebra to name such groups <i>abelian;</i> the name since then has been applied to commutative groups in general.</p>
+      <p>Abel was attracted to mathematics as a teenager and soon surpassed all his teachers in Norway. He finally received a government travel grant to study elsewhere in 1825 and proceeded to Berlin, where he befriended August Crelle, the founder of the most influential German mathematical journal. Abel contributed numerous papers to Crelle&rsquo;s <i>Journal</i> during the next several years, including many in the field of elliptic functions, whose theory he created virtually single-handedly. Abel returned to Norway in 1827 with no position and an abundance of debts. He nevertheless continued to write brilliant papers, but died of tuberculosis at the age of 26, two days before Crelle succeeded in finding a university position for him in Berlin.</p>
+    </div>
+  </div>
+  <div class="pno">21</div>
+</div>
+<div class="sheet book" id="pdf-p39">
+  <div class="rh"><span>Part I &middot; Groups and Subgroups</span><span>22</span></div>
+  <p><span class="num">2.8 Example</span> The familiar multiplicative properties of rational, real, and complex numbers show that the sets $\mathbb{Q}^+$ and $\mathbb{R}^+$ of positive numbers and the sets $\mathbb{Q}^*$, $\mathbb{R}^*$, and $\mathbb{C}^*$ of nonzero numbers under multiplication are abelian groups. &#9650;</p>
+  <p><span class="num">2.9 Example</span> The set of all real-valued functions with domain $\mathbb{R}$ under function addition is a group. This group is abelian. &#9650;</p>
+  <p><span class="num">2.10 Example</span> <b>(Linear Algebra)</b> Those who have studied vector spaces should note that the axioms for a vector space $V$ pertaining just to vector addition can be summarized by asserting that $V$ under vector addition is an abelian group. &#9650;</p>
+  <p><span class="num">2.11 Example</span> The set $M_{m \times n}(\mathbb{R})$ of all $m \times n$ matrices under matrix addition is a group. The $m \times n$ matrix with all entries 0 is the identity matrix. This group is abelian. &#9650;</p>
+  <p><span class="num">2.12 Example</span> The set $M_n(\mathbb{R})$ of all $n \times n$ matrices under matrix multiplication is <i>not</i> a group. The $n \times n$ matrix with all entries 0 has no inverse. &#9650;</p>
+  <p>Each of the groups we have seen in the above examples is an abelian group. There are many examples of groups which are not abelian, two of which we now present.</p>
+  <p><span class="num">2.13 Example</span> Here we give an example of a group that is not abelian. We let $T$ be the set of all isometries of the plane. An <b>isometry of the plane</b> is a function mapping the plane to the plane which preserves distance. So if $\phi$ is an isometry of the plane and $P, Q$ are points in the plane, then the distance between $P$ and $Q$ is the same as the distance between $\phi(P)$ and $\phi(Q)$. Isometries of the plane map the plane one-to-one and onto itself. Examples of isometries include translations and rotations of the plane. The set $T$ under the operation of composition forms a group. To verify this we first must check that function composition is an operation. Certainly, the composition of two isometries is an isometry since each preserves distance. So function composition gives an operation on $T$. Theorem 1.13 states that function composition is associative, so $\mathcal{G}_1$ is satisfied. The identity function $\iota$ that maps each point $P$ in the plane to itself gives an identity element in $T$, which means that $\mathcal{G}_2$ is satisfied. Finally, for any isometry $\phi$, the inverse function $\phi^{-1}$ is also an isometry and it serves as an inverse as defined in $\mathcal{G}_3$. Therefore $T$ is a group under function composition.</p>
+  <p>To show that $T$ is not abelian, we only need to find two isometries $\phi$ and $\theta$ such that $\phi \circ \theta \neq \theta \circ \phi$. The functions $\phi(x, y) = (-x, y)$ (reflection across the $y$-axis) and $\theta(x, y) = (-y, x)$ (rotation by $\pi/2$ about the origin) foot the bill. Note that $\phi \circ \theta(1, 0) = \phi(\theta(1, 0)) = \phi(0, 1) = (0, 1)$ and $\theta \circ \phi(1, 0) = \theta(\phi(1, 0)) = \theta(-1, 0) = (0, -1)$, which implies that $\phi \circ \theta \neq \theta \circ \phi$ and $T$ is not an abelian group under function composition. &#9650;</p>
+  <p><span class="num">2.14 Example</span> Show that the subset $S$ of $M_n(\mathbb{R})$ consisting of all <i>invertible</i> $n \times n$ matrices under matrix multiplication is a group.</p>
+  <p><i>Solution.</i> We start by showing that $S$ is closed under matrix multiplication. Let $A$ and $B$ be in $S$, so that both $A^{-1}$ and $B^{-1}$ exist and $AA^{-1} = BB^{-1} = I_n$. Then</p>
+  <div class="eq">$$(AB)(B^{-1}A^{-1}) = A(BB^{-1})A^{-1} = AI_nA^{-1} = I_n,$$</div>
+  <p>so that $AB$ is invertible and consequently is also in $S$.</p>
+  <p>Since matrix multiplication is associative and $I_n$ acts as the identity element, and since each element of $S$ has an inverse by definition of $S$, we see that $S$ is indeed a group. This group is <i>not</i> commutative. &#9650;</p>
+  <p>The group of invertible $n \times n$ matrices described in the preceding example is of fundamental importance in linear algebra. It is the <b>general linear group of degree $n$</b>,</p>
+  <div class="pno">22</div>
+</div>
+
+<div class="sheet book" id="pdf-p40">
+  <div class="rh"><span>Section 2 &middot; Groups</span><span>23</span></div>
+  <p>and is usually denoted by $GL(n, \mathbb{R})$. Those of you who have studied linear algebra know that a matrix $A$ in $GL(n, \mathbb{R})$ gives rise to an invertible linear transformation $T : \mathbb{R}^n \to \mathbb{R}^n$, defined by $T(\mathbf{x}) = A\mathbf{x}$, and that conversely, every invertible linear transformation of $\mathbb{R}^n$ into itself is defined in this fashion by some matrix in $GL(n, \mathbb{R})$. Also, matrix multiplication corresponds to composition of linear transformations. Thus all invertible linear transformations of $\mathbb{R}^n$ into itself form a group under function composition; this group is usually denoted by $GL(\mathbb{R}^n)$. Since the sets $GL(\mathbb{R}^n)$ and $GL(n, \mathbb{R})$ and their operations are essentially the same, we say that the two groups are <i>isomorphic</i>. We give a formal definition later in this section.</p>
+  <p>We conclude our list of examples of groups with one that may seem a bit contrived. We include it to show that there are many ways to define groups and to illustrate the steps needed to verify that a given set with an operation is a group.</p>
+  <p><span class="num">2.15 Example</span> Let $\ast$ be defined on $\mathbb{Q}^+$ by $a \ast b = ab/2$. Then</p>
+  <div class="eq">$$(a \ast b) \ast c = \frac{ab}{2} \ast c = \frac{abc}{4},$$</div>
+  <p>and likewise</p>
+  <div class="eq">$$a \ast (b \ast c) = a \ast \frac{bc}{2} = \frac{abc}{4}.$$</div>
+  <p>Thus $\ast$ is associative. Computation shows that</p>
+  <div class="eq">$$2 \ast a = a \ast 2 = a$$</div>
+  <p>for all $a \in \mathbb{Q}^+$, so 2 is an identity element for $\ast$. Finally,</p>
+  <div class="eq">$$a \ast \frac{4}{a} = \frac{4}{a} \ast a = 2,$$</div>
+  <p>so $a' = 4/a$ is an inverse for $a$. Hence $\mathbb{Q}^+$ with the operation $\ast$ is a group. &#9650;</p>
+  <h3 class="sub">Elementary Properties of Groups</h3>
+  <p>As we proceed to prove our first theorem about groups, we must use Definition 2.1, which is the only thing we know about groups at the moment. The proof of a second theorem can employ both Definition 2.1 and the first theorem; the proof of a third theorem can use the definition and the first two theorems, and so on.</p>
+  <p>Our first theorem will establish cancellation laws. In real number arithmetic, we know that $2a = 2b$ implies that $a = b$. We need only divide both sides of the equation $2a = 2b$ by 2, or equivalently, multiply both sides by $\frac{1}{2}$, which is the multiplicative inverse of 2. We parrot this proof to establish cancellation laws for any group. Note that we will also use the associative law.</p>
+  <p><span class="num">2.16 Theorem</span> If $G$ is a group with binary operation $\ast$, then the <b>left and right cancellation laws</b> hold in $G$, that is, $a \ast b = a \ast c$ implies $b = c$, and $b \ast a = c \ast a$ implies $b = c$ for all $a, b, c \in G$.</p>
+  <p><i>Proof.</i> Suppose $a \ast b = a \ast c$. Then by $\mathcal{G}_3$, there exists $a'$, and</p>
+  <div class="eq">$$a' \ast (a \ast b) = a' \ast (a \ast c).$$</div>
+  <p>By the associative law,</p>
+  <div class="eq">$$(a' \ast a) \ast b = (a' \ast a) \ast c.$$</div>
+  <p>By the definition of $a'$ in $\mathcal{G}_3$, $a' \ast a = e$, so</p>
+  <div class="eq">$$e \ast b = e \ast c.$$</div>
+  <div class="pno">23</div>
+</div>
+
+<div class="sheet book" id="pdf-p41">
+  <div class="rh"><span>Part I &middot; Groups and Subgroups</span><span>24</span></div>
+  <p>By the definition of $e$ in $\mathcal{G}_2$,</p>
+  <div class="eq">$$b = c.$$</div>
+  <p>Similarly, from $b \ast a = c \ast a$ one can deduce that $b = c$ upon multiplication on the right by $a'$ and use of the axioms for a group. &#9670;</p>
+  <p>Our next proof can make use of Theorem 2.16. We show that a &ldquo;linear equation&rdquo; in a group has a <i>unique</i> solution. Recall that we chose our group properties to allow us to find solutions of such equations.</p>
+  <p><span class="num">2.17 Theorem</span> If $G$ is a group with binary operation $\ast$, and if $a$ and $b$ are any elements of $G$, then the linear equations $a \ast x = b$ and $y \ast a = b$ have unique solutions $x$ and $y$ in $G$.</p>
+  <p><i>Proof.</i> First we show the existence of <i>at least</i> one solution by just computing that $a' \ast b$ is a solution of $a \ast x = b$. Note that</p>
+  <div class="eq">$$\begin{array}{rrl}
+a \ast (a' \ast b) &= (a \ast a') \ast b, & \text{associative law,}\\
+&= e \ast b, & \text{definition of } a',\\
+&= b, & \text{property of } e.
+\end{array}$$</div>
+  <p>Thus $x = a' \ast b$ is a solution of $a \ast x = b$. In a similar fashion, $y = b \ast a'$ is a solution of $y \ast a = b$.</p>
+  <p>To show uniqueness of $y$, we use the standard method of assuming that we have two solutions, $y_1$ and $y_2$, so that $y_1 \ast a = b$ and $y_2 \ast a = b$. Then $y_1 \ast a = y_2 \ast a$, and by Theorem 2.16, $y_1 = y_2$. The uniqueness of $x$ follows similarly. &#9670;</p>
+  <p>Of course, to prove the uniqueness in the last theorem, we could have followed the procedure we used in motivating the definition of a group, showing that if $a \ast x = b$, then $x = a' \ast b$. However, we chose to illustrate the standard way to prove an object is unique; namely, suppose you have two such objects, and then prove they must be the same. Note that the solutions $x = a' \ast b$ and $y = b \ast a'$ need not be the same unless $\ast$ is commutative.</p>
+  <p>Because a group has a binary operation, we know from Theorem 1.15 that the identity element $e$ in a group is unique. We state this again as part of the next theorem for easy reference.</p>
+  <p><span class="num">2.18 Theorem</span> In a group $G$ with binary operation $\ast$, there is only one element $e$ in $G$ such that</p>
+  <div class="eq">$$e \ast x = x \ast e = x$$</div>
+  <p>for all $x \in G$. Likewise for each $a \in G$, there is only one element $a'$ in $G$ such that</p>
+  <div class="eq">$$a' \ast a = a \ast a' = e.$$</div>
+  <p>In summary, the identity element and inverse of each element are unique in a group.</p>
+  <p><i>Proof.</i> Theorem 1.15 shows that an identity element for any binary operation is unique. No use of the other group axioms was required to show this.</p>
+  <p>Turning to the uniqueness of an inverse, suppose that $a \in G$ has inverses $a'$ and $a''$ so that $a' \ast a = a \ast a' = e$ and $a'' \ast a = a \ast a'' = e$. Then</p>
+  <div class="eq">$$a \ast a'' = a \ast a' = e$$</div>
+  <p>and, by Theorem 2.16,</p>
+  <div class="eq">$$a'' = a',$$</div>
+  <p>so the inverse of $a$ in a group is unique. &#9670;</p>
+  <div class="pno">24</div>
+</div>
+<div class="sheet book" id="pdf-p42">
+  <div class="rh"><span>Section 2 &middot; Groups</span><span>25</span></div>
+  <p>Note that in a group $G$, we have</p>
+  <div class="eq">$$(a \ast b) \ast (b' \ast a') = a \ast (b \ast b') \ast a' = (a \ast e) \ast a' = a \ast a' = e.$$</div>
+  <p>This equation and Theorem 2.18 show that $b' \ast a'$ is the unique inverse of $a \ast b$. That is, $(a \ast b)' = b' \ast a'$. We state this as a corollary.</p>
+  <p><span class="num">2.19 Corollary</span> Let $G$ be a group. For all $a, b \in G$, we have $(a \ast b)' = b' \ast a'$. &#9670;</p>
+  <p>For your information, we remark that binary algebraic structures with weaker axioms than those for a group have also been studied quite extensively. Of these weaker structures, the <b>semigroup,</b> a set with an associative binary operation, has perhaps had the most attention. A <b>monoid</b> is a semigroup that has an identity element for the binary operation. Note that every group is both a semigroup and a monoid.</p>
+  <p>Finally, it is possible to give axioms for a group $\langle G, \ast \rangle$ that seem at first glance to be weaker, namely:</p>
+  <ol class="exl-plain">
+    <li>The binary operation $\ast$ on $G$ is associative.</li>
+    <li>There exists a <b>left identity element</b> $e$ in $G$ such that $e \ast x = x$ for all $x \in G$.</li>
+    <li>For each $a \in G$, there exists a <b>left inverse</b> $a'$ in $G$ such that $a' \ast a = e$.</li>
+  </ol>
+  <p>From this <i>one-sided definition</i>, one can prove that the left identity element is also a right identity element, and a left inverse is also a right inverse for the same element. Thus these axioms should not be called <i>weaker</i>, since they result in exactly the same structures being called groups. It is conceivable that it might be easier in some cases to check these <i>left axioms</i> than to check our <i>two-sided axioms</i>. Of course, by symmetry it is clear that there are also <i>right axioms</i> for a group.</p>
+  <h3 class="sub">Group Isomorphisms</h3>
+  <p>All our examples have been of infinite groups, that is, groups where the set $G$ has an infinite number of elements. We turn to finite groups, starting with the smallest finite sets.</p>
+  <p>Since a group has to have at least one element, namely, the identity, a minimal set that might give rise to a group is a one-element set $\{e\}$. The only possible binary operation $\ast$ on $\{e\}$ is defined by $e \ast e = e$. The three group axioms hold. The identity element is always its own inverse in every group.</p>
+  <table class="tbl small float-r">
+    <caption><b>2.20 Table</b></caption>
+    <tr><th>$\times$</th><th>$1$</th><th>$-1$</th></tr>
+    <tr><th>$1$</th><td>$1$</td><td>$-1$</td></tr>
+    <tr><th>$-1$</th><td>$-1$</td><td>$1$</td></tr>
+  </table>
+  <p>There is a group with only two elements, namely $G = \{1, -1\}$ with operation the usual multiplication. It is clear that $G$ is closed under multiplication and we know that multiplication is associative. Furthermore, 1 is the identity, the inverse of 1 is 1, and the inverse of $-1$ is $-1$. Table 2.20 is the group table for $G$.</p>
+  <p>Is this the only group with exactly two elements? To see, let us try to put a group structure on a set with two elements. Since one of the elements must be the identity, we will label the identity element $e$ and we will label the other element $a$. Following tradition, we place the identity first both on the top and to the left as in the following table.</p>
+  <table class="tbl small center">
+    <tr><th>$\ast$</th><th>$e$</th><th>$a$</th></tr>
+    <tr><th>$e$</th><td></td><td></td></tr>
+    <tr><th>$a$</th><td></td><td></td></tr>
+  </table>
+  <p>Since $e$ is to be the identity,</p>
+  <div class="eq">$$e \ast x = x \ast e = x$$</div>
+  <div class="pno">25</div>
+</div>
+
+<div class="sheet book" id="pdf-p43">
+  <div class="rh"><span>Part I &middot; Groups and Subgroups</span><span>26</span></div>
+  <p>for all $x \in \{e, a\}$. We are forced to fill in the table as follows, if $\ast$ is to give a group:</p>
+  <table class="tbl small center">
+    <tr><th>$\ast$</th><th>$e$</th><th>$a$</th></tr>
+    <tr><th>$e$</th><td>$e$</td><td>$a$</td></tr>
+    <tr><th>$a$</th><td>$a$</td><td></td></tr>
+  </table>
+  <p>Also, $a$ must have an inverse $a'$ such that</p>
+  <div class="eq">$$a \ast a' = a' \ast a = e.$$</div>
+  <p>In our case, $a'$ must be either $e$ or $a$. Since $a' = e$ obviously does not work, we must have $a' = a$, so we have to complete the table as shown in Table 2.21.</p>
+  <table class="tbl small center">
+    <caption><b>2.21 Table</b></caption>
+    <tr><th>$\ast$</th><th>$e$</th><th>$a$</th></tr>
+    <tr><th>$e$</th><td>$e$</td><td>$a$</td></tr>
+    <tr><th>$a$</th><td>$a$</td><td>$e$</td></tr>
+  </table>
+  <p>All the group axioms are now satisfied, except possibly associativity. But if we relabel $1$ as $e$ and $-1$ as $a$ in Table 2.20 we obtain Table 2.21. Therefore, the table we constructed for $\{e, a\}$ must also satisfy $\mathcal{G}_1$, the associative property. The table also shows clearly that properties $\mathcal{G}_2$ and $\mathcal{G}_3$ are satisfied, so $\langle \{e, a\}, \ast \rangle$ is a group. The groups $\{1, -1\}$ and $\{e, a\}$ are not the same, but they are essentially the same since by relabeling elements of one with the names of the other, the operations match. When the elements of one group can be matched with another in such a way that the operations are the same, we say that the groups are <b>isomorphic</b> and the matching is called a <b>group isomorphism</b>. We showed that any group with two elements is isomorphic with $\{1, -1\}$ under multiplication. The notation used to indicate isomorphism is $\simeq$, so we could write $\langle \{1, -1\}, \times \rangle \simeq \langle \{e, a\}, \ast \rangle$. Of course the matching is a one-to-one function from one group onto the other. If we were only interested in groups whose tables are easy to compute, then we would not need a more precise definition for isomorphism. We would simply see if we can relabel one group table to make it look like the other. However, in the case of infinite groups or even groups with more than a few elements, we need a better way to verify that groups are isomorphic. We now give a more precise definition of a group isomorphism.</p>
+  <p><span class="num">2.22 Definition</span> Let $\langle G_1, \ast_1 \rangle$ and $\langle G_2, \ast_2 \rangle$ be groups and $f : G_1 \to G_2$. We say that $f$ is a <b>group isomorphism</b> if the following two conditions are satisfied.</p>
+  <ol class="exl-plain">
+    <li>The function $f$ is one-to-one and maps onto $G_2$.</li>
+    <li>For all $a, b \in G_1$, $f(a \ast_1 b) = f(a) \ast_2 f(b)$.</li>
+  </ol>
+  <p>Note that Condition 1 simply gives a way to relabel the elements of $G_1$ with elements in $G_2$. Condition 2, which we will refer to as the <b>homomorphism property</b>, says that with this relabeling, the operations $\ast_1$ on $G_1$ and $\ast_2$ on $G_2$ match. If we are in the context of groups, we will often use the term isomorphism to mean group isomorphism. If there is an isomorphism from a group $G_1$ to $G_2$, we say that $G_1$ is <b>isomorphic</b> with (or to) $G_2$. In Exercise 44, you are asked to show that if $f : G_1 \to G_2$ is an isomorphism, then $f^{-1} : G_2 \to G_1$, the inverse function, is also an isomorphism. So if $G_1$ is isomorphic with $G_2$, then $G_2$ is isomorphic with $G_1$. If you wish to verify that two groups, $G_1$ and $G_2$, are isomorphic, you can either construct an isomorphism mapping $G_1$ to $G_2$ or one mapping $G_2$ to $G_1$.</p>
+  <p><span class="num">2.23 Example</span> In Exercise 10 you will be asked to show that $2\mathbb{Z}$, the even integers, forms a group under addition. Here we show $\mathbb{Z}$ and $2\mathbb{Z}$ are isomorphic groups. In this case, the operations on the groups are both addition. We need a function $f : \mathbb{Z} \to 2\mathbb{Z}$ that is both one-to-one and onto $2\mathbb{Z}$. Let $f : \mathbb{Z} \to 2\mathbb{Z}$ be given by $f(m) = 2m$. We need to verify Condition 1 for an isomorphism, which says that $f$ is one-to-one and onto. Suppose that $a, b \in \mathbb{Z}$ and $f(a) = f(b)$. Then $2a = 2b$, which implies that $a = b$, so $f$ is one-to-one. We now show $f$</p>
+  <div class="pno">26</div>
+</div>
+
+<div class="sheet book" id="pdf-p44">
+  <div class="rh"><span>Section 2 &middot; Groups</span><span>27</span></div>
+  <p>is onto. Let $y \in 2\mathbb{Z}$. Since $y$ is even, $y = 2c$ for some $c \in \mathbb{Z}$. Therefore, $y = 2c = f(c)$, so $f$ maps onto $2\mathbb{Z}$. We now turn our attention to the homomorphism property and consider arbitrary $a, b \in \mathbb{Z}$. Then</p>
+  <div class="eq">$$f(a + b) = 2(a + b) = 2a + 2b = f(a) + f(b),$$</div>
+  <p>which verifies Condition 2. Therefore $f$ is a group isomorphism and $\mathbb{Z}$ and $2\mathbb{Z}$ are isomorphic groups.</p>
+  <p>As noted above, we could have defined an isomorphism by using the inverse function $f^{-1} : 2\mathbb{Z} \to \mathbb{Z}$, which is defined by $f^{-1}(x) = x/2$. &#9650;</p>
+  <h3 class="sub">Properties of Group Tables</h3>
+  <p>With Table 2.21 as background, we should be able to list some necessary conditions that a table giving a binary operation on a finite set must satisfy for the operation to give a group structure on the set. There must be one element of the set, which we may as well denote by $e$, that acts as the identity element. The condition $e \ast x = x$ means that the row of the table opposite $e$ at the extreme left must contain exactly the elements appearing across the very top of the table in the same order. Similarly, the condition $x \ast e = x$ means that the column of the table under $e$ at the very top must contain exactly the elements appearing at the extreme left in the same order. The fact that every element $a$ has a right and a left inverse means that in the row having $a$ at the extreme left, the element $e$ must appear, and in the column under $a$ at the very top, the $e$ must appear. Thus $e$ must appear in each row and in each column. We can do even better than this, however. By Theorem 2.17, not only do the equations $a \ast x = e$ and $y \ast a = e$ have unique solutions, but also the equations $a \ast x = b$ and $y \ast a = b$. By a similar argument, this means that <i>each element $b$ of the group must appear once and only once in each row and each column of the table.</i></p>
+  <p>Suppose conversely that a table for a binary operation on a finite set is such that there is an element acting as identity and that in each row and each column, each element of the set appears exactly once. Then it can be seen that the structure is a group structure if and only if the associative law holds. If a binary operation $\ast$ is given by a table, the associative law is usually messy to check. If the operation $\ast$ is defined by some characterizing property of $a \ast b$, the associative law is often easy to check. Fortunately, this second case turns out to be the one usually encountered.</p>
+  <p>We saw that there was essentially only one group of two elements in the sense that if the elements are denoted by $e$ and $a$ with the identity element $e$ appearing first, the table must be as shown in Table 2.21. Suppose that a set has three elements. As before, we may as well let the set be $\{e, a, b\}$. For $e$ to be an identity element, a binary operation $\ast$ on this set has to have a table of the form shown in Table 2.24. You can quickly see that Table 2.24 must be completed as shown in Table 2.25 if each row and each column contain each element exactly once. We find a group whose table is the same as Table 2.25. The elements of the group are the three matrices</p>
+  <table class="tbl small float-r">
+    <caption><b>2.24 Table</b></caption>
+    <tr><th>$\ast$</th><th>$e$</th><th>$a$</th><th>$b$</th></tr>
+    <tr><th>$e$</th><td>$e$</td><td>$a$</td><td>$b$</td></tr>
+    <tr><th>$a$</th><td>$a$</td><td></td><td></td></tr>
+    <tr><th>$b$</th><td>$b$</td><td></td><td></td></tr>
+  </table>
+  <table class="tbl small float-r">
+    <caption><b>2.25 Table</b></caption>
+    <tr><th>$\ast$</th><th>$e$</th><th>$a$</th><th>$b$</th></tr>
+    <tr><th>$e$</th><td>$e$</td><td>$a$</td><td>$b$</td></tr>
+    <tr><th>$a$</th><td>$a$</td><td>$b$</td><td>$e$</td></tr>
+    <tr><th>$b$</th><td>$b$</td><td>$e$</td><td>$a$</td></tr>
+  </table>
+  <div class="eq">$$e = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}, \quad a = \begin{bmatrix} -\frac{1}{2} & -\frac{\sqrt{3}}{2} \\ \frac{\sqrt{3}}{2} & -\frac{1}{2} \end{bmatrix}, \quad \text{and} \quad b = \begin{bmatrix} -\frac{1}{2} & \frac{\sqrt{3}}{2} \\ -\frac{\sqrt{3}}{2} & -\frac{1}{2} \end{bmatrix}.$$</div>
+  <p>We let $G = \{e, a, b\}$. In Exercise 18 you will show that $G$ is a group under matrix multiplication. By computing matrix products it is easy to check that the group table for $G$ is identical with Table 2.25. Therefore Table 2.25 gives a group.</p>
+  <p>Now suppose that $G'$ is any other group of three elements and imagine a table for $G'$ with identity element appearing first. Since our filling out of the table for $G = \{e, a, b\}$ could be done in only one way, we see that if we take the table for $G'$ and rename the identity $e$, the next element listed $a$, and the last element $b$, the resulting table for $G'$ must be the same as the one we had for $G$. As explained above, this renaming gives an isomorphism of the group $G'$ with the group $G$. Thus our work above can be summarized</p>
+  <div class="pno">27</div>
+</div>
+<div class="sheet book" id="pdf-p45">
+  <div class="rh"><span>Part I &middot; Groups and Subgroups</span><span>28</span></div>
+  <p>by saying that all groups with a single element are isomorphic, all groups with just two elements are isomorphic, and all groups with just three elements are isomorphic. We use the phrase <i>up to isomorphism</i> to express this identification. Thus we may say, &ldquo;There is only one group of three elements, up to isomorphism.&rdquo;</p>
+  <p>An interesting problem in group theory is to determine up to isomorphism all the groups with a given number of elements $n$. In Exercise 20, you will be asked to show that there are up to isomorphism exactly two groups of order 4. It is beyond the scope of this book to give a thorough investigation of this problem, but we will solve the problem for some other special values of $n$ in later sections.</p>
+  <h2 class="sec">Exercises 2</h2>
+  <h3 class="sub">Computations</h3>
+  <p>In Exercises 1 through 9, determine whether the binary operation $\ast$ gives a group structure on the given set. If no group results, give the first axiom in the order $\mathcal{G}_1$, $\mathcal{G}_2$, $\mathcal{G}_3$ from Definition 2.1 that does not hold.</p>
+  <ol class="exl" start="1">
+    <li>Let $\ast$ be defined on $\mathbb{Z}$ by letting $a \ast b = ab$.</li>
+    <li>Let $\ast$ be defined on $2\mathbb{Z} = \{2n \mid n \in \mathbb{Z}\}$ by letting $a \ast b = a + b$.</li>
+    <li>Let $\ast$ be defined on $\mathbb{R}^+$ by letting $a \ast b = \sqrt{ab}$.</li>
+    <li>Let $\ast$ be defined on $\mathbb{Q}$ by letting $a \ast b = ab$.</li>
+    <li>Let $\ast$ be defined on the set $\mathbb{R}^*$ of nonzero real numbers by letting $a \ast b = a/b$.</li>
+    <li>Let $\ast$ be defined on $\mathbb{C}$ by letting $a \ast b = |ab|$.</li>
+    <li>Let $\ast$ be defined on the set $\{a, b\}$ by Table 2.26.</li>
+    <li>Let $\ast$ be defined on the set $\{a, b\}$ by Table 2.27.</li>
+    <li>Let $\ast$ be defined on the set $\{e, a, b\}$ by Table 2.28.</li>
+  </ol>
+  <div class="tbl-row">
+    <table class="tbl small">
+      <caption><b>2.26 Table</b></caption>
+      <tr><th>$\ast$</th><th>$a$</th><th>$b$</th></tr>
+      <tr><th>$a$</th><td>$a$</td><td>$b$</td></tr>
+      <tr><th>$b$</th><td>$b$</td><td>$b$</td></tr>
+    </table>
+    <table class="tbl small">
+      <caption><b>2.27 Table</b></caption>
+      <tr><th>$\ast$</th><th>$a$</th><th>$b$</th></tr>
+      <tr><th>$a$</th><td>$a$</td><td>$b$</td></tr>
+      <tr><th>$b$</th><td>$a$</td><td>$b$</td></tr>
+    </table>
+    <table class="tbl small">
+      <caption><b>2.28 Table</b></caption>
+      <tr><th>$\ast$</th><th>$e$</th><th>$a$</th><th>$b$</th></tr>
+      <tr><th>$e$</th><td>$e$</td><td>$a$</td><td>$b$</td></tr>
+      <tr><th>$a$</th><td>$a$</td><td>$e$</td><td>$b$</td></tr>
+      <tr><th>$b$</th><td>$b$</td><td>$b$</td><td>$e$</td></tr>
+    </table>
+  </div>
+  <ol class="exl" start="10">
+    <li>Let $n$ be a positive integer and let $n\mathbb{Z} = \{nm \mid m \in \mathbb{Z}\}$.
+      <ol class="alpha">
+        <li>Show that $\langle n\mathbb{Z}, + \rangle$ is a group.</li>
+        <li>Show that $\langle n\mathbb{Z}, + \rangle \simeq \langle \mathbb{Z}, + \rangle$.</li>
+      </ol></li>
+  </ol>
+  <p>In Exercises 11 through 18, determine whether the given set of matrices under the specified operation, matrix addition or multiplication, is a group. Recall that a <b>diagonal matrix</b> is a square matrix whose only nonzero entries lie on the <b>main diagonal,</b> from the upper left to the lower right corner. An <b>upper-triangular matrix</b> is a square matrix with only zero entries below the main diagonal. Associated with each $n \times n$ matrix $A$ is a number called the determinant of $A$, denoted by $\det(A)$. If $A$ and $B$ are both $n \times n$ matrices, then $\det(AB) = \det(A)\det(B)$. Also, $\det(I_n) = 1$ and $A$ is invertible if and only if $\det(A) \neq 0$.</p>
+  <ol class="exl" start="11">
+    <li>All $n \times n$ diagonal matrices under matrix addition.</li>
+    <li>All $n \times n$ diagonal matrices under matrix multiplication.</li>
+    <li>All $n \times n$ diagonal matrices with no zero diagonal entry under matrix multiplication.</li>
+    <li>All $n \times n$ diagonal matrices with all diagonal entries 1 or $-1$ under matrix multiplication.</li>
+    <li>All $n \times n$ upper-triangular matrices under matrix multiplication.</li>
+    <li>All $n \times n$ upper-triangular matrices under matrix addition.</li>
+    <li>All $n \times n$ upper-triangular matrices with determinant 1 under matrix multiplication.</li>
+  </ol>
+  <div class="pno">28</div>
+</div>
+
+<div class="sheet book" id="pdf-p46">
+  <div class="rh"><span>Section 2 &middot; Exercises</span><span>29</span></div>
+  <ol class="exl" start="18">
+    <li>The set of $2 \times 2$ matrices $G = \{e, a, b\}$ where $e = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}$, $a = \begin{bmatrix} -\frac{1}{2} & -\frac{\sqrt{3}}{2} \\ \frac{\sqrt{3}}{2} & -\frac{1}{2} \end{bmatrix}$, and $b = \begin{bmatrix} -\frac{1}{2} & \frac{\sqrt{3}}{2} \\ -\frac{\sqrt{3}}{2} & -\frac{1}{2} \end{bmatrix}$ under matrix multiplication.</li>
+    <li>Let $S$ be the set of all real numbers except $-1$. Define $\ast$ on $S$ by
+      <div class="eq">$$a \ast b = a + b + ab.$$</div>
+      <ol class="alpha">
+        <li>Show that $\ast$ gives a binary operation on $S$.</li>
+        <li>Show that $\langle S, \ast \rangle$ is a group.</li>
+        <li>Find the solution of the equation $2 \ast x \ast 3 = 7$ in $S$.</li>
+      </ol></li>
+    <li>This exercise shows that there are two nonisomorphic group structures on a set of 4 elements.
+      <p class="indent">Let the set be $\{e, a, b, c\}$, with $e$ the identity element for the group operation. A group table would then have to start in the manner shown in Table 2.29. The square indicated by the question mark cannot be filled in with $a$. It must be filled in either with the identity element $e$ or with an element different from both $e$ and $a$. In this latter case, it is no loss of generality to assume that this element is $b$. If this square is filled in with $e$, the table can then be completed in two ways to give a group. Find these two tables. (You need not check the associative law.) If this square is filled in with $b$, then the table can only be completed in one way to give a group. Find this table. (Again, you need not check the associative law.) Of the three tables you now have, two give isomorphic groups. Determine which two tables these are, and give the one-to-one onto relabeling function which is an isomorphism.</p>
+      <ol class="alpha">
+        <li>Are all groups of 4 elements commutative?</li>
+        <li>Find a way to relabel the four matrices
+          <div class="eq">$$\left\{\begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}, \begin{bmatrix} 0 & -1 \\ 1 & 0 \end{bmatrix}, \begin{bmatrix} -1 & 0 \\ 0 & -1 \end{bmatrix}, \begin{bmatrix} 0 & 1 \\ -1 & 0 \end{bmatrix}\right\}$$</div>
+          so the matrix multiplication table is identical to one you constructed. This shows that the table you constructed defines an associative operation and therefore gives a group.</li>
+        <li>Show that for a particular value of $n$, the group elements given in Exercise 14 can be relabeled so their group table is identical to one you constructed. This implies the operation in the table is associative.</li>
+      </ol></li>
+  </ol>
+  <table class="tbl small center">
+    <caption><b>2.29 Table</b></caption>
+    <tr><th>$\ast$</th><th>$e$</th><th>$a$</th><th>$b$</th><th>$c$</th></tr>
+    <tr><th>$e$</th><td>$e$</td><td>$a$</td><td>$b$</td><td>$c$</td></tr>
+    <tr><th>$a$</th><td>$a$</td><td>?</td><td></td><td></td></tr>
+    <tr><th>$b$</th><td>$b$</td><td></td><td></td><td></td></tr>
+    <tr><th>$c$</th><td>$c$</td><td></td><td></td><td></td></tr>
+  </table>
+  <ol class="exl" start="21">
+    <li>According to Exercise 12 of Section 1, there are 16 possible binary operations on a set of 2 elements. How many of these give a structure of a group? How many of the 19,683 possible binary operations on a set of 3 elements give a group structure?</li>
+  </ol>
+  <h3 class="sub">Concepts</h3>
+  <ol class="exl" start="22">
+    <li>Consider our axioms $\mathcal{G}_1$, $\mathcal{G}_2$, and $\mathcal{G}_3$ for a group. We gave them in the order $\mathcal{G}_1\mathcal{G}_2\mathcal{G}_3$. Conceivable other orders to state the axioms are $\mathcal{G}_1\mathcal{G}_3\mathcal{G}_2$, $\mathcal{G}_2\mathcal{G}_1\mathcal{G}_3$, $\mathcal{G}_2\mathcal{G}_3\mathcal{G}_1$, $\mathcal{G}_3\mathcal{G}_1\mathcal{G}_2$, and $\mathcal{G}_3\mathcal{G}_2\mathcal{G}_1$. Of these six possible orders, exactly three are acceptable for a definition. Which orders are not acceptable, and why? (Remember this. Most instructors ask the student to define a group on at least one test.)</li>
+    <li>The following &ldquo;definitions&rdquo; of a group are taken verbatim, including spelling and punctuation, from papers of students who wrote a bit too quickly and carelessly. Criticize them.
+      <ol class="alpha">
+        <li>A group $G$ is a set of elements together with a binary operation $\ast$ such that the following conditions are satisfied
+          <ul class="plain">
+            <li>$\ast$ is associative</li>
+            <li>There exists $e \in G$ such that $e \ast x = x \ast e = x = $ identity.</li>
+            <li>For every $a \in G$ there exists an $a'$ (inverse) such that $a \cdot a' = a' \cdot a = e$</li>
+          </ul></li>
+        <li>A group is a set $G$ such that
+          <ul class="plain">
+            <li>The operation on $G$ is associative.</li>
+            <li>there is an identity element ($e$) in $G$.</li>
+            <li>for every $a \in G$, there is an $a'$ (inverse for each element).</li>
+          </ul></li>
+        <li>A group is a set with a binary operation such
+          <ul class="plain">
+            <li>the binary operation is defined</li>
+            <li>an inverse exists</li>
+            <li>an identity element exists</li>
+          </ul></li>
+        <li>A set $G$ is called a group over the binery operation $\ast$ such that for all $a, b \in G$
+          <ul class="plain">
+            <li>Binary operation $\ast$ is associative under addition</li>
+            <li>there exist an element $\{e\}$ such that $a \ast e = e \ast a = e$</li>
+            <li>Fore every element $a$ there exists an element $a'$ such that $a \ast a' = a' \ast a = e$</li>
+          </ul></li>
+      </ol></li>
+  </ol>
+  <div class="pno">29</div>
+</div>
+
+<div class="sheet book" id="pdf-p47">
+  <div class="rh"><span>Part I &middot; Groups and Subgroups</span><span>30</span></div>
+  <ol class="exl" start="24">
+    <li>Give a table defining an operation satisfying axioms $\mathcal{G}_2$ and $\mathcal{G}_3$ in the definition of a group, but not satisfying axiom $\mathcal{G}_1$ for the set
+      <ol class="alpha">
+        <li>$\{e, a, b\}$</li>
+        <li>$\{e, a, b, c\}$</li>
+      </ol></li>
+    <li>Mark each of the following true or false.
+      <ol class="tf">
+        <li>A group may have more than one identity element.</li>
+        <li>Any two groups of three elements are isomorphic.</li>
+        <li>In a group, each linear equation has a solution.</li>
+        <li>The proper attitude toward a definition is to memorize it so that you can reproduce it word for word as in the text.</li>
+        <li>Any definition a person gives for a group is correct provided that everything that is a group by that person&rsquo;s definition is also a group by the definition in the text.</li>
+        <li>Any definition a person gives for a group is correct provided he or she can show that everything that satisfies the definition satisfies the one in the text and conversely.</li>
+        <li>Every finite group of at most three elements is abelian.</li>
+        <li>An equation of the form $a \ast x \ast b = c$ always has a unique solution in a group.</li>
+        <li>The empty set can be considered a group.</li>
+        <li>Every group is a binary algebraic structure.</li>
+      </ol></li>
+  </ol>
+  <h3 class="sub">Proof synopsis</h3>
+  <p>We give an example of a proof synopsis. Here is a one-sentence synopsis of the proof that the inverse of an element $a$ in a group $\langle G, \ast \rangle$ is unique.</p>
+  <p class="center">Assuming that $a \ast a' = e$ and $a \ast a'' = e$, apply the left cancellation law to the equation $a \ast a' = a \ast a''$.</p>
+  <p>Note that we said &ldquo;the left cancellation law&rdquo; and not &ldquo;Theorem 2.16.&rdquo; We always suppose that our synopsis was given as an explanation given during a conversation at lunch, with no reference to text numbering and as little notation as is practical.</p>
+  <div class="pno">30</div>
+</div>
+<div class="sheet book" id="pdf-p48">
+  <div class="rh"><span>Section 2 &middot; Exercises</span><span>31</span></div>
+  <ol class="exl" start="26">
+    <li>Give a one-sentence synopsis of the proof of the left cancellation law in Theorem 2.16.</li>
+    <li>Give at most a two-sentence synopsis of the proof in Theorem 2.17 that an equation $ax = b$ has a unique solution in a group.</li>
+  </ol>
+  <h3 class="sub">Theory</h3>
+  <ol class="exl" start="28">
+    <li>An element $a \neq e$ in a group is said to have order 2 if $a \ast a = e$. Prove that if $G$ is a group and $a \in G$ has order 2, then for any $b \in G$, $b' \ast a \ast b$ also has order 2.</li>
+    <li>Show that if $G$ is a finite group with identity $e$ and with an even number of elements, then there is $a \neq e$ in $G$ such that $a \ast a = e$.</li>
+    <li>Let $\mathbb{R}^*$ be the set of all real numbers except 0. Define $\ast$ on $\mathbb{R}^*$ by letting $a \ast b = |a|b$.
+      <ol class="alpha">
+        <li>Show that $\ast$ gives an associative binary operation on $\mathbb{R}^*$.</li>
+        <li>Show that there is a left identity for $\ast$ and a right inverse for each element in $\mathbb{R}^*$.</li>
+        <li>Is $\mathbb{R}^*$ with this binary operation a group?</li>
+        <li>Explain the significance of this exercise.</li>
+      </ol></li>
+    <li>If $\ast$ is a binary operation on a set $S$, an element $x$ of $S$ is an <b>idempotent for</b> $\ast$ if $x \ast x = x$. Prove that a group has exactly one idempotent element. (You may use any theorems proved so far in the text.)</li>
+    <li>Show that every group $G$ with identity $e$ and such that $x \ast x = e$ for all $x \in G$ is abelian. [<i>Hint:</i> Consider $(a \ast b) \ast (a \ast b)$.]</li>
+    <li>Let $G$ be an abelian group and let $c^n = c \ast c \ast \cdots \ast c$, where $c \in G$ and $n \in \mathbb{Z}^+$, for $n$ factors $c$. Give a mathematical induction proof that $(a \ast b)^n = (a^n) \ast (b^n)$ for all $a, b \in G$.</li>
+    <li>Suppose that $G$ is a group and $a, b \in G$ satisfy $a \ast b = b \ast a'$ where as usual, $a'$ is the inverse for $a$. Prove that $b \ast a = a' \ast b$.</li>
+    <li>Suppose that $G$ is a group and $a$ and $b$ are elements of $G$ that satisfy $a \ast b = b \ast a^3$. Rewrite the element $(a \ast b)^2$ in the form $b^k a^r$. (See Exercise 33 for power notation.)</li>
+    <li>Let $G$ be a group with a finite number of elements. Show that for any $a \in G$, there exists an $n \in \mathbb{Z}^+$ such that $a^n = e$. See Exercise 33 for the meaning of $a^n$. [<i>Hint:</i> Consider $e, a, a^2, a^3, \ldots, a^m$, where $m$ is the number of elements in $G$, and use the cancellation laws.]</li>
+    <li>Show that if $(a \ast b)^2 = a^2 \ast b^2$ for $a$ and $b$ in a group $G$, then $a \ast b = b \ast a$. See Exercise 33 for the meaning of $a^2$.</li>
+    <li>Let $G$ be a group and let $a, b \in G$. Show that $(a \ast b)' = a' \ast b'$ if and only if $a \ast b = b \ast a$.</li>
+    <li>Let $G$ be a group and suppose that $a \ast b \ast c = e$ for $a, b, c \in G$. Show that $b \ast c \ast a = e$ also.</li>
+    <li>Prove that a set $G$, together with a binary operation $\ast$ on $G$ satisfying the left axioms 1, 2, and 3 given after Corollary 2.19, is a group.</li>
+    <li>Prove that a nonempty set $G$, together with an associative binary operation $\ast$ on $G$ such that
+      <div class="eq">$$a \ast x = b \text{ and } y \ast a = b \text{ have solutions in } G \text{ for all } a, b \in G,$$</div>
+      is a group. [<i>Hint:</i> Use Exercise 40.]</li>
+    <li>Let $G$ be a group. Prove that $(a')' = a$.</li>
+    <li>Let $\phi : \mathbb{R}^2 \to \mathbb{R}^2$ be an isometry of the plane.
+      <ol class="alpha">
+        <li>Prove that $\phi$ is a one-to-one function.</li>
+        <li>Prove that $\phi$ maps onto $\mathbb{R}^2$.</li>
+      </ol></li>
+    <li>Prove that if $f : G_1 \to G_2$ is a group isomorphism from the group $\langle G_1, \ast_1 \rangle$ to the group $\langle G_2, \ast_2 \rangle$, then $f^{-1} : G_2 \to G_1$ is also a group isomorphism.</li>
+    <li>Suppose that $G$ is a group with $n$ elements and $A \subseteq G$ has more than $\frac{n^2}{2}$ elements. Prove that for every $g \in G$, there exists $a, b \in A$ such that $a \ast b = g$. (This was Problem B-2 on the 1968 Putnam exam.)</li>
+  </ol>
+  <div class="pno">31</div>
+</div>
+</body>
+</html>

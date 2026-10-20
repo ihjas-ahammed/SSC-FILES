@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module II: Styling Pages</title>
+<style>
+:root{--ink:#1c2230;--muted:#5d6577;--accent:#1f4fbf;--rule:#d9dee8;--code:#f3f5f9;--note:#eef3ff;--warn:#fff6e5}
+*{box-sizing:border-box}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;background:#fff;color:var(--ink);font:17px/1.65 Georgia,"Times New Roman",serif}
+main{max-width:46rem;margin:0 auto;padding:2.5rem 1.25rem 4rem}
+header.title{border-bottom:3px solid var(--accent);margin-bottom:2rem;padding-bottom:1rem}
+header.title h1{font:700 2rem/1.2 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;margin:0 0 .3rem}
+header.title .meta{font:.95rem system-ui,sans-serif;color:var(--muted)}
+nav.toc{background:var(--note);border-radius:8px;padding:1rem 1.3rem;margin-bottom:2rem;font:.95rem/1.7 system-ui,sans-serif}
+nav.toc strong{display:block;margin-bottom:.3rem}
+nav.toc ol{margin:0;padding-left:1.2rem}
+nav.toc a{color:var(--accent);text-decoration:none}
+h2{font:700 1.45rem/1.3 system-ui,sans-serif;margin:2.6rem 0 .8rem;padding-bottom:.35rem;border-bottom:1px solid var(--rule);color:var(--accent)}
+h3{font:600 1.1rem/1.3 system-ui,sans-serif;margin:1.6rem 0 .5rem}
+p{margin:.7rem 0}
+code{font:.88em/1.4 "DejaVu Sans Mono",Consolas,monospace;background:var(--code);padding:.08em .3em;border-radius:4px}
+pre{background:var(--code);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:6px;padding:.9rem 1rem;overflow-x:auto;font:.86rem/1.5 "DejaVu Sans Mono",Consolas,monospace;white-space:pre}
+pre code{background:none;padding:0;font:inherit}
+.callout{background:var(--note);border-left:4px solid var(--accent);padding:.7rem 1rem;border-radius:6px;margin:1.2rem 0}
+.callout strong{font-family:system-ui,sans-serif}
+table{border-collapse:collapse;margin:1rem 0;width:100%;font-size:.95rem}
+th,td{padding:.45rem .7rem;text-align:left;vertical-align:top}
+th{font:600 .85rem system-ui,sans-serif;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+/* booktabs-style rules */
+table.book{border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+table.book thead th{border-bottom:1px solid var(--ink)}
+table.book tbody tr+tr td{border-top:1px solid var(--rule)}
+table.grid th,table.grid td{border:1px solid var(--rule)}
+table.grid th{background:var(--code)}
+.num{text-align:right}
+.ctr{text-align:center}
+.center{text-align:center}
+.right{text-align:right}
+.quote{margin:1rem 2.5rem;font-style:italic}
+.quote.plain{font-style:normal}
+.verse{margin:1rem 2rem;font-style:italic}
+.cols{display:flex;gap:1.2rem;align-items:flex-start;margin:1rem 0}
+.cols>div{flex:1 1 0;border:1px solid var(--rule);border-radius:6px;padding:.7rem 1rem}
+.cols.sm>div{font-size:.95rem}
+.sizes span{display:block}
+.fancy{border:1px solid var(--rule);border-radius:6px;margin:1rem 0;padding:.35rem .9rem;display:flex;justify-content:space-between;font:.85rem system-ui,sans-serif;color:var(--muted)}
+.fancy span:last-child{border-bottom:none}
+.fancy-hdr{border-bottom:1px solid var(--ink);padding-bottom:.25rem}
+.caption{font:600 .9rem system-ui,sans-serif;color:var(--muted);margin:.4rem 0 .6rem}
+.table-float{margin:1.3rem 0}
+.table-float .caption{text-align:center}
+ol,ul{padding-left:1.4rem}
+li{margin:.2rem 0}
+footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--rule);color:var(--muted);font:.85rem system-ui,sans-serif}
+@media print{
+  @page{size:A4;margin:16mm 18mm}
+  body{font-size:11pt}
+  main{max-width:none;padding:0}
+  h2,h3{break-after:avoid}
+  pre,table,.callout,.cols,.table-float,.fancy{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<main>
+
+<header class="title">
+  <h1>Module II: Styling Pages</h1>
+  <div class="meta">Study Notes &middot; MAT5FS112 &middot; Syllabus units 5&ndash;7</div>
+</header>
+
+<nav class="toc">
+  <strong>Contents</strong>
+  <ol>
+    <li><a href="#fonts">Fonts and text styling</a></li>
+    <li><a href="#spacing">Spacing and page layout</a></li>
+    <li><a href="#display">Displayed text</a></li>
+    <li><a href="#tabular">Rows and columns: tabular</a></li>
+    <li><a href="#floats">Tables as floating objects</a></li>
+  </ol>
+</nav>
+
+<h2 id="fonts">1. Fonts and text styling</h2>
+
+<p>Font commands change the look of a piece of text:</p>
+
+<table class="book">
+  <thead><tr><th>Command</th><th>Result</th></tr></thead>
+  <tbody>
+    <tr><td><code>\textbf{bold}</code></td><td><strong>bold</strong></td></tr>
+    <tr><td><code>\textit{italic}</code></td><td><em>italic</em></td></tr>
+    <tr><td><code>\emph{emphasis}</code></td><td><em>emphasis</em> (italic inside italic text becomes upright)</td></tr>
+    <tr><td><code>\texttt{typewriter}</code></td><td><code>typewriter</code></td></tr>
+    <tr><td><code>\textsf{sans serif}</code></td><td><span style="font-family:system-ui,sans-serif">sans serif</span></td></tr>
+    <tr><td><code>\textsc{small caps}</code></td><td><span style="font-variant:small-caps">small caps</span></td></tr>
+    <tr><td><code>\underline{underlined}</code></td><td><u>underlined</u></td></tr>
+  </tbody>
+</table>
+
+<p>Use <code>\emph</code> for meaning and <code>\textit</code> for pure styling. Commands can be combined: <code>\textbf{\textit{both}}</code>, which gives <strong><em>both</em></strong>.</p>
+
+<h3>1.1 Font size</h3>
+<p>Sizes are set with declarations. A declaration applies until the end of the enclosing group (a pair of braces or an environment):</p>
+<pre><code>{\small This is small text.}
+{\Large This is large text.}</code></pre>
+
+<p>Sizes, from small to large: <code>\tiny</code>, <code>\scriptsize</code>, <code>\footnotesize</code>, <code>\small</code>, <code>\normalsize</code>, <code>\large</code>, <code>\Large</code>, <code>\LARGE</code>, <code>\huge</code>, <code>\Huge</code>.</p>
+
+<p><span style="font-size:.85em">This is small text.</span> &nbsp;&nbsp; <span style="font-size:1.45em">This is large text.</span></p>
+
+<h2 id="spacing">2. Spacing and page layout</h2>
+
+<h3>2.1 Paragraph spacing</h3>
+<pre><code>\setlength{\parindent}{0pt}     % no indent at the start of paragraphs
+\setlength{\parskip}{0.6em}     % vertical gap between paragraphs
+\noindent                       % suppress indent for one paragraph</code></pre>
+
+<h3>2.2 Manual spacing</h3>
+<p><code>\vspace{1cm}</code> adds vertical space and <code>\hspace{2cm}</code> adds horizontal space. <code>\\</code> forces a line break and <code>\newpage</code> forces a page break.</p>
+
+<h3>2.3 Margins</h3>
+<p>The <code>geometry</code> package sets margins in one line, as in the source file of these notes:</p>
+<pre><code>\usepackage[margin=2.5cm]{geometry}</code></pre>
+
+<h3>2.4 Headers, footers and page numbers</h3>
+<p>The <code>fancyhdr</code> package gives control over the running header and footer, with <code>L</code>, <code>C</code> and <code>R</code> positions. These notes use:</p>
+<pre><code>\pagestyle{fancy}
+\fancyhf{}                          % clear everything first
+\fancyhead[L]{Left text}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}</code></pre>
+
+<p>A preview of the resulting running header:</p>
+<div class="fancy fancy-hdr"><span>MAT5FS112 &ndash; Module II</span><span>3</span></div>
+
+<p>Page numbering style: <code>\pagenumbering{roman}</code> (i, ii, iii&hellip;) or <code>\pagenumbering{arabic}</code>. <code>\thispagestyle{empty}</code> removes the header from one page.</p>
+
+<h2 id="display">3. Displayed text</h2>
+
+<p>Environments display blocks of text with a specific alignment or style.</p>
+
+<h3>3.1 Alignment</h3>
+<div class="cols sm">
+  <div class="center"><code>center</code><br>Centred text.</div>
+  <div><code>flushleft</code><br>Left-aligned (ragged right) text.</div>
+  <div class="right"><code>flushright</code><br>Right-aligned text.</div>
+</div>
+
+<h3>3.2 Quotations and verse</h3>
+<p>The <code>quote</code> environment sets a paragraph with extra margin on both sides:</p>
+<blockquote class="quote">A quotation: a paragraph set with extra margin on both sides.</blockquote>
+
+<p>The <code>quotation</code> environment is similar, but it indents the first line of each paragraph inside it.</p>
+
+<p><code>verse</code> keeps each line break you type and centres nothing else on the page:</p>
+<div class="verse">Verse keeps each line break you type<br>and centres nothing else on the page.</div>
+
+<h3>3.3 Side-by-side blocks with minipage</h3>
+<p>Two <code>minipage</code> boxes of fixed width, placed one after the other with <code>\hfill</code> between them, sit side by side:</p>
+<div class="cols">
+  <div><strong>Left column.</strong> A <code>minipage</code> is a box of fixed width that holds text. Its contents are wrapped inside the box.</div>
+  <div><strong>Right column.</strong> Two minipages placed one after the other with <code>\hfill</code> between them sit side by side.</div>
+</div>
+
+<h3>3.4 Verbatim text</h3>
+<pre><code>This text is printed exactly as typed:  $x^2$ and \textbf{stay raw}.</code></pre>
+
+<h2 id="tabular">4. Rows and columns: tabular</h2>
+
+<p>The <code>tabular</code> environment sets rows and columns. The argument gives one letter per column: <code>l</code> (left), <code>c</code> (centre), <code>r</code> (right), and <code>p{width}</code> (wrapped paragraph of given width). Cells are separated by <code>&amp;</code> and rows end with <code>\\</code>.</p>
+
+<pre><code>\begin{tabular}{lcr}
+Item   &amp; Mark &amp; Grade \\
+\hline
+Algebra &amp; 18  &amp; A     \\
+Real    &amp; 14  &amp; B     \\
+\end{tabular}</code></pre>
+
+<p>Rendered:</p>
+<table class="grid">
+  <thead><tr><th>Item</th><th class="ctr">Mark</th><th class="right">Grade</th></tr></thead>
+  <tbody>
+    <tr><td>Algebra</td><td class="ctr">18</td><td class="right">A</td></tr>
+    <tr><td>Real</td><td class="ctr">14</td><td class="right">B</td></tr>
+  </tbody>
+</table>
+
+<h3>4.1 Rules: <code>\hline</code> and <code>\cline</code></h3>
+<p><code>\hline</code> draws a full-width horizontal line. <code>\cline{2-3}</code> draws a line only under columns 2 to 3. Vertical lines come from <code>|</code> in the column specification.</p>
+
+<pre><code>\begin{tabular}{|l|c|c|}
+\hline
+Name &amp; Physics &amp; Maths \\
+\cline{2-3}
+Asha &amp; 80      &amp; 75    \\
+\hline
+\end{tabular}</code></pre>
+
+<p>Rendered:</p>
+<table class="grid">
+  <thead><tr><th>Name</th><th class="ctr">Physics</th><th class="ctr">Maths</th></tr></thead>
+  <tbody>
+    <tr><td>Asha</td><td class="ctr">80</td><td class="ctr">75</td></tr>
+  </tbody>
+</table>
+
+<h3>4.2 Spanning columns: <code>\multicolumn</code></h3>
+<pre><code>\begin{tabular}{|l|c|c|}
+\hline
+\multicolumn{3}{|c|}{Semester V marks} \\
+\hline
+Name &amp; Physics &amp; Maths \\
+\hline
+Asha &amp; 80      &amp; 75    \\
+\hline
+\end{tabular}</code></pre>
+
+<p>Rendered:</p>
+<table class="grid">
+  <thead>
+    <tr><th colspan="3" class="ctr">Semester V marks</th></tr>
+    <tr><th>Name</th><th class="ctr">Physics</th><th class="ctr">Maths</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Asha</td><td class="ctr">80</td><td class="ctr">75</td></tr>
+  </tbody>
+</table>
+
+<h3>4.3 Professional tables with <code>booktabs</code></h3>
+<p>The <code>booktabs</code> package uses <code>\toprule</code>, <code>\midrule</code>, <code>\bottomrule</code> and avoids vertical lines, which gives cleaner results. <code>\cmidrule{2-3}</code> draws a partial rule.</p>
+
+<pre><code>\begin{tabular}{l r r}
+\toprule
+Module &amp; Units &amp; Min.\ marks \\
+\midrule
+I   &amp; 4 &amp; 10 \\
+II  &amp; 3 &amp; 10 \\
+III &amp; 4 &amp; 10 \\
+\bottomrule
+\end{tabular}</code></pre>
+
+<p>Rendered:</p>
+<table class="book">
+  <thead><tr><th>Module</th><th class="num">Units</th><th class="num">Min. marks</th></tr></thead>
+  <tbody>
+    <tr><td>I</td><td class="num">4</td><td class="num">10</td></tr>
+    <tr><td>II</td><td class="num">3</td><td class="num">10</td></tr>
+    <tr><td>III</td><td class="num">4</td><td class="num">10</td></tr>
+  </tbody>
+</table>
+
+<h3>4.4 Fixed-width columns with <code>p{}</code></h3>
+<p>Use <code>p{width}</code> when a cell has a paragraph of text. The <code>array</code> package adds <code>m{width}</code> (vertically centred) and <code>b{width}</code> (bottom aligned).</p>
+
+<pre><code>\begin{tabular}{p{3.5cm} p{8cm}}
+\toprule
+Command &amp; Purpose \\
+\midrule
+\verb|\hline| &amp; Draws a full horizontal rule across the table. \\
+\verb|\multicolumn| &amp; Merges several cells in a row into one. \\
+\bottomrule
+\end{tabular}</code></pre>
+
+<p>Rendered:</p>
+<table class="book">
+  <thead><tr><th style="width:30%">Command</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>\hline</code></td><td>Draws a full horizontal rule across the table.</td></tr>
+    <tr><td><code>\multicolumn</code></td><td>Merges several cells in a row into one.</td></tr>
+  </tbody>
+</table>
+
+<h2 id="floats">5. Tables as floating objects</h2>
+
+<p>A table placed in a <code>table</code> environment floats: LaTeX moves it to a suitable place and numbers it. The caption and the label let the text refer to it.</p>
+
+<pre><code>\begin{table}[htbp]
+  \centering
+  \caption{Marks awarded in the LaTeX internal examination}
+  \label{tab:marks}
+  \begin{tabular}{lcc}
+    \toprule
+    Student &amp; Assignment &amp; Viva \\
+    \midrule
+    Student A &amp; 9 &amp; 8 \\
+    Student B &amp; 7 &amp; 9 \\
+    \bottomrule
+  \end{tabular}
+\end{table}</code></pre>
+
+<p>Rendered:</p>
+<div class="table-float">
+  <table class="book">
+    <thead><tr><th>Student</th><th class="ctr">Assignment</th><th class="ctr">Viva</th></tr></thead>
+    <tbody>
+      <tr><td>Student A</td><td class="ctr">9</td><td class="ctr">8</td></tr>
+      <tr><td>Student B</td><td class="ctr">7</td><td class="ctr">9</td></tr>
+    </tbody>
+  </table>
+  <div class="caption">Table 1: Marks awarded in the LaTeX internal examination</div>
+</div>
+
+<div class="callout"><strong>Placement.</strong> As <code>Table~\ref{tab:marks}</code> shows, the marks are recorded in two parts. The placement specifier <code>[htbp]</code> means: here, top, bottom, or on its own page. The <code>~</code> before <code>\ref</code> is a non-breaking space that keeps &ldquo;Table&rdquo; and the number together.</div>
+
+<footer>MAT5FS112 &middot; Module II study notes</footer>
+
+</main>
+</body>
+</html>

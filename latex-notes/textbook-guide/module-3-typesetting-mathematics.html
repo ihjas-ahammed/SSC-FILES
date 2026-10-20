@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module III: Typesetting Mathematics</title>
+<style>
+:root{--ink:#1c2230;--muted:#5d6577;--accent:#1f4fbf;--rule:#d9dee8;--code:#f3f5f9;--note:#eef3ff;--warn:#fff6e5;--ok:#eefaf0;--ok-rule:#2e8b57}
+*{box-sizing:border-box}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;background:#fff;color:var(--ink);font:16.5px/1.65 Georgia,"Times New Roman",serif}
+main{max-width:46rem;margin:0 auto;padding:2.5rem 1.25rem 4rem}
+header.title{border-bottom:3px solid var(--accent);margin-bottom:2rem;padding-bottom:1rem}
+header.title h1{font:700 2rem/1.2 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;margin:0 0 .3rem}
+header.title .meta{font:.95rem system-ui,sans-serif;color:var(--muted)}
+nav.toc{border:1px solid var(--rule);border-radius:8px;padding:1rem 1.3rem;margin-bottom:2rem;font:.94rem/1.7 system-ui,sans-serif}
+nav.toc strong{display:block;margin-bottom:.3rem}
+nav.toc ol{margin:0;padding-left:1.2rem;columns:2;column-gap:2rem}
+nav.toc a{color:var(--accent);text-decoration:none}
+section.part{margin-top:2.4rem}
+h2{font:700 1.5rem/1.3 system-ui,sans-serif;margin:0 0 .6rem;padding-bottom:.35rem;border-bottom:2px solid var(--accent);color:var(--accent)}
+h3{font:600 1.12rem/1.3 system-ui,sans-serif;margin:1.7rem 0 .5rem;color:var(--ink)}
+h4{font:600 .98rem/1.3 system-ui,sans-serif;margin:1.2rem 0 .3rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+p{margin:.65rem 0}
+code{font:.87em/1.4 "DejaVu Sans Mono",Consolas,monospace;background:var(--code);padding:.08em .3em;border-radius:4px;white-space:nowrap}
+pre{background:var(--code);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:6px;padding:.75rem .95rem;overflow-x:auto;font:.84rem/1.5 "DejaVu Sans Mono",Consolas,monospace;white-space:pre;margin:.8rem 0}
+pre code{background:none;padding:0;font:inherit;white-space:pre}
+.plain{background:var(--note);border-left:4px solid var(--accent);padding:.6rem .95rem;border-radius:6px;margin:1rem 0}
+.plain>strong:first-child{font-family:system-ui,sans-serif;color:var(--accent)}
+.remember{background:var(--ok);border-left:4px solid var(--ok-rule);padding:.6rem .95rem;border-radius:6px;margin:1rem 0}
+.remember>strong:first-child{font-family:system-ui,sans-serif;color:var(--ok-rule)}
+.warn{background:var(--warn);border-left:4px solid #d99a14;padding:.6rem .95rem;border-radius:6px;margin:1rem 0}
+.warn>strong:first-child{font-family:system-ui,sans-serif;color:#8a5a00}
+.io{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;align-items:start;margin:.6rem 0 1rem}
+.io>div{border:1px solid var(--rule);border-radius:6px;padding:.4rem .6rem;font-size:.95rem;background:#fff}
+.io>div>.lab{font:600 .72rem system-ui,sans-serif;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:0 0 .2rem}
+.io pre{margin:0;font-size:.8rem}
+.io .shown{padding:.1rem .2rem}
+table{border-collapse:collapse;margin:.9rem 0;width:100%;font-size:.93rem}
+th,td{border-bottom:1px solid var(--rule);padding:.42rem .6rem;text-align:left;vertical-align:top}
+th{font:600 .8rem system-ui,sans-serif;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);border-bottom:2px solid var(--ink)}
+td code{white-space:normal}
+ul,ol{padding-left:1.4rem}
+li{margin:.22rem 0}
+.tag{display:inline-block;font:600 .7rem system-ui,sans-serif;text-transform:uppercase;letter-spacing:.05em;background:#e4e9f5;color:var(--accent);border-radius:4px;padding:.08rem .4rem;vertical-align:middle}
+.tag.gap{background:#fde9c4;color:#7a4b00}
+footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--rule);color:var(--muted);font:.85rem system-ui,sans-serif}
+@media (max-width:640px){.io{grid-template-columns:1fr}nav.toc ol{columns:1}}
+@media print{
+  @page{size:A4;margin:16mm 18mm}
+  body{font-size:10.5pt}
+  main{max-width:none;padding:0}
+  section.part{break-before:page}
+  section.part:first-of-type{break-before:auto}
+  h2,h3,h4{break-after:avoid}
+  pre,table,.plain,.remember,.warn,.io{break-inside:avoid}
+  nav.toc{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<main>
+<header class="title"><h1>Module III: Typesetting Mathematics</h1><div class="meta">LaTeX Made Simple &middot; Syllabus units 8&ndash;11 &middot; Primer chapter 8 (pages 95&ndash;136)</div></header>
+<section class="part" id="ch8">
+  <h2>8. Typesetting mathematics</h2>
+  <p class="tag">Syllabus units 8&ndash;11 &middot; Primer pages 95&ndash;136</p>
+
+  <div class="plain">
+    <strong>In plain words.</strong> TeX was written to typeset mathematics well. Inside a formula, LaTeX spaces the symbols itself, so you write the meaning and let it place the spaces. Maths has two modes: <em>in-text</em> (inside a sentence, with <code>$...$</code>) and <em>display</em> (a formula on its own line, with <code>\[...\]</code> or <code>equation</code>).
+  </div>
+
+  <h3>8.1 The basics</h3>
+
+  <h4>In-text and displayed maths</h4>
+  <pre><code>The equation representing a straight line in the Cartesian plane is
+of the form $ax+by+c=0$, where $a$, $b$, $c$ are constants.
+
+$$
+  ax+by+c=0
+$$</code></pre>
+  <ul>
+    <li><code>$...$</code> keeps maths in the sentence. The letters are in math italic.</li>
+    <li><code>$$...$$</code> (TeX) and <code>\[...\]</code> (LaTeX) put the formula on its own centred line.</li>
+    <li><code>\(...\)</code> and <code>\begin{math}...\end{math}</code> are the LaTeX forms of in-text maths.</li>
+  </ul>
+
+  <div class="remember">
+    <strong>Spaces in maths.</strong> TeX ignores the spaces you type inside maths and places its own. <code>$ax+by+c=0$</code> and <code>$ax + by + c = 0$</code> print the same. Do not type spaces to make the result look right.
+  </div>
+
+  <h4>Superscripts and subscripts</h4>
+  <pre><code>$x^2$      $x_n$      $x_n^2$      % x squared, x sub n, both together
+$x^{mn}$    $x_{n-1}$                       % braces group several symbols
+$(x^m)^n = x^{mn}$</code></pre>
+  <p>Without braces, only the next character is affected. So <code>x^mn</code> prints "x<sup>m</sup>n", but <code>x^{mn}</code> prints x<sup>mn</sup>. For a superscript and a subscript together on the same letter, the order and braces change the output: <code>x_m^n</code>, <code>x^n_m</code> and <code>{x_m}^n</code> come out differently. Use braces to say what you mean.</p>
+  <pre><code>$$ x_m^n \qquad x^n_m \qquad {x_m}^n \qquad {x^n}_m $$</code></pre>
+
+  <h4>Roots and fractions</h4>
+  <pre><code>$\sqrt{2}$          % square root
+$\sqrt[4]{5}$      % fourth root
+$\sqrt{x+y}$       % the top bar stretches over the whole expression
+$\sqrt{2+\sqrt{2}}$ % nested roots</code></pre>
+  <p>The square root's horizontal bar stretches to cover its contents. Use <code>\frac{numerator}{denominator}</code> for fractions (covered in Part 8.4 below).</p>
+
+  <h4>Spacing inside maths</h4>
+  <table>
+    <thead><tr><th>Command</th><th>Space</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td><code>\,</code></td><td>thin space</td><td><code>\int f(x)\,dx</code></td></tr>
+      <tr><td><code>\;</code></td><td>thick space</td><td><code>x_n = x_{n-1}\;(n&gt;2)</code></td></tr>
+      <tr><td><code>\quad</code></td><td>a quad (about the width of M)</td><td><code>x_1=1,\quad x_2=1</code></td></tr>
+    </tbody>
+  </table>
+
+  <h4>Binary operators and relations</h4>
+  <p>TeX adds extra space around <em>binary operators</em> (such as <code>+</code>, <code>-</code>, <code>\circ</code>) and around <em>relations</em> (such as <code>=</code>, <code>\le</code>). Symbols that are not in either class do not get that space. To force a symbol to behave as one of these:</p>
+  <pre><code>x\circ y = x+y-xy          % \circ is a binary operator: spaces on both sides
+x\mathbin\Box y           % force \Box (from amssymb) to act as a binary operator
+x\mathrel\rho y           % force \rho to act as a relation</code></pre>
+  <p>Some symbols (for example <code>\Box</code>) are only available after loading <code>amssymb</code> or <code>latexsym</code>.</p>
+
+  <h3>8.2 Custom commands</h3>
+  <div class="plain">
+    <strong>In plain words.</strong> If you type the same expression many times, give it a short name with <code>\newcommand</code>. Put the definitions in the preamble, so they can be used anywhere.
+  </div>
+  <pre><code>\newcommand{\vect}{(x_1,x_2,\dots,x_n)}
+We often write $x$ to denote the vector $\vect$.</code></pre>
+  <p>With an argument, the same command can produce many vectors:</p>
+  <pre><code>\newcommand{\vect}[1]{(#1_1,#1_2,\dots,#1_n)}
+$\vect{x}$ gives $(x_1,x_2,\dots,x_n)$ and $\vect{a}$ gives $(a_1,a_2,\dots,a_n)$.
+
+\newcommand{\vect}[2]{(#1_1,#1_2,\dots,#1_#2)}
+$\vect{x}{m}$ gives $(x_1,x_2,\dots,x_m)$.</code></pre>
+  <p><code>[1]</code> says the command takes one argument. <code>#1</code> is replaced by that argument. A command can take up to nine arguments.</p>
+
+  <h3>8.3 More on mathematics: the amsmath package</h3>
+  <p>The primer uses <code>amsmath</code> for this section. Load it with <code>\usepackage{amsmath}</code>. It gives better equation environments.</p>
+
+  <h4>Single equations</h4>
+  <table>
+    <thead><tr><th>Environment</th><th>Numbered?</th><th>Use</th></tr></thead>
+    <tbody>
+      <tr><td><code>equation*</code></td><td>No</td><td>One display, no number</td></tr>
+      <tr><td><code>equation</code></td><td>Yes</td><td>One display with a number, such as (8.1)</td></tr>
+      <tr><td><code>multline*</code>, <code>multline</code></td><td>No / yes</td><td>One long formula over several lines (first line left, last line right)</td></tr>
+      <tr><td><code>split</code></td><td>Inside another environment</td><td>Several lines aligned at <code>&amp;</code>, inside one equation</td></tr>
+    </tbody>
+  </table>
+  <p>The starred version (<code>equation*</code>) has no number. The plain version numbers the formula. For any environment, the unstarred form adds numbers.</p>
+
+  <pre><code>\begin{equation*}
+  (a+b)^2 = (a+b)(a+b)
+\end{equation*}</code></pre>
+
+  <p>Text inside a display uses <code>\text</code>. Maths inside that text needs dollar signs:</p>
+  <pre><code>\begin{equation*}
+  x\le|x|\quad\text{and}\quad x\ge|x|
+\end{equation*}
+\begin{equation*}
+  x\le|x|\quad\text{for all $x$ in $R$}.
+\end{equation*}</code></pre>
+
+  <h4>Long equations: split and multline</h4>
+  <p>When an equation is too long for one line, <code>split</code> inside an <code>equation*</code> lines it up at the <code>&amp;</code> character, with the <code>=</code> signs aligned:</p>
+  <pre><code>\begin{equation*}
+  \begin{split}
+    (a+b)^2 &amp;amp; = (a+b)(a+b)\\
+            &amp;amp; = a^2+ab+ba+b^2\\
+            &amp;amp; = a^2+2ab+b^2
+  \end{split}
+\end{equation*}</code></pre>
+  <p><code>multline</code> is simpler to type, but for more than two lines its output is less neat. The primer recommends <code>split</code> for long expansions.</p>
+
+  <h4>Groups of equations: gather and align</h4>
+  <pre><code>\begin{gather*}
+  (a,b)+(c,d)=(a+c,b+d)\\
+  (a,b)(c,d)=(ac-bd,ad+bc)
+\end{gather*}
+
+Thus $x$, $y$ and $z$ satisfy the equations
+\begin{align*}
+  x+y-z &amp;amp; = 1\\
+  x-y+z &amp;amp; = 1
+\end{align*}</code></pre>
+  <ul>
+    <li><code>gather</code>: each line centred on its own.</li>
+    <li><code>align</code>: lines aligned at each <code>&amp;</code>. Put the <code>&amp;</code> before the <code>=</code> to line up the equals signs.</li>
+    <li><code>\intertext{and by hypothesis}</code> puts a short piece of text between aligned lines without breaking the alignment.</li>
+    <li>Extra <code>&amp;</code> signs make side-by-side columns. Use <code>\qquad</code> to space the columns apart.</li>
+    <li><code>aligned</code>, <code>gathered</code> and <code>alignedat</code> take only the width they need, so they can sit inside an <code>equation*</code> beside other text.</li>
+  </ul>
+
+  <h4>Cases</h4>
+  <pre><code>\begin{equation*}
+  |x| =
+  \begin{cases}
+    x      &amp;amp; \text{if $x\ge 0$}\\
+    -x     &amp;amp; \text{if $x\le 0$}
+  \end{cases}
+\end{equation*}</code></pre>
+
+  <h4>Equation numbers and labels</h4>
+  <pre><code>\numberwithin{equation}{section}   % equation numbers now carry the section number
+\begin{equation}\tag{L}
+  ax+by+c=0
+\end{equation}
+\begin{align}
+  x+y-z &amp;amp; = 1 \notag \\
+  x-y+z &amp;amp; = 1 \tag{H}
+\end{align}</code></pre>
+  <ul>
+    <li>Numbers are added to the unstarred environments automatically. In a book or report, the chapter number comes first: the second numbered equation of Chapter 8 prints as (8.2), as in the primer.</li>
+    <li><code>\numberwithin{equation}{section}</code> adds the section number as well, in the style (section.equation).</li>
+    <li><code>\tag{name}</code> replaces the automatic number with your own label.</li>
+    <li><code>\notag</code> removes the number from one row of an <code>align</code>.</li>
+    <li>Put <code>\tag</code> before the <code>\\</code> at the end of the row, not after it.</li>
+  </ul>
+
+  <div class="remember">
+    <strong>Remember (Part 8.1&ndash;8.3)</strong>
+    <ul>
+      <li>Use <code>$...$</code> for in-text maths and <code>\[...\]</code> or <code>equation</code> for displays.</li>
+      <li>Braces group the superscript or subscript. <code>x^{mn}</code>, not <code>x^mn</code>.</li>
+      <li>TeX sets the spaces in maths. Do not add spaces by hand.</li>
+      <li>Use <code>align</code> for several lines that must line up, and <code>split</code> inside an equation for one long formula.</li>
+      <li>The starred environment is unnumbered; the plain one is numbered.</li>
+    </ul>
+  </div>
+</section>
+<section class="part" id="ch8b">
+  <h2>8 (continued). Matrices, delimiters, fractions, operators and symbols</h2>
+  <p class="tag">Syllabus units 10 and 11 &middot; Primer pages 112&ndash;136</p>
+
+  <h3>8.4 Mathematics miscellany</h3>
+
+  <h4>Matrices</h4>
+  <p>Matrices are set with environments, where <code>&amp;</code> separates the columns and <code>\\</code> ends each row:</p>
+  <table>
+    <thead><tr><th>Environment</th><th>Brackets</th></tr></thead>
+    <tbody>
+      <tr><td><code>matrix</code></td><td>None</td></tr>
+      <tr><td><code>pmatrix</code></td><td>Round ( )</td></tr>
+      <tr><td><code>bmatrix</code></td><td>Square [ ]</td></tr>
+      <tr><td><code>vmatrix</code></td><td>Single bars | |  (determinant)</td></tr>
+      <tr><td><code>Vmatrix</code></td><td>Double bars &#8214; &#8214;</td></tr>
+      <tr><td><code>Bmatrix</code></td><td>Curly braces { }</td></tr>
+      <tr><td><code>smallmatrix</code></td><td>None, for use inside a line of text</td></tr>
+    </tbody>
+  </table>
+  <pre><code>\begin{equation*}
+  \begin{pmatrix}
+    1 &amp;amp; 1 &amp;amp; -1\\
+    1 &amp;amp; -1 &amp;amp; 1\\
+    1 &amp;amp; 1 &amp;amp; 1
+  \end{pmatrix}
+  \begin{pmatrix} x\\ y\\ z \end{pmatrix} =
+  \begin{pmatrix} 1\\ 1\\ 1 \end{pmatrix}.
+\end{equation*}
+The determinant $\begin{vmatrix} a &amp;amp; b\\ c &amp;amp; d \end{vmatrix}$ is defined by
+\begin{equation*}
+  \begin{vmatrix} a &amp;amp; b\\ c &amp;amp; d \end{vmatrix} = ad - bc
+\end{equation*}</code></pre>
+  <p><code>matrix</code> with no bracket is an array without outer delimiters, so use <code>pmatrix</code> or <code>bmatrix</code> when you want brackets. <code>pmatrix</code> works both in text and in displays.</p>
+
+  <h4>Dots</h4>
+  <table>
+    <thead><tr><th>Command</th><th>Looks like</th><th>Use</th></tr></thead>
+    <tbody>
+      <tr><td><code>\ldots</code></td><td>x<sub>1</sub>, x<sub>2</sub>, &hellip;</td><td>On the baseline, in a list</td></tr>
+      <tr><td><code>\cdots</code></td><td>&middot;&middot;&middot;</td><td>Centred, between operators</td></tr>
+      <tr><td><code>\vdots</code>, <code>\ddots</code></td><td>vertical and diagonal dots</td><td>In matrices</td></tr>
+      <tr><td><code>\dotsc</code>, <code>\dotsb</code>, <code>\dotsm</code>, <code>\dotsi</code></td><td>dots for commas, binary operators, products, integrals</td><td>Choose by what comes before and after</td></tr>
+    </tbody>
+  </table>
+  <p>In a matrix, <code>\hdotsfor{4}</code> draws a row of dots spanning four columns. It takes an optional spacing argument, such as <code>\hdotsfor[2]{4}</code>.</p>
+
+  <h4>Delimiters that grow: <code>\left</code> and <code>\right</code></h4>
+  <pre><code>\[
+  \left( \frac{x}{y} \right)^{2} \qquad
+  \left[ \sum_{k=1}^{n} k \right] \qquad
+  \left\{ x \in \mathbb{R} : x &amp;gt; 0 \right\}
+\]</code></pre>
+  <ul>
+    <li>Each <code>\left</code> needs a matching <code>\right</code>. Use <code>\right.</code> for an invisible closing delimiter.</li>
+    <li>The delimiters need not match. A large brace on one side of a system of equations is a common use: <code>\left.</code> ... <code>\right\}</code>.</li>
+    <li>Sometimes <code>\left</code> is too big. <code>\bigl</code>, <code>\bigr</code>, <code>\Bigl</code>, <code>\biggl</code>, <code>\Biggl</code> (and the <code>r</code> forms) give sizes you choose.</li>
+  </ul>
+
+  <h4>Fractions and binomial coefficients</h4>
+  <pre><code>\frac{a+b}{c}          % fraction
+\binom{n}{k}           % binomial coefficient
+\tfrac{1}{2}           % smaller fraction, for use in a line
+\dfrac{1}{2^{n-1}}     % larger fraction, even in text
+\cfrac{1^2}{2+\cfrac{3^2}{2+\dotsb}}   % continued fraction</code></pre>
+  <p>Inside text, <code>\frac</code> prints smaller than in a display. Use <code>\tfrac</code> or <code>\dfrac</code> to override that. <code>\dbinom</code> and <code>\tbinom</code> do the same for binomials.</p>
+
+  <p><code>\genfrac{left}{right}{thickness}{style}{top}{bottom}</code> gives a custom fraction. Here, <code>\genfrac{\{}{\}}{0pt}{}{ij}{k}</code> prints the Christoffel symbol with braces, and <code>\genfrac{[}{]}{0pt}{}{ij}{k}</code> with square brackets. A zero thickness removes the line.</p>
+
+  <h4>Limits on large operators</h4>
+  <pre><code>In text:      $\sum_{n=1}^{\infty} \frac{1}{n^2}$
+In display:   \[ \sum_{n=1}^{\infty} \frac{1}{n^2} = \frac{\pi^2}{6} \]
+Force text style in a line:   $\displaystyle\sum_{n=1}^{\infty} \frac{1}{n^2}$
+Limits at the side in display: $\sum\nolimits_{n=1}^{\infty}$
+Limits above and below in text: $\sum\limits_{n=1}^{\infty}$
+Integral with limits above and below: $\int\limits_0^{\infty}$</code></pre>
+  <ul>
+    <li>In a display, the sum sign is larger and its limits sit above and below. In text, the limits sit at the side.</li>
+    <li><code>\limits</code> and <code>\nolimits</code> change the position. <code>\displaystyle</code> and <code>\textstyle</code> change the size.</li>
+    <li>Integrals keep their limits at the side even in display, unless you add <code>\limits</code>.</li>
+    <li><code>\substack{i=1\\i\ne k}</code> puts two lines of subscript under one operator. <code>\sideset</code> puts symbols at all four corners.</li>
+  </ul>
+
+  <h4>Accents, over and under</h4>
+  <pre><code>$\hat{a}$  $\bar{a}$  $\dot{a}$  $\ddot{a}$  $\tilde{a}$  $\vec{a}$
+$\overset{\circ}{a}$      % a with a small circle above
+$\underset{\circ}{a}$     % a with a small circle below
+$\overbrace{a+b+c}^{\text{sum}}$   $\underbrace{x+y}_{\text{pair}}$
+$\overrightarrow{AB}$     $\underline{ab}$
+$\xrightarrow[\text{monic}]{f}$     % arrow with a label above and below</code></pre>
+  <p><code>\xrightarrow</code> and <code>\xleftarrow</code> (from amsmath) stretch to fit a label. The optional argument in square brackets is the label below.</p>
+
+  <h3>8.5 New operators</h3>
+  <p>Functions such as <code>\sin</code>, <code>\log</code> and <code>\lim</code> are already set upright. To make your own, declare it in the preamble:</p>
+  <pre><code>\DeclareMathOperator{\cl}{cl}          % in the preamble
+We denote the closure of $A$ in $Y$ by $\cl_Y(A)$.
+
+\DeclareMathOperator*{\esup}{ess\,sup} % starred: limits above and below
+$\|f\|_\infty=\esup_{x\in R}|f(x)|$</code></pre>
+
+  <h3>8.6 The many faces of mathematics: math fonts</h3>
+  <table>
+    <thead><tr><th>Command</th><th>Example</th><th>Use</th></tr></thead>
+    <tbody>
+      <tr><td><code>\mathit</code></td><td>x+y=z</td><td>Italic (default)</td></tr>
+      <tr><td><code>\mathrm</code></td><td>x+y=z (upright)</td><td>Upright text inside maths; the letter <em>d</em> in differentials</td></tr>
+      <tr><td><code>\mathbf</code></td><td>bold roman</td><td>Bold, without italics</td></tr>
+      <tr><td><code>\mathsf</code></td><td>sans serif</td><td>Matrices (ISO style, sans serif)</td></tr>
+      <tr><td><code>\mathtt</code></td><td>typewriter</td><td>Code-like symbols</td></tr>
+      <tr><td><code>\mathcal</code></td><td>calligraphic capitals</td><td>Like $\mathcal{L}$</td></tr>
+      <tr><td><code>\boldsymbol</code></td><td>bold italic</td><td>Vectors such as $\boldsymbol{a}+\boldsymbol{b}=\boldsymbol{c}$</td></tr>
+      <tr><td><code>\mathbb</code></td><td>blackboard bold</td><td>$\mathbb{R}$, $\mathbb{N}$ (needs amssymb)</td></tr>
+    </tbody>
+  </table>
+  <p><code>\mathbf</code> gives roman bold, not bold italic. For bold italic vectors use <code>\boldsymbol</code>. Note that <code>\boldsymbol{a+b=c}</code> makes the plus and equals bold too, because it affects every symbol in its braces.</p>
+
+  <div class="plain">
+    <strong>ISO conventions (from the primer).</strong> Simple variables are italic. Vectors are bold italic. The special numbers <em>e</em> and <em>i</em>, and the differential <em>d</em>, are upright. Define them once:
+  </div>
+  <pre><code>\newcommand{\me}{\mathrm{e}}
+\newcommand{\mi}{\mathrm{i}}
+\newcommand{\diff}{\mathrm{d}}   % then write $\diff x$</code></pre>
+
+  <h3>8.7 And that is not all</h3>
+  <p>The primer points to the <em>amsldoc</em> document, which comes with TeX distributions, and to Knuth's <em>The TeXbook</em>, chapter 18, "Fine Points of Mathematics Typing", for more.</p>
+
+  <h3>8.8 Symbols: the ones you need most</h3>
+  <p>The primer has full symbol tables. Here are the most used ones.</p>
+
+  <table>
+    <thead><tr><th>Group</th><th>Commands and what they print</th></tr></thead>
+    <tbody>
+      <tr><td>Greek lower case</td><td><code>\alpha</code> &alpha;, <code>\beta</code> &beta;, <code>\gamma</code> &gamma;, <code>\delta</code> &delta;, <code>\epsilon</code> &epsilon;, <code>\varepsilon</code> &epsilon;, <code>\theta</code> &theta;, <code>\lambda</code> &lambda;, <code>\mu</code> &mu;, <code>\pi</code> &pi;, <code>\rho</code> &rho;, <code>\sigma</code> &sigma;, <code>\phi</code> &phi;, <code>\omega</code> &omega;</td></tr>
+      <tr><td>Greek capitals</td><td><code>\Gamma</code> &Gamma;, <code>\Delta</code> &Delta;, <code>\Theta</code> &Theta;, <code>\Lambda</code> &Lambda;, <code>\Sigma</code> &Sigma;, <code>\Pi</code> &Pi;, <code>\Omega</code> &Omega;</td></tr>
+      <tr><td>Binary operators</td><td><code>\pm</code> &plusmn;, <code>\times</code> &times;, <code>\div</code> &divide;, <code>\cdot</code> &middot;, <code>\circ</code> &#8728;,<code>\cap</code> &cap;, <code>\cup</code> &cup;, <code>\wedge</code> &and;, <code>\vee</code> &or;</td></tr>
+      <tr><td>Relations</td><td><code>\le</code> &le;, <code>\ge</code> &ge;, <code>\ne</code> &ne;, <code>\approx</code> &asymp;, <code>\equiv</code> &equiv;, <code>\sim</code> &sim;, <code>\subset</code> &sub;, <code>\subseteq</code> &sube;, <code>\in</code> &isin;, <code>\propto</code> &prop;</td></tr>
+      <tr><td>Arrows</td><td><code>\to</code> or <code>\rightarrow</code> &rarr;, <code>\leftarrow</code> &larr;, <code>\Rightarrow</code> &rArr;, <code>\Leftrightarrow</code> &hArr;, <code>\mapsto</code> &#8614;, <code>\longrightarrow</code> &#10230;</td></tr>
+      <tr><td>Miscellaneous</td><td><code>\infty</code> &infin;, <code>\partial</code> &part;, <code>\nabla</code> &nabla;, <code>\forall</code> &forall;, <code>\exists</code> &exist;, <code>\emptyset</code> &empty;, <code>\neg</code> &not;, <code>\prime</code> &prime;, <code>\ldots</code> &hellip;</td></tr>
+      <tr><td>Variable-sized</td><td><code>\sum</code> &sum;, <code>\prod</code> &prod;, <code>\int</code> &int;, <code>\oint</code>, <code>\bigcup</code>, <code>\bigcap</code>, <code>\bigoplus</code></td></tr>
+      <tr><td>Log-like (upright)</td><td><code>\sin</code>, <code>\cos</code>, <code>\tan</code>, <code>\log</code>, <code>\ln</code>, <code>\exp</code>, <code>\lim</code>, <code>\max</code>, <code>\min</code>, <code>\sup</code>, <code>\inf</code>, <code>\det</code>, <code>\gcd</code>, <code>\arg</code></td></tr>
+      <tr><td>Delimiters</td><td><code>(</code> <code>)</code> <code>[</code> <code>]</code> <code>\{</code> <code>\}</code> <code>\langle</code> <code>\rangle</code> <code>\lfloor</code> <code>\rfloor</code> <code>\lceil</code> <code>\rceil</code> <code>|</code> <code>\|</code></td></tr>
+      <tr><td>Accents</td><td><code>\hat</code>, <code>\bar</code>, <code>\dot</code>, <code>\ddot</code>, <code>\tilde</code>, <code>\vec</code>, <code>\check</code>, <code>\breve</code>, <code>\grave</code>, <code>\acute</code></td></tr>
+      <tr><td>Other constructions</td><td><code>\widehat{abc}</code>, <code>\widetilde{abc}</code>, <code>\overline{abc}</code>, <code>\underline{abc}</code>, <code>\overbrace</code>, <code>\underbrace</code>, <code>\sqrt[n]{abc}</code>, <code>\frac{abc}{xyz}</code></td></tr>
+    </tbody>
+  </table>
+  <div class="warn">
+    <strong>Packages for more symbols.</strong> Symbols marked "not predefined in LaTeX 2e" in the primer's tables need <code>amssymb</code> (or <code>latexsym</code>). That includes <code>\Box</code>, <code>\blacksquare</code>, <code>\nexists</code>, <code>\mathbb</code> and most of the AMS arrows and relations.
+  </div>
+
+  <div class="remember">
+    <strong>Remember (Part 8.4&ndash;8.8)</strong>
+    <ul>
+      <li><code>pmatrix</code> and <code>bmatrix</code> give brackets; <code>matrix</code> gives none.</li>
+      <li><code>\left</code> and <code>\right</code> must come in pairs. Use <code>.</code> to hide one side.</li>
+      <li><code>\frac</code> is small in text; use <code>\dfrac</code> to override it.</li>
+      <li><code>\DeclareMathOperator</code> goes in the preamble.</li>
+      <li>For bold vectors use <code>\boldsymbol</code>, not <code>\mathbf</code>, when the symbols must be italic.</li>
+    </ul>
+  </div>
+</section>
+</main>
+</body>
+</html>

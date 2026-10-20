@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Griffiths 7.3.3 Maxwell’s equations (book pp. 340–341)</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+  :root {
+    --page-bg: #d9d9d4;
+    --paper: #fdfdfb;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --page-bg: #2b2b2b;
+      --paper: #f4f3ee;
+      --ink: #111;
+      --rule: #444;
+      --note: #555;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page-bg: #2b2b2b;
+    --paper: #f4f3ee;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  body {
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--ink);
+    font-family: "Times New Roman", Times, "Liberation Serif", serif;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .sheet {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 12mm auto;
+    padding: 14mm 18mm 16mm;
+    box-sizing: border-box;
+    background: var(--paper);
+    box-shadow: 0 1px 6px rgba(0,0,0,.25);
+    position: relative;
+  }
+  .sheet + .sheet { margin-top: 0; }
+  .hdr {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: start;
+    font-size: 14px;
+  }
+  .code { font-size: 22px; font-weight: bold; letter-spacing: .5px; }
+  .pages { text-align: center; padding-top: 14px; }
+  .name { text-align: right; line-height: 2; }
+  .title { text-align: center; margin-top: 22px; }
+  .title .exam { font-size: 19px; font-weight: bold; letter-spacing: .3px; }
+  .title .sch { margin-top: 2px; }
+  .title .course { margin-top: 10px; font-size: 16px; }
+  .title .subject { margin-top: 6px; font-size: 16px; font-weight: bold; }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 16px;
+    font-size: 15px;
+  }
+  .sec { margin-top: 14px; }
+  .sec-head {
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    font-weight: bold;
+  }
+  .sec-head .num { font-weight: bold; }
+  .sec-head .body { font-weight: normal; }
+  .sec-head .body b { font-weight: bold; }
+  .sec-head .body i { font-style: italic; }
+  .sec-total { text-align: right; font-weight: normal; margin-top: 4px; }
+  .qs { margin-top: 6px; }
+  .q {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    margin-bottom: 7px;
+  }
+  .q .n { text-align: right; padding-right: 10px; }
+  .q p { margin: 0; }
+  .sub { margin-left: 22px; }
+  .cut { color: var(--note); }
+  .turn { text-align: right; font-weight: bold; margin-top: 26px; }
+  .fig {
+    display: block;
+    margin: 8px auto 2px 36px;
+    width: 230px;
+    height: auto;
+  }
+  .fig-cap { margin-left: 36px; font-size: 13px; color: var(--note); font-style: italic; }
+  .foot-note {
+    margin-top: 26px;
+    border-top: 1px solid var(--rule);
+    padding-top: 6px;
+    font-size: 12px;
+    color: var(--note);
+  }
+  .pno { text-align: center; font-size: 15px; margin-bottom: 4px; }
+  .pno-hdr { position: absolute; top: 10mm; right: 18mm; font-weight: bold; font-size: 14px; }
+  @media print {
+    @page { size: A4; margin: 0; }
+    body { background: #fff; }
+    .sheet { margin: 0; box-shadow: none; width: 210mm; height: 297mm; min-height: 0; page-break-after: always; }
+    .sheet:last-child { page-break-after: auto; }
+  }
+  @media (max-width: 720px) {
+    .sheet { width: auto; margin: 0; padding: 14px 16px; min-height: 0; }
+    .hdr { grid-template-columns: 1fr; gap: 6px; }
+    .name { text-align: left; }
+    .pages { text-align: left; padding-top: 0; }
+  }
+</style>
+<style>
+  .sheet.book { height: auto; min-height: 297mm; text-align: justify; hyphens: auto; }
+  .sheet.book p { margin: 6px 0; }
+  .rh { display: flex; justify-content: space-between; font-size: 12px; color: var(--note);
+        border-bottom: 1px solid var(--rule); padding-bottom: 3px; margin-bottom: 12px; }
+  .chap { display: flex; background: #8a8a86; color: #fff; margin: 4px 0 16px; }
+  .chap .cn { background: #b4b4ae; padding: 10px 18px; font-size: 26px; }
+  .chap .ct { padding: 12px 16px; font-size: 22px; font-weight: bold; }
+  h2.sec { font-size: 20px; margin: 18px 0 8px; border-bottom: 2px solid var(--rule); padding-bottom: 3px; }
+  h3.sub { font-size: 16px; margin: 14px 0 6px; border-bottom: 1px solid var(--rule); padding-bottom: 2px; }
+  .eq { margin: 10px 0; text-align: center; overflow: visible; }
+  mjx-container[display="true"], mjx-container { overflow: visible !important; max-width: 100%; }
+  .sheet.book, .sheet.book .eq { overflow: visible; }
+  .eq.boxed { border: 1px solid var(--ink); display: block; padding: 4px 8px; }
+  .prob { background: #ecece7; border: 1px solid var(--rule); padding: 8px 12px; margin: 10px 0; text-align: left; }
+  .prob p { margin: 5px 0; }
+  .ex, .ex-cont { border: 1px solid var(--rule); padding: 8px 12px; margin: 10px 0; text-align: left; }
+  .ex p, .ex-cont p { margin: 5px 0; }
+  .figbox { border: 1px dashed var(--rule); padding: 10px; color: var(--note); font-size: 13px; text-align: center; margin: 8px 0; font-style: italic; }
+  figure { margin: 8px 0; text-align: center; }
+  figure > svg { width: 100%; max-width: 230px; height: auto; }
+  figure.single > svg { max-width: 260px; }
+  figure figcaption { font-size: 12px; font-style: italic; color: var(--note); }
+  .figrow { display: flex; flex-wrap: wrap; justify-content: space-around; gap: 8px; }
+  .figrow > figure { flex: 1 1 180px; max-width: 240px; }
+  .fn { font-size: 12.5px; color: var(--note); margin: 6px 0; text-align: left; }
+  .cont { font-size: 12.5px; color: var(--note); font-style: italic; }
+  .gapnote { font-size: 13px; color: var(--note); font-style: italic; border-left: 3px solid var(--rule); padding: 2px 8px; margin: 4px 0 10px; }
+  .flag { color: #8a1c1c; font-weight: bold; }
+  .answer { font-size: 14px; }
+  .tbl { border-collapse: collapse; width: 100%; font-size: 13px; margin: 6px 0; }
+  .tbl td, .tbl th { border: 1px solid var(--rule); padding: 3px 6px; text-align: center; }
+  .tbl th { background: #ebebe6; }
+  .tblcap { font-size: 13px; margin-top: 8px; text-align: left; }
+  .pno { text-align: center; font-size: 14px; margin-top: 14px; }
+  .intro p, .intro li { font-size: 14px; text-align: left; }
+  .intro table { border-collapse: collapse; width: 100%; font-size: 14px; margin: 6px 0; }
+  .intro td, .intro th { border: 1px solid var(--rule); padding: 4px 8px; text-align: left; }
+  @media print {
+    .sheet.book { height: auto !important; min-height: 0 !important; page-break-after: always; }
+  }
+  @media (max-width: 720px) {
+    .sheet.book .eq { overflow-x: auto; max-width: 100%; }
+    .sheet.book mjx-container[display="true"] { font-size: 85% !important; }
+    .sheet.book .figrow > figure { flex: 1 1 100%; max-width: 100%; }
+    .sheet.book { padding-left: 14px; padding-right: 14px; }
+  }
+</style>
+</head>
+<body>
+<!-- Book source, split from the Module 2 excerpt. Pages as printed in Griffiths 5th ed. -->
+<div class="sheet book" id="pdf-p43">
+  <div class="rh"><span>340</span><span>7 Electrodynamics</span></div>
+  <div class="prob">
+    <p>(Eq. 7.48) to an appropriate Ampèrian loop. In fact, do it three different ways: using (as the surface bounded by the Ampèrian loop) (a) a spherical cap north of the loop, (b) a spherical bowl south of the loop, and (c) a cone with vertex at the origin. (d) What does your result say for $\theta$ very near to $\pi$?<sup>27</sup></p>
+    <div class="figbox">Fig. 7.47: conducting sphere of radius $R$ with current $I$ entering at the south pole; loops (a), (b) and (c) bounding the surfaces, and angle $\theta$ measured from the $z$-axis. Schematic; see PDF page.</div>
+  </div>
+  <h3 class="sub">7.3.3 Maxwell’s Equations</h3>
+  <p>In the last section we put the finishing touches on Maxwell’s equations:<sup>28</sup></p>
+  <div class="ex" style="text-align:left">
+    <table class="tbl" style="width:100%;border:none">
+      <tr><td style="border:none;text-align:left">(i)&nbsp; $\nabla\cdot\mathbf E=\dfrac{1}{\epsilon_0}\rho$</td><td style="border:none;text-align:left">(Gauss’s law),</td><td style="border:none;text-align:right">(7.49)</td></tr>
+      <tr><td style="border:none;text-align:left">(ii)&nbsp; $\nabla\cdot\mathbf B=0$</td><td style="border:none;text-align:left">(no name),</td><td style="border:none"></td></tr>
+      <tr><td style="border:none;text-align:left">(iii)&nbsp; $\nabla\times\mathbf E=-\dfrac{\partial\mathbf B}{\partial t}$</td><td style="border:none;text-align:left">(Faraday’s law),</td><td style="border:none"></td></tr>
+      <tr><td style="border:none;text-align:left">(iv)&nbsp; $\nabla\times\mathbf B=\mu_0\mathbf J+\mu_0\epsilon_0\dfrac{\partial\mathbf E}{\partial t}$</td><td style="border:none;text-align:left">(Ampère’s law with Maxwell’s correction).</td><td style="border:none"></td></tr>
+    </table>
+  </div>
+  <p>Together with the Lorentz force law,</p>
+  <div class="eq">$$\mathbf F=q(\mathbf E+\mathbf v\times\mathbf B), \tag{7.50}$$</div>
+  <p>they summarize the entire theoretical content of classical electrodynamics<sup>29</sup> (save for some special properties of matter, which we encountered in Chapters 4 and 6). Even the continuity equation,</p>
+  <div class="eq">$$\nabla\cdot\mathbf J=-\frac{\partial\rho}{\partial t}, \tag{7.51}$$</div>
+  <p class="fn"><sup>27</sup> T. H. Boyer, <i>Am. J. Phys.</i> <b>87</b>, 729 (2019).</p>
+  <p class="fn"><sup>28</sup> Maxwell didn’t have access to modern vector notation (in particular, the del operator), and in his formulation there were actually 20 equations – including the potentials as well as the fields. It was Oliver Heaviside who distilled them into the tidy package we now know as “Maxwell’s equations.” See B. J. Hunt, <i>Physics Today</i> November 2012, p. 48.</p>
+  <p class="fn"><sup>29</sup> Like any differential equations, Maxwell’s must be supplemented by suitable <b>boundary conditions</b>. Because these are typically “obvious” from the context (for example, $\mathbf E$ and $\mathbf B$ go to zero at large distances from a localized charge distribution), it is easy to forget that they play an essential role.</p>
+  <div class="pno">340</div>
+</div>
+<div class="sheet book" id="pdf-p44">
+  <div class="rh"><span>341</span><span>7.3 Maxwell’s Equations</span></div>
+  <p>which is the mathematical expression of conservation of charge, can be derived from Maxwell’s equations by applying the divergence to number (iv).</p>
+  <p>I have written Maxwell’s equations in the traditional way, which emphasizes that they specify the divergence and curl of $\mathbf E$ and $\mathbf B$. In this form, they reinforce the notion that electric fields can be produced <i>either</i> by charges ($\rho$) <i>or</i> by changing magnetic fields ($\partial\mathbf B/\partial t$), and magnetic fields can be produced <i>either</i> by currents ($\mathbf J$) <i>or</i> by changing electric fields ($\partial\mathbf E/\partial t$). Actually, this is misleading, because $\partial\mathbf B/\partial t$ and $\partial\mathbf E/\partial t$ are <i>themselves</i> due to charges and currents. I think it is logically preferable to write</p>
+  <div class="ex" style="text-align:left">
+    <table class="tbl" style="width:100%;border:none">
+      <tr><td style="border:none;text-align:left">(i)&nbsp; $\nabla\cdot\mathbf E=\dfrac{1}{\epsilon_0}\rho,$</td><td style="border:none;text-align:left">(iii)&nbsp; $\nabla\times\mathbf E+\dfrac{\partial\mathbf B}{\partial t}=\mathbf 0,$</td><td style="border:none;text-align:right">(7.52)</td></tr>
+      <tr><td style="border:none;text-align:left">(ii)&nbsp; $\nabla\cdot\mathbf B=0,$</td><td style="border:none;text-align:left">(iv)&nbsp; $\nabla\times\mathbf B-\mu_0\epsilon_0\dfrac{\partial\mathbf E}{\partial t}=\mu_0\mathbf J.$</td><td style="border:none"></td></tr>
+    </table>
+  </div>
+  <p>with the fields ($\mathbf E$ and $\mathbf B$) on the left and the sources ($\rho$ and $\mathbf J$) on the right. This notation emphasizes that all electromagnetic fields are ultimately attributable to charges and currents. Maxwell’s equations tell you how <i>charges</i> produce <i>fields</i>; reciprocally, the force law tells you how <i>fields</i> affect <i>charges</i>.</p>
+  <div class="prob">
+    <p><b>Problem 7.39.</b> Suppose</p>
+    <div class="eq">$$\mathbf E(\mathbf r,t)=\frac{1}{4\pi\epsilon_0}\frac{q}{r^2}\,\theta(vt-r)\,\hat{\mathbf r},\qquad\mathbf B(\mathbf r,t)=\mathbf 0.$$</div>
+    <p>(The theta function is defined in Prob. 1.46b.) Show that these fields satisfy all of Maxwell’s equations, and determine $\rho$ and $\mathbf J$. Describe the physical situation that gives rise to these fields.</p>
+  </div>
+  <h3 class="sub">7.3.4 Magnetic Charge</h3>
+  <p>There is a pleasing symmetry to Maxwell’s equations; it is particularly striking in free space, where $\rho$ and $\mathbf J$ vanish:</p>
+  <div class="eq">$$\nabla\cdot\mathbf E=0,\qquad\nabla\times\mathbf E=-\frac{\partial\mathbf B}{\partial t},\qquad\nabla\cdot\mathbf B=0,\qquad\nabla\times\mathbf B=\mu_0\epsilon_0\frac{\partial\mathbf E}{\partial t}.$$</div>
+  <p>If you replace $\mathbf E$ by $\mathbf B$ and $\mathbf B$ by $-\mu_0\epsilon_0\mathbf E$, the first pair of equations turns into the second, and vice versa. This symmetry<sup>30</sup> between $\mathbf E$ and $\mathbf B$ is spoiled, though, by the charge term in Gauss’s law and the current term in Ampère’s law. You can’t help wondering why the corresponding quantities are “missing” from $\nabla\cdot\mathbf B=0$ and $\nabla\times\mathbf E=-\partial\mathbf B/\partial t$. What if we had</p>
+  <p class="fn"><sup>30</sup> Don’t be distracted by the pesky constants $\mu_0$ and $\epsilon_0$; these are present only because the SI system measures $\mathbf E$ and $\mathbf B$ in different units, and would not occur, for instance, in the Gaussian system.</p>
+  <div class="pno">341</div>
+</div>
+</body>
+</html>

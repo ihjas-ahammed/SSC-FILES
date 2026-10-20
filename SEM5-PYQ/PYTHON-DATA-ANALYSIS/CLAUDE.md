@@ -34,3 +34,8 @@ Delivery: `python-for-data-analysis-sem5-pyq+model.zip` (the 5 phone PDFs + prin
 ## Known gaps
 - No past papers; no answer keys or prepare files yet.
 - The syllabus's own CO/PO mapping is not reflected in the paper.
+
+## Model day paper (from the study-plan screenshot)
+- Trigger: the user uploads a screenshot of the study plan and says "create model day paper". Method: `create-model-day-paper.md` (this folder). Builder: `build_model_paper.py`, which takes a JSON paper and writes the HTML and PDF. Each paper is a `model-paper-<N>.json` in this folder.
+- Scope is the syllabus's section list, checked against the book excerpt headings. A question whose section is not listed is out, even when the topic sounds right. Do not pad a paper with out-of-scope questions.
+- Layout: copy the university paper for this subject (under `GitHub/SSC-FILES/PYQ/` or `ssc-v3/fyug/`), including its marks, ceilings and time. No name or register-number block.

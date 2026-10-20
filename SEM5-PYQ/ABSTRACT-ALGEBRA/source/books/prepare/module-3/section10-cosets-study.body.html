@@ -1,0 +1,79 @@
+<h2>Before you start</h2>
+<ul>
+<li>Subgroups and the subgroup test (Section 5, Theorems 5.12 and 5.16).</li>
+<li>Equivalence relations: reflexive, symmetric and transitive; an equivalence relation splits a set into disjoint classes (Section 0 of the book; a summary is given in Theorem 10.1 below).</li>
+<li>Homomorphisms and kernels (Section 8).</li>
+</ul>
+
+<h2>1. Cosets</h2>
+<p>Let $H$ be a subgroup of $G$, finite or infinite. We split $G$ into pieces of equal size by an equivalence relation.</p>
+<div class="box-res"><span class="lbl res">Theorem 10.1</span> Let $H \le G$. Define $a \sim_L b$ if and only if $a^{-1}b \in H$. Then $\sim_L$ is an equivalence relation on $G$.
+<p class="note"><i>Proof.</i> <b>Reflexive.</b> $a^{-1}a = e \in H$, so $a \sim_L a$. <b>Symmetric.</b> If $a^{-1}b \in H$, then $(a^{-1}b)^{-1} = b^{-1}a \in H$, so $b \sim_L a$. <b>Transitive.</b> If $a^{-1}b \in H$ and $b^{-1}c \in H$, then $(a^{-1}b)(b^{-1}c) = a^{-1}c \in H$, so $a \sim_L c$. &#9670;</p></div>
+<p>The cells of this partition are easy to describe. The cell containing $a$ is all $x$ with $a^{-1}x \in H$, that is all $x = ah$ with $h \in H$. This cell is written $aH$.</p>
+<div class="box-eq"><span class="lbl eq">Definition 10.2</span> For $H \le G$ and $a \in G$, the subset $aH = \{ah \mid h \in H\}$ is the <b>left coset</b> of $H$ containing $a$.</div>
+<p><b>Example 10.3.</b> The left cosets of $3\mathbb{Z}$ in $\mathbb{Z}$ are $3\mathbb{Z}$ itself, $1 + 3\mathbb{Z} = \{\dots, -8, -5, -2, 1, 4, 7, 10, \dots\}$, and $2 + 3\mathbb{Z} = \{\dots, -7, -4, -1, 2, 5, 8, 11, \dots\}$. These three exhaust $\mathbb{Z}$.</p>
+<p><b>Example 10.4.</b> In $\mathbb{Z}_{12}$ with $H = \langle 3 \rangle$: $0 + H = \{0, 3, 6, 9\}$, $1 + H = \{1, 4, 7, 10\}$, $2 + H = \{2, 5, 8, 11\}$. These are all the left cosets.</p>
+<p><b>Example 10.5.</b> In the nonabelian group $D_4 = \{\iota, \rho, \rho^2, \rho^3, \mu, \mu\rho, \mu\rho^2, \mu\rho^3\}$, the left cosets of $H = \langle \mu \rangle = \{\iota, \mu\}$ are</p>
+<div class="eq">$$\iota\{\iota, \mu\} = \{\iota, \mu\},\quad \rho\{\iota, \mu\} = \{\rho, \mu\rho^3\},\quad \rho^2\{\iota, \mu\} = \{\rho^2, \mu\rho^2\},\quad \rho^3\{\iota, \mu\} = \{\rho^3, \mu\rho\}.$$</div>
+<p>Every element of $D_4$ appears in exactly one of these sets, so the list is complete.</p>
+
+<h2>2. The theorem of Lagrange</h2>
+<p>In Example 10.4 each coset of $\langle 3 \rangle$ has four elements; in Example 10.5 each has two. Theorem 10.6 says this always happens.</p>
+<div class="box-res"><span class="lbl res">Theorem 10.6</span> Let $H \le G$. For any $a \in G$, the coset $aH$ has the same cardinality as $H$.
+<p class="note"><i>Proof.</i> Define $f : H \to aH$ by $f(h) = ah$. If $f(b) = f(c)$, then $ab = ac$ and left cancellation gives $b = c$, so $f$ is one-to-one. Every element of $aH$ has the form $ah = f(h)$, so $f$ is onto. &#9670;</p></div>
+<p>For a finite subgroup $H$ this says each coset has $|H|$ elements, which is what is needed for Lagrange&rsquo;s theorem.</p>
+<div class="box-res"><span class="lbl res">Theorem 10.7 (Theorem of Lagrange)</span> Let $H$ be a subgroup of a finite group $G$. Then the order of $H$ divides the order of $G$.
+<p class="note"><i>Proof.</i> Let $|G| = n$ and $|H| = m$. Each coset of $H$ has $m$ elements, and the cosets partition $G$. If there are $r$ cosets, then $n = rm$. &#9670;</p></div>
+<p>Theorem 10.7 is a counting theorem: it follows from counting cosets and the number of elements in each.</p>
+<div class="box-res"><span class="lbl res">Corollary 10.8</span> Every group of prime order is cyclic.
+<p class="note"><i>Proof.</i> Let $|G| = p$ and $a \ne e$. Then $\langle a \rangle$ has at least two elements, and its order divides $p$ by Theorem 10.7. So $|\langle a \rangle| = p$ and $\langle a \rangle = G$. &#9670;</p></div>
+<p>So up to isomorphism there is only one group of each prime order.</p>
+<div class="box-res"><span class="lbl res">Theorem 10.9</span> The order of an element of a finite group divides the order of the group.
+<p class="note"><i>Proof.</i> The order of an element is the order of the cyclic subgroup it generates. Apply Theorem 10.7. &#9670;</p></div>
+<div class="box-eq"><span class="lbl eq">Definition 10.10</span> The number of left cosets of $H$ in $G$ is the <b>index</b> $(G : H)$.</div>
+<p>The index may be finite or infinite. If $G$ is finite, $(G : H) = |G|/|H|$. The next theorem is about indices. The book leaves its proof to the exercises; Exercise 40 is printed directly below.</p>
+<p class="exl"><b>Exercise 40.</b> Prove Theorem 10.11 [<i>Hint:</i> Let $\{a_iH \mid i = 1, \dots, r\}$ be the collection of distinct left cosets of $H$ in $G$ and $\{b_jK \mid j = 1, \dots, s\}$ be the collection of distinct left cosets of $K$ in $H$. Show that $\{(a_ib_j)K \mid i = 1, \dots, r;\ j = 1, \dots, s\}$ is the collection of distinct left cosets of $K$ in $G$.]</p>
+<div class="box-res"><span class="lbl res">Theorem 10.11</span> Suppose $K \le H \le G$, and $(H : K)$ and $(G : H)$ are both finite. Then $(G : K)$ is finite and $(G : K) = (G : H)(H : K)$.</div>
+<p>Lagrange&rsquo;s theorem says the order of a subgroup of a finite group divides the group order. The converse is false in general: a group need not have a subgroup of every order that divides its order. Section 13 of the book shows this, and the complete answer for abelian groups is in Section 9.</p>
+
+<h3>Right cosets</h3>
+<p>Everything above works with right cosets. Let $\sim_R$ be defined by $a \sim_R b$ if and only if $ab^{-1} \in H$. Its classes are the <b>right cosets</b> $Ha = \{ha \mid h \in H\}$. Each right coset has the same cardinality as $H$, so left and right cosets have the same size. In an abelian group they coincide. In general they need not coincide.</p>
+<p><b>Example 10.12.</b> For $H = \{\iota, \mu\}$ in $D_4$ the right cosets are $\{\iota, \mu\}\iota = \{\iota, \mu\}$, $\{\iota, \mu\}\rho = \{\rho, \mu\rho\}$, $\{\iota, \mu\}\rho^2 = \{\rho^2, \mu\rho^2\}$, and $\{\iota, \mu\}\rho^3 = \{\rho^3, \mu\rho^3\}$. These differ from the left cosets: $\rho H = \{\rho, \mu\rho^3\}$ while $H\rho = \{\rho, \mu\rho\}$.</p>
+<p>Left and right cosets are not the same here. The book points out that when they are the same, a curious thing happens, which is illustrated next.</p>
+<p><b>Example 10.13.</b> $\mathbb{Z}_6$ is abelian. The cosets of $H = \{0, 3\}$ are $\{0, 3\}$, $1 + \{0, 3\} = \{1, 4\}$, and $2 + \{0, 3\} = \{2, 5\}$. They exhaust $\mathbb{Z}_6$.</p>
+<p><b>Table 10.14</b> gives the addition table of $\mathbb{Z}_6$ with the elements listed in the order of the cosets $\{0, 3\}$, $\{1, 4\}$, $\{2, 5\}$. The table is shaded by coset as printed: the entries for 0 and 3 are unshaded, those for 1 and 4 light, and those for 2 and 5 dark.</p>
+<table class="tbl"><tr><th>$+_6$</th><th>0</th><th>3</th><th>1</th><th>4</th><th>2</th><th>5</th></tr>
+<tr><th>0</th><td>0</td><td>3</td><td>1</td><td>4</td><td>2</td><td>5</td></tr>
+<tr><th>3</th><td>3</td><td>0</td><td>4</td><td>1</td><td>5</td><td>2</td></tr>
+<tr><th>1</th><td>1</td><td>4</td><td>2</td><td>5</td><td>3</td><td>0</td></tr>
+<tr><th>4</th><td>4</td><td>1</td><td>5</td><td>2</td><td>0</td><td>3</td></tr>
+<tr><th>2</th><td>2</td><td>5</td><td>3</td><td>0</td><td>4</td><td>1</td></tr>
+<tr><th>5</th><td>5</td><td>2</td><td>0</td><td>3</td><td>1</td><td>4</td></tr></table>
+<p><b>Table 10.15</b> gives the induced operation on the three cosets, named LT (light), MD (medium), DK (dark):</p>
+<table class="tbl"><tr><th></th><th>LT</th><th>MD</th><th>DK</th></tr>
+<tr><th>LT</th><td>LT</td><td>MD</td><td>DK</td></tr>
+<tr><th>MD</th><td>MD</td><td>DK</td><td>LT</td></tr>
+<tr><th>DK</th><td>DK</td><td>LT</td><td>MD</td></tr></table>
+<p>Replacing LT by $0$, MD by $1$, DK by $2$ gives the table of $\mathbb{Z}_3$. So the table of cosets is a group. Section 12 explains when this construction works in general: it needs left and right cosets to be the same.</p>
+<p><b>Example 10.16.</b> Let $H = \{\iota, \mu\} \le D_3$. The group table of $D_3$, with elements arranged so that the left cosets $\{\iota, \mu\}$, $\{\rho, \mu\rho^2\}$, $\{\rho^2, \mu\rho\}$ are together, is printed with double lines between the coset blocks:</p>
+<table class="tbl"><tr><th></th><th>$\iota$</th><th>$\mu$</th><th>$\rho$</th><th>$\mu\rho^2$</th><th>$\rho^2$</th><th>$\mu\rho$</th></tr>
+<tr><th>$\iota$</th><td>$\iota$</td><td>$\mu$</td><td>$\rho$</td><td>$\mu\rho^2$</td><td>$\rho^2$</td><td>$\mu\rho$</td></tr>
+<tr><th>$\mu$</th><td>$\mu$</td><td>$\iota$</td><td>$\mu\rho$</td><td>$\rho^2$</td><td>$\mu\rho^2$</td><td>$\rho$</td></tr>
+<tr><th>$\rho$</th><td>$\rho$</td><td>$\mu\rho^2$</td><td>$\rho^2$</td><td>$\mu\rho$</td><td>$\iota$</td><td>$\mu$</td></tr>
+<tr><th>$\mu\rho^2$</th><td>$\mu\rho^2$</td><td>$\rho$</td><td>$\mu$</td><td>$\iota$</td><td>$\mu\rho$</td><td>$\rho^2$</td></tr>
+<tr><th>$\rho^2$</th><td>$\rho^2$</td><td>$\mu\rho$</td><td>$\iota$</td><td>$\mu$</td><td>$\rho$</td><td>$\mu\rho^2$</td></tr>
+<tr><th>$\mu\rho$</th><td>$\mu\rho$</td><td>$\rho^2$</td><td>$\mu\rho^2$</td><td>$\rho$</td><td>$\mu$</td><td>$\iota$</td></tr></table>
+<p>Here most blocks contain elements of more than one left coset, and the second row of blocks contains two blocks with the same elements $\{\rho^2, \mu\rho, \mu, \iota\}$. So there is no natural way to make the left cosets a group.</p>
+
+<h2>3. Kernels and cosets</h2>
+<p>If $G$ is abelian, left and right cosets coincide. The next theorem gives another case.</p>
+<div class="box-res"><span class="lbl res">Theorem 10.17</span> Let $\phi : G \to G'$ be a homomorphism. The left and right cosets of $\operatorname{Ker}(\phi)$ are identical. Moreover $a, b \in G$ lie in the same coset of $\operatorname{Ker}(\phi)$ if and only if $\phi(a) = \phi(b)$.
+<p class="note"><i>Proof.</i> Suppose $a$ and $b$ lie in the same left coset, so $a^{-1}b \in \operatorname{Ker}(\phi)$. Then $\phi(a)^{-1}\phi(b) = e$, so $\phi(a) = \phi(b)$. Hence $\phi(ab^{-1}) = \phi(a)\phi(b)^{-1} = e$, so $ab^{-1} \in \operatorname{Ker}(\phi)$ and $a, b$ lie in the same right coset. Conversely, if $\phi(a) = \phi(b)$ then $\phi(b^{-1}a) = e$, so $a, b$ lie in the same left coset. The argument for right cosets is the same, and is left to the reader. &#9670;</p></div>
+<p><b>Example 10.18.</b> The determinant $\det : GL(2, \mathbb{R}) \to \mathbb{R}^*$ is a homomorphism. Two matrices lie in the same left coset of its kernel if and only if they lie in the same right coset, which happens if and only if they have the same determinant. For example $\begin{bmatrix}2&0\\0&1\end{bmatrix}$ and $\begin{bmatrix}3&2\\2&2\end{bmatrix}$ both have determinant $2$.</p>
+<div class="box-res"><span class="lbl res">Corollary 10.19</span> A homomorphism $\phi : G \to G'$ is one-to-one if and only if $\operatorname{Ker}(\phi)$ is the trivial subgroup of $G$.
+<p class="note"><i>Proof.</i> If $\operatorname{Ker}(\phi) = \{e\}$, each coset has one element, and $\phi(a) = \phi(b)$ puts $a, b$ in one coset by Theorem 10.17, so $a = b$. Conversely, if $\phi$ is one-to-one, only $e$ maps to $e'$, so $\operatorname{Ker}(\phi) = \{e\}$. &#9670;</p></div>
+<p>To test whether $\phi$ is one-to-one, it is enough to show that $\phi(x) = e'$ has only the solution $x = e$.</p>
+<p><b>Example 10.20.</b> $\phi : \mathbb{R} \to \mathbb{R}^+$, $\phi(x) = 2^x$, is a homomorphism. The equation $2^x = 1$ has only the solution $x = 0$, since $2^x &gt; 1$ for $x &gt; 0$ and $2^x &lt; 1$ for $x &lt; 0$. So $\phi$ is one-to-one.</p>
+
+<h2>Notes on this section</h2>
+<p>This section covers book items 10.1 to 10.20, with Tables 10.14 and 10.15 and the D_3 table of Example 10.16. Items 10.1 to 10.9 are syllabus item 15 and items 10.10 to 10.14 are syllabus item 16. Items 10.15 to 10.20 are the rest of the subsection and are kept in this module. The book&rsquo;s exercises (1 to 55) are in the Module 3 excerpt; the one named in the text, Exercise 40, is printed after 10.10. The notes do not reproduce the exercises further.</p>

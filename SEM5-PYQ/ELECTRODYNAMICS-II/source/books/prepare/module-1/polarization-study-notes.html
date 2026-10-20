@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Study notes: Polarization (Griffiths 4.1)</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+  :root { --ink:#111; --muted:#555; --rule:#999; --paper:#ffffff; --hi:#f3f3ee; }
+  body { margin:0; background:var(--paper); color:var(--ink); font-family:"Times New Roman", Times, "Liberation Serif", serif; font-size:17px; line-height:1.6; }
+  main { max-width:760px; margin:0 auto; padding:18px; }
+  h1 { font-size:24px; margin:0 0 4px; }
+  h2 { font-size:19px; margin:26px 0 8px; border-bottom:1px solid var(--rule); padding-bottom:3px; }
+  h3 { font-size:17px; margin:18px 0 6px; }
+  .meta { color:var(--muted); font-size:14px; margin-bottom:14px; }
+  p, li { margin:6px 0; }
+  .eq { margin:10px 0; text-align:center; }
+  .key { background:var(--hi); border-left:3px solid var(--rule); padding:6px 10px; margin:10px 0; }
+  .doubt { color:var(--muted); font-style:italic; }
+  .fig { margin:14px 0; text-align:center; }
+  .fig svg { display:block; width:100%; max-width:320px; height:auto; margin:0 auto; }
+  .fig figcaption { font-size:13px; color:var(--muted); font-style:italic; margin-top:4px; }
+  @media (max-width:600px) { main { padding:12px; font-size:16px; } }
+  @media print {
+    @page { size: A4; margin: 16mm; }
+    body { font-size:12.5pt; }
+    main { max-width:none; padding:0; }
+    h2 { break-after: avoid; }
+    .fig { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<main>
+<h1>Study notes: Polarization (Griffiths §4.1)</h1>
+<div class="meta">My notes while reading Griffiths, <i>Introduction to Electrodynamics</i> (5th ed.), pp. 166–172. These are my own words, not the book's. Equation numbers match the book so you can check.</div>
+
+<h2>1. Why should a rubber rod pick up paper if it has no charge?</h2>
+<p>Metals and insulators behave differently. In a metal, some electrons are free and roam through the whole piece. In an insulator (also called a dielectric), every electron is tied to its own atom or molecule. So I thought: if the electrons cannot leave, nothing should happen when I put it in a field.</p>
+<p>That is wrong, and the book's first point is that the atom can still change shape a little. The electrons can shift slightly away from the nucleus, and that small shift is enough to matter.</p>
+
+<h2>2. Induced dipoles: what happens to a neutral atom?</h2>
+<p>An atom has a nucleus with charge $+q$ and an electron cloud with total charge $-q$. Overall it is neutral. Now put it in a field $\mathbf E$ pointing to the right. The nucleus is pushed right, the cloud is pushed left. The nucleus and cloud separate by a small distance $d$.</p>
+<p>Why do they stop? Because the cloud is negative and the nucleus is positive, they pull each other back. When the pull from the cloud equals the push from the field, they stop. That is equilibrium.</p>
+<figure class="fig">
+<svg viewBox="0 0 300 200" role="img" aria-label="Uniform electron cloud of radius a, nucleus displaced by d to the right of the centre, field E to the right">
+  <defs><marker id="arr1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#111"/></marker></defs>
+  <circle cx="150" cy="100" r="80" fill="#e6e6df" stroke="#111" stroke-width="1.4"/>
+  <circle cx="150" cy="100" r="2.5" fill="none" stroke="#111"/>
+  <line x1="150" y1="100" x2="93.4" y2="43.4" stroke="#111"/>
+  <text x="108" y="60" font-size="13" font-style="italic" font-family="Times New Roman, serif">a</text>
+  <circle cx="180" cy="100" r="5" fill="#111"/>
+  <text x="188" y="92" font-size="13" font-family="Times New Roman, serif">+q</text>
+  <text x="236" y="52" font-size="13" font-family="Times New Roman, serif">−q cloud</text>
+  <line x1="150" y1="126" x2="180" y2="126" stroke="#111"/>
+  <line x1="150" y1="120" x2="150" y2="132" stroke="#111"/>
+  <line x1="180" y1="120" x2="180" y2="132" stroke="#111"/>
+  <text x="161" y="144" font-size="13" font-style="italic" font-family="Times New Roman, serif">d</text>
+  <line x1="20" y1="22" x2="80" y2="22" stroke="#111" stroke-width="1.6" marker-end="url(#arr1)"/>
+  <text x="40" y="14" font-size="13" font-style="italic" font-weight="bold" font-family="Times New Roman, serif">E</text>
+</svg>
+<figcaption>Figure 1. My sketch of the Example 4.1 model: the nucleus is pushed right by E and the cloud pulls it back.</figcaption>
+</figure>
+
+<h3>Finding the pull from the cloud (the model in Example 4.1)</h3>
+<p>To make the sum possible, the book pictures the cloud as a uniform ball of charge $-q$ and radius $a$. Now I need the field of that ball at a distance $d$ from its centre, with $d < a$.</p>
+<p>Gauss's law says the flux through a sphere of radius $s$ equals the enclosed charge divided by $\epsilon_0$. The fraction of the ball's charge inside radius $s$ is $(s/a)^3$, because the charge is spread evenly through the volume. So the enclosed charge is $q\,s^3/a^3$. The flux through the sphere is $E \cdot 4\pi s^2$, so</p>
+<div class="eq">$$E \cdot 4\pi s^2 = \frac{q\,s^3}{a^3\,\epsilon_0} \quad\Longrightarrow\quad E_e = \frac{1}{4\pi\epsilon_0}\frac{q\,d}{a^3}.$$</div>
+<p>Notice the field grows with $d$. The further the nucleus moves, the harder the cloud pulls back. That is exactly what a spring does, so the response will be proportional to the push.</p>
+
+<h3>Balance and the polarizability</h3>
+<p>At equilibrium, the field pushing the nucleus equals the cloud's pull: $E = E_e$. So</p>
+<div class="eq">$$E = \frac{1}{4\pi\epsilon_0}\frac{q\,d}{a^3} \quad\Longrightarrow\quad p = qd = (4\pi\epsilon_0 a^3)\,E.$$</div>
+<p>The induced dipole $p = qd$ is proportional to $E$, which is Eq. 4.1 with $\alpha = 4\pi\epsilon_0 a^3$ (Eq. 4.2). The book says this is only accurate to a factor of about 4, because the real electron cloud is not a uniform ball.</p>
+<p>Since $\frac{4}{3}\pi a^3 = v$ is the volume of the ball, $4\pi a^3 = 3v$, so $\alpha = 3\epsilon_0 v$. Atoms with bigger volume are easier to push, which makes sense.</p>
+
+<div class="key"><b>Units check.</b> $\mathbf p$ is in C·m and $E$ is in N/C. So $\alpha = p/E$ is in C·m ÷ (N/C) = C²·m/N. Table 4.1 gives $\alpha/4\pi\epsilon_0$ in $10^{-30}\,\text{m}^3$. $4\pi\epsilon_0$ has units C²/(N·m²), so multiplying by $\text{m}^3$ gives C²·m/N again. The two agree.</div>
+
+<h3>Molecules are less simple</h3>
+<p>For a molecule the push can depend on direction. CO₂ is easier to stretch along its axis than across it. So the field splits into a part along the axis and a part across it, and each part gets its own $\alpha$:</p>
+<div class="eq">$$\mathbf p = \alpha_\parallel\mathbf E_\parallel + \alpha_\perp\mathbf E_\perp.$$</div>
+<p>If the molecule is very asymmetric, each component of $\mathbf p$ can depend on every component of $\mathbf E$. That is why there are nine numbers $\alpha_{ij}$ (Eq. 4.3). They form a $3\times3$ grid, the "tensor". Each row gives one component of $\mathbf p$: $p_x = \alpha_{xx}E_x + \alpha_{xy}E_y + \alpha_{xz}E_z$, and so on.</p>
+
+<h3>Problem 4.2: the electron cloud is not a ball</h3>
+<p>The hydrogen cloud has density $\rho(r) \propto e^{-2r/a}$. To find its field, use Gauss again, but now the enclosed charge is a sum over shells. For $r \ll a$, the exponential can be expanded as $e^{-2r/a} \approx 1 - 2r/a$. That approximation is what keeps the answer proportional to $E$. The idea is the same as before; only the charge distribution changed.</p>
+
+<h2>3. Permanent dipoles: the molecule already has one</h2>
+<p>Water is bent, with an angle of about $105^\circ$. Oxygen pulls electrons toward itself, so one side is negative and the other is positive. It has a permanent dipole $\mathbf p$ even with no field. That is why water is a good solvent: it can pull at the charges of salt.</p>
+
+<h3>Torque: why it turns</h3>
+<p>Put a dipole in a uniform field. The positive end feels $q\mathbf E$ and the negative end feels $-q\mathbf E$. The net force is zero, so it does not move. But the forces are at different points, so they make a turning effect.</p>
+<p>Take the centre as origin. The positive end is at $+\mathbf d/2$ and the negative end at $-\mathbf d/2$. The torque is</p>
+<div class="eq">$$\mathbf N = \left(\tfrac{\mathbf d}{2}\times q\mathbf E\right) + \left(-\tfrac{\mathbf d}{2}\times(-q\mathbf E)\right) = q\,\mathbf d\times\mathbf E = \mathbf p\times\mathbf E. \quad (4.4)$$</div>
+<p>Both terms point the same way, so they add. The direction of $\mathbf p\times\mathbf E$ tries to bring $\mathbf p$ in line with $\mathbf E$. That is why a polar molecule swings round to point with the field.</p>
+<figure class="fig">
+<svg viewBox="0 0 260 200" role="img" aria-label="Dipole at 40 degrees to a uniform field E pointing right; forces F plus and F minus are equal and opposite">
+  <defs><marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#111"/></marker></defs>
+  <line x1="20" y1="30" x2="100" y2="30" stroke="#111" stroke-width="1.6" marker-end="url(#arr2)"/>
+  <text x="50" y="22" font-size="13" font-style="italic" font-weight="bold" font-family="Times New Roman, serif">E</text>
+  <line x1="91.7" y1="142.1" x2="168.3" y2="77.9" stroke="#111" stroke-width="2"/>
+  <circle cx="168.3" cy="77.9" r="5" fill="#111"/>
+  <text x="146" y="66" font-size="13" font-family="Times New Roman, serif">+q</text>
+  <circle cx="91.7" cy="142.1" r="5" fill="#fdfdfb" stroke="#111" stroke-width="1.4"/>
+  <text x="74" y="162" font-size="13" font-family="Times New Roman, serif">−q</text>
+  <text x="106" y="102" font-size="13" font-style="italic" font-family="Times New Roman, serif">p</text>
+  <path d="M155,110 A25,25 0 0 0 149.15,93.93" fill="none" stroke="#111"/>
+  <text x="164" y="104" font-size="13" font-style="italic" font-family="Times New Roman, serif">θ</text>
+  <line x1="174" y1="78" x2="212" y2="78" stroke="#111" stroke-width="1.6" marker-end="url(#arr2)"/>
+  <text x="200" y="70" font-size="13" font-family="Times New Roman, serif">F+</text>
+  <line x1="86" y1="142" x2="48" y2="142" stroke="#111" stroke-width="1.6" marker-end="url(#arr2)"/>
+  <text x="30" y="134" font-size="13" font-family="Times New Roman, serif">F−</text>
+  <text x="130" y="192" font-size="13" text-anchor="middle" font-family="Times New Roman, serif">Net force zero; torque turns p toward E</text>
+</svg>
+<figcaption>Figure 2. My sketch of a permanent dipole in a uniform field. The two forces are equal and opposite, but they act at different points, so they turn the dipole.</figcaption>
+</figure>
+
+<h3>Energy: where does $U = -\mathbf p\cdot\mathbf E$ come from?</h3>
+<p>Let the angle between $\mathbf p$ and $\mathbf E$ be $\theta$. The torque from the field has size $pE\sin\theta$. To turn the dipole slowly from $90^\circ$ to $\theta$, I have to push against that torque. The work I do is</p>
+<div class="eq">$$W = \int_{\pi/2}^{\theta} pE\sin\phi\;d\phi = pE\,(-\cos\theta) = -\mathbf p\cdot\mathbf E.$$</div>
+<p>The work I do is stored as potential energy. So $U = -\mathbf p\cdot\mathbf E$, with the zero at $90^\circ$. This is Problem 4.7, and it is the reason the dipole wants to line up: lowest energy is $\theta = 0$.</p>
+<figure class="fig">
+<svg viewBox="0 0 280 210" role="img" aria-label="Graph of U against theta: U equals minus pE cos theta, lowest at theta equals 0, highest at 180 degrees">
+  <line x1="40" y1="30" x2="40" y2="180" stroke="#111"/>
+  <line x1="40" y1="180" x2="250" y2="180" stroke="#111"/>
+  <line x1="40" y1="110" x2="250" y2="110" stroke="#777" stroke-dasharray="4 3"/>
+  <polyline points="40,170 73.3,162 106.7,140 140,110 173.3,80 206.7,58 240,50" fill="none" stroke="#111" stroke-width="2"/>
+  <circle cx="40" cy="170" r="3" fill="#111"/>
+  <text x="6" y="174" font-size="13" font-family="Times New Roman, serif">−pE</text>
+  <text x="6" y="54" font-size="13" font-family="Times New Roman, serif">+pE</text>
+  <text x="40" y="196" font-size="13" text-anchor="middle" font-family="Times New Roman, serif">0</text>
+  <text x="140" y="196" font-size="13" text-anchor="middle" font-family="Times New Roman, serif">90°</text>
+  <text x="240" y="196" font-size="13" text-anchor="middle" font-family="Times New Roman, serif">180°</text>
+  <text x="256" y="184" font-size="14" font-style="italic" font-family="Times New Roman, serif">θ</text>
+  <text x="26" y="26" font-size="14" font-style="italic" font-family="Times New Roman, serif">U</text>
+  <text x="50" y="44" font-size="13" font-family="Times New Roman, serif">U = −pE cos θ</text>
+</svg>
+<figcaption>Figure 3. My sketch of U against θ, with zero energy at 90°. The dipole is most stable at θ = 0, where U is lowest.</figcaption>
+</figure>
+<p class="doubt">Why is it safe for a permanent dipole but not for an induced one? An induced dipole's size depends on $E$, so the simple $U = -\mathbf p\cdot\mathbf E$ does not capture the full energy (the book warns about this in footnote 3).</p>
+
+<h3>Non-uniform field: a force appears</h3>
+<p>In a non-uniform field, the two ends feel different fields. Let $\mathbf d$ be the separation. The field at the positive end is $\mathbf E(\mathbf r + \mathbf d/2)$, and at the negative end $\mathbf E(\mathbf r - \mathbf d/2)$. For a short dipole, the difference is a small change along $\mathbf d$:</p>
+<div class="eq">$$\Delta\mathbf E \approx (\mathbf d\cdot\nabla)\mathbf E, \qquad \mathbf F = q\,\Delta\mathbf E = (\mathbf p\cdot\nabla)\mathbf E. \quad (4.5)$$</div>
+<p>I did not know partial derivatives before this. $\nabla$ just means "take the change in each direction". The idea is simple: a bigger change of $E$ over the dipole length gives a bigger force. The book notes the field must change rather suddenly for this to matter inside a molecule, so it is usually small.</p>
+<figure class="fig">
+<svg viewBox="0 0 260 190" role="img" aria-label="Dipole in a field that is stronger at the positive end; the force on the positive end is larger, so the net force points right">
+  <defs><marker id="arr3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#111"/></marker></defs>
+  <line x1="90" y1="110" x2="170" y2="110" stroke="#111" stroke-width="2"/>
+  <circle cx="90" cy="110" r="6" fill="#fdfdfb" stroke="#111" stroke-width="1.4"/>
+  <text x="62" y="106" font-size="13" font-family="Times New Roman, serif">−q</text>
+  <circle cx="170" cy="110" r="6" fill="#111"/>
+  <text x="178" y="104" font-size="13" font-family="Times New Roman, serif">+q</text>
+  <line x1="170" y1="70" x2="230" y2="70" stroke="#111" stroke-width="1.6" marker-end="url(#arr3)"/>
+  <text x="234" y="74" font-size="13" font-family="Times New Roman, serif">E₊</text>
+  <line x1="90" y1="70" x2="120" y2="70" stroke="#111" stroke-width="1.6" marker-end="url(#arr3)"/>
+  <text x="124" y="74" font-size="13" font-family="Times New Roman, serif">E₋</text>
+  <line x1="170" y1="150" x2="230" y2="150" stroke="#111" stroke-width="1.6" marker-end="url(#arr3)"/>
+  <text x="234" y="154" font-size="13" font-family="Times New Roman, serif">F₊</text>
+  <line x1="90" y1="150" x2="120" y2="150" stroke="#111" stroke-width="1.6" marker-end="url(#arr3)"/>
+  <text x="124" y="154" font-size="13" font-family="Times New Roman, serif">F₋</text>
+  <text x="130" y="184" font-size="13" text-anchor="middle" font-family="Times New Roman, serif">E₊ &gt; E₋, so F₊ &gt; F₋: net force to the right</text>
+</svg>
+<figcaption>Figure 4. My sketch of a short dipole in a non-uniform field. Each end feels its own field, and the stronger field at the + end gives the bigger force.</figcaption>
+</figure>
+
+<h2>4. Polarization $\mathbf P$: many dipoles together</h2>
+<p>Now suppose each atom or molecule in a block has dipole $\mathbf p$, and there are $N$ of them per unit volume, all pointing the same way. The total dipole in a small volume $\Delta V$ is $N\,\Delta V\,\mathbf p$. Dividing by the volume:</p>
+<div class="eq">$$\mathbf P = \frac{\text{total dipole moment}}{\text{volume}} = N\mathbf p.$$</div>
+<figure class="fig">
+<svg viewBox="0 0 300 200" role="img" aria-label="Block of aligned dipoles in a field E pointing right; polarization P is dipole moment per unit volume">
+  <defs>
+    <marker id="arr4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#111"/></marker>
+    <marker id="arr5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#111"/></marker>
+  </defs>
+  <rect x="40" y="40" width="220" height="110" fill="#efefe9" stroke="#111" stroke-width="1.4"/>
+  <line x1="40" y1="22" x2="110" y2="22" stroke="#111" stroke-width="1.6" marker-end="url(#arr4)"/>
+  <text x="70" y="14" font-size="13" font-style="italic" font-weight="bold" font-family="Times New Roman, serif">E</text>
+  <g stroke="#111" stroke-width="1.8" marker-end="url(#arr5)">
+    <line x1="61" y1="65" x2="79" y2="65"/><line x1="101" y1="65" x2="119" y2="65"/><line x1="141" y1="65" x2="159" y2="65"/><line x1="181" y1="65" x2="199" y2="65"/><line x1="221" y1="65" x2="239" y2="65"/>
+    <line x1="61" y1="100" x2="79" y2="100"/><line x1="101" y1="100" x2="119" y2="100"/><line x1="141" y1="100" x2="159" y2="100"/><line x1="181" y1="100" x2="199" y2="100"/><line x1="221" y1="100" x2="239" y2="100"/>
+    <line x1="61" y1="135" x2="79" y2="135"/><line x1="101" y1="135" x2="119" y2="135"/><line x1="141" y1="135" x2="159" y2="135"/><line x1="181" y1="135" x2="199" y2="135"/><line x1="221" y1="135" x2="239" y2="135"/>
+  </g>
+  <text x="150" y="176" font-size="14" text-anchor="middle" font-family="Times New Roman, serif">P = N p  (dipoles per volume × dipole each)</text>
+  <text x="150" y="192" font-size="12" text-anchor="middle" font-family="Times New Roman, serif">all dipoles point along E; the arrows are the dipoles</text>
+</svg>
+<figcaption>Figure 5. My sketch of aligned dipoles in a block. Polarization is the total dipole moment per unit volume.</figcaption>
+</figure>
+<p>Units: C·m per m³ gives C/m². $\mathbf P$ is the quantity that will matter later, because the material's own field depends on $\mathbf P$ and not on each atom separately.</p>
+
+<h3>Why the alignment is never perfect</h3>
+<p>A polar molecule has energy $-pE\cos\theta$ in the field. Thermal motion gives each molecule energy of order $k_BT$. Compare them: if $pE \ll k_BT$, thermal motion wins and the molecules point in all directions. At room temperature $k_BT \approx 0.026$ eV, and for a field of ordinary size the energy $pE$ is tiny, so the alignment is weak. This is why the book says alignment is never complete and is lost almost at once when the field goes off.</p>
+<p>The two mechanisms (induced and permanent) both give a net dipole along $\mathbf E$. Permanent dipoles turn; induced ones stretch. That is the whole picture of §4.1.</p>
+
+<h2>Doubts I still have</h2>
+<ul>
+<li class="doubt">Why does the book say the uniform-ball model is only good to a factor of 4? (I think because the real cloud is more concentrated near the nucleus. Not yet checked.)</li>
+<li class="doubt">Is $\nabla$ the same as the gradient from my maths class? I need to revise partial derivatives before I can follow Eq. 4.5 fully.</li>
+</ul>
+</main>
+</body>
+</html>

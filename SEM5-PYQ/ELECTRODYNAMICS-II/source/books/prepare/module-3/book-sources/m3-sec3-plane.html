@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Griffiths 9.2.2 Monochromatic plane waves (book pp. 402–406)</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+  :root {
+    --page-bg: #d9d9d4;
+    --paper: #fdfdfb;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --page-bg: #2b2b2b;
+      --paper: #f4f3ee;
+      --ink: #111;
+      --rule: #444;
+      --note: #555;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page-bg: #2b2b2b;
+    --paper: #f4f3ee;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  body {
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--ink);
+    font-family: "Times New Roman", Times, "Liberation Serif", serif;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .sheet {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 12mm auto;
+    padding: 14mm 18mm 16mm;
+    box-sizing: border-box;
+    background: var(--paper);
+    box-shadow: 0 1px 6px rgba(0,0,0,.25);
+    position: relative;
+  }
+  .sheet + .sheet { margin-top: 0; }
+  .hdr {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: start;
+    font-size: 14px;
+  }
+  .code { font-size: 22px; font-weight: bold; letter-spacing: .5px; }
+  .pages { text-align: center; padding-top: 14px; }
+  .name { text-align: right; line-height: 2; }
+  .title { text-align: center; margin-top: 22px; }
+  .title .exam { font-size: 19px; font-weight: bold; letter-spacing: .3px; }
+  .title .sch { margin-top: 2px; }
+  .title .course { margin-top: 10px; font-size: 16px; }
+  .title .subject { margin-top: 6px; font-size: 16px; font-weight: bold; }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 16px;
+    font-size: 15px;
+  }
+  .sec { margin-top: 14px; }
+  .sec-head {
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    font-weight: bold;
+  }
+  .sec-head .num { font-weight: bold; }
+  .sec-head .body { font-weight: normal; }
+  .sec-head .body b { font-weight: bold; }
+  .sec-head .body i { font-style: italic; }
+  .sec-total { text-align: right; font-weight: normal; margin-top: 4px; }
+  .qs { margin-top: 6px; }
+  .q {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    margin-bottom: 7px;
+  }
+  .q .n { text-align: right; padding-right: 10px; }
+  .q p { margin: 0; }
+  .sub { margin-left: 22px; }
+  .cut { color: var(--note); }
+  .turn { text-align: right; font-weight: bold; margin-top: 26px; }
+  .fig {
+    display: block;
+    margin: 8px auto 2px 36px;
+    width: 230px;
+    height: auto;
+  }
+  .fig-cap { margin-left: 36px; font-size: 13px; color: var(--note); font-style: italic; }
+  .foot-note {
+    margin-top: 26px;
+    border-top: 1px solid var(--rule);
+    padding-top: 6px;
+    font-size: 12px;
+    color: var(--note);
+  }
+  .pno { text-align: center; font-size: 15px; margin-bottom: 4px; }
+  .pno-hdr { position: absolute; top: 10mm; right: 18mm; font-weight: bold; font-size: 14px; }
+  @media print {
+    @page { size: A4; margin: 0; }
+    body { background: #fff; }
+    .sheet { margin: 0; box-shadow: none; width: 210mm; height: 297mm; min-height: 0; page-break-after: always; }
+    .sheet:last-child { page-break-after: auto; }
+  }
+  @media (max-width: 720px) {
+    .sheet { width: auto; margin: 0; padding: 14px 16px; min-height: 0; }
+    .hdr { grid-template-columns: 1fr; gap: 6px; }
+    .name { text-align: left; }
+    .pages { text-align: left; padding-top: 0; }
+  }
+</style>
+<style>
+  .sheet.book { height: auto; min-height: 297mm; text-align: justify; hyphens: auto; }
+  .sheet.book p { margin: 6px 0; }
+  .rh { display: flex; justify-content: space-between; font-size: 12px; color: var(--note);
+        border-bottom: 1px solid var(--rule); padding-bottom: 3px; margin-bottom: 12px; }
+  .chap { display: flex; background: #8a8a86; color: #fff; margin: 4px 0 16px; }
+  .chap .cn { background: #b4b4ae; padding: 10px 18px; font-size: 26px; }
+  .chap .ct { padding: 12px 16px; font-size: 22px; font-weight: bold; }
+  h2.sec { font-size: 20px; margin: 18px 0 8px; border-bottom: 2px solid var(--rule); padding-bottom: 3px; }
+  h3.sub { font-size: 16px; margin: 14px 0 6px; border-bottom: 1px solid var(--rule); padding-bottom: 2px; }
+  .eq { margin: 10px 0; text-align: center; overflow: visible; }
+  mjx-container[display="true"], mjx-container { overflow: visible !important; max-width: 100%; }
+  .sheet.book, .sheet.book .eq { overflow: visible; }
+  .eq.boxed { border: 1px solid var(--ink); display: block; padding: 4px 8px; }
+  .prob { background: #ecece7; border: 1px solid var(--rule); padding: 8px 12px; margin: 10px 0; text-align: left; }
+  .prob p { margin: 5px 0; }
+  .ex, .ex-cont { border: 1px solid var(--rule); padding: 8px 12px; margin: 10px 0; text-align: left; }
+  .ex p, .ex-cont p { margin: 5px 0; }
+  .figbox { border: 1px dashed var(--rule); padding: 10px; color: var(--note); font-size: 13px; text-align: center; margin: 8px 0; font-style: italic; }
+  figure { margin: 8px 0; text-align: center; }
+  figure > svg { width: 100%; max-width: 230px; height: auto; }
+  figure.single > svg { max-width: 260px; }
+  figure figcaption { font-size: 12px; font-style: italic; color: var(--note); }
+  .figrow { display: flex; flex-wrap: wrap; justify-content: space-around; gap: 8px; }
+  .figrow > figure { flex: 1 1 180px; max-width: 240px; }
+  .fn { font-size: 12.5px; color: var(--note); margin: 6px 0; text-align: left; }
+  .cont { font-size: 12.5px; color: var(--note); font-style: italic; }
+  .gapnote { font-size: 13px; color: var(--note); font-style: italic; border-left: 3px solid var(--rule); padding: 2px 8px; margin: 4px 0 10px; }
+  .flag { color: #8a1c1c; font-weight: bold; }
+  .answer { font-size: 14px; }
+  .tbl { border-collapse: collapse; width: 100%; font-size: 13px; margin: 6px 0; }
+  .tbl td, .tbl th { border: 1px solid var(--rule); padding: 3px 6px; text-align: center; }
+  .tbl th { background: #ebebe6; }
+  .tblcap { font-size: 13px; margin-top: 8px; text-align: left; }
+  .pno { text-align: center; font-size: 14px; margin-top: 14px; }
+  .intro p, .intro li { font-size: 14px; text-align: left; }
+  .intro table { border-collapse: collapse; width: 100%; font-size: 14px; margin: 6px 0; }
+  .intro td, .intro th { border: 1px solid var(--rule); padding: 4px 8px; text-align: left; }
+  @media print {
+    .sheet.book { height: auto !important; min-height: 0 !important; page-break-after: always; }
+  }
+  @media (max-width: 720px) {
+    .sheet.book .eq { overflow-x: auto; max-width: 100%; }
+    .sheet.book mjx-container[display="true"] { font-size: 85% !important; }
+    .sheet.book .figrow > figure { flex: 1 1 100%; max-width: 100%; }
+    .sheet.book { padding-left: 14px; padding-right: 14px; }
+  }
+</style>
+</head>
+<body>
+<!-- Book source for Module 3. Transcribed sheet by sheet from the full Griffiths PDF; printed page numbers in each sheet header. -->
+<div class="sheet book" id="pdf-p427"><div class="rh"><span>403</span><span>9.2 Electromagnetic Waves in Vacuum</span></div>
+<p><b>Table 9.1. The Electromagnetic Spectrum</b> (book)</p><table class="tbl"><tr><th>Frequency (Hz)</th><th>Type</th><th>Wavelength (m)</th></tr><tr><td>$10^{22}$</td><td></td><td>$10^{-13}$</td></tr><tr><td>$10^{21}$</td><td>Gamma rays</td><td>$10^{-12}$</td></tr><tr><td>$10^{20}$</td><td></td><td>$10^{-11}$</td></tr><tr><td>$10^{19}$</td><td></td><td>$10^{-10}$</td></tr><tr><td>$10^{18}$</td><td>X rays</td><td>$10^{-9}$</td></tr><tr><td>$10^{17}$</td><td></td><td>$10^{-8}$</td></tr><tr><td>$10^{16}$</td><td>Ultraviolet</td><td>$10^{-7}$</td></tr><tr><td>$10^{15}$</td><td>Visible</td><td>$10^{-6}$</td></tr><tr><td>$10^{14}$</td><td>Infrared</td><td>$10^{-5}$</td></tr><tr><td>$10^{13}$</td><td></td><td>$10^{-4}$</td></tr><tr><td>$10^{12}$</td><td></td><td>$10^{-3}$</td></tr><tr><td>$10^{11}$</td><td></td><td>$10^{-2}$</td></tr><tr><td>$10^{10}$</td><td>Microwave</td><td>$10^{-1}$</td></tr><tr><td>$10^{9}$</td><td></td><td>$1$</td></tr><tr><td>$10^{8}$</td><td>TV, FM</td><td>$10$</td></tr><tr><td>$10^{7}$</td><td></td><td>$10^{2}$</td></tr><tr><td>$10^{6}$</td><td>AM</td><td>$10^{3}$</td></tr><tr><td>$10^{5}$</td><td></td><td>$10^{4}$</td></tr><tr><td>$10^{4}$</td><td>RF</td><td>$10^{5}$</td></tr><tr><td>$10^{3}$</td><td></td><td>$10^{6}$</td></tr></table><p><b>The Visible Range</b> (book)</p><table class="tbl"><tr><th>Frequency (Hz)</th><th>Color</th><th>Wavelength (m)</th></tr><tr><td>$1.0\times10^{15}$</td><td>Near ultraviolet</td><td>$3.0\times10^{-7}$</td></tr><tr><td>$7.5\times10^{14}$</td><td>Shortest visible blue</td><td>$4.0\times10^{-7}$</td></tr><tr><td>$6.5\times10^{14}$</td><td>Blue</td><td>$4.6\times10^{-7}$</td></tr><tr><td>$5.6\times10^{14}$</td><td>Green</td><td>$5.4\times10^{-7}$</td></tr><tr><td>$5.1\times10^{14}$</td><td>Yellow</td><td>$5.9\times10^{-7}$</td></tr><tr><td>$4.9\times10^{14}$</td><td>Orange</td><td>$6.1\times10^{-7}$</td></tr><tr><td>$3.9\times10^{14}$</td><td>Longest visible red</td><td>$7.6\times10^{-7}$</td></tr><tr><td>$3.0\times10^{14}$</td><td>Near infrared</td><td>$1.0\times10^{-6}$</td></tr></table>
+<p>$$\tilde{\mathbf E}(z,t)=\tilde{\mathbf E}_0e^{i(kz-\omega t)},\qquad\tilde{\mathbf B}(z,t)=\tilde{\mathbf B}_0e^{i(kz-\omega t)},\qquad(9.44)$$</p>
+<p>where $\tilde{\mathbf E}_0$ and $\tilde{\mathbf B}_0$ are the (complex) amplitudes (the <i>physical</i> fields, of course, are the real parts of $\tilde{\mathbf E}$ and $\tilde{\mathbf B}$), and $\omega=ck$.</p>
+<p>Now, the wave equations for $\mathbf E$ and $\mathbf B$ (Eq. 9.41) were derived from Maxwell’s equations. However, whereas every solution to Maxwell’s equations (in empty space) must obey the wave equation, the converse is <i>not</i> true; Maxwell’s equations impose extra constraints on $\tilde{\mathbf E}_0$ and $\tilde{\mathbf B}_0$. In particular, since $\nabla\cdot\mathbf E=0$ and $\nabla\cdot\mathbf B=0$, it follows<sup>8</sup> that</p>
+<div class="fn"><sup>8</sup> Because the real part of $\tilde{\mathbf E}$ differs from the imaginary part only in the replacement of sine by cosine, if the former obeys Maxwell’s equations, so does the latter, and hence $\tilde{\mathbf E}$ as well.</div>
+</div>
+<div class="sheet book" id="pdf-p428"><div class="rh"><span>404</span><span>9 Electromagnetic Waves</span></div>
+<figure class="fig"><div class="figbox">Fig. 9.9 (book): plane wave, with $\mathbf E$ in the same plane at each position along $z$, moving in the $v$ direction; the fields are uniform over each plane. [Figure not transcribed here.]</div></figure>
+<div class="eq">$$(\tilde E_0)_z=(\tilde B_0)_z=0.\qquad(9.45)$$</div>
+<p>That is, <i>electromagnetic waves are transverse</i>: the electric and magnetic fields are perpendicular to the direction of propagation. Moreover, Faraday’s law, $\nabla\times\mathbf E=-\partial\mathbf B/\partial t$, implies a relation between the electric and magnetic amplitudes, to wit,</p>
+<div class="eq">$$-k(\tilde E_0)_y=\omega(\tilde B_0)_x,\qquad k(\tilde E_0)_x=\omega(\tilde B_0)_y,\qquad(9.46)$$</div>
+<p>or, more compactly,</p>
+<div class="eq">$$\tilde{\mathbf B}_0=\frac{k}{\omega}(\hat z\times\tilde{\mathbf E}_0).\qquad(9.47)$$</div>
+<p>Evidently, $\mathbf E$ and $\mathbf B$ are <i>mutually perpendicular</i>, and perpendicular to the direction of propagation (here, $z$), so they really have only one (nonzero) component each; they are <i>in phase</i>, and their (real) amplitudes are related by</p>
+<div class="eq">$$B_0=\frac{k}{\omega}E_0=\frac{1}{c}E_0.\qquad(9.48)$$</div>
+<p>The fourth of Maxwell’s equations, $\nabla\times\mathbf B=\mu_0\epsilon_0(\partial\mathbf E/\partial t)$, does not yield an independent condition; it simply reproduces Eq. 9.46.</p>
+<p><b>Example 9.2.</b> If $\mathbf E$ points in the $x$ direction, then $\mathbf B$ points in the $y$ direction (Eq. 9.47):</p>
+<div class="eq">$$\tilde{\mathbf E}(z,t)=\tilde E_0e^{i(kz-\omega t)}\hat x,\qquad\tilde{\mathbf B}(z,t)=\frac{1}{c}\tilde E_0e^{i(kz-\omega t)}\hat y,$$</div>
+<p>or (taking the real part)</p>
+<div class="eq boxed">$$\mathbf E(z,t)=E_0\cos(kz-\omega t+\delta)\hat x,\qquad\mathbf B(z,t)=\frac{1}{c}E_0\cos(kz-\omega t+\delta)\hat y.\qquad(9.49)$$</div>
+<p>This is the paradigm for a monochromatic plane wave (see Fig. 9.10). The wave as a whole is said to be <b>polarized</b> in the $x$ direction (by convention, we use the direction of $\mathbf E$ to specify the polarization of an electromagnetic wave).</p>
+</div>
+<div class="sheet book" id="pdf-p429"><div class="rh"><span>405</span><span>9.2 Electromagnetic Waves in Vacuum</span></div>
+<figure class="fig"><div class="figbox">Fig. 9.10 (book): the paradigm monochromatic plane wave: $\mathbf E$ along $x$, $\mathbf B$ along $y$, both varying with $z$ with amplitudes $E_0$ and $E_0/c$. [Figure not transcribed here.]</div></figure>
+<p>There is nothing special about the $z$ direction, of course – we can easily generalize to monochromatic plane waves traveling in an arbitrary direction. The notation is facilitated by the introduction of the <b>propagation (or wave) vector</b>, $\mathbf k$, pointing in the direction of propagation, whose magnitude is the wave number $k$. The scalar product $\mathbf k\cdot\mathbf r$ is the appropriate generalization of $kz$ (Fig. 9.11), so</p>
+<figure class="fig"><div class="figbox">Fig. 9.11 (book): the propagation vector $\mathbf k$ and the position vector $\mathbf r$, with $\hat k\cdot\mathbf r$ the component of $\mathbf r$ along $\mathbf k$. [Figure not transcribed here.]</div></figure>
+<div class="eq">$$\tilde{\mathbf E}(\mathbf r,t)=\tilde E_0e^{i(\mathbf k\cdot\mathbf r-\omega t)}\hat n,\qquad\tilde{\mathbf B}(\mathbf r,t)=\frac{1}{c}\tilde E_0e^{i(\mathbf k\cdot\mathbf r-\omega t)}(\hat k\times\hat n)=\frac{1}{c}\hat k\times\tilde{\mathbf E},\qquad(9.50)$$</div>
+<p>where $\hat n$ is the polarization vector. Because $\mathbf E$ is transverse,</p>
+<div class="eq">$$\hat n\cdot\hat k=0.\qquad(9.51)$$</div>
+<p>(The transversality of $\mathbf B$ follows automatically from Eq. 9.50.) The actual (real) electric and magnetic fields in a monochromatic plane wave with propagation vector $\mathbf k$ and polarization $\hat n$ are</p>
+<div class="eq">$$\mathbf E(\mathbf r,t)=E_0\cos(\mathbf k\cdot\mathbf r-\omega t+\delta)\hat n,\qquad(9.52)$$</div>
+<div class="eq">$$\mathbf B(\mathbf r,t)=\frac{1}{c}E_0\cos(\mathbf k\cdot\mathbf r-\omega t+\delta)(\hat k\times\hat n).\qquad(9.53)$$</div>
+<p><b>Problem 9.9.</b> Write down the (real) electric and magnetic fields for a monochromatic plane wave of amplitude $E_0$, frequency $\omega$, and phase angle zero that is (a) traveling in the negative $x$ direction and polarized in the $z$ direction, and (b) traveling in the direction from the origin to the point $(1,1,1)$, with polarization parallel to the $xz$ plane. In each case, sketch the wave, and give the explicit Cartesian components of $\mathbf k$ and $\hat n$.</p>
+</div>
+
+</body>
+</html>

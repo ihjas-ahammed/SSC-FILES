@@ -53,7 +53,7 @@ def abs_corner():
 
 def caratheodory():
     s = S(360, 330)
-    p = Plot(-0.2, 3.6, -0.2, 3.6, 360, 175, (24, 10, 12, 20))
+    p = Plot(-0.2, 3.6, -0.2, 3.6, 360, 135, (24, 10, 12, 20))
     f = lambda x: 0.25 * x * x + 0.3
     c = 1.4
     p.axes()
@@ -78,8 +78,8 @@ def caratheodory():
     d2 = ''.join(q.o)
     defs = set(p.defs) | set(q.defs)
     dd = ''.join(f"<marker id='ah{k}' viewBox='0 0 10 10' refX='7' refY='5' markerWidth='6' markerHeight='6' orient='auto-start-reverse'><path d='M0,1 L9,5 L0,9 z' fill='#{k}'/></marker>" for k in defs)
-    svg = f"<svg viewBox='0 0 360 330' xmlns='http://www.w3.org/2000/svg'><defs>{dd}</defs>{d1}<g transform='translate(0,178)'>{d2}</g></svg>"
-    return fig(svg, "Carathéodory's idea (f(x) = x²/4 + 0.3, c = 1.4). The chord-slope function φ(x) = (f(x) − f(c))/(x − c) has a hole at x = c. f is differentiable at c exactly when that hole can be filled so that φ is <b>continuous</b> at c, and then φ(c) = f′(c). Here φ(x) = (x + c)/4.")
+    svg = f"<svg viewBox='0 0 360 285' xmlns='http://www.w3.org/2000/svg'><defs>{dd}</defs>{d1}<g transform='translate(0,135)'>{d2}</g></svg>"
+    return fig(svg, "Carathéodory's idea (f(x) = x²/4 + 0.3, c = 1.4). The chord slope φ(x) = (f(x) − f(c))/(x − c) has a hole at c. f is differentiable at c exactly when the hole can be filled so that φ is <b>continuous</b> there, and then φ(c) = f′(c).")
 
 
 def interior_ext():

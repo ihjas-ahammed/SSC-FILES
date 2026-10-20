@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Griffiths 7.1.1 Ohm’s law (book pp. 298–303)</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+  :root {
+    --page-bg: #d9d9d4;
+    --paper: #fdfdfb;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --page-bg: #2b2b2b;
+      --paper: #f4f3ee;
+      --ink: #111;
+      --rule: #444;
+      --note: #555;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page-bg: #2b2b2b;
+    --paper: #f4f3ee;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  body {
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--ink);
+    font-family: "Times New Roman", Times, "Liberation Serif", serif;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .sheet {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 12mm auto;
+    padding: 14mm 18mm 16mm;
+    box-sizing: border-box;
+    background: var(--paper);
+    box-shadow: 0 1px 6px rgba(0,0,0,.25);
+    position: relative;
+  }
+  .sheet + .sheet { margin-top: 0; }
+  .hdr {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: start;
+    font-size: 14px;
+  }
+  .code { font-size: 22px; font-weight: bold; letter-spacing: .5px; }
+  .pages { text-align: center; padding-top: 14px; }
+  .name { text-align: right; line-height: 2; }
+  .title { text-align: center; margin-top: 22px; }
+  .title .exam { font-size: 19px; font-weight: bold; letter-spacing: .3px; }
+  .title .sch { margin-top: 2px; }
+  .title .course { margin-top: 10px; font-size: 16px; }
+  .title .subject { margin-top: 6px; font-size: 16px; font-weight: bold; }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 16px;
+    font-size: 15px;
+  }
+  .sec { margin-top: 14px; }
+  .sec-head {
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    font-weight: bold;
+  }
+  .sec-head .num { font-weight: bold; }
+  .sec-head .body { font-weight: normal; }
+  .sec-head .body b { font-weight: bold; }
+  .sec-head .body i { font-style: italic; }
+  .sec-total { text-align: right; font-weight: normal; margin-top: 4px; }
+  .qs { margin-top: 6px; }
+  .q {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    margin-bottom: 7px;
+  }
+  .q .n { text-align: right; padding-right: 10px; }
+  .q p { margin: 0; }
+  .sub { margin-left: 22px; }
+  .cut { color: var(--note); }
+  .turn { text-align: right; font-weight: bold; margin-top: 26px; }
+  .fig {
+    display: block;
+    margin: 8px auto 2px 36px;
+    width: 230px;
+    height: auto;
+  }
+  .fig-cap { margin-left: 36px; font-size: 13px; color: var(--note); font-style: italic; }
+  .foot-note {
+    margin-top: 26px;
+    border-top: 1px solid var(--rule);
+    padding-top: 6px;
+    font-size: 12px;
+    color: var(--note);
+  }
+  .pno { text-align: center; font-size: 15px; margin-bottom: 4px; }
+  .pno-hdr { position: absolute; top: 10mm; right: 18mm; font-weight: bold; font-size: 14px; }
+  @media print {
+    @page { size: A4; margin: 0; }
+    body { background: #fff; }
+    .sheet { margin: 0; box-shadow: none; width: 210mm; height: 297mm; min-height: 0; page-break-after: always; }
+    .sheet:last-child { page-break-after: auto; }
+  }
+  @media (max-width: 720px) {
+    .sheet { width: auto; margin: 0; padding: 14px 16px; min-height: 0; }
+    .hdr { grid-template-columns: 1fr; gap: 6px; }
+    .name { text-align: left; }
+    .pages { text-align: left; padding-top: 0; }
+  }
+</style>
+<style>
+  .sheet.book { height: auto; min-height: 297mm; text-align: justify; hyphens: auto; }
+  .sheet.book p { margin: 6px 0; }
+  .rh { display: flex; justify-content: space-between; font-size: 12px; color: var(--note);
+        border-bottom: 1px solid var(--rule); padding-bottom: 3px; margin-bottom: 12px; }
+  .chap { display: flex; background: #8a8a86; color: #fff; margin: 4px 0 16px; }
+  .chap .cn { background: #b4b4ae; padding: 10px 18px; font-size: 26px; }
+  .chap .ct { padding: 12px 16px; font-size: 22px; font-weight: bold; }
+  h2.sec { font-size: 20px; margin: 18px 0 8px; border-bottom: 2px solid var(--rule); padding-bottom: 3px; }
+  h3.sub { font-size: 16px; margin: 14px 0 6px; border-bottom: 1px solid var(--rule); padding-bottom: 2px; }
+  .eq { margin: 10px 0; text-align: center; overflow: visible; }
+  mjx-container[display="true"], mjx-container { overflow: visible !important; max-width: 100%; }
+  .sheet.book, .sheet.book .eq { overflow: visible; }
+  .eq.boxed { border: 1px solid var(--ink); display: block; padding: 4px 8px; }
+  .prob { background: #ecece7; border: 1px solid var(--rule); padding: 8px 12px; margin: 10px 0; text-align: left; }
+  .prob p { margin: 5px 0; }
+  .ex, .ex-cont { border: 1px solid var(--rule); padding: 8px 12px; margin: 10px 0; text-align: left; }
+  .ex p, .ex-cont p { margin: 5px 0; }
+  .figbox { border: 1px dashed var(--rule); padding: 10px; color: var(--note); font-size: 13px; text-align: center; margin: 8px 0; font-style: italic; }
+  figure { margin: 8px 0; text-align: center; }
+  figure > svg { width: 100%; max-width: 230px; height: auto; }
+  figure.single > svg { max-width: 260px; }
+  figure figcaption { font-size: 12px; font-style: italic; color: var(--note); }
+  .figrow { display: flex; flex-wrap: wrap; justify-content: space-around; gap: 8px; }
+  .figrow > figure { flex: 1 1 180px; max-width: 240px; }
+  .fn { font-size: 12.5px; color: var(--note); margin: 6px 0; text-align: left; }
+  .cont { font-size: 12.5px; color: var(--note); font-style: italic; }
+  .gapnote { font-size: 13px; color: var(--note); font-style: italic; border-left: 3px solid var(--rule); padding: 2px 8px; margin: 4px 0 10px; }
+  .flag { color: #8a1c1c; font-weight: bold; }
+  .answer { font-size: 14px; }
+  .tbl { border-collapse: collapse; width: 100%; font-size: 13px; margin: 6px 0; }
+  .tbl td, .tbl th { border: 1px solid var(--rule); padding: 3px 6px; text-align: center; }
+  .tbl th { background: #ebebe6; }
+  .tblcap { font-size: 13px; margin-top: 8px; text-align: left; }
+  .pno { text-align: center; font-size: 14px; margin-top: 14px; }
+  .intro p, .intro li { font-size: 14px; text-align: left; }
+  .intro table { border-collapse: collapse; width: 100%; font-size: 14px; margin: 6px 0; }
+  .intro td, .intro th { border: 1px solid var(--rule); padding: 4px 8px; text-align: left; }
+  @media print {
+    .sheet.book { height: auto !important; min-height: 0 !important; page-break-after: always; }
+  }
+  @media (max-width: 720px) {
+    .sheet.book .eq { overflow-x: auto; max-width: 100%; }
+    .sheet.book mjx-container[display="true"] { font-size: 85% !important; }
+    .sheet.book .figrow > figure { flex: 1 1 100%; max-width: 100%; }
+    .sheet.book { padding-left: 14px; padding-right: 14px; }
+  }
+</style>
+</head>
+<body>
+<!-- Book source, split from the Module 2 excerpt. Pages as printed in Griffiths 5th ed. -->
+<div class="sheet book" id="pdf-p01">
+  <div class="rh"><span>298 (chapter opener)</span><span>7 Electrodynamics</span></div>
+  <div class="chap"><span class="cn">7</span><span class="ct">Electrodynamics</span></div>
+  <h2 class="sec">7.1 Electromotive Force</h2>
+  <h3 class="sub">7.1.1 Ohm’s Law</h3>
+  <p>To make a current flow, you have to <i>push</i> on the charges. How <i>fast</i> they move, in response to a given push, depends on the nature of the material. For most substances, the current density <b>J</b> is proportional to the <i>force per unit charge</i>, <b>f</b>:</p>
+  <div class="eq">$$\mathbf J=\sigma\mathbf f. \tag{7.1}$$</div>
+  <p>The proportionality factor $\sigma$ (not to be confused with surface charge) is an empirical constant that varies from one material to another; it’s called the <b>conductivity</b> of the medium. Actually, the handbooks usually list the <i>reciprocal</i> of $\sigma$, called the <b>resistivity</b>: $\rho = 1/\sigma$ (not to be confused with charge density – I’m sorry, but we’re running out of Greek letters, and this is the standard notation). Some typical values are listed in Table 7.1. Notice that even <i>insulators</i> conduct slightly, though the conductivity of a metal is astronomically greater; in fact, for most purposes metals can be regarded as <b>perfect conductors</b>, with $\sigma = \infty$, while for insulators we can pretend $\sigma = 0$.</p>
+  <p>In principle, the force that drives the charges to produce the current could be anything – chemical, gravitational, or trained ants with tiny harnesses. For <i>our</i> purposes, though, it’s usually an electromagnetic force that does the job. In this case Eq. 7.1 becomes</p>
+  <div class="eq">$$\mathbf J=\sigma(\mathbf E+\mathbf v\times\mathbf B). \tag{7.2}$$</div>
+  <p>Ordinarily, the velocity of the charges is sufficiently small that the second term can be ignored:</p>
+  <div class="eq">$$\boxed{\mathbf J=\sigma\mathbf E.} \tag{7.3}$$</div>
+  <p>(However, in plasmas, for instance, the magnetic contribution to $\mathbf f$ can be significant.) Equation 7.3 is called <b>Ohm’s law</b>, though the physics behind it is really contained in Eq. 7.1, of which 7.3 is just a special case.</p>
+  <p>I know: you’re confused because I said $\mathbf E=\mathbf 0$ inside a conductor (Section 2.5.1). But that’s for <i>stationary</i> charges ($\mathbf J=\mathbf 0$). Moreover, for <i>perfect</i> conductors $\mathbf E=\mathbf J/\sigma=\mathbf 0$ even if current <i>is</i> flowing. In practice, metals are such good conductors that the electric field required to drive current in</p>
+  <div class="pno">298</div>
+</div>
+<div class="sheet book" id="pdf-p02">
+  <div class="rh"><span>299</span><span>7.1 Electromotive Force</span></div>
+  <p>them is negligible. Thus we routinely treat the connecting wires in electric circuits (for example) as equipotentials. <b>Resistors</b>, by contrast, are made from <i>poorly</i> conducting materials.</p>
+  <div class="tblcap"><b>Table 7.1.</b> Resistivities, in ohm meters (all values are for 1 atm, 20°C). Data from <i>Handbook of Chemistry and Physics</i>, 91st ed., CRC Press, Boca Raton (2010) and other references.</div>
+  <table class="tbl">
+    <tr><th>Material</th><th>Resistivity</th><th>Material</th><th>Resistivity</th></tr>
+    <tr><td style="text-align:left"><i>Conductors:</i></td><td></td><td style="text-align:left"><i>Semiconductors:</i></td><td></td></tr>
+    <tr><td style="text-align:left">Silver</td><td>$1.59\times10^{-8}$</td><td style="text-align:left">Sea water</td><td>0.2</td></tr>
+    <tr><td style="text-align:left">Copper</td><td>$1.68\times10^{-8}$</td><td style="text-align:left">Germanium</td><td>0.46</td></tr>
+    <tr><td style="text-align:left">Gold</td><td>$2.21\times10^{-8}$</td><td style="text-align:left">Diamond</td><td>2.7</td></tr>
+    <tr><td style="text-align:left">Aluminum</td><td>$2.65\times10^{-8}$</td><td style="text-align:left">Silicon</td><td>2500</td></tr>
+    <tr><td style="text-align:left">Iron</td><td>$9.61\times10^{-8}$</td><td style="text-align:left"><i>Insulators:</i></td><td></td></tr>
+    <tr><td style="text-align:left">Mercury</td><td>$9.61\times10^{-7}$</td><td style="text-align:left">Water (pure)</td><td>$8.3\times10^{3}$</td></tr>
+    <tr><td style="text-align:left">Nichrome</td><td>$1.08\times10^{-6}$</td><td style="text-align:left">Glass</td><td>$10^{9}$–$10^{14}$</td></tr>
+    <tr><td style="text-align:left">Manganese</td><td>$1.44\times10^{-6}$</td><td style="text-align:left">Rubber</td><td>$10^{13}$–$10^{15}$</td></tr>
+    <tr><td style="text-align:left">Graphite</td><td>$1.6\times10^{-5}$</td><td style="text-align:left">Teflon</td><td>$10^{22}$–$10^{24}$</td></tr>
+  </table>
+  <div class="ex">
+    <p><b>Example 7.1.</b> A cylindrical resistor of cross-sectional area $A$ and length $L$ is made from material with conductivity $\sigma$. (See Fig. 7.1; as indicated, the cross section need not be circular, but I <i>do</i> assume it is the same all the way down.) If we stipulate that the potential is constant over each end, and the potential difference between the ends is $V$, what current flows?</p>
+    <div class="figbox">Fig. 7.1: cylinder of cross-section $A$ and length $L$ (labelled $L$); electric field $\mathbf E$ drawn along the axis $z$. Schematic; see PDF page.</div>
+    <p><i>Solution.</i> As it turns out, the electric field is <i>uniform</i> within the wire (I’ll prove this in a moment). It follows from Eq. 7.3 that the current density is also uniform, so</p>
+    <div class="eq">$$I = JA = \sigma EA = \frac{\sigma A}{L}V.$$</div>
+  </div>
+  <div class="ex">
+    <p><b>Example 7.2.</b> Two long coaxial metal cylinders (radii $a$ and $b$) are separated by material of conductivity $\sigma$ (Fig. 7.2). If they are maintained at a potential difference $V$, what current flows from one to the other, in a length $L$?</p>
+  </div>
+  <div class="pno">299</div>
+</div>
+<div class="sheet book" id="pdf-p03">
+  <div class="rh"><span>300</span><span>7 Electrodynamics</span></div>
+  <div class="ex">
+    <div class="figbox">Fig. 7.2: two long coaxial cylinders, inner radius $a$, outer radius $b$, length $L$; field $\mathbf E$ points radially outward. Schematic; see PDF page.</div>
+    <p><i>Solution.</i> The field between the cylinders is</p>
+    <div class="eq">$$\mathbf E=\frac{\lambda}{2\pi\epsilon_0 s}\hat{\mathbf s},$$</div>
+    <p>where $\lambda$ is the charge per unit length on the inner cylinder. The current is therefore</p>
+    <div class="eq">$$I=\int\mathbf J\cdot d\mathbf a=\sigma\int\mathbf E\cdot d\mathbf a=\frac{\sigma}{\epsilon_0}\lambda L.$$</div>
+    <p>(The integral is over any surface enclosing the inner cylinder.) Meanwhile, the potential difference between the cylinders is</p>
+    <div class="eq">$$V=-\int_b^a\mathbf E\cdot d\mathbf l=\frac{\lambda}{2\pi\epsilon_0}\ln\left(\frac{b}{a}\right),$$</div>
+    <p>so</p>
+    <div class="eq">$$I=\frac{2\pi\sigma L}{\ln(b/a)}\,V.$$</div>
+  </div>
+  <p>As these examples illustrate, the total current flowing from one <b>electrode</b> to the other is proportional to the potential difference between them:</p>
+  <div class="eq">$$\boxed{V=IR.} \tag{7.4}$$</div>
+  <p>This, of course, is the more familiar version of Ohm’s law. The constant of proportionality $R$ is called the <b>resistance</b>; it’s a function of the geometry of the arrangement and the conductivity of the medium between the electrodes. (In Ex. 7.1, $R=(L/\sigma A)$; in Ex. 7.2, $R=\ln(b/a)/2\pi\sigma L$.) Resistance is measured in <b>ohms</b> ($\Omega$): an ohm is a volt per ampere. Notice that the proportionality between $V$ and $I$ is a direct consequence of Eq. 7.3: if you want to double $V$, you simply double the charge on the electrodes – that doubles $\mathbf E$, which (for an ohmic material) doubles $\mathbf J$, which doubles $I$.</p>
+  <p>For <i>steady</i> currents and <i>uniform</i> conductivity,</p>
+  <div class="eq">$$\nabla\cdot\mathbf E=\frac{1}{\sigma}\nabla\cdot\mathbf J=0. \tag{7.5}$$</div>
+  <p>(Eq. 5.33), and therefore the charge density is zero; any unbalanced charge resides on the surface. (We proved this long ago, for the case of <i>stationary</i> charges, using the fact that $\mathbf E=\mathbf 0$; turns out, it is still true when steady currents flow, for media satisfying Eq. 7.3.) It follows, in particular, that Laplace’s equation holds within a homogeneous ohmic material carrying</p>
+  <div class="pno">300</div>
+</div>
+<div class="sheet book" id="pdf-p04">
+  <div class="rh"><span>301</span><span>7.1 Electromotive Force</span></div>
+  <p>a steady current, so all the tools and tricks of Chapter 3 are available for calculating the potential.</p>
+  <div class="ex">
+    <p><b>Example 7.3.</b> I asserted that the field in Ex. 7.1 is <i>uniform</i>. Let’s prove it.</p>
+    <p><i>Solution.</i> Within the cylinder $V$ obeys Laplace’s equation. What are the boundary conditions? At the left-hand end the potential is constant – we may as well set it equal to zero. At the right-hand end the potential is likewise constant – call it $V_0$. On the cylindrical surface, $\mathbf J\cdot\hat{\mathbf n}=0$, or else charge would be leaking out into the surrounding space (which we take to be nonconducting). Therefore $\mathbf E\cdot\hat{\mathbf n}=0$, and hence $\partial V/\partial n=0$. With $V$ or its normal derivative specified on all surfaces, the field is uniquely determined (Prob. 3.5). But it’s easy to guess <i>one</i> potential that obeys Laplace’s equation and fits these boundary conditions:</p>
+    <div class="eq">$$V(z)=\frac{V_0 z}{L},$$</div>
+    <p>where $z$ is measured along the axis. The uniqueness theorem guarantees that this is <i>the</i> solution. The corresponding field is</p>
+    <div class="eq">$$\mathbf E=-\nabla V=-\frac{V_0}{L}\hat{\mathbf z},$$</div>
+    <p>which is indeed uniform.</p>
+    <div class="figbox">Fig. 7.3: wire between two metal plates, one held at $V=0$ and one at $V_0$; field lines $\mathbf E$ run uniformly along the axis. Schematic; see PDF page.</div>
+    <p>Contrast the enormously more difficult problem that arises if the conducting material is removed, leaving only a metal plate at either end (Fig. 7.3). Evidently, in the present case charge arranges itself over the surface of the wire in just such a way as to produce a nice uniform field within.<sup>1</sup></p>
+  </div>
+  <p>I don’t suppose there is any formula in physics more familiar than Ohm’s law, and yet it’s not really a true law, in the sense of Coulomb’s or Ampère’s; rather, it is a “rule of thumb” that applies pretty well to many substances. You’re not going to win a Nobel prize for finding an exception. In fact, when you stop to think about it, it’s a little surprising that Ohm’s law <i>ever</i> holds.</p>
+  <p class="fn"><sup>1</sup> Calculating this surface charge is not easy. See, for example, J. D. Jackson, <i>Am. J. Phys.</i> <b>64</b>, 855 (1996). Nor is it a simple matter to determine the field <i>outside</i> the wire – see Prob. 7.45.</p>
+  <div class="pno">301</div>
+</div>
+<div class="sheet book" id="pdf-p05">
+  <div class="rh"><span>302</span><span>7 Electrodynamics</span></div>
+  <p>After all, a given field $\mathbf E$ produces a force $q\mathbf E$ (on a charge $q$), and according to Newton’s second law, the charge will accelerate. But if the charges are <i>accelerating</i>, why doesn’t the current <i>increase</i> with time, growing larger and larger the longer you leave the field on? Ohm’s law implies, on the contrary, that a constant field produces a <i>constant</i> current, which suggests a constant <i>velocity</i>. Doesn’t that contradict Newton’s law?</p>
+  <p>No, for we are forgetting the frequent collisions electrons make as they pass down the wire. It’s a little like this: Suppose you’re driving down a street with a stop sign at every intersection, so that, although you accelerate constantly in between, you are obliged to start all over again with each new block. Your <i>average</i> speed is then a constant, in spite of the fact that (save for the periodic abrupt stops) you are always accelerating. If the length of a block is $\lambda$ and your acceleration is $a$, the time it takes to go a block is</p>
+  <div class="eq">$$t=\sqrt{\frac{2\lambda}{a}},$$</div>
+  <p>and hence your average velocity is</p>
+  <div class="eq">$$v_{\text{ave}}=\frac12 at=\sqrt{\frac{\lambda a}{2}}.$$</div>
+  <p>But wait! That’s no good <i>either</i>! It says that the velocity is proportional to the <i>square root</i> of the acceleration, and therefore that the current should be proportional to the square root of the field! There’s another twist to the story: In practice, the charges are already moving very fast because of their thermal energy. But the thermal velocities have random directions, and average to zero. The <b>drift velocity</b> we are concerned with is a tiny extra bit (Prob. 5.21). So the time between collisions is actually much shorter than we supposed; if we assume for the sake of argument that all charges travel the same distance $\lambda$ between collisions, then</p>
+  <div class="eq">$$t=\frac{\lambda}{v_{\text{thermal}}},$$</div>
+  <p>and therefore</p>
+  <div class="eq">$$v_{\text{ave}}=\frac12 at=\frac{a\lambda}{2v_{\text{thermal}}}.$$</div>
+  <p>If there are $n$ molecules per unit volume, $f$ free electrons per molecule, each with charge $q$ and mass $m$, the current density is</p>
+  <div class="eq">$$\mathbf J=nfq\,\mathbf v_{\text{ave}}=\frac{nfq\lambda}{2v_{\text{thermal}}}\frac{\mathbf F}{m}=\left(\frac{nf\lambda q^2}{2mv_{\text{thermal}}}\right)\mathbf E. \tag{7.6}$$</div>
+  <p>I don’t claim that the term in parentheses is an accurate formula for the conductivity,<sup>2</sup> but it does indicate the basic ingredients, and it correctly predicts that conductivity is proportional to the density of the moving charges and (ordinarily) decreases with increasing temperature.</p>
+  <p class="fn"><sup>2</sup> This classical model (due to Drude) bears little resemblance to the modern quantum theory of conductivity. See, for instance, D. Park’s <i>Introduction to the Quantum Theory</i>, 3rd ed., McGraw-Hill, New York (1992), Chap. 15.</p>
+  <div class="pno">302</div>
+</div>
+<div class="sheet book" id="pdf-p06">
+  <div class="rh"><span>303</span><span>7.1 Electromotive Force</span></div>
+  <p>As a result of all the collisions, the work done by the electrical force is converted into heat in the resistor. Since the work done per unit charge is $V$ and the charge flowing per unit time is $I$, the power delivered is</p>
+  <div class="eq">$$\boxed{P=VI=I^2R.} \tag{7.7}$$</div>
+  <p>This is the <b>Joule heating law</b>. With $I$ in amperes and $R$ in ohms, $P$ comes out in watts (joules per second).</p>
+  <div class="prob">
+    <div class="figbox">Fig. 7.4: (a) two concentric spherical shells, radii $a$ and $b$, separated by material of conductivity $\sigma$; (b) two metal spheres, each of radius $a$, immersed in the sea on ropes, held far apart. Schematic; see PDF page.</div>
+    <p><b>Problem 7.1.</b> Two concentric metal spherical shells, of radius $a$ and $b$, respectively, are separated by weakly conducting material of conductivity $\sigma$ (Fig. 7.4a).</p>
+    <p>(a) If they are maintained at a potential difference $V$, what current flows from one to the other?<br>
+    (b) What is the resistance between the shells?<br>
+    (c) Notice that if $b\gg a$ the outer radius ($b$) is irrelevant. How do you account for that? Exploit this observation to determine the current flowing between two metal spheres, each of radius $a$, immersed deep in the sea and held quite far apart (Fig. 7.4b), if the potential difference between them is $V$. (This arrangement can be used to measure the conductivity of sea water.)</p>
+  </div>
+  <div class="prob">
+    <p><b>Problem 7.2.</b> A capacitor $C$ has been charged up to potential $V_0$; at time $t=0$, it is connected to a resistor $R$, and begins to discharge (Fig. 7.5a).</p>
+    <div class="figbox">Fig. 7.5: (a) capacitor charged to $\pm Q$, discharging through resistor $R$ when switch closes; (b) capacitor and resistor connected to battery $V_0$ when switch closes. Schematic; see PDF page.</div>
+    <p>(a) Determine the charge on the capacitor as a function of time, $Q(t)$. What is the current through the resistor, $I(t)$?<br>
+    (b) What was the original energy stored in the capacitor (Eq. 2.55)? By integrating Eq. 7.7, confirm that the heat delivered to the resistor is equal to the energy lost by the capacitor.</p>
+  </div>
+  <div class="pno">303</div>
+</div>
+</body>
+</html>

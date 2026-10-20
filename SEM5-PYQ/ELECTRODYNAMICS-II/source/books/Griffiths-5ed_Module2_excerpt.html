@@ -1,0 +1,1541 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Griffiths, Introduction to Electrodynamics (5th ed.), Module 2 excerpt</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+  :root {
+    --page-bg: #d9d9d4;
+    --paper: #fdfdfb;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --page-bg: #2b2b2b;
+      --paper: #f4f3ee;
+      --ink: #111;
+      --rule: #444;
+      --note: #555;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page-bg: #2b2b2b;
+    --paper: #f4f3ee;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  body {
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--ink);
+    font-family: "Times New Roman", Times, "Liberation Serif", serif;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .sheet {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 12mm auto;
+    padding: 14mm 18mm 16mm;
+    box-sizing: border-box;
+    background: var(--paper);
+    box-shadow: 0 1px 6px rgba(0,0,0,.25);
+    position: relative;
+  }
+  .sheet + .sheet { margin-top: 0; }
+  .hdr {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: start;
+    font-size: 14px;
+  }
+  .code { font-size: 22px; font-weight: bold; letter-spacing: .5px; }
+  .pages { text-align: center; padding-top: 14px; }
+  .name { text-align: right; line-height: 2; }
+  .title { text-align: center; margin-top: 22px; }
+  .title .exam { font-size: 19px; font-weight: bold; letter-spacing: .3px; }
+  .title .sch { margin-top: 2px; }
+  .title .course { margin-top: 10px; font-size: 16px; }
+  .title .subject { margin-top: 6px; font-size: 16px; font-weight: bold; }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 16px;
+    font-size: 15px;
+  }
+  .sec { margin-top: 14px; }
+  .sec-head {
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    font-weight: bold;
+  }
+  .sec-head .num { font-weight: bold; }
+  .sec-head .body { font-weight: normal; }
+  .sec-head .body b { font-weight: bold; }
+  .sec-head .body i { font-style: italic; }
+  .sec-total { text-align: right; font-weight: normal; margin-top: 4px; }
+  .qs { margin-top: 6px; }
+  .q {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    margin-bottom: 7px;
+  }
+  .q .n { text-align: right; padding-right: 10px; }
+  .q p { margin: 0; }
+  .sub { margin-left: 22px; }
+  .cut { color: var(--note); }
+  .turn { text-align: right; font-weight: bold; margin-top: 26px; }
+  .fig {
+    display: block;
+    margin: 8px auto 2px 36px;
+    width: 230px;
+    height: auto;
+  }
+  .fig-cap { margin-left: 36px; font-size: 13px; color: var(--note); font-style: italic; }
+  .foot-note {
+    margin-top: 26px;
+    border-top: 1px solid var(--rule);
+    padding-top: 6px;
+    font-size: 12px;
+    color: var(--note);
+  }
+  .pno { text-align: center; font-size: 15px; margin-bottom: 4px; }
+  .pno-hdr { position: absolute; top: 10mm; right: 18mm; font-weight: bold; font-size: 14px; }
+  @media print {
+    @page { size: A4; margin: 0; }
+    body { background: #fff; }
+    .sheet { margin: 0; box-shadow: none; width: 210mm; height: 297mm; min-height: 0; page-break-after: always; }
+    .sheet:last-child { page-break-after: auto; }
+  }
+  @media (max-width: 720px) {
+    .sheet { width: auto; margin: 0; padding: 14px 16px; min-height: 0; }
+    .hdr { grid-template-columns: 1fr; gap: 6px; }
+    .name { text-align: left; }
+    .pages { text-align: left; padding-top: 0; }
+  }
+</style>
+<style>
+  .sheet.book { height: auto; min-height: 297mm; text-align: justify; hyphens: auto; }
+  .sheet.book p { margin: 6px 0; }
+  .rh { display: flex; justify-content: space-between; font-size: 12px; color: var(--note);
+        border-bottom: 1px solid var(--rule); padding-bottom: 3px; margin-bottom: 12px; }
+  .chap { display: flex; background: #8a8a86; color: #fff; margin: 4px 0 16px; }
+  .chap .cn { background: #b4b4ae; padding: 10px 18px; font-size: 26px; }
+  .chap .ct { padding: 12px 16px; font-size: 22px; font-weight: bold; }
+  h2.sec { font-size: 20px; margin: 18px 0 8px; border-bottom: 2px solid var(--rule); padding-bottom: 3px; }
+  h3.sub { font-size: 16px; margin: 14px 0 6px; border-bottom: 1px solid var(--rule); padding-bottom: 2px; }
+  .eq { margin: 10px 0; text-align: center; overflow: visible; }
+  mjx-container[display="true"], mjx-container { overflow: visible !important; max-width: 100%; }
+  .sheet.book, .sheet.book .eq { overflow: visible; }
+  .eq.boxed { border: 1px solid var(--ink); display: block; padding: 4px 8px; }
+  .prob { background: #ecece7; border: 1px solid var(--rule); padding: 8px 12px; margin: 10px 0; text-align: left; }
+  .prob p { margin: 5px 0; }
+  .ex, .ex-cont { border: 1px solid var(--rule); padding: 8px 12px; margin: 10px 0; text-align: left; }
+  .ex p, .ex-cont p { margin: 5px 0; }
+  .figbox { border: 1px dashed var(--rule); padding: 10px; color: var(--note); font-size: 13px; text-align: center; margin: 8px 0; font-style: italic; }
+  figure { margin: 8px 0; text-align: center; }
+  figure > svg { width: 100%; max-width: 230px; height: auto; }
+  figure.single > svg { max-width: 260px; }
+  figure figcaption { font-size: 12px; font-style: italic; color: var(--note); }
+  .figrow { display: flex; flex-wrap: wrap; justify-content: space-around; gap: 8px; }
+  .figrow > figure { flex: 1 1 180px; max-width: 240px; }
+  .fn { font-size: 12.5px; color: var(--note); margin: 6px 0; text-align: left; }
+  .cont { font-size: 12.5px; color: var(--note); font-style: italic; }
+  .gapnote { font-size: 13px; color: var(--note); font-style: italic; border-left: 3px solid var(--rule); padding: 2px 8px; margin: 4px 0 10px; }
+  .flag { color: #8a1c1c; font-weight: bold; }
+  .answer { font-size: 14px; }
+  .tbl { border-collapse: collapse; width: 100%; font-size: 13px; margin: 6px 0; }
+  .tbl td, .tbl th { border: 1px solid var(--rule); padding: 3px 6px; text-align: center; }
+  .tbl th { background: #ebebe6; }
+  .tblcap { font-size: 13px; margin-top: 8px; text-align: left; }
+  .pno { text-align: center; font-size: 14px; margin-top: 14px; }
+  .intro p, .intro li { font-size: 14px; text-align: left; }
+  .intro table { border-collapse: collapse; width: 100%; font-size: 14px; margin: 6px 0; }
+  .intro td, .intro th { border: 1px solid var(--rule); padding: 4px 8px; text-align: left; }
+  @media print {
+    .sheet.book { height: auto !important; min-height: 0 !important; page-break-after: always; }
+  }
+  @media (max-width: 720px) {
+    .sheet.book .eq { overflow-x: auto; max-width: 100%; }
+    .sheet.book mjx-container[display="true"] { font-size: 85% !important; }
+    .sheet.book .figrow > figure { flex: 1 1 100%; max-width: 100%; }
+    .sheet.book { padding-left: 14px; padding-right: 14px; }
+  }
+</style>
+</head>
+<body>
+<div class="sheet book intro" id="contents">
+  <div class="rh"><span>Contents</span><span>Griffiths, <i>Introduction to Electrodynamics</i> (5th ed.)</span></div>
+  <h2 class="sec">Module 2 excerpt, page by page</h2>
+  <p>This file converts a 64-page excerpt, PDF pages 322–385 of <i>Introduction to Electrodynamics</i> (Griffiths, 5th ed., the copy in the ELECTRODYNAMICS I folder, 628 pages). The book page is the PDF page minus 24. Each excerpt page is one sheet, headed with the book page number as printed. The excerpt is one unbroken run with no gaps:</p>
+  <table>
+    <tr><th>Excerpt pages</th><th>Book pages</th><th>Content</th></tr>
+    <tr><td>1–64</td><td>298–361</td><td>Chapter 7, Electrodynamics (opener on p. 298, chapter ends p. 360), then the Intermission page (p. 361)</td></tr>
+  </table>
+  <p><b>Where the sections fall</b> (excerpt page = book page − 297):</p>
+  <table>
+    <tr><th>Section</th><th>Book pages</th><th>Excerpt pages</th><th>Syllabus item</th></tr>
+    <tr><td>7.1.1 Ohm’s law</td><td>298–303</td><td>1–6</td><td>6</td></tr>
+    <tr><td>7.1.2 Electromotive force</td><td>304–305</td><td>7–8</td><td>6</td></tr>
+    <tr><td>7.1.3 Motional emf</td><td>306–315</td><td>9–18</td><td>6</td></tr>
+    <tr><td>7.2.1 Faraday’s law</td><td>316–319</td><td>19–22</td><td>7</td></tr>
+    <tr><td>7.2.2 The induced electric field</td><td>320–324</td><td>23–27</td><td>7</td></tr>
+    <tr><td>7.2.3 Inductance</td><td>325–330</td><td>28–33</td><td>7</td></tr>
+    <tr><td>7.2.4 Energy in magnetic fields</td><td>331–333</td><td>34–36</td><td>7</td></tr>
+    <tr><td>7.3.1 Electrodynamics before Maxwell</td><td>335</td><td>38</td><td>8</td></tr>
+    <tr><td>7.3.2 How Maxwell fixed Ampère’s law</td><td>336–339</td><td>39–42</td><td>8</td></tr>
+    <tr><td>7.3.3 Maxwell’s equations</td><td>340–340</td><td>43</td><td>8</td></tr>
+    <tr><td>7.3.4 Magnetic charge</td><td>341</td><td>44</td><td><b>not in list</b> (beyond syllabus)</td></tr>
+    <tr><td>7.3.5 Maxwell’s equations in matter</td><td>342–344</td><td>45–47</td><td>8</td></tr>
+    <tr><td>7.3.6 Boundary conditions</td><td>345–347</td><td>48–50</td><td>8</td></tr>
+    <tr><td>7.4 The field of a rotating magnet</td><td>347–350</td><td>50–53</td><td><b>not in list</b> (beyond syllabus)</td></tr>
+    <tr><td>More problems on Chapter 7</td><td>350–360</td><td>53–63</td><td>—</td></tr>
+  </table>
+  <p><b>Conventions:</b></p>
+  <ul>
+    <li>Equation numbers are Griffiths 5th ed. numbers, shown as printed. Where the printed number is missing in the scan, it is not guessed.</li>
+    <li>Boxes are Griffiths’s own framing: <i>Example</i> boxes (solid border), <i>Problem</i> boxes (grey), and the <span class="flag">!</span> mark for harder problems. A box that runs over a page break continues on the next sheet with the same border.</li>
+    <li>Every figure is a dashed box giving the figure number and what it shows; the PDF page has the picture. No figure is drawn in SVG in this excerpt.</li>
+    <li>One footnote number is illegible in the scan (p. 323, footnote 19). It is shown as <span class="cut">[number not legible in scan]</span>.</li>
+    <li>Maths is in MathJax. Notation is kept as printed, for example the script <i>𝓡</i> for the separation vector in Problem 7.33.</li>
+    <li>Footnotes are at the foot of their page.</li>
+  </ul>
+  <p>This is a personal study copy. The text is © the publisher; do not redistribute.</p>
+  <div class="pno">i</div>
+</div>
+
+<div class="sheet book" id="pdf-p01">
+  <div class="rh"><span>298 (chapter opener)</span><span>7 Electrodynamics</span></div>
+  <div class="chap"><span class="cn">7</span><span class="ct">Electrodynamics</span></div>
+  <h2 class="sec">7.1 Electromotive Force</h2>
+  <h3 class="sub">7.1.1 Ohm’s Law</h3>
+  <p>To make a current flow, you have to <i>push</i> on the charges. How <i>fast</i> they move, in response to a given push, depends on the nature of the material. For most substances, the current density <b>J</b> is proportional to the <i>force per unit charge</i>, <b>f</b>:</p>
+  <div class="eq">$$\mathbf J=\sigma\mathbf f. \tag{7.1}$$</div>
+  <p>The proportionality factor $\sigma$ (not to be confused with surface charge) is an empirical constant that varies from one material to another; it’s called the <b>conductivity</b> of the medium. Actually, the handbooks usually list the <i>reciprocal</i> of $\sigma$, called the <b>resistivity</b>: $\rho = 1/\sigma$ (not to be confused with charge density – I’m sorry, but we’re running out of Greek letters, and this is the standard notation). Some typical values are listed in Table 7.1. Notice that even <i>insulators</i> conduct slightly, though the conductivity of a metal is astronomically greater; in fact, for most purposes metals can be regarded as <b>perfect conductors</b>, with $\sigma = \infty$, while for insulators we can pretend $\sigma = 0$.</p>
+  <p>In principle, the force that drives the charges to produce the current could be anything – chemical, gravitational, or trained ants with tiny harnesses. For <i>our</i> purposes, though, it’s usually an electromagnetic force that does the job. In this case Eq. 7.1 becomes</p>
+  <div class="eq">$$\mathbf J=\sigma(\mathbf E+\mathbf v\times\mathbf B). \tag{7.2}$$</div>
+  <p>Ordinarily, the velocity of the charges is sufficiently small that the second term can be ignored:</p>
+  <div class="eq">$$\boxed{\mathbf J=\sigma\mathbf E.} \tag{7.3}$$</div>
+  <p>(However, in plasmas, for instance, the magnetic contribution to $\mathbf f$ can be significant.) Equation 7.3 is called <b>Ohm’s law</b>, though the physics behind it is really contained in Eq. 7.1, of which 7.3 is just a special case.</p>
+  <p>I know: you’re confused because I said $\mathbf E=\mathbf 0$ inside a conductor (Section 2.5.1). But that’s for <i>stationary</i> charges ($\mathbf J=\mathbf 0$). Moreover, for <i>perfect</i> conductors $\mathbf E=\mathbf J/\sigma=\mathbf 0$ even if current <i>is</i> flowing. In practice, metals are such good conductors that the electric field required to drive current in</p>
+  <div class="pno">298</div>
+</div>
+
+<div class="sheet book" id="pdf-p02">
+  <div class="rh"><span>299</span><span>7.1 Electromotive Force</span></div>
+  <p>them is negligible. Thus we routinely treat the connecting wires in electric circuits (for example) as equipotentials. <b>Resistors</b>, by contrast, are made from <i>poorly</i> conducting materials.</p>
+  <div class="tblcap"><b>Table 7.1.</b> Resistivities, in ohm meters (all values are for 1 atm, 20°C). Data from <i>Handbook of Chemistry and Physics</i>, 91st ed., CRC Press, Boca Raton (2010) and other references.</div>
+  <table class="tbl">
+    <tr><th>Material</th><th>Resistivity</th><th>Material</th><th>Resistivity</th></tr>
+    <tr><td style="text-align:left"><i>Conductors:</i></td><td></td><td style="text-align:left"><i>Semiconductors:</i></td><td></td></tr>
+    <tr><td style="text-align:left">Silver</td><td>$1.59\times10^{-8}$</td><td style="text-align:left">Sea water</td><td>0.2</td></tr>
+    <tr><td style="text-align:left">Copper</td><td>$1.68\times10^{-8}$</td><td style="text-align:left">Germanium</td><td>0.46</td></tr>
+    <tr><td style="text-align:left">Gold</td><td>$2.21\times10^{-8}$</td><td style="text-align:left">Diamond</td><td>2.7</td></tr>
+    <tr><td style="text-align:left">Aluminum</td><td>$2.65\times10^{-8}$</td><td style="text-align:left">Silicon</td><td>2500</td></tr>
+    <tr><td style="text-align:left">Iron</td><td>$9.61\times10^{-8}$</td><td style="text-align:left"><i>Insulators:</i></td><td></td></tr>
+    <tr><td style="text-align:left">Mercury</td><td>$9.61\times10^{-7}$</td><td style="text-align:left">Water (pure)</td><td>$8.3\times10^{3}$</td></tr>
+    <tr><td style="text-align:left">Nichrome</td><td>$1.08\times10^{-6}$</td><td style="text-align:left">Glass</td><td>$10^{9}$–$10^{14}$</td></tr>
+    <tr><td style="text-align:left">Manganese</td><td>$1.44\times10^{-6}$</td><td style="text-align:left">Rubber</td><td>$10^{13}$–$10^{15}$</td></tr>
+    <tr><td style="text-align:left">Graphite</td><td>$1.6\times10^{-5}$</td><td style="text-align:left">Teflon</td><td>$10^{22}$–$10^{24}$</td></tr>
+  </table>
+  <div class="ex">
+    <p><b>Example 7.1.</b> A cylindrical resistor of cross-sectional area $A$ and length $L$ is made from material with conductivity $\sigma$. (See Fig. 7.1; as indicated, the cross section need not be circular, but I <i>do</i> assume it is the same all the way down.) If we stipulate that the potential is constant over each end, and the potential difference between the ends is $V$, what current flows?</p>
+    <div class="figbox">Fig. 7.1: cylinder of cross-section $A$ and length $L$ (labelled $L$); electric field $\mathbf E$ drawn along the axis $z$. Schematic; see PDF page.</div>
+    <p><i>Solution.</i> As it turns out, the electric field is <i>uniform</i> within the wire (I’ll prove this in a moment). It follows from Eq. 7.3 that the current density is also uniform, so</p>
+    <div class="eq">$$I = JA = \sigma EA = \frac{\sigma A}{L}V.$$</div>
+  </div>
+  <div class="ex">
+    <p><b>Example 7.2.</b> Two long coaxial metal cylinders (radii $a$ and $b$) are separated by material of conductivity $\sigma$ (Fig. 7.2). If they are maintained at a potential difference $V$, what current flows from one to the other, in a length $L$?</p>
+  </div>
+  <div class="pno">299</div>
+</div>
+
+<div class="sheet book" id="pdf-p03">
+  <div class="rh"><span>300</span><span>7 Electrodynamics</span></div>
+  <div class="ex">
+    <div class="figbox">Fig. 7.2: two long coaxial cylinders, inner radius $a$, outer radius $b$, length $L$; field $\mathbf E$ points radially outward. Schematic; see PDF page.</div>
+    <p><i>Solution.</i> The field between the cylinders is</p>
+    <div class="eq">$$\mathbf E=\frac{\lambda}{2\pi\epsilon_0 s}\hat{\mathbf s},$$</div>
+    <p>where $\lambda$ is the charge per unit length on the inner cylinder. The current is therefore</p>
+    <div class="eq">$$I=\int\mathbf J\cdot d\mathbf a=\sigma\int\mathbf E\cdot d\mathbf a=\frac{\sigma}{\epsilon_0}\lambda L.$$</div>
+    <p>(The integral is over any surface enclosing the inner cylinder.) Meanwhile, the potential difference between the cylinders is</p>
+    <div class="eq">$$V=-\int_b^a\mathbf E\cdot d\mathbf l=\frac{\lambda}{2\pi\epsilon_0}\ln\left(\frac{b}{a}\right),$$</div>
+    <p>so</p>
+    <div class="eq">$$I=\frac{2\pi\sigma L}{\ln(b/a)}\,V.$$</div>
+  </div>
+  <p>As these examples illustrate, the total current flowing from one <b>electrode</b> to the other is proportional to the potential difference between them:</p>
+  <div class="eq">$$\boxed{V=IR.} \tag{7.4}$$</div>
+  <p>This, of course, is the more familiar version of Ohm’s law. The constant of proportionality $R$ is called the <b>resistance</b>; it’s a function of the geometry of the arrangement and the conductivity of the medium between the electrodes. (In Ex. 7.1, $R=(L/\sigma A)$; in Ex. 7.2, $R=\ln(b/a)/2\pi\sigma L$.) Resistance is measured in <b>ohms</b> ($\Omega$): an ohm is a volt per ampere. Notice that the proportionality between $V$ and $I$ is a direct consequence of Eq. 7.3: if you want to double $V$, you simply double the charge on the electrodes – that doubles $\mathbf E$, which (for an ohmic material) doubles $\mathbf J$, which doubles $I$.</p>
+  <p>For <i>steady</i> currents and <i>uniform</i> conductivity,</p>
+  <div class="eq">$$\nabla\cdot\mathbf E=\frac{1}{\sigma}\nabla\cdot\mathbf J=0. \tag{7.5}$$</div>
+  <p>(Eq. 5.33), and therefore the charge density is zero; any unbalanced charge resides on the surface. (We proved this long ago, for the case of <i>stationary</i> charges, using the fact that $\mathbf E=\mathbf 0$; turns out, it is still true when steady currents flow, for media satisfying Eq. 7.3.) It follows, in particular, that Laplace’s equation holds within a homogeneous ohmic material carrying</p>
+  <div class="pno">300</div>
+</div>
+
+<div class="sheet book" id="pdf-p04">
+  <div class="rh"><span>301</span><span>7.1 Electromotive Force</span></div>
+  <p>a steady current, so all the tools and tricks of Chapter 3 are available for calculating the potential.</p>
+  <div class="ex">
+    <p><b>Example 7.3.</b> I asserted that the field in Ex. 7.1 is <i>uniform</i>. Let’s prove it.</p>
+    <p><i>Solution.</i> Within the cylinder $V$ obeys Laplace’s equation. What are the boundary conditions? At the left-hand end the potential is constant – we may as well set it equal to zero. At the right-hand end the potential is likewise constant – call it $V_0$. On the cylindrical surface, $\mathbf J\cdot\hat{\mathbf n}=0$, or else charge would be leaking out into the surrounding space (which we take to be nonconducting). Therefore $\mathbf E\cdot\hat{\mathbf n}=0$, and hence $\partial V/\partial n=0$. With $V$ or its normal derivative specified on all surfaces, the field is uniquely determined (Prob. 3.5). But it’s easy to guess <i>one</i> potential that obeys Laplace’s equation and fits these boundary conditions:</p>
+    <div class="eq">$$V(z)=\frac{V_0 z}{L},$$</div>
+    <p>where $z$ is measured along the axis. The uniqueness theorem guarantees that this is <i>the</i> solution. The corresponding field is</p>
+    <div class="eq">$$\mathbf E=-\nabla V=-\frac{V_0}{L}\hat{\mathbf z},$$</div>
+    <p>which is indeed uniform.</p>
+    <div class="figbox">Fig. 7.3: wire between two metal plates, one held at $V=0$ and one at $V_0$; field lines $\mathbf E$ run uniformly along the axis. Schematic; see PDF page.</div>
+    <p>Contrast the enormously more difficult problem that arises if the conducting material is removed, leaving only a metal plate at either end (Fig. 7.3). Evidently, in the present case charge arranges itself over the surface of the wire in just such a way as to produce a nice uniform field within.<sup>1</sup></p>
+  </div>
+  <p>I don’t suppose there is any formula in physics more familiar than Ohm’s law, and yet it’s not really a true law, in the sense of Coulomb’s or Ampère’s; rather, it is a “rule of thumb” that applies pretty well to many substances. You’re not going to win a Nobel prize for finding an exception. In fact, when you stop to think about it, it’s a little surprising that Ohm’s law <i>ever</i> holds.</p>
+  <p class="fn"><sup>1</sup> Calculating this surface charge is not easy. See, for example, J. D. Jackson, <i>Am. J. Phys.</i> <b>64</b>, 855 (1996). Nor is it a simple matter to determine the field <i>outside</i> the wire – see Prob. 7.45.</p>
+  <div class="pno">301</div>
+</div>
+
+<div class="sheet book" id="pdf-p05">
+  <div class="rh"><span>302</span><span>7 Electrodynamics</span></div>
+  <p>After all, a given field $\mathbf E$ produces a force $q\mathbf E$ (on a charge $q$), and according to Newton’s second law, the charge will accelerate. But if the charges are <i>accelerating</i>, why doesn’t the current <i>increase</i> with time, growing larger and larger the longer you leave the field on? Ohm’s law implies, on the contrary, that a constant field produces a <i>constant</i> current, which suggests a constant <i>velocity</i>. Doesn’t that contradict Newton’s law?</p>
+  <p>No, for we are forgetting the frequent collisions electrons make as they pass down the wire. It’s a little like this: Suppose you’re driving down a street with a stop sign at every intersection, so that, although you accelerate constantly in between, you are obliged to start all over again with each new block. Your <i>average</i> speed is then a constant, in spite of the fact that (save for the periodic abrupt stops) you are always accelerating. If the length of a block is $\lambda$ and your acceleration is $a$, the time it takes to go a block is</p>
+  <div class="eq">$$t=\sqrt{\frac{2\lambda}{a}},$$</div>
+  <p>and hence your average velocity is</p>
+  <div class="eq">$$v_{\text{ave}}=\frac12 at=\sqrt{\frac{\lambda a}{2}}.$$</div>
+  <p>But wait! That’s no good <i>either</i>! It says that the velocity is proportional to the <i>square root</i> of the acceleration, and therefore that the current should be proportional to the square root of the field! There’s another twist to the story: In practice, the charges are already moving very fast because of their thermal energy. But the thermal velocities have random directions, and average to zero. The <b>drift velocity</b> we are concerned with is a tiny extra bit (Prob. 5.21). So the time between collisions is actually much shorter than we supposed; if we assume for the sake of argument that all charges travel the same distance $\lambda$ between collisions, then</p>
+  <div class="eq">$$t=\frac{\lambda}{v_{\text{thermal}}},$$</div>
+  <p>and therefore</p>
+  <div class="eq">$$v_{\text{ave}}=\frac12 at=\frac{a\lambda}{2v_{\text{thermal}}}.$$</div>
+  <p>If there are $n$ molecules per unit volume, $f$ free electrons per molecule, each with charge $q$ and mass $m$, the current density is</p>
+  <div class="eq">$$\mathbf J=nfq\,\mathbf v_{\text{ave}}=\frac{nfq\lambda}{2v_{\text{thermal}}}\frac{\mathbf F}{m}=\left(\frac{nf\lambda q^2}{2mv_{\text{thermal}}}\right)\mathbf E. \tag{7.6}$$</div>
+  <p>I don’t claim that the term in parentheses is an accurate formula for the conductivity,<sup>2</sup> but it does indicate the basic ingredients, and it correctly predicts that conductivity is proportional to the density of the moving charges and (ordinarily) decreases with increasing temperature.</p>
+  <p class="fn"><sup>2</sup> This classical model (due to Drude) bears little resemblance to the modern quantum theory of conductivity. See, for instance, D. Park’s <i>Introduction to the Quantum Theory</i>, 3rd ed., McGraw-Hill, New York (1992), Chap. 15.</p>
+  <div class="pno">302</div>
+</div>
+
+<div class="sheet book" id="pdf-p06">
+  <div class="rh"><span>303</span><span>7.1 Electromotive Force</span></div>
+  <p>As a result of all the collisions, the work done by the electrical force is converted into heat in the resistor. Since the work done per unit charge is $V$ and the charge flowing per unit time is $I$, the power delivered is</p>
+  <div class="eq">$$\boxed{P=VI=I^2R.} \tag{7.7}$$</div>
+  <p>This is the <b>Joule heating law</b>. With $I$ in amperes and $R$ in ohms, $P$ comes out in watts (joules per second).</p>
+  <div class="prob">
+    <div class="figbox">Fig. 7.4: (a) two concentric spherical shells, radii $a$ and $b$, separated by material of conductivity $\sigma$; (b) two metal spheres, each of radius $a$, immersed in the sea on ropes, held far apart. Schematic; see PDF page.</div>
+    <p><b>Problem 7.1.</b> Two concentric metal spherical shells, of radius $a$ and $b$, respectively, are separated by weakly conducting material of conductivity $\sigma$ (Fig. 7.4a).</p>
+    <p>(a) If they are maintained at a potential difference $V$, what current flows from one to the other?<br>
+    (b) What is the resistance between the shells?<br>
+    (c) Notice that if $b\gg a$ the outer radius ($b$) is irrelevant. How do you account for that? Exploit this observation to determine the current flowing between two metal spheres, each of radius $a$, immersed deep in the sea and held quite far apart (Fig. 7.4b), if the potential difference between them is $V$. (This arrangement can be used to measure the conductivity of sea water.)</p>
+  </div>
+  <div class="prob">
+    <p><b>Problem 7.2.</b> A capacitor $C$ has been charged up to potential $V_0$; at time $t=0$, it is connected to a resistor $R$, and begins to discharge (Fig. 7.5a).</p>
+    <div class="figbox">Fig. 7.5: (a) capacitor charged to $\pm Q$, discharging through resistor $R$ when switch closes; (b) capacitor and resistor connected to battery $V_0$ when switch closes. Schematic; see PDF page.</div>
+    <p>(a) Determine the charge on the capacitor as a function of time, $Q(t)$. What is the current through the resistor, $I(t)$?<br>
+    (b) What was the original energy stored in the capacitor (Eq. 2.55)? By integrating Eq. 7.7, confirm that the heat delivered to the resistor is equal to the energy lost by the capacitor.</p>
+  </div>
+  <div class="pno">303</div>
+</div>
+
+<div class="sheet book" id="pdf-p07">
+  <div class="rh"><span>304</span><span>7 Electrodynamics</span></div>
+  <div class="prob">
+    <p>Now imagine <i>charging up</i> the capacitor, by connecting it (and the resistor) to a battery of voltage $V_0$, at time $t=0$ (Fig. 7.5b).<br>
+    (c) Again, determine $Q(t)$ and $I(t)$.<br>
+    (d) Find the total energy output of the battery ($\int V_0 I\,dt$). Determine the heat delivered to the resistor. What is the final energy stored in the capacitor? What fraction of the work done by the battery shows up as energy in the capacitor? [Notice that the answer is independent of $R$!]</p>
+  </div>
+  <div class="prob">
+    <div class="figbox">Fig. 7.6: two metal objects, labelled 1 and 2, embedded in material of conductivity $\sigma$. Schematic; see PDF page.</div>
+    <p><b>Problem 7.3.</b></p>
+    <p>(a) Two metal objects are embedded in weakly conducting (nonpolarizable) material of conductivity $\sigma$ (Fig. 7.6). Show that the resistance between them is related to the capacitance of the arrangement by</p>
+    <div class="eq">$$R=\frac{\epsilon_0}{\sigma C}.$$</div>
+    <p>(b) Suppose you connected a battery between 1 and 2, and charged them up to a potential difference $V_0$. If you then disconnect the battery, the charge will gradually leak off. Show that $V(t)=V_0e^{-t/\tau}$, and find the time constant, $\tau$, in terms of $\epsilon_0$ and $\sigma$.</p>
+  </div>
+  <div class="prob">
+    <p><b>Problem 7.4.</b> Suppose the conductivity of the material separating the cylinders in Ex. 7.2 is not uniform; specifically, $\sigma(s)=k/s$, for some constant $k$. Find the resistance between the cylinders. [<i>Hint:</i> Because $\sigma$ is a function of position, Eq. 7.5 does not hold, the charge density is not zero in the resistive medium, and $\mathbf E$ does not go like $1/s$. But we do know that for steady currents $I$ is the same across each cylindrical surface. Take it from there.]</p>
+  </div>
+  <h3 class="sub">7.1.2 Electromotive Force</h3>
+  <p>If you think about a typical electric circuit – a battery hooked up to a light bulb, say (Fig. 7.7) – a perplexing question arises: In practice, the <i>current is the same all the way around the loop</i>; why is this the case, when the only obvious driving force is inside the battery? Off hand, you might expect a large current in the battery and none at all in the lamp. Who’s doing the pushing, in the rest of the circuit, and how does it happen that this push is exactly right to produce the same current in each segment? What’s more, given that the charges in a typical wire move (literally) at a <i>snail’s</i> pace (see Prob. 5.21), why doesn’t it take half an hour for the current to reach the light bulb? How do all the charges know to start moving at the same instant?</p>
+  <div class="pno">304</div>
+</div>
+
+<div class="sheet book" id="pdf-p08">
+  <div class="rh"><span>305</span><span>7.1 Electromotive Force</span></div>
+  <div class="figrow">
+    <figure><div class="figbox">Fig. 7.7: battery connected to a light bulb by wires, forming a closed loop. Schematic; see PDF page.</div><figcaption>Fig. 7.7</figcaption></figure>
+    <figure><div class="figbox">Fig. 7.8: current $I_{\text{in}}$ entering a bend in a wire and $I_{\text{out}}$ leaving; charge piles up on the inside of the bend and field $\mathbf E$ points away from the kink. Schematic; see PDF page.</div><figcaption>Fig. 7.8</figcaption></figure>
+  </div>
+  <p><i>Answer:</i> If the current were <i>not</i> the same all the way around (for instance, during the first split second after the switch is closed), then charge would be piling up somewhere, and – here’s the crucial point – the electric field of this accumulating charge is in such a direction as to even out the flow. Suppose, for instance, that the current <i>into</i> the bend in Fig. 7.8 is greater than the current <i>out</i>. Then charge piles up at the “knee,” and this produces a field aiming <i>away</i> from the kink.<sup>3</sup> This field <i>opposes</i> the current flowing in (slowing it down) and <i>promotes</i> the current flowing out (speeding it up) until these currents are equal, at which point there is no further accumulation of charge, and equilibrium is established. It’s a beautiful system, automatically self-correcting to keep the current uniform, and it does it all so quickly that, in practice, you can safely assume the current is the same all around the circuit, even in systems that oscillate at radio frequencies.</p>
+  <p>There are really <i>two</i> forces involved in driving charge around a circuit: the <i>source</i>, $q\mathbf f_s$, which is ordinarily confined to one portion of the loop (a battery, say), and an <i>electrostatic</i> force, $q\mathbf E$, which serves to smooth out the flow and communicate the influence of the source to distant parts of the circuit:</p>
+  <div class="eq">$$\mathbf f=\mathbf f_s+\mathbf E. \tag{7.8}$$</div>
+  <p>The physical agency responsible for $\mathbf f_s$ can be many different things: in a battery it’s a chemical force; in a piezoelectric crystal, mechanical pressure is converted into an electrical impulse; in a thermocouple it’s a temperature gradient that does the job; in a photoelectric cell it’s light; and in a Van de Graaff generator the electrons are literally loaded onto a conveyer belt and swept along. Whatever the <i>mechanism</i>, its net effect is determined by the line integral of $\mathbf f$ around the circuit:</p>
+  <div class="eq">$$\boxed{\mathcal E\equiv\oint\mathbf f\cdot d\mathbf l=\oint\mathbf f_s\cdot d\mathbf l.} \tag{7.9}$$</div>
+  <p>(Because $\oint\mathbf E\cdot d\mathbf l=0$ for electrostatic fields, it doesn’t matter whether you use $\mathbf f$ or $\mathbf f_s$.) The quantity $\mathcal E$ is called the <b>electromotive force</b>, or <b>emf</b>, of the circuit. It’s a lousy term, since this is not a <i>force</i> at all – it’s the <i>integral</i> of a <i>force per unit charge</i>. Some people prefer the word <b>electromotance</b>, but emf is so established that I think we’d better stick with it.</p>
+  <p class="fn"><sup>3</sup> The amount of charge involved is surprisingly small – see W. G. V. Rosser, <i>Am. J. Phys.</i> <b>38</b>, 265 (1970); nevertheless, the resulting field can be detected experimentally – see R. Jacobs, A. de Salazar, and A. Nassar, <i>Am. J. Phys.</i> <b>78</b>, 1432 (2010).</p>
+  <div class="pno">305</div>
+</div>
+
+<div class="sheet book" id="pdf-p09">
+  <div class="rh"><span>306</span><span>7 Electrodynamics</span></div>
+  <p>Within an ideal source of emf (a resistanceless battery,<sup>4</sup> for instance), the net force on the charges is zero (Eq. 7.1 with $\sigma=\infty$), so $\mathbf E=-\mathbf f_s$. The potential difference between the terminals ($a$ and $b$) is therefore</p>
+  <div class="eq">$$V=-\int_a^b\mathbf E\cdot d\mathbf l=\int_a^b\mathbf f_s\cdot d\mathbf l=\oint\mathbf f_s\cdot d\mathbf l=\mathcal E \tag{7.10}$$</div>
+  <p>(we can extend the integral to the entire loop because $\mathbf f_s=\mathbf 0$ outside the source). The function of a battery, then, is to establish and maintain a voltage difference equal to the electromotive force (a 6 V battery, for example, holds the positive terminal 6 V above the negative terminal). The resulting electrostatic field drives current around the rest of the circuit (notice, however, that <i>inside</i> the battery $\mathbf f_s$ drives current in the direction <i>opposite</i> to $\mathbf E$).<sup>5</sup></p>
+  <p>Because it’s the line integral of $\mathbf f_s$, $\mathcal E$ can be interpreted as the <i>work done per unit charge</i>, by the source – indeed, in some books electromotive force is <i>defined</i> this way. However, as you’ll see in the next section, there is some subtlety involved in this interpretation, so I prefer Eq. 7.9.</p>
+  <div class="prob">
+    <p><b>Problem 7.5.</b> A battery of emf $\mathcal E$ and internal resistance $r$ is hooked up to a variable “load” resistance, $R$. If you want to deliver the maximum possible <i>power</i> to the load, what resistance $R$ should you choose? (You can’t change $\mathcal E$ and $r$, of course.)</p>
+  </div>
+  <div class="prob">
+    <div class="figbox">Fig. 7.9: parallel-plate capacitor with surface charges $+\sigma$ and $-\sigma$ and field $\mathbf E$ between the plates; a rectangular loop of wire of height $h$ with resistor $R$ has one end between the plates. Schematic; see PDF page.</div>
+    <p><b>Problem 7.6.</b> A rectangular loop of wire is situated so that one end (height $h$) is between the plates of a parallel-plate capacitor (Fig. 7.9), oriented parallel to the field $\mathbf E$. The other end is way outside, where the field is essentially zero. If the total resistance is $R$, what current flows? Explain. [<i>Warning:</i> This is a trick question, so be careful; if you have invented a perpetual motion machine, there’s probably something wrong with it.]</p>
+  </div>
+  <h3 class="sub">7.1.3 Motional Emf</h3>
+  <p>In the last section, I listed several possible sources of electromotive force, batteries being the most familiar. But I did not mention the commonest one</p>
+  <p class="fn"><sup>4</sup> <i>Real</i> batteries have a certain <b>internal resistance</b>, $r$, and the potential difference between their terminals is $\mathcal E-Ir$, when a current $I$ is flowing. For an illuminating discussion of how batteries work, see D. Roberts, <i>Am. J. Phys.</i> <b>51</b>, 829 (1983).</p>
+  <p class="fn"><sup>5</sup> Current in an electric circuit is somewhat analogous to the flow of water in a closed system of pipes, with gravity playing the role of the electrostatic field, and a pump (lifting the water up <i>against</i> gravity) in the role of the battery. In this story, <i>height</i> is analogous to voltage.</p>
+  <div class="pno">306</div>
+</div>
+
+<div class="sheet book" id="pdf-p10">
+  <div class="rh"><span>307</span><span>7.1 Electromotive Force</span></div>
+  <div class="figbox">Fig. 7.10: rectangular loop with sides $a$, $b$, $c$, $d$, width $x$ inside the shaded region of uniform field $\mathbf B$ (into the page), height $h$, resistor $R$; loop moves to the right with velocity $v$. Schematic; see PDF page.</div>
+  <p>of all: the <b>generator</b>. Generators exploit <b>motional emfs</b>, which arise when you <i>move a wire through a magnetic field</i>. Figure 7.10 suggests a primitive model for a generator. In the shaded region there is a uniform magnetic field $\mathbf B$, pointing into the page, and the resistor $R$ represents whatever it is (maybe a light bulb or a toaster) we’re trying to drive current through. If the entire loop is pulled to the right with speed $v$, the mobile charges in segment $ab$ experience a magnetic force whose vertical component $qvB$ drives current around the loop, in the clockwise direction. The emf is</p>
+  <div class="eq">$$\mathcal E=\oint\mathbf f_{\text{mag}}\cdot d\mathbf l=vBh, \tag{7.11}$$</div>
+  <p>where $h$ is the width of the loop. (The horizontal segments $bc$ and $ad$ contribute nothing, since the force there is perpendicular to the wire.)</p>
+  <p>Notice that the integral you perform to calculate $\mathcal E$ (Eq. 7.9 or 7.11) is carried out at <i>one instant of time</i> – take a “snapshot” of the loop, if you like, and work from that. Thus $d\mathbf l$, for the segment $ab$ in Fig. 7.10, points straight up, even though the loop is moving to the right. You can’t quarrel with this – it’s simply the way emf is <i>defined</i> – but it is important to be clear about it.</p>
+  <p>In particular, although the magnetic force is responsible for establishing the emf, it is <i>not</i> doing any work – magnetic forces <i>never</i> do work. Who, then, <i>is</i> supplying the energy that heats the resistor? <i>Answer:</i> The person who’s pulling on the loop, of course. But this is subtle, so listen closely. With the current flowing, the free charges in segment $ab$ have a vertical velocity (call it $\mathbf u$) in addition to the horizontal velocity $\mathbf v$ they inherit from the motion of the loop. Accordingly, the magnetic force has a component $quB$ to the left. To counteract this, the person pulling on the wire must exert a force per unit charge</p>
+  <div class="eq">$$f_{\text{pull}}=uB$$</div>
+  <p>to the <i>right</i> (Fig. 7.11). This force is transmitted to the charge by the structure of the wire.</p>
+  <p>Meanwhile, the particle is actually moving in the direction of the resultant velocity $\mathbf w$, and the distance it goes is $(h/\cos\theta)$. The work done per unit charge (<i>by</i> the person pulling on the loop, <i>on</i> a charge as it ascends the “vertical” segment) is therefore</p>
+  <div class="eq">$$\int\mathbf f_{\text{pull}}\cdot d\mathbf l=(uB)\left(\frac{h}{\cos\theta}\right)\sin\theta=vBh=\mathcal E.$$</div>
+  <div class="pno">307</div>
+</div>
+
+<div class="sheet book" id="pdf-p11">
+  <div class="rh"><span>308</span><span>7 Electrodynamics</span></div>
+  <div class="figrow">
+    <figure><div class="figbox">Fig. 7.11: velocity vectors $\mathbf v$, $\mathbf u$, $\mathbf w$ and force vectors $\mathbf f_{\text{mag}}$, $\mathbf f_{\text{pull}}$, with components $vB$ and $uB$ and angle $\theta$. Schematic; see PDF page.</div><figcaption>Fig. 7.11</figcaption></figure>
+  </div>
+  <div class="figrow">
+    <figure><div class="figbox">(a) Integration path for computing $\mathcal E$ (follow the wire at one instant of time). Schematic; see PDF page.</div><figcaption>Fig. 7.12(a)</figcaption></figure>
+    <figure><div class="figbox">(b) Integration path for calculating work done (follow the charge around the loop). Schematic; see PDF page.</div><figcaption>Fig. 7.12(b)</figcaption></figure>
+  </div>
+  <p>($\sin\theta$ coming from the dot product). As it turns out, then, the <i>work done per unit charge is exactly equal to the emf</i>, though the integrals are taken along entirely different paths (Fig. 7.12), and completely different forces are involved. To calculate the emf, you integrate around the loop at <i>one instant</i>, but to calculate the work done you follow a charge in its journey around the loop; $\mathbf f_{\text{pull}}$ contributes nothing to the emf, because it is perpendicular to the wire, whereas $\mathbf f_{\text{mag}}$ contributes nothing to work because it is perpendicular to the net motion of the charge.<sup>6</sup></p>
+  <p>There is a particularly nice way of expressing the emf generated in a moving loop. Let $\Phi$ be the flux of $\mathbf B$ through the loop:</p>
+  <div class="eq">$$\Phi\equiv\int\mathbf B\cdot d\mathbf a. \tag{7.12}$$</div>
+  <p>For the rectangular loop in Fig. 7.10,</p>
+  <div class="eq">$$\Phi=Bhx.$$</div>
+  <p>As the loop moves, the flux decreases:</p>
+  <div class="eq">$$\frac{d\Phi}{dt}=Bh\frac{dx}{dt}=-Bhv.$$</div>
+  <p>(The minus sign accounts for the fact that $dx/dt$ is negative.) But this is precisely the emf (Eq. 7.11); the emf generated in the loop is minus the rate of change of flux through the loop:</p>
+  <p class="fn"><sup>6</sup> For further discussion, see E. P. Mosca, <i>Am. J. Phys.</i> <b>42</b>, 295 (1974).</p>
+  <div class="pno">308</div>
+</div>
+
+<div class="sheet book" id="pdf-p12">
+  <div class="rh"><span>309</span><span>7.1 Electromotive Force</span></div>
+  <div class="figbox">Fig. 7.13: surface $\mathcal S$ bounded by a loop at time $t$ and the loop at time $(t+dt)$, joined by a ribbon; inset: enlargement of $d\mathbf a$ showing the points $P$ and $P'$, the vectors $d\mathbf l$ and $\mathbf v\,dt$. Schematic; see PDF page.</div>
+  <div class="eq">$$\boxed{\mathcal E=-\frac{d\Phi}{dt}.} \tag{7.13}$$</div>
+  <p>This is the <b>flux rule</b> for motional emf.</p>
+  <p>Apart from its delightful simplicity, the flux rule has the virtue of applying to <i>non</i>rectangular loops moving in <i>arbitrary</i> directions through <i>non</i>uniform magnetic fields; in fact, the loop need not even maintain a fixed shape.</p>
+  <p><i>Proof.</i> Figure 7.13 shows a loop of wire at time $t$, and also a short time $dt$ later. Suppose we compute the flux at time $t$, using surface $\mathcal S$, and the flux at time $t+dt$, using the surface consisting of $\mathcal S$ plus the “ribbon” that connects the new position of the loop to the old. The <i>change</i> in flux, then, is</p>
+  <div class="eq">$$d\Phi=\Phi(t+dt)-\Phi(t)=\Phi_{\text{ribbon}}=\int_{\text{ribbon}}\mathbf B\cdot d\mathbf a.$$</div>
+  <p>Focus your attention on point $P$: in time $dt$, it moves to $P'$. Let $\mathbf v$ be the velocity of the <i>wire</i>, and $\mathbf u$ the velocity of a charge <i>down</i> the wire; $\mathbf w=\mathbf v+\mathbf u$ is the resultant velocity of a charge at $P$. The infinitesimal element of area on the ribbon can be written as</p>
+  <div class="eq">$$d\mathbf a=(\mathbf v\times d\mathbf l)\,dt$$</div>
+  <p>(see inset in Fig. 7.13). Therefore</p>
+  <div class="eq">$$\frac{d\Phi}{dt}=\oint\mathbf B\cdot(\mathbf v\times d\mathbf l).$$</div>
+  <p>Since $\mathbf w=(\mathbf v+\mathbf u)$ and $\mathbf u$ is parallel to $d\mathbf l$, we can just as well write this as</p>
+  <div class="eq">$$\frac{d\Phi}{dt}=\oint\mathbf B\cdot(\mathbf w\times d\mathbf l).$$</div>
+  <div class="pno">309</div>
+</div>
+
+<div class="sheet book" id="pdf-p13">
+  <div class="rh"><span>310</span><span>7 Electrodynamics</span></div>
+  <div class="figbox">Fig. 7.14: circuit with an ammeter (A) and a switch that connects to point $a$ or $b$; region of uniform field $\mathbf B$ (into the page). Schematic; see PDF page.</div>
+  <p>Now, the scalar triple product can be rewritten:</p>
+  <div class="eq">$$\mathbf B\cdot(\mathbf w\times d\mathbf l)=-(\mathbf w\times\mathbf B)\cdot d\mathbf l,$$</div>
+  <p>so</p>
+  <div class="eq">$$\frac{d\Phi}{dt}=-\oint(\mathbf w\times\mathbf B)\cdot d\mathbf l.$$</div>
+  <p>But $(\mathbf w\times\mathbf B)$ is the magnetic force per unit charge, $\mathbf f_{\text{mag}}$, so</p>
+  <div class="eq">$$\frac{d\Phi}{dt}=-\oint\mathbf f_{\text{mag}}\cdot d\mathbf l,$$</div>
+  <p>and the integral of $\mathbf f_{\text{mag}}$ is the emf:</p>
+  <div class="eq">$$\mathcal E=-\frac{d\Phi}{dt}.\qquad\square$$</div>
+  <p>There is a sign ambiguity in the definition of emf (Eq. 7.9): Which <i>way</i> around the loop are you supposed to integrate? There is a compensating ambiguity in the definition of <i>flux</i> (Eq. 7.12): Which is the positive direction for $d\mathbf a$? In applying the flux rule, sign consistency is governed (as always) by your right hand: if your fingers define the positive direction around the loop, then your thumb indicates the direction of $d\mathbf a$. Should the emf come out negative, it means the current will flow in the negative direction around the circuit.</p>
+  <p>The flux rule is a nifty shortcut for calculating motional emfs. It does not contain any new physics – just the Lorentz force law. But it can lead to error or ambiguity if you’re not careful. The flux rule assumes you have a single wire loop – it can move, rotate, stretch, or distort (continuously), but beware of switches, sliding contacts, or extended conductors allowing a variety of current paths. A standard “flux rule paradox” involves the circuit in Fig. 7.14. When the switch is thrown (from $a$ to $b$) the flux through the circuit doubles, but there’s no motional emf (no conductor moving through a magnetic field), and the ammeter (A) records no current.</p>
+  <div class="ex">
+    <p><b>Example 7.4.</b> A metal disk of radius $a$ rotates with angular velocity $\omega$ about a vertical axis, through a uniform field $\mathbf B$, pointing up. A circuit is made by connecting one end of a resistor to the axle and the other end to a sliding contact, which touches the outer edge of the disk (Fig. 7.15). Find the current in the resistor.</p>
+  </div>
+  <div class="pno">310</div>
+</div>
+
+<div class="sheet book" id="pdf-p14">
+  <div class="rh"><span>311</span><span>7.1 Electromotive Force</span></div>
+  <div class="ex">
+    <div class="figbox">Fig. 7.15: metal disk spinning about a vertical axis in field $\mathbf B$ (pointing up), with a resistor $R$ joining the axle to a sliding contact on the outer edge; current $I$ shown in the resistor. Schematic; see PDF page.</div>
+    <p><i>Solution.</i> The speed of a point on the disk at a distance $s$ from the axis is $v=\omega s$, so the force per unit charge is $\mathbf f_{\text{mag}}=\mathbf v\times\mathbf B=\omega sB$. The emf is therefore</p>
+    <div class="eq">$$\mathcal E=\int_0^a f_{\text{mag}}\,ds=\omega B\int_0^a s\,ds=\frac{\omega Ba^2}{2},$$</div>
+    <p>and the current is</p>
+    <div class="eq">$$I=\frac{\mathcal E}{R}=\frac{\omega Ba^2}{2R}.$$</div>
+  </div>
+  <p>Example 7.4 (the <b>Faraday disk</b>, or <b>Faraday dynamo</b>) involves a motional emf that you can’t calculate (at least, not directly) from the flux rule. The flux rule assumes the current flows along a well-defined path, whereas in this example the current spreads out over the whole disk. It’s not even clear what the “flux through the circuit” would <i>mean</i> in this context.</p>
+  <p>Even more tricky is the case of <b>eddy currents</b>. Take a chunk of aluminum (say), and shake it around in a nonuniform magnetic field. Currents will be generated in the material, and you will feel a kind of “viscous drag” – as though you were pulling the block through molasses (this is the force $\mathbf f_{\text{pull}}$ in the discussion of motional emf). Eddy currents are notoriously difficult to calculate,<sup>7</sup> but easy and dramatic to demonstrate. You may have witnessed the classic experiment in which an aluminum disk mounted as a</p>
+  <div class="figrow">
+    <figure><div class="figbox">Fig. 7.16(a): aluminum disk hung as a pendulum on a horizontal axis, swinging down between the poles of a magnet. Schematic; see PDF page.</div><figcaption>Fig. 7.16(a)</figcaption></figure>
+    <figure><div class="figbox">Fig. 7.16(b): the same disk with many slots cut in it, swinging between the poles. Schematic; see PDF page.</div><figcaption>Fig. 7.16(b)</figcaption></figure>
+  </div>
+  <p class="fn"><sup>7</sup> See, for example, W. M. Saslow, <i>Am. J. Phys.</i> <b>60</b>, 693 (1992).</p>
+  <div class="pno">311</div>
+</div>
+
+<div class="sheet book" id="pdf-p15">
+  <div class="rh"><span>312</span><span>7 Electrodynamics</span></div>
+  <p>pendulum on a horizontal axis swings down and passes between the poles of a magnet (Fig. 7.16a). When it enters the field region it suddenly slows way down. To confirm that eddy currents are responsible, one repeats the demonstration using a disk that has many slots cut in it, to prevent the flow of large-scale currents (Fig. 7.16b). This time the disk swings freely, unimpeded by the field.</p>
+  <div class="ex">
+    <p><b>Example 7.5.</b><sup>8</sup> There are precious few eddy current problems that can be treated analytically. Here’s a rare example, solved by Hertz (at the age of 23) in 1880. Imagine a uniform, electrically neutral, spherical shell, of inner radius $R_1$, outer radius $R_2$, and conductivity $\sigma$, centered at the origin and spinning with constant angular velocity $\boldsymbol\omega$, in the presence of a uniform magnetic field $\mathbf B$.<sup>9</sup> Find the eddy currents in the shell, in the steady state (fields, charges, currents all constant in time), if (a) $\boldsymbol\omega$ and $\mathbf B$ are in the <i>same</i> direction and (b) they are perpendicular.</p>
+    <p><i>Solution.</i> In electrostatics the charge density in a conductor is zero (any excess charge goes to the surface), and this is still true for steady currents in conductors at rest, as we found in Eq. 7.5. But for a conductor <i>moving</i> through a magnetic field we cannot ignore the velocity term in Eq. 7.2. Indeed, taking the divergence, and invoking Gauss’s law and the continuity equation,</p>
+    <div class="eq">$$\nabla\cdot\mathbf J=\sigma\left[\nabla\cdot\mathbf E+\nabla\cdot(\mathbf v\times\mathbf B)\right]=\sigma\left[\frac{1}{\epsilon_0}\rho+\nabla\cdot(\mathbf v\times\mathbf B)\right]=-\frac{\partial\rho}{\partial t}.$$</div>
+    <p>In the steady state $\rho$ is constant, and we are left with</p>
+    <div class="eq">$$\rho=-\epsilon_0\nabla\cdot(\mathbf v\times\mathbf B). \tag{7.14}$$</div>
+    <p>(a) We might as well choose axes such that $\mathbf B=B\hat{\mathbf z}$ and $\boldsymbol\omega=\omega\hat{\mathbf z}$. For any point in a rigid rotating object, $\mathbf v=\boldsymbol\omega\times\mathbf r$, so, using the BAC–CAB rule,</p>
+    <div class="eq">$$\mathbf v\times\mathbf B=(\boldsymbol\omega\times\mathbf r)\times\mathbf B=\mathbf r(\mathbf B\cdot\boldsymbol\omega)-\boldsymbol\omega(\mathbf B\cdot\mathbf r)=\omega B(\mathbf r-z\hat{\mathbf z})=\omega B(x\hat{\mathbf x}+y\hat{\mathbf y}), \tag{7.15}$$</div>
+    <p>and therefore</p>
+    <div class="eq">$$\rho=-2\epsilon_0\omega B. \tag{7.16}$$</div>
+    <p>(There will be compensating charge at the two surfaces, of course.) The electric potential satisfies Poisson’s equation</p>
+    <div class="eq">$$\nabla^2V=-\frac{1}{\epsilon_0}\rho=2\omega B\qquad(R_1\lt r\lt R_2). \tag{7.17}$$</div>
+  </div>
+  <p class="fn"><sup>8</sup> This example can be skipped without loss of continuity. For details and practical applications see M. A. Nurge <i>et al.</i>, <i>Am. J. Phys.</i> <b>85</b>, 596 (2017).</p>
+  <p class="fn"><sup>9</sup> Assume that any magnetic fields produced by the eddy currents themselves are negligible – or that they are included in $\mathbf B$.</p>
+  <div class="pno">312</div>
+</div>
+
+<div class="sheet book" id="pdf-p16">
+  <div class="rh"><span>313</span><span>7.1 Electromotive Force</span></div>
+  <div class="ex-cont">
+    <p>and the radial current vanishes at the boundaries (otherwise charge would be leaking off into space):</p>
+    <div class="eq">$$J_r=\sigma\left[\mathbf E+\mathbf v\times\mathbf B\right]\cdot\hat{\mathbf r}=0\qquad(\text{at } r=R_1 \text{ and } R_2). \tag{7.18}$$</div>
+    <p>Thus</p>
+    <div class="eq">$$E_r=-\omega B(x\hat{\mathbf x}+y\hat{\mathbf y})\cdot\hat{\mathbf r}=-\frac{\omega B}{r}(x^2+y^2)=-\omega Br\sin^2\theta \tag{7.19}$$</div>
+    <p>at each surface:</p>
+    <div class="eq">$$\left.\frac{\partial V}{\partial r}\right|_{R_1}=\omega BR_1\sin^2\theta,\qquad\left.\frac{\partial V}{\partial r}\right|_{R_2}=\omega BR_2\sin^2\theta. \tag{7.20}$$</div>
+    <p>Having specified the charge density (Eq. 7.16) and the normal derivative of $V$ on the boundaries (Eq. 7.20), the field in the shell is uniquely determined (Prob. 3.5). In fact, it’s easy to guess the potential:</p>
+    <div class="eq">$$V(r,\theta)=\frac{\omega B}{2}r^2\sin^2\theta+K=\frac{\omega B}{2}(x^2+y^2)+K \tag{7.21}$$</div>
+    <p>(for some constant $K$), and the field is</p>
+    <div class="eq">$$\mathbf E=-\nabla V=-\omega B(x\hat{\mathbf x}+y\hat{\mathbf y})=-\mathbf v\times\mathbf B \tag{7.22}$$</div>
+    <p>(Eq. 7.15). As it turns out, then, the electric force exactly cancels the magnetic force; there is <i>no</i> eddy current in this configuration,<sup>10</sup></p>
+    <div class="eq">$$\mathbf J=\mathbf 0.$$</div>
+    <p>(b) This time we’ll take $\boldsymbol\omega=\omega\hat{\mathbf x}$ and $\mathbf B=B\hat{\mathbf y}$. Then</p>
+    <div class="eq">$$\mathbf v\times\mathbf B=\mathbf r(\mathbf B\cdot\boldsymbol\omega)-\boldsymbol\omega(\mathbf B\cdot\mathbf r)=-\omega By\,\hat{\mathbf x},$$</div>
+    <p>which is divergenceless, so the charge density vanishes (Eq. 7.14):</p>
+    <div class="eq">$$\rho=0$$</div>
+    <p>(there may still be induced surface charges). Laplace’s equation holds within the shell,</p>
+    <div class="eq">$$\nabla^2V=0,$$</div>
+    <p>and Eq. 7.19 becomes</p>
+    <div class="eq">$$E_r=-(\mathbf v\times\mathbf B)\cdot\hat{\mathbf r}=\omega By(\hat{\mathbf x}\cdot\hat{\mathbf r})=\omega Br\sin^2\theta\sin\phi\cos\phi$$</div>
+    <p>at each boundary:</p>
+    <div class="eq">$$\left.\frac{\partial V}{\partial r}\right|_{R_1}=-\omega BR_1\sin^2\theta\sin\phi\cos\phi,\qquad\left.\frac{\partial V}{\partial r}\right|_{R_2}=-\omega BR_2\sin^2\theta\sin\phi\cos\phi.$$</div>
+    <p>The solution is</p>
+    <div class="eq">$$V(r,\theta,\phi)=-\frac{\omega B}{2}r^2\sin^2\theta\sin\phi\cos\phi+K=-\frac{\omega B}{2}xy+K\qquad(R_1\lt r\lt R_2),$$</div>
+  </div>
+  <p class="fn"><sup>10</sup> There is a <b>convection current</b>, since $\rho$ (and the surface charges) are dragged around by the spinning of the shell, but (as you can check for yourself) the ratio $J_{\text{conv}}/J_{\text{cond}}$ is typically of the order of $\epsilon_0\omega/\sigma$, which is utterly negligible for (say) aluminum at 100 rpm.</p>
+  <div class="pno">313</div>
+</div>
+
+<div class="sheet book" id="pdf-p17">
+  <div class="rh"><span>314</span><span>7 Electrodynamics</span></div>
+  <div class="ex-cont">
+    <p>and the electric field is</p>
+    <div class="eq">$$\mathbf E=-\nabla V=\frac{\omega B}{2}(y\hat{\mathbf x}+x\hat{\mathbf y}).$$</div>
+    <p>The eddy current is</p>
+    <div class="eq">$$\mathbf J=\sigma\left[\mathbf E+(\mathbf v\times\mathbf B)\right]=\frac{\omega B\sigma}{2}(-y\hat{\mathbf x}+x\hat{\mathbf y})=\frac{\omega B\sigma}{2}\,r\sin\theta\,\hat{\boldsymbol\phi}.$$</div>
+    <p>Remarkably, this is just what you would get if the shell had been a <i>non</i>conductor carrying a uniform charge density $\rho=B\sigma/2$ and spinning with angular velocity $\omega$ about the $z$-axis! That’s <i>right</i>: the $z$-axis! Incidentally, for $\boldsymbol\omega$ and $\mathbf B$ in arbitrary orientations the formula is</p>
+    <div class="eq">$$\mathbf J=-\frac{\sigma}{2}\left[\mathbf r\times(\boldsymbol\omega\times\mathbf B)\right].$$</div>
+  </div>
+  <div class="prob">
+    <p><b>Problem 7.7.</b> A metal bar of mass $m$ slides frictionlessly on two parallel conducting rails a distance $l$ apart (Fig. 7.17). A resistor $R$ is connected across the rails, and a uniform magnetic field $\mathbf B$, pointing into the page, fills the entire region.</p>
+    <div class="figbox">Fig. 7.17: metal bar of mass $m$ moving to the right at speed $v$ on two parallel rails a distance $l$ apart, with resistor $R$ across the rails; field $\mathbf B$ into the page. Schematic; see PDF page.</div>
+    <p>(a) If the bar moves to the right at speed $v$, what is the current in the resistor? In what direction does it flow?<br>
+    (b) What is the magnetic force on the bar? In what direction?<br>
+    (c) If the bar starts out with speed $v_0$ at time $t=0$, and is left to slide, what is its speed at a later time $t$?<br>
+    (d) The initial kinetic energy of the bar was, of course, $\frac12 mv_0^2$. Check that the energy delivered to the resistor is exactly $\frac12 mv_0^2$.</p>
+  </div>
+  <div class="prob">
+    <p><b>Problem 7.8.</b> A square loop of wire (side length $a$) lies on a table, a distance $s$ from a very long straight wire, which carries a current $I$, as shown in Fig. 7.18.</p>
+    <p>(a) Find the flux of $\mathbf B$ through the loop.<br>
+    (b) If someone now pulls the loop directly away from the wire, at speed $v$, what emf is generated? In what direction (clockwise or counterclockwise) does the current flow?<br>
+    (c) What if the loop is pulled to the <i>right</i> at speed $v$?</p>
+  </div>
+  <div class="pno">314</div>
+</div>
+
+<div class="sheet book" id="pdf-p18">
+  <div class="rh"><span>315</span><span>7.1 Electromotive Force</span></div>
+  <div class="prob">
+    <div class="figbox">Fig. 7.18: square loop of side $a$, at distance $s$ from a long straight wire carrying current $I$. Schematic; see PDF page.</div>
+    <p><b>Problem 7.9.</b> An infinite number of different surfaces can be fit to a given boundary line, and yet, in defining the magnetic flux through a loop, $\Phi=\int\mathbf B\cdot d\mathbf a$, I never specified the particular surface to be used. Justify this apparent oversight.</p>
+    <p><b>Problem 7.10.</b> A square loop (side length $a$) is mounted on a vertical shaft and rotated at angular velocity $\omega$ (Fig. 7.19). A uniform magnetic field $\mathbf B$ points to the right. Find $\mathcal E(t)$ for this <b>alternating current</b> generator.</p>
+    <div class="figbox">Fig. 7.19: square loop on a vertical shaft rotating at $\omega$ in uniform field $\mathbf B$ (to the right), with connections to terminals. Schematic; see PDF page.</div>
+    <p><b>Problem 7.11.</b> A square loop is cut out of a thick sheet of aluminum. It is then placed so that the top portion is in a uniform magnetic field $\mathbf B$, and is allowed to fall under gravity (Fig. 7.20). (In the diagram, shading indicates the field region; $\mathbf B$ points into the page.) If the magnetic field is 1 T (a pretty standard laboratory field), find the terminal velocity of the loop (in m/s). Find the velocity of the loop as a function of time. How long does it take (in seconds) to reach, say, 90 percent of the terminal velocity? What would happen if you cut a tiny slit in the ring, breaking the circuit? [<i>Note:</i> The dimensions of the loop cancel out; determine the actual <i>numbers</i>, in the units indicated.]</p>
+    <p><b>Problem 7.12.</b> Calculate the net magnetic torque on the eddy current in Ex. 7.5b. This torque will act as a brake on the rotation. What is the time constant for the (exponential) damping? Assume that the angular velocity lost in a given rotation is a small fraction of the total. Find the actual number, for aluminum (mass density $2.7\times10^3$ kg/m<sup>3</sup>) in the Earth’s magnetic field.</p>
+    <div class="figbox">Fig. 7.20: square loop cut out of a thick aluminum sheet, its top portion inside the shaded field region, falling downward. Schematic; see PDF page.</div>
+  </div>
+  <div class="pno">315</div>
+</div>
+
+<div class="sheet book" id="pdf-p19">
+  <div class="rh"><span>316</span><span>7 Electrodynamics</span></div>
+  <h2 class="sec">7.2 Electromagnetic Induction</h2>
+  <h3 class="sub">7.2.1 Faraday’s Law</h3>
+  <p>In 1831, Michael Faraday reported on a series of experiments, including three that (with some violence to history) can be characterized as follows:</p>
+  <p><b>Experiment 1</b> He pulled a loop of wire to the right through a magnetic field (Fig. 7.21a). A current flowed in the loop.</p>
+  <p><b>Experiment 2</b> He moved the <i>magnet</i> to the <i>left</i>, holding the loop still (Fig. 7.21b). Again, a current flowed in the loop.</p>
+  <p><b>Experiment 3</b> With both the loop and the magnet at rest (Fig. 7.21c), he changed the <i>strength</i> of the field (he used an electromagnet, and varied the current in the coil). Once again, current flowed in the loop.</p>
+  <p>The first experiment, of course, is a straightforward case of motional emf; according to the flux rule,</p>
+  <div class="eq">$$\mathcal E=-\frac{d\Phi}{dt}.$$</div>
+  <p>I don’t think it will surprise you to learn that exactly the same emf arises in Experiment 2 – all that really matters is the <i>relative</i> motion of the magnet and the loop. Indeed, in the light of special relativity it <i>has</i> to be so. But Faraday knew nothing of relativity, and in classical electrodynamics this simple reciprocity is a remarkable coincidence. For if the <i>loop</i> moves, it’s a <i>magnetic</i> force that sets up the emf, but if the loop is <i>stationary</i>, the force <i>cannot</i> be magnetic – stationary charges experience no magnetic forces. In that case, what <i>is</i> responsible? What sort of field exerts a force on charges at rest? Well, <i>electric</i> fields do, of course, but there doesn’t seem to be any electric field in sight.</p>
+  <p>Faraday had an ingenious inspiration:</p>
+  <div class="figbox"><b>a changing magnetic field induces an electric field.</b></div>
+  <div class="figrow">
+    <figure><div class="figbox">Fig. 7.21(a): loop moved to the right through a field marked $\mathbf B$ (in); current $I$ in the loop. Schematic; see PDF page.</div><figcaption>Fig. 7.21(a)</figcaption></figure>
+    <figure><div class="figbox">Fig. 7.21(b): magnet moved to the left, loop held still; current $I$ in the loop. Schematic; see PDF page.</div><figcaption>Fig. 7.21(b)</figcaption></figure>
+    <figure><div class="figbox">Fig. 7.21(c): loop and magnet at rest, field marked “changing magnetic field”; current $I$ in the loop. Schematic; see PDF page.</div><figcaption>Fig. 7.21(c)</figcaption></figure>
+  </div>
+  <div class="pno">316</div>
+</div>
+
+<div class="sheet book" id="pdf-p20">
+  <div class="rh"><span>317</span><span>7.2 Electromagnetic Induction</span></div>
+  <p>It is this induced<sup>11</sup> <i>electric</i> field that accounts for the emf in Experiment 2.<sup>12</sup> Indeed, if (as Faraday found empirically) the emf is again equal to the rate of change of the flux,</p>
+  <div class="eq">$$\mathcal E=\oint\mathbf E\cdot d\mathbf l=-\frac{d\Phi}{dt}, \tag{7.23}$$</div>
+  <p>then $\mathbf E$ is related to the change in $\mathbf B$ by the equation</p>
+  <div class="eq">$$\oint\mathbf E\cdot d\mathbf l=-\int\frac{\partial\mathbf B}{\partial t}\cdot d\mathbf a. \tag{7.24}$$</div>
+  <p>This is <b>Faraday’s law</b>, in integral form. We can convert it to differential form by applying Stokes’ theorem (see footnote to Eq. 2.14):</p>
+  <div class="eq">$$\boxed{\nabla\times\mathbf E=-\frac{\partial\mathbf B}{\partial t}.} \tag{7.25}$$</div>
+  <p>Note that Faraday’s law reduces to the old rule $\oint\mathbf E\cdot d\mathbf l=0$ (or, in differential form, $\nabla\times\mathbf E=0$) in the static case (constant $\mathbf B$) as, of course, it should.</p>
+  <p>In Experiment 3, the magnetic field changes for entirely different reasons, but according to Faraday’s law an electric field will again be induced, giving rise to an emf $-d\Phi/dt$. Indeed, one can subsume all three cases (and for that matter any combination of them) into a kind of <b>universal flux rule</b>:</p>
+  <div class="ex">
+    <p><b>Whenever (and for whatever reason) the magnetic flux through a loop changes, an emf</b></p>
+    <div class="eq">$$\mathcal E=-\frac{d\Phi}{dt} \tag{7.26}$$</div>
+    <p><b>will appear in the loop.</b></p>
+  </div>
+  <p>Many people call <i>this</i> “Faraday’s law.”<sup>13</sup> Maybe I’m overly fastidious, but I find this confusing. There are really <i>two totally different mechanisms</i> underlying Eq. 7.26, and to identify them both as “Faraday’s law” is a little like saying that because identical twins look alike we ought to call them by the same name. In Faraday’s first experiment it’s the Lorentz force law at work; the emf is <i>magnetic</i>. But in the other two it’s an <i>electric</i> field (induced by the changing magnetic field) that does the job. Viewed in this</p>
+  <p class="fn"><sup>11</sup> “Induce” is a subtle and slippery verb. It carries a faint odor of <i>causation</i> (“<i>pro</i>duce” would make this explicit) without quite committing itself. There is a sterile ongoing debate in the literature as to whether a changing magnetic field should be regarded as an independent “source” of electric fields (along with electric charge) – after all, the magnetic field <i>itself</i> is due to electric currents. It’s like asking whether the postman is the “source” of my mail. Well, sure – he delivered it to my door. On the other hand, Grandma wrote the letter. Ultimately, $\rho$ and $\mathbf J$ are the sources of <i>all</i> electromagnetic fields, and a changing magnetic field merely delivers electromagnetic news from currents somewhere else. But it is often convenient to think of a changing magnetic field “producing” an electric field, and it won’t hurt you as long as you understand that this is the condensed version of a more complicated story. For a nice discussion, see S. E. Hill, <i>Phys. Teach.</i> <b>48</b>, 410 (2010).</p>
+  <p class="fn"><sup>12</sup> You might argue that the magnetic field in Experiment 2 is not really <i>changing</i> – just <i>moving</i>. But if you sit at a <i>fixed location</i>, the field you experience changes as the magnet passes by.</p>
+  <p class="fn"><sup>13</sup> Electrical engineers like to say that the emf is generated by the “cutting” of magnetic field lines.</p>
+  <div class="pno">317</div>
+</div>
+
+<div class="sheet book" id="pdf-p21">
+  <div class="rh"><span>318</span><span>7 Electrodynamics</span></div>
+  <p>light, it is quite astonishing that all three processes yield the same formula for the emf. In fact, it was precisely this “coincidence” that led Einstein to the special theory of relativity – he sought a deeper understanding of what is, in classical electrodynamics, a peculiar accident. But that’s a story for Chapter 12. In the meantime, I shall reserve the term “Faraday’s law” for electric fields induced by changing magnetic fields, and I do <i>not</i> regard Experiment 1 as an instance of Faraday’s law.</p>
+  <div class="ex">
+    <p><b>Example 7.6.</b> A long cylindrical magnet of length $L$ and radius $a$ carries a uniform magnetization $\mathbf M$ parallel to its axis. It passes at constant velocity $v$ through a circular wire ring of slightly larger diameter (Fig. 7.22). Graph the emf induced in the ring, as a function of time.</p>
+    <div class="figbox">Fig. 7.22: long cylindrical magnet, magnetization $\mathbf M$ along its axis, moving at velocity $v$ through a circular ring; length $L$, radius $a$. Schematic; see PDF page.</div>
+    <div class="figrow">
+      <figure><div class="figbox">Fig. 7.23(a): flux $\Phi$ through the ring against $t$; a plateau at $\mu_0M\pi a^2$ lasting a time $L/v$. Schematic; see PDF page.</div><figcaption>Fig. 7.23(a)</figcaption></figure>
+      <figure><div class="figbox">Fig. 7.23(b): emf $\mathcal E$ against $t$; two spikes, one negative and one positive. Schematic; see PDF page.</div><figcaption>Fig. 7.23(b)</figcaption></figure>
+    </div>
+    <p><i>Solution.</i> The magnetic field is the same as that of a long solenoid with surface current $\mathbf K_b=M\hat{\boldsymbol\phi}$. So the field inside is $\mathbf B=\mu_0\mathbf M$, except near the ends, where it starts to spread out. The flux through the ring is zero when the magnet is far away; it builds up to a maximum of $\mu_0M\pi a^2$ as the leading end passes through; and it drops back to zero as the trailing end emerges (Fig. 7.23a). The emf is (minus) the derivative of $\Phi$ with respect to time, so it consists of two spikes, as shown in Fig. 7.23b.</p>
+  </div>
+  <p>Keeping track of the <i>signs</i> in Faraday’s law can be a real headache. For instance, in Ex. 7.6 we would like to know which <i>way</i> around the ring the induced current flows. In principle, the right-hand rule does the job (we called $\Phi$ positive to the left, in Fig. 7.22, so the positive direction for current in the ring is counterclockwise, as viewed from the left; since the first spike in Fig. 7.23b is <i>negative</i>, the first current pulse flows <i>clockwise</i>, and the second</p>
+  <div class="pno">318</div>
+</div>
+
+<div class="sheet book" id="pdf-p22">
+  <div class="rh"><span>319</span><span>7.2 Electromagnetic Induction</span></div>
+  <p>counterclockwise). But there’s a handy rule, called <b>Lenz’s law</b>, whose sole purpose is to help you get the directions right:<sup>14</sup></p>
+  <div class="figbox"><b>nature abhors a change in flux.</b></div>
+  <p>The induced current will flow in such a direction that the flux <i>it</i> produces tends to cancel the change. (As the front end of the magnet in Ex. 7.6 enters the ring, the flux increases, so the current in the ring must generate a field to the <i>right</i> – it therefore flows <i>clockwise</i>.) Notice that it is the <i>change</i> in flux, not the flux itself, that nature abhors (when the tail end of the magnet exits the ring, the flux <i>drops</i>, so the induced current flows <i>counterclockwise</i>, in an effort to restore it). Faraday induction is a kind of “inertial” phenomenon: A conducting loop “likes” to maintain a constant flux through it; if you try to <i>change</i> the flux, the loop responds by sending a current around in such a direction as to frustrate your efforts. (It doesn’t succeed completely; the flux produced by the induced current is typically only a tiny fraction of the original. All Lenz’s law tells you is the <i>direction</i> of the flow.)</p>
+  <div class="ex">
+    <p><b>Example 7.7. (The “jumping ring” demonstration.)</b> If you wind a solenoidal coil around an iron core (the iron is there to beef up the magnetic field), place a metal ring on top, and plug it in, the ring will jump several feet in the air (Fig. 7.24). Why?</p>
+    <div class="figbox">Fig. 7.24: solenoid with an iron core, connected to a plug, with a metal ring on top; field $\mathbf B$ shown emerging from the top of the solenoid. Schematic; see PDF page.</div>
+    <p><i>Solution.</i> <i>Before</i> you turned on the current, the flux through the ring was <i>zero</i>. <i>Afterward</i> a flux appeared (upward, in the diagram), and the emf generated in the ring led to a current (in the ring) which, according to Lenz’s law, was in such a direction that <i>its</i> field tended to cancel this new flux. This means that the current in the loop is <i>opposite</i> to the current in the solenoid. And opposite currents repel, so the ring flies off.<sup>15</sup></p>
+  </div>
+  <p class="fn"><sup>14</sup> Lenz’s law applies to <i>motional</i> emfs, too, but for them it is usually easier to get the direction of the current from the Lorentz force law.</p>
+  <p class="fn"><sup>15</sup> For further discussion of the jumping ring (and the related “floating ring”), see C. S. Schneider and J. P. Ertel, <i>Am. J. Phys.</i> <b>66</b>, 686 (1998); P. J. H. Tjossem and E. C. Brost, <i>Am. J. Phys.</i> <b>79</b>, 353 (2011).</p>
+  <div class="pno">319</div>
+</div>
+
+<div class="sheet book" id="pdf-p23">
+  <div class="rh"><span>320</span><span>7 Electrodynamics</span></div>
+  <div class="prob">
+    <p><b>Problem 7.13.</b> A long solenoid, of radius $a$, is driven by an alternating current, so that the field inside is sinusoidal: $\mathbf B(t)=B_0\cos(\omega t)\,\hat{\mathbf z}$. A circular loop of wire, of radius $a/2$ and resistance $R$, is placed inside the solenoid, and coaxial with it. Find the current induced in the loop, as a function of time.</p>
+    <p><b>Problem 7.14.</b> A square loop of wire, with sides of length $a$, lies in the first quadrant of the $xy$ plane, with one corner at the origin. In this region, there is a nonuniform time-dependent magnetic field $\mathbf B(y,t)=ky^3t^2\,\hat{\mathbf z}$ (where $k$ is a constant). Find the emf induced in the loop.</p>
+    <p><b>Problem 7.15.</b> As a lecture demonstration a short cylindrical bar magnet is dropped down a vertical aluminum pipe of slightly larger diameter, about 2 m long. It takes several seconds to emerge at the bottom, whereas an otherwise identical piece of <i>unmagnetized</i> iron makes the trip in a fraction of a second. Explain why the magnet falls more slowly.<sup>16</sup></p>
+  </div>
+  <h3 class="sub">7.2.2 The Induced Electric Field</h3>
+  <p>Faraday’s law generalizes the electrostatic rule $\nabla\times\mathbf E=\mathbf 0$ to the time-dependent régime. The <i>divergence</i> of $\mathbf E$ is still given by Gauss’s law ($\nabla\cdot\mathbf E=\rho/\epsilon_0$). If $\mathbf E$ is a <i>pure</i> Faraday field (due exclusively to a changing $\mathbf B$, with $\rho=0$), then</p>
+  <div class="eq">$$\nabla\cdot\mathbf E=0,\qquad\nabla\times\mathbf E=-\frac{\partial\mathbf B}{\partial t}.$$</div>
+  <p>This is mathematically identical to magnetostatics,</p>
+  <div class="eq">$$\nabla\cdot\mathbf B=0,\qquad\nabla\times\mathbf B=\mu_0\mathbf J.$$</div>
+  <p><i>Conclusion:</i> Faraday-induced electric fields are determined by $-(\partial\mathbf B/\partial t)$ in exactly the same way as magnetostatic fields are determined by $\mu_0\mathbf J$. The analog to Biot–Savart is<sup>17</sup> is</p>
+  <div class="eq">$$\mathbf E=-\frac{1}{4\pi}\int\frac{(\partial\mathbf B/\partial t)\times\hat{\mathbf r}}{r^2}\,d\tau=-\frac{1}{4\pi}\frac{\partial}{\partial t}\int\frac{\mathbf B\times\hat{\mathbf r}}{r^2}\,d\tau, \tag{7.27}$$</div>
+  <p>and if symmetry permits, we can use all the tricks associated with Ampère’s law in integral form ($\oint\mathbf B\cdot d\mathbf l=\mu_0I_{\text{enc}}$), only now it’s <i>Faraday’s</i> law in integral form:</p>
+  <div class="eq">$$\oint\mathbf E\cdot d\mathbf l=-\frac{d\Phi}{dt}. \tag{7.28}$$</div>
+  <p>The rate of change of (magnetic) flux through the Ampèrian loop plays the role formerly assigned to $\mu_0I_{\text{enc}}$.</p>
+  <p class="fn"><sup>16</sup> For a discussion of this amazing demonstration see K. D. Hahn <i>et al.</i>, <i>Am. J. Phys.</i> <b>66</b>, 1066 (1998); G. Donoso, C. L. Ladera, and P. Martin, <i>Am. J. Phys.</i> <b>79</b>, 193 (2011).</p>
+  <p class="fn"><sup>17</sup> Magnetostatics holds only for time-independent currents, but there is no such restriction on $\partial\mathbf B/\partial t$.</p>
+  <div class="pno">320</div>
+</div>
+
+<div class="sheet book" id="pdf-p24">
+  <div class="rh"><span>321</span><span>7.2 Electromagnetic Induction</span></div>
+  <div class="ex">
+    <p><b>Example 7.8.</b> A uniform magnetic field $\mathbf B(t)$, pointing straight up, fills the shaded circular region of Fig. 7.25. If $\mathbf B$ is changing with time, what is the induced electric field?</p>
+    <p><i>Solution.</i> $\mathbf E$ points in the azimuthal direction, just like the magnetic field inside a long straight wire carrying a uniform <i>current</i> density. Draw an Ampèrian loop of radius $s$, and apply Faraday’s law:</p>
+    <div class="eq">$$\oint\mathbf E\cdot d\mathbf l=E(2\pi s)=-\frac{d\Phi}{dt}=-\frac{d}{dt}\left(\pi s^2B(t)\right)=-\pi s^2\frac{dB}{dt}.$$</div>
+    <p>Therefore,</p>
+    <div class="eq">$$\mathbf E=-\frac{s}{2}\frac{dB}{dt}\hat{\boldsymbol\phi}.$$</div>
+    <p>If $\mathbf B$ is increasing, $\mathbf E$ runs clockwise, as viewed from above.</p>
+    <div class="figrow">
+      <figure><div class="figbox">Fig. 7.25: uniform field $\mathbf B(t)$ pointing up through a shaded circular region; dashed Ampèrian loop of radius $s$. Schematic; see PDF page.</div><figcaption>Fig. 7.25</figcaption></figure>
+      <figure><div class="figbox">Fig. 7.26: wheel of radius $b$ with a line charge $\lambda$ on its rim; field $\mathbf B_0$ up through the central region of radius $a$; $\mathbf E$ curls around the axis; rotation direction shown. Schematic; see PDF page.</div><figcaption>Fig. 7.26</figcaption></figure>
+    </div>
+  </div>
+  <div class="ex">
+    <p><b>Example 7.9.</b> A line charge $\lambda$ is glued onto the rim of a wheel of radius $b$, which is then suspended horizontally, as shown in Fig. 7.26, so that it is free to rotate (the spokes are made of some nonconducting material – wood, maybe). In the central region, out to radius $a$, there is a uniform magnetic field $\mathbf B_0$, pointing up. Now someone turns the field off. What happens?</p>
+    <p><i>Solution.</i> The changing magnetic field will induce an electric field, curling around the axis of the wheel. This electric field exerts a force on the charges at the rim, and the wheel starts to turn. According to Lenz’s law, it will rotate in such a direction that <i>its</i> field tends to restore the upward flux. The motion, then, is counterclockwise, as viewed from above.</p>
+    <p>Faraday’s law, applied to the loop at radius $b$, says</p>
+    <div class="eq">$$\oint\mathbf E\cdot d\mathbf l=E(2\pi b)=-\frac{d\Phi}{dt}=-\pi a^2\frac{dB}{dt},\qquad\text{or}\qquad\mathbf E=-\frac{a^2}{2b}\frac{dB}{dt}\hat{\boldsymbol\phi}.$$</div>
+    <p>The torque on a segment of length $d\mathbf l$ is $(\mathbf r\times\mathbf F)$, or $b\lambda E\,dl$. The total torque on the wheel is therefore</p>
+    <div class="eq">$$N=b\lambda\left(-\frac{a^2}{2b}\frac{dB}{dt}\right)\oint dl=-b\lambda\pi a^2\frac{dB}{dt},$$</div>
+  </div>
+  <div class="pno">321</div>
+</div>
+
+<div class="sheet book" id="pdf-p25">
+  <div class="rh"><span>322</span><span>7 Electrodynamics</span></div>
+  <div class="ex-cont">
+    <p>and the angular momentum imparted to the wheel is</p>
+    <div class="eq">$$\int N\,dt=-\lambda\pi a^2b\int_{B_0}^{0}dB=\lambda\pi a^2bB_0.$$</div>
+    <p>It doesn’t matter how quickly or slowly you turn off the field; the resulting angular velocity of the wheel is the same regardless. (If you find yourself wondering where the angular momentum <i>came</i> from, you’re getting ahead of the story! Wait for the next chapter.)</p>
+    <p>Note that it’s the <i>electric</i> field that did the rotating. To convince you of this, I deliberately set things up so that the <i>magnetic</i> field is <i>zero</i> at the location of the charge. The experimenters may tell you they never put in any electric field – all they did was switch off the magnetic field. But when they did that, an electric field automatically appeared, and it’s this electric field that turned the wheel.</p>
+  </div>
+  <p>I must warn you, now, of a small fraud that tarnishes many applications of Faraday’s law: electromagnetic induction, of course, occurs only when the magnetic fields are <i>changing</i>, and yet we would like to use the apparatus of magnetostatics (Ampère’s law, the Biot–Savart law, and the rest) to <i>calculate</i> those magnetic fields. Technically, any result derived in this way is only approximately correct. But in practice the error is usually negligible, unless the field fluctuates extremely rapidly, or you are interested in points very far from the source. Even the case of a wire snipped by a pair of scissors (Prob. 7.19) is <i>static enough</i> for Ampère’s law to apply. This régime, in which magnetostatic rules can be used to calculate the magnetic field on the right-hand side of Faraday’s law, is called <b>quasistatic</b>. Generally speaking, it is only when we come to electromagnetic waves and radiation that we must worry seriously about the breakdown of magnetostatics itself.</p>
+  <div class="ex">
+    <p><b>Example 7.10.</b> An infinitely long straight wire carries a slowly varying current $I(t)$. Determine the induced electric field, as a function of the distance $s$ from the wire.<sup>18</sup></p>
+    <p><i>Solution.</i> In the quasistatic approximation, the magnetic field is $(\mu_0I/2\pi s)$, and it circles the wire. Like the $\mathbf B$-field of a solenoid, $\mathbf E$ here runs parallel to the axis. For the rectangular “Ampèrian loop” in Fig. 7.27, Faraday’s law gives</p>
+  </div>
+  <p class="fn"><sup>18</sup> This example is artificial, and not just in the obvious sense of involving infinite wires, but in a more subtle respect. It assumes that the current is the same (at any given instant) all the way down the line. This is a safe assumption for the <i>short</i> wires in typical electric circuits, but not for <i>long</i> wires (<b>transmission lines</b>), unless you supply a distributed and synchronized driving mechanism. But never mind – the problem doesn’t enquire how you would <i>produce</i> such a current; it only asks what <i>fields</i> would result if you <i>did</i>. Variations on this problem are discussed by M. A. Heald, <i>Am. J. Phys.</i> <b>54</b>, 1142 (1986).</p>
+  <div class="pno">322</div>
+</div>
+
+<div class="sheet book" id="pdf-p26">
+  <div class="rh"><span>323</span><span>7.2 Electromagnetic Induction</span></div>
+  <div class="ex-cont">
+    <div class="figbox">Fig. 7.27: rectangular Ampèrian loop of width $l$ with sides at $s_0$ and $s$, beside a long straight wire carrying current $I$. Schematic; see PDF page.</div>
+    <div class="eq">$$\oint\mathbf E\cdot d\mathbf l=E(s_0)l-E(s)l=-\frac{d}{dt}\int\mathbf B\cdot d\mathbf a=-\frac{\mu_0l}{2\pi}\frac{dI}{dt}\int_{s_0}^{s}\frac{1}{s'}\,ds'=-\frac{\mu_0l}{2\pi}\frac{dI}{dt}(\ln s-\ln s_0).$$</div>
+    <p>Thus</p>
+    <div class="eq">$$\mathbf E(s)=\left[\frac{\mu_0}{2\pi}\frac{dI}{dt}\ln s+K\right]\hat{\mathbf z}, \tag{7.29}$$</div>
+    <p>where $K$ is a constant (that is to say, it is independent of $s$ – it might still be a function of $t$). The actual <i>value</i> of $K$ depends on the whole history of the function $I(t)$ – we’ll see some examples in Chapter 10.</p>
+    <p>Equation 7.29 has the peculiar implication that $E$ blows up as $s$ goes to infinity. <i>That</i> can’t be true. … What’s gone wrong? <i>Answer:</i> We have overstepped the limits of the quasistatic approximation. As we shall see in Chapter 9, electromagnetic “news” travels at the speed of light, and at large distances $\mathbf B$ depends not on the current <i>now</i>, but on the current <i>as it was</i> at some earlier time (indeed, a whole <i>range</i> of earlier times, since different points on the wire are different distances away). If $\tau$ is the time it takes $I$ to change substantially, then the quasistatic approximation should hold only for</p>
+    <div class="eq">$$s\ll c\tau, \tag{7.30}$$</div>
+    <p>and hence Eq. 7.29 simply does not apply, at extremely large $s$.</p>
+  </div>
+  <div class="prob">
+    <p><b>Problem 7.16.</b> A long solenoid with radius $a$ and $n$ turns per unit length carries a time-dependent current $I(t)$ in the $\hat{\boldsymbol\phi}$ direction. Find the electric field (magnitude and direction) at a distance $s$ from the axis (both inside and outside the solenoid), in the quasistatic approximation.</p>
+    <p><b>Problem 7.17.</b> An alternating current $I=I_0\cos(\omega t)$ flows down a long straight wire, and returns along a coaxial conducting tube of radius $a$.</p>
+    <p>(a) In what <i>direction</i> does the induced electric field point (radial, circumferential, or longitudinal)?<br>
+    (b) Assuming that the field goes to zero as $s\to\infty$, find $\mathbf E(s,t)$.<sup>19</sup></p>
+  </div>
+  <p class="fn"><sup>19</sup> This is not at all the way electric fields <i>actually</i> behave in coaxial cables, for reasons suggested in footnote <span class="cut">[number not legible in scan]</span>. See Section 9.5.3, and J. G. Cherveniak, <i>Am. J. Phys.</i> <b>54</b>, 946 (1986), for a more realistic treatment.</p>
+  <div class="pno">323</div>
+</div>
+
+<div class="sheet book" id="pdf-p27">
+  <div class="rh"><span>324</span><span>7 Electrodynamics</span></div>
+  <div class="prob">
+    <p><b>Problem 7.18.</b> A long solenoid of radius $a$, carrying $n$ turns per unit length, is looped by a wire with resistance $R$, as shown in Fig. 7.28.</p>
+    <div class="figbox">Fig. 7.28: long solenoid of radius $a$ looped by a wire passing through a resistor $R$. Schematic; see PDF page.</div>
+    <p>(a) If the current in the solenoid is increasing at a constant rate ($dI/dt=k$), what current flows in the loop, and which way (left or right) does it pass through the resistor?<br>
+    (b) If the current $I$ in the solenoid is constant but the solenoid is pulled out of the loop (toward the left, to a place far from the loop), what total charge passes through the resistor?</p>
+    <p><b>Problem 7.19.</b> A square loop, side $a$, resistance $R$, lies a distance $s$ from an infinite straight wire that carries current $I$ (Fig. 7.29). Now someone cuts the wire, so $I$ drops to zero. In what direction does the induced current in the square loop flow, and what total charge passes a given point in the loop during the time this current flows? If you don’t like the scissors model, turn the current down <i>gradually</i>:</p>
+    <div class="eq">$$I(t)=\begin{cases}(1-\alpha t)I & \text{for } 0\le t\le 1/\alpha,\\ 0 & \text{for } t>1/\alpha.\end{cases}$$</div>
+    <div class="figbox">Fig. 7.29: square loop of side $a$ at distance $s$ from a straight wire carrying current $I$; a pair of scissors is shown cutting the wire. Schematic; see PDF page.</div>
+    <p><b>Problem 7.20.</b> A toroidal coil has a rectangular cross section, with inner radius $a$, outer radius $a+w$, and height $h$. It carries a total of $N$ tightly wound turns, and the current is increasing at a constant rate ($dI/dt=k$). If $w$ and $h$ are both much less than $a$, find the electric field at a point $z$ above the center of the toroid. [<i>Hint:</i> Exploit the analogy between Faraday fields and magnetostatic fields, and refer to Ex. 5.6.]</p>
+    <p><b>Problem 7.21.</b> Where is $\partial\mathbf B/\partial t$ nonzero, in Fig. 7.21b? Exploit the analogy between Faraday’s law and Ampère’s law to sketch (qualitatively) the electric field. [For a quantitative model, see Prob. 7.46.]</p>
+  </div>
+  <div class="pno">324</div>
+</div>
+
+<div class="sheet book" id="pdf-p28">
+  <div class="rh"><span>325</span><span>7.2 Electromagnetic Induction</span></div>
+  <div class="prob">
+    <p><b>Problem 7.22.</b> Imagine a uniform magnetic field, pointing in the $z$ direction and filling all space ($\mathbf B=B_0\hat{\mathbf z}$). A positive charge is at rest, at the origin. Now somebody turns off the magnetic field, thereby inducing an electric field. In what direction does the charge move?<sup>20</sup></p>
+  </div>
+  <h3 class="sub">7.2.3 Inductance</h3>
+  <p>Suppose you have two loops of wire, at rest (Fig. 7.30). If you run a steady current $I_1$ around loop 1, it produces a magnetic field $\mathbf B_1$. Some of the field lines pass through loop 2; let $\Phi_2$ be the flux of $\mathbf B_1$ through loop 2. You might have a tough time actually <i>calculating</i> $\mathbf B_1$, but a glance at the Biot–Savart law,</p>
+  <div class="eq">$$\mathbf B_1=\frac{\mu_0}{4\pi}I_1\oint\frac{d\mathbf l_1\times\hat{\mathbf r}}{r^2},$$</div>
+  <p>reveals one significant fact about this field: <i>it is proportional to the current $I_1$</i>. Therefore, so too is the flux through loop 2:</p>
+  <div class="eq">$$\Phi_2=\int\mathbf B_1\cdot d\mathbf a_2.$$</div>
+  <p>Thus</p>
+  <div class="eq">$$\Phi_2=M_{21}I_1, \tag{7.31}$$</div>
+  <p>where $M_{21}$ is the constant of proportionality; it is known as the <b>mutual inductance</b> of the two loops.</p>
+  <p>There is a cute formula for the mutual inductance, which you can derive by expressing the flux in terms of the vector potential, and invoking Stokes’ theorem:</p>
+  <div class="eq">$$\Phi_2=\int\mathbf B_1\cdot d\mathbf a_2=\int(\nabla\times\mathbf A_1)\cdot d\mathbf a_2=\oint\mathbf A_1\cdot d\mathbf l_2.$$</div>
+  <p>Now, according to Eq. 5.66,</p>
+  <div class="eq">$$\mathbf A_1=\frac{\mu_0I_1}{4\pi}\oint\frac{d\mathbf l_1}{r}.$$</div>
+  <div class="figrow">
+    <figure><div class="figbox">Fig. 7.30: loop 1 carrying current $I_1$ and field lines $\mathbf B_1$ threading loop 2 above it. Schematic; see PDF page.</div><figcaption>Fig. 7.30</figcaption></figure>
+    <figure><div class="figbox">Fig. 7.31: loop 1 with element $d\mathbf l_1$ and loop 2 with element $d\mathbf l_2$, separated by vector $\mathbf r$. Schematic; see PDF page.</div><figcaption>Fig. 7.31</figcaption></figure>
+  </div>
+  <p class="fn"><sup>20</sup> This paradox was suggested by Tom Colbert. Refer to Prob. 2.56.</p>
+  <div class="pno">325</div>
+</div>
+
+<div class="sheet book" id="pdf-p29">
+  <div class="rh"><span>326</span><span>7 Electrodynamics</span></div>
+  <p>and hence</p>
+  <div class="eq">$$\Phi_2=\frac{\mu_0I_1}{4\pi}\oint\left(\oint\frac{d\mathbf l_1}{r}\right)\cdot d\mathbf l_2.$$</div>
+  <p>Evidently,</p>
+  <div class="eq">$$M_{21}=\frac{\mu_0}{4\pi}\oint\oint\frac{d\mathbf l_1\cdot d\mathbf l_2}{r}. \tag{7.32}$$</div>
+  <p>This is the <b>Neumann formula</b>; it involves a double line integral – one integration around loop 1, the other around loop 2 (Fig. 7.31). It’s not very useful for practical calculations, but it does reveal two important things about mutual inductance:</p>
+  <p>(1) $M_{21}$ is a purely geometrical quantity, having to do with the sizes, shapes, and relative positions of the two loops.<br>
+  (2) The integral in Eq. 7.32 is unchanged if we switch the roles of loops 1 and 2; it follows that</p>
+  <div class="eq">$$M_{21}=M_{12}. \tag{7.33}$$</div>
+  <p>This is an astonishing conclusion: <i>Whatever the shapes and positions of the loops, the flux through 2 when we run a current $I$ around 1 is identical to the flux through 1 when we send the same current $I$ around 2.</i> We may as well drop the subscripts and call them both $M$.</p>
+  <div class="ex">
+    <p><b>Example 7.11.</b> A short solenoid (length $l$ and radius $a$, with $n_1$ turns per unit length) lies on the axis of a very long solenoid (radius $b$, $n_2$ turns per unit length) as shown in Fig. 7.32. Current $I$ flows in the short solenoid. What is the flux through the long solenoid?</p>
+    <div class="figbox">Fig. 7.32: short solenoid of length $l$ and radius $a$ placed on the axis of a long solenoid of radius $b$. Schematic; see PDF page.</div>
+    <p><i>Solution.</i> Since the inner solenoid is short, it has a very complicated field; moreover, it puts a different flux through each turn of the outer solenoid. It would be a <i>miserable</i> task to compute the total flux this way. However, if we exploit the equality of the mutual inductances, the problem becomes very easy. Just look at the reverse situation: run the current $I$ through the <i>outer</i> solenoid, and calculate the flux through the <i>inner</i> one. The field inside the long solenoid is constant:</p>
+    <div class="eq">$$B=\mu_0n_2I$$</div>
+  </div>
+  <div class="pno">326</div>
+</div>
+
+<div class="sheet book" id="pdf-p30">
+  <div class="rh"><span>327</span><span>7.2 Electromagnetic Induction</span></div>
+  <div class="ex-cont">
+    <p>(Eq. 5.59), so the flux through a single loop of the short solenoid is</p>
+    <div class="eq">$$B\pi a^2=\mu_0n_2I\pi a^2.$$</div>
+    <p>There are $n_1l$ turns in all, so the total flux through the inner solenoid is</p>
+    <div class="eq">$$\Phi=\mu_0\pi a^2n_1n_2Il.$$</div>
+    <p>This is also the flux a current $I$ in the <i>short</i> solenoid would put through the <i>long</i> one, which is what we set out to find. Incidentally, the mutual inductance, in this case, is</p>
+    <div class="eq">$$M=\mu_0\pi a^2n_1n_2l.$$</div>
+  </div>
+  <p>Suppose, now, that you <i>vary</i> the current in loop 1. The flux through loop 2 will vary accordingly, and Faraday’s law says this changing flux will induce an emf in loop 2:</p>
+  <div class="eq">$$\mathcal E_2=-\frac{d\Phi_2}{dt}=-M\frac{dI_1}{dt}. \tag{7.34}$$</div>
+  <p>(In quoting Eq. 7.31 – which was based on the Biot–Savart law – I am tacitly assuming that the currents change slowly enough for the system to be considered quasistatic.) What a remarkable thing: every time you change the current in loop 1, an induced current flows in loop 2 – even though there are no wires connecting them!</p>
+  <p>Come to it, a changing current not only induces an emf in any nearby loops, it also induces an emf in the source loop <i>itself</i> (Fig 7.33). Once again, the field (and therefore also the flux) is proportional to the current:</p>
+  <div class="eq">$$\Phi=LI. \tag{7.35}$$</div>
+  <p>The constant of proportionality $L$ is called the <b>self-inductance</b> (or simply the <b>inductance</b>) of the loop. As with $M$, it depends on the geometry (size and shape) of the loop. If the current changes, the emf induced in the loop is</p>
+  <div class="eq">$$\mathcal E=-L\frac{dI}{dt}. \tag{7.36}$$</div>
+  <p>Inductance is measured in <b>henries</b> (H); a henry is a volt-second per ampere.</p>
+  <div class="figbox">Fig. 7.33: loop carrying current $I$ with magnetic field lines $\mathbf B$ threading the loop. Schematic; see PDF page.</div>
+  <div class="pno">327</div>
+</div>
+
+<div class="sheet book" id="pdf-p31">
+  <div class="rh"><span>328</span><span>7 Electrodynamics</span></div>
+  <div class="ex">
+    <p><b>Example 7.12.</b> Find the self-inductance of a toroidal coil with rectangular cross section (inner radius $a$, outer radius $b$, height $h$) that carries a total of $N$ turns.</p>
+    <p><i>Solution.</i> The magnetic field inside the toroid is (Eq. 5.60)</p>
+    <div class="eq">$$B=\frac{\mu_0NI}{2\pi s}.$$</div>
+    <p>The flux through a single turn (Fig. 7.34) is</p>
+    <div class="eq">$$\int\mathbf B\cdot d\mathbf a=\frac{\mu_0NI}{2\pi}h\int_a^b\frac{1}{s}\,ds=\frac{\mu_0NIh}{2\pi}\ln\left(\frac{b}{a}\right).$$</div>
+    <p>The <i>total</i> flux is $N$ times this, so the self-inductance (Eq. 7.35) is</p>
+    <div class="eq">$$L=\frac{\mu_0N^2h}{2\pi}\ln\left(\frac{b}{a}\right). \tag{7.37}$$</div>
+    <div class="figbox">Fig. 7.34: rectangular cross section of the toroid, inner radius $a$, outer radius $b$, height $h$, with an element $ds$ at distance $s$ from the axis. Schematic; see PDF page.</div>
+  </div>
+  <p>Inductance (like capacitance) is an intrinsically <i>positive</i> quantity. Lenz’s law, which is enforced by the minus sign in Eq. 7.36, dictates that the emf is in such a direction as to <i>oppose</i> any <i>change in current</i>. For this reason, it is called a <b>back emf</b>. Whenever you try to alter the current in a wire, you must fight against this back emf. Inductance plays somewhat the same role in electric circuits that <i>mass</i> plays in mechanical systems: the greater $L$ is, the harder it is to change the current, just as the larger the mass, the harder it is to change an object’s velocity.</p>
+  <div class="ex">
+    <p><b>Example 7.13.</b> Suppose a current $I$ is flowing around a loop, when someone suddenly cuts the wire. The current drops “instantaneously” to zero. This generates a whopping back emf, for although $I$ may be small, $dI/dt$ is enormous. (That’s why you sometimes draw a spark when you unplug an iron or toaster – electromagnetic induction is desperately trying to keep the current going, even if it has to jump the gap in the circuit.)</p>
+    <p>Nothing so dramatic occurs when you plug <i>in</i> a toaster or iron. In this case induction opposes the sudden <i>increase</i> in current, prescribing instead a smooth and continuous buildup. Suppose, for instance, that a battery (which supplies a constant emf $\mathcal E_0$) is connected to a circuit of resistance $R$ and inductance $L$ (Fig. 7.35). What current flows?</p>
+  </div>
+  <div class="pno">328</div>
+</div>
+
+<div class="sheet book" id="pdf-p32">
+  <div class="rh"><span>329</span><span>7.2 Electromagnetic Induction</span></div>
+  <div class="ex-cont">
+    <div class="figbox">Fig. 7.35: circuit with inductance $L$, battery $\mathcal E_0$, a switch, and resistor $R$. Schematic; see PDF page.</div>
+    <p><i>Solution.</i> The total emf in this circuit is $\mathcal E_0$ from the battery plus $-L(dI/dt)$ from the inductance. Ohm’s law, then, says<sup>21</sup></p>
+    <div class="eq">$$\mathcal E_0-L\frac{dI}{dt}=IR.$$</div>
+    <p>This is a first-order differential equation for $I$ as a function of time. The general solution, as you can show for yourself, is</p>
+    <div class="eq">$$I(t)=\frac{\mathcal E_0}{R}+k\,e^{-(R/L)t},$$</div>
+    <p>where $k$ is a constant to be determined by the initial conditions. In particular, if you close the switch at time $t=0$, so $I(0)=0$, then $k=-\mathcal E_0/R$, and</p>
+    <div class="eq">$$I(t)=\frac{\mathcal E_0}{R}\left[1-e^{-(R/L)t}\right]. \tag{7.38}$$</div>
+    <p>This function is plotted in Fig. 7.36. Had there been no inductance in the circuit, the current would have jumped immediately to $\mathcal E_0/R$. In practice, <i>every</i> circuit has <i>some</i> self-inductance, and the current approaches $\mathcal E_0/R$ asymptotically. The quantity $\tau\equiv L/R$ is the <b>time constant</b>; it tells you how long the current takes to reach a substantial fraction (roughly two-thirds) of its final value.</p>
+    <div class="figbox">Fig. 7.36: graph of $I$ against $t$, rising from zero and approaching $\mathcal E_0/R$ asymptotically; marks at $L/R$, $2L/R$, $3L/R$. Schematic; see PDF page.</div>
+  </div>
+  <div class="prob">
+    <p><b>Problem 7.23.</b> A small loop of wire (radius $a$) is held a distance $z$ above the center of a large loop (radius $b$), as shown in Fig. 7.37. The planes of the two loops are parallel, and perpendicular to the common axis.</p>
+    <p>(a) Suppose current $I$ flows in the big loop. Find the flux through the little loop. (The little loop is so small that you may consider the field of the big loop to be essentially constant.)</p>
+  </div>
+  <p class="fn"><sup>21</sup> Notice that $-L(dI/dt)$ goes on the <i>left</i>-hand side of the equation – it is part of the emf that establishes the voltage across the resistor.</p>
+  <div class="pno">329</div>
+</div>
+
+<div class="sheet book" id="pdf-p33">
+  <div class="rh"><span>330</span><span>7 Electrodynamics</span></div>
+  <div class="prob">
+    <p>(b) Suppose current $I$ flows in the little loop. Find the flux through the big loop. (The little loop is so small that you may treat it as a magnetic dipole.)<br>
+    (c) Find the mutual inductances, and confirm that $M_{12}=M_{21}$.</p>
+    <div class="figrow">
+      <figure><div class="figbox">Fig. 7.37: small loop of radius $a$ held a distance $z$ above the centre of a large loop of radius $b$, planes parallel and perpendicular to the common axis. Schematic; see PDF page.</div><figcaption>Fig. 7.37</figcaption></figure>
+      <figure><div class="figbox">Fig. 7.38: “hairpin” loop of length $l$, with the two straight sections separated by a distance $d$. Schematic; see PDF page.</div><figcaption>Fig. 7.38</figcaption></figure>
+    </div>
+    <p><b>Problem 7.24.</b> A square loop of wire, of side $a$, lies midway between two long wires, $3a$ apart, and in the same plane. (Actually, the long wires are sides of a large rectangular loop, but the short ends are so far away that they can be ignored.) A clockwise current $I$ in the square loop is gradually increasing: $dI/dt=k$ (a constant). Find the emf induced in the big loop. Which way will the induced current flow?</p>
+    <p><b>Problem 7.25.</b> Find the self-inductance per unit length of a long solenoid, of radius $R$, carrying $n$ turns per unit length.</p>
+    <p><b>Problem 7.26.</b> Try computing the self-inductance of the “hairpin” loop shown in Fig. 7.38. (Neglect the contribution from the ends; most of the flux comes from the long straight section.) You’ll run into a snag that is characteristic of many self-inductance calculations. To get a definite answer, assume the wire has a tiny radius $\epsilon$, and ignore any flux through the wire itself.</p>
+    <p><b>Problem 7.27.</b> An alternating current $I(t)=I_0\cos(\omega t)$ (amplitude 0.5 A, frequency 60 Hz) flows down a straight wire, which runs along the axis of a toroidal coil with rectangular cross section (inner radius 1 cm, outer radius 2 cm, height 1 cm, 1000 turns). The coil is connected to a 500 $\Omega$ resistor.</p>
+    <p>(a) In the quasistatic approximation, what emf is induced in the toroid? Find the current, $I_R(t)$, in the resistor.<br>
+    (b) Calculate the back emf in the coil, due to the current $I_R(t)$. What is the ratio of the amplitudes of this back emf and the “direct” emf in (a)?</p>
+    <p><b>Problem 7.28.</b> A capacitor $C$ is charged up to a voltage $V$ and connected to an inductor $L$, as shown schematically in Fig. 7.39. At time $t=0$, the switch $S$ is closed. Find the current in the circuit as a function of time. How does your answer change if a resistor $R$ is included in series with $C$ and $L$?</p>
+    <div class="figbox">Fig. 7.39: capacitor $C$ and inductor $L$ in a loop with switch $S$. Schematic; see PDF page.</div>
+  </div>
+  <div class="pno">330</div>
+</div>
+
+<div class="sheet book" id="pdf-p34">
+  <div class="rh"><span>331</span><span>7.2 Electromagnetic Induction</span></div>
+  <h3 class="sub">7.2.4 Energy in Magnetic Fields</h3>
+  <p>It takes a certain amount of energy to start a current flowing in a circuit. I’m not talking about the energy delivered to the resistors and converted into heat – that is irretrievably lost, as far as the circuit is concerned, and can be large or small, depending on how long you let the current run. What I am concerned with, rather, is the work you must do <i>against the back emf</i> to get the current going. This is a <i>fixed</i> amount, and it is <i>recoverable</i>: you get it back when the current is turned off. In the meantime, it represents energy latent in the circuit; as we’ll see in a moment, it can be regarded as energy stored in the magnetic field.</p>
+  <p>The work done on a unit charge, against the back emf, in one trip around the circuit is $-\mathcal E$ (the minus sign records the fact that this is the work done <i>by</i> you <i>against</i> the emf, not the work done by the emf). The amount of charge per unit time passing down the wire is $I$. So the total work done per unit time is</p>
+  <div class="eq">$$\frac{dW}{dt}=-\mathcal EI=LI\frac{dI}{dt}.$$</div>
+  <p>If we start with zero current and build it up to a final value $I$, the work done (integrating the last equation over time) is</p>
+  <div class="eq">$$\boxed{W=\frac12LI^2.} \tag{7.39}$$</div>
+  <p>It does not depend on how <i>long</i> we take to crank up the current, only on the geometry of the loop (in the form of $L$) and the final current $I$.</p>
+  <p>There is a nicer way to write $W$, which has the advantage that it is readily generalized to surface and volume currents. Remember that the flux through the loop is equal to $LI$ (Eq. 7.35). On the other hand,</p>
+  <div class="eq">$$\Phi=\int\mathbf B\cdot d\mathbf a=\int(\nabla\times\mathbf A)\cdot d\mathbf a=\oint\mathbf A\cdot d\mathbf l,$$</div>
+  <p>where the line integral is around the perimeter of the loop. Thus</p>
+  <div class="eq">$$LI=\oint\mathbf A\cdot d\mathbf l,$$</div>
+  <p>and therefore</p>
+  <div class="eq">$$W=\frac12I\oint\mathbf A\cdot d\mathbf l=\frac12\oint(\mathbf A\cdot I)\,d\mathbf l. \tag{7.40}$$</div>
+  <p>In this form, the generalization to volume currents is obvious:</p>
+  <div class="eq">$$W=\frac12\int(\mathbf A\cdot\mathbf J)\,d\tau. \tag{7.41}$$</div>
+  <p>But we can do even better, and express $W$ entirely in terms of the magnetic field: Ampère’s law, $\nabla\times\mathbf B=\mu_0\mathbf J$, lets us eliminate $\mathbf J$:</p>
+  <div class="eq">$$W=\frac{1}{2\mu_0}\int\mathbf A\cdot(\nabla\times\mathbf B)\,d\tau. \tag{7.42}$$</div>
+  <div class="pno">331</div>
+</div>
+
+<div class="sheet book" id="pdf-p35">
+  <div class="rh"><span>332</span><span>7 Electrodynamics</span></div>
+  <p>Integration by parts transfers the derivative from $\mathbf B$ to $\mathbf A$; specifically, product rule 6 states that</p>
+  <div class="eq">$$\nabla\cdot(\mathbf A\times\mathbf B)=\mathbf B\cdot(\nabla\times\mathbf A)-\mathbf A\cdot(\nabla\times\mathbf B),$$</div>
+  <p>so</p>
+  <div class="eq">$$\mathbf A\cdot(\nabla\times\mathbf B)=\mathbf B\cdot\mathbf B-\nabla\cdot(\mathbf A\times\mathbf B).$$</div>
+  <p>Consequently,</p>
+  <div class="eq">$$W=\frac{1}{2\mu_0}\left[\int B^2\,d\tau-\int\nabla\cdot(\mathbf A\times\mathbf B)\,d\tau\right]=\frac{1}{2\mu_0}\left[\int_{\mathcal V}B^2\,d\tau-\oint_{\mathcal S}(\mathbf A\times\mathbf B)\cdot d\mathbf a\right], \tag{7.43}$$</div>
+  <p>where $\mathcal S$ is the surface bounding the volume $\mathcal V$.</p>
+  <p>Now, the integration in Eq. 7.41 is to be taken over the <i>entire volume occupied by the current</i>. But any region <i>larger</i> than this will do just as well, since $\mathbf J$ is zero out there anyway. In Eq. 7.43, the larger the region we pick the greater is the contribution from the volume integral, and therefore the smaller is that of the surface integral (this makes sense: as the surface gets farther from the current, both $\mathbf A$ and $\mathbf B$ decrease). In particular, if we agree to integrate over <i>all</i> space, then the surface integral goes to zero, and we are left with</p>
+  <div class="eq">$$\boxed{W=\frac{1}{2\mu_0}\int_{\text{all space}}B^2\,d\tau.} \tag{7.44}$$</div>
+  <p>In view of this result, we say the energy is “stored in the magnetic field,” in the amount $(B^2/2\mu_0)$ per unit volume. This is a nice way to think of it, though someone looking at Eq. 7.41 might prefer to say that the energy is stored in the <i>current distribution</i>, in the amount $\frac12(\mathbf A\cdot\mathbf J)$ per unit volume. The distinction is one of bookkeeping; the important quantity is the total energy $W$, and we need not worry about where (if anywhere) the energy is “located.” (The same issue arose in the case of <i>electro</i>static energy – Section 2.4.4.)</p>
+  <p>You might find it strange that it takes energy to set up a magnetic field – after all, magnetic fields <i>themselves</i> do no work. The point is that producing a magnetic field, where previously there was none, requires <i>changing</i> the field, and a changing $\mathbf B$-field, according to Faraday, induces an <i>electric</i> field. The latter, of course, <i>can</i> do work. In the beginning, there is no $\mathbf E$, and at the end there is no $\mathbf E$; but in between, while $\mathbf B$ is building up, there <i>is</i> an $\mathbf E$, and it is against <i>this</i> that the work is done. (You see why I could not calculate the energy stored in a magnetostatic field back in Chapter 5.) In light of this, it is extraordinary how similar the magnetic energy formulas are to their electrostatic counterparts:<sup>22</sup></p>
+  <p class="fn"><sup>22</sup> For an illuminating confirmation of Eq. 7.44, see the method of Prob. 2.45, using the method of T. H. Boyer, <i>Am. J. Phys.</i> <b>69</b>, 1 (2001).</p>
+  <div class="pno">332</div>
+</div>
+
+<div class="sheet book" id="pdf-p36">
+  <div class="rh"><span>333</span><span>7.2 Electromagnetic Induction</span></div>
+  <div class="eq">$$W_{\text{elec}}=\frac12\int(V\rho)\,d\tau=\frac{\epsilon_0}{2}\int E^2\,d\tau,$$</div>
+  <p class="eqref" style="text-align:right">(2.43 and 2.45)</p>
+  <div class="eq">$$W_{\text{mag}}=\frac12\int(\mathbf A\cdot\mathbf J)\,d\tau=\frac{1}{2\mu_0}\int B^2\,d\tau.$$</div>
+  <p class="eqref" style="text-align:right">(7.41 and 7.44)</p>
+  <div class="ex">
+    <p><b>Example 7.14.</b> A long coaxial cable carries current $I$ (the current flows down the surface of the inner cylinder, radius $a$, and back along the outer cylinder, radius $b$) as shown in Fig. 7.40. Find the magnetic energy stored in a section of length $l$.</p>
+    <div class="figbox">Fig. 7.40: long coaxial cable; inner cylinder of radius $a$ carries current $I$ in one direction, outer cylinder of radius $b$ carries it back. Schematic; see PDF page.</div>
+    <p><i>Solution.</i> According to Ampère’s law, the field between the cylinders is</p>
+    <div class="eq">$$\mathbf B=\frac{\mu_0I}{2\pi s}\hat{\boldsymbol\phi}.$$</div>
+    <p>Elsewhere, the field is zero. Thus, the energy per unit volume is</p>
+    <div class="eq">$$\frac{1}{2\mu_0}\left(\frac{\mu_0I}{2\pi s}\right)^2=\frac{\mu_0I^2}{8\pi^2s^2}.$$</div>
+    <p>The energy in a cylindrical shell of length $l$, radius $s$, and thickness $ds$, then, is</p>
+    <div class="eq">$$\left(\frac{\mu_0I^2}{8\pi^2s^2}\right)2\pi ls\,ds=\frac{\mu_0I^2l}{4\pi}\left(\frac{ds}{s}\right).$$</div>
+    <p>Integrating from $a$ to $b$, we have</p>
+    <div class="eq">$$W=\frac{\mu_0I^2l}{4\pi}\ln\left(\frac{b}{a}\right).$$</div>
+    <p>By the way, this suggests a very simple way to calculate the self-inductance of the cable. According to Eq. 7.39, the energy can also be written as $\frac12LI^2$. Comparing the two expressions,<sup>23</sup></p>
+    <div class="eq">$$L=\frac{\mu_0l}{2\pi}\ln\left(\frac{b}{a}\right).$$</div>
+    <p>This method of calculating self-inductance is especially useful when the current is not confined to a single path, but spreads over some surface or volume, so that different parts of the current enclose different amounts of flux. In such cases, it can be very tricky to get the inductance directly from Eq. 7.35, and it is best to let Eq. 7.39 <i>define</i> $L$.</p>
+  </div>
+  <p class="fn"><sup>23</sup> Notice the similarity to Eq. 7.37 – in a sense, the rectangular toroid <i>is</i> a short coaxial cable, turned on its side.</p>
+  <div class="pno">333</div>
+</div>
+
+<div class="sheet book" id="pdf-p37">
+  <div class="rh"><span>334</span><span>7 Electrodynamics</span></div>
+  <div class="prob">
+    <p><b>Problem 7.29.</b> Find the energy stored in a section of length $l$ of a long solenoid (radius $R$, current $I$, $n$ turns per unit length): (a) using Eq. 7.39 (you found $L$ in Prob. 7.25), (b) using Eq. 7.40 (we worked out $\mathbf A$ in Ex. 5.12), (c) using Eq. 7.44, and (d) using Eq. 7.43 (take as your volume the cylindrical tube from radius $a\lt R$ out to radius $b>R$).</p>
+    <p><b>Problem 7.30.</b> Calculate the energy stored in the toroidal coil of Ex. 7.12, by applying Eq. 7.44. Use the answer to check Eq. 7.37.</p>
+    <p><b>Problem 7.31.</b> A long cable carries current in one direction uniformly distributed over its (circular) cross section. The current returns along the surface (there is a very thin insulating sheath separating the currents). Find the self-inductance per unit length.</p>
+    <div class="figbox">Fig. 7.41: battery $\mathcal E_0$ with switch $S$ (positions $A$ and $B$), in series with inductor $L$ and resistor $R$. Schematic; see PDF page.</div>
+    <p><b>Problem 7.32.</b> Suppose the circuit in Fig. 7.41 has been connected for a long time when suddenly, at time $t=0$, switch $S$ is thrown from $A$ to $B$, bypassing the battery.</p>
+    <p>(a) What is the current at any subsequent time $t$?<br>
+    (b) What is the total energy delivered to the resistor?<br>
+    (c) Show that this is equal to the energy originally stored in the inductor.</p>
+    <p><b>Problem 7.33.</b> Two tiny wire loops, with areas $\mathbf a_1$ and $\mathbf a_2$, are situated a displacement $\mathcal R$ apart (Fig. 7.42).</p>
+    <div class="figbox">Fig. 7.42: two small loops with area vectors $\mathbf a_1$ and $\mathbf a_2$, separated by the displacement $\mathcal R$. Schematic; see PDF page.</div>
+    <p>(a) Find their mutual inductance. [<i>Hint:</i> Treat them as magnetic dipoles, and use Eq. 5.88.] Is your formula consistent with Eq. 7.33?<br>
+    (b) Suppose a current $I_1$ is flowing in loop 1, and we propose to turn on a current $I_2$ in loop 2. How much work must be done, against the mutually induced emf, to keep the current $I_1$ flowing in loop 1? In light of this result, comment on Eq. 6.35.</p>
+    <p><b>Problem 7.34.</b> An infinite cylinder of radius $R$ carries a uniform surface charge $\sigma$. We propose to set it spinning about its axis, at a final angular velocity $\omega_f$. How much work will this take, per unit length? Do it two ways, and compare your answers:</p>
+  </div>
+  <div class="pno">334</div>
+</div>
+
+<div class="sheet book" id="pdf-p38">
+  <div class="rh"><span>335</span><span>7.3 Maxwell’s Equations</span></div>
+  <div class="prob">
+    <p>(a) Find the magnetic field and the induced electric field (in the quasistatic approximation), inside and outside the cylinder, in terms of $\omega$, $\dot\omega$, and $s$ (the distance from the axis). Calculate the torque you must exert, and from that obtain the work done per unit length ($W=\int N\,d\phi$).<br>
+    (b) Use Eq. 7.44 to determine the energy stored in the resulting magnetic field.</p>
+  </div>
+  <h2 class="sec">7.3 Maxwell’s Equations</h2>
+  <h3 class="sub">7.3.1 Electrodynamics before Maxwell</h3>
+  <p>So far, we have encountered the following laws, specifying the divergence and curl of electric and magnetic fields:</p>
+  <div class="tbl-wrap">
+    <table class="tbl" style="width:auto;margin:6px auto">
+      <tr><td style="text-align:left">(i)&nbsp; $\nabla\cdot\mathbf E=\rho/\epsilon_0$</td><td style="text-align:left">(Gauss’s law),</td></tr>
+      <tr><td style="text-align:left">(ii)&nbsp; $\nabla\cdot\mathbf B=0$</td><td style="text-align:left">(no name),</td></tr>
+      <tr><td style="text-align:left">(iii)&nbsp; $\nabla\times\mathbf E=-\partial\mathbf B/\partial t$</td><td style="text-align:left">(Faraday’s law),</td></tr>
+      <tr><td style="text-align:left">(iv)&nbsp; $\nabla\times\mathbf B=\mu_0\mathbf J$</td><td style="text-align:left">(Ampère’s law).</td></tr>
+    </table>
+  </div>
+  <p>These equations represent the state of electromagnetic theory in the mid-nineteenth century, when Maxwell began his work. They were not written in so compact a form, in those days, but their physical content was familiar. Now, it happens that there is a fatal inconsistency in these formulas. It has to do with the old rule that divergence of curl is always zero. If you apply the divergence to number (iii), everything works out:</p>
+  <div class="eq">$$\nabla\cdot(\nabla\times\mathbf E)=\nabla\cdot\left(-\frac{\partial\mathbf B}{\partial t}\right)=-\frac{\partial}{\partial t}(\nabla\cdot\mathbf B).$$</div>
+  <p>The left-hand side is zero because divergence of curl is zero; the right-hand side is zero by virtue of equation (ii). But when you do the same thing to number (iv), you get into trouble:</p>
+  <div class="eq">$$\nabla\cdot(\nabla\times\mathbf B)=\mu_0(\nabla\cdot\mathbf J); \tag{7.45}$$</div>
+  <p>the left-hand side must be zero, but the right-hand side, in general, is <i>not</i>. For <i>steady</i> currents, the divergence of $\mathbf J$ is zero, but when we go beyond magnetostatics Ampère’s law cannot be right.</p>
+  <p>There’s another way to see that Ampère’s law is bound to fail for nonsteady currents. Suppose we’re in the process of charging up a capacitor (Fig. 7.43). In integral form, Ampère’s law reads</p>
+  <div class="eq">$$\oint\mathbf B\cdot d\mathbf l=\mu_0I_{\text{enc}}.$$</div>
+  <p>I want to apply it to the Ampèrian loop shown in the diagram. How do I determine $I_{\text{enc}}$? Well, it’s the total current passing through the loop, or, more precisely, the current piercing a surface that has the loop for</p>
+  <div class="pno">335</div>
+</div>
+
+<div class="sheet book" id="pdf-p39">
+  <div class="rh"><span>336</span><span>7 Electrodynamics</span></div>
+  <div class="figbox">Fig. 7.43: capacitor being charged by a battery through wires; an Ampèrian loop encircles one wire, with a plane surface and a balloon-shaped surface both bounded by it. Schematic; see PDF page.</div>
+  <p>its boundary. In this case, the <i>simplest</i> surface lies in the plane of the loop – the wire punctures this surface, so $I_{\text{enc}}=I$. Fine – but what if I draw instead the bubble-shaped surface in Fig. 7.43? <i>No</i> current passes through <i>this</i> surface, and I conclude that $I_{\text{enc}}=0$! We never had this problem in magnetostatics because the conflict arises only when charge is piling up somewhere (in this case, on the capacitor plates). But for <i>nonsteady</i> currents (such as this one) “the current enclosed by the loop” is an ill-defined notion; it depends entirely on what surface you use. (If this seems pedantic to you – “obviously one should use the plane surface” – remember that the Ampèrian loop could be some contorted shape that doesn’t even lie in a plane.)</p>
+  <p>Of course, we had no right to <i>expect</i> Ampère’s law to hold outside of magnetostatics; after all, we derived it from the Biot–Savart law. However, in Maxwell’s time there was no <i>experimental</i> reason to doubt that Ampère’s law was of wider validity. The flaw was a purely theoretical one, and Maxwell fixed it by purely theoretical arguments.</p>
+  <h3 class="sub">7.3.2 How Maxwell Fixed Ampère’s Law</h3>
+  <p>The problem is on the right-hand side of Eq. 7.45, which <i>should be</i> zero, but <i>isn’t</i>. Applying the continuity equation (Eq. 5.29) and Gauss’s law, the offending term can be rewritten:</p>
+  <div class="eq">$$\nabla\cdot\mathbf J=-\frac{\partial\rho}{\partial t}=-\frac{\partial}{\partial t}(\epsilon_0\nabla\cdot\mathbf E)=-\nabla\cdot\left(\epsilon_0\frac{\partial\mathbf E}{\partial t}\right).$$</div>
+  <p>If we were to combine $\epsilon_0(\partial\mathbf E/\partial t)$ with $\mathbf J$, in Ampère’s law, it would be just right to kill off the extra divergence:</p>
+  <div class="eq">$$\boxed{\nabla\times\mathbf B=\mu_0\mathbf J+\mu_0\epsilon_0\frac{\partial\mathbf E}{\partial t}.} \tag{7.46}$$</div>
+  <p>(Maxwell himself had other reasons for wanting to add this quantity to Ampère’s law. To him, the rescue of the continuity equation was a happy dividend rather than a primary motive. But today we recognize this</p>
+  <div class="pno">336</div>
+</div>
+
+<div class="sheet book" id="pdf-p40">
+  <div class="rh"><span>337</span><span>7.3 Maxwell’s Equations</span></div>
+  <p>argument as a far more compelling one than Maxwell’s, which was based on a now-discredited model of the ether.<sup>24</sup>)</p>
+  <p>Such a modification changes nothing, as far as magnetostatics is concerned: when $\mathbf E$ is constant, we still have $\nabla\times\mathbf B=\mu_0\mathbf J$. In fact, Maxwell’s term is hard to detect in ordinary electromagnetic experiments, where it must compete for attention with $\mathbf J$ – that’s why Faraday and the others never discovered it in the laboratory. However, it plays a crucial role in the propagation of electromagnetic waves, as we’ll see in Chapter 9.</p>
+  <p>Apart from curing the defect in Ampère’s law, Maxwell’s term has a certain aesthetic appeal: just as a changing <i>magnetic</i> field induces an <i>electric</i> field (Faraday’s law), so<sup>25</sup></p>
+  <div class="figbox"><b>a changing electric field induces a magnetic field.</b></div>
+  <p>Of course, theoretical convenience and aesthetic consistency are only <i>suggestive</i> – there might, after all, be other ways to doctor up Ampère’s law. The real confirmation of Maxwell’s theory came in 1888 with Hertz’s experiments on electromagnetic waves.</p>
+  <p>Maxwell called his extra term the <b>displacement current</b>:</p>
+  <div class="eq">$$\mathbf J_d\equiv\epsilon_0\frac{\partial\mathbf E}{\partial t}. \tag{7.47}$$</div>
+  <p>(It’s a misleading name; $\epsilon_0(\partial\mathbf E/\partial t)$ has nothing to do with current, except that it adds to $\mathbf J$ in Ampère’s law.) Let’s see now how displacement current resolves the paradox of the charging capacitor (Fig. 7.43). If the capacitor plates are very close together (I didn’t <i>draw</i> them that way, but the calculation is simpler if you assume this), then the electric field between them is</p>
+  <div class="eq">$$E=\frac{1}{\epsilon_0}\sigma=\frac{1}{\epsilon_0}\frac{Q}{A},$$</div>
+  <p>where $Q$ is the charge on the plate and $A$ is its area. Thus, between the plates,</p>
+  <div class="eq">$$\frac{\partial E}{\partial t}=\frac{1}{\epsilon_0A}\frac{dQ}{dt}=\frac{1}{\epsilon_0A}I.$$</div>
+  <p>Now, the “new, improved” Ampère’s law (Eq. 7.46) reads, in integral form,</p>
+  <div class="eq">$$\oint\mathbf B\cdot d\mathbf l=\mu_0I_{\text{enc}}+\mu_0\epsilon_0\int\left(\frac{\partial\mathbf E}{\partial t}\right)\cdot d\mathbf a. \tag{7.48}$$</div>
+  <p>If we choose the <i>flat</i> surface, then $E=0$ and $I_{\text{enc}}=I$. If, on the other hand, we use the balloon-shaped surface, then $I_{\text{enc}}=0$, but $\int(\partial\mathbf E/\partial t)\cdot d\mathbf a=I/\epsilon_0$. So we get the same answer for either surface, though in the first case it comes from the conduction current, and in the second from the displacement current.</p>
+  <p class="fn"><sup>24</sup> For the history of this subject, see A. M. Bork, <i>Am. J. Phys.</i> <b>31</b>, 854 (1963).</p>
+  <p class="fn"><sup>25</sup> See footnote 11 for commentary on the word “induce.” The same issue arises here: Should a changing electric field be regarded as an independent source of magnetic field (along with current)? In a proximate sense it does function as a source, but since the electric field itself was produced by charges and currents, they alone are the “ultimate” sources of $\mathbf E$ and $\mathbf B$. See S. E. Hill, <i>Phys. Teach.</i> <b>49</b>, 343 (2011); for a contrary view, see C. Savage, <i>Phys. Teach.</i> <b>50</b>, 226 (2012).</p>
+  <div class="pno">337</div>
+</div>
+
+<div class="sheet book" id="pdf-p41">
+  <div class="rh"><span>338</span><span>7 Electrodynamics</span></div>
+  <div class="ex">
+    <p><b>Example 7.15.</b> Imagine two concentric metal spherical shells (Fig. 7.44). The inner one (radius $a$) carries a charge $Q(t)$, and the outer one (radius $b$) an opposite charge $-Q(t)$. The space between them is filled with ohmic material of conductivity $\sigma$, so a radial current flows:</p>
+    <div class="eq">$$\mathbf J=\sigma\mathbf E=\sigma\frac{1}{4\pi\epsilon_0}\frac{Q}{r^2}\hat{\mathbf r},\qquad I=-\dot Q=\oint\mathbf J\cdot d\mathbf a=\frac{\sigma Q}{\epsilon_0}.$$</div>
+    <p>This configuration is spherically symmetrical, so the magnetic field has to be zero (the only direction it could possibly point is radial, and $\nabla\cdot\mathbf B=0\Rightarrow\oint\mathbf B\cdot d\mathbf a=B(4\pi r^2)=0$, so $\mathbf B=\mathbf 0$). What? I thought currents produce magnetic fields! Isn’t that what Biot–Savart and Ampère taught us? How can there be a $\mathbf J$ with no accompanying $\mathbf B$?</p>
+    <p><i>Solution.</i> This is not a static configuration: $Q$, $\mathbf E$, and $\mathbf J$ are all functions of time; Ampère and Biot–Savart do not apply. The displacement current</p>
+    <div class="eq">$$\mathbf J_d=\epsilon_0\frac{\partial\mathbf E}{\partial t}=\frac{1}{4\pi r^2}\dot Q\,\hat{\mathbf r}=-\sigma\frac{Q}{4\pi\epsilon_0r^2}\hat{\mathbf r}$$</div>
+    <p>exactly cancels the conduction current (in Eq. 7.46), and the magnetic field (determined by $\nabla\cdot\mathbf B=0$, $\nabla\times\mathbf B=\mathbf 0$) is indeed zero.</p>
+    <div class="figbox">Fig. 7.44: two concentric spherical shells, inner radius $a$ and outer radius $b$, with the conducting material between them and the current $\mathbf J$ directed radially outward. Schematic; see PDF page.</div>
+  </div>
+  <div class="prob">
+    <p><b>Problem 7.35.</b> A fat wire, radius $a$, carries a constant current $I$, uniformly distributed over its cross section. A narrow gap in the wire, of width $w\ll a$, forms a parallel-plate capacitor, as shown in Fig. 7.45. Find the magnetic field in the gap, at a distance $s\lt a$ from the axis.</p>
+    <div class="figbox">Fig. 7.45: fat wire of radius $a$ with a narrow gap of width $w$ forming a parallel-plate capacitor, carrying current $I$; plates marked $+\sigma$ and $-\sigma$. Schematic; see PDF page.</div>
+    <p><b>Problem 7.36.</b> The preceding problem was an artificial model for the charging capacitor, designed to avoid complications associated with the current spreading out over the surface of</p>
+  </div>
+  <div class="pno">338</div>
+</div>
+
+<div class="sheet book" id="pdf-p42">
+  <div class="rh"><span>339</span><span>7.3 Maxwell’s Equations</span></div>
+  <div class="prob">
+    <p>the plates. For a more realistic model, imagine <i>thin</i> wires that connect to the centers of the plates (Fig. 7.46a). Again, the current $I$ is constant, the radius of the capacitor is $a$, and the separation of the plates is $w\ll a$. Assume that the current flows out over the plates in such a way that the surface charge is uniform, at any given time, and is zero at $t=0$.</p>
+    <div class="figrow">
+      <figure><div class="figbox">Fig. 7.46(a): circular parallel plates of radius $a$ separated by $w$, with thin connecting wires carrying current $I$. Schematic; see PDF page.</div><figcaption>Fig. 7.46(a)</figcaption></figure>
+      <figure><div class="figbox">Fig. 7.46(b): cylindrical surface, open at the right-hand end, extending through the plate and outside the capacitor. Schematic; see PDF page.</div><figcaption>Fig. 7.46(b)</figcaption></figure>
+    </div>
+    <p>(a) Find the electric field between the plates, as a function of $t$.<br>
+    (b) Find the displacement current through a circle of radius $s$ in the plane midway between the plates. Using this circle as your “Ampèrian loop,” and the flat surface that spans it, find the magnetic field at a distance $s$ from the axis.<br>
+    (c) Repeat part (b), but this time use the cylindrical surface in Fig. 7.46b, which is open at the right-hand end and extends to the left through the plate and terminates outside the capacitor. Notice that the displacement current through this surface is zero, and there are two contributions to $I_{\text{enc}}$.<sup>26</sup></p>
+    <p><b>Problem 7.37.</b> Refer to Prob. 7.17, to which the correct answer was</p>
+    <div class="eq">$$\mathbf E(s,t)=\frac{\mu_0I_0\omega}{2\pi}\sin(\omega t)\ln\left(\frac{a}{s}\right)\hat{\mathbf z}.$$</div>
+    <p>(a) Find the displacement current density $\mathbf J_d$.<br>
+    (b) Integrate it to get the total displacement current, $I_d=\int\mathbf J_d\cdot d\mathbf a$.<br>
+    (c) Compare $I_d$ and $I$. (What’s their ratio?) If the outer cylinder were, say, 2 mm in diameter, how high would the frequency have to be, for $I_d$ to be 1 percent of $I$? [This problem is designed to indicate why Faraday never discovered displacement currents, and why it is ordinarily safe to ignore them unless the frequency is extremely high.]</p>
+    <p><b>Problem 7.38.</b> A conducting spherical shell (radius $R$, centered at the origin) is being charged by a steady current $I$ flowing up the $z$-axis and connected to the “south pole,” where it spreads out uniformly over the surface (see Fig. 7.47). The total charge on the sphere, at time $t$, is $Q(t)=It$. Find the magnetic field at a point $(r,\theta,\phi)$ exterior to the sphere. First decide what <i>direction</i> you think $\mathbf B$ points; then apply the Ampère/Maxwell law in integral form</p>
+  </div>
+  <p class="fn"><sup>26</sup> This problem raises an interesting quasi-philosophical question: If you measure $\mathbf B$ in the laboratory, have you detected the effects of displacement current (as (b) would suggest), or merely confirmed the effects of ordinary currents (as (c) implies)? See D. F. Bartlett, <i>Am. J. Phys.</i> <b>58</b>, 1168 (1990).</p>
+  <div class="pno">339</div>
+</div>
+
+<div class="sheet book" id="pdf-p43">
+  <div class="rh"><span>340</span><span>7 Electrodynamics</span></div>
+  <div class="prob">
+    <p>(Eq. 7.48) to an appropriate Ampèrian loop. In fact, do it three different ways: using (as the surface bounded by the Ampèrian loop) (a) a spherical cap north of the loop, (b) a spherical bowl south of the loop, and (c) a cone with vertex at the origin. (d) What does your result say for $\theta$ very near to $\pi$?<sup>27</sup></p>
+    <div class="figbox">Fig. 7.47: conducting sphere of radius $R$ with current $I$ entering at the south pole; loops (a), (b) and (c) bounding the surfaces, and angle $\theta$ measured from the $z$-axis. Schematic; see PDF page.</div>
+  </div>
+  <h3 class="sub">7.3.3 Maxwell’s Equations</h3>
+  <p>In the last section we put the finishing touches on Maxwell’s equations:<sup>28</sup></p>
+  <div class="ex" style="text-align:left">
+    <table class="tbl" style="width:100%;border:none">
+      <tr><td style="border:none;text-align:left">(i)&nbsp; $\nabla\cdot\mathbf E=\dfrac{1}{\epsilon_0}\rho$</td><td style="border:none;text-align:left">(Gauss’s law),</td><td style="border:none;text-align:right">(7.49)</td></tr>
+      <tr><td style="border:none;text-align:left">(ii)&nbsp; $\nabla\cdot\mathbf B=0$</td><td style="border:none;text-align:left">(no name),</td><td style="border:none"></td></tr>
+      <tr><td style="border:none;text-align:left">(iii)&nbsp; $\nabla\times\mathbf E=-\dfrac{\partial\mathbf B}{\partial t}$</td><td style="border:none;text-align:left">(Faraday’s law),</td><td style="border:none"></td></tr>
+      <tr><td style="border:none;text-align:left">(iv)&nbsp; $\nabla\times\mathbf B=\mu_0\mathbf J+\mu_0\epsilon_0\dfrac{\partial\mathbf E}{\partial t}$</td><td style="border:none;text-align:left">(Ampère’s law with Maxwell’s correction).</td><td style="border:none"></td></tr>
+    </table>
+  </div>
+  <p>Together with the Lorentz force law,</p>
+  <div class="eq">$$\mathbf F=q(\mathbf E+\mathbf v\times\mathbf B), \tag{7.50}$$</div>
+  <p>they summarize the entire theoretical content of classical electrodynamics<sup>29</sup> (save for some special properties of matter, which we encountered in Chapters 4 and 6). Even the continuity equation,</p>
+  <div class="eq">$$\nabla\cdot\mathbf J=-\frac{\partial\rho}{\partial t}, \tag{7.51}$$</div>
+  <p class="fn"><sup>27</sup> T. H. Boyer, <i>Am. J. Phys.</i> <b>87</b>, 729 (2019).</p>
+  <p class="fn"><sup>28</sup> Maxwell didn’t have access to modern vector notation (in particular, the del operator), and in his formulation there were actually 20 equations – including the potentials as well as the fields. It was Oliver Heaviside who distilled them into the tidy package we now know as “Maxwell’s equations.” See B. J. Hunt, <i>Physics Today</i> November 2012, p. 48.</p>
+  <p class="fn"><sup>29</sup> Like any differential equations, Maxwell’s must be supplemented by suitable <b>boundary conditions</b>. Because these are typically “obvious” from the context (for example, $\mathbf E$ and $\mathbf B$ go to zero at large distances from a localized charge distribution), it is easy to forget that they play an essential role.</p>
+  <div class="pno">340</div>
+</div>
+
+<div class="sheet book" id="pdf-p44">
+  <div class="rh"><span>341</span><span>7.3 Maxwell’s Equations</span></div>
+  <p>which is the mathematical expression of conservation of charge, can be derived from Maxwell’s equations by applying the divergence to number (iv).</p>
+  <p>I have written Maxwell’s equations in the traditional way, which emphasizes that they specify the divergence and curl of $\mathbf E$ and $\mathbf B$. In this form, they reinforce the notion that electric fields can be produced <i>either</i> by charges ($\rho$) <i>or</i> by changing magnetic fields ($\partial\mathbf B/\partial t$), and magnetic fields can be produced <i>either</i> by currents ($\mathbf J$) <i>or</i> by changing electric fields ($\partial\mathbf E/\partial t$). Actually, this is misleading, because $\partial\mathbf B/\partial t$ and $\partial\mathbf E/\partial t$ are <i>themselves</i> due to charges and currents. I think it is logically preferable to write</p>
+  <div class="ex" style="text-align:left">
+    <table class="tbl" style="width:100%;border:none">
+      <tr><td style="border:none;text-align:left">(i)&nbsp; $\nabla\cdot\mathbf E=\dfrac{1}{\epsilon_0}\rho,$</td><td style="border:none;text-align:left">(iii)&nbsp; $\nabla\times\mathbf E+\dfrac{\partial\mathbf B}{\partial t}=\mathbf 0,$</td><td style="border:none;text-align:right">(7.52)</td></tr>
+      <tr><td style="border:none;text-align:left">(ii)&nbsp; $\nabla\cdot\mathbf B=0,$</td><td style="border:none;text-align:left">(iv)&nbsp; $\nabla\times\mathbf B-\mu_0\epsilon_0\dfrac{\partial\mathbf E}{\partial t}=\mu_0\mathbf J.$</td><td style="border:none"></td></tr>
+    </table>
+  </div>
+  <p>with the fields ($\mathbf E$ and $\mathbf B$) on the left and the sources ($\rho$ and $\mathbf J$) on the right. This notation emphasizes that all electromagnetic fields are ultimately attributable to charges and currents. Maxwell’s equations tell you how <i>charges</i> produce <i>fields</i>; reciprocally, the force law tells you how <i>fields</i> affect <i>charges</i>.</p>
+  <div class="prob">
+    <p><b>Problem 7.39.</b> Suppose</p>
+    <div class="eq">$$\mathbf E(\mathbf r,t)=\frac{1}{4\pi\epsilon_0}\frac{q}{r^2}\,\theta(vt-r)\,\hat{\mathbf r},\qquad\mathbf B(\mathbf r,t)=\mathbf 0.$$</div>
+    <p>(The theta function is defined in Prob. 1.46b.) Show that these fields satisfy all of Maxwell’s equations, and determine $\rho$ and $\mathbf J$. Describe the physical situation that gives rise to these fields.</p>
+  </div>
+  <h3 class="sub">7.3.4 Magnetic Charge</h3>
+  <p>There is a pleasing symmetry to Maxwell’s equations; it is particularly striking in free space, where $\rho$ and $\mathbf J$ vanish:</p>
+  <div class="eq">$$\nabla\cdot\mathbf E=0,\qquad\nabla\times\mathbf E=-\frac{\partial\mathbf B}{\partial t},\qquad\nabla\cdot\mathbf B=0,\qquad\nabla\times\mathbf B=\mu_0\epsilon_0\frac{\partial\mathbf E}{\partial t}.$$</div>
+  <p>If you replace $\mathbf E$ by $\mathbf B$ and $\mathbf B$ by $-\mu_0\epsilon_0\mathbf E$, the first pair of equations turns into the second, and vice versa. This symmetry<sup>30</sup> between $\mathbf E$ and $\mathbf B$ is spoiled, though, by the charge term in Gauss’s law and the current term in Ampère’s law. You can’t help wondering why the corresponding quantities are “missing” from $\nabla\cdot\mathbf B=0$ and $\nabla\times\mathbf E=-\partial\mathbf B/\partial t$. What if we had</p>
+  <p class="fn"><sup>30</sup> Don’t be distracted by the pesky constants $\mu_0$ and $\epsilon_0$; these are present only because the SI system measures $\mathbf E$ and $\mathbf B$ in different units, and would not occur, for instance, in the Gaussian system.</p>
+  <div class="pno">341</div>
+</div>
+
+<div class="sheet book" id="pdf-p45">
+  <div class="rh"><span>342</span><span>7 Electrodynamics</span></div>
+  <div class="ex" style="text-align:left">
+    <table class="tbl" style="width:100%;border:none">
+      <tr><td style="border:none;text-align:left">(i)&nbsp; $\nabla\cdot\mathbf E=\dfrac{1}{\epsilon_0}\rho_e,$</td><td style="border:none;text-align:left">(iii)&nbsp; $\nabla\times\mathbf E=-\mu_0\mathbf J_m-\dfrac{\partial\mathbf B}{\partial t},$</td><td style="border:none;text-align:right">(7.53)</td></tr>
+      <tr><td style="border:none;text-align:left">(ii)&nbsp; $\nabla\cdot\mathbf B=\mu_0\rho_m,$</td><td style="border:none;text-align:left">(iv)&nbsp; $\nabla\times\mathbf B=\mu_0\mathbf J_e+\mu_0\epsilon_0\dfrac{\partial\mathbf E}{\partial t}.$</td><td style="border:none"></td></tr>
+    </table>
+  </div>
+  <p>Then $\rho_m$ would represent the density of magnetic “charge,” and $\rho_e$ the density of electric charge; $\mathbf J_m$ would be the current of magnetic charge, and $\mathbf J_e$ the current of electric charge. Both charges would be conserved:</p>
+  <div class="eq">$$\nabla\cdot\mathbf J_m=-\frac{\partial\rho_m}{\partial t}\qquad\text{and}\qquad\nabla\cdot\mathbf J_e=-\frac{\partial\rho_e}{\partial t}. \tag{7.54}$$</div>
+  <p>The former follows by application of the divergence to (iii), the latter by taking the divergence of (iv).</p>
+  <p>In a sense, Maxwell’s equations <i>beg</i> for magnetic charge to exist – it would fit in so nicely. And yet, in spite of a diligent search, no one has ever found any.<sup>31</sup> As far as we know, $\rho_m$ is zero everywhere, and so is $\mathbf J_m$; $\mathbf B$ is <i>not</i> on equal footing with $\mathbf E$: there exist stationary sources for $\mathbf E$ (electric charges) but none for $\mathbf B$. (This is reflected in the fact that magnetic multipole expansions have no monopole term, and magnetic dipoles consist of current loops, not separated north and south “poles.”) Apparently God just didn’t <i>make</i> any magnetic charge. (In <i>quantum</i> electrodynamics, by the way, it’s a more than merely aesthetic shame that magnetic charge does not seem to exist: Dirac showed that the existence of magnetic charge would explain why electric charge is <i>quantized</i>. See Prob. 8.21.)</p>
+  <div class="prob">
+    <p><b>Problem 7.40.</b> Assuming that “Coulomb’s law” for magnetic charges ($q_m$) reads</p>
+    <div class="eq">$$\mathbf F=\frac{\mu_0}{4\pi}\frac{q_{m1}q_{m2}}{r^2}\hat{\mathbf r}. \tag{7.55}$$</div>
+    <p>work out the force law for a monopole $q_m$ moving with velocity $\mathbf v$ through electric and magnetic fields $\mathbf E$ and $\mathbf B$.<sup>32</sup></p>
+    <p><b>Problem 7.41.</b> Suppose a magnetic monopole $q_m$ passes through a resistanceless loop of wire with self-inductance $L$. What current is induced in the loop?<sup>33</sup></p>
+  </div>
+  <p class="fn"><sup>31</sup> For an extensive bibliography, see A. S. Goldhaber and W. P. Trower, <i>Am. J. Phys.</i> <b>58</b>, 429 (1990).</p>
+  <p class="fn"><sup>32</sup> For interesting commentary, see W. Rindler, <i>Am. J. Phys.</i> <b>57</b>, 993 (1989).</p>
+  <p class="fn"><sup>33</sup> This is one of the methods used to search for monopoles in the laboratory; see B. Cabrera, <i>Phys. Rev. Lett.</i> <b>48</b>, 1378 (1982).</p>
+  <h3 class="sub">7.3.5 Maxwell’s Equations in Matter</h3>
+  <p>Maxwell’s equations in the form 7.49 are complete and correct as they stand. However, when you are working with materials that are subject to electric and magnetic polarization there is a more convenient way to write</p>
+  <div class="pno">342</div>
+</div>
+
+<div class="sheet book" id="pdf-p46">
+  <div class="rh"><span>343</span><span>7.3 Maxwell’s Equations</span></div>
+  <div class="figbox">Fig. 7.48: tube of polarized material with polarization $\mathbf P$ along its axis; surface charges $+\sigma_b$ and $-\sigma_b$ at the two ends; area element $da_\perp$. Schematic; see PDF page.</div>
+  <p>them. For inside polarized matter there will be accumulations of “bound” charge and current, over which you exert no direct control. It would be nice to reformulate Maxwell’s equations so as to make explicit reference only to the “free” charges and currents.</p>
+  <p>We have already learned, from the static case, that an electric polarization $\mathbf P$ produces a bound charge density</p>
+  <div class="eq">$$\rho_b=-\nabla\cdot\mathbf P \tag{7.56}$$</div>
+  <p>(Eq. 4.12). Likewise, a magnetic polarization (or “magnetization”) $\mathbf M$ results in a bound current</p>
+  <div class="eq">$$\mathbf J_b=\nabla\times\mathbf M \tag{7.57}$$</div>
+  <p>(Eq. 6.13). There’s just one new feature to consider in the nonstatic case: any <i>change</i> in the electric polarization involves a <i>flow</i> of (bound) charge, which must be included in the total current. For suppose we examine a tiny chunk of polarized material (Fig. 7.48). The polarization introduces a charge density $\sigma_b=P$ at one end and $-\sigma_b$ at the other (Eq. 4.11). If $P$ now <i>increases</i> a bit, the charge on each end increases accordingly, giving a net current</p>
+  <div class="eq">$$dI=\frac{\partial\sigma_b}{\partial t}\,da_\perp=\frac{\partial P}{\partial t}\,da_\perp.$$</div>
+  <p>The current density, therefore, is</p>
+  <div class="eq">$$\mathbf J_p=\frac{\partial\mathbf P}{\partial t}. \tag{7.58}$$</div>
+  <p>This <b>polarization current</b> has nothing to do with the <i>bound</i> current $\mathbf J_b$. The latter is associated with magnetization of the material and involves the spin and orbital motion of electrons; $\mathbf J_p$, by contrast, is the result of the linear motion of charge when the electric polarization changes. If $\mathbf P$ points to the right, and is increasing, then each plus charge moves a bit to the right and each minus charge to the left; the cumulative effect is the polarization current $\mathbf J_p$.</p>
+  <p>We ought to check that Eq. 7.58 is consistent with the continuity equation:</p>
+  <div class="eq">$$\nabla\cdot\mathbf J_p=\nabla\cdot\frac{\partial\mathbf P}{\partial t}=\frac{\partial}{\partial t}(\nabla\cdot\mathbf P)=-\frac{\partial\rho_b}{\partial t}.$$</div>
+  <p><i>Yes</i>: The continuity equation <i>is</i> satisfied; in fact, $\mathbf J_p$ is essential to ensure the conservation of bound charge. (Incidentally, a changing <i>magnetization</i> does <i>not</i> lead to any analogous accumulation of charge or current. The bound</p>
+  <div class="pno">343</div>
+</div>
+
+<div class="sheet book" id="pdf-p47">
+  <div class="rh"><span>344</span><span>7 Electrodynamics</span></div>
+  <p>current $\mathbf J_b=\nabla\times\mathbf M$ varies in response to changes in $\mathbf M$, to be sure, but that’s about it.)</p>
+  <p>In view of all this, the total charge density can be separated into two parts:</p>
+  <div class="eq">$$\rho=\rho_f+\rho_b=\rho_f-\nabla\cdot\mathbf P, \tag{7.59}$$</div>
+  <p>and the current density into <i>three</i> parts:</p>
+  <div class="eq">$$\mathbf J=\mathbf J_f+\mathbf J_b+\mathbf J_p=\mathbf J_f+\nabla\times\mathbf M+\frac{\partial\mathbf P}{\partial t}. \tag{7.60}$$</div>
+  <p>Gauss’s law can now be written as</p>
+  <div class="eq">$$\nabla\cdot\mathbf E=\frac{1}{\epsilon_0}(\rho_f-\nabla\cdot\mathbf P),$$</div>
+  <p>or</p>
+  <div class="eq">$$\nabla\cdot\mathbf D=\rho_f, \tag{7.61}$$</div>
+  <p>where, as in the static case,</p>
+  <div class="eq">$$\mathbf D\equiv\epsilon_0\mathbf E+\mathbf P. \tag{7.62}$$</div>
+  <p>Meanwhile, Ampère’s law (with Maxwell’s term) becomes</p>
+  <div class="eq">$$\nabla\times\mathbf B=\mu_0\left(\mathbf J_f+\nabla\times\mathbf M+\frac{\partial\mathbf P}{\partial t}\right)+\mu_0\epsilon_0\frac{\partial\mathbf E}{\partial t},$$</div>
+  <p>or</p>
+  <div class="eq">$$\nabla\times\mathbf H=\mathbf J_f+\frac{\partial\mathbf D}{\partial t}, \tag{7.63}$$</div>
+  <p>where, as before,</p>
+  <div class="eq">$$\mathbf H\equiv\frac{1}{\mu_0}\mathbf B-\mathbf M. \tag{7.64}$$</div>
+  <p>Faraday’s law and $\nabla\cdot\mathbf B=0$ are not affected by our separation of charge and current into free and bound parts, since they do not involve $\rho$ or $\mathbf J$.</p>
+  <p>In terms of <i>free</i> charges and currents, then, Maxwell’s equations read</p>
+  <div class="ex" style="text-align:left">
+    <table class="tbl" style="width:100%;border:none">
+      <tr><td style="border:none;text-align:left">(i)&nbsp; $\nabla\cdot\mathbf D=\rho_f,$</td><td style="border:none;text-align:left">(iii)&nbsp; $\nabla\times\mathbf E=-\dfrac{\partial\mathbf B}{\partial t},$</td><td style="border:none;text-align:right">(7.65)</td></tr>
+      <tr><td style="border:none;text-align:left">(ii)&nbsp; $\nabla\cdot\mathbf B=0,$</td><td style="border:none;text-align:left">(iv)&nbsp; $\nabla\times\mathbf H=\mathbf J_f+\dfrac{\partial\mathbf D}{\partial t}.$</td><td style="border:none"></td></tr>
+    </table>
+  </div>
+  <p>Some people regard these as the “true” Maxwell’s equations, but please understand that they are in <i>no way</i> more “general” than Eq. 7.49; they simply reflect a convenient division of charge and current into free and nonfree parts. And they have the disadvantage of hybrid notation, since they contain both $\mathbf E$ and $\mathbf D$, both $\mathbf B$ and $\mathbf H$. They must be supplemented, therefore, by appropriate <b>constitutive relations</b>, giving $\mathbf D$ and $\mathbf H$ in terms of $\mathbf E$ and $\mathbf B$. These depend on the nature of the material; for linear media,</p>
+  <div class="eq">$$\mathbf P=\epsilon_0\chi_e\mathbf E\qquad\text{and}\qquad\mathbf M=\chi_m\mathbf H, \tag{7.66}$$</div>
+  <div class="pno">344</div>
+</div>
+
+<div class="sheet book" id="pdf-p48">
+  <div class="rh"><span>345</span><span>7.3 Maxwell’s Equations</span></div>
+  <p>so</p>
+  <div class="eq">$$\mathbf D=\epsilon\mathbf E\qquad\text{and}\qquad\mathbf H=\frac{1}{\mu}\mathbf B, \tag{7.67}$$</div>
+  <p>where $\epsilon\equiv\epsilon_0(1+\chi_e)$ and $\mu\equiv\mu_0(1+\chi_m)$. You may remember that $\mathbf D$ is called the electric “displacement”; that’s why the second term in the Ampère/Maxwell equation (iv) came to be called the <b>displacement current</b>. In this context,</p>
+  <div class="eq">$$\mathbf J_d\equiv\frac{\partial\mathbf D}{\partial t}. \tag{7.68}$$</div>
+  <div class="prob">
+    <p><b>Problem 7.42.</b> Sea water at frequency $\nu=4\times10^8$ Hz has permittivity $\epsilon=81\epsilon_0$, permeability $\mu=\mu_0$, and resistivity $\rho=0.23\ \Omega\cdot$m. What is the (amplitude) ratio of conduction current to displacement current in sea water, at this frequency? [<i>Hint:</i> Consider a parallel-plate capacitor immersed in sea water and driven by a voltage $V_0\cos(2\pi\nu t)$.]</p>
+  </div>
+  <h3 class="sub">7.3.6 Boundary Conditions</h3>
+  <p>In general, the fields $\mathbf E$, $\mathbf B$, $\mathbf D$, and $\mathbf H$ will be discontinuous at a boundary between two different media, or at a surface that carries a charge density $\sigma$ or a current density $\mathbf K$. The explicit form of these discontinuities can be deduced from Maxwell’s equations (Eq. 7.65), in their integral form</p>
+  <div class="ex" style="text-align:left">
+    <table class="tbl" style="width:100%;border:none">
+      <tr><td style="border:none;text-align:left">(i)&nbsp; $\displaystyle\oint_{\mathcal S}\mathbf D\cdot d\mathbf a=Q_{f,\text{enc}},$</td><td style="border:none;text-align:left" rowspan="2">over any closed surface $\mathcal S$.</td></tr>
+      <tr><td style="border:none;text-align:left">(ii)&nbsp; $\displaystyle\oint_{\mathcal S}\mathbf B\cdot d\mathbf a=0,$</td></tr>
+      <tr><td style="border:none;text-align:left">(iii)&nbsp; $\displaystyle\oint_{\mathcal P}\mathbf E\cdot d\mathbf l=-\frac{d}{dt}\int_{\mathcal S}\mathbf B\cdot d\mathbf a,$</td><td style="border:none;text-align:left" rowspan="2">for any surface $\mathcal S$ bounded by the closed loop $\mathcal P$.</td></tr>
+      <tr><td style="border:none;text-align:left">(iv)&nbsp; $\displaystyle\oint_{\mathcal P}\mathbf H\cdot d\mathbf l=I_{\text{enc}}+\frac{d}{dt}\int_{\mathcal S}\mathbf D\cdot d\mathbf a,$</td></tr>
+    </table>
+  </div>
+  <p>Applying (i) to a tiny, wafer-thin Gaussian pillbox extending just slightly into the material on either side of the boundary (Fig. 7.49), we obtain</p>
+  <div class="eq">$$\mathbf D_{\text{above}}\cdot\mathbf a-\mathbf D_{\text{below}}\cdot\mathbf a=\sigma_f\,d.$$</div>
+  <p>(The positive direction for $\mathbf a$ is “upward.”) The edge of the wafer contributes nothing in the limit as the thickness goes to zero; nor does any volume charge density.) Thus, the component of $\mathbf D$ that is perpendicular to the interface is discontinuous in the amount</p>
+  <div class="eq">$$\boxed{D^{\perp}_{\text{above}}-D^{\perp}_{\text{below}}=\sigma_f.} \tag{7.69}$$</div>
+  <p>Identical reasoning, applied to equation (ii), yields</p>
+  <div class="eq">$$\boxed{B^{\perp}_{\text{above}}-B^{\perp}_{\text{below}}=0.} \tag{7.70}$$</div>
+  <div class="pno">345</div>
+</div>
+
+<div class="sheet book" id="pdf-p49">
+  <div class="rh"><span>346</span><span>7 Electrodynamics</span></div>
+  <div class="figbox">Fig. 7.49: thin Gaussian pillbox straddling a charged surface $\sigma_f$, with $\mathbf a$ pointing up, $\mathbf D_{\text{above}}$ above and $\mathbf D_{\text{below}}$ below the surface. Schematic; see PDF page.</div>
+  <p>Turning to (iii), a very thin Ampèrian loop straddling the surface gives</p>
+  <div class="eq">$$\mathbf E_{\text{above}}\cdot\mathbf l-\mathbf E_{\text{below}}\cdot\mathbf l=-\frac{d}{dt}\int_{\mathcal S}\mathbf B\cdot d\mathbf a.$$</div>
+  <p>But in the limit as the width of the loop goes to zero, the flux vanishes. (I have already dropped the contribution of the two ends to $\oint\mathbf E\cdot d\mathbf l$, on the same grounds.) Therefore,</p>
+  <div class="eq">$$\boxed{\mathbf E^{\parallel}_{\text{above}}-\mathbf E^{\parallel}_{\text{below}}=\mathbf 0.} \tag{7.71}$$</div>
+  <p>That is, the components of $\mathbf E$ <i>parallel</i> to the interface are continuous across the boundary. By the same token, (iv) implies</p>
+  <div class="eq">$$\mathbf H_{\text{above}}\cdot\mathbf l-\mathbf H_{\text{below}}\cdot\mathbf l=I_{f,\text{enc}},$$</div>
+  <p>where $I_{f,\text{enc}}$ is the free current passing through the Ampèrian loop. No <i>volume</i> current density will contribute (in the limit of infinitesimal width), but a <i>surface</i> current can. In fact, if $\hat{\mathbf n}$ is a unit vector perpendicular to the interface (pointing “upward”), so that $(\hat{\mathbf n}\times\mathbf l)$ is normal to the Ampèrian loop (Fig. 7.50), then</p>
+  <div class="eq">$$I_{f,\text{enc}}=\mathbf K_f\cdot(\hat{\mathbf n}\times\mathbf l)=(\mathbf K_f\times\hat{\mathbf n})\cdot\mathbf l,$$</div>
+  <p>and hence</p>
+  <div class="eq">$$\boxed{\mathbf H^{\parallel}_{\text{above}}-\mathbf H^{\parallel}_{\text{below}}=\mathbf K_f\times\hat{\mathbf n}.} \tag{7.72}$$</div>
+  <p>So the <i>parallel</i> components of $\mathbf H$ are discontinuous by an amount proportional to the free surface current density.</p>
+  <p>Equations 7.69–7.72 are the general boundary conditions for electrodynamics. In the case of <i>linear</i> media, they can be expressed in terms of $\mathbf E$ and $\mathbf B$ alone:</p>
+  <div class="pno">346</div>
+</div>
+
+<div class="sheet book" id="pdf-p50">
+  <div class="rh"><span>347</span><span>7.4 The Field of a Rotating Magnet</span></div>
+  <div class="figbox">Fig. 7.50: thin Ampèrian loop of width $l$ straddling a surface carrying free current $\mathbf K_f$; $\hat{\mathbf n}$ perpendicular to the surface, pointing up; regions marked “above” and “below”. Schematic; see PDF page.</div>
+  <div class="ex" style="text-align:left">
+    <table class="tbl" style="width:100%;border:none">
+      <tr><td style="border:none;text-align:left">(i)&nbsp; $\epsilon_{\text{above}}E^{\perp}_{\text{above}}-\epsilon_{\text{below}}E^{\perp}_{\text{below}}=\sigma_f,$</td><td style="border:none;text-align:right" rowspan="4">(7.73)</td></tr>
+      <tr><td style="border:none;text-align:left">(ii)&nbsp; $B^{\perp}_{\text{above}}-B^{\perp}_{\text{below}}=0,$</td></tr>
+      <tr><td style="border:none;text-align:left">(iii)&nbsp; $E^{\parallel}_{\text{above}}-E^{\parallel}_{\text{below}}=0,$</td></tr>
+      <tr><td style="border:none;text-align:left">(iv)&nbsp; $\dfrac{1}{\mu_{\text{above}}}B^{\parallel}_{\text{above}}-\dfrac{1}{\mu_{\text{below}}}B^{\parallel}_{\text{below}}=\mathbf K_f\times\hat{\mathbf n}.$</td></tr>
+    </table>
+  </div>
+  <p>In particular, if there is no free charge or free current at the interface, then</p>
+  <div class="ex" style="text-align:left">
+    <table class="tbl" style="width:100%;border:none">
+      <tr><td style="border:none;text-align:left">(i)&nbsp; $\epsilon_{\text{above}}E^{\perp}_{\text{above}}-\epsilon_{\text{below}}E^{\perp}_{\text{below}}=0,$</td><td style="border:none;text-align:right" rowspan="4">(7.74)</td></tr>
+      <tr><td style="border:none;text-align:left">(ii)&nbsp; $B^{\perp}_{\text{above}}-B^{\perp}_{\text{below}}=0,$</td></tr>
+      <tr><td style="border:none;text-align:left">(iii)&nbsp; $E^{\parallel}_{\text{above}}-E^{\parallel}_{\text{below}}=0,$</td></tr>
+      <tr><td style="border:none;text-align:left">(iv)&nbsp; $\dfrac{1}{\mu_{\text{above}}}B^{\parallel}_{\text{above}}-\dfrac{1}{\mu_{\text{below}}}B^{\parallel}_{\text{below}}=0.$</td></tr>
+    </table>
+  </div>
+  <p>As we shall see in Chapter 9, these equations are the basis for the theory of reflection and refraction.</p>
+  <h2 class="sec">7.4 The Field of a Rotating Magnet</h2>
+  <p>Imagine an axially symmetric magnet rotating at constant angular velocity about its axis – a cylindrical bar magnet, if you like, or for that matter the Earth itself (pretending that the magnetic axis coincides with the rotation axis). It is natural to wonder whether its magnetic field is stationary, or rotates with the magnet (or, as Arlo Guthrie would say, “Maybe it doesn’t even matter”). Are the field lines “dragged along” by the rotation of the source? Faraday did a series of experiments (variations on the disk experiment of Ex. 7.4) that appeared to settle the issue. Mounting the magnet along the axis of the disk he first held the magnet still while he rotated the disk (that’s the original version), and a current was generated in the circuit (Fig. 7.51). Then he allowed the magnet to rotate at the same rate as the disk; again a current was generated. Finally, he held the disk at rest and rotated the magnet. This time <i>no</i> current flowed. He concluded</p>
+  <div class="pno">347</div>
+</div>
+
+<div class="sheet book" id="pdf-p51">
+  <div class="rh"><span>348</span><span>7 Electrodynamics</span></div>
+  <div class="figrow">
+    <figure><div class="figbox">Fig. 7.51(a): disk rotating at $\omega$ above a stationary bar magnet (N above S), with the circuit connecting disk and axis. Schematic; see PDF page.</div><figcaption>Fig. 7.51(a)</figcaption></figure>
+    <figure><div class="figbox">Fig. 7.51(b): disk and magnet both rotating at $\omega$. Schematic; see PDF page.</div><figcaption>Fig. 7.51(b)</figcaption></figure>
+    <figure><div class="figbox">Fig. 7.51(c): magnet rotating at $\omega$, disk at rest. Schematic; see PDF page.</div><figcaption>Fig. 7.51(c)</figcaption></figure>
+  </div>
+  <p>that the field of the rotating magnet is the same as that of the stationary magnet: that’s why the first two experiments give the same result, and the third is just what you’d get if the magnet were at rest. Apparently a magnet rotating about its axis of symmetry does <i>not</i> drag the field around as it spins; the field lines are stationary.<sup>34</sup></p>
+  <p>And yet, if the magnet rotates about an axis <i>perpendicular</i> to its axis of symmetry, then it certainly <i>does</i> drag the field along with it. The field lines loop around from the north pole to the south pole, and that direction keeps changing. So not everyone accepted Faraday’s conclusion, until 1912 when experiments by S. J. Barnett finally led to a consensus that Faraday was right – in particular, the Earth’s magnetic field (or more precisely the part of it associated with rotation about the geographic north-south axis) does <i>not</i> rotate with the Earth.<sup>35</sup></p>
+  <p>But what exactly does it <i>mean</i> to say that the field lines do (or do not) rotate with their source? Faraday had a very concrete conception of field lines as a network of “wires” (or cobwebs) existing “out there” in space. In that case, to say that they are moving (or not) makes perfect sense. But in Maxwell’s theory it is <i>fields</i> that have real physical existence, and field <i>lines</i> are just constructs we devise (by joining up the arrows that represent the fields themselves) to help us visualize (and draw) the fields. And we have already learned that even <i>static</i> magnetic field lines can be problematic (Section 5.3.4).</p>
+  <p>Consider for a moment the electrical analog. Imagine a point charge at rest at the origin. Its (electric) field “radiates” out in all directions, and it is (obviously) constant in time (Fig. 7.52). The field lines are like spokes on a</p>
+  <div class="figrow">
+    <figure><div class="figbox">Fig. 7.52: radial field lines of a point charge at the origin, drawn at $t=0$, $t=1$ and $t=2$; labelled arrows $a$, $a'$, $a''$, $a'''$ mark the same field line at successive times. Schematic; see PDF page.</div><figcaption>Fig. 7.52</figcaption></figure>
+  </div>
+  <p class="fn"><sup>34</sup> If the magnetic field lines were moving, they would presumably have induced an electric field, just as they did in Fig. 7.21b.</p>
+  <p class="fn"><sup>35</sup> For the full history, see C. F. Chyba and K. P. Hand, <i>Phys. Rev. Appl.</i> <b>6</b>, 014017 (2016).</p>
+  <div class="pno">348</div>
+</div>
+
+<div class="sheet book" id="pdf-p52">
+  <div class="rh"><span>349</span><span>7.4 The Field of a Rotating Magnet</span></div>
+  <p>wheel (or rather pins in a pin cushion, in three dimensions). A moment later the picture looks exactly the same. But suppose I ask <i>which</i> field line at $t=1$ corresponds to the field line I labeled $a$ at $t=0$? It’s $a'$, obviously (I hear you say). Not so fast! Why not $a''$? That would still be a perfectly good field-line pattern, representing exactly the same field. The <i>labeling</i> of the field lines is completely arbitrary, with no physical content at all. If you prefer to say that the field line called $a$ (at $t=0$) “corresponds” to the field line $a''$ at $t=1$, and then to $a'''$ at $t=2$, and so on, more power to you! For you, the field lines rotate, even though the source does <i>not</i>. It’s not <i>wrong</i>, exactly (it describes the field correctly at every moment), it’s just <i>dumb</i> – a complicated and confusing way to think about something that is intrinsically simple and straightforward.</p>
+  <p>But suppose instead of a point charge we have a uniformly charged <i>sphere</i>, and it’s (uniformly) <i>rotating</i>. The electric field is exactly the same (for points outside), and it’s still static (because the charge <i>density</i> is constant in time). It is now accompanied by a (static) <i>magnetic</i> field, but that doesn’t alter the <i>electric</i> field. Now, however, it is not quite so dumb to wonder whether the electric field lines rotate with the sphere. Well, let ’em rotate, if it pleases you (you can even have them rotate at some completely different rate, about some other axis, if you want to be really perverse); this has nothing to do with <i>physics</i> – they represent the same electric <i>field</i> – it just has to do with how you choose to direct the field-line movie. Arlo was right: it doesn’t even matter. Field lines tell you two things: their density tells you the magnitude of the field, and the arrow tells you its direction. As long as they get those two things right, you can’t ask for more, because that’s <i>all there is to know</i> about the fields. <i>Which</i> field line at one moment corresponds to which field line at some other moment … that’s a metaphysical question; it has no “right” answer, because it is devoid of physical content. And for electric fields that’s pretty much the end of the story.</p>
+  <p>But the <i>magnetic</i> case is more pernicious, because of the $\mathbf v$ in the Lorentz force law. That’s the velocity of the charge … but relative to <i>what</i>? Nowadays we would answer “relative to whatever inertial reference frame you choose to work in – the frame in which the magnetic field is $\mathbf B$.” But if you conceive of magnetic field lines as “wires” out there in space, moving around in time, it is easy to persuade yourself (at any rate, it was in the nineteenth century) that $\mathbf v$ must be the velocity of the charge <i>relative to the field line</i> at that location. (Remember those electrical engineers talking about “cutting” field lines.) And if that is the case (which, I hasten to say, it is <i>not</i><sup>36</sup>) then it matters critically whether the field lines are dragged along with the rotation of the magnet. If they <i>are</i> dragged along, then Faraday should have found the same current when the magnet rotated and the disk was at rest as he did when the disk rotated and the magnet was at rest, and</p>
+  <p class="fn"><sup>36</sup> Footnote 34 was just plain <i>wrong</i>: moving magnetic field lines don’t induce electric fields – time-dependent <i>fields</i> do.</p>
+  <div class="pno">349</div>
+</div>
+
+<div class="sheet book" id="pdf-p53">
+  <div class="rh"><span>350</span><span>7 Electrodynamics</span></div>
+  <p>he should have seen <i>no</i> current when the two rotated together. But that’s the opposite of what he actually observed, so he concluded that the field lines are <i>not</i> dragged along by the rotation of the magnet. And similarly Barnett concluded that the Earth does not drag its magnetic field around as it rotates. It’s not an unreasonable inference, and in practice it is sometimes an illuminating way to picture how the field evolves in time. That’s why geophysicists, plasma physicists, and astrophysicists use this language. But it is a <i>choice</i>, not something forced by the laws of electrodynamics, so when you read about field lines being “dragged” around, ask yourself what precisely the author <i>means</i> by the statement, and remind yourself that field lines don’t come in different colors (or carry serial numbers) so you could keep track of individual lines from frame to frame in the movie.</p>
+  <h2 class="sec">More Problems on Chapter 7</h2>
+  <div class="prob">
+    <p><b>Problem 7.43.</b> <span class="flag">!</span> Two long, straight copper pipes, each of radius $a$, are held a distance $2d$ apart (see Fig. 7.53). One is at potential $V_0$, the other at $-V_0$. The space surrounding the pipes is filled with weakly conducting material of conductivity $\sigma$. Find the current per unit length that flows from one pipe to the other. [<i>Hint:</i> Refer to Prob. 3.14.]</p>
+    <div class="figbox">Fig. 7.53: two long pipes of radius $a$ with their centres $2d$ apart, at potentials $-V_0$ and $+V_0$, in material of conductivity $\sigma$. Schematic; see PDF page.</div>
+    <p><b>Problem 7.44.</b> <span class="flag">!</span> A rare case in which the electrostatic field $\mathbf E$ for a circuit can actually be <i>calculated</i> is the following:<sup>37</sup> Imagine an infinitely long cylindrical sheet, of uniform resistivity and radius $a$. A slot (corresponding to the battery) is maintained at $\pm V_0/2$, at $\phi=\pm\pi$, and a steady current flows over the surface, as indicated in Fig. 7.54. According to Ohm’s law, then,</p>
+    <div class="eq">$$V(a,\phi)=\frac{V_0\phi}{2\pi}\qquad(-\pi\lt \phi\lt +\pi).$$</div>
+    <p>(a) Use separation of variables in cylindrical coordinates to determine $V(s,\phi)$ inside and outside the cylinder. [<i>Answer:</i> $(V_0/\pi)\tan^{-1}[(s\sin\phi)/(a+s\cos\phi)]$ (for $s\lt a$); $(V_0/\pi)\tan^{-1}[(a\sin\phi)/(s+a\cos\phi)]$ (for $s>a$).]<br>
+    (b) Find the surface charge density on the cylinder. [<i>Answer:</i> $(\epsilon_0V_0/\pi a)\tan(\phi/2)$.]</p>
+  </div>
+  <p class="fn"><sup>37</sup> See M. A. Heald, <i>Am. J. Phys.</i> <b>52</b>, 522 (1984). See also J. A. Hernandes and A. K. T. Assis, <i>Phys. Rev. E</i> <b>68</b>, 046611 (2003).</p>
+  <div class="pno">350</div>
+</div>
+
+<div class="sheet book" id="pdf-p54">
+  <div class="rh"><span>351</span><span>More Problems on Chapter 7</span></div>
+  <div class="prob">
+    <div class="figbox">Fig. 7.54: infinitely long cylinder of radius $a$ with a slot at $\phi=\pm\pi$, the slot held at $\pm V_0/2$, and a surface current $\mathbf K$ flowing around the cylinder. Schematic; see PDF page.</div>
+    <p><b>Problem 7.45.</b> The magnetic field outside a long straight wire carrying a steady current $I$ is</p>
+    <div class="eq">$$\mathbf B=\frac{\mu_0}{2\pi}\frac{I}{s}\hat{\boldsymbol\phi}.$$</div>
+    <p>The electric field inside the wire is uniform:</p>
+    <div class="eq">$$\mathbf E=\frac{I\rho}{\pi a^2}\hat{\mathbf z},$$</div>
+    <p>where $\rho$ is the resistivity and $a$ is the radius (see Exs. 7.1 and 7.3). <i>Question:</i> What is the electric field <i>outside</i> the wire?<sup>38</sup> The answer depends on how you complete the circuit. Suppose the current returns along a perfectly conducting grounded coaxial cylinder of radius $b$ (Fig. 7.55). In the region $a\lt s\lt b$, the potential $V(s,z)$ satisfies Laplace’s equation, with the boundary conditions</p>
+    <div class="eq">$$\text{(i)}\quad V(a,z)=-\frac{I\rho z}{\pi a^2},\qquad\text{(ii)}\quad V(b,z)=0.$$</div>
+    <p>This does not suffice to determine the answer – we still need to specify boundary conditions at the two ends (though for a <i>long</i> wire it shouldn’t matter much). In the literature, it is customary to sweep this ambiguity under the rug by simply <i>stipulating</i> that $V(s,z)$ is proportional to $z$: $V(s,z)=zf(s)$. On this assumption:</p>
+    <p>(a) determine $f(s)$;<br>
+    (b) find $\mathbf E(s,z)$;<br>
+    (c) calculate the surface charge density $\sigma(z)$ on the wire.</p>
+    <div class="figbox">Fig. 7.55: long straight wire of radius $a$ carrying current $I$ along the $z$-axis, returning along a coaxial grounded cylinder of radius $b$. Schematic; see PDF page.</div>
+  </div>
+  <p class="fn"><sup>38</sup> This is a famous problem, first analyzed by Sommerfeld and others, and known in its most recent incarnation as <b>Merzbacher’s puzzle</b>. See A. Sommerfeld, <i>Electrodynamics</i>, Academic Press, New York (1952), p. 125; E. Merzbacher, <i>Am. J. Phys.</i> <b>48</b>, 178 (1980); further references in R. N. Varnay and L. H. Fisher, <i>Am. J. Phys.</i> <b>52</b>, 1097 (1984).</p>
+  <div class="pno">351</div>
+</div>
+
+<div class="sheet book" id="pdf-p55">
+  <div class="rh"><span>352</span><span>7 Electrodynamics</span></div>
+  <div class="prob">
+    <p>[<i>Answer:</i> $V=(-Iz\rho/\pi a^2)\,[\ln(s/b)/\ln(a/b)]$. This is a peculiar result, since $E_s$ and $\sigma(z)$ are <i>not</i> independent of $z$ – as one would certainly expect for a truly <i>infinite</i> wire.]</p>
+    <p><b>Problem 7.46.</b> Refer to Prob. 7.21 and Fig. 7.21b. As a quantitative model,<sup>39</sup> let the magnetic field be uniform ($-B_0\hat{\mathbf z}$) in the shaded region (width $w$), but taper off linearly in a slab of width $d$ at the left- and right-hand surfaces (Fig. 7.56). Choose axes with $x$ horizontal (to the right), $y$ vertical (upward), and $z$ coming out of the page, with the origin at the center of the left end of the wire loop. Set the clock so the left edge of the magnet passes the origin at $t=0$.</p>
+    <div class="figbox">Fig. 7.56: rectangular wire loop of height $h$ with a resistor, and a shaded region of field of width $w$ moving at speed $v$ ($vt$ marked), with tapered slabs of width $d$ at each edge. Five regions are numbered 1 to 5. Schematic; see PDF page.</div>
+    <p>(a) What is $\mathbf B(x,t)$ in each of the five regions? (Let the magnet extend indefinitely in the $y$ and $z$ directions.)<br>
+    (b) Differentiate to get $\partial\mathbf B/\partial t$, and specify the regions in which it is nonzero.<br>
+    (c) Find the induced electric field in region 3, and the resulting emf in the loop. Is it what you expected?</p>
+    <p><b>Problem 7.47.</b> In a <i>perfect conductor</i>, the conductivity is infinite, so $\mathbf E=\mathbf 0$ (Eq. 7.3), and any net charge resides on the surface (just as it does for an <i>im</i>perfect conductor, in electrostatics).</p>
+    <p>(a) Show that the magnetic field is constant ($\partial\mathbf B/\partial t=\mathbf 0$), inside a perfect conductor.<br>
+    (b) Show that the magnetic flux through a (stationary) perfectly conducting loop is constant.</p>
+    <p>A <b>superconductor</b> is a perfect conductor with the additional property that (the constant) $\mathbf B$ inside is in fact <i>zero</i>. (This “flux exclusion” is known as the <b>Meissner effect</b>.<sup>40</sup>)</p>
+    <p>(c) Show that the current in a superconductor is confined to the surface.<br>
+    (d) Superconductivity is lost above a certain critical temperature ($T_c$), which varies from one material to another. Suppose you had a sphere (radius $a$) above its critical temperature, and you held it in a uniform magnetic field $B_0\hat{\mathbf z}$ while cooling it below $T_c$. Find the induced surface current density $\mathbf K$, as a function of the polar angle $\theta$.</p>
+  </div>
+  <p class="fn"><sup>39</sup> This problem was suggested by Martin Ligare.</p>
+  <p class="fn"><sup>40</sup> The Meissner effect is sometimes referred to as “perfect diamagnetism,” in the sense that the field inside is not merely <i>reduced</i>, but canceled entirely. However, the surface currents responsible for this are <i>free</i>, not bound, so the actual <i>mechanism</i> is quite different.</p>
+  <div class="pno">352</div>
+</div>
+
+<div class="sheet book" id="pdf-p56">
+  <div class="rh"><span>353</span><span>More Problems on Chapter 7</span></div>
+  <div class="prob">
+    <p><b>Problem 7.48.</b> A familiar demonstration of superconductivity (Prob. 7.47) is the levitation of a magnet over a piece of superconducting material. This phenomenon can be analyzed using the method of images.<sup>41</sup> Treat the magnet as a perfect dipole $\mathbf m$, a height $z$ above the origin (and constrained to point in the $z$ direction), and pretend that the superconductor occupies the entire half-space below the $xy$ plane. Because of the Meissner effect, $\mathbf B=\mathbf 0$ for $z\le0$, and since $\mathbf B$ is divergenceless, the normal ($z$) component is continuous, so $B_z=0$ just <i>above</i> the surface. This boundary condition is met by the image configuration in which an identical dipole is placed at $-z$, as a stand-in for the superconductor; the two arrangements therefore produce the same magnetic field in the region $z>0$.</p>
+    <p>(a) Which way should the image dipole point ($+z$ or $-z$)?<br>
+    (b) Find the force on the magnet due to the induced currents in the superconductor (which is to say, the force due to the image dipole). Set it equal to $Mg$ (where $M$ is the mass of the magnet) to determine the height $h$ at which the magnet will “float.” [<i>Hint:</i> Refer to Prob. 6.3.]<br>
+    (c) The induced current on the surface of the superconductor (the $xy$ plane) can be determined from the boundary condition on the <i>tangential</i> component of $\mathbf B$ (Eq. 5.76): $\mathbf B=\mu_0(\mathbf K\times\hat{\mathbf z})$. Using the field you get from the image configuration, show that</p>
+    <div class="eq">$$\mathbf K=-\frac{3mrh}{2\pi(r^2+h^2)^{5/2}}\hat{\boldsymbol\phi},$$</div>
+    <p>where $r$ is the distance from the origin.</p>
+    <p><span class="flag">!</span> <b>Problem 7.49.</b> If a magnetic dipole levitating above an infinite superconducting plane (Prob. 7.48) is free to rotate, what orientation will it adopt, and how high above the surface will it float?</p>
+    <p><b>Problem 7.50.</b> A perfectly conducting spherical shell of radius $a$ rotates about the $z$-axis with angular velocity $\omega$, in a uniform magnetic field $\mathbf B=B_0\hat{\mathbf z}$. Calculate the emf developed between the “north pole” and the equator. (Imagine that there are sliding contacts, as in Fig. 7.15.) [<i>Answer:</i> $\tfrac12B_0\omega a^2$.]</p>
+    <p><span class="flag">!</span> <b>Problem 7.51.</b> Refer to Prob. 7.11 (and use the result of Prob. 5.45): How long does it take a falling <i>circular</i> ring (radius $a$, mass $m$, resistance $R$) to cross the bottom of the magnetic field $B$, at its (changing) terminal velocity?</p>
+    <p><b>Problem 7.52.</b></p>
+    <p>(a) Referring to Prob. 5.55a and Eq. 7.27, show that</p>
+    <div class="eq">$$\mathbf E=-\frac{\partial\mathbf A}{\partial t}, \tag{7.75}$$</div>
+    <p>for Faraday-induced electric fields. Check this result by taking the divergence and curl of both sides.</p>
+  </div>
+  <p class="fn"><sup>41</sup> W. M. Saslow, <i>Am. J. Phys.</i> <b>59</b>, 16 (1991).</p>
+  <div class="pno">353</div>
+</div>
+
+<div class="sheet book" id="pdf-p57">
+  <div class="rh"><span>354</span><span>7 Electrodynamics</span></div>
+  <div class="prob">
+    <p>(b) A spherical shell of radius $R$ carries a uniform surface charge $\sigma$. It spins about a fixed axis at an angular velocity $\omega(t)$ that changes slowly with time. Find the electric field inside and outside the sphere. [<i>Hint:</i> There are <i>two</i> contributions here: the Coulomb field due to the charge, and the Faraday field due to the changing $\mathbf B$. Refer to Ex. 5.11.]</p>
+    <p><b>Problem 7.53.</b> Electrons undergoing cyclotron motion can be sped up by increasing the magnetic field; the accompanying electric field will impart tangential acceleration. This is the principle of the <b>betatron</b>. One would like to keep the radius of the orbit constant during the process. Show that this can be achieved by designing a magnet such that the average field over the area of the orbit is twice the field at the circumference (Fig. 7.57). Assume the electrons start from rest in zero field, and that the apparatus is symmetric about the center of the orbit. (Assume also that the electron velocity remains well below the speed of light, so that nonrelativistic mechanics applies.) [<i>Hint:</i> Differentiate Eq. 5.3 with respect to time, and use $\mathbf F=m\mathbf a=q\mathbf E$.]</p>
+    <div class="figrow">
+      <figure><div class="figbox">Fig. 7.57: betatron magnet with its pole pieces; electron orbit of radius $r$ in the field $\mathbf B$ around the centre. Schematic; see PDF page.</div><figcaption>Fig. 7.57</figcaption></figure>
+      <figure><div class="figbox">Fig. 7.58: infinite wire along $\hat{\mathbf z}$ carrying current $I$ and moving in the $y$ direction at speed $v$; axes $x$, $y$, $z$. Schematic; see PDF page.</div><figcaption>Fig. 7.58</figcaption></figure>
+    </div>
+    <p><b>Problem 7.54.</b> An infinite wire carrying a constant current $I$ in the $\hat{\mathbf z}$ direction is moving in the $y$ direction at a constant speed $v$. Find the electric field, in the quasistatic approximation, at the instant the wire coincides with the $z$-axis (Fig. 7.58). [<i>Answer:</i> $-(\mu_0Iv/2\pi s)\sin\phi\,\hat{\mathbf z}$.]</p>
+    <p><b>Problem 7.55.</b> An atomic electron (charge $q$) circles about the nucleus (charge $Q$) in an orbit of radius $r$; the centripetal acceleration is provided, of course, by the Coulomb attraction of opposite charges. Now a small magnetic field $dB$ is slowly turned on, perpendicular to the plane of the orbit. Show that the increase in kinetic energy, $dT$, imparted by the induced electric field, is just right to sustain circular motion <i>at the same radius $r$</i>. (That’s why, in my discussion of diamagnetism, I assumed the radius is fixed. See Section 6.1.3 and the references cited there.)</p>
+    <p><b>Problem 7.56.</b> The current in a long solenoid is increasing linearly with time, so the flux is proportional to $t$: $\Phi=\alpha t$. Two voltmeters are connected to diametrically opposite points ($A$ and $B$), together with resistors ($R_1$ and $R_2$), as shown in Fig. 7.59. What is the reading on each voltmeter? Assume that these are <i>ideal</i> voltmeters that draw negligible current (they have huge internal resistance), and that a voltmeter registers $-\int_a^b\mathbf E\cdot d\mathbf l$ between the terminals</p>
+  </div>
+  <div class="pno">354</div>
+</div>
+
+<div class="sheet book" id="pdf-p58">
+  <div class="rh"><span>355</span><span>More Problems on Chapter 7</span></div>
+  <div class="prob">
+    <p>and through the meter. [<i>Answer:</i> $V_1=\alpha R_1/(R_1+R_2)$; $V_2=-\alpha R_2/(R_1+R_2)$. Notice that $V_1\neq V_2$, even though they are connected to the same points!<sup>42</sup>]</p>
+    <div class="figbox">Fig. 7.59: solenoid with a circular cross-section, points $A$ and $B$ at diametrically opposite positions, resistors $R_1$ and $R_2$ and voltmeters $V_1$ and $V_2$ connected between points $a$ and $b$. Schematic; see PDF page.</div>
+    <p><b>Problem 7.57.</b> A circular wire loop (radius $r$, resistance $R$) encloses a region of uniform magnetic field, $B$, perpendicular to its plane. The field (occupying the shaded region in Fig. 7.60) increases linearly with time ($B=\alpha t$). An ideal voltmeter (infinite internal resistance) is connected between points $P$ and $Q$.</p>
+    <div class="figbox">Fig. 7.60: circular loop of radius $r$ with a shaded field region; voltmeter $V$ connected across chord $PQ$ subtending $90^{\circ}$ at the centre. Schematic; see PDF page.</div>
+    <p>(a) What is the current in the loop?<br>
+    (b) What does the voltmeter read? [<i>Answer:</i> $\alpha r^2/2$.]</p>
+    <p><b>Problem 7.58.</b> In the discussion of motional emf (Section 7.1.3) I assumed that the wire loop (Fig. 7.10) has a resistance $R$; the current generated is then $I=vBh/R$. But what if the wire is made out of perfectly conducting material, so that $R$ is zero? In that case, the current is limited only by the back emf associated with the self-inductance of the loop (which would ordinarily be negligible in comparison with $IR$). As a model, let’s simply replace the resistor by an inductor, $L$. Show that in this régime the loop (mass $m$) executes simple harmonic motion, and find its frequency.<sup>43</sup> [<i>Answer:</i> $\omega=Bh/\sqrt{mL}$.]</p>
+    <p><b>Problem 7.59.</b></p>
+    <p>(a) Use the Neumann formula (Eq. 7.32) to calculate the mutual inductance of the configuration in Fig. 7.37, assuming $a$ is very small ($a\ll b$, $a\ll z$). Compare your answer to Prob. 7.23.</p>
+  </div>
+  <p class="fn"><sup>42</sup> See R. H. Romer, <i>Am. J. Phys.</i> <b>50</b>, 1089 (1982). See also H. W. Nicholson, <i>Am. J. Phys.</i> <b>73</b>, 1194 (2005); B. H. McGuyer, <i>Am. J. Phys.</i> <b>80</b>, 101 (2012).</p>
+  <p class="fn"><sup>43</sup> For a collection of related problems, see W. M. Saslow, <i>Am. J. Phys.</i> <b>55</b>, 986 (1987); R. H. Romer, <i>Eur. J. Phys.</i> <b>11</b>, 103 (1990).</p>
+  <div class="pno">355</div>
+</div>
+
+<div class="sheet book" id="pdf-p59">
+  <div class="rh"><span>356</span><span>7 Electrodynamics</span></div>
+  <div class="prob">
+    <p>(b) For the general case (not assuming $a$ is small), show that</p>
+    <div class="eq">$$M=\frac{\mu_0\pi\beta}{2}\sqrt{ab\beta}\left(1+\frac{15}{8}\beta^2+\cdots\right),$$</div>
+    <p>where</p>
+    <div class="eq">$$\beta\equiv\frac{ab}{z^2+a^2+b^2}.$$</div>
+  </div>
+  <p><b>Problem 7.60.</b> Two coils are wrapped around a cylindrical form in such a way that the <i>same</i> flux passes through every turn of both coils. (In practice this is achieved by inserting an iron core through the cylinder; this has the effect of concentrating the flux.) The <b>primary</b> coil has $N_1$ turns and the <b>secondary</b> has $N_2$ (Fig. 7.61). If the current $I$ in the primary is changing, show that the emf in the secondary is given by</p>
+  <div class="eq">$$\frac{\mathcal E_2}{\mathcal E_1}=\frac{N_2}{N_1}, \tag{7.76}$$</div>
+  <p>where $\mathcal E_1$ is the (back) emf of the primary. [This is a primitive <b>transformer</b> – a device for raising or lowering the emf of an alternating current source. By choosing the appropriate number of turns, any desired secondary emf can be obtained. If you think this violates the conservation of energy, study Prob. 7.61.]</p>
+  <div class="figbox">Fig. 7.61: cylindrical form with primary coil ($N_1$ turns) and secondary coil ($N_2$ turns) wound on it. Schematic; see PDF page.</div>
+  <div class="prob">
+    <p><b>Problem 7.61.</b> A transformer (Prob. 7.60) takes an input AC voltage of amplitude $V_1$, and delivers an output voltage of amplitude $V_2$, which is determined by the turns ratio ($V_2/V_1=N_2/N_1$). If $N_2>N_1$, the output voltage is greater than the input voltage. Why doesn’t this violate conservation of energy? [<i>Answer:</i> Power is the product of voltage and current; if the voltage goes <i>up</i>, the current must come <i>down</i>. The purpose of this problem is to see exactly how this works out, in a simplified model.]</p>
+    <p>(a) In an ideal transformer, the same flux passes through all turns of the primary and of the secondary. Show that in this case $M^2=L_1L_2$, where $M$ is the mutual inductance of the coils, and $L_1$, $L_2$ are their individual self-inductances.<br>
+    (b) Suppose the primary is driven with AC voltage $V_{\text{in}}=V_1\cos(\omega t)$, and the secondary is connected to a resistor, $R$. Show that the two currents satisfy the relations</p>
+  </div>
+  <div class="pno">356</div>
+</div>
+
+<div class="sheet book" id="pdf-p60">
+  <div class="rh"><span>357</span><span>More Problems on Chapter 7</span></div>
+  <div class="prob">
+    <div class="eq">$$L_1\frac{dI_1}{dt}+M\frac{dI_2}{dt}=V_1\cos(\omega t),\qquad L_2\frac{dI_2}{dt}+M\frac{dI_1}{dt}=-I_2R.$$</div>
+    <p>(c) Using the result in (a), solve these equations for $I_1(t)$ and $I_2(t)$. (Assume $I_1$ has no DC component.)<br>
+    (d) Show that the output voltage ($V_{\text{out}}=I_2R$) divided by the input voltage ($V_{\text{in}}$) is equal to the turns ratio: $V_{\text{out}}/V_{\text{in}}=N_2/N_1$.<br>
+    (e) Calculate the input power ($P_{\text{in}}=V_{\text{in}}I_1$) and the output power ($P_{\text{out}}=V_{\text{out}}I_2$), and show that their averages over a full cycle are equal.</p>
+    <p><b>Problem 7.62.</b> An infinite wire runs along the $z$-axis; it carries a current $I(z)$ that is a function of $z$ (but not of $t$), and a charge density $\lambda(t)$ that is a function of $t$ (but not of $z$).</p>
+    <p>(a) By examining the charge flowing into a segment $dz$ in a time $dt$, show that $d\lambda/dt=-dI/dz$. If we stipulate that $\lambda(0)=0$ and $I(0)=0$, show that $\lambda(t)=kt$, $I(z)=-kz$, where $k$ is a constant.<br>
+    (b) Assume for a moment that the process is quasistatic, so the fields are given by Eqs. 2.9 and 5.38. Show that these are in fact the <i>exact</i> fields, by confirming that all four of Maxwell’s equations are satisfied. (First do it in differential form, for the region $s>0$, then in integral form for the appropriate Gaussian cylinder/Ampèrian loop straddling the axis.)</p>
+    <p><b>Problem 7.63.</b> Suppose $\mathbf J(\mathbf r)$ is constant in time but $\rho(\mathbf r,t)$ is <i>not</i> – conditions that might prevail, for instance, during the charging of a capacitor.</p>
+    <p>(a) Show that the charge density at any particular point is a linear function of time:</p>
+    <div class="eq">$$\rho(\mathbf r,t)=\rho(\mathbf r,0)+\dot\rho(\mathbf r,0)\,t,$$</div>
+    <p>where $\dot\rho(\mathbf r,0)$ is the time derivative of $\rho$ at $t=0$. [<i>Hint:</i> Use the continuity equation.]</p>
+  </div>
+  <p>This is <i>not</i> an electrostatic or magnetostatic configuration;<sup>44</sup> nevertheless, rather surprisingly, both Coulomb’s law (Eq. 2.8) and the Biot–Savart law (Eq. 5.42) hold, as you can confirm by showing that they satisfy Maxwell’s equations.</p>
+  <div class="prob">
+    <p>(b) Show that</p>
+    <div class="eq">$$\mathbf B(\mathbf r)=\frac{\mu_0}{4\pi}\int\frac{\mathbf J(\mathbf r')\times\hat{\mathbf r}}{r^2}\,d\tau'$$</div>
+    <p>obeys Ampère’s law <i>with Maxwell’s displacement current term</i> (though $\mathbf J$, here, is the ordinary (conduction) current, and does not include the displacement current).</p>
+    <p><b>Problem 7.64.</b> The magnetic field of an infinite straight wire carrying a steady current $I$ can be obtained from the <i>displacement</i> current term in the Ampère/Maxwell law, as follows: Picture</p>
+  </div>
+  <p class="fn"><sup>44</sup> Some authors <i>would</i> regard this as magnetostatic, since $\mathbf B$ is independent of $t$. For them, the Biot–Savart law is a general rule of magnetostatics, but $\nabla\cdot\mathbf J=0$ and $\nabla\times\mathbf B=\mu_0\mathbf J$ apply only under the <i>additional</i> assumption that $\rho$ is constant. In such a formulation, Maxwell’s displacement term can (in this very special case) be <i>derived</i> from the Biot–Savart law, by the method of part (b). See D. F. Bartlett, <i>Am. J. Phys.</i> <b>58</b>, 1168 (1990); D. J. Griffiths and M. A. Heald, <i>Am. J. Phys.</i> <b>59</b>, 111 (1991).</p>
+  <div class="pno">357</div>
+</div>
+
+<div class="sheet book" id="pdf-p61">
+  <div class="rh"><span>358</span><span>7 Electrodynamics</span></div>
+  <div class="prob">
+    <p>the current as consisting of a uniform line charge $\lambda$ moving along the $z$-axis at speed $v$ (so that $I=\lambda v$), with a tiny gap of length $\epsilon$, which reaches the origin at time $t=0$. In the next instant (up to $t=\epsilon/v$) there is no <i>real</i> current passing through a circular Ampèrian loop in the $xy$ plane, but there <i>is</i> a displacement current, due to the “missing” charge in the gap.</p>
+    <p>(a) Use Coulomb’s law to calculate the $z$ component of the electric field, for points in the $xy$ plane a distance $s$ from the origin, due to a segment of wire with uniform density $-\lambda$ extending from $z_1=vt-\epsilon$ to $z_2=vt$.<br>
+    (b) Determine the flux of this electric field through a circle of radius $a$ in the $xy$ plane.<br>
+    (c) Find the displacement current through this circle. Show that $I_d$ is equal to $I$, in the limit as the gap width ($\epsilon$) goes to zero.<sup>45</sup></p>
+  </div>
+  <div class="prob">
+    <p><b>Problem 7.65.</b> A certain transmission line is constructed from two thin metal “ribbons,” of width $w$, a very small distance $h\ll w$ apart. The current travels down one strip and back along the other. In each case, it spreads out uniformly over the surface of the ribbon.</p>
+    <p>(a) Find the capacitance per unit length, $\mathcal C$.<br>
+    (b) Find the inductance per unit length, $\mathcal L$.<br>
+    (c) What is the product $\mathcal{LC}$, numerically? [The quantities $\mathcal L$ and $\mathcal C$ will, of course, vary from one kind of transmission line to another, but their <i>product</i> is a universal constant – check, for example, the cable in Ex. 7.14 – provided the space between the conductors is a vacuum. In the theory of transmission lines, this product is related to the speed with which a pulse propagates down the line: $v=1/\sqrt{\mathcal{LC}}$.]<br>
+    (d) If the strips are insulated from one another by a nonconducting material of permittivity $\epsilon$ and permeability $\mu$, what then is the product $\mathcal{LC}$? What is the propagation speed? [<i>Hint:</i> See Ex. 4.6; by what factor does $\mathcal C$ change when an inductor is immersed in linear material of permeability $\mu$?]</p>
+    <p><b>Problem 7.66.</b> Two very long coaxial circular solenoids (radii $a$ and $2a$) have $4n$ and $n$ turns per unit length, respectively. They both carry a steady current $I$, but in opposite directions.</p>
+    <p>(a) What is the magnetic flux through a plane, coaxial, circular loop of radius $5a$?<br>
+    (b) Now suppose they are driven by an <i>alternating</i> current, $I=I_0\cos\omega t$. In the quasistatic approximation, what is the induced electric field in each region, $s\lt a$, $a\lt s\lt 2a$, $s>2a$?<br>
+    (c) This changing electric field, in turn, induces a secondary magnetic field, $\mathbf B'$. Find this field, for a point on the axis.<br>
+    (d) Compare $\mathbf B'$ and $\mathbf B$, for points on the axis – what is their ratio? Calculate the actual <i>number</i>, if the frequency is 60 Hz (ordinary household current) and $a=2$ cm.</p>
+    <p><b>Problem 7.67.</b> <b>Alfvén’s theorem</b> states that in a perfectly conducting fluid (say, a gas of free electrons), the magnetic flux through any closed loop moving with the fluid is constant in time. (The magnetic field lines are, as it were, “frozen” into the fluid.) Prove it, as follows:</p>
+  </div>
+  <p class="fn"><sup>45</sup> For a slightly different approach to the same problem, see W. K. Terry, <i>Am. J. Phys.</i> <b>50</b>, 742 (1982).</p>
+  <div class="pno">358</div>
+</div>
+
+<div class="sheet book" id="pdf-p62">
+  <div class="rh"><span>359</span><span>More Problems on Chapter 7</span></div>
+  <div class="prob">
+    <p>(a) Use Ohm’s law, in the form of Eq. 7.2, together with Faraday’s law, to prove that if $\sigma=\infty$ and $\mathbf J$ is finite, then</p>
+    <div class="eq">$$\frac{\partial\mathbf B}{\partial t}=\nabla\times(\mathbf v\times\mathbf B).$$</div>
+    <div class="figbox">Fig. 7.62: moving loop $\mathcal P$ at time $t$ and its new position $\mathcal P'$ at time $t+dt$, with surfaces $\mathcal S$ and $\mathcal S'$, ribbon $\mathcal R$, and displacement $\mathbf v\,dt$. Schematic; see PDF page.</div>
+    <p>(b) Let $\mathcal S$ be the surface bounded by the loop ($\mathcal P$) at time $t$, and $\mathcal S'$ a surface bounded by the loop in its new position ($\mathcal P'$) at time $t+dt$ (see Fig. 7.62). The change in flux is</p>
+    <div class="eq">$$d\Phi=\int_{\mathcal S}\mathbf B(t+dt)\cdot d\mathbf a-\int_{\mathcal S}\mathbf B(t)\cdot d\mathbf a.$$</div>
+    <p>Use $\nabla\cdot\mathbf B=0$ to show that</p>
+    <div class="eq">$$\int_{\mathcal S'}\mathbf B(t+dt)\cdot d\mathbf a+\int_{\mathcal R}\mathbf B(t+dt)\cdot d\mathbf a=\int_{\mathcal S}\mathbf B(t+dt)\cdot d\mathbf a$$</div>
+    <p>(where $\mathcal R$ is the “ribbon” joining $\mathcal P$ and $\mathcal P'$), and hence that</p>
+    <div class="eq">$$d\Phi=dt\int_{\mathcal S}\frac{\partial\mathbf B}{\partial t}\cdot d\mathbf a-\int_{\mathcal R}\mathbf B(t+dt)\cdot d\mathbf a$$</div>
+    <p>(for infinitesimal $dt$). Use the method of Section 7.1.3 to rewrite the second integral as</p>
+    <div class="eq">$$dt\oint_{\mathcal P}(\mathbf B\times\mathbf v)\cdot d\mathbf l,$$</div>
+    <p>and invoke Stokes’ theorem to conclude that</p>
+    <div class="eq">$$\frac{d\Phi}{dt}=\int_{\mathcal S}\left(\frac{\partial\mathbf B}{\partial t}-\nabla\times(\mathbf v\times\mathbf B)\right)\cdot d\mathbf a.$$</div>
+    <p>Together with the result in (a), this proves the theorem.</p>
+    <p><b>Problem 7.68.</b></p>
+    <p>(a) Show that Maxwell’s equations with magnetic charge (Eq. 7.53) are invariant under the <b>duality transformation</b></p>
+    <div class="eq">$$\begin{aligned}\mathbf E'&=\mathbf E\cos\alpha+c\mathbf B\sin\alpha,\\ c\mathbf B'&=c\mathbf B\cos\alpha-\mathbf E\sin\alpha,\\ cq'_e&=cq_e\cos\alpha+q_m\sin\alpha,\\ q'_m&=q_m\cos\alpha-cq_e\sin\alpha,\end{aligned} \tag{7.77}$$</div>
+  </div>
+  <div class="pno">359</div>
+</div>
+
+<div class="sheet book" id="pdf-p63">
+  <div class="rh"><span>360</span><span>7 Electrodynamics</span></div>
+  <div class="prob">
+    <p>where $c\equiv1/\sqrt{\epsilon_0\mu_0}$ and $\alpha$ is an arbitrary rotation angle in “$\mathbf E/\mathbf B$-space.” Charge and current densities transform in the same way as $q_e$ and $q_m$. [This means, in particular, that if you know the fields produced by a configuration of <i>electric</i> charge, you can immediately (using $\alpha=90^{\circ}$) write down the fields produced by the corresponding arrangement of <i>magnetic</i> charge.]</p>
+    <div class="figbox">Fig. 7.63: two coaxial circular rings carrying currents $I_1$ and $I_2$, moving with velocity $\mathbf v$ along the axis $z$. Schematic; see PDF page.</div>
+    <p>(b) Show that the force law (Prob. 7.40)</p>
+    <div class="eq">$$\mathbf F=q_e(\mathbf E+\mathbf v\times\mathbf B)+q_m\left(\mathbf B-\frac{1}{c^2}\mathbf v\times\mathbf E\right) \tag{7.78}$$</div>
+    <p>is also invariant under the duality transformation.</p>
+    <p><b>Problem 7.69.</b> Two coaxial circular rings carry steady currents $I_1$ and $I_2$. They are moving at constant speed $v$ in the direction of the axis (Fig. 7.63). Assume the motion is quasistatic, so the <i>magnetic</i> fields of the two loops are the same – though moving – as they would be at rest.</p>
+    <p>(a) What is the emf induced in loop 2, due to loop 1?<br>
+    (b) Is there a <i>motional</i> emf in loop 2, due to loop 1?<br>
+    (c) Is there a <i>Faraday</i> emf in loop 2, due to loop 1?<br>
+    (d) Are your answers to (b) and (c) be consistent with (a)? Explain.<sup>46</sup></p>
+  </div>
+  <p class="fn"><sup>46</sup> This problem was suggested by an exchange with Hermann Batelaan.</p>
+  <div class="pno">360</div>
+</div>
+
+<div class="sheet book" id="pdf-p64">
+  <div class="rh"><span>361</span><span>Intermission (after Chapter 7)</span></div>
+  <h2 class="sec">Intermission</h2>
+  <p>All of our cards are now on the table, and in a sense my job is done. In the first seven chapters we assembled electrodynamics piece by piece, and now, with Maxwell’s equations in their final form, the theory is complete. There are no more laws to be learned, no further generalizations to be considered, and (with perhaps one exception) no lurking inconsistencies to be resolved. If yours is a one-semester course, this would be a reasonable place to stop.</p>
+  <p>But in another sense we have just arrived at the starting point. We are at last in possession of a full deck – it’s time to deal. This is the fun part, in which one comes to appreciate the extraordinary power and richness of electrodynamics. In a full-year course there should be plenty of time to cover the remaining chapters, and perhaps to supplement them with a unit on plasma physics, say, or AC circuit theory, or even a little general relativity. But if you have room for only one topic, I’d recommend Chapter 9, on electromagnetic waves (you’ll probably want to skim Chapter 8 as preparation). This is the segue to optics, and is historically the most important application of Maxwell’s theory.</p>
+  <div class="pno">361</div>
+</div>
+
+</body>
+</html>

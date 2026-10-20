@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Griffiths 9.1.1–9.1.2 Wave equation and sinusoidal waves (book pp. 390–396)</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+  :root {
+    --page-bg: #d9d9d4;
+    --paper: #fdfdfb;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --page-bg: #2b2b2b;
+      --paper: #f4f3ee;
+      --ink: #111;
+      --rule: #444;
+      --note: #555;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page-bg: #2b2b2b;
+    --paper: #f4f3ee;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  body {
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--ink);
+    font-family: "Times New Roman", Times, "Liberation Serif", serif;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .sheet {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 12mm auto;
+    padding: 14mm 18mm 16mm;
+    box-sizing: border-box;
+    background: var(--paper);
+    box-shadow: 0 1px 6px rgba(0,0,0,.25);
+    position: relative;
+  }
+  .sheet + .sheet { margin-top: 0; }
+  .hdr {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: start;
+    font-size: 14px;
+  }
+  .code { font-size: 22px; font-weight: bold; letter-spacing: .5px; }
+  .pages { text-align: center; padding-top: 14px; }
+  .name { text-align: right; line-height: 2; }
+  .title { text-align: center; margin-top: 22px; }
+  .title .exam { font-size: 19px; font-weight: bold; letter-spacing: .3px; }
+  .title .sch { margin-top: 2px; }
+  .title .course { margin-top: 10px; font-size: 16px; }
+  .title .subject { margin-top: 6px; font-size: 16px; font-weight: bold; }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 16px;
+    font-size: 15px;
+  }
+  .sec { margin-top: 14px; }
+  .sec-head {
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    font-weight: bold;
+  }
+  .sec-head .num { font-weight: bold; }
+  .sec-head .body { font-weight: normal; }
+  .sec-head .body b { font-weight: bold; }
+  .sec-head .body i { font-style: italic; }
+  .sec-total { text-align: right; font-weight: normal; margin-top: 4px; }
+  .qs { margin-top: 6px; }
+  .q {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    margin-bottom: 7px;
+  }
+  .q .n { text-align: right; padding-right: 10px; }
+  .q p { margin: 0; }
+  .sub { margin-left: 22px; }
+  .cut { color: var(--note); }
+  .turn { text-align: right; font-weight: bold; margin-top: 26px; }
+  .fig {
+    display: block;
+    margin: 8px auto 2px 36px;
+    width: 230px;
+    height: auto;
+  }
+  .fig-cap { margin-left: 36px; font-size: 13px; color: var(--note); font-style: italic; }
+  .foot-note {
+    margin-top: 26px;
+    border-top: 1px solid var(--rule);
+    padding-top: 6px;
+    font-size: 12px;
+    color: var(--note);
+  }
+  .pno { text-align: center; font-size: 15px; margin-bottom: 4px; }
+  .pno-hdr { position: absolute; top: 10mm; right: 18mm; font-weight: bold; font-size: 14px; }
+  @media print {
+    @page { size: A4; margin: 0; }
+    body { background: #fff; }
+    .sheet { margin: 0; box-shadow: none; width: 210mm; height: 297mm; min-height: 0; page-break-after: always; }
+    .sheet:last-child { page-break-after: auto; }
+  }
+  @media (max-width: 720px) {
+    .sheet { width: auto; margin: 0; padding: 14px 16px; min-height: 0; }
+    .hdr { grid-template-columns: 1fr; gap: 6px; }
+    .name { text-align: left; }
+    .pages { text-align: left; padding-top: 0; }
+  }
+</style>
+<style>
+  .sheet.book { height: auto; min-height: 297mm; text-align: justify; hyphens: auto; }
+  .sheet.book p { margin: 6px 0; }
+  .rh { display: flex; justify-content: space-between; font-size: 12px; color: var(--note);
+        border-bottom: 1px solid var(--rule); padding-bottom: 3px; margin-bottom: 12px; }
+  .chap { display: flex; background: #8a8a86; color: #fff; margin: 4px 0 16px; }
+  .chap .cn { background: #b4b4ae; padding: 10px 18px; font-size: 26px; }
+  .chap .ct { padding: 12px 16px; font-size: 22px; font-weight: bold; }
+  h2.sec { font-size: 20px; margin: 18px 0 8px; border-bottom: 2px solid var(--rule); padding-bottom: 3px; }
+  h3.sub { font-size: 16px; margin: 14px 0 6px; border-bottom: 1px solid var(--rule); padding-bottom: 2px; }
+  .eq { margin: 10px 0; text-align: center; overflow: visible; }
+  mjx-container[display="true"], mjx-container { overflow: visible !important; max-width: 100%; }
+  .sheet.book, .sheet.book .eq { overflow: visible; }
+  .eq.boxed { border: 1px solid var(--ink); display: block; padding: 4px 8px; }
+  .prob { background: #ecece7; border: 1px solid var(--rule); padding: 8px 12px; margin: 10px 0; text-align: left; }
+  .prob p { margin: 5px 0; }
+  .ex, .ex-cont { border: 1px solid var(--rule); padding: 8px 12px; margin: 10px 0; text-align: left; }
+  .ex p, .ex-cont p { margin: 5px 0; }
+  .figbox { border: 1px dashed var(--rule); padding: 10px; color: var(--note); font-size: 13px; text-align: center; margin: 8px 0; font-style: italic; }
+  figure { margin: 8px 0; text-align: center; }
+  figure > svg { width: 100%; max-width: 230px; height: auto; }
+  figure.single > svg { max-width: 260px; }
+  figure figcaption { font-size: 12px; font-style: italic; color: var(--note); }
+  .figrow { display: flex; flex-wrap: wrap; justify-content: space-around; gap: 8px; }
+  .figrow > figure { flex: 1 1 180px; max-width: 240px; }
+  .fn { font-size: 12.5px; color: var(--note); margin: 6px 0; text-align: left; }
+  .cont { font-size: 12.5px; color: var(--note); font-style: italic; }
+  .gapnote { font-size: 13px; color: var(--note); font-style: italic; border-left: 3px solid var(--rule); padding: 2px 8px; margin: 4px 0 10px; }
+  .flag { color: #8a1c1c; font-weight: bold; }
+  .answer { font-size: 14px; }
+  .tbl { border-collapse: collapse; width: 100%; font-size: 13px; margin: 6px 0; }
+  .tbl td, .tbl th { border: 1px solid var(--rule); padding: 3px 6px; text-align: center; }
+  .tbl th { background: #ebebe6; }
+  .tblcap { font-size: 13px; margin-top: 8px; text-align: left; }
+  .pno { text-align: center; font-size: 14px; margin-top: 14px; }
+  .intro p, .intro li { font-size: 14px; text-align: left; }
+  .intro table { border-collapse: collapse; width: 100%; font-size: 14px; margin: 6px 0; }
+  .intro td, .intro th { border: 1px solid var(--rule); padding: 4px 8px; text-align: left; }
+  @media print {
+    .sheet.book { height: auto !important; min-height: 0 !important; page-break-after: always; }
+  }
+  @media (max-width: 720px) {
+    .sheet.book .eq { overflow-x: auto; max-width: 100%; }
+    .sheet.book mjx-container[display="true"] { font-size: 85% !important; }
+    .sheet.book .figrow > figure { flex: 1 1 100%; max-width: 100%; }
+    .sheet.book { padding-left: 14px; padding-right: 14px; }
+  }
+</style>
+</head>
+<body>
+<!-- Book source for Module 3. Transcribed sheet by sheet from the full Griffiths PDF; printed page numbers in each sheet header. -->
+<div class="sheet book" id="pdf-p414"><div class="rh"><span>390</span><span>9 Electromagnetic Waves</span></div>
+<h2 class="sec">9 Electromagnetic Waves</h2>
+<h2 class="sec">9.1 Waves in One Dimension</h2>
+<h3 class="sub">9.1.1 The Wave Equation</h3>
+<p>What is a “wave”? I don’t think I can give you an entirely satisfactory answer – the concept is intrinsically somewhat vague – but here’s a start: A wave is a <i>disturbance of a continuous medium that propagates with a fixed shape at constant velocity</i>. Immediately I must add qualifiers: in the presence of absorption, the wave will diminish in size as it moves; if the medium is dispersive, different frequencies travel at different speeds; in two or three dimensions, as the wave spreads out, its amplitude will decrease; and of course <i>standing</i> waves don’t propagate at all. But these are refinements; let’s start with the simple case: fixed shape, constant speed, one dimension (Fig. 9.1).</p>
+<p>How would you represent such an object mathematically? In Fig. 9.1, I have drawn the wave at two different times, once at $t=0$, and again at some later time $t$ – each point on the wave form simply shifts to the right by an amount $vt$, where $v$ is the velocity. Maybe the wave is generated by shaking one end of a taut string; $f(z,t)$ represents the displacement of the string at the point $z$, at time $t$. Given the <i>initial</i> shape of the string, $g(z)\equiv f(z,0)$, what is the subsequent form, $f(z,t)$? Well, the displacement at point $z$, at the later time $t$, is the same as the displacement a distance $vt$ to the left (that is, at $z-vt$), back at time $t=0$:</p>
+<div class="eq">$$f(z,t)=f(z-vt,0)=g(z-vt).\qquad(9.1)$$</div>
+<p>That statement captures (mathematically) the essence of wave motion. It tells us that the function $f(z,t)$, which <i>might</i> have depended on $z$ and $t$ in any old way, in fact depends on them only in the very special combination $z-vt$; when that is true, the function $f(z,t)$ represents a wave of fixed shape traveling in the $z$ direction at speed $v$. For example, if $A$ and $b$ are constants (with the appropriate units),</p>
+<div class="eq">$$f_1(z,t)=Ae^{-b(z-vt)^2},\qquad f_2(z,t)=A\sin[b(z-vt)],\qquad f_3(z,t)=\frac{A}{b(z-vt)^2+1}$$</div>
+<p>all represent waves (with different shapes, of course), but</p>
+<div class="eq">$$f_4(z,t)=Ae^{-b(bz^2+vt)}\qquad\text{and}\qquad f_5(z,t)=A\sin(bz)\cos(bvt)$$</div>
+<p>do <i>not</i>. <span class="note">[The text layer shows a small mark after the last cosine in $f_5$; in the page image it reads as a footnote-style mark, not a power. Confirm against the printed page before the notes are built.]</span></p>
+</div>
+<div class="sheet book" id="pdf-p415"><div class="rh"><span>391</span><span>9.1 Waves in One Dimension</span></div>
+<figure class="fig"><div class="figbox">Fig. 9.1 (book): the wave $f(z,0)$ at $t=0$ and $f(z,t)$ at a later time, shifted to the right by $vt$. [Figure not transcribed here.]</div></figure>
+<figure class="fig"><div class="figbox">Fig. 9.2 (book): a string segment between $z$ and $z+\Delta z$, with tension $T$ at angles $\theta$ and $\theta'$. [Figure not transcribed here.]</div></figure>
+<p>Why does a stretched string support wave motion? Actually, it follows from Newton’s second law. Imagine a very long string under tension $T$. If it is displaced from equilibrium, the net transverse force on the segment between $z$ and $z+\Delta z$ (Fig. 9.2) is</p>
+<div class="eq">$$\Delta F=T\sin\theta'-T\sin\theta,$$</div>
+<p>where $\theta'$ is the angle the string makes with the $z$ direction at point $z+\Delta z$, and $\theta$ is the corresponding angle at point $z$. Provided that the distortion of the string is not too great, these angles are small (the figure is exaggerated, obviously), and we can replace the sine by the tangent:</p>
+<div class="eq">$$\Delta F\approx T(\tan\theta'-\tan\theta)=T\left(\left.\frac{\partial f}{\partial z}\right|_{z+\Delta z}-\left.\frac{\partial f}{\partial z}\right|_{z}\right)\approx T\frac{\partial^2f}{\partial z^2}\Delta z.$$</div>
+<p>If the mass per unit length is $\mu$, Newton’s second law says</p>
+<div class="eq">$$\Delta F=\mu(\Delta z)\frac{\partial^2f}{\partial t^2},$$</div>
+<p>and therefore</p>
+<div class="eq">$$\frac{\partial^2f}{\partial z^2}=\frac{\mu}{T}\frac{\partial^2f}{\partial t^2}.$$</div>
+<p>Evidently, small disturbances on the string satisfy</p>
+<div class="eq boxed">$$\frac{\partial^2f}{\partial z^2}=\frac{1}{v^2}\frac{\partial^2f}{\partial t^2},\qquad(9.2)$$</div>
+<p>where $v$ (which, as we’ll soon see, represents the speed of propagation) is</p>
+<div class="eq">$$v=\sqrt{\frac{T}{\mu}}.\qquad(9.3)$$</div>
+</div>
+<div class="sheet book" id="pdf-p416"><div class="rh"><span>392</span><span>9 Electromagnetic Waves</span></div>
+<p>Equation 9.2 is known as the (classical) <b>wave equation</b>, because it admits as solutions all functions of the form</p>
+<div class="eq">$$f(z,t)=g(z-vt)\qquad(9.4)$$</div>
+<p>(that is, all functions that depend on the variables $z$ and $t$ in the special combination $u\equiv z-vt$), and we have just learned that such functions represent waves propagating in the $z$ direction with speed $v$.</p>
+<p><i>Proof.</i></p>
+<div class="eq">$$\frac{\partial f}{\partial z}=\frac{dg}{du}\frac{\partial u}{\partial z}=\frac{dg}{du},\qquad\frac{\partial f}{\partial t}=\frac{dg}{du}\frac{\partial u}{\partial t}=-v\frac{dg}{du},$$</div>
+<div class="eq">$$\frac{\partial^2f}{\partial z^2}=\frac{\partial}{\partial z}\left(\frac{dg}{du}\right)=\frac{d^2g}{du^2}\frac{\partial u}{\partial z}=\frac{d^2g}{du^2},\qquad\frac{\partial^2f}{\partial t^2}=-v\frac{\partial}{\partial t}\left(\frac{dg}{du}\right)=-v\frac{d^2g}{du^2}\frac{\partial u}{\partial t}=v^2\frac{d^2g}{du^2},$$</div>
+<p>so</p>
+<div class="eq">$$\frac{d^2g}{du^2}=\frac{\partial^2f}{\partial z^2}=\frac{1}{v^2}\frac{\partial^2f}{\partial t^2}.\qquad\square$$</div>
+<p>Note that $g(u)$ can be <i>any</i> (differentiable) function whatever.<sup>1</sup> If the disturbance propagates at constant speed without changing its shape, then it satisfies the wave equation.</p>
+<p>But functions of the form $g(z-vt)$ are not the <i>only</i> solutions. The wave equation involves the <i>square</i> of $v$, so we can generate another class of solutions by simply changing the sign of the velocity:</p>
+<div class="eq">$$f(z,t)=h(z+vt).\qquad(9.5)$$</div>
+<p>This, of course, represents a wave propagating in the <i>negative</i> $z$ direction, and it is certainly reasonable (on physical grounds) that such solutions would be allowed. What <i>is</i> perhaps surprising is that the <i>most general</i> solution to the wave equation is the sum of a wave to the right and a wave to the left:</p>
+<div class="eq">$$f(z,t)=g(z-vt)+h(z+vt).\qquad(9.6)$$</div>
+<p>(Notice that the wave equation is <b>linear</b>: the sum of any two solutions is itself a solution.) As it turns out, every solution to the wave equation can be expressed in this form.</p>
+<p>Like the simple harmonic oscillator equation, the wave equation is ubiquitous in physics. If something is vibrating, the oscillator equation is almost certainly responsible (at least, for small amplitudes), and if something is waving (whether the context is mechanics or acoustics, optics or oceanography), the wave equation (perhaps with some decoration) is bound to be involved.</p>
+<div class="fn"><sup>1</sup> Does it surprise you that the class of solutions to the wave equation is so huge? After all, an <i>ordinary</i> second-order differential equation typically admits just <i>two</i> linearly independent solutions …. That’s right, but there’s no such rule for <i>partial</i> differential equations.</div>
+</div>
+<div class="sheet book" id="pdf-p417"><div class="rh"><span>393</span><span>9.1 Waves in One Dimension</span></div>
+<div class="prob"><p><b>Problem 9.1.</b> By explicit differentiation, check that the functions $f_1$, $f_2$, and $f_3$ in the text satisfy the wave equation. Show that $f_4$ and $f_5$ do <i>not</i>.</p>
+<p><b>Problem 9.2.</b> Show that the standing wave $f(z,t)=A\sin(kz)\cos(kvt)$ satisfies the wave equation, and express it as the sum of a wave traveling to the left and a wave traveling to the right (Eq. 9.6).</p></div>
+<h3 class="sub">9.1.2 Sinusoidal Waves</h3>
+<p>(i) <b>Terminology.</b> Of all possible wave forms, the sinusoidal one</p>
+<div class="eq">$$f(z,t)=A\cos[k(z-vt)+\delta]\qquad(9.7)$$</div>
+<p>is (for good reason) the most familiar. Figure 9.3 shows this function at time $t=0$. The quantity $A$ is the <b>amplitude</b> of the wave (it is positive, and represents the maximum displacement from equilibrium). The argument of the cosine is called the <b>phase</b>, and $\delta$ is the <b>phase constant</b> (obviously, you can add any integer multiple of $2\pi$ to $\delta$ without changing $f(z,t)$; ordinarily, one uses a value in the range $0\le\delta<2\pi$, but sometimes $-\pi<\delta\le\pi$, for example, may be more convenient). Notice that at $z=vt-\delta/k$, the phase is zero; let’s call this the “central maximum.” If $\delta=0$, the central maximum passes the origin at time $t=0$; more generally, $\delta/k$ is the distance by which the central maximum (and therefore the entire wave) is “delayed.” Finally, $k$ is the <b>wave number</b>; it is related to the <b>wavelength</b> $\lambda$ by the equation</p>
+<div class="eq">$$\lambda=\frac{2\pi}{k},\qquad(9.8)$$</div>
+<p>for when $z$ advances by $2\pi/k$, the cosine executes one complete cycle.</p>
+<p>As time passes, the entire wave train proceeds to the right, at speed $v$. At any given point $z$, the string vibrates up and down, undergoing one full cycle in a <b>period</b></p>
+<div class="eq">$$T=\frac{2\pi}{kv}.\qquad(9.9)$$</div>
+<figure class="fig"><div class="figbox">Fig. 9.3 (book): sinusoidal wave $f(z,0)$ with amplitude $A$, phase constant $\delta$, central maximum at $\delta/k$ and wavelength $\lambda$. [Figure not transcribed here.]</div></figure>
+</div>
+<div class="sheet book" id="pdf-p418"><div class="rh"><span>394</span><span>9 Electromagnetic Waves</span></div>
+<figure class="fig"><div class="figbox">Fig. 9.4 (book): sinusoidal wave traveling to the left, at $t=0$, with central maximum at $-\delta/k$. [Figure not transcribed here.]</div></figure>
+<p>The <b>frequency</b> $\nu$ (number of oscillations per unit time) is</p>
+<div class="eq">$$\nu=\frac{kv}{2\pi}=\frac{v}{\lambda}=\frac{1}{T}.\qquad(9.10)$$</div>
+<p>For our purposes, a more convenient unit is the <b>angular frequency</b> $\omega$, so called because in the analogous case of uniform circular motion, it represents the number of radians swept out per unit time:</p>
+<div class="eq boxed">$$\omega=2\pi\nu=kv,\qquad\text{so}\qquad\omega=kv.\qquad(9.11)$$</div>
+<p>Ordinarily, it’s nicer to write sinusoidal waves (Eq. 9.7) in terms of $\omega$, instead of $v$:<sup>2</sup></p>
+<div class="eq">$$f(z,t)=A\cos(kz-\omega t+\delta).\qquad(9.12)$$</div>
+<p>A sinusoidal oscillation of wave number $k$ and (angular) frequency $\omega$ traveling to the left would be written</p>
+<div class="eq">$$f(z,t)=A\cos(kz+\omega t-\delta).\qquad(9.13)$$</div>
+<p>The sign of the phase constant is chosen for consistency with our previous convention that $\delta/k$ shall represent the distance by which the wave is “delayed” (since the wave is now moving to the left, a delay means a shift to the right). At $t=0$, the wave looks like Fig. 9.4. Because the cosine is an even function, we can just as well write Eq. 9.13 thus:</p>
+<div class="eq">$$f(z,t)=A\cos(-kz-\omega t+\delta).\qquad(9.14)$$</div>
+<p>Comparison with Eq. 9.12 reveals that we could simply switch the sign of $k$ to produce a wave with the same amplitude, phase constant, frequency, and wavelength, traveling in the opposite direction.</p>
+<p>(ii) <b>Complex notation.</b> In view of Euler’s formula,</p>
+<div class="eq">$$e^{i\theta}=\cos\theta+i\sin\theta,\qquad(9.15)$$</div>
+<p>the sinusoidal wave (Eq. 9.12) can be written</p>
+<div class="eq">$$f(z,t)=\mathrm{Re}\left[Ae^{i(kz-\omega t+\delta)}\right],\qquad(9.16)$$</div>
+<div class="fn"><sup>2</sup> I put a box around the equation $\omega=kv$, because the relation between wave number (or wavelength) and frequency ($\nu$ or $\omega$) is fundamental, and it really ought to have a memorable name. Essentially the same idea can be expressed in several different ways: $\nu\lambda=v$, $\lambda\omega=2\pi v$, etc.</div>
+</div>
+<div class="sheet book" id="pdf-p419"><div class="rh"><span>395</span><span>9.1 Waves in One Dimension</span></div>
+<p>where $\mathrm{Re}(\xi)$ denotes the real part of the complex number $\xi$. This invites us to introduce the <b>complex wave function</b></p>
+<div class="eq">$$\tilde f(z,t)\equiv\tilde Ae^{i(kz-\omega t)},\qquad(9.17)$$</div>
+<p>with the <b>complex amplitude</b> $\tilde A\equiv Ae^{i\delta}$ subsuming both the (positive) real amplitude $A$ and the phase constant $\delta$. The actual wave function is the real part of $\tilde f$:</p>
+<div class="eq">$$f(z,t)=\mathrm{Re}[\tilde f(z,t)].\qquad(9.18)$$</div>
+<p>If you know $\tilde f$, it is a simple matter to find $f$; the advantage of the complex notation is that exponentials are much easier to manipulate than sines and cosines.</p>
+<p><b>Example 9.1.</b> Suppose you want to add two sinusoidal waves:</p>
+<div class="eq">$$f_3=f_1+f_2=\mathrm{Re}(\tilde f_1)+\mathrm{Re}(\tilde f_2)=\mathrm{Re}(\tilde f_1+\tilde f_2)=\mathrm{Re}(\tilde f_3),$$</div>
+<p>with $\tilde f_3=\tilde f_1+\tilde f_2$. You simply add the corresponding complex wave functions, and then take the real part. In particular, if they have the same frequency and wave number,</p>
+<div class="eq">$$\tilde f_3=\tilde A_1e^{i(kz-\omega t)}+\tilde A_2e^{i(kz-\omega t)}=\tilde A_3e^{i(kz-\omega t)},\qquad\text{where}\qquad\tilde A_3=\tilde A_1+\tilde A_2,$$</div>
+<div class="eq">$$\text{or}\qquad A_3e^{i\delta_3}=A_1e^{i\delta_1}+A_2e^{i\delta_2}.\qquad(9.19)$$</div>
+<p>In other words, you just add the (complex) amplitudes. The combined wave still has the same frequency and wavelength, $f_3(z,t)=A_3\cos(kz-\omega t+\delta_3)$, and you can easily figure out $A_3$ and $\delta_3$ from Eq. 9.19 (see Prob. 9.3). Try doing this without using the complex notation – you will find yourself looking up trig identities and wading through nasty algebra.</p>
+<p><i>Caveat:</i> The complex notation is great for adding sinusoidal functions, because $\mathrm{Re}(\tilde f_1+\tilde f_2)=\mathrm{Re}(\tilde f_1)+\mathrm{Re}(\tilde f_2)$, but not so useful for multiplying them: $\mathrm{Re}(\tilde f_1\cdot\tilde f_2)\neq\mathrm{Re}(\tilde f_1)\cdot\mathrm{Re}(\tilde f_2)$. Be on guard, therefore, when you encounter quantities (energy, for example) that are quadratic. There are tricks for handling special cases (see Prob. 9.12), but the fireproof method is to revert to the real notation.</p>
+</div>
+<div class="sheet book" id="pdf-p420"><div class="rh"><span>396</span><span>9 Electromagnetic Waves</span></div>
+<p>(iii) <b>Linear combinations of sinusoidal waves.</b> Although the sinusoidal function (Eq. 9.17) is a very special wave form, the fact is that any wave can be expressed as a linear combination of sinusoidal ones:</p>
+<div class="eq">$$\tilde f(z,t)=\int_{-\infty}^{\infty}\tilde A(k)e^{i(kz-\omega t)}\,dk.\qquad(9.20)$$</div>
+<p>Here $\omega$ is a function of $k$ (Eq. 9.11), and I have allowed $k$ to run negative in order to include waves going both directions.<sup>3</sup></p>
+<p>The formula for $\tilde A(k)$, in terms of the initial conditions $f(z,0)$ and $\dot f(z,0)$, can be obtained from the theory of Fourier transforms (see Prob. 9.34), but the details are not relevant to my purpose here. The point is that any wave can be written as a linear combination of sinusoidal waves, and therefore if you know how sinusoidal waves behave, you know in principle how any wave behaves. So from now on, we shall confine our attention to sinusoidal waves.</p>
+<p><b>Problem 9.3.</b> Use Eq. 9.19 to determine $A_3$ and $\delta_3$ in terms of $A_1$, $A_2$, $\delta_1$, and $\delta_2$.<br><b>Problem 9.4.</b> Obtain Eq. 9.20 directly from the wave equation, by separation of variables.</p>
+<div class="fn"><sup>3</sup> This does not mean that $\lambda$ and $\omega$ are negative – wavelength and frequency are intrinsically positive (like speed $v$ and amplitude $A$). If we allow negative wave numbers, then Eqs. 9.8 and 9.11 should really be written $\lambda=2\pi/|k|$ and $\omega=|k|v$.</div>
+<h3 class="sub">9.1.3 Boundary Conditions: Reflection and Transmission</h3>
+<p>So far, I have assumed the string is infinitely long – or at any rate long enough that we don’t need to worry about what happens to a wave when it reaches the end. As a matter of fact, what happens depends a lot on how the string is attached – that is, on the specific boundary conditions to which the wave is subject. Suppose, for instance, that the string is simply tied onto a second string. The tension $T$ is the same for both, but the mass per unit length $\mu$, presumably, is not, and hence the wave velocities $v_1$ and $v_2$ are different (remember, $v=\sqrt{T/\mu}$). Let’s say, for convenience, that the knot occurs at $z=0$. The <b>incident</b> wave</p>
+<div class="eq">$$\tilde f_I(z,t)=\tilde A_Ie^{i(k_1z-\omega t)}\qquad(z<0),\qquad(9.21)$$</div>
+<p>coming in from the left, gives rise to a <b>reflected</b> wave</p>
+<div class="eq">$$\tilde f_R(z,t)=\tilde A_Re^{i(-k_1z-\omega t)}\qquad(z<0),\qquad(9.22)$$</div>
+<p>traveling <i>back</i> along string 1 (hence the minus sign in front of $k_1$), in addition to a <b>transmitted</b> wave</p>
+<div class="eq">$$\tilde f_T(z,t)=\tilde A_Te^{i(k_2z-\omega t)}\qquad(z>0),\qquad(9.23)$$</div>
+<p>which continues on to the right in string 2.</p>
+</div>
+
+</body>
+</html>

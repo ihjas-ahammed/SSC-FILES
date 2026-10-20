@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Study notes: Section 1, electromotive force (Griffiths 7.1)</title>
+<script>
+window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+  @page { size: A4; margin: 16mm; }
+  :root { --ink:#1B2631; --muted:#5D6D7E; --rule:#AEB6BF; --paper:#FFFFFF; --bound:#B9770E; --res:#117A65; --eq:#1F618D; --idb:#A04000; --hi:#FDF2E9; }
+  body { margin:0; background:var(--paper); color:var(--ink); font-family:"Times New Roman", Times, "Liberation Serif", serif; font-size:12.5pt; line-height:1.5; }
+  main { max-width:760px; margin:0 auto; padding:14px; }
+  h1 { font-size:20pt; margin:0 0 4px; color:var(--eq); }
+  .meta { color:var(--muted); font-size:10.5pt; margin-bottom:10px; }
+  h2 { font-size:14pt; margin:22px 0 6px; color:var(--eq); border-bottom:2px solid var(--eq); padding-bottom:2px; break-after:avoid; }
+  h3 { font-size:12.5pt; margin:14px 0 4px; color:var(--res); break-after:avoid; }
+  p, li { margin:5px 0; }
+  ul { margin:4px 0 4px 22px; padding:0; }
+  .eq { margin:8px 0; text-align:center; }
+  .box-eq { background:#EAF2F8; border-left:4px solid var(--eq); padding:6px 10px; margin:8px 0; }
+  .box-res { background:#E9F7EF; border-left:4px solid var(--res); padding:6px 10px; margin:8px 0; }
+  .box-id { background:var(--hi); border-left:4px solid var(--idb); padding:6px 10px; margin:8px 0; }
+  .lbl { font-weight:bold; font-size:10.5pt; text-transform:uppercase; letter-spacing:.3px; }
+  .lbl.res { color:var(--res); } .lbl.eq { color:var(--eq); } .lbl.id { color:var(--idb); }
+  .note { font-size:11.5pt; color:var(--muted); margin:4px 0; }
+  .bg { font-size:10.5pt; color:var(--muted); font-style:italic; }
+  .bound { color:var(--bound); font-weight:bold; }
+  .fig { margin:12px 0; text-align:center; break-inside:avoid; }
+  .fig svg { display:block; width:100%; max-width:320px; height:auto; margin:0 auto; }
+  .fig figcaption { font-size:10.5pt; color:var(--muted); font-style:italic; margin-top:3px; }
+  @media print { .keep { break-inside: avoid; } }
+
+  .box-recall { background:#FEF9E7; border-left:4px solid #B9770E; padding:6px 10px; margin:8px 0; }
+  .box-recall ol { margin:4px 0 4px 20px; padding:0; }
+  .lbl.recall { color:#B9770E; }
+  .figsvg { display:block; width:100%; max-width:300px; height:auto; margin:0 auto; }
+  .fig img { display:block; width:100%; max-width:300px; height:auto; margin:0 auto; }
+  .box-res p, .box-eq p { margin:4px 0; }
+  .sec-body { column-count: 2; column-gap: 22px; column-rule: 1px solid #AEB6BF; }
+  .sec-body .eq, .sec-body .box-eq, .sec-body .fig { break-inside: avoid; }
+  .sec-body .box-res, .sec-body .box-recall { box-decoration-break: clone; }
+  .sec-body .fig img, .sec-body .figsvg { max-height: 130px; width: auto; max-width: 220px; }
+  .sec-body h3 { break-after: avoid; }
+  .sec-body p, .sec-body li { font-size: 11pt; }
+  .sec-body .eq { font-size: 0.93em; }
+  .sec-body mjx-container[display="true"] { font-size: 0.85em !important; max-width: 100%; }
+  @media print { h2 { break-after: avoid; } }
+</style>
+</head>
+<body>
+<main>
+<h1>Study notes: Section 1, electromotive force (Griffiths §7.1)</h1>
+<div class="meta">Student notes in my own words. Griffiths, <i>Introduction to Electrodynamics</i> (5th ed.), §7.1 Electromotive force, pp. 298–315. Figures are redrawn for these notes, not copied from the book; the book figure number is in each caption.</div>
+<h2>7.1.1 Ohm’s law</h2>
+<div class="sec-body">
+<div class="bg">Source: <i>book-sources/m2-s71-ohm.html</i>, Griffiths pp. 298–303. Equations 7.1–7.5 and 7.7 are cited by their book numbers.</div>
+
+<h3>Before you start</h3>
+<ul>
+<li>Current density $\mathbf J$ is current per unit area, perpendicular to the flow.</li>
+<li>Line integral of $\mathbf E$ gives potential difference: $V=-\int\mathbf E\cdot d\mathbf l$.</li>
+<li>Gauss’s law in the form $\nabla\cdot\mathbf E=\rho/\epsilon_0$; divergence of a curl is zero.</li>
+</ul>
+
+<div class="box-recall"><span class="lbl recall">Plus Two recall: Ohm’s law and resistivity</span>
+<p><b>Recall.</b> From Class 12: $V=IR$, and for a wire $R=\rho\ell/A$, where $\rho$ is the resistivity.</p>
+<p><b>Re-derive.</b></p><ol><li>Take a uniform cylinder of length $\ell$ and area $A$, with potential difference $V$ between its ends. The field is $E=V/\ell$ (uniform, Example 7.3).</li><li>The current density is $J=I/A$.</li><li>From $V=IR$ and $R=\rho\ell/A$: $I=VA/(\rho\ell)$.</li><li>Therefore $J=I/A=V/(\rho\ell)=E/\rho=\sigma E$, with $\sigma=1/\rho$.</li></ol>
+<p><b>Saved.</b> $\mathbf J=\sigma\mathbf E$ (Eq. 7.3).</p></div>
+<h3>1. Force per unit charge and current density</h3>
+<p>To make a current flow, something has to push on the charges. Call the push per unit charge $\mathbf f$. How fast the charges move depends on the material, and for most substances the current density is proportional to the push:</p>
+<div class="box-eq"><div class="eq">$$\mathbf J=\sigma\mathbf f \tag{7.1}$$</div>
+<p class="note">$\sigma$ is the conductivity. The handbooks list the resistivity $\rho=1/\sigma$ instead. Table 7.1 in the book gives values: silver $1.59\times10^{-8}\ \Omega$m, glass $10^{9}$–$10^{14}\ \Omega$m. The book takes metals as perfect conductors ($\sigma=\infty$) and insulators as $\sigma=0$.</p></div>
+
+<p>In an electromagnetic setting the push is the Lorentz force per unit charge, $\mathbf f=\mathbf E+\mathbf v\times\mathbf B$. So</p>
+<div class="eq">$$\mathbf J=\sigma(\mathbf E+\mathbf v\times\mathbf B) \tag{7.2}$$</div>
+<p>The charges usually drift slowly, so $\mathbf v\times\mathbf B$ is negligible. What is left is Ohm’s law.</p>
+
+<div class="box-res"><span class="lbl res">Result 1: Ohm’s law</span>
+<div class="eq">$$\mathbf J=\sigma\mathbf E \tag{7.3}$$</div></div>
+
+<p>The book warns that $\mathbf E$ is not zero inside a conductor carrying a current. The statement $\mathbf E=\mathbf 0$ inside a conductor (Section 2.5.1) is for stationary charges. With a current, the field needed to drive it is $\mathbf E=\mathbf J/\sigma$, which is very small in a good metal. That is why connecting wires in a circuit can be treated as equipotentials.</p>
+
+<h3>2. Resistance of a cylinder (Example 7.1)</h3>
+<p>Take a cylinder of cross-sectional area $A$ and length $L$, with conductivity $\sigma$, held at potential difference $V$ between its ends (Fig. 7.1). The cross section need not be circular, as long as it is the same all the way along.</p>
+<figure class="fig"><img src="final/m2-s1-resistor.jpg" alt="m2 s1 resistor"><figcaption>Fig. 7.1 (book): cylindrical resistor, field E along the axis, current I leaving the right end.</figcaption></figure>
+<p>The field inside is uniform (proved in section 5 below). Then $\mathbf J=\sigma\mathbf E$ is uniform too, and the current is</p>
+<div class="eq">$$I=JA=\sigma EA=\frac{\sigma A}{L}V$$</div>
+<p>using $E=V/L$ for a uniform field.</p>
+
+<h3>3. Resistance of coaxial cylinders (Example 7.2)</h3>
+<p>Two long coaxial metal cylinders of radii $a$ and $b$, separated by a material of conductivity $\sigma$, have potential difference $V$. Let the inner cylinder carry charge $\lambda$ per unit length.</p>
+<figure class="fig"><img src="final/m2-s1-coax.jpg" alt="m2 s1 coax"><figcaption>Fig. 7.2 (book): coaxial cylinders, end view; the field E between them is radial.</figcaption></figure>
+<p>The field between them is</p>
+<div class="eq">$$\mathbf E=\dfrac{\lambda}{2\pi\epsilon_0 s}\hat{\mathbf s}$$</div>
+<p>Two calculations:</p>
+<ul>
+<li>Current through a surface enclosing the inner cylinder: $I=\sigma\int\mathbf E\cdot d\mathbf a=\frac{\sigma}{\epsilon_0}\lambda L$.</li>
+<li>Potential difference: $V=-\int_b^a\mathbf E\cdot d\mathbf l=\frac{\lambda}{2\pi\epsilon_0}\ln\frac{b}{a}$.</li>
+</ul>
+<p>Eliminating $\lambda$ gives $I=\frac{2\pi\sigma L}{\ln(b/a)}V$.</p>
+
+<h3>4. From current to resistance</h3>
+<p>In both examples the current is proportional to the potential difference between the electrodes. That is the circuit form of Ohm’s law:</p>
+<div class="box-res"><span class="lbl res">Result 2: Ohm’s law in circuit form</span>
+<div class="eq">$$V=IR \tag{7.4}$$</div>
+<p>$R$ depends only on geometry and $\sigma$. From Example 7.1, $R=L/\sigma A$. From Example 7.2, $R=\frac{\ln(b/a)}{2\pi\sigma L}$. The unit is the ohm, $\Omega$: an ohm is a volt per ampere.</p></div>
+<p>Doubling $V$ doubles $\mathbf E$ (because $\mathbf E=\mathbf J/\sigma$ and the material is ohmic), which doubles $\mathbf J$ and so $I$.</p>
+
+<h3>5. Example 7.3: the field in the resistor is uniform</h3>
+<p>Inside the cylinder, $V$ satisfies Laplace’s equation, because $\nabla\cdot\mathbf J=0$ for steady currents. The boundary conditions are: $V=0$ at the left end, $V=V_0$ at the right end, and $\partial V/\partial n=0$ on the curved surface (no current leaks out). Guess $V(z)=V_0z/L$. It satisfies Laplace’s equation and all three conditions. Laplace’s equation with these boundary conditions has only one solution, so this is it. Its field $\mathbf E=-\nabla V=-(V_0/L)\hat{\mathbf z}$ is uniform.</p>
+
+
+<h3>6. Charge on a steady current (Eq. 7.5)</h3>
+<p>For a steady current in a uniform conductor, combine Ohm’s law with the fact that $\nabla\cdot\mathbf J=0$ for steady flow:</p>
+<div class="eq">$$\nabla\cdot\mathbf E=\frac{1}{\sigma}\nabla\cdot\mathbf J=0 \tag{7.5}$$</div>
+<p>So there is no charge density inside the conductor. Any unbalanced charge sits on the surface. Laplace’s equation therefore holds inside a homogeneous ohmic material that carries a steady current, and the methods of Chapter 3 can be used for $V$.</p>
+
+<div class="box-recall"><span class="lbl recall">Plus Two recall: Joule heating</span>
+<p><b>Recall.</b> From Class 12: power $P=VI$, and with $V=IR$, $P=I^2R$.</p>
+<p><b>Re-derive.</b></p><ol><li>Work per unit charge across a resistor is $V$.</li><li>Charge passing per unit time is $I$.</li><li>So energy per unit time is $VI$. Substituting $V=IR$ gives $I^2R$.</li></ol>
+<p><b>Saved.</b> $P=VI=I^2R$ (Eq. 7.7).</p></div>
+<h3>7. Joule heating (Eq. 7.7)</h3>
+<p>The electric force does work on the charges, and collisions turn that work into heat. The work per unit charge is $V$ and the charge passing per unit time is $I$, so the power is</p>
+<div class="box-res"><span class="lbl res">Result 3: Joule heating law</span>
+<div class="eq">$$P=VI=I^2R \tag{7.7}$$</div>
+<p>With $I$ in amperes and $R$ in ohms, $P$ is in watts.</p></div>
+
+<h3>8. Where Ohm’s law comes from (Eq. 7.6, background)</h3>
+<p>Charges accelerate between collisions and lose their speed at each collision. Their average velocity is therefore steady. With $n$ molecules per unit volume, $f$ free electrons per molecule, charge $q$ and mass $m$, and a mean free path $\lambda$, the classical estimate of the current density is</p>
+<div class="eq">$$\mathbf J=nfq\,\mathbf v_{\text{ave}}=\left(\frac{nf\lambda q^2}{2mv_{\text{thermal}}}\right)\mathbf E \tag{7.6}$$</div>
+<p class="bg">The book stresses that this classical (Drude) picture is not the quantum theory of conduction (footnote 2). It gets the trend right: conductivity grows with the number of moving charges and falls with temperature.</p>
+</div>
+<h2>7.1.2 Electromotive force</h2>
+<div class="sec-body">
+<div class="bg">Source: <i>book-sources/m2-s72-emf.html</i>, Griffiths pp. 304–305. Equations 7.7–7.10 and footnotes 3–5 are included.</div>
+
+<h3>Before you start</h3>
+<ul>
+<li>Ohm’s law $\mathbf J=\sigma\mathbf E$ and the circuit form $V=IR$ (Section 7.1.1).</li>
+<li>A line integral around a closed loop; for an electrostatic field, $\oint\mathbf E\cdot d\mathbf l=0$.</li>
+</ul>
+
+<h3>1. The puzzle</h3>
+<p>Take a battery, a light bulb and two wires, joined into a loop. The current is the same at every point of the loop. But the only obvious push on the charges is inside the battery. Why do charges in the bulb’s wire know to move at the same time and at the same speed as charges at the battery?</p>
+<figure class="fig"><img src="final/m2-s1-bend.jpg" alt="m2 s1 bend"><figcaption>Fig. 7.8 (book): charge piles up at a bend, and E points away from the knee.</figcaption></figure>
+<p>The answer is that the current cannot be unequal for long. Imagine the current entering a bend is larger than the current leaving it. Charge then piles up at the knee. The field from that extra charge points away from the knee, and it slows the incoming current and speeds up the outgoing current. This continues until the two currents are equal. The system corrects itself so quickly that for practical purposes the current is the same everywhere, even at radio frequencies.</p>
+
+<div class="box-recall"><span class="lbl recall">Plus Two recall: emf as work per unit charge</span>
+<p><b>Recall.</b> From Class 12: the emf of a source is the work done per unit charge by the source in carrying charge round the circuit.</p>
+<p><b>Re-derive.</b></p><ol><li>The source force per unit charge is $\mathbf f_s$. Its work per unit charge over one trip round the loop is $\oint\mathbf f_s\cdot d\mathbf l$.</li><li>The electrostatic field does no net work round a closed loop, since $\oint\mathbf E\cdot d\mathbf l=0$.</li><li>So only the source force remains.</li></ol>
+<p><b>Saved.</b> $\mathcal E=\oint\mathbf f\cdot d\mathbf l=\oint\mathbf f_s\cdot d\mathbf l$ (Eq. 7.9).</p></div>
+<h3>2. Two forces drive the charges</h3>
+<p>There are two forces per unit charge acting on the charges:</p>
+<ul>
+<li>the source force $\mathbf f_s$, which acts only in the source region (for example, the chemistry inside a battery);</li>
+<li>the electrostatic force $\mathbf E$, which acts everywhere in the circuit and carries the influence of the source to the rest of the loop.</li>
+</ul>
+<p>The total force per unit charge is</p>
+<div class="eq">$$\mathbf f=\mathbf f_s+\mathbf E \tag{7.8}$$</div>
+<p>The source force can come from many mechanisms: a chemical reaction in a battery, mechanical pressure in a piezoelectric crystal, a temperature gradient in a thermocouple, light in a photoelectric cell, or charge carried on a belt in a Van de Graaff generator. The mechanism does not matter. What matters is the line integral of the total force around the circuit.</p>
+
+<div class="box-res"><span class="lbl res">Result 4: electromotive force (emf)</span>
+<div class="eq">$$\mathcal E\equiv\oint\mathbf f\cdot d\mathbf l=\oint\mathbf f_s\cdot d\mathbf l \tag{7.9}$$</div>
+<p>The two forms agree because $\oint\mathbf E\cdot d\mathbf l=0$ for electrostatic fields. So only the source force contributes.</p></div>
+
+<p>The name is misleading. Emf is not a force; it is the line integral of a force per unit charge, so its unit is the volt. Some people prefer “electromotance”, but the book keeps the established name.</p>
+
+<h3>3. Potential difference across an ideal battery</h3>
+<p>Inside an ideal battery (no resistance), the net force on a charge is zero. So $\mathbf f_s+\mathbf E=\mathbf 0$, that is $\mathbf E=-\mathbf f_s$ inside the battery. The potential difference between its terminals $a$ and $b$ is</p>
+<div class="eq">$$V=-\int_a^b\mathbf E\cdot d\mathbf l=\int_a^b\mathbf f_s\cdot d\mathbf l$$
+<div class="eq">$$=\oint\mathbf f_s\cdot d\mathbf l=\mathcal E \tag{7.10}$$</div></div>
+<p>The line integral can be taken round the whole loop, because $\mathbf f_s$ is zero outside the battery. So an ideal battery holds its terminals at a voltage equal to its emf. A 6 V battery holds the positive terminal 6 V above the negative one.</p>
+<p>Inside the battery, $\mathbf f_s$ drives the current in the direction opposite to $\mathbf E$. The electrostatic field drives the current around the rest of the circuit.</p>
+<p>A real battery has internal resistance $r$. Its terminal potential difference is $\mathcal E-Ir$ when a current $I$ flows (footnote 4).</p>
+
+<div class="box-recall"><span class="lbl recall">Plus Two recall: Internal resistance</span>
+<p><b>Recall.</b> From Class 12: a real cell of emf $\mathcal E$ and internal resistance $r$ gives terminal voltage $V=\mathcal E-Ir$ when current $I$ flows.</p>
+<p><b>Re-derive.</b></p><ol><li>An ideal source (no resistance) gives terminal voltage $V=\mathcal E$ (Eq. 7.10).</li><li>In a real source the current $I$ flows through the internal resistance $r$, so there is a potential drop $Ir$ inside the source (Ohm’s law across $r$).</li><li>The terminal voltage is the emf less this drop.</li></ol>
+<p><b>Saved.</b> $V_{\text{terminal}}=\mathcal E-Ir$ (footnote 4).</p></div>
+<h3>4. An analogy (footnote 5)</h3>
+<p>A circuit is like a closed system of water pipes. Gravity plays the role of the electrostatic field: it pulls water downward, and water flows from high to low. A pump lifts water against gravity, and it plays the role of the battery. In this picture “height” is the analogue of voltage.</p>
+
+<h3>5. Why emf is not a force</h3>
+<p>The integral $\oint\mathbf f\cdot d\mathbf l$ has units of force per unit charge times length, which is energy per unit charge, that is volts. So a voltage is what you get, not a force. Remember this when you read the book’s comments on the name.</p>
+</div>
+<h2>7.1.3 Motional emf and the flux rule</h2>
+<div class="sec-body">
+<div class="bg">Source: <i>book-sources/m2-s73-motional.html</i>, Griffiths pp. 306–315. Equations 7.11–7.13 and 7.14–7.22 (eddy currents) are included. The problems on these pages are not included in these notes.</div>
+
+<h3>Before you start</h3>
+<ul>
+<li>Magnetic force on a moving charge: $\mathbf F=q\mathbf v\times\mathbf B$.</li>
+<li>Flux of a field through a surface: $\Phi=\int\mathbf B\cdot d\mathbf a$.</li>
+<li>Divergence and curl, and Stokes’ theorem (used in the eddy-current example).</li>
+</ul>
+
+<h3>1. A generator: a wire moving through a field</h3>
+<p>Generators work because a wire moving through a magnetic field gets pushed. Figure 7.10 is a primitive model: a rectangular loop whose left side lies in a uniform field $\mathbf B$ pointing into the page. The loop is pulled to the right at speed $v$, and a resistor $R$ on the right side represents whatever the current drives (a bulb, say).</p>
+<figure class="fig"><img src="final/m2-s1-generator.jpg" alt="m2 s1 generator"><figcaption>Fig. 7.10 (book): rectangular loop with one side in a uniform field B; pulled to the right at speed v.</figcaption></figure>
+<p>Each mobile charge in the left side moves with the wire at velocity $\mathbf v$ to the right. The magnetic force on it is $q\mathbf v\times\mathbf B$. The velocity is to the right and $\mathbf B$ is into the page, so the force is upward. Its vertical component, $qvB$, drives charge around the loop in the clockwise direction. The emf is the line integral of the magnetic force per unit charge:</p>
+<div class="box-res"><span class="lbl res">Result 5: motional emf</span>
+<div class="eq">$$\mathcal E=\oint\mathbf f_{\text{mag}}\cdot d\mathbf l=vBh \tag{7.11}$$</div>
+<p>$h$ is the length of the side in the field. The top and bottom sides, $bc$ and $ad$, contribute nothing, because the force on a charge there is perpendicular to the wire.</p></div>
+
+<p>Two points about the integral. First, it is taken at one instant: a snapshot of the loop. The direction of $d\mathbf l$ on side $ab$ is straight up, even though the loop is moving to the right. Second, this is just how emf is defined, so the sign has to be read off from the definition.</p>
+
+<div class="box-recall"><span class="lbl recall">Plus Two recall: Motional emf $\mathcal E=Blv$</span>
+<p><b>Recall.</b> From Class 12: a conductor of length $l$ moving at speed $v$ perpendicular to a field $B$ has emf $Blv$.</p>
+<p><b>Re-derive.</b></p><ol><li>The magnetic force on a charge $q$ is $q\mathbf v\times\mathbf B$. So the force per unit charge is $\mathbf v\times\mathbf B$, with magnitude $vB$, directed along the wire.</li><li>Integrate this along the moving side of length $h$: $\oint\mathbf f_{\text{mag}}\cdot d\mathbf l=vBh$.</li></ol>
+<p><b>Saved.</b> $\mathcal E=vBh$ (Eq. 7.11).</p></div>
+<h3>2. Who is doing the work?</h3>
+<p>The magnetic force does no work on a charge, because it is always perpendicular to the velocity. Yet energy is delivered to the resistor. The answer is subtle.</p>
+<figure class="fig"><img src="final/m2-s1-forces.jpg" alt="m2 s1 forces"><figcaption>Fig. 7.11 (book): velocity and force vectors for a charge in the moving wire.</figcaption></figure>
+<p>The current means the charges move up the left side with a velocity $\mathbf u$ in addition to the horizontal velocity $\mathbf v$. The resultant velocity is $\mathbf w=\mathbf v+\mathbf u$. The magnetic force $q\mathbf w\times\mathbf B$ has a leftward component $quB$, which opposes the motion along the wire. To keep the current going, the person pulling the loop must push to the right with a force per unit charge $f_{\text{pull}}=uB$. That force is transmitted by the structure of the wire.</p>
+<p>The charge moves along the slanted path of length $h/\cos\theta$. The work per unit charge done by the person is</p>
+<div class="eq">$$\int\mathbf f_{\text{pull}}\cdot d\mathbf l=(uB)\left(\frac{h}{\cos\theta}\right)\sin\theta=vBh=\mathcal E$$</div>
+<p>The work per unit charge equals the emf. The two line integrals follow different paths: the emf is along the wire at one instant, and the work is along the charge’s actual path (Fig. 7.12). The forces are different too: the magnetic force does the emf but no work, and the pulling force does the work but contributes nothing to the emf.</p>
+<figure class="fig"><img src="final/m2-s1-paths.jpg" alt="m2 s1 paths"><figcaption>Fig. 7.12 (book): (a) path for the emf, at one instant; (b) path followed by one charge.</figcaption></figure>
+
+<h3>3. The flux rule</h3>
+<p>The area of the loop inside the field region is $hx$, so the flux through the loop is</p>
+<div class="eq">$$\Phi=\int\mathbf B\cdot d\mathbf a \tag{7.12}$$</div>
+<p>For this loop, $\Phi=Bhx$. As the loop moves right, $x$ decreases, so $dx/dt\lt 0$ and</p>
+<div class="eq">$$\frac{d\Phi}{dt}=Bh\frac{dx}{dt}=-Bhv$$</div>
+<p>Compare with Eq. 7.11: the emf is $vBh$, which is minus the rate of change of flux. This is general.</p>
+
+<div class="box-res"><span class="lbl res">Result 6: the flux rule for motional emf</span>
+<div class="eq">$$\mathcal E=-\frac{d\Phi}{dt} \tag{7.13}$$</div>
+<p>It applies to loops of any shape moving in any direction through any magnetic field, even if the loop changes shape as it moves.</p></div>
+
+<div class="box-recall"><span class="lbl recall">Plus Two recall: Faraday’s law: $\mathcal E=-d\Phi/dt$</span>
+<p><b>Recall.</b> From Class 12: the induced emf equals minus the rate of change of magnetic flux, $\mathcal E=-d\Phi/dt$.</p>
+<p><b>Re-derive.</b></p><ol><li>For the loop of Fig. 7.10, the flux is $\Phi=Bhx$, where $x$ is the length of the loop inside the field.</li><li>As the loop moves right, $x$ decreases at speed $v$, so $dx/dt=-v$.</li><li>Therefore $d\Phi/dt=-Bhv$, and $-d\Phi/dt=vBh$, which is the motional emf of Eq. 7.11.</li></ol>
+<p><b>Saved.</b> $\mathcal E=-d\Phi/dt$ (Eq. 7.13).</p></div>
+<h3>4. Proof of the flux rule</h3>
+<p>Look at the loop at time $t$ and again a short time $dt$ later (Fig. 7.13). Use a surface $\mathcal S$ bounded by the loop at time $t$, and a surface $\mathcal S'$ bounded by the loop at $t+dt$. The change in flux is the flux through the thin ribbon that joins the old loop to the new one:</p>
+<div class="eq">$$d\Phi=\Phi(t+dt)-\Phi(t)=\int_{\text{ribbon}}\mathbf B\cdot d\mathbf a$$</div>
+<p>Take a point $P$ on the loop. In time $dt$ it moves to $P'$. Let $\mathbf v$ be the velocity of the wire and $\mathbf u$ the velocity of a charge down the wire, so $\mathbf w=\mathbf v+\mathbf u$ is the velocity of a charge at $P$. The element of area of the ribbon swept out by the segment $d\mathbf l$ is</p>
+<div class="eq">$$d\mathbf a=(\mathbf v\times d\mathbf l)\,dt$$</div>
+<p>Substituting, $\frac{d\Phi}{dt}=\oint\mathbf B\cdot(\mathbf v\times d\mathbf l)$. Because $\mathbf u$ is parallel to $d\mathbf l$, $\mathbf v\times d\mathbf l$ may be replaced by $\mathbf w\times d\mathbf l$:</p>
+<div class="eq">$$\frac{d\Phi}{dt}=\oint\mathbf B\cdot(\mathbf w\times d\mathbf l)=-\oint(\mathbf w\times\mathbf B)\cdot d\mathbf l$$</div>
+<p>The last step uses the scalar triple product rule. Since $\mathbf w\times\mathbf B=\mathbf f_{\text{mag}}$, this is $-\oint\mathbf f_{\text{mag}}\cdot d\mathbf l=-\mathcal E$. That is the flux rule.</p>
+<p><b>Signs.</b> There is a sign ambiguity in both definitions. The direction of $d\mathbf l$ round the loop and the direction of $d\mathbf a$ must be linked by the right-hand rule. If the emf comes out negative, the current flows in the negative sense round the circuit.</p>
+
+<h3>5. A warning: the flux-rule paradox (Fig. 7.14)</h3>
+<p>The flux rule assumes the circuit is a single wire loop with one current path. If you throw a switch in a circuit like Fig. 7.14, moving from $a$ to $b$, the flux through the circuit doubles. But no conductor moves through a magnetic field, so there is no motional emf, and the ammeter reads zero. Switches, sliding contacts and extended conductors allow several current paths, and then the flux rule cannot be used directly.</p>
+<figure class="fig"><img src="final/m2-s1-paradox.jpg" alt="m2 s1 paradox"><figcaption>Fig. 7.14 (book): flux-rule paradox; the switch moves from a to b.</figcaption></figure>
+
+<h3>6. Example 7.4: the Faraday disk</h3>
+<p>A metal disk of radius $a$ spins with angular velocity $\omega$ about a vertical axis, in a uniform field $\mathbf B$ pointing up. A resistor joins the axle to a sliding contact at the rim.</p>
+<figure class="fig"><img src="final/m2-s1-disk.jpg" alt="m2 s1 disk"><figcaption>Fig. 7.15 (book): Faraday disk spinning in a field B pointing up.</figcaption></figure>
+<p>A point at distance $s$ from the axis moves with speed $v=\omega s$. The magnetic force per unit charge is $\mathbf f_{\text{mag}}=\mathbf v\times\mathbf B$, of magnitude $\omega sB$. The emf is the integral of this along a radius:</p>
+<div class="eq">$$\mathcal E=\int_0^a\omega sB\,ds=\frac{\omega Ba^2}{2}$$</div>
+<p>The current is $I=\mathcal E/R=\omega Ba^2/2R$. The flux rule cannot be used here, because the current spreads over the whole disk and there is no single path whose flux we can compute.</p>
+
+<h3>7. Eddy currents (Example 7.5)</h3>
+<p>Move a conductor through a non-uniform field and currents are induced inside it. These eddy currents oppose the motion, so the conductor feels a drag. The book works out one solvable case: a uniform, neutral spherical shell of conductivity $\sigma$, inner radius $R_1$, outer radius $R_2$, spinning with angular velocity $\boldsymbol\omega$ in a uniform field $\mathbf B$.</p>
+<p>In a conductor at rest the charge density is zero. But a conductor moving through a field has the velocity term in its current law, $\mathbf J=\sigma(\mathbf E+\mathbf v\times\mathbf B)$ (Eq. 7.2). Taking the divergence, and using Gauss’s law and the continuity equation, gives in the steady state</p>
+<div class="eq">$$\rho=-\epsilon_0\nabla\cdot(\mathbf v\times\mathbf B) \tag{7.14}$$</div>
+<p>Choose axes with $\mathbf B=B\hat{\mathbf z}$ and $\boldsymbol\omega=\omega\hat{\mathbf z}$. For a rigid rotating body $\mathbf v=\boldsymbol\omega\times\mathbf r$. With the BAC–CAB rule,</p>
+<div class="eq">$$\mathbf v\times\mathbf B=\mathbf r(\mathbf B\cdot\boldsymbol\omega)-\boldsymbol\omega(\mathbf B\cdot\mathbf r)=\omega B(x\hat{\mathbf x}+y\hat{\mathbf y}) \tag{7.15}$$</div>
+<p>so $\rho=-2\epsilon_0\omega B$ (Eq. 7.16). The potential then satisfies Poisson’s equation $\nabla^2V=2\omega B$ in the shell (Eq. 7.17). There are compensating surface charges at the two boundaries.</p>
+<p><b>Case (a): $\boldsymbol\omega$ parallel to $\mathbf B$.</b> The radial current must vanish at both surfaces (Eq. 7.18). Solving gives $V=\frac{\omega B}{2}(x^2+y^2)+K$, so $\mathbf E=-\mathbf v\times\mathbf B$ (Eq. 7.22). The electric force cancels the magnetic force exactly, and there is no eddy current: $\mathbf J=\mathbf 0$.</p>
+<div class="eq">$$E_r=-\omega B(x\hat{\mathbf x}+y\hat{\mathbf y})\cdot\hat{\mathbf r}=-\omega Br\sin^2\theta \tag{7.19}$$</div>
+<div class="eq">$$\left.\frac{\partial V}{\partial r}\right|_{R_1}=\omega BR_1\sin^2\theta,\qquad\left.\frac{\partial V}{\partial r}\right|_{R_2}=\omega BR_2\sin^2\theta \tag{7.20}$$</div>
+<div class="eq">$$V(r,\theta)=\frac{\omega B}{2}r^2\sin^2\theta+K \tag{7.21}$$</div>
+
+<p><b>Case (b): $\boldsymbol\omega$ perpendicular to $\mathbf B$.</b> Take $\boldsymbol\omega=\omega\hat{\mathbf x}$ and $\mathbf B=B\hat{\mathbf y}$. Now $\rho=0$ and Laplace’s equation holds in the shell. The normal derivatives of $V$ at $R_1$ and $R_2$ are fixed, and the solution is $V=-\frac{\omega B}{2}xy+K$ in the shell. The eddy current follows from $\mathbf J=\sigma(\mathbf E+\mathbf v\times\mathbf B)$, and it is non-zero.</p>
+<p class="bg">The book adds (footnote 10) that the convection current from the moving charge is negligible compared with the conduction current. The ratio is about $\epsilon_0\omega/\sigma$, which is tiny for aluminium at 100 rpm.</p>
+</div>
+</main>
+</body>
+</html>

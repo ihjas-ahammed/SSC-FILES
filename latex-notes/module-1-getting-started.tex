@@ -1,0 +1,218 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{multicol}   % two- or three-column lists
+\usepackage{makeidx}
+\makeindex
+
+% ---------------------------------------------------------------
+% MODULE I - Getting Started with LaTeX
+% Syllabus units 1-4 (Text 1: Indian TeX Users Group primer,
+% Tutorials I-V). Compile with: pdflatex, then bibtex/makeindex
+% where a section below says so.
+% ---------------------------------------------------------------
+
+\title{Module I: Getting Started with \LaTeX}
+\author{Study Notes -- MAT5FS112}
+\date{}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+% ===============================================================
+\section{What is LaTeX?}
+% ===============================================================
+
+\LaTeX{} is a \emph{markup language} built on top of the \TeX{}
+typesetting engine. You write a plain text \texttt{.tex} file that
+describes the \emph{structure} of a document (title, sections,
+lists, equations); the engine decides how it looks on the page.
+
+The workflow is:
+\begin{enumerate}
+  \item Write source code in a \texttt{.tex} file (any text editor, or Overleaf).
+  \item Compile it: \verb|pdflatex file.tex|.
+  \item Open the resulting \texttt{file.pdf}.
+\end{enumerate}
+
+Compilation also creates helper files (\texttt{.aux}, \texttt{.log},
+\texttt{.toc}). Always read the \texttt{.log} file when an error
+appears; the first error is the one that matters.
+
+% ===============================================================
+\section{Anatomy of a document}
+% ===============================================================
+
+Every LaTeX file has two parts:
+\begin{description}
+  \item[Preamble] everything before \verb|\begin{document}|. It sets the
+    document class, loads packages and defines global settings.
+  \item[Body] everything between \verb|\begin{document}| and
+    \verb|\end{document}|. This is the content you read.
+\end{description}
+
+\subsection{The smallest document}
+
+\begin{verbatim}
+\documentclass{article}
+\begin{document}
+Hello, world!
+\end{document}
+\end{verbatim}
+
+\subsection{Document classes and options}
+
+The class decides the overall look: \texttt{article} (papers,
+assignments), \texttt{report} (long documents with chapters),
+\texttt{book}, and \texttt{beamer} (slides, Module V). Options go in
+square brackets:
+\begin{verbatim}
+\documentclass[11pt,a4paper]{article}
+\end{verbatim}
+
+\subsection{Packages}
+
+Packages add features. Load them in the preamble:
+\begin{verbatim}
+\usepackage[margin=2.5cm]{geometry}   % page margins
+\end{verbatim}
+
+% ===============================================================
+\section{Commands, environments and special characters}
+% ===============================================================
+
+A \emph{command} starts with a backslash: \verb|\textbf{bold}|.
+An \emph{environment} is a block delimited by \verb|\begin{name}| and
+\verb|\end{name}|. Environments must be closed in the reverse order in
+which they were opened.
+
+Some characters have special meaning and must be escaped:
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+You type & You get \\
+\hline
+\verb|\%| & \% \\
+\verb|\$| & \$ \\
+\verb|\&| & \& \\
+\verb|\#| & \# \\
+\verb|\_| & \_ \\
+\verb|\{| and \verb|\}| & \{ and \} \\
+\verb|\textbackslash| & \textbackslash \\
+\verb|\textasciitilde| & \textasciitilde \\
+\hline
+\end{tabular}
+\end{center}
+
+A \texttt{\%} starts a comment: everything after it on that line is
+ignored by the compiler.
+
+% ===============================================================
+\section{Document structure}
+% ===============================================================
+
+\subsection{Title block}
+
+The title block is built from three commands in the preamble and
+one in the body:
+\begin{verbatim}
+\title{My Title}
+\author{Author Name}
+\date{\today}          % or \date{} for no date
+\maketitle             % in the body
+\end{verbatim}
+
+\subsection{Sectioning}
+
+Sectioning commands number and title parts of the document:
+\verb|\section|, \verb|\subsection|, \verb|\subsubsection|,
+\verb|\paragraph|. Adding a star (\verb|\section*|) removes the number
+and the table-of-contents entry.
+
+\subsection{Table of contents}
+
+\verb|\tableofcontents| prints the contents page. It needs
+\emph{two} compilations: the first writes the entries to a
+\texttt{.toc} file, the second reads them back.
+
+\subsection{Lists}
+
+\begin{multicols}{3}
+\textbf{itemize} (bullets)
+\begin{itemize}
+  \item apples
+  \item oranges
+\end{itemize}
+\end{multicols}
+
+\begin{enumerate}
+  \item First numbered item.
+  \item Second numbered item.
+    \begin{enumerate}
+      \item Nested items are numbered differently.
+    \end{enumerate}
+\end{enumerate}
+
+\begin{description}
+  \item[Term] an explanation of the term.
+\end{description}
+
+% ===============================================================
+\section{Bibliography}
+% ===============================================================
+
+\subsection{Hand-written bibliography (compiles as it is)}
+
+For a short list, \verb|thebibliography| is enough. Each entry is
+introduced by \verb|\bibitem| and cited with \verb|\cite|. Here the
+citation \cite{lamport} and \cite{knuth} is resolved in this file.
+
+\begin{thebibliography}{9}
+  \bibitem{lamport} Leslie Lamport, \emph{\LaTeX: A Document
+    Preparation System}, 2nd ed., Addison-Wesley, 1994.
+  \bibitem{knuth} Donald E. Knuth, \emph{The \TeX book},
+    Addison-Wesley, 1984.
+\end{thebibliography}
+
+\subsection{BibTeX database (for real projects)}
+
+For larger projects, keep references in a separate \texttt{.bib}
+file and let BibTeX format them. The database \texttt{refs.bib}
+looks like this:
+\begin{verbatim}
+@book{lamport1994,
+  author    = {Leslie Lamport},
+  title     = {\LaTeX: A Document Preparation System},
+  edition   = {2nd},
+  publisher = {Addison-Wesley},
+  year      = {1994}
+}
+\end{verbatim}
+
+The document then uses:
+\begin{verbatim}
+\bibliographystyle{plain}
+\bibliography{refs}        % refers to refs.bib, placed at the end
+\end{verbatim}
+
+Compile in this order: \verb|pdflatex|, \verb|bibtex|, \verb|pdflatex|,
+\verb|pdflatex|.
+
+% ===============================================================
+\section{Index}
+% ===============================================================
+
+Mark index entries in the text with \verb|\index{term}|. Print the
+index at the end with \verb|\printindex| (needs \verb|\makeindex| in
+the preamble). Here we mark two terms:
+\index{LaTeX}\index{preamble}
+
+The index is produced in three steps: \verb|pdflatex|,
+\verb|makeindex|, \verb|pdflatex|.
+
+\printindex
+
+\end{document}

@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Convex Optimization: Module I</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+  :root {
+    --page-bg: #d9d9d4;
+    --paper: #fdfdfb;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --page-bg: #2b2b2b;
+      --paper: #f4f3ee;
+      --ink: #111;
+      --rule: #444;
+      --note: #555;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page-bg: #2b2b2b;
+    --paper: #f4f3ee;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  body {
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--ink);
+    font-family: "Times New Roman", Times, "Liberation Serif", serif;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .sheet {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 12mm auto;
+    padding: 14mm 18mm 16mm;
+    box-sizing: border-box;
+    background: var(--paper);
+    box-shadow: 0 1px 6px rgba(0,0,0,.25);
+    position: relative;
+  }
+  .sheet + .sheet { margin-top: 0; }
+  .hdr {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: start;
+    font-size: 14px;
+  }
+  .code { font-size: 22px; font-weight: bold; letter-spacing: .5px; }
+  .pages { text-align: center; padding-top: 14px; }
+  .name { text-align: right; line-height: 2; }
+  .title { text-align: center; margin-top: 22px; }
+  .title .exam { font-size: 19px; font-weight: bold; letter-spacing: .3px; }
+  .title .sch { margin-top: 2px; }
+  .title .course { margin-top: 10px; font-size: 16px; }
+  .title .subject { margin-top: 6px; font-size: 16px; font-weight: bold; }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 16px;
+    font-size: 15px;
+  }
+  .sec { margin-top: 14px; }
+  .sec-head {
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    font-weight: bold;
+  }
+  .sec-head .num { font-weight: bold; }
+  .sec-head .body { font-weight: normal; }
+  .sec-head .body b { font-weight: bold; }
+  .sec-head .body i { font-style: italic; }
+  .sec-total { text-align: right; font-weight: normal; margin-top: 4px; }
+  .qs { margin-top: 6px; }
+  .q {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    margin-bottom: 7px;
+  }
+  .q .n { text-align: right; padding-right: 10px; }
+  .q p { margin: 0; }
+  .sub { margin-left: 22px; }
+  .cut { color: var(--note); }
+  .turn { text-align: right; font-weight: bold; margin-top: 26px; }
+  .fig {
+    display: block;
+    margin: 8px auto 2px 36px;
+    width: 230px;
+    height: auto;
+  }
+  .fig-cap { margin-left: 36px; font-size: 13px; color: var(--note); font-style: italic; }
+  .foot-note {
+    margin-top: 26px;
+    border-top: 1px solid var(--rule);
+    padding-top: 6px;
+    font-size: 12px;
+    color: var(--note);
+  }
+  .pno { text-align: center; font-size: 15px; margin-bottom: 4px; }
+  .pno-hdr { position: absolute; top: 10mm; right: 18mm; font-weight: bold; font-size: 14px; }
+  @media print {
+    @page { size: A4; margin: 0; }
+    body { background: #fff; }
+    .sheet { margin: 0; box-shadow: none; width: 210mm; height: 297mm; min-height: 0; page-break-after: always; }
+    .sheet:last-child { page-break-after: auto; }
+  }
+  @media (max-width: 720px) {
+    .sheet { width: auto; margin: 0; padding: 14px 16px; min-height: 0; }
+    .hdr { grid-template-columns: 1fr; gap: 6px; }
+    .name { text-align: left; }
+    .pages { text-align: left; padding-top: 0; }
+  }
+.sec-title, .topic { break-after: avoid; }
+</style>
+<style>
+  .sec-title { font-weight: bold; margin-top: 16px; }
+  .sec-title .sub { font-weight: normal; font-style: italic; }
+  .lead { margin: 8px 0 4px; }
+  .placeholder {
+    margin: 8px 0 4px 36px; padding: 8px 10px;
+    border: 1px dashed var(--rule); font-size: 13px; color: var(--note);
+  }
+  .title .tl { margin-top: 4px; font-size: 16px; }
+  .title .tl.bold { font-weight: bold; }
+  body { font-size: 12px; line-height: 1.3; }
+  .sheet { padding: 0; }
+  .title .exam{font-size:15px;} .title .sch{font-size:13px;} .title .course,.title .subject,.title .tl{font-size:12px;}
+  .hdr .code{font-size:16px;}
+  .sec-title { margin-top: 8px; font-size: 13px; }
+  .topic { font-weight: bold; font-style: italic; margin: 6px 0 2px 0; font-size: 12px; }
+  .q { margin-bottom: 3px; grid-template-columns: 26px 1fr; }
+  .q-src { float:right; margin:1px 0 0 12px; font-size:11px; color: var(--note); font-style: italic; white-space:nowrap; }
+  .q p { display:inline; margin:0; }
+  .mk { font-weight: bold; white-space: nowrap; }
+  @page { size: A4; margin: 14mm 16mm; }
+  @media print { .sheet { margin:0; padding:0; box-shadow:none; width:auto; min-height:0; } body{background:#fff;} }
+</style>
+<style>@media print { .sheet { height:auto !important; min-height:0 !important; page-break-after: auto; } .sheet.key { page-break-before: always; } }</style>
+</head>
+
+<body>
+<div class="sheet">
+<div class="title">
+<div class="tl exam">FYUGP B.Sc. MATHEMATICS HONOURS</div>
+<div class="tl sch">CONVEX OPTIMIZATION (MAT5EJ303 (2))</div>
+<div class="tl course">Semester V &middot; Elective (Specialisation: Data Science)</div>
+<div class="tl subject">MODULE 1: REVIEW OF MULTIVARIABLE CALCULUS</div>
+<div class="tl course">Model questions on topics the past papers miss</div>
+</div>
+<div class="sec"><div class="sec-title">Section A: 1 mark each, answer all</div>
+<div class="topic">Hessian matrix</div>
+<div class="q"><span class="n">1</span><div><p>Write the Hessian matrix of $f(x, y) = x^2 y + 3y^2$. <span class="mk">(1 mark)</span></p></div></div>
+<div class="topic">Eigenvalues of the Hessian</div>
+<div class="q"><span class="n">2</span><div><p>State the condition on the eigenvalues of the Hessian at a stationary point which ensures that the point is a local minimum. <span class="mk">(1 mark)</span></p></div></div>
+<div class="topic">Total derivative and Jacobian matrix</div>
+<div class="q"><span class="n">3</span><div><p>Write the matrix that represents the total derivative $f'(\mathbf{a})$ of a differentiable map $f : \mathbb{R}^n \to \mathbb{R}^m$, and give its entries. <span class="mk">(1 mark)</span></p></div></div>
+</div>
+<div class="sec"><div class="sec-title">Section B: 2 marks each, answer all</div>
+<div class="topic">Second order Taylor theorem</div>
+<div class="q"><span class="n">4</span><div><p>State the second order Taylor theorem for a real-valued function $f$ of $n$ variables. <span class="mk">(2 marks)</span></p></div></div>
+<div class="topic">Mean value theorem</div>
+<div class="q"><span class="n">5</span><div><p>State the mean value theorem for a differentiable real-valued function $f$ on $\mathbb{R}^n$. <span class="mk">(2 marks)</span></p></div></div>
+</div>
+<div class="sec"><div class="sec-title">Section C: 4 marks each, answer all</div>
+<div class="topic">Hessian matrix and symmetry</div>
+<div class="q"><span class="n">6</span><div><p>Let $f(x, y) = x^3 - 3xy + y^2$. Find all second order partial derivatives of $f$, and write the Hessian matrix at $(1, 1)$. State whether the Hessian is symmetric and give the reason. <span class="mk">(4 marks)</span></p></div></div>
+<div class="topic">Eigenvalues of the Hessian</div>
+<div class="q"><span class="n">7</span><div><p>Let $f(x, y) = x^2 + xy + y^2 - 3x$. Find the stationary point of $f$, the eigenvalues of the Hessian there, and classify the stationary point. <span class="mk">(4 marks)</span></p></div></div>
+</div>
+<div class="sec"><div class="sec-title">Section D: 10 marks, answer the question</div>
+<div class="topic">Classification of stationary points</div>
+<div class="q"><span class="n">8</span><div><p>Find all stationary points of $f(x, y) = x^3 - 3x + 3y^2$, and classify each one using the Hessian matrix and its eigenvalues. <span class="mk">(10 marks)</span></p></div></div>
+</div>
+</div>
+<div class="sheet key">
+<div class="title"><div class="tl exam">Key and mapping: Module I model paper</div></div>
+<div class="sec"><div class="sec-title">Section A: 1 mark each, answer all</div>
+<p class="key"><b>1. (Unit 5).</b> $H = \begin{pmatrix} 2y & 2x \\ 2x & 6 \end{pmatrix}$</p>
+<p class="key"><b>2. (Units 7, 8).</b> Both eigenvalues are positive (the Hessian is positive definite).</p>
+<p class="key"><b>3. (Unit 2).</b> The Jacobian matrix $f'(\mathbf{a}) = \left(\dfrac{\partial f_i}{\partial x_j}(\mathbf{a})\right)$, with $m$ rows and $n$ columns.</p>
+</div>
+<div class="sec"><div class="sec-title">Section B: 2 marks each, answer all</div>
+<p class="key"><b>4. (Unit 6).</b> If $f$ is twice differentiable near $\boldsymbol{\xi}$, then for $\mathbf{x}$ near $\boldsymbol{\xi}$, $f(\mathbf{x}) = f(\boldsymbol{\xi}) + f'(\boldsymbol{\xi})(\mathbf{x} - \boldsymbol{\xi}) + \tfrac{1}{2}(\mathbf{x} - \boldsymbol{\xi})^{T} f''(\boldsymbol{\eta})(\mathbf{x} - \boldsymbol{\xi})$ for some $\boldsymbol{\eta}$ on the line segment joining $\mathbf{x}$ and $\boldsymbol{\xi}$.</p>
+<p class="key"><b>5. (Unit 6).</b> For $\mathbf{a}, \mathbf{b}$ with the segment between them in the domain, there is $\boldsymbol{\xi}$ on the segment with $f(\mathbf{b}) - f(\mathbf{a}) = f'(\boldsymbol{\xi})(\mathbf{b} - \mathbf{a})$.</p>
+</div>
+<div class="sec"><div class="sec-title">Section C: 4 marks each, answer all</div>
+<p class="key"><b>6. (Unit 5).</b> $f_x = 3x^2 - 3y$, $f_y = -3x + 2y$; $f_{xx} = 6x$, $f_{xy} = f_{yx} = -3$, $f_{yy} = 2$. At $(1, 1)$: $H = \begin{pmatrix} 6 & -3 \\ -3 & 2 \end{pmatrix}$. It is symmetric because $f_{xy} = f_{yx}$ (equality of mixed partials, since $f$ has continuous second order partials).</p>
+<p class="key"><b>7. (Units 7, 8).</b> $f_x = 2x + y - 3 = 0$ and $f_y = x + 2y = 0$ give $(x, y) = (2, -1)$. The Hessian is $\begin{pmatrix} 2 & 1 \\ 1 & 2 \end{pmatrix}$, with characteristic equation $(2 - \lambda)^2 - 1 = 0$, so $\lambda = 1$ and $\lambda = 3$. Both are positive, so $(2, -1)$ is a local minimum with value $f(2, -1) = -3$.</p>
+</div>
+<div class="sec"><div class="sec-title">Section D: 10 marks, answer the question</div>
+<p class="key"><b>8. (Units 4, 8).</b> $f_x = 3x^2 - 3 = 0$ gives $x = \pm 1$; $f_y = 6y = 0$ gives $y = 0$. The stationary points are $(1, 0)$ and $(-1, 0)$. The Hessian is $\begin{pmatrix} 6x & 0 \\ 0 & 6 \end{pmatrix}$. At $(1, 0)$: $H = \operatorname{diag}(6, 6)$, eigenvalues $6, 6$, both positive; a local minimum with value $f(1, 0) = -2$. At $(-1, 0)$: $H = \operatorname{diag}(-6, 6)$, eigenvalues $-6$ and $6$ of opposite sign; a saddle point with value $f(-1, 0) = 2$.</p>
+</div>
+<div class="sec"><div class="sec-title">Mapping to the syllabus and Binmore (2nd ed.)</div>
+<table class="tbl" style="width:100%;border-collapse:collapse" border="1" cellpadding="4"><tr><th>Question</th><th>Syllabus unit</th><th>Binmore section, printed pages</th></tr>
+<tr><td>1</td><td>Unit 5 (Hessian matrix)</td><td>19.31 (second derivatives), printed p. 219</td></tr>
+<tr><td>2</td><td>Units 7, 8 (eigenvalue test)</td><td>19.37–19.40, printed pp. 223–227</td></tr>
+<tr><td>3</td><td>Unit 2 (total derivative, Jacobian matrix)</td><td>19.12–19.19, printed pp. 199–210</td></tr>
+<tr><td>4</td><td>Unit 6 (second order Taylor)</td><td>19.36, printed p. 222</td></tr>
+<tr><td>5</td><td>Unit 6 (mean value theorem)</td><td>19.35, printed p. 221</td></tr>
+<tr><td>6</td><td>Unit 5 (Hessian matrix); Schwarz's theorem</td><td>19.31, printed p. 219; symmetry of mixed partials</td></tr>
+<tr><td>7</td><td>Units 7, 8 (eigenvalues and classification)</td><td>19.37–19.40, printed pp. 223–227</td></tr>
+<tr><td>8</td><td>Units 4, 8 (stationary points, classification)</td><td>19.27–19.30, printed pp. 217–218; 19.40, printed p. 227</td></tr>
+</table>
+<p class="key">Coverage: the Module I PYQ does not reach units 2 (total derivative), 5, 6, 7 and the classification part of 8. Questions 1 to 8 are drafted for those gaps; they are not taken from past papers.</p>
+</div></div>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<div class="sheet">
+<div class="title">
+<div class="tl exam">Convex Optimization, Module I</div>
+<div class="tl sch">Section 1: Directional and partial derivatives</div>
+<div class="tl course">Study notes (student version) &middot; Binmore, <i>Mathematical Analysis</i> (2nd ed.), §19.1–19.5, printed pp. 190–195</div>
+</div>
+<p class="key"><b>How to read these notes.</b> Book numbers are in brackets, for example [19.2]. Each numbered item of the book is here. Figures in the book are described in words; they are not drawn yet.</p>
+
+<div class="sec"><div class="sec-title">1. Directional derivatives [19.1]</div>
+<p>Start with two vectors in $\mathbb{R}^n$. The vector $\boldsymbol{\xi}$ gives a point, and $\mathbf{u}$ gives a direction. We take $\mathbf{u}$ to have length 1, so that $\|\mathbf{u}\| = 1$. The points $\mathbf{x} = \boldsymbol{\xi} + t\mathbf{u}$, for real $t$, form the straight line through $\boldsymbol{\xi}$ in the direction $\mathbf{u}$. The number $t$ is the distance from $\boldsymbol{\xi}$ to $\mathbf{x}$ along that line.</p>
+<p>Let $f : \mathbb{R}^n \to \mathbb{R}$. Define a new function of one variable by $F(t) = f(\boldsymbol{\xi} + t\mathbf{u})$. For $n = 2$ there is a picture. Cut the surface $y = f(\mathbf{x})$ with a vertical plane through $\boldsymbol{\xi}$ that is parallel to $\mathbf{u}$. The cut is the curve $y = F(t)$. In the picture, $\boldsymbol{\xi}$ is relabelled as $t = 0$. [figure described in 19.1]</p>
+<p>The slope of this cut at $t = 0$ is $F'(0)$. It is the rate at which the surface rises at $\boldsymbol{\xi}$ when we move in the direction $\mathbf{u}$. This number is the <i>directional derivative</i> of $f$ at $\boldsymbol{\xi}$ in the direction $\mathbf{u}$. We write it $D_{\mathbf{u}} f(\boldsymbol{\xi})$, and by the definition of a derivative,
+$$D_{\mathbf{u}} f(\boldsymbol{\xi}) = \lim_{t \to 0} \frac{f(\boldsymbol{\xi} + t\mathbf{u}) - f(\boldsymbol{\xi})}{t}.$$
+The same symbol is used when $\mathbf{u}$ is not a unit vector, or when $f$ has vector values. The slope picture no longer applies in those cases, but the limit still makes sense.</p>
+</div>
+
+<div class="sec"><div class="sec-title">2. Example: a slope in a given direction [19.2]</div>
+<p>Let $f(x_1, x_2) = x_1 x_2$. We want the slope of the surface at $(1, 2)$ in the direction $(3, 4)$.</p>
+<p>The vector $(3, 4)$ has length 5, so it is not a unit vector. We replace it by $\mathbf{u} = (3/5, 4/5)$, which points the same way. With $\boldsymbol{\xi} = (1, 2)$,
+$$\frac{f(\boldsymbol{\xi} + t\mathbf{u}) - f(\boldsymbol{\xi})}{t} = \frac{(1 + 3t/5)(2 + 4t/5) - 2}{t} = \frac{2t + 12t^2/25}{t} = 2 + \frac{12t}{25}.$$
+As $t \to 0$ this tends to $2$. So the slope is $2$.</p>
+<p>The curve $x_1 x_2 = 2$ is a <i>contour</i> of $f$. Every point of the surface above this contour is at the same height. The direction $(1, -2)$ is tangent to the contour, and the book asks you to check that the directional derivative at $(1, 2)$ in that direction is zero.</p>
+</div>
+
+<div class="sec"><div class="sec-title">3. Partial derivatives [19.3]</div>
+<p>Let $f : \mathbb{R}^n \to \mathbb{R}$. To keep the notation short, take $n = 2$. The argument for general $n$ is the same. For a point $\boldsymbol{\xi} = (\xi_1, \xi_2)$, the two <i>partial derivatives</i> are
+$$f_1(\xi_1, \xi_2) = \lim_{h \to 0} \frac{f(\xi_1 + h, \xi_2) - f(\xi_1, \xi_2)}{h}, \qquad f_2(\xi_1, \xi_2) = \lim_{k \to 0} \frac{f(\xi_1, \xi_2 + k) - f(\xi_1, \xi_2)}{k},$$
+provided the limits exist.</p>
+<p>In practice you do not need the limit. To find $f_1$, differentiate with respect to $x_1$ and treat $x_2$ as a constant. To find $f_2$, do the reverse. This is the same skill as ordinary differentiation.</p>
+</div>
+
+<div class="sec"><div class="sec-title">4. Examples of partial derivatives [19.4]</div>
+<p><b>(i)</b> Let $f(x_1, x_2) = x_1^2 x_2 + x_2^3 x_1$. Then
+$$f_1(x_1, x_2) = 2x_1 x_2 + x_2^3, \qquad f_2(x_1, x_2) = x_1^2 + 3x_2^2 x_1.$$</p>
+<p><b>(ii)</b> Let $g(x_1, x_2) = \sin(x_1 x_2 + x_2^2)$. Then
+$$g_1(x_1, x_2) = x_2 \cos(x_1 x_2 + x_2^2), \qquad g_2(x_1, x_2) = (x_1 + 2x_2)\cos(x_1 x_2 + x_2^2).$$</p>
+<p><b>(iii)</b> Let $h(x_1, x_2, x_3) = x_1 + x_2 x_3$, a function on $\mathbb{R}^3$. Then
+$$h_1 = 1, \qquad h_2 = x_3, \qquad h_3 = x_2.$$</p>
+<p>Now the meaning. Let $\mathbf{i} = (1, 0)$ and $\mathbf{j} = (0, 1)$. These are unit vectors along the $x_1$-axis and the $x_2$-axis. Taking $t \to 0$ in the definition of the directional derivative gives
+$$D_{\mathbf{i}} f(\boldsymbol{\xi}) = f_1(\xi_1, \xi_2), \qquad D_{\mathbf{j}} f(\boldsymbol{\xi}) = f_2(\xi_1, \xi_2).$$
+So $f_1(\xi_1, \xi_2)$ is the slope of the surface at $\boldsymbol{\xi}$ in the $x_1$-direction. Likewise $f_2(\xi_1, \xi_2)$ is the slope in the $x_2$-direction. Geometrically, cut the surface by the plane $x_2 = \xi_2$. The graph $y = f(x_1, \xi_2)$ on that plane has slope $f_1(\xi_1, \xi_2)$ at $x_1 = \xi_1$ [figures described in 19.4].</p>
+</div>
+
+<div class="sec"><div class="sec-title">5. Notation [19.5]</div>
+<p>There are several ways to write a partial derivative, and you have to be ready for all of them. Write $f_{x_1}(\xi_1, \xi_2)$ for $f_1(\xi_1, \xi_2)$, and similarly for $f_2$. When $y = f(x_1, x_2)$, write $\dfrac{\partial y}{\partial x_1}$ for $f_1(x_1, x_2)$, and $\dfrac{\partial y}{\partial x_2}$ for $f_2(x_1, x_2)$.</p>
+<p>The $\partial y / \partial x_1$ notation can be confusing. The letters $x_1$ and $x_2$ are used both for the point where we evaluate and for the variables we differentiate with respect to. This does not matter in examples, but it causes trouble in proofs. When several variables are around, make it clear which one is held fixed. The notation $\left(\dfrac{\partial y}{\partial x_1}\right)_{x_2}$ means: differentiate with respect to $x_1$ while $x_2$ is treated as a constant.</p>
+</div>
+
+<div class="sec"><div class="sec-title">What to take from this section</div>
+<ul>
+<li>A directional derivative is a slope of the surface $y = f(\mathbf{x})$ in a chosen direction $\mathbf{u}$ (a unit vector) [19.1].</li>
+<li>The partial derivatives $f_1$ and $f_2$ are the directional derivatives along the coordinate axes [19.3, 19.4].</li>
+<li>To compute a partial derivative, differentiate in one variable and freeze the others [19.3, 19.4].</li>
+<li>Check the length of $\mathbf{u}$ before using the formula; normalise it first [19.2].</li>
+</ul>
+</div>
+</div>

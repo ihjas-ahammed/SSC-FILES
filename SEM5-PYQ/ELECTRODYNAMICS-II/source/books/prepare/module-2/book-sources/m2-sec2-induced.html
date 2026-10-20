@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Griffiths 7.2.2 The induced electric field and the quasistatic approximation (book pp. 320–324)</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+  :root {
+    --page-bg: #d9d9d4;
+    --paper: #fdfdfb;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --page-bg: #2b2b2b;
+      --paper: #f4f3ee;
+      --ink: #111;
+      --rule: #444;
+      --note: #555;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page-bg: #2b2b2b;
+    --paper: #f4f3ee;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  body {
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--ink);
+    font-family: "Times New Roman", Times, "Liberation Serif", serif;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .sheet {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 12mm auto;
+    padding: 14mm 18mm 16mm;
+    box-sizing: border-box;
+    background: var(--paper);
+    box-shadow: 0 1px 6px rgba(0,0,0,.25);
+    position: relative;
+  }
+  .sheet + .sheet { margin-top: 0; }
+  .hdr {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: start;
+    font-size: 14px;
+  }
+  .code { font-size: 22px; font-weight: bold; letter-spacing: .5px; }
+  .pages { text-align: center; padding-top: 14px; }
+  .name { text-align: right; line-height: 2; }
+  .title { text-align: center; margin-top: 22px; }
+  .title .exam { font-size: 19px; font-weight: bold; letter-spacing: .3px; }
+  .title .sch { margin-top: 2px; }
+  .title .course { margin-top: 10px; font-size: 16px; }
+  .title .subject { margin-top: 6px; font-size: 16px; font-weight: bold; }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 16px;
+    font-size: 15px;
+  }
+  .sec { margin-top: 14px; }
+  .sec-head {
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    font-weight: bold;
+  }
+  .sec-head .num { font-weight: bold; }
+  .sec-head .body { font-weight: normal; }
+  .sec-head .body b { font-weight: bold; }
+  .sec-head .body i { font-style: italic; }
+  .sec-total { text-align: right; font-weight: normal; margin-top: 4px; }
+  .qs { margin-top: 6px; }
+  .q {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    margin-bottom: 7px;
+  }
+  .q .n { text-align: right; padding-right: 10px; }
+  .q p { margin: 0; }
+  .sub { margin-left: 22px; }
+  .cut { color: var(--note); }
+  .turn { text-align: right; font-weight: bold; margin-top: 26px; }
+  .fig {
+    display: block;
+    margin: 8px auto 2px 36px;
+    width: 230px;
+    height: auto;
+  }
+  .fig-cap { margin-left: 36px; font-size: 13px; color: var(--note); font-style: italic; }
+  .foot-note {
+    margin-top: 26px;
+    border-top: 1px solid var(--rule);
+    padding-top: 6px;
+    font-size: 12px;
+    color: var(--note);
+  }
+  .pno { text-align: center; font-size: 15px; margin-bottom: 4px; }
+  .pno-hdr { position: absolute; top: 10mm; right: 18mm; font-weight: bold; font-size: 14px; }
+  @media print {
+    @page { size: A4; margin: 0; }
+    body { background: #fff; }
+    .sheet { margin: 0; box-shadow: none; width: 210mm; height: 297mm; min-height: 0; page-break-after: always; }
+    .sheet:last-child { page-break-after: auto; }
+  }
+  @media (max-width: 720px) {
+    .sheet { width: auto; margin: 0; padding: 14px 16px; min-height: 0; }
+    .hdr { grid-template-columns: 1fr; gap: 6px; }
+    .name { text-align: left; }
+    .pages { text-align: left; padding-top: 0; }
+  }
+</style>
+<style>
+  .sheet.book { height: auto; min-height: 297mm; text-align: justify; hyphens: auto; }
+  .sheet.book p { margin: 6px 0; }
+  .rh { display: flex; justify-content: space-between; font-size: 12px; color: var(--note);
+        border-bottom: 1px solid var(--rule); padding-bottom: 3px; margin-bottom: 12px; }
+  .chap { display: flex; background: #8a8a86; color: #fff; margin: 4px 0 16px; }
+  .chap .cn { background: #b4b4ae; padding: 10px 18px; font-size: 26px; }
+  .chap .ct { padding: 12px 16px; font-size: 22px; font-weight: bold; }
+  h2.sec { font-size: 20px; margin: 18px 0 8px; border-bottom: 2px solid var(--rule); padding-bottom: 3px; }
+  h3.sub { font-size: 16px; margin: 14px 0 6px; border-bottom: 1px solid var(--rule); padding-bottom: 2px; }
+  .eq { margin: 10px 0; text-align: center; overflow: visible; }
+  mjx-container[display="true"], mjx-container { overflow: visible !important; max-width: 100%; }
+  .sheet.book, .sheet.book .eq { overflow: visible; }
+  .eq.boxed { border: 1px solid var(--ink); display: block; padding: 4px 8px; }
+  .prob { background: #ecece7; border: 1px solid var(--rule); padding: 8px 12px; margin: 10px 0; text-align: left; }
+  .prob p { margin: 5px 0; }
+  .ex, .ex-cont { border: 1px solid var(--rule); padding: 8px 12px; margin: 10px 0; text-align: left; }
+  .ex p, .ex-cont p { margin: 5px 0; }
+  .figbox { border: 1px dashed var(--rule); padding: 10px; color: var(--note); font-size: 13px; text-align: center; margin: 8px 0; font-style: italic; }
+  figure { margin: 8px 0; text-align: center; }
+  figure > svg { width: 100%; max-width: 230px; height: auto; }
+  figure.single > svg { max-width: 260px; }
+  figure figcaption { font-size: 12px; font-style: italic; color: var(--note); }
+  .figrow { display: flex; flex-wrap: wrap; justify-content: space-around; gap: 8px; }
+  .figrow > figure { flex: 1 1 180px; max-width: 240px; }
+  .fn { font-size: 12.5px; color: var(--note); margin: 6px 0; text-align: left; }
+  .cont { font-size: 12.5px; color: var(--note); font-style: italic; }
+  .gapnote { font-size: 13px; color: var(--note); font-style: italic; border-left: 3px solid var(--rule); padding: 2px 8px; margin: 4px 0 10px; }
+  .flag { color: #8a1c1c; font-weight: bold; }
+  .answer { font-size: 14px; }
+  .tbl { border-collapse: collapse; width: 100%; font-size: 13px; margin: 6px 0; }
+  .tbl td, .tbl th { border: 1px solid var(--rule); padding: 3px 6px; text-align: center; }
+  .tbl th { background: #ebebe6; }
+  .tblcap { font-size: 13px; margin-top: 8px; text-align: left; }
+  .pno { text-align: center; font-size: 14px; margin-top: 14px; }
+  .intro p, .intro li { font-size: 14px; text-align: left; }
+  .intro table { border-collapse: collapse; width: 100%; font-size: 14px; margin: 6px 0; }
+  .intro td, .intro th { border: 1px solid var(--rule); padding: 4px 8px; text-align: left; }
+  @media print {
+    .sheet.book { height: auto !important; min-height: 0 !important; page-break-after: always; }
+  }
+  @media (max-width: 720px) {
+    .sheet.book .eq { overflow-x: auto; max-width: 100%; }
+    .sheet.book mjx-container[display="true"] { font-size: 85% !important; }
+    .sheet.book .figrow > figure { flex: 1 1 100%; max-width: 100%; }
+    .sheet.book { padding-left: 14px; padding-right: 14px; }
+  }
+</style>
+</head>
+<body>
+<!-- Book source, split from the Module 2 excerpt. Pages as printed in Griffiths 5th ed. -->
+<div class="sheet book" id="pdf-p23">
+  <div class="rh"><span>320</span><span>7 Electrodynamics</span></div>
+  <div class="prob">
+    <p><b>Problem 7.13.</b> A long solenoid, of radius $a$, is driven by an alternating current, so that the field inside is sinusoidal: $\mathbf B(t)=B_0\cos(\omega t)\,\hat{\mathbf z}$. A circular loop of wire, of radius $a/2$ and resistance $R$, is placed inside the solenoid, and coaxial with it. Find the current induced in the loop, as a function of time.</p>
+    <p><b>Problem 7.14.</b> A square loop of wire, with sides of length $a$, lies in the first quadrant of the $xy$ plane, with one corner at the origin. In this region, there is a nonuniform time-dependent magnetic field $\mathbf B(y,t)=ky^3t^2\,\hat{\mathbf z}$ (where $k$ is a constant). Find the emf induced in the loop.</p>
+    <p><b>Problem 7.15.</b> As a lecture demonstration a short cylindrical bar magnet is dropped down a vertical aluminum pipe of slightly larger diameter, about 2 m long. It takes several seconds to emerge at the bottom, whereas an otherwise identical piece of <i>unmagnetized</i> iron makes the trip in a fraction of a second. Explain why the magnet falls more slowly.<sup>16</sup></p>
+  </div>
+  <h3 class="sub">7.2.2 The Induced Electric Field</h3>
+  <p>Faraday’s law generalizes the electrostatic rule $\nabla\times\mathbf E=\mathbf 0$ to the time-dependent régime. The <i>divergence</i> of $\mathbf E$ is still given by Gauss’s law ($\nabla\cdot\mathbf E=\rho/\epsilon_0$). If $\mathbf E$ is a <i>pure</i> Faraday field (due exclusively to a changing $\mathbf B$, with $\rho=0$), then</p>
+  <div class="eq">$$\nabla\cdot\mathbf E=0,\qquad\nabla\times\mathbf E=-\frac{\partial\mathbf B}{\partial t}.$$</div>
+  <p>This is mathematically identical to magnetostatics,</p>
+  <div class="eq">$$\nabla\cdot\mathbf B=0,\qquad\nabla\times\mathbf B=\mu_0\mathbf J.$$</div>
+  <p><i>Conclusion:</i> Faraday-induced electric fields are determined by $-(\partial\mathbf B/\partial t)$ in exactly the same way as magnetostatic fields are determined by $\mu_0\mathbf J$. The analog to Biot–Savart is<sup>17</sup> is</p>
+  <div class="eq">$$\mathbf E=-\frac{1}{4\pi}\int\frac{(\partial\mathbf B/\partial t)\times\hat{\mathbf r}}{r^2}\,d\tau=-\frac{1}{4\pi}\frac{\partial}{\partial t}\int\frac{\mathbf B\times\hat{\mathbf r}}{r^2}\,d\tau, \tag{7.27}$$</div>
+  <p>and if symmetry permits, we can use all the tricks associated with Ampère’s law in integral form ($\oint\mathbf B\cdot d\mathbf l=\mu_0I_{\text{enc}}$), only now it’s <i>Faraday’s</i> law in integral form:</p>
+  <div class="eq">$$\oint\mathbf E\cdot d\mathbf l=-\frac{d\Phi}{dt}. \tag{7.28}$$</div>
+  <p>The rate of change of (magnetic) flux through the Ampèrian loop plays the role formerly assigned to $\mu_0I_{\text{enc}}$.</p>
+  <p class="fn"><sup>16</sup> For a discussion of this amazing demonstration see K. D. Hahn <i>et al.</i>, <i>Am. J. Phys.</i> <b>66</b>, 1066 (1998); G. Donoso, C. L. Ladera, and P. Martin, <i>Am. J. Phys.</i> <b>79</b>, 193 (2011).</p>
+  <p class="fn"><sup>17</sup> Magnetostatics holds only for time-independent currents, but there is no such restriction on $\partial\mathbf B/\partial t$.</p>
+  <div class="pno">320</div>
+</div>
+<div class="sheet book" id="pdf-p24">
+  <div class="rh"><span>321</span><span>7.2 Electromagnetic Induction</span></div>
+  <div class="ex">
+    <p><b>Example 7.8.</b> A uniform magnetic field $\mathbf B(t)$, pointing straight up, fills the shaded circular region of Fig. 7.25. If $\mathbf B$ is changing with time, what is the induced electric field?</p>
+    <p><i>Solution.</i> $\mathbf E$ points in the azimuthal direction, just like the magnetic field inside a long straight wire carrying a uniform <i>current</i> density. Draw an Ampèrian loop of radius $s$, and apply Faraday’s law:</p>
+    <div class="eq">$$\oint\mathbf E\cdot d\mathbf l=E(2\pi s)=-\frac{d\Phi}{dt}=-\frac{d}{dt}\left(\pi s^2B(t)\right)=-\pi s^2\frac{dB}{dt}.$$</div>
+    <p>Therefore,</p>
+    <div class="eq">$$\mathbf E=-\frac{s}{2}\frac{dB}{dt}\hat{\boldsymbol\phi}.$$</div>
+    <p>If $\mathbf B$ is increasing, $\mathbf E$ runs clockwise, as viewed from above.</p>
+    <div class="figrow">
+      <figure><div class="figbox">Fig. 7.25: uniform field $\mathbf B(t)$ pointing up through a shaded circular region; dashed Ampèrian loop of radius $s$. Schematic; see PDF page.</div><figcaption>Fig. 7.25</figcaption></figure>
+      <figure><div class="figbox">Fig. 7.26: wheel of radius $b$ with a line charge $\lambda$ on its rim; field $\mathbf B_0$ up through the central region of radius $a$; $\mathbf E$ curls around the axis; rotation direction shown. Schematic; see PDF page.</div><figcaption>Fig. 7.26</figcaption></figure>
+    </div>
+  </div>
+  <div class="ex">
+    <p><b>Example 7.9.</b> A line charge $\lambda$ is glued onto the rim of a wheel of radius $b$, which is then suspended horizontally, as shown in Fig. 7.26, so that it is free to rotate (the spokes are made of some nonconducting material – wood, maybe). In the central region, out to radius $a$, there is a uniform magnetic field $\mathbf B_0$, pointing up. Now someone turns the field off. What happens?</p>
+    <p><i>Solution.</i> The changing magnetic field will induce an electric field, curling around the axis of the wheel. This electric field exerts a force on the charges at the rim, and the wheel starts to turn. According to Lenz’s law, it will rotate in such a direction that <i>its</i> field tends to restore the upward flux. The motion, then, is counterclockwise, as viewed from above.</p>
+    <p>Faraday’s law, applied to the loop at radius $b$, says</p>
+    <div class="eq">$$\oint\mathbf E\cdot d\mathbf l=E(2\pi b)=-\frac{d\Phi}{dt}=-\pi a^2\frac{dB}{dt},\qquad\text{or}\qquad\mathbf E=-\frac{a^2}{2b}\frac{dB}{dt}\hat{\boldsymbol\phi}.$$</div>
+    <p>The torque on a segment of length $d\mathbf l$ is $(\mathbf r\times\mathbf F)$, or $b\lambda E\,dl$. The total torque on the wheel is therefore</p>
+    <div class="eq">$$N=b\lambda\left(-\frac{a^2}{2b}\frac{dB}{dt}\right)\oint dl=-b\lambda\pi a^2\frac{dB}{dt},$$</div>
+  </div>
+  <div class="pno">321</div>
+</div>
+<div class="sheet book" id="pdf-p25">
+  <div class="rh"><span>322</span><span>7 Electrodynamics</span></div>
+  <div class="ex-cont">
+    <p>and the angular momentum imparted to the wheel is</p>
+    <div class="eq">$$\int N\,dt=-\lambda\pi a^2b\int_{B_0}^{0}dB=\lambda\pi a^2bB_0.$$</div>
+    <p>It doesn’t matter how quickly or slowly you turn off the field; the resulting angular velocity of the wheel is the same regardless. (If you find yourself wondering where the angular momentum <i>came</i> from, you’re getting ahead of the story! Wait for the next chapter.)</p>
+    <p>Note that it’s the <i>electric</i> field that did the rotating. To convince you of this, I deliberately set things up so that the <i>magnetic</i> field is <i>zero</i> at the location of the charge. The experimenters may tell you they never put in any electric field – all they did was switch off the magnetic field. But when they did that, an electric field automatically appeared, and it’s this electric field that turned the wheel.</p>
+  </div>
+  <p>I must warn you, now, of a small fraud that tarnishes many applications of Faraday’s law: electromagnetic induction, of course, occurs only when the magnetic fields are <i>changing</i>, and yet we would like to use the apparatus of magnetostatics (Ampère’s law, the Biot–Savart law, and the rest) to <i>calculate</i> those magnetic fields. Technically, any result derived in this way is only approximately correct. But in practice the error is usually negligible, unless the field fluctuates extremely rapidly, or you are interested in points very far from the source. Even the case of a wire snipped by a pair of scissors (Prob. 7.19) is <i>static enough</i> for Ampère’s law to apply. This régime, in which magnetostatic rules can be used to calculate the magnetic field on the right-hand side of Faraday’s law, is called <b>quasistatic</b>. Generally speaking, it is only when we come to electromagnetic waves and radiation that we must worry seriously about the breakdown of magnetostatics itself.</p>
+  <div class="ex">
+    <p><b>Example 7.10.</b> An infinitely long straight wire carries a slowly varying current $I(t)$. Determine the induced electric field, as a function of the distance $s$ from the wire.<sup>18</sup></p>
+    <p><i>Solution.</i> In the quasistatic approximation, the magnetic field is $(\mu_0I/2\pi s)$, and it circles the wire. Like the $\mathbf B$-field of a solenoid, $\mathbf E$ here runs parallel to the axis. For the rectangular “Ampèrian loop” in Fig. 7.27, Faraday’s law gives</p>
+  </div>
+  <p class="fn"><sup>18</sup> This example is artificial, and not just in the obvious sense of involving infinite wires, but in a more subtle respect. It assumes that the current is the same (at any given instant) all the way down the line. This is a safe assumption for the <i>short</i> wires in typical electric circuits, but not for <i>long</i> wires (<b>transmission lines</b>), unless you supply a distributed and synchronized driving mechanism. But never mind – the problem doesn’t enquire how you would <i>produce</i> such a current; it only asks what <i>fields</i> would result if you <i>did</i>. Variations on this problem are discussed by M. A. Heald, <i>Am. J. Phys.</i> <b>54</b>, 1142 (1986).</p>
+  <div class="pno">322</div>
+</div>
+<div class="sheet book" id="pdf-p26">
+  <div class="rh"><span>323</span><span>7.2 Electromagnetic Induction</span></div>
+  <div class="ex-cont">
+    <div class="figbox">Fig. 7.27: rectangular Ampèrian loop of width $l$ with sides at $s_0$ and $s$, beside a long straight wire carrying current $I$. Schematic; see PDF page.</div>
+    <div class="eq">$$\oint\mathbf E\cdot d\mathbf l=E(s_0)l-E(s)l=-\frac{d}{dt}\int\mathbf B\cdot d\mathbf a=-\frac{\mu_0l}{2\pi}\frac{dI}{dt}\int_{s_0}^{s}\frac{1}{s'}\,ds'=-\frac{\mu_0l}{2\pi}\frac{dI}{dt}(\ln s-\ln s_0).$$</div>
+    <p>Thus</p>
+    <div class="eq">$$\mathbf E(s)=\left[\frac{\mu_0}{2\pi}\frac{dI}{dt}\ln s+K\right]\hat{\mathbf z}, \tag{7.29}$$</div>
+    <p>where $K$ is a constant (that is to say, it is independent of $s$ – it might still be a function of $t$). The actual <i>value</i> of $K$ depends on the whole history of the function $I(t)$ – we’ll see some examples in Chapter 10.</p>
+    <p>Equation 7.29 has the peculiar implication that $E$ blows up as $s$ goes to infinity. <i>That</i> can’t be true. … What’s gone wrong? <i>Answer:</i> We have overstepped the limits of the quasistatic approximation. As we shall see in Chapter 9, electromagnetic “news” travels at the speed of light, and at large distances $\mathbf B$ depends not on the current <i>now</i>, but on the current <i>as it was</i> at some earlier time (indeed, a whole <i>range</i> of earlier times, since different points on the wire are different distances away). If $\tau$ is the time it takes $I$ to change substantially, then the quasistatic approximation should hold only for</p>
+    <div class="eq">$$s\ll c\tau, \tag{7.30}$$</div>
+    <p>and hence Eq. 7.29 simply does not apply, at extremely large $s$.</p>
+  </div>
+  <div class="prob">
+    <p><b>Problem 7.16.</b> A long solenoid with radius $a$ and $n$ turns per unit length carries a time-dependent current $I(t)$ in the $\hat{\boldsymbol\phi}$ direction. Find the electric field (magnitude and direction) at a distance $s$ from the axis (both inside and outside the solenoid), in the quasistatic approximation.</p>
+    <p><b>Problem 7.17.</b> An alternating current $I=I_0\cos(\omega t)$ flows down a long straight wire, and returns along a coaxial conducting tube of radius $a$.</p>
+    <p>(a) In what <i>direction</i> does the induced electric field point (radial, circumferential, or longitudinal)?<br>
+    (b) Assuming that the field goes to zero as $s\to\infty$, find $\mathbf E(s,t)$.<sup>19</sup></p>
+  </div>
+  <p class="fn"><sup>19</sup> This is not at all the way electric fields <i>actually</i> behave in coaxial cables, for reasons suggested in footnote <span class="cut">[number not legible in scan]</span>. See Section 9.5.3, and J. G. Cherveniak, <i>Am. J. Phys.</i> <b>54</b>, 946 (1986), for a more realistic treatment.</p>
+  <div class="pno">323</div>
+</div>
+<div class="sheet book" id="pdf-p27">
+  <div class="rh"><span>324</span><span>7 Electrodynamics</span></div>
+  <div class="prob">
+    <p><b>Problem 7.18.</b> A long solenoid of radius $a$, carrying $n$ turns per unit length, is looped by a wire with resistance $R$, as shown in Fig. 7.28.</p>
+    <div class="figbox">Fig. 7.28: long solenoid of radius $a$ looped by a wire passing through a resistor $R$. Schematic; see PDF page.</div>
+    <p>(a) If the current in the solenoid is increasing at a constant rate ($dI/dt=k$), what current flows in the loop, and which way (left or right) does it pass through the resistor?<br>
+    (b) If the current $I$ in the solenoid is constant but the solenoid is pulled out of the loop (toward the left, to a place far from the loop), what total charge passes through the resistor?</p>
+    <p><b>Problem 7.19.</b> A square loop, side $a$, resistance $R$, lies a distance $s$ from an infinite straight wire that carries current $I$ (Fig. 7.29). Now someone cuts the wire, so $I$ drops to zero. In what direction does the induced current in the square loop flow, and what total charge passes a given point in the loop during the time this current flows? If you don’t like the scissors model, turn the current down <i>gradually</i>:</p>
+    <div class="eq">$$I(t)=\begin{cases}(1-\alpha t)I & \text{for } 0\le t\le 1/\alpha,\\ 0 & \text{for } t>1/\alpha.\end{cases}$$</div>
+    <div class="figbox">Fig. 7.29: square loop of side $a$ at distance $s$ from a straight wire carrying current $I$; a pair of scissors is shown cutting the wire. Schematic; see PDF page.</div>
+    <p><b>Problem 7.20.</b> A toroidal coil has a rectangular cross section, with inner radius $a$, outer radius $a+w$, and height $h$. It carries a total of $N$ tightly wound turns, and the current is increasing at a constant rate ($dI/dt=k$). If $w$ and $h$ are both much less than $a$, find the electric field at a point $z$ above the center of the toroid. [<i>Hint:</i> Exploit the analogy between Faraday fields and magnetostatic fields, and refer to Ex. 5.6.]</p>
+    <p><b>Problem 7.21.</b> Where is $\partial\mathbf B/\partial t$ nonzero, in Fig. 7.21b? Exploit the analogy between Faraday’s law and Ampère’s law to sketch (qualitatively) the electric field. [For a quantitative model, see Prob. 7.46.]</p>
+  </div>
+  <div class="pno">324</div>
+</div>
+</body>
+</html>

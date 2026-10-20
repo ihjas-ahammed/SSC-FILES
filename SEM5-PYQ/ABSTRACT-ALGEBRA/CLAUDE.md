@@ -61,6 +61,7 @@ The builders and scratch scripts for Modules 2–4 are in the session scratchpad
 - Paper rules: no name or register block, no paper code in generated papers. Transcriptions keep the printed code.
 
 ## Rules the user set
+- Finish requested work end to end without asking permission for steps already asked for (user, 2026-10-16). Ask only when a fact or access only the user has is missing; name the choice taken in the final message.
 - Notes must not drop content from the book. Student version uses own words; structured version is formal. Both keep the book's numbers.
 - No placeholders or "in progress" wording in final files. A missing item is a build failure.
 - Keep the paper's wording. True/false statements get "State whether true or false:" in front.
@@ -89,3 +90,8 @@ The builders and scratch scripts for Modules 2–4 are in the session scratchpad
 3. Module V scope (open-ended): still open.
 4. Module IV item 17 (homomorphisms): checked 2026-10-16. Group homomorphisms are 8th-ed §8.1–8.6 (Module 2) and kernel cosets §10.17–10.19 (Module 3); ring homomorphisms are §22.9–22.11 (Module 4).
 5. Plus Two statuses marked OPEN in `source/books/prepare/module-2/pre-math.html` need the Kerala text.
+
+## Model day paper (from the study-plan screenshot)
+- Trigger: the user uploads a screenshot of the study plan and says "create model day paper". Method: `create-model-day-paper.md` (this folder). Builder: `build_model_paper.py`, which takes a JSON paper and writes the HTML and PDF. Each paper is a `model-paper-<N>.json` in this folder.
+- Scope is the syllabus's section list, checked against the book excerpt headings. A question whose section is not listed is out, even when the topic sounds right. Do not pad a paper with out-of-scope questions.
+- Layout: copy the university paper for this subject (under `GitHub/SSC-FILES/PYQ/` or `ssc-v3/fyug/`), including its marks, ceilings and time. No name or register-number block.

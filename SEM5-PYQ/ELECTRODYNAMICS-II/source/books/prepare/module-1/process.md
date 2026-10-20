@@ -1,0 +1,318 @@
+# process.md: building study notes from a book section (Module 1)
+
+Scope: how the Griffiths 5th ed. Module 1 notes in this folder were made. Use it for the next section.
+
+Source files (in `book-sources/`, one per topic):
+- `polarization.html`: book §4.1, pp. 166–172
+- `field-of-polarized-object.html`: book §4.2, pp. 173–180
+- `electric-displacement-dielectrics.html`, `magnetization.html`, `magnetized-object-ampere-ferromagnetism.html`: not yet worked
+
+Output names: `<topic>-notes.html` (first draft, plain notes), `<topic>-structured-notes.html` (formal, for quick study), and the matching `.pdf`. Keep all files in this folder.
+
+---
+
+## 1. Read the section
+
+1. Read the topic HTML from `book-sources/`. Read the whole section, including equations and examples, before writing anything.
+2. List every equation number that appears (for example 4.9–4.19 for §4.2). Every equation in the notes must carry its book number, or say "not numbered in the excerpt".
+3. Note the syllabus status of each subsection. The syllabus map in `source/books/index.md` says which subsections are beyond the syllabus. Mark those as "background" in the notes; do not drop them.
+4. Note the book's own warnings and footnotes (for example the footnote that says a subsection can be skipped). Keep them in the notes.
+
+## 2. Prerequisites
+
+5. List the maths and physics the section assumes, from the Class 12 (Kerala SCERT Plus Two) base. Mark each as Recall, Partial or Beyond, as in `pre-physics.html` and `pre-math.html`.
+6. For §4.2 the Beyond items were: divergence, the divergence theorem, integration by parts, and the gradient of $1/\mathcal R$ with respect to the source point. Put them in a "Before you start" list at the top of the notes.
+
+## 3. Write the notes
+
+7. Write the first draft (`<topic>-notes.html`) as a student's working notes: every derivation step written out.
+8. Write the structured version (`<topic>-structured-notes.html`) from the first draft. Rules:
+   - Keep every point, step and warning from the draft. Do not summarise away a derivation step.
+   - Formal, impersonal tone. No first-person narration.
+   - Numbered headings by topic; short bullets; key results in a boxed "Result" with the book equation number.
+   - Each derivation states its starting equation, each step, and the final result.
+   - Keep the book's notation: $\mathbf P$, $\sigma_b$, $\rho_b$, $\mathcal R$, and so on.
+9. Equations: write them as MathJax (`$...$` and `$$...$$`). Check the count of `$` is even before rendering.
+10. Figures: draw sketches as inline SVG, one per concept. Label them as sketches ("my sketch"). Do not copy the book's figures. Give each marker id a unique name within the file.
+11. Reuse figures from an earlier file by extracting the `<figure class="fig">` blocks with a script, not by retyping them.
+
+## 4. Check the content
+
+12. Re-derive each result from the starting equation before rendering. Record any step you could not verify as an OPEN point in a final section.
+13. Check the arithmetic and units of every numerical value against the book (for example $\alpha$ units, $4/3\pi R^3$).
+14. Check that each book equation number cited in the notes exists in the topic HTML.
+
+## 5. Render and check
+
+15. Render to PDF with headless Chrome, A4, with virtual time so MathJax finishes:
+    `/opt/google/chrome/chrome --headless=new --no-sandbox --disable-gpu --no-pdf-header-footer --virtual-time-budget=20000 --print-to-pdf=OUT.pdf file://PATH.html`
+    (Headless Firefox cannot print to PDF in this environment.)
+16. Check the page count with `pdfinfo`. Rasterise with `pdftoppm -r 60` and look at each page that has a figure or a boxed result. Check for: equations not rendered, overlapping labels, figures split across pages.
+17. Fix and re-render until the pages are clean.
+
+## 6. Send
+
+18. Mail with `quickmail <file> ihjas.one@gmail.com`, one file per message. Send only when asked.
+19. Copy the final PDF into this folder next to the HTML before mailing.
+
+## 7. Rules for this folder
+
+- Do not add content to the topic HTML files in `book-sources/` unless the user asks. Notes are separate files.
+- Anything not in the book must be labelled as added, or placed only in a separate notes file.
+- The book is the reference. If the notes and the book differ, the book is right until checked; record the difference as OPEN.
+- Do not state a number from memory that you have not checked. Mark it OPEN instead.
+- Before starting a new section, check that the previous section's notes are rendered and mailed.
+
+
+---
+
+## 8. Module-wide build (added after Module 1 run)
+
+Use this when producing the combined Module 1 files.
+
+### 8.1 Layout
+- `parts/`: one body per section and style, `sXY-student.body.html` and `sXY-structured.body.html` (XY = 44, 61, 62, 63, 64, and 43 student). Bodies hold no <html>, <head> or title; the builder adds them.
+- `diagrams/image-gen/`: one PNG per figure, generated by Codex image generation. Briefs live in `run_briefs.py` (sections 4.1–4.2) and `run_briefs2.py` (sections 4.3–6.4). The shared style string is `STYLE` in `run_briefs.py`.
+- Final output: `electrodynamics-module1-study.html/.pdf` (student) and `electrodynamics-module1-structured.html/.pdf` (structured), built by `build_module1.py` (kept in the scratchpad; copy it here if it must be re-run later).
+
+### 8.2 Steps
+1. Read the source section from `book-sources/` in full (equations included). Record every equation number.
+2. Write the structured body (formal). Keep every derivation step, warning, footnote and open point.
+3. Write the student body (own words, no formal table of contents). Keep the same content and equation numbers. Student bodies are the reading notes for study.
+4. Mark each figure in the body as `{{FIG:name}}` inside `<div class="fig">…<figcaption>…</figcaption></div>`. Give every figure a caption that says what the picture shows.
+5. Write the image brief for each figure in the brief file: geometry, labels, colours, and the formula line. Use the shared STYLE string.
+6. Generate each image with Codex image generation (one brief per `codex exec`, sandbox `workspace-write`, folder `diagrams/image-gen`). Two runners can run in parallel, each with its own log.
+7. Open every PNG and check the labels and geometry against the brief. Re-run a brief if a label is wrong or missing.
+8. Build the combined files with the builder. The builder reports any missing image by name; treat any missing image as a failure.
+9. Render each combined HTML to PDF with headless Chrome (same command as step 15 above).
+10. Check page count with `pdfinfo`, then look at at least one page with figures, one with boxed results and one with tables.
+11. Copy the PDFs into this folder and mail them, one file per message.
+
+### 8.3 Rules that apply to every section
+- Do not drop a derivation step, footnote, warning, or worked example from the source to make the notes shorter. The quick-study version is the structured one, not a shorter one.
+- The student version is in the student's own words, but it must not invent physics or change equation numbers.
+- Placeholder figures are only for a draft the user has asked for; the final files must use image-generated figures.
+- Anything beyond the syllabus list is marked "background" in both versions.
+- Pages or sections missing from the excerpt are named in each section's header note.
+
+
+---
+
+## 9. Figure review, cleaning and two-column layout (added after the Module 1 PDF review)
+
+### 9.1 Review every figure before building
+1. Build one review sheet per six figures (2 columns × 3 rows, labels under each picture). Read each one against its brief.
+2. A figure is regenerated when: the content is not the brief (wrong diagram), a label or formula is cut off, or a caption or formula is baked into the picture and duplicates the HTML caption.
+3. Regenerate in one Codex session, two images per sheet (left half and right half of one image), with the flag "keep every label inside the picture; no text below it". Crop each half into its own PNG.
+
+### 9.2 Clean the images
+4. `diagrams/process_images.py` writes the cleaned copies to `diagrams/final/` (WebP): background that touches the corners is made transparent, the bottom band is trimmed only where a caption was baked in (`TRIM`), and the picture is cut to its content and scaled to at most 620 px wide. Originals in `image-gen/` are not changed by this step.
+5. Check the trim: a trim that cuts through a label is a failure. Regenerate that figure instead of trimming further.
+
+### 9.3 Build the combined files
+6. The builder (`build_module1.py`) uses only `diagrams/final/`. It reports any missing figure by name; a missing figure is a failure.
+7. Layout: two columns for section text, with headings, box results, tables and wide figures spanning both columns. A figure is "wide" when its cleaned image is at least 520 px wide.
+8. Captions: figures are numbered once for the whole document, and no caption may say "placeholder", "sketch" or "to be replaced".
+
+### 9.4 Size and check
+9. Keep the PDF small: cleaned WebP images (about 1 MB for all figures). Check the PDF size with `ls -l` before mailing.
+10. Look at at least one page from each combined file, and a page with a wide figure and a page with a two-column block.
+11. Mail each PDF as its own message.
+
+
+---
+
+## 10. Tracking image generation time (minute-by-minute)
+
+Why: the earlier runs were tracked only by eye, so a stalled job looked the same as a slow one. Track each Codex job the same way every time.
+
+1. Before each Codex job, write a line to the job's log: `START <job name> <HH:MM:SS>` (the runner script does this with `date`).
+2. Each run writes one line per finished image: `DONE <image name> <HH:MM:SS>`, with the file's own modification time as the check.
+3. Check progress once per minute while a job runs. At each check, record the number of files saved so far and the elapsed minutes in the log, for example `00:21 1/5 saved, 6 min elapsed`.
+4. A job with no new file for 4 minutes is stalled. Report it, and check the Codex session log for the last event before restarting it.
+5. Report the total time per job and per image at the end of the run, from the log.
+6. Use one Codex session for a set of images, not one session per image, after the first image is confirmed to work (the first image in a new session is the one that takes longest).
+
+
+---
+
+## 11. Why figure processing is slow, and the fix
+
+Cause: the transparency step in `diagrams/process_images.py` first looped over every pixel in Python, using slow pixel access and a visited-set, for each image. A 940 × 740 image is about 700,000 pixels, so each image took tens of seconds, and 31 images took several minutes. The run also printed nothing until it ended, so it looked stuck.
+
+Fix (in the script now):
+- The background is made transparent with PIL's `ImageDraw.floodfill` (compiled code) from the four corners, with a colour tolerance of 38. One image now takes about 1–2 seconds.
+- Each image's name is printed as soon as it is written (`flush=True`), so a run shows progress.
+
+Rules to keep it fast:
+1. Do not use per-pixel Python loops on the full-size image.
+2. If a step must be done per pixel, downscale the image first, or use a compiled routine (PIL or numpy; numpy is not installed on this machine).
+3. Print progress while a job runs (see section 10).
+
+
+---
+
+## 12. Final pipeline (end of Module 1, 2026-10-15)
+
+Outputs: `electrodynamics-module1-study.pdf` (student) and `electrodynamics-module1-structured.pdf` (structured), both about 1.3 MB and 2.2 MB.
+
+### 12.1 Figures
+1. Figures are generated with Codex image generation, one session per batch, two images per sheet (left and right halves). Keep every label inside the picture and add no caption or formula below the picture.
+2. Review every figure at six per view before building. Regenerate any figure with clipped labels, baked-in captions or wrong content.
+3. Save the cleaned copies as JPEG (`diagrams/final/*.jpg`), flattened onto white, no transparency, about 480 px wide. Transparent WebP made the PDF store each figure twice (image plus alpha mask), which doubled the file size.
+4. Trim a baked-in caption only if the trim does not cut a label. Otherwise regenerate.
+
+### 12.2 Math and captions
+5. Never write a raw `<` inside math in the HTML source. The browser reads `<b` or `<0` as a tag and swallows the rest of the section (this caused the green boxes, the blank space and the blank page). The builder turns `<` inside `$...$` into `\lt`.
+6. Captions use plain HTML text, not MathJax. MathJax inside a figure caption rendered at a huge size. The builder converts simple math in captions (`\rho_b`, `E_\text{out}`) to `ρ<sub>b</sub>`, `E<sub>out</sub>`.
+7. Number figures once for the whole document. Remove the words "placeholder", "my sketch" and "to be replaced" from every caption.
+
+### 12.3 Layout
+8. Two columns for section text. Headings, tables and figures stay inside a column (no `column-span: all`). Keep the section title spanning the page only.
+9. Do not force a page break before each section. The forced break left one-third empty pages at the end of short sections.
+10. Check the layout after rebuilding: tags balanced (open and close counts match), no page with more than 75% blank height apart from the cover, and no blank pages.
+
+### 12.4 Checks before mailing
+11. Tag balance: parse the HTML and confirm every tag closes.
+12. Blank pages: drop any page with no text and no image (pypdf). Check the blank-height share per page (pdftoppm, count rows with no ink). Measuring white pixels per page is wrong: text pages are over 80% white.
+13. Size breakdown: count image XObjects and font streams in the PDF with a regex on the raw file. If images are doubled, look for alpha masks.
+14. Look at at least one page with a figure and one page with a column break before mailing.
+
+
+---
+
+## 13. Pre-physics, pre-math, Plus Two recall and two-column notes (added for Module 2)
+
+This section applies to every module from Module 2 on. Module 1 was done before these rules; its files are not changed.
+
+### 13.1 Pre-physics and pre-math bridges (one pair per module)
+1. Write `pre-physics.html` and `pre-math.html` in the module's `prepare/module-N/` folder before any notes. Copy the layout of `prepare/module-1/pre-math.html`.
+2. Base: Kerala SCERT Plus Two (Class 12). Each item has a number (P1…, M1…), what to recall, the Plus Two chapter, where it is used in the module, and a status.
+3. Status key: Recall = taught in Plus Two, revise it; Partial = touched in Plus Two, the module needs more detail; Beyond = not in Plus Two, learn the basic idea first.
+4. Two tables per file: Essential (used in the main argument) and Helpful.
+5. Read the book section first, then list what it uses. Do not list topics the section does not use.
+
+### 13.2 Plus Two recall boxes
+6. Where an equation in the notes comes from Plus Two (for example Ohm's law, emf as work per unit charge, Joule heating, motional emf, Faraday's law), put a box directly before the topic's derivation. The box has three parts:
+   - **Recall:** the Plus Two statement, in one line.
+   - **Re-derive:** numbered steps that take the student from the Plus Two statement to the module's equation. Every step is written out.
+   - **Saved:** the result with its book equation number.
+7. Both the student and the structured version carry the box. The box class is `box-recall`, with a yellow-brown left rule and the label "Plus Two recall: <topic>".
+8. Put a box only where the equation really comes from Plus Two. Do not add boxes for equations that are new in the module.
+
+### 13.3 Two-column layout
+9. Combined PDFs use two columns for the section text (`.sec-body`, `column-count: 2`). The section title (`h2`) stays across the full width. Each section body is one `.sec-body` block.
+10. Keep equations, box results, recall boxes and figures inside one column (`break-inside: avoid`). Figure images are at most 170 px high inside a column.
+11. Body text in columns is 11 pt; equations are 0.93 em.
+
+### 13.4 Lessons from Module 2 notes
+12. Split the book first into per-topic sources (`book-sources/`), copied from the excerpt sheets, with the same page numbers. Notes are written from those sources.
+13. Check every equation number cited in the notes against the book sources (a short script). Any number not found is a failure.
+14. Check the maths by rendering the HTML with headless Chrome and `--dump-dom`. Only `mjx-merror` elements are real errors; the CSS rule `g[data-mml-node="merror"]` is not.
+15. Build SVG drafts for every figure first, check each draft at a contact sheet, fix clipped captions and overlapping labels, then run Codex. Keep the drafts; do not ship them.
+16. Codex sheets: four figures per sheet (a 2×2 grid), one sheet per run, run in the background with a log. A run takes about 2–3 minutes. Read each sheet before cropping. If a label is wrong (for example the word "theta" where the symbol θ is needed), change the brief and re-run that one sheet.
+17. Crop each sheet into four PNGs, then run `process_images.py` to write JPEGs into `final/` (flattened on white, 620 px wide at most).
+18. Figure captions carry the book figure number, for example "Fig. 7.8 (book): …". Say in the meta line that figures are redrawn, not copied.
+19. Mail each combined PDF as its own message after rendering. Check the page count with `pdfinfo` and look at one page with a figure and one with a recall box.
+
+
+---
+
+## 14. Equations: never lose one (findings from the Module 2 section 1 review)
+
+What happened: a coaxial-cable field equation was written inline in a sentence with a display-size fraction (`\dfrac`). In the two-column PDF it sat in the middle of a line, its fraction stretched the line, and it read as if the equation was missing. Text checks did not catch it, because MathJax draws maths as graphics and `pdftotext` cannot see it. A wide display equation in another place ran over the column gutter into the next column. One equation was never in the notes at all (Eqs. 7.19–7.21, the eddy-current boundary values).
+
+Rules from now on:
+1. **Every equation that stands alone is a display block** (`<div class="eq">$$…$$</div>`), with its book number as `\tag{N}`. Never leave a standalone equation inside a sentence. If it needs a name (for example "Ex. 7.2"), say it in the text before the block; do not put text in the `\tag`.
+2. **One tag per display block.** Write two numbered equations as two blocks. A block with two tags (`\tag{7.40}\qquad…\tag{7.41}`) defeats the checker.
+3. **Inline maths is text style.** The builder rewrites `\dfrac` to `\frac` inside sentences. A fraction that needs display size belongs in a display block.
+4. **Long display equations are split.** If a display block is wider than the column (about 60 characters of TeX in a two-column layout), split it into two blocks at an `=` sign. Check the gutter after each build (`render.py` reports any word crossing it).
+5. **Coverage check.** Run `check_equations.py <prefix>` after writing each topic. Every numbered equation in the topic's book source must appear as a display block or be cited as "Eq. N". A MISSING line is a failure. It reads the `\tag{N}` numbers of the book source and the notes.
+6. **Look at the page.** For each topic, look at a rendered page that has an equation at the top or bottom of a column. Text extraction is not enough for maths.
+7. **Record the reason** whenever an equation is found missing, in the section's process note, and fix the source (not the PDF).
+
+---
+
+## 15. Module 2 workflow (sections 1–3), with the rules that changed
+
+Sections are numbered as in the book: Section 1 = §7.1, Section 2 = §7.2, Section 3 = §7.3 and §7.4 (§7.4 is background). Each section is built in this order. Name topic sources `m2-s7…` for Section 1 (legacy names) and `m2-sec{N}-{topic}` from Section 2 onward.
+
+1. **Book sources.** Split the excerpt sheets for each topic into `book-sources/<topic>.html`, keeping the printed page numbers. A topic may share its first or last sheet with the next topic; say so in the source header.
+2. **Pre files.** One `pre-physics.html` and `pre-math.html` per module (section 13.1). Done once per module, before any notes.
+3. **Notes.** For each topic write `<topic>-study.body.html` (student voice) and `<topic>-structured.body.html` (formal). Both carry the same equations in the same order.
+4. **Plus Two recall.** Wherever an equation comes from Plus Two (Class 12), add a `box-recall` with Recall, Re-derive (numbered steps) and Saved. Use it only where the base is Plus Two; do not add boxes for new material (section 13.2).
+5. **Equation check.** Run the coverage check (section 14, rule 5) and fix every MISSING line.
+6. **SVG drafts.** One SVG per figure in `diagrams/` (style from `SPEC.md`), then a contact sheet of all drafts. Fix clipped captions and labels in the drafts before briefing Codex. Keep the drafts.
+7. **Codex sheets.** Briefs in `image-gen/run_briefs_*.py`, four figures per sheet (2×2), one sheet per `codex exec`. Run them in the background with `run_sheets_*.py`, which logs `START` and `DONE` lines with times. Write Greek letters as symbols in the brief (θ, Φ, μ0) and say so in the prompt; the word "theta" appeared once in Section 1 and was re-run.
+8. **Read every sheet** before cropping. A wrong label is a re-run of that sheet, not an edit.
+9. **Process.** `process_images.py` writes `final/*.jpg` (flattened on white, 620 px at most). For the final PDFs, the builder may use a 480 px copy (see section 16).
+10. **Build.** `build_module2.py <codex|svg> <section1|section2|section3|module2>` puts each topic body in a two-column block with the topic title across the page. A missing figure stops the build.
+11. **Render and check** with `render.py`: PDF, blank-page drop (pypdf), gutter check, MathJax error count. Then look at a contact sheet of every page.
+12. **Compress and mail.** Compress with Ghostscript (`-dPDFSETTINGS=/ebook`), check that the text is still selectable and the maths still renders, then mail each PDF as its own message.
+
+---
+
+## 16. Size without losing content
+
+- Figures: 480 px wide JPEG at quality 80 is enough for the two-column layout. Do not use PNG in the final PDF (each PNG is stored with an alpha mask).
+- PDF: run Ghostscript with `-dPDFSETTINGS=/ebook` (150 dpi images, text and maths kept as vectors). Compare the page count and the text before and after.
+- Never shorten the text or drop a figure to reduce the size. Reduce the image resolution instead.
+
+
+---
+
+## 17. Findings from the Module 2 review (margins, overflow, depth, the same process for every section)
+
+What went wrong, and the rule that prevents each one.
+
+| What went wrong | Rule |
+|---|---|
+| The page had extra side margin (text 78–516 pt; Module 1 is 54–540 pt). The body was capped at 760 px. | Use the Module 1 page: `main` has no max width; `padding: 0 14px`; `@page` margin 16 mm. Measure the text x-range with `pdftotext -bbox` (must be about 55–540 pt). |
+| Long display equations ran over the column gutter into the next column. | Build step breaks any display longer than 70 TeX characters into an `aligned` block at its top-level `=` (then at top-level `+` and `-`). Two-equation blocks (`\qquad`) become `gathered` lines. A block that cannot be broken is marked `longeq` and set at 0.72 em. |
+| Sections 2 and 3 were thinner than section 1 (fewer worked steps, fewer recall boxes). | Every section gets the same depth: every example worked step by step, a Plus Two recall box wherever the base is Plus Two, a structured version as complete as the student version. Check with the depth figures in section 17.2. |
+| Two equations were written with two tags in one block, or the same tag repeated. | One tag per display block. Several equations that share one number go into one `aligned` block with one tag. `check_source.py` reports violations. |
+| A stray backslash or an unclosed `<div>` broke the maths and the next block. | Run `check_source.py` on the body files before building. Run the MathJax error count (`render.py`) after building. |
+
+### 17.1 The checks, in order (each is a script in `prepare/module-2/`)
+1. `check_source.py <body files>`: escaped quotes, stray backslashes before line breaks, unclosed display blocks, odd `$$`, more than one tag in a block, unbalanced braces or environments.
+2. `build_module2.py codex module2`: builds the notes. It prints each long equation it broke, and each one it could not break.
+3. `render.py <notes.html>`: PDF, blank-page drop, gutter check (full-width titles are expected to show), MathJax error count (must be 0).
+4. `check_overflow.py <notes.html>`: measures every rendered equation's SVG width against its column, for display and inline maths. Must report 0 and 0.
+5. `check_equations.py <prefix>`: every equation number in the book source must be shown or cited. MISSING must be empty.
+6. Look at one contact sheet of all pages, and one page at 110 dpi with each equation at a column edge.
+
+### 17.2 Depth figures for every section (a check, not a target)
+Count, per section, study and structured: characters of body text, Plus Two recall boxes, display equations. Section 1 (§7.1) is the reference: about 24 000 study and 15 000 structured characters, 6 recall boxes, 22–26 display equations. A section much smaller than that needs a reason written in its process note.
+
+### 17.3 Same process for every section
+- Do not change the process for a later section. If a step is skipped for one section, record it in that section's note, with the reason.
+- Each section has: book sources (per topic), pre files (once per module), study and structured bodies per topic, SVG drafts with a contact sheet, Codex sheets (logged), `process_images.py` (480 px), build, render, the four checks above, and a mail.
+- Work the topics one by one with the same checks, not all topics at once. Section 2 and 3 were written in one pass after section 1 and were thinner; the rule above is the fix.
+
+### 17.4 Sizes
+- Figures: 480 px, JPEG quality 75 (`process_images.py`).
+- PDF: no Ghostscript recompression (it made the file larger in the test). MathJax SVG output is kept; the tex-chtml output is smaller but broke the column layout, so it is not used.
+
+
+---
+
+## 18. Current pipeline, summarised (updated after Module 2)
+
+Use this as the checklist for any module. The reasons are in sections 8–17.
+
+1. **Pre files** (once per module): `pre-physics.html`, `pre-math.html` (section 13.1).
+2. **Book sources** per topic from the excerpt: `book-sources/<topic>.html`, page numbers kept.
+3. **Bodies** per topic: `<topic>-study.body.html` (student voice) and `<topic>-structured.body.html` (formal). Figure markers `{{FIG:name}}`. Plus Two recall boxes where the base is Plus Two (section 13.2).
+4. **Checks on bodies**: `check_source.py` (section 17.1).
+5. **Equations**: `check_equations.py <prefix>`; no MISSING (section 14).
+6. **SVG drafts** into `diagrams/`; contact sheet; fix captions and labels.
+7. **Codex sheets**: four figures per sheet, background runner with START/DONE log; read each sheet before cropping; Greek letters as symbols.
+8. **Images**: `process_images.py` → `final/*.jpg` (480 px, quality 75).
+9. **Build**: `build_module<N>.py codex module<N>` (two combined files), then `render.py` (0 MathJax errors, blank pages dropped, gutter check).
+10. **Overflow**: `check_overflow.py` (display 0, inline 0).
+11. **Depth**: compare the section's text size, recall boxes and display equations with section 1 (section 17.2).
+12. **Mail**: each PDF as its own message.
+
+Where the Module 2 versions of these scripts live: `prepare/module-2/`. Module 2's own record is `prepare/module-2/process.md`.
+
+Module 3 is to be done in one run following this list, with the checks run after each section, not only at the end.

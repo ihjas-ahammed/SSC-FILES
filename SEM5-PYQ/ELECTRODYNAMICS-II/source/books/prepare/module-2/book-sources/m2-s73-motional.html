@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Griffiths 7.1.3 Motional emf and the flux rule (book pp. 306–315)</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+  :root {
+    --page-bg: #d9d9d4;
+    --paper: #fdfdfb;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --page-bg: #2b2b2b;
+      --paper: #f4f3ee;
+      --ink: #111;
+      --rule: #444;
+      --note: #555;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page-bg: #2b2b2b;
+    --paper: #f4f3ee;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  body {
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--ink);
+    font-family: "Times New Roman", Times, "Liberation Serif", serif;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .sheet {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 12mm auto;
+    padding: 14mm 18mm 16mm;
+    box-sizing: border-box;
+    background: var(--paper);
+    box-shadow: 0 1px 6px rgba(0,0,0,.25);
+    position: relative;
+  }
+  .sheet + .sheet { margin-top: 0; }
+  .hdr {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: start;
+    font-size: 14px;
+  }
+  .code { font-size: 22px; font-weight: bold; letter-spacing: .5px; }
+  .pages { text-align: center; padding-top: 14px; }
+  .name { text-align: right; line-height: 2; }
+  .title { text-align: center; margin-top: 22px; }
+  .title .exam { font-size: 19px; font-weight: bold; letter-spacing: .3px; }
+  .title .sch { margin-top: 2px; }
+  .title .course { margin-top: 10px; font-size: 16px; }
+  .title .subject { margin-top: 6px; font-size: 16px; font-weight: bold; }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 16px;
+    font-size: 15px;
+  }
+  .sec { margin-top: 14px; }
+  .sec-head {
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    font-weight: bold;
+  }
+  .sec-head .num { font-weight: bold; }
+  .sec-head .body { font-weight: normal; }
+  .sec-head .body b { font-weight: bold; }
+  .sec-head .body i { font-style: italic; }
+  .sec-total { text-align: right; font-weight: normal; margin-top: 4px; }
+  .qs { margin-top: 6px; }
+  .q {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    margin-bottom: 7px;
+  }
+  .q .n { text-align: right; padding-right: 10px; }
+  .q p { margin: 0; }
+  .sub { margin-left: 22px; }
+  .cut { color: var(--note); }
+  .turn { text-align: right; font-weight: bold; margin-top: 26px; }
+  .fig {
+    display: block;
+    margin: 8px auto 2px 36px;
+    width: 230px;
+    height: auto;
+  }
+  .fig-cap { margin-left: 36px; font-size: 13px; color: var(--note); font-style: italic; }
+  .foot-note {
+    margin-top: 26px;
+    border-top: 1px solid var(--rule);
+    padding-top: 6px;
+    font-size: 12px;
+    color: var(--note);
+  }
+  .pno { text-align: center; font-size: 15px; margin-bottom: 4px; }
+  .pno-hdr { position: absolute; top: 10mm; right: 18mm; font-weight: bold; font-size: 14px; }
+  @media print {
+    @page { size: A4; margin: 0; }
+    body { background: #fff; }
+    .sheet { margin: 0; box-shadow: none; width: 210mm; height: 297mm; min-height: 0; page-break-after: always; }
+    .sheet:last-child { page-break-after: auto; }
+  }
+  @media (max-width: 720px) {
+    .sheet { width: auto; margin: 0; padding: 14px 16px; min-height: 0; }
+    .hdr { grid-template-columns: 1fr; gap: 6px; }
+    .name { text-align: left; }
+    .pages { text-align: left; padding-top: 0; }
+  }
+</style>
+<style>
+  .sheet.book { height: auto; min-height: 297mm; text-align: justify; hyphens: auto; }
+  .sheet.book p { margin: 6px 0; }
+  .rh { display: flex; justify-content: space-between; font-size: 12px; color: var(--note);
+        border-bottom: 1px solid var(--rule); padding-bottom: 3px; margin-bottom: 12px; }
+  .chap { display: flex; background: #8a8a86; color: #fff; margin: 4px 0 16px; }
+  .chap .cn { background: #b4b4ae; padding: 10px 18px; font-size: 26px; }
+  .chap .ct { padding: 12px 16px; font-size: 22px; font-weight: bold; }
+  h2.sec { font-size: 20px; margin: 18px 0 8px; border-bottom: 2px solid var(--rule); padding-bottom: 3px; }
+  h3.sub { font-size: 16px; margin: 14px 0 6px; border-bottom: 1px solid var(--rule); padding-bottom: 2px; }
+  .eq { margin: 10px 0; text-align: center; overflow: visible; }
+  mjx-container[display="true"], mjx-container { overflow: visible !important; max-width: 100%; }
+  .sheet.book, .sheet.book .eq { overflow: visible; }
+  .eq.boxed { border: 1px solid var(--ink); display: block; padding: 4px 8px; }
+  .prob { background: #ecece7; border: 1px solid var(--rule); padding: 8px 12px; margin: 10px 0; text-align: left; }
+  .prob p { margin: 5px 0; }
+  .ex, .ex-cont { border: 1px solid var(--rule); padding: 8px 12px; margin: 10px 0; text-align: left; }
+  .ex p, .ex-cont p { margin: 5px 0; }
+  .figbox { border: 1px dashed var(--rule); padding: 10px; color: var(--note); font-size: 13px; text-align: center; margin: 8px 0; font-style: italic; }
+  figure { margin: 8px 0; text-align: center; }
+  figure > svg { width: 100%; max-width: 230px; height: auto; }
+  figure.single > svg { max-width: 260px; }
+  figure figcaption { font-size: 12px; font-style: italic; color: var(--note); }
+  .figrow { display: flex; flex-wrap: wrap; justify-content: space-around; gap: 8px; }
+  .figrow > figure { flex: 1 1 180px; max-width: 240px; }
+  .fn { font-size: 12.5px; color: var(--note); margin: 6px 0; text-align: left; }
+  .cont { font-size: 12.5px; color: var(--note); font-style: italic; }
+  .gapnote { font-size: 13px; color: var(--note); font-style: italic; border-left: 3px solid var(--rule); padding: 2px 8px; margin: 4px 0 10px; }
+  .flag { color: #8a1c1c; font-weight: bold; }
+  .answer { font-size: 14px; }
+  .tbl { border-collapse: collapse; width: 100%; font-size: 13px; margin: 6px 0; }
+  .tbl td, .tbl th { border: 1px solid var(--rule); padding: 3px 6px; text-align: center; }
+  .tbl th { background: #ebebe6; }
+  .tblcap { font-size: 13px; margin-top: 8px; text-align: left; }
+  .pno { text-align: center; font-size: 14px; margin-top: 14px; }
+  .intro p, .intro li { font-size: 14px; text-align: left; }
+  .intro table { border-collapse: collapse; width: 100%; font-size: 14px; margin: 6px 0; }
+  .intro td, .intro th { border: 1px solid var(--rule); padding: 4px 8px; text-align: left; }
+  @media print {
+    .sheet.book { height: auto !important; min-height: 0 !important; page-break-after: always; }
+  }
+  @media (max-width: 720px) {
+    .sheet.book .eq { overflow-x: auto; max-width: 100%; }
+    .sheet.book mjx-container[display="true"] { font-size: 85% !important; }
+    .sheet.book .figrow > figure { flex: 1 1 100%; max-width: 100%; }
+    .sheet.book { padding-left: 14px; padding-right: 14px; }
+  }
+</style>
+</head>
+<body>
+<!-- Book source, split from the Module 2 excerpt. Pages as printed in Griffiths 5th ed. -->
+<div class="sheet book" id="pdf-p09">
+  <div class="rh"><span>306</span><span>7 Electrodynamics</span></div>
+  <p>Within an ideal source of emf (a resistanceless battery,<sup>4</sup> for instance), the net force on the charges is zero (Eq. 7.1 with $\sigma=\infty$), so $\mathbf E=-\mathbf f_s$. The potential difference between the terminals ($a$ and $b$) is therefore</p>
+  <div class="eq">$$V=-\int_a^b\mathbf E\cdot d\mathbf l=\int_a^b\mathbf f_s\cdot d\mathbf l=\oint\mathbf f_s\cdot d\mathbf l=\mathcal E \tag{7.10}$$</div>
+  <p>(we can extend the integral to the entire loop because $\mathbf f_s=\mathbf 0$ outside the source). The function of a battery, then, is to establish and maintain a voltage difference equal to the electromotive force (a 6 V battery, for example, holds the positive terminal 6 V above the negative terminal). The resulting electrostatic field drives current around the rest of the circuit (notice, however, that <i>inside</i> the battery $\mathbf f_s$ drives current in the direction <i>opposite</i> to $\mathbf E$).<sup>5</sup></p>
+  <p>Because it’s the line integral of $\mathbf f_s$, $\mathcal E$ can be interpreted as the <i>work done per unit charge</i>, by the source – indeed, in some books electromotive force is <i>defined</i> this way. However, as you’ll see in the next section, there is some subtlety involved in this interpretation, so I prefer Eq. 7.9.</p>
+  <div class="prob">
+    <p><b>Problem 7.5.</b> A battery of emf $\mathcal E$ and internal resistance $r$ is hooked up to a variable “load” resistance, $R$. If you want to deliver the maximum possible <i>power</i> to the load, what resistance $R$ should you choose? (You can’t change $\mathcal E$ and $r$, of course.)</p>
+  </div>
+  <div class="prob">
+    <div class="figbox">Fig. 7.9: parallel-plate capacitor with surface charges $+\sigma$ and $-\sigma$ and field $\mathbf E$ between the plates; a rectangular loop of wire of height $h$ with resistor $R$ has one end between the plates. Schematic; see PDF page.</div>
+    <p><b>Problem 7.6.</b> A rectangular loop of wire is situated so that one end (height $h$) is between the plates of a parallel-plate capacitor (Fig. 7.9), oriented parallel to the field $\mathbf E$. The other end is way outside, where the field is essentially zero. If the total resistance is $R$, what current flows? Explain. [<i>Warning:</i> This is a trick question, so be careful; if you have invented a perpetual motion machine, there’s probably something wrong with it.]</p>
+  </div>
+  <h3 class="sub">7.1.3 Motional Emf</h3>
+  <p>In the last section, I listed several possible sources of electromotive force, batteries being the most familiar. But I did not mention the commonest one</p>
+  <p class="fn"><sup>4</sup> <i>Real</i> batteries have a certain <b>internal resistance</b>, $r$, and the potential difference between their terminals is $\mathcal E-Ir$, when a current $I$ is flowing. For an illuminating discussion of how batteries work, see D. Roberts, <i>Am. J. Phys.</i> <b>51</b>, 829 (1983).</p>
+  <p class="fn"><sup>5</sup> Current in an electric circuit is somewhat analogous to the flow of water in a closed system of pipes, with gravity playing the role of the electrostatic field, and a pump (lifting the water up <i>against</i> gravity) in the role of the battery. In this story, <i>height</i> is analogous to voltage.</p>
+  <div class="pno">306</div>
+</div>
+<div class="sheet book" id="pdf-p10">
+  <div class="rh"><span>307</span><span>7.1 Electromotive Force</span></div>
+  <div class="figbox">Fig. 7.10: rectangular loop with sides $a$, $b$, $c$, $d$, width $x$ inside the shaded region of uniform field $\mathbf B$ (into the page), height $h$, resistor $R$; loop moves to the right with velocity $v$. Schematic; see PDF page.</div>
+  <p>of all: the <b>generator</b>. Generators exploit <b>motional emfs</b>, which arise when you <i>move a wire through a magnetic field</i>. Figure 7.10 suggests a primitive model for a generator. In the shaded region there is a uniform magnetic field $\mathbf B$, pointing into the page, and the resistor $R$ represents whatever it is (maybe a light bulb or a toaster) we’re trying to drive current through. If the entire loop is pulled to the right with speed $v$, the mobile charges in segment $ab$ experience a magnetic force whose vertical component $qvB$ drives current around the loop, in the clockwise direction. The emf is</p>
+  <div class="eq">$$\mathcal E=\oint\mathbf f_{\text{mag}}\cdot d\mathbf l=vBh, \tag{7.11}$$</div>
+  <p>where $h$ is the width of the loop. (The horizontal segments $bc$ and $ad$ contribute nothing, since the force there is perpendicular to the wire.)</p>
+  <p>Notice that the integral you perform to calculate $\mathcal E$ (Eq. 7.9 or 7.11) is carried out at <i>one instant of time</i> – take a “snapshot” of the loop, if you like, and work from that. Thus $d\mathbf l$, for the segment $ab$ in Fig. 7.10, points straight up, even though the loop is moving to the right. You can’t quarrel with this – it’s simply the way emf is <i>defined</i> – but it is important to be clear about it.</p>
+  <p>In particular, although the magnetic force is responsible for establishing the emf, it is <i>not</i> doing any work – magnetic forces <i>never</i> do work. Who, then, <i>is</i> supplying the energy that heats the resistor? <i>Answer:</i> The person who’s pulling on the loop, of course. But this is subtle, so listen closely. With the current flowing, the free charges in segment $ab$ have a vertical velocity (call it $\mathbf u$) in addition to the horizontal velocity $\mathbf v$ they inherit from the motion of the loop. Accordingly, the magnetic force has a component $quB$ to the left. To counteract this, the person pulling on the wire must exert a force per unit charge</p>
+  <div class="eq">$$f_{\text{pull}}=uB$$</div>
+  <p>to the <i>right</i> (Fig. 7.11). This force is transmitted to the charge by the structure of the wire.</p>
+  <p>Meanwhile, the particle is actually moving in the direction of the resultant velocity $\mathbf w$, and the distance it goes is $(h/\cos\theta)$. The work done per unit charge (<i>by</i> the person pulling on the loop, <i>on</i> a charge as it ascends the “vertical” segment) is therefore</p>
+  <div class="eq">$$\int\mathbf f_{\text{pull}}\cdot d\mathbf l=(uB)\left(\frac{h}{\cos\theta}\right)\sin\theta=vBh=\mathcal E.$$</div>
+  <div class="pno">307</div>
+</div>
+<div class="sheet book" id="pdf-p11">
+  <div class="rh"><span>308</span><span>7 Electrodynamics</span></div>
+  <div class="figrow">
+    <figure><div class="figbox">Fig. 7.11: velocity vectors $\mathbf v$, $\mathbf u$, $\mathbf w$ and force vectors $\mathbf f_{\text{mag}}$, $\mathbf f_{\text{pull}}$, with components $vB$ and $uB$ and angle $\theta$. Schematic; see PDF page.</div><figcaption>Fig. 7.11</figcaption></figure>
+  </div>
+  <div class="figrow">
+    <figure><div class="figbox">(a) Integration path for computing $\mathcal E$ (follow the wire at one instant of time). Schematic; see PDF page.</div><figcaption>Fig. 7.12(a)</figcaption></figure>
+    <figure><div class="figbox">(b) Integration path for calculating work done (follow the charge around the loop). Schematic; see PDF page.</div><figcaption>Fig. 7.12(b)</figcaption></figure>
+  </div>
+  <p>($\sin\theta$ coming from the dot product). As it turns out, then, the <i>work done per unit charge is exactly equal to the emf</i>, though the integrals are taken along entirely different paths (Fig. 7.12), and completely different forces are involved. To calculate the emf, you integrate around the loop at <i>one instant</i>, but to calculate the work done you follow a charge in its journey around the loop; $\mathbf f_{\text{pull}}$ contributes nothing to the emf, because it is perpendicular to the wire, whereas $\mathbf f_{\text{mag}}$ contributes nothing to work because it is perpendicular to the net motion of the charge.<sup>6</sup></p>
+  <p>There is a particularly nice way of expressing the emf generated in a moving loop. Let $\Phi$ be the flux of $\mathbf B$ through the loop:</p>
+  <div class="eq">$$\Phi\equiv\int\mathbf B\cdot d\mathbf a. \tag{7.12}$$</div>
+  <p>For the rectangular loop in Fig. 7.10,</p>
+  <div class="eq">$$\Phi=Bhx.$$</div>
+  <p>As the loop moves, the flux decreases:</p>
+  <div class="eq">$$\frac{d\Phi}{dt}=Bh\frac{dx}{dt}=-Bhv.$$</div>
+  <p>(The minus sign accounts for the fact that $dx/dt$ is negative.) But this is precisely the emf (Eq. 7.11); the emf generated in the loop is minus the rate of change of flux through the loop:</p>
+  <p class="fn"><sup>6</sup> For further discussion, see E. P. Mosca, <i>Am. J. Phys.</i> <b>42</b>, 295 (1974).</p>
+  <div class="pno">308</div>
+</div>
+<div class="sheet book" id="pdf-p12">
+  <div class="rh"><span>309</span><span>7.1 Electromotive Force</span></div>
+  <div class="figbox">Fig. 7.13: surface $\mathcal S$ bounded by a loop at time $t$ and the loop at time $(t+dt)$, joined by a ribbon; inset: enlargement of $d\mathbf a$ showing the points $P$ and $P'$, the vectors $d\mathbf l$ and $\mathbf v\,dt$. Schematic; see PDF page.</div>
+  <div class="eq">$$\boxed{\mathcal E=-\frac{d\Phi}{dt}.} \tag{7.13}$$</div>
+  <p>This is the <b>flux rule</b> for motional emf.</p>
+  <p>Apart from its delightful simplicity, the flux rule has the virtue of applying to <i>non</i>rectangular loops moving in <i>arbitrary</i> directions through <i>non</i>uniform magnetic fields; in fact, the loop need not even maintain a fixed shape.</p>
+  <p><i>Proof.</i> Figure 7.13 shows a loop of wire at time $t$, and also a short time $dt$ later. Suppose we compute the flux at time $t$, using surface $\mathcal S$, and the flux at time $t+dt$, using the surface consisting of $\mathcal S$ plus the “ribbon” that connects the new position of the loop to the old. The <i>change</i> in flux, then, is</p>
+  <div class="eq">$$d\Phi=\Phi(t+dt)-\Phi(t)=\Phi_{\text{ribbon}}=\int_{\text{ribbon}}\mathbf B\cdot d\mathbf a.$$</div>
+  <p>Focus your attention on point $P$: in time $dt$, it moves to $P'$. Let $\mathbf v$ be the velocity of the <i>wire</i>, and $\mathbf u$ the velocity of a charge <i>down</i> the wire; $\mathbf w=\mathbf v+\mathbf u$ is the resultant velocity of a charge at $P$. The infinitesimal element of area on the ribbon can be written as</p>
+  <div class="eq">$$d\mathbf a=(\mathbf v\times d\mathbf l)\,dt$$</div>
+  <p>(see inset in Fig. 7.13). Therefore</p>
+  <div class="eq">$$\frac{d\Phi}{dt}=\oint\mathbf B\cdot(\mathbf v\times d\mathbf l).$$</div>
+  <p>Since $\mathbf w=(\mathbf v+\mathbf u)$ and $\mathbf u$ is parallel to $d\mathbf l$, we can just as well write this as</p>
+  <div class="eq">$$\frac{d\Phi}{dt}=\oint\mathbf B\cdot(\mathbf w\times d\mathbf l).$$</div>
+  <div class="pno">309</div>
+</div>
+<div class="sheet book" id="pdf-p13">
+  <div class="rh"><span>310</span><span>7 Electrodynamics</span></div>
+  <div class="figbox">Fig. 7.14: circuit with an ammeter (A) and a switch that connects to point $a$ or $b$; region of uniform field $\mathbf B$ (into the page). Schematic; see PDF page.</div>
+  <p>Now, the scalar triple product can be rewritten:</p>
+  <div class="eq">$$\mathbf B\cdot(\mathbf w\times d\mathbf l)=-(\mathbf w\times\mathbf B)\cdot d\mathbf l,$$</div>
+  <p>so</p>
+  <div class="eq">$$\frac{d\Phi}{dt}=-\oint(\mathbf w\times\mathbf B)\cdot d\mathbf l.$$</div>
+  <p>But $(\mathbf w\times\mathbf B)$ is the magnetic force per unit charge, $\mathbf f_{\text{mag}}$, so</p>
+  <div class="eq">$$\frac{d\Phi}{dt}=-\oint\mathbf f_{\text{mag}}\cdot d\mathbf l,$$</div>
+  <p>and the integral of $\mathbf f_{\text{mag}}$ is the emf:</p>
+  <div class="eq">$$\mathcal E=-\frac{d\Phi}{dt}.\qquad\square$$</div>
+  <p>There is a sign ambiguity in the definition of emf (Eq. 7.9): Which <i>way</i> around the loop are you supposed to integrate? There is a compensating ambiguity in the definition of <i>flux</i> (Eq. 7.12): Which is the positive direction for $d\mathbf a$? In applying the flux rule, sign consistency is governed (as always) by your right hand: if your fingers define the positive direction around the loop, then your thumb indicates the direction of $d\mathbf a$. Should the emf come out negative, it means the current will flow in the negative direction around the circuit.</p>
+  <p>The flux rule is a nifty shortcut for calculating motional emfs. It does not contain any new physics – just the Lorentz force law. But it can lead to error or ambiguity if you’re not careful. The flux rule assumes you have a single wire loop – it can move, rotate, stretch, or distort (continuously), but beware of switches, sliding contacts, or extended conductors allowing a variety of current paths. A standard “flux rule paradox” involves the circuit in Fig. 7.14. When the switch is thrown (from $a$ to $b$) the flux through the circuit doubles, but there’s no motional emf (no conductor moving through a magnetic field), and the ammeter (A) records no current.</p>
+  <div class="ex">
+    <p><b>Example 7.4.</b> A metal disk of radius $a$ rotates with angular velocity $\omega$ about a vertical axis, through a uniform field $\mathbf B$, pointing up. A circuit is made by connecting one end of a resistor to the axle and the other end to a sliding contact, which touches the outer edge of the disk (Fig. 7.15). Find the current in the resistor.</p>
+  </div>
+  <div class="pno">310</div>
+</div>
+<div class="sheet book" id="pdf-p14">
+  <div class="rh"><span>311</span><span>7.1 Electromotive Force</span></div>
+  <div class="ex">
+    <div class="figbox">Fig. 7.15: metal disk spinning about a vertical axis in field $\mathbf B$ (pointing up), with a resistor $R$ joining the axle to a sliding contact on the outer edge; current $I$ shown in the resistor. Schematic; see PDF page.</div>
+    <p><i>Solution.</i> The speed of a point on the disk at a distance $s$ from the axis is $v=\omega s$, so the force per unit charge is $\mathbf f_{\text{mag}}=\mathbf v\times\mathbf B=\omega sB$. The emf is therefore</p>
+    <div class="eq">$$\mathcal E=\int_0^a f_{\text{mag}}\,ds=\omega B\int_0^a s\,ds=\frac{\omega Ba^2}{2},$$</div>
+    <p>and the current is</p>
+    <div class="eq">$$I=\frac{\mathcal E}{R}=\frac{\omega Ba^2}{2R}.$$</div>
+  </div>
+  <p>Example 7.4 (the <b>Faraday disk</b>, or <b>Faraday dynamo</b>) involves a motional emf that you can’t calculate (at least, not directly) from the flux rule. The flux rule assumes the current flows along a well-defined path, whereas in this example the current spreads out over the whole disk. It’s not even clear what the “flux through the circuit” would <i>mean</i> in this context.</p>
+  <p>Even more tricky is the case of <b>eddy currents</b>. Take a chunk of aluminum (say), and shake it around in a nonuniform magnetic field. Currents will be generated in the material, and you will feel a kind of “viscous drag” – as though you were pulling the block through molasses (this is the force $\mathbf f_{\text{pull}}$ in the discussion of motional emf). Eddy currents are notoriously difficult to calculate,<sup>7</sup> but easy and dramatic to demonstrate. You may have witnessed the classic experiment in which an aluminum disk mounted as a</p>
+  <div class="figrow">
+    <figure><div class="figbox">Fig. 7.16(a): aluminum disk hung as a pendulum on a horizontal axis, swinging down between the poles of a magnet. Schematic; see PDF page.</div><figcaption>Fig. 7.16(a)</figcaption></figure>
+    <figure><div class="figbox">Fig. 7.16(b): the same disk with many slots cut in it, swinging between the poles. Schematic; see PDF page.</div><figcaption>Fig. 7.16(b)</figcaption></figure>
+  </div>
+  <p class="fn"><sup>7</sup> See, for example, W. M. Saslow, <i>Am. J. Phys.</i> <b>60</b>, 693 (1992).</p>
+  <div class="pno">311</div>
+</div>
+<div class="sheet book" id="pdf-p15">
+  <div class="rh"><span>312</span><span>7 Electrodynamics</span></div>
+  <p>pendulum on a horizontal axis swings down and passes between the poles of a magnet (Fig. 7.16a). When it enters the field region it suddenly slows way down. To confirm that eddy currents are responsible, one repeats the demonstration using a disk that has many slots cut in it, to prevent the flow of large-scale currents (Fig. 7.16b). This time the disk swings freely, unimpeded by the field.</p>
+  <div class="ex">
+    <p><b>Example 7.5.</b><sup>8</sup> There are precious few eddy current problems that can be treated analytically. Here’s a rare example, solved by Hertz (at the age of 23) in 1880. Imagine a uniform, electrically neutral, spherical shell, of inner radius $R_1$, outer radius $R_2$, and conductivity $\sigma$, centered at the origin and spinning with constant angular velocity $\boldsymbol\omega$, in the presence of a uniform magnetic field $\mathbf B$.<sup>9</sup> Find the eddy currents in the shell, in the steady state (fields, charges, currents all constant in time), if (a) $\boldsymbol\omega$ and $\mathbf B$ are in the <i>same</i> direction and (b) they are perpendicular.</p>
+    <p><i>Solution.</i> In electrostatics the charge density in a conductor is zero (any excess charge goes to the surface), and this is still true for steady currents in conductors at rest, as we found in Eq. 7.5. But for a conductor <i>moving</i> through a magnetic field we cannot ignore the velocity term in Eq. 7.2. Indeed, taking the divergence, and invoking Gauss’s law and the continuity equation,</p>
+    <div class="eq">$$\nabla\cdot\mathbf J=\sigma\left[\nabla\cdot\mathbf E+\nabla\cdot(\mathbf v\times\mathbf B)\right]=\sigma\left[\frac{1}{\epsilon_0}\rho+\nabla\cdot(\mathbf v\times\mathbf B)\right]=-\frac{\partial\rho}{\partial t}.$$</div>
+    <p>In the steady state $\rho$ is constant, and we are left with</p>
+    <div class="eq">$$\rho=-\epsilon_0\nabla\cdot(\mathbf v\times\mathbf B). \tag{7.14}$$</div>
+    <p>(a) We might as well choose axes such that $\mathbf B=B\hat{\mathbf z}$ and $\boldsymbol\omega=\omega\hat{\mathbf z}$. For any point in a rigid rotating object, $\mathbf v=\boldsymbol\omega\times\mathbf r$, so, using the BAC–CAB rule,</p>
+    <div class="eq">$$\mathbf v\times\mathbf B=(\boldsymbol\omega\times\mathbf r)\times\mathbf B=\mathbf r(\mathbf B\cdot\boldsymbol\omega)-\boldsymbol\omega(\mathbf B\cdot\mathbf r)=\omega B(\mathbf r-z\hat{\mathbf z})=\omega B(x\hat{\mathbf x}+y\hat{\mathbf y}), \tag{7.15}$$</div>
+    <p>and therefore</p>
+    <div class="eq">$$\rho=-2\epsilon_0\omega B. \tag{7.16}$$</div>
+    <p>(There will be compensating charge at the two surfaces, of course.) The electric potential satisfies Poisson’s equation</p>
+    <div class="eq">$$\nabla^2V=-\frac{1}{\epsilon_0}\rho=2\omega B\qquad(R_1\lt r\lt R_2). \tag{7.17}$$</div>
+  </div>
+  <p class="fn"><sup>8</sup> This example can be skipped without loss of continuity. For details and practical applications see M. A. Nurge <i>et al.</i>, <i>Am. J. Phys.</i> <b>85</b>, 596 (2017).</p>
+  <p class="fn"><sup>9</sup> Assume that any magnetic fields produced by the eddy currents themselves are negligible – or that they are included in $\mathbf B$.</p>
+  <div class="pno">312</div>
+</div>
+<div class="sheet book" id="pdf-p16">
+  <div class="rh"><span>313</span><span>7.1 Electromotive Force</span></div>
+  <div class="ex-cont">
+    <p>and the radial current vanishes at the boundaries (otherwise charge would be leaking off into space):</p>
+    <div class="eq">$$J_r=\sigma\left[\mathbf E+\mathbf v\times\mathbf B\right]\cdot\hat{\mathbf r}=0\qquad(\text{at } r=R_1 \text{ and } R_2). \tag{7.18}$$</div>
+    <p>Thus</p>
+    <div class="eq">$$E_r=-\omega B(x\hat{\mathbf x}+y\hat{\mathbf y})\cdot\hat{\mathbf r}=-\frac{\omega B}{r}(x^2+y^2)=-\omega Br\sin^2\theta \tag{7.19}$$</div>
+    <p>at each surface:</p>
+    <div class="eq">$$\left.\frac{\partial V}{\partial r}\right|_{R_1}=\omega BR_1\sin^2\theta,\qquad\left.\frac{\partial V}{\partial r}\right|_{R_2}=\omega BR_2\sin^2\theta. \tag{7.20}$$</div>
+    <p>Having specified the charge density (Eq. 7.16) and the normal derivative of $V$ on the boundaries (Eq. 7.20), the field in the shell is uniquely determined (Prob. 3.5). In fact, it’s easy to guess the potential:</p>
+    <div class="eq">$$V(r,\theta)=\frac{\omega B}{2}r^2\sin^2\theta+K=\frac{\omega B}{2}(x^2+y^2)+K \tag{7.21}$$</div>
+    <p>(for some constant $K$), and the field is</p>
+    <div class="eq">$$\mathbf E=-\nabla V=-\omega B(x\hat{\mathbf x}+y\hat{\mathbf y})=-\mathbf v\times\mathbf B \tag{7.22}$$</div>
+    <p>(Eq. 7.15). As it turns out, then, the electric force exactly cancels the magnetic force; there is <i>no</i> eddy current in this configuration,<sup>10</sup></p>
+    <div class="eq">$$\mathbf J=\mathbf 0.$$</div>
+    <p>(b) This time we’ll take $\boldsymbol\omega=\omega\hat{\mathbf x}$ and $\mathbf B=B\hat{\mathbf y}$. Then</p>
+    <div class="eq">$$\mathbf v\times\mathbf B=\mathbf r(\mathbf B\cdot\boldsymbol\omega)-\boldsymbol\omega(\mathbf B\cdot\mathbf r)=-\omega By\,\hat{\mathbf x},$$</div>
+    <p>which is divergenceless, so the charge density vanishes (Eq. 7.14):</p>
+    <div class="eq">$$\rho=0$$</div>
+    <p>(there may still be induced surface charges). Laplace’s equation holds within the shell,</p>
+    <div class="eq">$$\nabla^2V=0,$$</div>
+    <p>and Eq. 7.19 becomes</p>
+    <div class="eq">$$E_r=-(\mathbf v\times\mathbf B)\cdot\hat{\mathbf r}=\omega By(\hat{\mathbf x}\cdot\hat{\mathbf r})=\omega Br\sin^2\theta\sin\phi\cos\phi$$</div>
+    <p>at each boundary:</p>
+    <div class="eq">$$\left.\frac{\partial V}{\partial r}\right|_{R_1}=-\omega BR_1\sin^2\theta\sin\phi\cos\phi,\qquad\left.\frac{\partial V}{\partial r}\right|_{R_2}=-\omega BR_2\sin^2\theta\sin\phi\cos\phi.$$</div>
+    <p>The solution is</p>
+    <div class="eq">$$V(r,\theta,\phi)=-\frac{\omega B}{2}r^2\sin^2\theta\sin\phi\cos\phi+K=-\frac{\omega B}{2}xy+K\qquad(R_1\lt r\lt R_2),$$</div>
+  </div>
+  <p class="fn"><sup>10</sup> There is a <b>convection current</b>, since $\rho$ (and the surface charges) are dragged around by the spinning of the shell, but (as you can check for yourself) the ratio $J_{\text{conv}}/J_{\text{cond}}$ is typically of the order of $\epsilon_0\omega/\sigma$, which is utterly negligible for (say) aluminum at 100 rpm.</p>
+  <div class="pno">313</div>
+</div>
+<div class="sheet book" id="pdf-p17">
+  <div class="rh"><span>314</span><span>7 Electrodynamics</span></div>
+  <div class="ex-cont">
+    <p>and the electric field is</p>
+    <div class="eq">$$\mathbf E=-\nabla V=\frac{\omega B}{2}(y\hat{\mathbf x}+x\hat{\mathbf y}).$$</div>
+    <p>The eddy current is</p>
+    <div class="eq">$$\mathbf J=\sigma\left[\mathbf E+(\mathbf v\times\mathbf B)\right]=\frac{\omega B\sigma}{2}(-y\hat{\mathbf x}+x\hat{\mathbf y})=\frac{\omega B\sigma}{2}\,r\sin\theta\,\hat{\boldsymbol\phi}.$$</div>
+    <p>Remarkably, this is just what you would get if the shell had been a <i>non</i>conductor carrying a uniform charge density $\rho=B\sigma/2$ and spinning with angular velocity $\omega$ about the $z$-axis! That’s <i>right</i>: the $z$-axis! Incidentally, for $\boldsymbol\omega$ and $\mathbf B$ in arbitrary orientations the formula is</p>
+    <div class="eq">$$\mathbf J=-\frac{\sigma}{2}\left[\mathbf r\times(\boldsymbol\omega\times\mathbf B)\right].$$</div>
+  </div>
+  <div class="prob">
+    <p><b>Problem 7.7.</b> A metal bar of mass $m$ slides frictionlessly on two parallel conducting rails a distance $l$ apart (Fig. 7.17). A resistor $R$ is connected across the rails, and a uniform magnetic field $\mathbf B$, pointing into the page, fills the entire region.</p>
+    <div class="figbox">Fig. 7.17: metal bar of mass $m$ moving to the right at speed $v$ on two parallel rails a distance $l$ apart, with resistor $R$ across the rails; field $\mathbf B$ into the page. Schematic; see PDF page.</div>
+    <p>(a) If the bar moves to the right at speed $v$, what is the current in the resistor? In what direction does it flow?<br>
+    (b) What is the magnetic force on the bar? In what direction?<br>
+    (c) If the bar starts out with speed $v_0$ at time $t=0$, and is left to slide, what is its speed at a later time $t$?<br>
+    (d) The initial kinetic energy of the bar was, of course, $\frac12 mv_0^2$. Check that the energy delivered to the resistor is exactly $\frac12 mv_0^2$.</p>
+  </div>
+  <div class="prob">
+    <p><b>Problem 7.8.</b> A square loop of wire (side length $a$) lies on a table, a distance $s$ from a very long straight wire, which carries a current $I$, as shown in Fig. 7.18.</p>
+    <p>(a) Find the flux of $\mathbf B$ through the loop.<br>
+    (b) If someone now pulls the loop directly away from the wire, at speed $v$, what emf is generated? In what direction (clockwise or counterclockwise) does the current flow?<br>
+    (c) What if the loop is pulled to the <i>right</i> at speed $v$?</p>
+  </div>
+  <div class="pno">314</div>
+</div>
+<div class="sheet book" id="pdf-p18">
+  <div class="rh"><span>315</span><span>7.1 Electromotive Force</span></div>
+  <div class="prob">
+    <div class="figbox">Fig. 7.18: square loop of side $a$, at distance $s$ from a long straight wire carrying current $I$. Schematic; see PDF page.</div>
+    <p><b>Problem 7.9.</b> An infinite number of different surfaces can be fit to a given boundary line, and yet, in defining the magnetic flux through a loop, $\Phi=\int\mathbf B\cdot d\mathbf a$, I never specified the particular surface to be used. Justify this apparent oversight.</p>
+    <p><b>Problem 7.10.</b> A square loop (side length $a$) is mounted on a vertical shaft and rotated at angular velocity $\omega$ (Fig. 7.19). A uniform magnetic field $\mathbf B$ points to the right. Find $\mathcal E(t)$ for this <b>alternating current</b> generator.</p>
+    <div class="figbox">Fig. 7.19: square loop on a vertical shaft rotating at $\omega$ in uniform field $\mathbf B$ (to the right), with connections to terminals. Schematic; see PDF page.</div>
+    <p><b>Problem 7.11.</b> A square loop is cut out of a thick sheet of aluminum. It is then placed so that the top portion is in a uniform magnetic field $\mathbf B$, and is allowed to fall under gravity (Fig. 7.20). (In the diagram, shading indicates the field region; $\mathbf B$ points into the page.) If the magnetic field is 1 T (a pretty standard laboratory field), find the terminal velocity of the loop (in m/s). Find the velocity of the loop as a function of time. How long does it take (in seconds) to reach, say, 90 percent of the terminal velocity? What would happen if you cut a tiny slit in the ring, breaking the circuit? [<i>Note:</i> The dimensions of the loop cancel out; determine the actual <i>numbers</i>, in the units indicated.]</p>
+    <p><b>Problem 7.12.</b> Calculate the net magnetic torque on the eddy current in Ex. 7.5b. This torque will act as a brake on the rotation. What is the time constant for the (exponential) damping? Assume that the angular velocity lost in a given rotation is a small fraction of the total. Find the actual number, for aluminum (mass density $2.7\times10^3$ kg/m<sup>3</sup>) in the Earth’s magnetic field.</p>
+    <div class="figbox">Fig. 7.20: square loop cut out of a thick aluminum sheet, its top portion inside the shaded field region, falling downward. Schematic; see PDF page.</div>
+  </div>
+  <div class="pno">315</div>
+</div>
+</body>
+</html>

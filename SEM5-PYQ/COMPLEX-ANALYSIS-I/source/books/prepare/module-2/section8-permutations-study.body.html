@@ -1,0 +1,84 @@
+<h2>Before you start</h2>
+<ul>
+<li>Isomorphisms (Section 2): a one-to-one, onto map that keeps the operation.</li>
+<li>Functions: composition, one-to-one and onto maps, and inverse functions. Images and inverse images of sets (Definition 8.4 below).</li>
+<li>Permutations and cycles: the notation $(a_1, a_2, \dots, a_k)$ for a cycle, and the group $S_n$ of permutations of $\{1, \dots, n\}$. The Section 4 material is used without reproduction.</li>
+</ul>
+
+<h2>1. Homomorphisms</h2>
+<p>An isomorphism keeps the operation and is one-to-one and onto. A <b>homomorphism</b> keeps the operation and need not be either. So every isomorphism is a homomorphism, but not the other way round.</p>
+<div class="box-eq"><span class="lbl eq">Definition 8.1</span> Let $\phi : G \to G'$ be a map between groups. $\phi$ is a <b>homomorphism</b> if $\phi(ab) = \phi(a)\phi(b)$ for all $a, b \in G$.</div>
+<p><b>Example 8.2.</b> The map $\phi : \mathbb{R} \to U$ given by $\phi(x) = \cos(2\pi x) + i\sin(2\pi x) = e^{2\pi ix}$ is a homomorphism. The identity formulas for sines and cosines give $\phi(a + b) = \phi(a)\phi(b)$. It maps onto $U$ but is not one-to-one, so it is not an isomorphism. Also $\phi(-x) = (\phi(x))^{-1}$.</p>
+<p><b>Example 8.3.</b> $\phi : U_{28} \to U_4$ given by $\phi(z) = z^7$ is well defined and a homomorphism: $(z_1z_2)^7 = z_1^7z_2^7$, and $z^{28} = 1$ gives $(z^7)^4 = 1$.</p>
+
+<div class="box-recall"><span class="lbl">Plus Two recall: functions, images and inverse images (status OPEN, check against the Kerala text)</span>
+<p><b>Recall.</b> For a map $\phi : X \to Y$, a subset $A$ of $X$ has an image $\phi[A]$ and a subset $B$ of $Y$ has an inverse image $\phi^{-1}[B]$. The inverse image can be nonempty even when $\phi$ is not onto.</p>
+<p><b>Re-derive.</b></p>
+<ol><li>Take $\phi(x) = x^2$ on $\mathbb{R}$, $B = \{4\}$. Then $\phi^{-1}[B] = \{2, -2\}$, although $4$ is in the image.</li><li>Take $A = \{-1, 1\}$. Then $\phi[A] = \{1\}$.</li></ol>
+<p><b>Saved.</b> Definition 8.4.</p></div>
+
+<div class="box-eq"><span class="lbl eq">Definition 8.4</span> Let $\phi : X \to Y$, $A \subseteq X$, $B \subseteq Y$. The <b>image of $A$</b> is $\phi[A] = \{\phi(a) \mid a \in A\}$. The <b>inverse image of $B$</b> is $\phi^{-1}[B] = \{a \in X \mid \phi(a) \in B\}$.</div>
+<p>The book gives proofs of the four properties in Theorem 8.5 because they are not obvious for maps that are neither one-to-one nor onto. For an isomorphism they are obvious: an isomorphism only relabels.</p>
+
+<div class="box-res"><span class="lbl res">Theorem 8.5</span> Let $\phi : G \to G'$ be a homomorphism.
+<ol>
+<li>$\phi(e) = e'$, the identity of $G'$.</li>
+<li>$\phi(a^{-1}) = \phi(a)^{-1}$ for every $a \in G$.</li>
+<li>If $H \le G$, then $\phi[H] \le G'$.</li>
+<li>If $K' \le G'$, then $\phi^{-1}[K'] \le G$.</li>
+</ol>
+<p class="note"><i>Proof in brief.</i> (1) $\phi(e) = \phi(ee) = \phi(e)\phi(e)$; cancel. (2) $e' = \phi(aa^{-1}) = \phi(a)\phi(a^{-1})$. (3) $\phi(a)\phi(b) = \phi(ab)$ keeps $\phi[H]$ closed; (1) and (2) give the identity and inverses. (4) If $a, b \in \phi^{-1}[K']$ then $\phi(ab) = \phi(a)\phi(b) \in K'$, and $\phi(a^{-1}) = \phi(a)^{-1} \in K'$; also $\phi(e) = e' \in K'$. &#9670;</p></div>
+<p>With $\{e'\}$ in place of $K'$, Theorem 8.5 (4) says $\phi^{-1}[\{e'\}]$ is a subgroup of $G$.</p>
+
+<div class="box-eq"><span class="lbl eq">Definition 8.6</span> For a homomorphism $\phi : G \to G'$ the subgroup $\phi^{-1}[\{e'\}] = \{x \in G \mid \phi(x) = e'\}$ is the <b>kernel</b> of $\phi$, written $\operatorname{Ker}(\phi)$.</div>
+<p>The kernel is used later in the book to define the alternating group, and the case $H = G$ of Theorem 8.5 (3) says $\phi[G]$ is a subgroup of $G'$. That case is used in Cayley&rsquo;s Theorem.</p>
+
+<p><b>Example 8.7.</b> In Example 8.2 the kernel of $\phi$ is the set of integers, since $e^{2\pi ix} = 1$ exactly when $x$ is an integer. For $n \ge 1$, $\phi[\langle \frac{1}{n} \rangle] = U_n$.</p>
+<p><b>Example 8.8.</b> $\phi : \mathbb{Z}_n \to D_n$ given by $\phi(k) = \rho^k$ is a homomorphism. The two cases $a + b &lt; n$ and $a + b \ge n$ are checked separately, using $\rho^n = \iota$. Its image is $\langle \rho \rangle$.</p>
+
+<h2>2. Cayley&rsquo;s Theorem</h2>
+<p>Many groups we have met are isomorphic to groups of permutations. $\mathbb{Z}_n$ is isomorphic to $\langle (1, 2, \dots, n) \rangle \le S_n$. $D_n$ is a group of permutations of $\mathbb{Z}_n$. $GL(n, \mathbb{R})$ permutes the vectors of $\mathbb{R}^n$. A subgroup of a permutation group is called a <b>group of permutations</b>. Cayley&rsquo;s Theorem says every group is isomorphic to one.</p>
+<p>The idea comes from the group table. Each row contains every element once. So each row defines a permutation of the group: put the table head on top and the row for $a$ below. For $D_3$ (Table 8.9) the row for $\mu\rho$ gives</p>
+<div class="eq">$$\begin{pmatrix} \iota & \rho & \rho^2 & \mu & \mu\rho & \mu\rho^2 \\ \mu\rho & \mu\rho^2 & \mu & \rho^2 & \iota & \rho \end{pmatrix}.$$</div>
+
+<div class="keep"><p><b>Table 8.9.</b> The group table of $D_3$. Rows and columns are headed $\iota, \rho, \rho^2, \mu, \mu\rho, \mu\rho^2$ in that order:</p>
+<table class="tbl"><tr><th>$D_3$</th><th>$\iota$</th><th>$\rho$</th><th>$\rho^2$</th><th>$\mu$</th><th>$\mu\rho$</th><th>$\mu\rho^2$</th></tr>
+<tr><th>$\iota$</th><td>$\iota$</td><td>$\rho$</td><td>$\rho^2$</td><td>$\mu$</td><td>$\mu\rho$</td><td>$\mu\rho^2$</td></tr>
+<tr><th>$\rho$</th><td>$\rho$</td><td>$\rho^2$</td><td>$\iota$</td><td>$\mu\rho^2$</td><td>$\mu$</td><td>$\mu\rho$</td></tr>
+<tr><th>$\rho^2$</th><td>$\rho^2$</td><td>$\iota$</td><td>$\rho$</td><td>$\mu\rho$</td><td>$\mu\rho^2$</td><td>$\mu$</td></tr>
+<tr><th>$\mu$</th><td>$\mu$</td><td>$\mu\rho$</td><td>$\mu\rho^2$</td><td>$\iota$</td><td>$\rho^2$</td><td>$\rho$</td></tr>
+<tr><th>$\mu\rho$</th><td>$\mu\rho$</td><td>$\mu\rho^2$</td><td>$\mu$</td><td>$\rho^2$</td><td>$\iota$</td><td>$\rho$</td></tr>
+<tr><th>$\mu\rho^2$</th><td>$\mu\rho^2$</td><td>$\mu$</td><td>$\mu\rho$</td><td>$\rho$</td><td>$\rho^2$</td><td>$\iota$</td></tr></table></div>
+
+<p>Let $\lambda_x$ be the permutation given by row $x$: $\lambda_x(g)$ is the entry in row $x$, column $g$, that is $xg$. This makes sense for infinite groups too.</p>
+<div class="box-eq"><span class="lbl eq">Definition 8.10</span> Let $G$ be a group. The map $\phi : G \to S_G$ given by $\phi(x) = \lambda_x$, where $\lambda_x(g) = xg$ for all $g \in G$, is the <b>left regular representation</b> of $G$.</div>
+<p>Each $\lambda_x$ is a permutation. It is one-to-one, because $xa = xb$ gives $a = b$ by cancellation. It is onto, because $\lambda_x(x^{-1}b) = b$.</p>
+
+<div class="box-res"><span class="lbl res">Theorem 8.11 (Cayley&rsquo;s Theorem)</span> Every group is isomorphic to a group of permutations.
+<p class="note"><i>Proof in brief.</i> $\phi$ is one-to-one: if $\lambda_a = \lambda_b$ then $ae = be$, so $a = b$. $\phi$ is a homomorphism: $\lambda_{ab}(g) = (ab)g = a(bg) = (\lambda_a\lambda_b)(g)$. By Theorem 8.5 (3) with $H = G$, $\phi[G]$ is a subgroup of $S_G$, and $\phi : G \to \phi[G]$ is an isomorphism. &#9670;</p></div>
+
+<p><b>Example 8.12.</b> The proof gives a subgroup of $S_G$ for any $G$, but not always the smallest one. $D_n$ is isomorphic to a subgroup of $S_{\mathbb{Z}_n}$, although the proof gives a subgroup of $S_{D_n}$ (which has $2n$ elements, not $n$). Also $\mathbb{Z}_6$ is isomorphic to a subgroup of $S_5$, since $(1, 2, 3)(4, 5)$ has order $6$.</p>
+<p>The <b>right regular representation</b> is defined next.</p>
+
+<div class="box-eq"><span class="lbl eq">Historical note</span> Arthur Cayley (1821&ndash;1895) gave an abstract-sounding definition of a group in 1854, and in 1878 stated what is now Theorem 8.11 in a paper that argued from the group table. Walther von Dyck&rsquo;s axiomatic definition of 1882 gave the abstract theory its start. The book&rsquo;s full note is kept in the excerpt.</div>
+
+<div class="box-eq"><span class="lbl eq">Definition 8.13</span> Let $G$ be a group. Put $\sigma_x(g) = gx$. The map $\tau : G \to S_G$ given by $\tau(x) = \sigma_{x^{-1}}$ is the <b>right regular representation</b> of $G$.</div>
+<p>The right regular representation also proves Cayley&rsquo;s Theorem. The book leaves the details to Exercise 54, which is printed right after this paragraph.</p>
+<div class="box-eq"><span class="lbl eq">Exercise 54, Section 8 (named after Definition 8.13)</span> Prove Cayley&rsquo;s Theorem using the right regular representation rather than the left regular representation.</div>
+
+
+<h2>3. Transpositions and orbits</h2>
+<div class="box-eq"><span class="lbl eq">Definition 8.14</span> A cycle of length $2$ is a <b>transposition</b>.</div>
+<p>A transposition fixes every element except two, which it swaps. A computation shows</p>
+<div class="eq">$$\begin{aligned}(a_1, a_2, \dots, a_n) &= (a_1, a_n)(a_1, a_{n-1}) \cdots \\ &\quad (a_1, a_3)(a_1, a_2).\end{aligned}$$</div>
+<p>So every cycle of length $n$ is a product of $n - 1$ transpositions.</p>
+<div class="box-res"><span class="lbl res">Theorem 8.15</span> Every permutation of a finite set with at least two elements is a product of transpositions.</div>
+<p>In plain terms: any rearrangement of $n$ objects can be produced by swapping pairs.</p>
+<p><b>Example 8.16.</b> $(1, 6)(2, 5, 3) = (1, 6)(2, 3)(2, 5)$.</p>
+<p><b>Example 8.17.</b> In $S_n$ with $n \ge 2$, the identity is $(1, 2)(1, 2)$.</p>
+<p>A product of transpositions for a given permutation is not unique (we can always insert $(1, 2)(1, 2)$). Later in the book it is shown that the number of transpositions is always even or always odd. That proof uses orbits, which are defined here.</p>
+<p>For $\sigma \in S_A$ and $a \in A$, the <b>orbit</b> of $a$ is $\{\sigma^k(a) \mid k \in \mathbb{Z}\}$. For a permutation in disjoint cycle form, the orbit of $a$ is the set of entries in the cycle that contains $a$.</p>
+<p><b>Example 8.18.</b> Let $\sigma = (1, 2, 6)(3, 5) \in S_6$. The orbit of $1$ is $\{1, 2, 6\}$, and the same set is the orbit of $2$ and of $6$. The orbit of $3$ is $\{3, 5\}$. The orbit of $4$ is $\{4\}$, since $\sigma = (1, 2, 6)(3, 5)(4)$ when $1$-cycles are included.</p>
+
+<h2>Notes on this section</h2>
+<p>This section covers book items 8.1 to 8.18 and Table 8.9, with the historical note. Items 8.1 to 8.6 are homomorphisms and kernels (syllabus item 11); items 8.7 to 8.18 are Cayley&rsquo;s theorem, the regular representations, transpositions and orbits (syllabus item 12). The book&rsquo;s Section 8 continues past 8.18 into even and odd permutations, the alternating groups (8.19 to 8.25), which belong to Module III, and is not in these notes. The exercises of Section 8 are not reproduced except Exercise 54, which is printed after the text that names it.</p>

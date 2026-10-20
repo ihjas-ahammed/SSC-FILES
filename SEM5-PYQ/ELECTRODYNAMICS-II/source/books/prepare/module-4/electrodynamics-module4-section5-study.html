@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Study notes: Section 5: series LCR and parallel resonance (Murugeshan 13.2(vi), 13.3, 13.4)</title>
+<script>
+window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+  @page { size: A4; margin: 16mm; }
+  :root { --ink:#1B2631; --muted:#5D6D7E; --rule:#AEB6BF; --paper:#FFFFFF; --bound:#B9770E; --res:#117A65; --eq:#1F618D; --idb:#A04000; --hi:#FDF2E9; }
+  body { margin:0; background:var(--paper); color:var(--ink); font-family:"Times New Roman", Times, "Liberation Serif", serif; font-size:12.5pt; line-height:1.5; }
+  main { max-width:760px; margin:0 auto; padding:14px; }
+  h1 { font-size:20pt; margin:0 0 4px; color:var(--eq); }
+  .meta { color:var(--muted); font-size:10.5pt; margin-bottom:10px; }
+  h2 { font-size:14pt; margin:22px 0 6px; color:var(--eq); border-bottom:2px solid var(--eq); padding-bottom:2px; break-after:avoid; }
+  h3 { font-size:12.5pt; margin:14px 0 4px; color:var(--res); break-after:avoid; }
+  p, li { margin:5px 0; }
+  ul { margin:4px 0 4px 22px; padding:0; }
+  .eq { margin:8px 0; text-align:center; }
+  .box-eq { background:#EAF2F8; border-left:4px solid var(--eq); padding:6px 10px; margin:8px 0; }
+  .box-res { background:#E9F7EF; border-left:4px solid var(--res); padding:6px 10px; margin:8px 0; }
+  .box-id { background:var(--hi); border-left:4px solid var(--idb); padding:6px 10px; margin:8px 0; }
+  .lbl { font-weight:bold; font-size:10.5pt; text-transform:uppercase; letter-spacing:.3px; }
+  .lbl.res { color:var(--res); } .lbl.eq { color:var(--eq); } .lbl.id { color:var(--idb); }
+  .note { font-size:11.5pt; color:var(--muted); margin:4px 0; }
+  .bg { font-size:10.5pt; color:var(--muted); font-style:italic; }
+  .bound { color:var(--bound); font-weight:bold; }
+  .fig { margin:12px 0; text-align:center; break-inside:avoid; }
+  .fig svg { display:block; width:100%; max-width:320px; height:auto; margin:0 auto; }
+  .fig figcaption { font-size:10.5pt; color:var(--muted); font-style:italic; margin-top:3px; }
+  @media print { .keep { break-inside: avoid; } }
+
+  .box-recall { background:#FEF9E7; border-left:4px solid #B9770E; padding:6px 10px; margin:8px 0; }
+  .box-recall ol { margin:4px 0 4px 20px; padding:0; }
+  .lbl.recall { color:#B9770E; }
+  .figsvg { display:block; width:100%; max-width:240px; height:auto; margin:0 auto; }
+  .fig img { display:block; width:100%; max-width:240px; height:auto; margin:0 auto; }
+  .box-res p, .box-eq p { margin:4px 0; }
+  .sec-body { column-count: 2; column-gap: 22px; column-rule: 1px solid #AEB6BF; }
+  .sec-body .eq, .sec-body .box-eq, .sec-body .fig { break-inside: avoid; }
+  .sec-body .box-res, .sec-body .box-recall { box-decoration-break: clone; }
+  .sec-body .fig img, .sec-body .figsvg { max-height: 130px; width: auto; max-width: 220px; }
+  .sec-body h3 { break-after: avoid; }
+  .sec-body p, .sec-body li { font-size: 11pt; }
+  .sec-body .eq { font-size: 0.93em; }
+  .sec-body .longeq mjx-container[display="true"] { font-size: 0.72em !important; }
+  .sec-body mjx-container[display="true"] { font-size: 0.85em !important; max-width: 100%; }
+  .sec-bar { background:#1F618D; color:#fff; font-size:13pt; font-weight:bold; padding:6px 10px; margin:16px 0 6px; column-span: all; break-after: avoid; }
+  main { max-width: none; margin: 0; padding: 0 14px; }
+  @page { size: A4; margin: 16mm; }
+  @media print { h2 { break-after: avoid; } }
+</style>
+</head>
+<body>
+<main>
+<h1>Study notes: Section 5: series LCR and parallel resonance (Murugeshan 13.2(vi), 13.3, 13.4)</h1>
+<div class="meta">Murugeshan, <i>Electricity and Magnetism</i> (10th ed.), Ch. 12 §12.1 and §12.2 (Module 4, syllabus item 15–16). Figures are drawn for these notes from the book formulas; the book figure number is in each caption. Problems are not included.</div>
+<h2>13.2 (vi), 13.3 and 13.4 Parallel and series resonance</h2>
+<div class="sec-body">
+<div class="bg">Source: <i>book-sources/m4-s5-series-parallel.html</i>, Murugeshan pp. 338–346 (printed), with Examples 1 and 2 of §13.3 and Example 1 of §13.4. Syllabus items 20 (parallel L and C) and 21 (series LCR). The book numbers the series derivation by two methods; the equations are tagged (a) for the first and (b) for the second method.</div>
+
+<h3>Before you start</h3>
+<ul>
+<li>The impedance and phase of R, L and C in series (Section 4 of these notes).</li>
+<li>Complex numbers, the conjugate and the modulus (pre-math B1, B3).</li>
+</ul>
+
+<h3>1. Parallel resonant circuit (§13.2(vi))</h3>
+<p>Take an inductance $L$ and a capacitance $C$ in parallel across an alternating emf $E = E_0\sin\omega t$. The current in $L$ lags the emf by $\pi/2$, so $I_L = (E_0/\omega L)\sin(\omega t-\pi/2)$. The current in $C$ leads the emf by $\pi/2$, so $I_C = E_0/(1/\omega C)\sin(\omega t+\pi/2)$ (Fig. 13.14). The total current is</p>
+<div class="eq">$$\begin{aligned}I &= I_L + I_C \\  &= E_0\left(\omega C - \frac{1}{\omega L}\right)\cos\omega t\end{aligned} \tag{13.2(vi)(1)}$$</div>
+<p>If at a frequency $\nu_0$ we have $\omega C = 1/\omega L$, the current is zero. The circuit then offers an infinite impedance: it is a <i>parallel resonant circuit</i>. Its resonant frequency is</p>
+<div class="eq">$$\nu_0 = \frac{1}{2\pi\sqrt{LC}}\tag{13.2(vi)(2)}$$</div>
+<figure class="fig"><img src="final/m4-s5-par-circuit.jpg" alt="m4 s5 par circuit"><figcaption>Fig. 13.14 (book): parallel L and C across E = E₀ sin ωt.</figcaption></figure>
+<figure class="fig"><img src="final/m4-s5-par-curve.jpg" alt="m4 s5 par curve"><figcaption>Fig. 13.15 and 13.23 (book): current against frequency, minimum at the parallel resonant frequency.</figcaption></figure>
+
+<h3>2. Series LCR circuit: first method (§13.3)</h3>
+<div class="box-recall"><span class="lbl recall">Recall (Plus Two)</span> In Plus Two, resistances in series add, and the total opposition to current is the impedance. Here the reactances $X_L$ and $X_C$ subtract, so the impedance is $\sqrt{R^2+(X_L-X_C)^2}$.</div>
+<p>Let $E=E_0\sin\omega t$ be applied to $R$, $L$ and $C$ in series (Fig. 13.16). Let $I$ be the current and $Q$ the charge on $C$. The emf equation is $L\,dI/dt + RI + Q/C = E_0\sin\omega t$. Differentiating with respect to $t$ gives</p>
+<div class="eq longeq">$$L\frac{d^2I}{dt^2} + R\frac{dI}{dt} + \frac{1}{C}\frac{dQ}{dt} = E_0\omega\cos\omega t\tag{13.3(a)(1)}$$</div>
+<p>Try the solution $I = I_0\sin(\omega t-\phi)$, with $I_0$ and $\phi$ constants. Substituting $I$, $dI/dt$ and $d^2I/dt^2$ and equating the coefficients of $\sin(\omega t-\phi)$ and $\cos(\omega t-\phi)$ gives</p>
+<div class="eq">$$I = I_0\sin(\omega t-\phi)\tag{13.3(a)(2)}$$</div>
+<div class="eq">$$\left(-L\omega^2 + \frac{1}{C}\right)I_0 = -E_0\omega\sin\phi\tag{13.3(a)(3)}$$</div>
+<div class="eq">$$R\omega I_0 = E_0\omega\cos\phi\tag{13.3(a)(4)}$$</div>
+<p>Dividing and squaring-and-adding give</p>
+<div class="eq">$$\tan\phi = \frac{\omega L - 1/\omega C}{R}\tag{13.3(a)(5)}$$</div>
+<div class="eq">$$I_0 = \frac{E_0}{\sqrt{R^2 + \left(\omega L - 1/\omega C\right)^2}}\tag{13.3(a)(6)}$$</div>
+<div class="eq longeq">$$I = \frac{E_0}{\sqrt{R^2 + \left(\omega L - 1/\omega C\right)^2}}\sin(\omega t - \phi)\tag{13.3(a)(7)}$$</div>
+<p>The quantity $\sqrt{R^2+(\omega L-1/\omega C)^2}$ is the impedance $Z$, which is $\sqrt{R^2+(X_L-X_C)^2}$. The current lags the emf if $X_L>X_C$, leads it if $X_L\lt X_C$, and is in phase when $X_L=X_C$.</p>
+
+<h3>3. Series resonance</h3>
+<p>The impedance is least when $\omega L = 1/\omega C$, so $Z=R$ and the current is largest. This frequency is the resonant frequency $\nu_0 = 1/(2\pi\sqrt{LC})$. The largest current is $I_0=E_0/R$. The sharpness of the peak depends on $R$: small $R$ gives a sharp peak (Figs. 13.17, 13.18). The circuit is an <i>acceptor</i> circuit, because it admits the current of its own frequency most readily.</p>
+<figure class="fig"><img src="final/m4-s5-lcr-circuit.jpg" alt="m4 s5 lcr circuit"><figcaption>Fig. 13.16 (book): R, L and C in series across E = E₀ sin ωt.</figcaption></figure>
+<figure class="fig"><img src="final/m4-s5-res-curve.jpg" alt="m4 s5 res curve"><figcaption>Figs. 13.17 and 13.18 (book): current against frequency at resonance, for low and high R.</figcaption></figure>
+<div class="eq longeq">$$I = \frac{E_0}{\sqrt{R^2 + \left(\omega L - \dfrac{1}{C\omega}\right)^2}}\sin(\omega t-\phi)\tag{13.3(res)(1)}$$</div>
+
+<h3>4. Voltage magnification and the Q-factor</h3>
+<p>At resonance $I_0 = E_0/R$, and the voltage across $L$ is $V_L = X_L I_0 = (\omega_0 L/R)E_0 = QE_0$, where $Q = \omega_0 L/R$ is the quality factor. Thus the voltage across $L$ (and across $C$) is $Q$ times the applied voltage. This is the <i>voltage magnification</i>. It does not increase the power, because the reactive power is wattless. A larger $Q$ gives a sharper, narrower resonance curve (Fig. 13.18). The sharpness is measured by the bandwidth.</p>
+<figure class="fig"><img src="final/m4-s5-vm.jpg" alt="m4 s5 vm"><figcaption>Voltage magnification at resonance: V_L / E₀ = Q (book, §13.3).</figcaption></figure>
+<figure class="fig"><img src="final/m4-s5-q-bandwidth.jpg" alt="m4 s5 q bandwidth"><figcaption>Sharp and flat resonance curves; a large Q gives a narrow bandwidth (book, §13.3).</figcaption></figure>
+<figure class="fig"><img src="final/m4-s5-vector.jpg" alt="m4 s5 vector"><figcaption>Fig. 13.19 (book): vector diagram of the series LCR circuit.</figcaption></figure>
+
+<h3>5. Vector diagram</h3>
+<p>In a series circuit the current is the same through $R$, $L$ and $C$. The drop $E_R = I_0R$ is in phase with the current, $E_L = \omega LI_0$ is $90^\circ$ ahead of it, and $E_C = I_0/\omega C$ is $90^\circ$ behind it (Fig. 13.19). The resultant of $E_L$ and $E_C$ is $E_L - E_C$, and $E_0^2 = E_R^2 + (E_L-E_C)^2$.</p>
+
+<h3>6. Series LCR circuit: second method (complex impedance)</h3>
+<p>Write $Z = Z_R + Z_L + Z_C = R + j(\omega L - 1/\omega C)$ (Fig. 13.21). With $E=E_0e^{j\omega t}$,</p>
+<div class="eq">$$E = E_0 e^{j\omega t}\tag{13.3(b)(1)}$$</div>
+<div class="eq">$$\begin{gathered}Z = \sqrt{R^2 + (\omega L - 1/\omega C)^2}\,e^{j\phi} \\ \tan\phi = \frac{\omega L-1/\omega C}{R}\end{gathered} \tag{13.3(b)(2)}$$</div>
+<div class="eq">$$\begin{aligned}I &= \frac{E}{Z} \\  &= \frac{E_0}{\sqrt{R^2 + (\omega L - 1/\omega C)^2}}\,e^{j(\omega t-\phi)}\end{aligned} \tag{13.3(b)(3)}$$</div>
+<div class="eq">$$I = I_0e^{j(\omega t - \phi)}\tag{13.3(b)(4)}$$</div>
+<div class="eq">$$\begin{aligned}i &= \operatorname{Im}(I) \\  &= \frac{E_0}{\sqrt{R^2 + (\omega L - 1/\omega C)^2}}\sin(\omega t - \phi)\end{aligned} \tag{13.3(b)(5)}$$</div>
+<p>The actual current is the imaginary part of the complex current. The current lags the voltage by $\phi$.</p>
+
+<h3>7. Parallel resonant circuit: the rejector (§13.4)</h3>
+<p>Let $C$ be in parallel with the series combination of $R$ and $L$, across $E = E_0 e^{j\omega t}$ (Fig. 13.22). The impedance of the $L$ branch is $Z_1 = R + j\omega L$ and of the $C$ branch is $Z_2 = 1/(j\omega C)$. Their parallel combination has</p>
+<div class="eq longeq">$$\frac{1}{Z} = \frac{R}{R^2 + (L\omega)^2} + j\left[C\omega - \frac{L\omega}{R^2 + (L\omega)^2}\right]$$</div>
+<p>The admittance is least, and so the impedance greatest, at $\omega_0 = \sqrt{\frac{1}{LC} - \frac{R^2}{L^2}}$. If $R$ is small, $\nu_0 = 1/(2\pi\sqrt{LC})$. At this frequency the impedance is $Z = L/(RC)$ and the current is least. A parallel circuit at resonance is a <i>rejector</i>: it blocks the current of its natural frequency (Fig. 13.23). In a parallel circuit, resonance gives maximum impedance; in a series circuit, minimum.</p>
+<figure class="fig"><img src="final/m4-s5-impedance-tri.jpg" alt="m4 s5 impedance tri"><figcaption>Impedance triangle for series LCR: Z = √(R² + (X_L − X_C)²) (book, §13.3).</figcaption></figure>
+
+<h3>8. Worked examples</h3>
+<p><b>§13.3, Example 1 (printed p. 344).</b> $R=50+2=52\ \Omega$, $L=0.3$ H, $C=40\ \mu$F, $\omega=100\pi$, $E_{rms}=200$ V. $X_L=94.2\ \Omega$, $X_C=79.6\ \Omega$, $Z=53.97\ \Omega$, $I_{rms}=3.71$ A. $\tan\phi = 0.28$, $\phi\approx15^\circ39'$, $\cos\phi=0.964$, apparent power $742$ VA, true power $716$ W.</p>
+<p><b>§13.3, Example 2 (printed p. 344).</b> For resonance with $L=5$ H and $\omega=100\pi$, $C=2\ \mu$F. The current at resonance is $I_{rms}=100/100=1.0$ A. The p.d. across $R$ is 100 V, across $L$ 1570 V, and across $C$ 1570 V, which are equal and opposite in phase.</p>
+<p><b>§13.4, Example 1 (printed p. 347).</b> $L=2$ mH, $R=15\ \Omega$, $C=0.001\ \mu$F. The resonant frequency is $\nu_0 = 112\,590$ Hz (or $112\,596$ Hz by the approximation). The peak make-up current is $E_0CR/L = 15\times10^{-6}$ A.</p>
+</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<h2>Before you start</h2>
+<ul>
+<li>Rings, units and fields (Section 22 of the book; notes above).</li>
+<li>Greatest common divisor and relative primeness (Module 2, Section 6).</li>
+<li>Plus Two recall: factorising a quadratic and solving $(x - a)(x - b) = 0$. (Status: Recall, check against the Kerala text.)</li>
+</ul>
+
+<h2>1. Divisors of zero and cancellation</h2>
+<p>In the integers a product is $0$ only when a factor is $0$. We use this when we solve $x^2 - 5x + 6 = 0$ by factoring it as $(x - 2)(x - 3)$. This property can fail in other rings.</p>
+<p><b>Example 23.1.</b> In $\mathbb{Z}_{12}$ the factorisation $x^2 - 5x + 6 = (x - 2)(x - 3)$ still holds, but many products are $0$: for instance $(2)(6) = 0$ and $(3)(4) = 0$. So the equation has the solutions $2, 3, 6, 11$ in $\mathbb{Z}_{12}$, not just $2$ and $3$, since $(6 - 2)(6 - 3) = 0$ and $(11 - 2)(11 - 3) = 0$.</p>
+<div class="box-eq"><span class="lbl eq">Definition 23.2</span> Two nonzero elements $a, b$ of a ring $R$ with $ab = 0$ are <b>divisors of $0$</b> (or <b>$0$ divisors</b>).</div>
+<p>In $\mathbb{Z}_{12}$ the elements $2, 3, 4, 6, 8, 9, 10$ are divisors of $0$. These are exactly the numbers whose gcd with $12$ is not $1$. A unit cannot be a divisor of $0$: if $ab = 0$ and $a$ is a unit, then $b = a^{-1}ab = 0$.</p>
+<div class="box-res"><span class="lbl res">Theorem 23.3</span> Let $m \in \mathbb{Z}_n$. Either $m = 0$; or $\gcd(m,n) = 1$, and $m$ is a unit of $\mathbb{Z}_n$; or $\gcd(m,n) \ne 1$, and $m$ is a $0$ divisor of $\mathbb{Z}_n$.
+<p class="note"><i>Proof.</i> If $d = \gcd(m, n) \ne 1$ and $m \ne 0$, then $m(n/d) = (m/d)n$ is a multiple of $n$, so $m \cdot (n/d) = 0$ in $\mathbb{Z}_n$ with $m, n/d \ne 0$. If $\gcd(m, n) = 1$, write $an + bm = 1$ and reduce $b$ modulo $n$: $b = nq + r$ with $0 \le r \le n - 1$. Then $rm = 1 - n(a + qm)$, so $rm = 1$ in $\mathbb{Z}_n$. &#9670;</p></div>
+<p><b>Example 23.4.</b> In $\mathbb{Z}_{20}$ the units are $1, 3, 7, 9, 11, 13, 17, 19$ (since $1 \cdot 1 = 3 \cdot 7 = 9 \cdot 9 = \cdots = 1$), and the $0$ divisors are $2, 4, 5, 6, 8, 10, 12, 14, 15, 16, 18$ (for example $2 \cdot 10 = 0$).</p>
+<div class="box-res"><span class="lbl res">Corollary 23.5</span> If $p$ is prime, every nonzero element of $\mathbb{Z}_p$ is a unit; so $\mathbb{Z}_p$ is a field with no divisors of $0$.
+<p class="note"><i>Proof.</i> For $0 &lt; m \le p - 1$, $\gcd(m, p) = 1$; apply Theorem 23.3. &#9632;</p></div>
+<p>The book adds that linear algebra over a finite field such as $\mathbb{Z}_p$ uses only field properties, since there is no natural idea of magnitude in $\mathbb{Z}_p$ ($p \cdot 1 = 0$).</p>
+<div class="box-res"><span class="lbl res">Theorem 23.6</span> The cancellation laws hold in a ring $R$ if and only if $R$ has no divisors of $0$.
+<p class="note"><i>Proof.</i> If cancellation holds and $ab = 0$ with $a \ne 0$, then $ab = a0$ gives $b = 0$. Conversely, if $R$ has no divisors of $0$ and $ab = ac$ with $a \ne 0$, then $a(b - c) = 0$ gives $b = c$; the case $ba = ca$ is similar. &#9670;</p></div>
+<p>In a ring with no divisors of $0$, an equation $ax = b$ with $a \ne 0$ has at most one solution. If $a$ is a unit the solution is $a^{-1}b$. In a commutative ring the quotient $b/a$ denotes $a^{-1}b = ba^{-1}$; this notation must not be used in a noncommutative ring.</p>
+
+<h2>2. Integral domains</h2>
+<div class="box-eq"><span class="lbl eq">Definition 23.7</span> An <b>integral domain</b> $D$ is a commutative ring with unity $1 \ne 0$ that has no divisors of $0$.</div>
+<p>An integral domain lies between a commutative ring with unity and a field (Example 23.9 and Figure 23.10).</p>
+<p><b>Example 23.8.</b> $\mathbb{Z}$ and $\mathbb{Z}_p$ ($p$ prime) are integral domains. $\mathbb{Z}_n$ is not an integral domain if $n$ is not prime, and a direct product $R \times S$ of nonzero rings is never one, since $(r, 0)(0, s) = (0, 0)$.</p>
+<p><b>Example 23.9.</b> $\mathbb{Z}_2$ is an integral domain, but $M_2(\mathbb{Z}_2)$ has divisors of $0$: $\begin{pmatrix}1&0\\0&0\end{pmatrix}\begin{pmatrix}0&0\\1&0\end{pmatrix} = 0$.</p>
+<p>Every field is an integral domain, since units are not divisors of $0$ and multiplication in a field is commutative.</p>
+<p><b>Figure 23.10.</b> A Venn-style diagram of containment: commutative rings, rings with unity, integral domains, fields, and the regions numbered 2 to 6. Labels as printed; not redrawn.</p>
+<p><b>Exercise 26</b> (named after Example 23.9, in the sentence that introduces Figure 23.10). Redraw Fig. 23.10 to include a subset corresponding to strictly skew fields.</p>
+<div class="box-res"><span class="lbl res">Theorem 23.11</span> Every finite integral domain is a field.
+<p class="note"><i>Proof.</i> Let $R$ be a finite integral domain and $a \ne 0$. The map $f(x) = ax$ is one-to-one by cancellation (Theorem 23.6). Since $R$ is finite, $f$ is also onto, so $ab = 1$ for some $b \in R$. Thus $a$ is a unit. &#9632;</p></div>
+<p>The finite condition is needed: $\mathbb{Z}$ is an infinite integral domain that is not a field, and multiplication by $2$ is one-to-one but not onto.</p>
+
+<h2>3. Characteristic</h2>
+<div class="box-eq"><span class="lbl eq">Definition 23.12</span> If some positive integer $n$ satisfies $n \cdot a = 0$ for all $a \in R$, the least such $n$ is the <b>characteristic</b> of $R$. If none exists, $R$ has <b>characteristic $0$</b>.</div>
+<p><b>Exercise 35</b> (named after Definition 23.12). Show that the characteristic of an integral domain $D$ must be either $0$ or a prime $p$. [<i>Hint:</i> If the characteristic of $D$ is $mn$, consider $(m \cdot 1)(n \cdot 1)$ in $D$.]</p>
+<p><b>Example 23.13.</b> $\mathbb{Z}_n$ has characteristic $n$; $\mathbb{Z}$, $\mathbb{Q}$, $\mathbb{R}$, $\mathbb{C}$ have characteristic $0$.</p>
+<div class="box-res"><span class="lbl res">Theorem 23.14</span> Let $R$ have unity. If $n \cdot 1 \ne 0$ for all $n \in \mathbb{Z}^+$, then $R$ has characteristic $0$; otherwise the least $n$ with $n \cdot 1 = 0$ is the characteristic.
+<p class="note"><i>Proof.</i> If $n \cdot 1 = 0$, then $n \cdot a = a(n \cdot 1) = a0 = 0$ for every $a \in R$. &#9670;</p></div>
+
+<h2>Notes on this section</h2>
+<p>Book items 23.1 to 23.14 are covered, with Figure 23.10 and the named exercises (26 and 35). Exercises 1 to 36 of Section 23 are in the Module 4 excerpt.</p>

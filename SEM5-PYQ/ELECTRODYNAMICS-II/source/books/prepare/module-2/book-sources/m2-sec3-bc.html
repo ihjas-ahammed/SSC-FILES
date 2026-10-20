@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Griffiths 7.3.6 Boundary conditions (book pp. 345–347)</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+  :root {
+    --page-bg: #d9d9d4;
+    --paper: #fdfdfb;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --page-bg: #2b2b2b;
+      --paper: #f4f3ee;
+      --ink: #111;
+      --rule: #444;
+      --note: #555;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page-bg: #2b2b2b;
+    --paper: #f4f3ee;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  body {
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--ink);
+    font-family: "Times New Roman", Times, "Liberation Serif", serif;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .sheet {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 12mm auto;
+    padding: 14mm 18mm 16mm;
+    box-sizing: border-box;
+    background: var(--paper);
+    box-shadow: 0 1px 6px rgba(0,0,0,.25);
+    position: relative;
+  }
+  .sheet + .sheet { margin-top: 0; }
+  .hdr {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: start;
+    font-size: 14px;
+  }
+  .code { font-size: 22px; font-weight: bold; letter-spacing: .5px; }
+  .pages { text-align: center; padding-top: 14px; }
+  .name { text-align: right; line-height: 2; }
+  .title { text-align: center; margin-top: 22px; }
+  .title .exam { font-size: 19px; font-weight: bold; letter-spacing: .3px; }
+  .title .sch { margin-top: 2px; }
+  .title .course { margin-top: 10px; font-size: 16px; }
+  .title .subject { margin-top: 6px; font-size: 16px; font-weight: bold; }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 16px;
+    font-size: 15px;
+  }
+  .sec { margin-top: 14px; }
+  .sec-head {
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    font-weight: bold;
+  }
+  .sec-head .num { font-weight: bold; }
+  .sec-head .body { font-weight: normal; }
+  .sec-head .body b { font-weight: bold; }
+  .sec-head .body i { font-style: italic; }
+  .sec-total { text-align: right; font-weight: normal; margin-top: 4px; }
+  .qs { margin-top: 6px; }
+  .q {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    margin-bottom: 7px;
+  }
+  .q .n { text-align: right; padding-right: 10px; }
+  .q p { margin: 0; }
+  .sub { margin-left: 22px; }
+  .cut { color: var(--note); }
+  .turn { text-align: right; font-weight: bold; margin-top: 26px; }
+  .fig {
+    display: block;
+    margin: 8px auto 2px 36px;
+    width: 230px;
+    height: auto;
+  }
+  .fig-cap { margin-left: 36px; font-size: 13px; color: var(--note); font-style: italic; }
+  .foot-note {
+    margin-top: 26px;
+    border-top: 1px solid var(--rule);
+    padding-top: 6px;
+    font-size: 12px;
+    color: var(--note);
+  }
+  .pno { text-align: center; font-size: 15px; margin-bottom: 4px; }
+  .pno-hdr { position: absolute; top: 10mm; right: 18mm; font-weight: bold; font-size: 14px; }
+  @media print {
+    @page { size: A4; margin: 0; }
+    body { background: #fff; }
+    .sheet { margin: 0; box-shadow: none; width: 210mm; height: 297mm; min-height: 0; page-break-after: always; }
+    .sheet:last-child { page-break-after: auto; }
+  }
+  @media (max-width: 720px) {
+    .sheet { width: auto; margin: 0; padding: 14px 16px; min-height: 0; }
+    .hdr { grid-template-columns: 1fr; gap: 6px; }
+    .name { text-align: left; }
+    .pages { text-align: left; padding-top: 0; }
+  }
+</style>
+<style>
+  .sheet.book { height: auto; min-height: 297mm; text-align: justify; hyphens: auto; }
+  .sheet.book p { margin: 6px 0; }
+  .rh { display: flex; justify-content: space-between; font-size: 12px; color: var(--note);
+        border-bottom: 1px solid var(--rule); padding-bottom: 3px; margin-bottom: 12px; }
+  .chap { display: flex; background: #8a8a86; color: #fff; margin: 4px 0 16px; }
+  .chap .cn { background: #b4b4ae; padding: 10px 18px; font-size: 26px; }
+  .chap .ct { padding: 12px 16px; font-size: 22px; font-weight: bold; }
+  h2.sec { font-size: 20px; margin: 18px 0 8px; border-bottom: 2px solid var(--rule); padding-bottom: 3px; }
+  h3.sub { font-size: 16px; margin: 14px 0 6px; border-bottom: 1px solid var(--rule); padding-bottom: 2px; }
+  .eq { margin: 10px 0; text-align: center; overflow: visible; }
+  mjx-container[display="true"], mjx-container { overflow: visible !important; max-width: 100%; }
+  .sheet.book, .sheet.book .eq { overflow: visible; }
+  .eq.boxed { border: 1px solid var(--ink); display: block; padding: 4px 8px; }
+  .prob { background: #ecece7; border: 1px solid var(--rule); padding: 8px 12px; margin: 10px 0; text-align: left; }
+  .prob p { margin: 5px 0; }
+  .ex, .ex-cont { border: 1px solid var(--rule); padding: 8px 12px; margin: 10px 0; text-align: left; }
+  .ex p, .ex-cont p { margin: 5px 0; }
+  .figbox { border: 1px dashed var(--rule); padding: 10px; color: var(--note); font-size: 13px; text-align: center; margin: 8px 0; font-style: italic; }
+  figure { margin: 8px 0; text-align: center; }
+  figure > svg { width: 100%; max-width: 230px; height: auto; }
+  figure.single > svg { max-width: 260px; }
+  figure figcaption { font-size: 12px; font-style: italic; color: var(--note); }
+  .figrow { display: flex; flex-wrap: wrap; justify-content: space-around; gap: 8px; }
+  .figrow > figure { flex: 1 1 180px; max-width: 240px; }
+  .fn { font-size: 12.5px; color: var(--note); margin: 6px 0; text-align: left; }
+  .cont { font-size: 12.5px; color: var(--note); font-style: italic; }
+  .gapnote { font-size: 13px; color: var(--note); font-style: italic; border-left: 3px solid var(--rule); padding: 2px 8px; margin: 4px 0 10px; }
+  .flag { color: #8a1c1c; font-weight: bold; }
+  .answer { font-size: 14px; }
+  .tbl { border-collapse: collapse; width: 100%; font-size: 13px; margin: 6px 0; }
+  .tbl td, .tbl th { border: 1px solid var(--rule); padding: 3px 6px; text-align: center; }
+  .tbl th { background: #ebebe6; }
+  .tblcap { font-size: 13px; margin-top: 8px; text-align: left; }
+  .pno { text-align: center; font-size: 14px; margin-top: 14px; }
+  .intro p, .intro li { font-size: 14px; text-align: left; }
+  .intro table { border-collapse: collapse; width: 100%; font-size: 14px; margin: 6px 0; }
+  .intro td, .intro th { border: 1px solid var(--rule); padding: 4px 8px; text-align: left; }
+  @media print {
+    .sheet.book { height: auto !important; min-height: 0 !important; page-break-after: always; }
+  }
+  @media (max-width: 720px) {
+    .sheet.book .eq { overflow-x: auto; max-width: 100%; }
+    .sheet.book mjx-container[display="true"] { font-size: 85% !important; }
+    .sheet.book .figrow > figure { flex: 1 1 100%; max-width: 100%; }
+    .sheet.book { padding-left: 14px; padding-right: 14px; }
+  }
+</style>
+</head>
+<body>
+<!-- Book source, split from the Module 2 excerpt. Pages as printed in Griffiths 5th ed. -->
+<div class="sheet book" id="pdf-p48">
+  <div class="rh"><span>345</span><span>7.3 Maxwell’s Equations</span></div>
+  <p>so</p>
+  <div class="eq">$$\mathbf D=\epsilon\mathbf E\qquad\text{and}\qquad\mathbf H=\frac{1}{\mu}\mathbf B, \tag{7.67}$$</div>
+  <p>where $\epsilon\equiv\epsilon_0(1+\chi_e)$ and $\mu\equiv\mu_0(1+\chi_m)$. You may remember that $\mathbf D$ is called the electric “displacement”; that’s why the second term in the Ampère/Maxwell equation (iv) came to be called the <b>displacement current</b>. In this context,</p>
+  <div class="eq">$$\mathbf J_d\equiv\frac{\partial\mathbf D}{\partial t}. \tag{7.68}$$</div>
+  <div class="prob">
+    <p><b>Problem 7.42.</b> Sea water at frequency $\nu=4\times10^8$ Hz has permittivity $\epsilon=81\epsilon_0$, permeability $\mu=\mu_0$, and resistivity $\rho=0.23\ \Omega\cdot$m. What is the (amplitude) ratio of conduction current to displacement current in sea water, at this frequency? [<i>Hint:</i> Consider a parallel-plate capacitor immersed in sea water and driven by a voltage $V_0\cos(2\pi\nu t)$.]</p>
+  </div>
+  <h3 class="sub">7.3.6 Boundary Conditions</h3>
+  <p>In general, the fields $\mathbf E$, $\mathbf B$, $\mathbf D$, and $\mathbf H$ will be discontinuous at a boundary between two different media, or at a surface that carries a charge density $\sigma$ or a current density $\mathbf K$. The explicit form of these discontinuities can be deduced from Maxwell’s equations (Eq. 7.65), in their integral form</p>
+  <div class="ex" style="text-align:left">
+    <table class="tbl" style="width:100%;border:none">
+      <tr><td style="border:none;text-align:left">(i)&nbsp; $\displaystyle\oint_{\mathcal S}\mathbf D\cdot d\mathbf a=Q_{f,\text{enc}},$</td><td style="border:none;text-align:left" rowspan="2">over any closed surface $\mathcal S$.</td></tr>
+      <tr><td style="border:none;text-align:left">(ii)&nbsp; $\displaystyle\oint_{\mathcal S}\mathbf B\cdot d\mathbf a=0,$</td></tr>
+      <tr><td style="border:none;text-align:left">(iii)&nbsp; $\displaystyle\oint_{\mathcal P}\mathbf E\cdot d\mathbf l=-\frac{d}{dt}\int_{\mathcal S}\mathbf B\cdot d\mathbf a,$</td><td style="border:none;text-align:left" rowspan="2">for any surface $\mathcal S$ bounded by the closed loop $\mathcal P$.</td></tr>
+      <tr><td style="border:none;text-align:left">(iv)&nbsp; $\displaystyle\oint_{\mathcal P}\mathbf H\cdot d\mathbf l=I_{\text{enc}}+\frac{d}{dt}\int_{\mathcal S}\mathbf D\cdot d\mathbf a,$</td></tr>
+    </table>
+  </div>
+  <p>Applying (i) to a tiny, wafer-thin Gaussian pillbox extending just slightly into the material on either side of the boundary (Fig. 7.49), we obtain</p>
+  <div class="eq">$$\mathbf D_{\text{above}}\cdot\mathbf a-\mathbf D_{\text{below}}\cdot\mathbf a=\sigma_f\,d.$$</div>
+  <p>(The positive direction for $\mathbf a$ is “upward.”) The edge of the wafer contributes nothing in the limit as the thickness goes to zero; nor does any volume charge density.) Thus, the component of $\mathbf D$ that is perpendicular to the interface is discontinuous in the amount</p>
+  <div class="eq">$$\boxed{D^{\perp}_{\text{above}}-D^{\perp}_{\text{below}}=\sigma_f.} \tag{7.69}$$</div>
+  <p>Identical reasoning, applied to equation (ii), yields</p>
+  <div class="eq">$$\boxed{B^{\perp}_{\text{above}}-B^{\perp}_{\text{below}}=0.} \tag{7.70}$$</div>
+  <div class="pno">345</div>
+</div>
+<div class="sheet book" id="pdf-p49">
+  <div class="rh"><span>346</span><span>7 Electrodynamics</span></div>
+  <div class="figbox">Fig. 7.49: thin Gaussian pillbox straddling a charged surface $\sigma_f$, with $\mathbf a$ pointing up, $\mathbf D_{\text{above}}$ above and $\mathbf D_{\text{below}}$ below the surface. Schematic; see PDF page.</div>
+  <p>Turning to (iii), a very thin Ampèrian loop straddling the surface gives</p>
+  <div class="eq">$$\mathbf E_{\text{above}}\cdot\mathbf l-\mathbf E_{\text{below}}\cdot\mathbf l=-\frac{d}{dt}\int_{\mathcal S}\mathbf B\cdot d\mathbf a.$$</div>
+  <p>But in the limit as the width of the loop goes to zero, the flux vanishes. (I have already dropped the contribution of the two ends to $\oint\mathbf E\cdot d\mathbf l$, on the same grounds.) Therefore,</p>
+  <div class="eq">$$\boxed{\mathbf E^{\parallel}_{\text{above}}-\mathbf E^{\parallel}_{\text{below}}=\mathbf 0.} \tag{7.71}$$</div>
+  <p>That is, the components of $\mathbf E$ <i>parallel</i> to the interface are continuous across the boundary. By the same token, (iv) implies</p>
+  <div class="eq">$$\mathbf H_{\text{above}}\cdot\mathbf l-\mathbf H_{\text{below}}\cdot\mathbf l=I_{f,\text{enc}},$$</div>
+  <p>where $I_{f,\text{enc}}$ is the free current passing through the Ampèrian loop. No <i>volume</i> current density will contribute (in the limit of infinitesimal width), but a <i>surface</i> current can. In fact, if $\hat{\mathbf n}$ is a unit vector perpendicular to the interface (pointing “upward”), so that $(\hat{\mathbf n}\times\mathbf l)$ is normal to the Ampèrian loop (Fig. 7.50), then</p>
+  <div class="eq">$$I_{f,\text{enc}}=\mathbf K_f\cdot(\hat{\mathbf n}\times\mathbf l)=(\mathbf K_f\times\hat{\mathbf n})\cdot\mathbf l,$$</div>
+  <p>and hence</p>
+  <div class="eq">$$\boxed{\mathbf H^{\parallel}_{\text{above}}-\mathbf H^{\parallel}_{\text{below}}=\mathbf K_f\times\hat{\mathbf n}.} \tag{7.72}$$</div>
+  <p>So the <i>parallel</i> components of $\mathbf H$ are discontinuous by an amount proportional to the free surface current density.</p>
+  <p>Equations 7.69–7.72 are the general boundary conditions for electrodynamics. In the case of <i>linear</i> media, they can be expressed in terms of $\mathbf E$ and $\mathbf B$ alone:</p>
+  <div class="pno">346</div>
+</div>
+<div class="sheet book" id="pdf-p50">
+  <div class="rh"><span>347</span><span>7.4 The Field of a Rotating Magnet</span></div>
+  <div class="figbox">Fig. 7.50: thin Ampèrian loop of width $l$ straddling a surface carrying free current $\mathbf K_f$; $\hat{\mathbf n}$ perpendicular to the surface, pointing up; regions marked “above” and “below”. Schematic; see PDF page.</div>
+  <div class="ex" style="text-align:left">
+    <table class="tbl" style="width:100%;border:none">
+      <tr><td style="border:none;text-align:left">(i)&nbsp; $\epsilon_{\text{above}}E^{\perp}_{\text{above}}-\epsilon_{\text{below}}E^{\perp}_{\text{below}}=\sigma_f,$</td><td style="border:none;text-align:right" rowspan="4">(7.73)</td></tr>
+      <tr><td style="border:none;text-align:left">(ii)&nbsp; $B^{\perp}_{\text{above}}-B^{\perp}_{\text{below}}=0,$</td></tr>
+      <tr><td style="border:none;text-align:left">(iii)&nbsp; $E^{\parallel}_{\text{above}}-E^{\parallel}_{\text{below}}=0,$</td></tr>
+      <tr><td style="border:none;text-align:left">(iv)&nbsp; $\dfrac{1}{\mu_{\text{above}}}B^{\parallel}_{\text{above}}-\dfrac{1}{\mu_{\text{below}}}B^{\parallel}_{\text{below}}=\mathbf K_f\times\hat{\mathbf n}.$</td></tr>
+    </table>
+  </div>
+  <p>In particular, if there is no free charge or free current at the interface, then</p>
+  <div class="ex" style="text-align:left">
+    <table class="tbl" style="width:100%;border:none">
+      <tr><td style="border:none;text-align:left">(i)&nbsp; $\epsilon_{\text{above}}E^{\perp}_{\text{above}}-\epsilon_{\text{below}}E^{\perp}_{\text{below}}=0,$</td><td style="border:none;text-align:right" rowspan="4">(7.74)</td></tr>
+      <tr><td style="border:none;text-align:left">(ii)&nbsp; $B^{\perp}_{\text{above}}-B^{\perp}_{\text{below}}=0,$</td></tr>
+      <tr><td style="border:none;text-align:left">(iii)&nbsp; $E^{\parallel}_{\text{above}}-E^{\parallel}_{\text{below}}=0,$</td></tr>
+      <tr><td style="border:none;text-align:left">(iv)&nbsp; $\dfrac{1}{\mu_{\text{above}}}B^{\parallel}_{\text{above}}-\dfrac{1}{\mu_{\text{below}}}B^{\parallel}_{\text{below}}=0.$</td></tr>
+    </table>
+  </div>
+  <p>As we shall see in Chapter 9, these equations are the basis for the theory of reflection and refraction.</p>
+  <h2 class="sec">7.4 The Field of a Rotating Magnet</h2>
+  <p>Imagine an axially symmetric magnet rotating at constant angular velocity about its axis – a cylindrical bar magnet, if you like, or for that matter the Earth itself (pretending that the magnetic axis coincides with the rotation axis). It is natural to wonder whether its magnetic field is stationary, or rotates with the magnet (or, as Arlo Guthrie would say, “Maybe it doesn’t even matter”). Are the field lines “dragged along” by the rotation of the source? Faraday did a series of experiments (variations on the disk experiment of Ex. 7.4) that appeared to settle the issue. Mounting the magnet along the axis of the disk he first held the magnet still while he rotated the disk (that’s the original version), and a current was generated in the circuit (Fig. 7.51). Then he allowed the magnet to rotate at the same rate as the disk; again a current was generated. Finally, he held the disk at rest and rotated the magnet. This time <i>no</i> current flowed. He concluded</p>
+  <div class="pno">347</div>
+</div>
+</body>
+</html>

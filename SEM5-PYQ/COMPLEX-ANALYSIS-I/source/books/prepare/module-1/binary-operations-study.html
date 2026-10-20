@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Study notes: binary operations (Module 1, section 1)</title>
+<script>
+window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+@page { size: A4; margin: 15mm 15mm; }
+:root { --ink:#1B2631; --muted:#5D6D7E; --rule:#AEB6BF; --eq:#1F618D; --res:#117A65; --recall:#8A6D1A; --idb:#A04000; }
+body { margin:0; color:var(--ink); font-family:"Times New Roman", Times, "Liberation Serif", serif; font-size:11pt; line-height:1.42; }
+main { width:100%; }
+h1 { font-size:17pt; margin:0 0 3px; color:var(--eq); }
+.meta { color:var(--muted); font-size:9.5pt; margin-bottom:8px; border-bottom:1px solid var(--rule); padding-bottom:5px; }
+.sec-body { column-count:2; column-gap:16px; column-rule:0.5px solid var(--rule); }
+h2 { font-size:12.5pt; margin:12px 0 4px; color:var(--eq); border-bottom:1.5px solid var(--eq); padding-bottom:1px; break-after:avoid; column-span:none; }
+h3 { font-size:10.8pt; margin:8px 0 2px; color:var(--res); break-after:avoid; }
+p, li { margin:3px 0; }
+ul, ol { margin:3px 0 3px 18px; padding:0; }
+.eq { margin:5px 0; text-align:center; break-inside:avoid; font-size:10.5pt; }
+.box-eq { background:#EAF2F8; border-left:3px solid var(--eq); padding:4px 7px; margin:5px 0; break-inside:avoid; }
+.box-res { background:#E9F7EF; border-left:3px solid var(--res); padding:4px 7px; margin:5px 0; break-inside:avoid; }
+.box-recall { background:#FDF6E3; border-left:3px solid var(--recall); padding:4px 7px; margin:6px 0; break-inside:avoid; font-size:10.2pt; }
+.lbl { font-weight:bold; font-size:9.6pt; text-transform:uppercase; letter-spacing:.3px; }
+.lbl.eq { color:var(--eq); } .lbl.res { color:var(--res); }
+.box-recall .lbl { color:var(--recall); }
+table.tbl { border-collapse:collapse; margin:5px auto; font-size:10pt; break-inside:avoid; }
+table.tbl td, table.tbl th { border:1px solid var(--rule); padding:2px 7px; text-align:center; }
+table.tbl caption { font-size:9.5pt; color:var(--muted); caption-side:top; margin-bottom:2px; }
+.note { font-size:9.5pt; color:var(--muted); }
+</style>
+</head>
+<body>
+<main>
+<h1>Study notes: binary operations (Module 1, section 1)</h1>
+<div class="meta">Fraleigh, <i>A First Course in Abstract Algebra</i> (8th ed.), Section 1, printed pp. 11&ndash;16. Numbers are the book&rsquo;s own. Tables only, no figures in this section. Exercises (printed pp. 17&ndash;19) are not included in the notes. Student notes in my own words; every definition, theorem and example is kept with its book number.</div>
+<div class="sec-body">
+<h2>Before you start</h2>
+<ul>
+<li>A <b>set</b> is a collection of objects. $S \times S$ is the set of all ordered pairs $(a, b)$ with $a, b \in S$ (Definition 0.4 in the book).</li>
+<li>A <b>function</b> sends each input to one output. $f \circ g$ means &ldquo;first $g$, then $f$&rdquo;: $(f \circ g)(x) = f(g(x))$.</li>
+<li>Arithmetic laws you already use: $a + b = b + a$, $a + 0 = a$, $a + (-a) = 0$; the same laws for $\times$ with $1$ and $\frac{1}{a}$.</li>
+<li>Closure of a subset (Section 1.4) and the warnings in 1.26&ndash;1.30 are new. Learn the idea before reading them.</li>
+</ul>
+
+<h2>1. Binary operations</h2>
+
+<h3>1.1 What an operation is</h3>
+<p>A <b>binary operation</b> $\ast$ on a set $S$ is a rule that takes an ordered pair $(a, b)$ of elements of $S$ and gives exactly one element of $S$, written $a \ast b$. The word &ldquo;binary&rdquo; means the rule takes <i>two</i> inputs. The book calls it an operation when there is no risk of confusion.</p>
+<p>Addition $+$ on $\mathbb{R}$ is an operation. Multiplication $\cdot$ on $\mathbb{R}$ is a different operation on the same set. The same two rules work on $\mathbb{C}$, $\mathbb{Z}$, $\mathbb{R}^+$, and $\mathbb{Z}^+$ (Example 1.2).</p>
+<div class="box-eq"><span class="lbl eq">Definition 1.1</span><br>A binary operation $\ast$ on $S$ is a function from $S \times S$ into $S$. For each $(a, b) \in S \times S$, the element $\ast((a, b))$ is written $a \ast b$.</div>
+<p>Note that the operation must be defined for <i>every</i> ordered pair of elements of $S$. Matrix addition on $M(\mathbb{R})$ is <i>not</i> an operation on that set, because $A + B$ is not defined when $A$ and $B$ have different sizes (Example 1.3).</p>
+
+<h3>1.2 Closed subsets and induced operations</h3>
+<p>Sometimes an operation on $S$ gives an operation on a smaller set $H \subseteq S$. The question is whether the answer stays inside $H$.</p>
+<div class="box-eq"><span class="lbl eq">Definition 1.4</span><br>Let $\ast$ be an operation on $S$ and $H \subseteq S$. $H$ is <b>closed under</b> $\ast$ if $a \ast b \in H$ for all $a, b \in H$. Then the operation restricted to $H$ is the <b>induced operation</b>.</div>
+<p>The set $S$ is always closed under its own operation. A subset may not be.</p>
+<p><b>Example 1.5.</b> Ordinary addition on $\mathbb{R}$ does not induce an operation on $\mathbb{R}^*$ (the nonzero reals): $2$ and $-2$ are in $\mathbb{R}^*$, but $2 + (-2) = 0 \notin \mathbb{R}^*$.</p>
+<p><b>Example 1.6.</b> Let $H = \{n^2 \mid n \in \mathbb{Z}^+\}$.</p>
+<ul>
+<li>Addition: $1^2 = 1$ and $2^2 = 4$ are in $H$, but $1 + 4 = 5 \notin H$. So $H$ is not closed under addition.</li>
+<li>Multiplication: if $r = n^2$ and $s = m^2$, then $rs = (nm)^2$, and $nm \in \mathbb{Z}^+$. So $H$ is closed under multiplication.</li>
+</ul>
+<p>The method: write what membership in $H$ means for $r$ and $s$, then check whether the result has that form.</p>
+<p><b>Example 1.7.</b> Let $F$ be the set of real-valued functions with domain $\mathbb{R}$. For $f, g \in F$ define, for each $x \in \mathbb{R}$:</p>
+<div class="eq">$$(f + g)(x) = f(x) + g(x), \quad (f - g)(x) = f(x) - g(x), \quad (f \cdot g)(x) = f(x)g(x), \quad (f \circ g)(x) = f(g(x)).$$</div>
+<p>Each of these is again a real-valued function on $\mathbb{R}$, so $F$ is closed under all four operations.</p>
+<p>In this text we abstract these familiar structures. Unfamiliar examples help show which features are essential.</p>
+
+<h3>1.3 Three examples of operations</h3>
+<p><b>Example 1.8.</b> On $\mathbb{Z}^+$ let $a \ast b$ be the smaller of $a$ and $b$ (or the common value if $a = b$). For example $2 \ast 11 = 2$, $15 \ast 10 = 10$, and $3 \ast 3 = 3$.</p>
+<p><b>Example 1.9.</b> On $\mathbb{Z}^+$ let $a \ast' b = a$. For example $2 \ast' 3 = 2$ and $25 \ast' 10 = 25$.</p>
+<p><b>Example 1.10.</b> On $\mathbb{Z}^+$ let $a \ast'' b = (a \ast b) + 2$, where $\ast$ is from Example 1.8. For example $4 \ast'' 7 = 6$, $25 \ast'' 9 = 11$, and $6 \ast'' 6 = 8$.</p>
+<p>These look artificial, but Example 1.8 is used all the time: a GPS route planner, for example, keeps the shorter of two routes. Notice that Example 1.8 gives the same answer in either order. Example 1.9 does not: $5 \ast' 7 = 5$, but $7 \ast' 5 = 7$. That difference leads to the next definition.</p>
+
+<h3>1.4 Commutativity</h3>
+<div class="box-eq"><span class="lbl eq">Definition 1.11</span><br>An operation $\ast$ on $S$ is <b>commutative</b> if $a \ast b = b \ast a$ for all $a, b \in S$.</div>
+<p>The book&rsquo;s convention: definitions are if-and-only-if statements, but theorems are not.</p>
+<div class="box-recall"><span class="lbl">Plus Two recall: commutative law</span>
+<p><b>Recall.</b> Addition and multiplication of numbers are commutative.</p>
+<p><b>Re-derive.</b></p>
+<ol>
+<li>Take $a = 2$, $b = 3$. Then $2 + 3 = 5$ and $3 + 2 = 5$. Equal.</li>
+<li>Take $a = 2$, $b = 3$ for subtraction: $2 - 3 = -1$ but $3 - 2 = 1$. Not equal.</li>
+<li>So subtraction is not commutative, and commutativity has to be checked for each operation.</li>
+</ol>
+<p><b>Saved.</b> Commutativity is a property of an operation, not of a set. $\ast$ on $\mathbb{Z}^+$ in Example 1.8 is commutative; $\ast'$ in Example 1.9 is not (Definition 1.11).</p>
+</div>
+
+<h3>1.5 Associativity</h3>
+<p>A binary operation combines two elements at a time. For three elements $a, b, c$ there are two obvious ways to combine them: $(a \ast b) \ast c$ and $a \ast (b \ast c)$.</p>
+<p>With $\ast$ from Example 1.8: $(2 \ast 5) \ast 9 = 2 \ast 9 = 2$, and $2 \ast (5 \ast 9) = 2 \ast 5 = 2$. They agree. In general, for this $\ast$,</p>
+<div class="eq">$$(a \ast b) \ast c = a \ast (b \ast c),$$</div>
+<p>so the expression $a \ast b \ast c$ has one meaning.</p>
+<p>For $\ast''$ from Example 1.10 they do not agree:</p>
+<div class="eq">$$(2 \ast'' 5) \ast'' 9 = 4 \ast'' 9 = 6, \qquad 2 \ast'' (5 \ast'' 9) = 2 \ast'' 7 = 4.$$</div>
+<p>So $a \ast'' b \ast'' c$ is ambiguous.</p>
+<div class="box-eq"><span class="lbl eq">Definition 1.12</span><br>An operation on $S$ is <b>associative</b> if $(a \ast b) \ast c = a \ast (b \ast c)$ for all $a, b, c \in S$.</div>
+<p>If $\ast$ is associative, longer expressions such as $a \ast b \ast c \ast d$ are not ambiguous: the book states (without proof) that brackets may be put in any way, and the result is the same.</p>
+<div class="box-recall"><span class="lbl">Plus Two recall: associative law</span>
+<p><b>Recall.</b> The associative law for addition and multiplication of numbers.</p>
+<p><b>Re-derive.</b></p>
+<ol>
+<li>Take $a = 2$, $b = 3$, $c = 4$. $(2 + 3) + 4 = 5 + 4 = 9$.</li>
+<li>$2 + (3 + 4) = 2 + 7 = 9$. Equal.</li>
+<li>Take the same numbers for subtraction: $(2 - 3) - 4 = -5$, but $2 - (3 - 4) = 3$. Not equal.</li>
+</ol>
+<p><b>Saved.</b> Addition and multiplication are associative; subtraction is not (Definition 1.12).</p>
+</div>
+
+<h3>1.6 Composition of functions is associative</h3>
+<p>For any set $S$ and functions $f, g, h$ mapping $S$ into $S$, the composition $f \circ g$ is again such a function. The next theorem says composition is associative.</p>
+<div class="box-eq"><span class="lbl eq">Theorem 1.13</span> <b>(Associativity of composition).</b> Let $S$ be a set and let $f, g, h$ map $S$ into $S$. Then $f \circ (g \circ h) = (f \circ g) \circ h$.</div>
+<p><b>Proof.</b> Two functions are equal if they give the same value at every $x \in S$. For $x \in S$:</p>
+<div class="eq">$$(f \circ (g \circ h))(x) = f\big((g \circ h)(x)\big) = f\big(g(h(x))\big),$$</div>
+<div class="eq">$$((f \circ g) \circ h)(x) = (f \circ g)\big(h(x)\big) = f\big(g(h(x))\big).$$</div>
+<p>Both give $f(g(h(x)))$, so the functions are equal. &#9670;</p>
+<p>Matrix multiplication is associative. The book says this is tedious with summation notation. It follows at once from Theorem 1.13 when matrices are read as linear transformations, since matrix multiplication then corresponds to composition.</p>
+
+<h3>1.7 Identity elements</h3>
+<p>The numbers $0$ and $1$ play special roles: for any real $a$, $a + 0 = a$, and $a \times 1 = a$. We call $0$ the additive identity and $1$ the multiplicative identity.</p>
+<div class="box-eq"><span class="lbl eq">Definition 1.14</span><br>Let $\ast$ be an operation on $S$. An element $e \in S$ is an <b>identity element</b> for $\ast$ if $a \ast e = e \ast a = a$ for all $a \in S$.</div>
+<p>Both conditions are required because the operation need not be commutative. If it is commutative, one of the two conditions is enough.</p>
+<div class="box-recall"><span class="lbl">Plus Two recall: identity elements</span>
+<p><b>Recall.</b> $0$ is the additive identity and $1$ the multiplicative identity on the reals.</p>
+<p><b>Re-derive.</b></p>
+<ol>
+<li>Take any $a$. $a + 0 = 0 + a = a$. So $0$ satisfies Definition 1.14 for $+$.</li>
+<li>$a \cdot 1 = 1 \cdot a = a$. So $1$ satisfies Definition 1.14 for $\cdot$.</li>
+<li>For subtraction, $a - 0 = a$ holds, but $0 - a = -a$, which is not $a$ in general. So $0$ is a right identity for subtraction but not a left identity, and Definition 1.14 needs both sides to be checked.</li>
+</ol>
+<p><b>Saved.</b> $0$ and $1$ are identities for $+$ and $\cdot$ (Definition 1.14).</p>
+</div>
+
+<div class="box-eq"><span class="lbl eq">Theorem 1.15</span> <b>(Uniqueness of identity).</b> A set with a binary operation has at most one identity element.</div>
+<p><b>Proof.</b> Suppose $e$ and $e'$ are both identities. Look at $e \ast e'$. Since $e$ is an identity, $e \ast e' = e'$. Since $e'$ is an identity, $e \ast e' = e$. Therefore $e = e'$. &#9670;</p>
+<p>The book notes that the proof uses only the identity property, not any other property of the operation.</p>
+
+<h3>1.8 More examples of identities</h3>
+<p><b>Example 1.16.</b> Let $F$ be the set of all real-valued functions on $\mathbb{R}$, as in Example 1.7.</p>
+<ul>
+<li>The function $\iota(x) = x$ is the identity for composition. For any $f \in F$, $f \circ \iota = \iota \circ f = f$.</li>
+<li>The function $m(x) = 1$ is the identity for multiplication of functions.</li>
+<li>The function $a(x) = 0$ is the identity for addition of functions.</li>
+<li>Subtraction of functions has no identity element.</li>
+</ul>
+
+<h3>1.9 Inverses</h3>
+<p>For addition the inverse of $a$ is $-a$. For multiplication the inverse of a nonzero $a$ is $\frac{1}{a}$.</p>
+<div class="box-eq"><span class="lbl eq">Definition 1.17</span><br>Let $\ast$ be an operation on $S$ with identity $e$. For $x \in S$, an <b>inverse</b> of $x$ is an element $x'$ with $x \ast x' = x' \ast x = e$.</div>
+<div class="box-recall"><span class="lbl">Plus Two recall: inverses</span>
+<p><b>Recall.</b> Additive inverse of $a$ is $-a$; multiplicative inverse of $a \neq 0$ is $\frac{1}{a}$.</p>
+<p><b>Re-derive.</b></p>
+<ol>
+<li>Take $a = 5$. $5 + (-5) = 0$, the additive identity. So $-5$ is an inverse of $5$ for $+$.</li>
+<li>$5 \cdot \frac{1}{5} = 1$, the multiplicative identity. So $\frac{1}{5}$ is an inverse of $5$ for $\cdot$.</li>
+<li>$0$ has no multiplicative inverse, because $0 \cdot x = 0 \neq 1$ for every $x$.</li>
+</ol>
+<p><b>Saved.</b> Inverses are defined relative to an identity (Definition 1.17).</p>
+</div>
+<p><b>Example 1.18.</b> On the set $F$ of Example 1.16, the operation is composition and the identity is $\iota$. The usual inverse of a function $f$ is a function $f'$ with $f \circ f' = f' \circ f = \iota$. So $f$ has an inverse exactly when $f$ is one-to-one and onto. The two definitions agree.</p>
+
+<h2>2. Operations given by tables</h2>
+<p>For a finite set $S$ we can define an operation by a table. The elements of $S$ are listed across the top and down the left side in the same order. The entry in row $i$, column $j$ is $(\text{ith entry on the left}) \ast (\text{jth entry on the top})$.</p>
+<p><b>Example 1.19.</b> Table 1.20 defines $\ast$ on $S = \{a, b, c\}$. Reading the table gives $a \ast b = c$ and $b \ast a = a$, so $\ast$ is not commutative.</p>
+<table class="tbl">
+<caption><b>1.20 Table</b></caption>
+<tr><th>$\ast$</th><th>$a$</th><th>$b$</th><th>$c$</th></tr>
+<tr><th>$a$</th><td>$b$</td><td>$c$</td><td>$b$</td></tr>
+<tr><th>$b$</th><td>$a$</td><td>$c$</td><td>$b$</td></tr>
+<tr><th>$c$</th><td>$c$</td><td>$b$</td><td>$a$</td></tr>
+</table>
+<p>A table defines a commutative operation exactly when its entries are symmetric about the diagonal from the top left to the bottom right. Entry $(i, j)$ equals entry $(j, i)$.</p>
+<p><b>Example 1.21.</b> Complete Table 1.22 so that $\ast$ is commutative on $S = \{a, b, c, d\}$.</p>
+<p><i>Solution.</i> Table 1.22 has $b \ast a = d$. For commutativity $a \ast b = d$ too, so $d$ goes in the square symmetric to it across the diagonal. Filling the rest the same way gives Table 1.23.</p>
+<table class="tbl">
+<caption><b>1.22 Table</b> (as given)</caption>
+<tr><th>$\ast$</th><th>$a$</th><th>$b$</th><th>$c$</th><th>$d$</th></tr>
+<tr><th>$a$</th><td>$b$</td><td></td><td></td><td></td></tr>
+<tr><th>$b$</th><td>$d$</td><td>$a$</td><td></td><td></td></tr>
+<tr><th>$c$</th><td>$a$</td><td>$c$</td><td>$d$</td><td></td></tr>
+<tr><th>$d$</th><td>$a$</td><td>$b$</td><td>$b$</td><td>$c$</td></tr>
+</table>
+<table class="tbl">
+<caption><b>1.23 Table</b> (completed, commutative)</caption>
+<tr><th>$\ast$</th><th>$a$</th><th>$b$</th><th>$c$</th><th>$d$</th></tr>
+<tr><th>$a$</th><td>$b$</td><td>$d$</td><td>$a$</td><td>$a$</td></tr>
+<tr><th>$b$</th><td>$d$</td><td>$a$</td><td>$c$</td><td>$b$</td></tr>
+<tr><th>$c$</th><td>$a$</td><td>$c$</td><td>$d$</td><td>$b$</td></tr>
+<tr><th>$d$</th><td>$a$</td><td>$b$</td><td>$b$</td><td>$c$</td></tr>
+</table>
+<p><b>Example 1.24.</b> When an operation has an identity, the convention is to list the identity first in the heads. Then the first row and first column repeat the head row and head column, as in Table 1.25.</p>
+<table class="tbl">
+<caption><b>1.25 Table</b></caption>
+<tr><th>$\ast$</th><th>$e$</th><th>$a$</th><th>$b$</th><th>$c$</th></tr>
+<tr><th>$e$</th><td>$e$</td><td>$a$</td><td>$b$</td><td>$c$</td></tr>
+<tr><th>$a$</th><td>$a$</td><td>$c$</td><td>$c$</td><td>$a$</td></tr>
+<tr><th>$b$</th><td>$b$</td><td>$a$</td><td>$e$</td><td>$c$</td></tr>
+<tr><th>$c$</th><td>$c$</td><td>$e$</td><td>$a$</td><td>$b$</td></tr>
+</table>
+
+<h2>3. Warnings: when a rule is not an operation</h2>
+<p>To define a binary operation $\ast$ on a set $S$ we must make sure of two things:</p>
+<ol>
+<li>exactly one element is assigned to each ordered pair of elements of $S$;</li>
+<li>for each ordered pair, the element assigned is again in $S$.</li>
+</ol>
+<p>If Condition 1 fails for some pairs, $\ast$ is <b>not everywhere defined</b>. If the rule can give several answers, $\ast$ is <b>not well defined</b>. If Condition 2 fails, $S$ is <b>not closed</b> under $\ast$.</p>
+<p><b>Example 1.26.</b> Test $a \ast b = a/b$ on three sets.</p>
+<ul>
+<li>On $\mathbb{Q}$: $2 \ast 0 = 2/0$ is undefined. Condition 1 fails, so this is not an operation on $\mathbb{Q}$.</li>
+<li>On $\mathbb{Q}^*$ (no zero): both conditions hold, since $a/b$ is a nonzero rational whenever $a, b \neq 0$. This is an operation.</li>
+<li>On $\mathbb{Z}^+$: $1 \ast 2 = \frac{1}{2} \notin \mathbb{Z}^+$. Condition 2 fails.</li>
+</ul>
+<p>The examples that follow test attempts to define operations. The symbol $\ast$ stands for the attempted operation each time.</p>
+<p><b>Example 1.27.</b> On $F$ of Example 1.7 let $f \ast g = h$, where $h(x) = f(x)/g(x)$. This fails Condition 2: $g$ may be zero somewhere. For $f = \cos$ and $g(x) = x^2$, $h(0)$ is undefined, so $h \notin F$.</p>
+<p><b>Example 1.28.</b> On $F$ let $f \ast g = h$, where $h$ is a function greater than both $f$ and $g$. This is not well defined: the phrase &ldquo;greater than&rdquo; is never defined for functions, and even with a definition there are many such $h$.</p>
+<p><b>Example 1.29.</b> Let $S$ be a set of 20 people, no two of the same height. Let $a \ast b = c$, where $c$ is the tallest person in $S$. This is an operation: it is defined for every pair and always gives one person in $S$. It is not interesting, but it is legitimate.</p>
+<p><b>Example 1.30.</b> Let $a \ast b = c$, where $c$ is the shortest person in $S$ who is taller than both $a$ and $b$. This is not everywhere defined: if $a$ or $b$ is the tallest person, no such $c$ exists, so $a \ast b$ is not determined.</p>
+
+</div>
+</main>
+</body>
+</html>

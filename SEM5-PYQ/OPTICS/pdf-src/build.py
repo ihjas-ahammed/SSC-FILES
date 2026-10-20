@@ -65,6 +65,9 @@ def build(mod, name):
                 break
         return fn()
     body = re.sub(r'\{\{fig:(\w+)\}\}', fig, src)
+    if name == 'prepare':
+        # Continuous flow: no forced page break between topics, so no half-empty pages.
+        body = body.replace('<section class="page">', '<section class="flow">')
     if name == 'answers':
         body = titled_needs(body, mod)
         # Answer keys flow continuously (no forced page per group, so no stranded tails);
