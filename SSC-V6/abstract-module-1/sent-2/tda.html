@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Topological Data Analysis</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Card width and height are capped so they look the same on every screen */
+      --view: min(100vw, 430px);
+      --card-w: clamp(260px, calc(var(--view) * 0.78), 320px);
+      --sheet-h: min(82vh, 680px);
+      --gap: 14px;
+    }
+
+    html, body { height: 100%; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #ffffff;
+      display: flex;
+      justify-content: center;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ONE horizontal scroller: covers, open sheets and their cards all move together */
+    .shelf {
+      width: var(--view);
+      height: 100vh;
+      padding: 14px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: var(--gap);
+      overflow-x: auto;
+      overflow-y: hidden;
+      overscroll-behavior-x: contain;
+      -webkit-overflow-scrolling: touch;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+    }
+
+    .shelf::-webkit-scrollbar { display: none; }
+
+    /* Group of sheets: stacked like a pile of books when closed, spread into a row when tapped */
+    .group {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: var(--gap);
+    }
+
+    .group.is-stacked .sheet + .sheet {
+      margin-left: calc(4px - var(--card-w));
+    }
+
+    /* Sheet: closed = card-sized cover, open = cover plus cards sliding out to the right */
+    .sheet {
+      flex: 0 0 auto;
+      width: var(--card-w);
+      height: var(--sheet-h);
+      display: flex;
+      flex-direction: row;
+      border-radius: 24px;
+      background: linear-gradient(180deg, #b9d4ff 0%, #8ebbff 100%);
+      box-shadow:
+        4px 4px 0 #a8c8ff,
+        0 10px 24px rgba(30, 99, 245, 0.15);
+      transition: width 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease, margin-left 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .sheet.is-open {
+      /* the cover keeps its card size; the cards widen the sheet to the right */
+      width: calc(var(--card-w) + var(--n) * (var(--card-w) + var(--gap)) + (var(--view) - var(--card-w)) / 2);
+      box-shadow: 0 10px 30px rgba(30, 99, 245, 0.15);
+      transition: width 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s ease, margin-left 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    /* Cover: the card-sized front of the sheet */
+    .cover {
+      appearance: none;
+      border: 0;
+      background: none;
+      font: inherit;
+      color: #0d1b2a;
+      text-align: left;
+      cursor: pointer;
+      padding: 26px 22px 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      flex: 0 0 var(--card-w);
+      width: var(--card-w);
+      height: 100%;
+      scroll-snap-align: center;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .cover-kicker {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #1447c4;
+      margin-bottom: 8px;
+    }
+
+    .cover-title {
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+
+    .cover-list {
+      font-size: 15px;
+      line-height: 1.5;
+      color: #334155;
+    }
+
+    /* Cards holder: hidden when closed, widens to fit the cards when open */
+    .pages {
+      width: 0;
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      transition: width 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.15s ease, visibility 0s linear 0.3s;
+    }
+
+    .sheet:not(.is-open) .pages {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .sheet.is-open .pages {
+      width: calc(var(--n) * (var(--card-w) + var(--gap)) + (var(--view) - var(--card-w)) / 2);
+      opacity: 1;
+      visibility: visible;
+      transition: width 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s ease 0.2s, visibility 0s;
+    }
+
+    /* ---------- Flip cards: front = concept, back = write-your-own definition ---------- */
+
+    .card {
+      flex: 0 0 var(--card-w);
+      height: calc(100% - 24px);
+      margin-left: var(--gap);
+      scroll-snap-align: center;
+      perspective: 1200px;
+      user-select: none;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    /* Locked cards: dimmed, can't be flipped, and the row can't scroll past them */
+    .card.is-locked {
+      opacity: 0.5;
+      scroll-snap-align: none;
+    }
+
+    .card.is-locked .face {
+      filter: grayscale(0.6);
+    }
+
+    .card.is-flipped .card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .face {
+      position: absolute;
+      inset: 0;
+      border-radius: 24px;
+      padding: 26px 22px 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      overflow: hidden;
+      background: linear-gradient(160deg, #1e63f5 0%, #1447c4 100%);
+      color: #ffffff;
+      box-shadow: 0 10px 24px rgba(20, 71, 196, 0.35);
+    }
+
+    /* Back is the same blue as the front, holding the write-your-own definition */
+    .back {
+      transform: rotateY(180deg);
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .back .card-index {
+      opacity: 0.85;
+    }
+
+    .quiz-q {
+      font-size: 19px;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .must-include {
+      font-size: 13px;
+      font-weight: 600;
+      opacity: 0.9;
+    }
+
+    .must-include strong {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      padding: 2px 8px;
+      margin-right: 4px;
+      display: inline-block;
+      margin-top: 4px;
+    }
+
+    .def-input {
+      width: 100%;
+      min-height: 110px;
+      resize: none;
+      border: 2px solid #ffffff;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.16);
+      color: #ffffff;
+      padding: 12px 14px;
+      font: inherit;
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.45;
+    }
+
+    .def-input::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .def-input:disabled {
+      opacity: 0.8;
+    }
+
+    .def-input.is-correct {
+      background: rgba(34, 197, 94, 0.5);
+    }
+
+    .def-check {
+      align-self: flex-end;
+      appearance: none;
+      border: 0;
+      border-radius: 14px;
+      background: #ffffff;
+      color: #1447c4;
+      font: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 12px 18px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .def-check:disabled {
+      opacity: 0.6;
+    }
+
+    .omr-feedback {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    .omr-feedback[hidden] { display: none; }
+
+    .def-actions { align-self: flex-end; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; }
+    .def-retry {
+      appearance: none;
+      border: 2px solid #ffffff;
+      border-radius: 14px;
+      background: transparent;
+      color: #ffffff;
+      font: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 10px 16px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .def-retry:disabled { opacity: 0.6; }
+    .def-reveal { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
+    .def-reveal-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; }
+    .def-confirm {
+      appearance: none;
+      border: 0;
+      border-radius: 14px;
+      background: #ffffff;
+      color: #1447c4;
+      font: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 12px 18px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .manual-verify { display: flex; flex-direction: column; gap: 14px; }
+    .verify-row { display: flex; flex-direction: column; gap: 8px; font-size: 14px; font-weight: 600; line-height: 1.4; }
+    .verify-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      opacity: 0.75;
+    }
+    .verify-text { margin: 0; font-size: 15px; font-weight: 500; line-height: 1.45; }
+    .verify-input {
+      flex: 1;
+      min-width: 0;
+      border: 2px solid #ffffff;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.16);
+      color: #ffffff;
+      padding: 8px 12px;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .verify-input::placeholder { color: rgba(255, 255, 255, 0.7); }
+    .verify-yes {
+      appearance: none;
+      border: 0;
+      border-radius: 14px;
+      background: #ffffff;
+      color: #1447c4;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 8px 14px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .card-index {
+      font-size: 13px;
+      font-weight: 600;
+      opacity: 0.75;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .art {
+      flex: 1 1 auto;
+      min-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 0;
+    }
+
+    .glyph {
+      font-size: 96px;
+      font-weight: 300;
+      line-height: 1;
+      color: #ffffff;
+      opacity: 0.95;
+    }
+
+    .card-title {
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+
+    .card-body {
+      font-size: 15px;
+      line-height: 1.5;
+      opacity: 0.92;
+      margin-bottom: 14px;
+    }
+
+    .examples {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .card-example {
+      font-size: 14px;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.16);
+      border-radius: 12px;
+      padding: 10px 14px;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <main class="shelf" id="shelf">
+    <div class="group is-stacked" id="group">
+
+      <!-- Sheet 01: Foundations -->
+      <section class="sheet" data-sheet>
+        <button class="cover" aria-expanded="false">
+          <span class="cover-kicker">01 · 5 cards</span>
+          <span class="cover-title">Foundations</span>
+          <span class="cover-list">Shape of data · Simplices · Persistence · Barcodes · Rips filtration</span>
+        </button>
+
+        <div class="pages">
+          <article class="card">
+            <div class="card-inner">
+              <div class="face front">
+                <span class="card-index">01</span>
+                <div class="art"><div class="glyph">◯</div></div>
+                <div>
+                  <h2 class="card-title">The shape of data</h2>
+                  <p class="card-body">Topological data analysis studies the shape of data: clusters, loops and holes that persist across scales.</p>
+                  <div class="examples">
+                    <span class="card-example">Clusters</span>
+                    <span class="card-example">Loops and holes</span>
+                  </div>
+                </div>
+              </div>
+              <div class="face back">
+                <span class="card-index">Your definition</span>
+                <h2 class="quiz-q">In your own words, define the goal of topological data analysis.</h2>
+                <p class="must-include" hidden>Must include: <strong>shape</strong><strong>holes</strong><strong>scales</strong></p>
+                <textarea class="def-input" placeholder="Write your definition here"></textarea>
+                <button class="def-check" type="button">Check</button>
+                <p class="omr-feedback" hidden></p>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-inner">
+              <div class="face front">
+                <span class="card-index">02</span>
+                <div class="art"><div class="glyph">△</div></div>
+                <div>
+                  <h2 class="card-title">Simplicial complex</h2>
+                  <p class="card-body">A simplicial complex builds a shape from points, edges and triangles glued together.</p>
+                  <div class="examples">
+                    <span class="card-example">Points</span>
+                    <span class="card-example">Edges</span>
+                    <span class="card-example">Triangles</span>
+                  </div>
+                </div>
+              </div>
+              <div class="face back">
+                <span class="card-index">Your definition</span>
+                <h2 class="quiz-q">In your own words, define a simplicial complex.</h2>
+                <p class="must-include" hidden>Must include: <strong>points</strong><strong>edges</strong><strong>triangles</strong></p>
+                <textarea class="def-input" placeholder="Write your definition here"></textarea>
+                <button class="def-check" type="button">Check</button>
+                <p class="omr-feedback" hidden></p>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-inner">
+              <div class="face front">
+                <span class="card-index">03</span>
+                <div class="art"><div class="glyph">∞</div></div>
+                <div>
+                  <h2 class="card-title">Persistent homology</h2>
+                  <p class="card-body">Persistent homology tracks which features appear and disappear as a scale parameter grows.</p>
+                  <div class="examples">
+                    <span class="card-example">Features</span>
+                    <span class="card-example">Scale parameter</span>
+                  </div>
+                </div>
+              </div>
+              <div class="face back">
+                <span class="card-index">Your definition</span>
+                <h2 class="quiz-q">In your own words, define persistent homology.</h2>
+                <p class="must-include" hidden>Must include: <strong>features</strong><strong>scale</strong></p>
+                <textarea class="def-input" placeholder="Write your definition here"></textarea>
+                <button class="def-check" type="button">Check</button>
+                <p class="omr-feedback" hidden></p>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-inner">
+              <div class="face front">
+                <span class="card-index">04</span>
+                <div class="art"><div class="glyph">▮</div></div>
+                <div>
+                  <h2 class="card-title">Persistence barcode</h2>
+                  <p class="card-body">A persistence barcode shows each feature as a bar running from its birth to its death.</p>
+                  <div class="examples">
+                    <span class="card-example">Birth</span>
+                    <span class="card-example">Death</span>
+                  </div>
+                </div>
+              </div>
+              <div class="face back">
+                <span class="card-index">Your definition</span>
+                <h2 class="quiz-q">In your own words, explain what a bar in a persistence barcode shows.</h2>
+                <p class="must-include" hidden>Must include: <strong>birth</strong><strong>death</strong></p>
+                <textarea class="def-input" placeholder="Write your definition here"></textarea>
+                <button class="def-check" type="button">Check</button>
+                <p class="omr-feedback" hidden></p>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-inner">
+              <div class="face front">
+                <span class="card-index">05</span>
+                <div class="art"><div class="glyph">◉</div></div>
+                <div>
+                  <h2 class="card-title">Rips filtration</h2>
+                  <p class="card-body">A Rips filtration connects points that are within a distance ε, growing the complex as ε increases.</p>
+                  <div class="examples">
+                    <span class="card-example">Distance ε</span>
+                  </div>
+                </div>
+              </div>
+              <div class="face back">
+                <span class="card-index">Your definition</span>
+                <h2 class="quiz-q">In your own words, explain how a Rips filtration grows.</h2>
+                <p class="must-include" hidden>Must include: <strong>distance</strong><strong>epsilon</strong></p>
+                <textarea class="def-input" placeholder="Write your definition here"></textarea>
+                <button class="def-check" type="button">Check</button>
+                <p class="omr-feedback" hidden></p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Sheet 02: Theory and uses -->
+      <section class="sheet" data-sheet>
+        <button class="cover" aria-expanded="false">
+          <span class="cover-kicker">02 · 5 cards</span>
+          <span class="cover-title">Theory and uses</span>
+          <span class="cover-list">Betti numbers · Stability · Mapper · Homology invariance · Applications</span>
+        </button>
+
+        <div class="pages">
+          <article class="card">
+            <div class="card-inner">
+              <div class="face front">
+                <span class="card-index">06</span>
+                <div class="art"><div class="glyph">β</div></div>
+                <div>
+                  <h2 class="card-title">Betti numbers</h2>
+                  <p class="card-body">Betti numbers count the connected components (β₀) and the loops (β₁) in a shape.</p>
+                  <div class="examples">
+                    <span class="card-example">β₀ components</span>
+                    <span class="card-example">β₁ loops</span>
+                  </div>
+                </div>
+              </div>
+              <div class="face back">
+                <span class="card-index">Your definition</span>
+                <h2 class="quiz-q">In your own words, define the Betti numbers of a shape.</h2>
+                <p class="must-include" hidden>Must include: <strong>components</strong><strong>loops</strong></p>
+                <textarea class="def-input" placeholder="Write your definition here"></textarea>
+                <button class="def-check" type="button">Check</button>
+                <p class="omr-feedback" hidden></p>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-inner">
+              <div class="face front">
+                <span class="card-index">07</span>
+                <div class="art"><div class="glyph">≈</div></div>
+                <div>
+                  <h2 class="card-title">Stability</h2>
+                  <p class="card-body">Small changes in the data cause only small changes in the persistence diagram.</p>
+                  <div class="examples">
+                    <span class="card-example">Robust to noise</span>
+                  </div>
+                </div>
+              </div>
+              <div class="face back">
+                <span class="card-index">Your definition</span>
+                <h2 class="quiz-q">In your own words, explain what stability means for persistence diagrams.</h2>
+                <p class="must-include" hidden>Must include: <strong>small</strong><strong>diagram</strong></p>
+                <textarea class="def-input" placeholder="Write your definition here"></textarea>
+                <button class="def-check" type="button">Check</button>
+                <p class="omr-feedback" hidden></p>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-inner">
+              <div class="face front">
+                <span class="card-index">08</span>
+                <div class="art"><div class="glyph">⋔</div></div>
+                <div>
+                  <h2 class="card-title">Mapper</h2>
+                  <p class="card-body">Mapper turns high-dimensional data into a graph by clustering overlapping pieces selected by a filter function.</p>
+                  <div class="examples">
+                    <span class="card-example">Filter function</span>
+                    <span class="card-example">Clusters</span>
+                  </div>
+                </div>
+              </div>
+              <div class="face back">
+                <span class="card-index">Your definition</span>
+                <h2 class="quiz-q">In your own words, describe how Mapper builds its graph.</h2>
+                <p class="must-include" hidden>Must include: <strong>filter</strong><strong>cluster</strong></p>
+                <textarea class="def-input" placeholder="Write your definition here"></textarea>
+                <button class="def-check" type="button">Check</button>
+                <p class="omr-feedback" hidden></p>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-inner">
+              <div class="face front">
+                <span class="card-index">09</span>
+                <div class="art"><div class="glyph">⬡</div></div>
+                <div>
+                  <h2 class="card-title">Homology invariance</h2>
+                  <p class="card-body">Homology is invariant under continuous deformation, so it ignores stretching and bending.</p>
+                  <div class="examples">
+                    <span class="card-example">Stretching</span>
+                    <span class="card-example">Bending</span>
+                  </div>
+                </div>
+              </div>
+              <div class="face back">
+                <span class="card-index">Your definition</span>
+                <h2 class="quiz-q">In your own words, explain why homology ignores stretching.</h2>
+                <p class="must-include" hidden>Must include: <strong>deformation</strong><strong>invariant</strong></p>
+                <textarea class="def-input" placeholder="Write your definition here"></textarea>
+                <button class="def-check" type="button">Check</button>
+                <p class="omr-feedback" hidden></p>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-inner">
+              <div class="face front">
+                <span class="card-index">10</span>
+                <div class="art"><div class="glyph">⟲</div></div>
+                <div>
+                  <h2 class="card-title">Applications</h2>
+                  <p class="card-body">TDA is used to study the shape of protein structures and to detect repeating cycles in time series.</p>
+                  <div class="examples">
+                    <span class="card-example">Proteins</span>
+                    <span class="card-example">Time series</span>
+                  </div>
+                </div>
+              </div>
+              <div class="face back">
+                <span class="card-index">Your definition</span>
+                <h2 class="quiz-q">In your own words, describe one use of topological data analysis.</h2>
+                <p class="must-include" hidden>Must include: <strong>shape</strong><strong>cycles</strong></p>
+                <textarea class="def-input" placeholder="Write your definition here"></textarea>
+                <button class="def-check" type="button">Check</button>
+                <p class="omr-feedback" hidden></p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      var shelf = document.getElementById('shelf');
+      var group = document.getElementById('group');
+      var sheets = Array.prototype.slice.call(document.querySelectorAll('[data-sheet]'));
+
+      // Required key words per card, read from the "Must include" line
+      document.querySelectorAll('.card').forEach(function (card) {
+        var words = Array.prototype.map.call(
+          card.querySelectorAll('.must-include strong'),
+          function (s) { return s.textContent.trim().toLowerCase(); }
+        );
+        card.dataset.keywords = words.join('|');
+      });
+
+      // Each sheet's open width is worked out from the cards it actually holds
+      sheets.forEach(function (s) {
+        s.style.setProperty('--n', s.querySelectorAll('.card').length);
+      });
+
+      // Only the first card of each sheet is open at the start; the rest unlock one by one
+      sheets.forEach(function (sheet) {
+        sheet.querySelectorAll('.card').forEach(function (card, i) {
+          if (i > 0) card.classList.add('is-locked');
+        });
+      });
+
+      // Keep one element steady on screen while widths animate, then glide it to the center
+      var glideId = null;
+      function glideTo(el, done, duration) {
+        duration = duration || 620;
+        var start = performance.now();
+        var fromX = el.getBoundingClientRect().left - shelf.getBoundingClientRect().left;
+        var toX = shelf.clientWidth / 2 - el.getBoundingClientRect().width / 2;
+
+        if (glideId) cancelAnimationFrame(glideId);
+        shelf.style.scrollSnapType = 'none';
+
+        function frame(now) {
+          var t = Math.min((now - start) / duration, 1);
+          var eased = 1 - Math.pow(1 - t, 3);
+          var wantX = fromX + (toX - fromX) * eased;
+          var nowX = el.getBoundingClientRect().left - shelf.getBoundingClientRect().left;
+          shelf.scrollLeft += nowX - wantX;
+
+          if (t < 1) {
+            glideId = requestAnimationFrame(frame);
+          } else {
+            glideId = null;
+            shelf.style.scrollSnapType = '';
+            var finalX = el.getBoundingClientRect().left - shelf.getBoundingClientRect().left;
+            shelf.scrollTo({ left: shelf.scrollLeft + (finalX - toX), behavior: 'smooth' });
+            if (done) done();
+          }
+        }
+
+        glideId = requestAnimationFrame(frame);
+      }
+
+      // Tangle the sheets back into the stack (closes them all)
+      function stackAll() {
+        if (glideId) { cancelAnimationFrame(glideId); glideId = null; }
+        shelf.style.scrollSnapType = '';
+        sheets.forEach(function (s) {
+          s.classList.remove('is-open');
+          s.querySelector('.cover').setAttribute('aria-expanded', 'false');
+        });
+        group.classList.add('is-stacked');
+        shelf.scrollTo({ left: 0, behavior: 'smooth' });
+      }
+
+      // While the pile is stacked, any tap on it spreads it into the row and nothing else happens
+      group.addEventListener('click', function (e) {
+        if (group.classList.contains('is-stacked')) {
+          e.stopPropagation();
+          e.preventDefault();
+          group.classList.remove('is-stacked');
+        }
+      }, true);
+
+      // Rule-based checker: no AI model. Words are normalised, stemmed, matched against
+      // synonyms and near-misses (one typo), and ignored when negated ("no loops").
+      var SYNONYMS = {
+        shape: ['shapes', 'form', 'forms'],
+        holes: ['hole', 'void', 'voids', 'gap', 'gaps'],
+        scales: ['scale', 'epsilon', 'radius', 'resolution', 'threshold'],
+        points: ['point', 'dot', 'dots', 'vertex', 'vertices', 'node', 'nodes'],
+        edges: ['edge', 'line', 'segment', 'segments'],
+        triangles: ['triangle', 'simplex', 'simplices'],
+        features: ['feature', 'component', 'loop', 'hole'],
+        scale: ['epsilon', 'radius', 'resolution', 'threshold'],
+        birth: ['born', 'appear', 'appears', 'start', 'starts'],
+        death: ['die', 'dies', 'disappear', 'disappears', 'end', 'ends'],
+        distance: ['close', 'closer', 'radius'],
+        epsilon: ['eps', 'radius', 'threshold'],
+        components: ['component', 'piece', 'pieces', 'cluster', 'clusters'],
+        loops: ['loop', 'cycle', 'cycles', 'hole', 'holes'],
+        small: ['smaller', 'tiny', 'little', 'slight', 'slightly'],
+        diagram: ['diagrams', 'barcode', 'barcodes'],
+        filter: ['filters', 'function', 'lens'],
+        cluster: ['clusters', 'clustering', 'group', 'grouping'],
+        deformation: ['deform', 'deformations', 'stretch', 'stretching', 'bend', 'bending'],
+        invariant: ['invariance', 'unchanged', 'unaffected', 'preserved'],
+        cycles: ['cycle', 'loop', 'loops', 'repeating']
+      };
+
+      var STOP = { the: 1, a: 1, an: 1, of: 1, and: 1, to: 1, in: 1, is: 1, as: 1, that: 1, it: 1, on: 1, for: 1 };
+      var NEG = { not: 1, no: 1, never: 1, without: 1, nor: 1 };
+
+      function tokens(text) {
+        return text.toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, ' ')
+          .split(/\s+/).filter(function (w) { return w && !STOP[w]; });
+      }
+
+      function stem(w) {
+        return w.replace(/(ations|ation|ences|ence|ances|ance|ings|ing|ents|ent|ies|es|s|ed|ly)$/, '');
+      }
+
+      function levenshtein(a, b) {
+        var row = [];
+        for (var j = 0; j <= b.length; j++) row[j] = j;
+        for (var i = 1; i <= a.length; i++) {
+          var prev = row[0];
+          row[0] = i;
+          for (var k = 1; k <= b.length; k++) {
+            var tmp = row[k];
+            row[k] = Math.min(row[k] + 1, row[k - 1] + 1, prev + (a[i - 1] === b[k - 1] ? 0 : 1));
+            prev = tmp;
+          }
+        }
+        return row[b.length];
+      }
+
+      function hasConcept(words, concept) {
+        var forms = [concept].concat(SYNONYMS[concept] || []).map(stem);
+        for (var i = 0; i < words.length; i++) {
+          var s = stem(words[i]);
+          var hit = forms.some(function (f) {
+            return s === f || (f.length > 4 && levenshtein(s, f) <= 1);
+          });
+          if (hit) {
+            var negated = words.slice(Math.max(0, i - 2), i).some(function (w) { return NEG[w]; });
+            if (!negated) return true;
+          }
+        }
+        return false;
+      }
+
+      // Write-your-own definition: the reader is trusted. A minimum length unlocks the
+      // next card, and "I know this" unlocks it without writing anything.
+      var MIN_WORDS = 8;
+
+      function unlockCard(card, message) {
+        var box = card.querySelector('.def-input');
+        var btn = card.querySelector('.def-check');
+        var fb = card.querySelector('.omr-feedback');
+        box.disabled = true;
+        btn.disabled = true;
+        box.classList.add('is-correct');
+        fb.textContent = message;
+        fb.hidden = false;
+
+        var next = card.nextElementSibling;
+        if (next && next.classList.contains('is-locked')) next.classList.remove('is-locked');
+      }
+
+      // Shows the correct statement (the card's explanation directly above) below the
+      // answer, with an "I'm correct" button that unlocks the card.
+      function showReference(card) {
+        var fb = card.querySelector('.omr-feedback');
+        clearReference(card);
+
+        var body = card.querySelector('.card-body');
+        var correct = body ? body.textContent.trim() : '';
+
+        var reveal = document.createElement('div');
+        reveal.className = 'def-reveal';
+        var label = document.createElement('span');
+        label.className = 'verify-label';
+        label.textContent = 'Correct statement';
+        var text = document.createElement('p');
+        text.className = 'verify-text';
+        text.textContent = correct;
+        var confirm = document.createElement('button');
+        confirm.type = 'button';
+        confirm.className = 'def-confirm';
+        confirm.textContent = "I'm correct";
+        confirm.addEventListener('click', function (e) {
+          e.stopPropagation();
+          unlockCard(card, 'Confirmed. Next card unlocked.');
+        });
+        var row = document.createElement('div');
+        row.className = 'def-reveal-actions';
+        var retry = document.createElement('button');
+        retry.type = 'button';
+        retry.className = 'def-retry';
+        retry.textContent = 'Retry';
+        retry.addEventListener('click', function (e) {
+          e.stopPropagation();
+          retryDefinition(card);
+        });
+        row.appendChild(retry);
+        row.appendChild(confirm);
+
+        reveal.appendChild(label);
+        reveal.appendChild(text);
+        reveal.appendChild(row);
+
+        fb.after(reveal);
+        fb.textContent = 'Compare your answer with the correct statement.';
+        fb.hidden = false;
+      }
+
+      function clearReference(card) {
+        var old = card.querySelector('.def-reveal');
+        if (old) old.remove();
+      }
+
+      function checkDefinition(card) {
+        var box = card.querySelector('.def-input');
+        var fb = card.querySelector('.omr-feedback');
+        if (box.disabled) return;
+
+        var text = box.value.trim();
+        var count = text ? text.split(/\s+/).length : 0;
+        if (count < MIN_WORDS) {
+          fb.textContent = 'Not yet. Write at least ' + MIN_WORDS + ' words (' + count + ' so far).';
+          fb.hidden = false;
+          return;
+        }
+        showReference(card);
+      }
+
+      function skipCard(card) {
+        if (card.querySelector('.def-input').disabled) return;
+        unlockCard(card, 'Skipped. Next card unlocked.');
+      }
+
+      function retryDefinition(card) {
+        var box = card.querySelector('.def-input');
+        if (box.disabled) return;
+        box.value = '';
+        clearReference(card);
+        var fb = card.querySelector('.omr-feedback');
+        fb.textContent = '';
+        fb.hidden = true;
+        box.focus();
+      }
+
+      document.querySelectorAll('.def-check').forEach(function (btn) {
+        var actions = document.createElement('div');
+        actions.className = 'def-actions';
+
+        var skip = document.createElement('button');
+        skip.type = 'button';
+        skip.className = 'def-retry';
+        skip.textContent = 'I know this';
+        skip.addEventListener('click', function (e) {
+          e.stopPropagation();
+          skipCard(btn.closest('.card'));
+        });
+
+        btn.parentNode.insertBefore(actions, btn);
+        actions.appendChild(skip);
+        actions.appendChild(btn);
+
+        btn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          checkDefinition(btn.closest('.card'));
+        });
+      });
+
+      document.querySelectorAll('.def-input').forEach(function (box) {
+        box.addEventListener('click', function (e) { e.stopPropagation(); });
+      });
+
+      sheets.forEach(function (sheet) {
+        sheet.addEventListener('click', function (e) {
+          // Tapping an unlocked card flips it between the concept and the write-up
+          var card = e.target.closest('.card');
+          if (card) {
+            if (card.classList.contains('is-locked')) return;
+            card.classList.toggle('is-flipped');
+            return;
+          }
+
+          // Double tap on the sheet tangles the stack back together
+          var now = Date.now();
+          if (sheet._lastTap && now - sheet._lastTap < 350) {
+            sheet._lastTap = 0;
+            stackAll();
+            return;
+          }
+          sheet._lastTap = now;
+
+          // Tap a closed sheet to open it; tap an open sheet outside its cards to close it
+          var willOpen = !sheet.classList.contains('is-open');
+          sheet.classList.toggle('is-open', willOpen);
+          sheet.querySelector('.cover').setAttribute('aria-expanded', String(willOpen));
+
+          if (willOpen) {
+            glideTo(sheet.querySelector('.card'));
+          } else {
+            glideTo(sheet.querySelector('.cover'), null, 310);
+          }
+        });
+      });
+
+      // How far the row may scroll: it stops before the first locked card of an open sheet
+      function scrollLimit() {
+        var limit = Infinity;
+        sheets.forEach(function (sheet) {
+          if (!sheet.classList.contains('is-open')) return;
+          var locked = sheet.querySelector('.card.is-locked');
+          if (!locked) return;
+          var r = locked.getBoundingClientRect();
+          var left = r.left - shelf.getBoundingClientRect().left + shelf.scrollLeft;
+          limit = Math.min(limit, left + r.width / 2 - shelf.clientWidth / 2);
+        });
+        return limit;
+      }
+
+      // Wait until the swipe settles, then ease back to the limit (no snapping during the swipe)
+      var clampTimer = null;
+      shelf.addEventListener('scroll', function () {
+        if (glideId) return;
+        clearTimeout(clampTimer);
+        clampTimer = setTimeout(function () {
+          var limit = scrollLimit();
+          if (shelf.scrollLeft > limit + 1) {
+            shelf.scrollTo({ left: limit, behavior: 'smooth' });
+          }
+        }, 150);
+      }, { passive: true });
+
+      // Once the row settles, flip back any card that isn't the one in view
+      var flipTimer = null;
+      shelf.addEventListener('scroll', function () {
+        clearTimeout(flipTimer);
+        flipTimer = setTimeout(function () {
+          var mid = shelf.getBoundingClientRect().left + shelf.clientWidth / 2;
+          document.querySelectorAll('.card.is-flipped').forEach(function (c) {
+            var r = c.getBoundingClientRect();
+            if (Math.abs(r.left + r.width / 2 - mid) > 40) c.classList.remove('is-flipped');
+          });
+        }, 200);
+      }, { passive: true });
+
+      // Scrolling back left past an open sheet's cover closes it
+      shelf.addEventListener('scroll', function () {
+        if (glideId) return;
+        var shelfLeft = shelf.getBoundingClientRect().left;
+        sheets.forEach(function (sheet) {
+          if (!sheet.classList.contains('is-open')) return;
+          var sheetLeft = sheet.getBoundingClientRect().left - shelfLeft;
+          if (sheetLeft > 40) {
+            sheet.classList.remove('is-open');
+            sheet.querySelector('.cover').setAttribute('aria-expanded', 'false');
+            glideTo(sheet.querySelector('.cover'), null, 310);
+          }
+        });
+      }, { passive: true });
+    })();
+  </script>
+</body>
+</html>

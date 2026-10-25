@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>{{TITLE}}</title>
+<meta name="theme-color" content="#FAF8F3">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="{{TITLE}}">
+{{HEAD_APP}}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+{{STYLE}}
+</style>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'none' },
+    options: { enableMenu: false }
+  };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+</head>
+<body class="is-focused">
+
+<header class="topbar" id="topbar">
+  <div class="notch-bar">
+  <button class="notch" id="notch" type="button" aria-label="Show header">
+    <span data-home>Focus</span>
+    <span class="n-score"><b id="nYou">0</b> – <b id="nOpp">0</b></span>
+    <span data-away>Time</span>
+    <span class="n-clock" id="nClock">00:00</span>
+    <span class="n-pips"><i class="pip" data-s></i><i class="pip" data-s></i><i class="pip" data-s></i></span>
+    <i class="n-cov"><i id="nCov"></i></i>
+  </button>
+  <button type="button" class="notch-action" id="pauseMatch" aria-label="Pause match" aria-pressed="false" hidden>Ⅱ</button>
+  <button type="button" class="notch-action" id="notchMatch" aria-label="Open match centre" title="Match centre">⚽</button>
+  </div>
+  <div class="tb-full">
+    <div class="course-heading">
+      <h1>Study day <span>Optics · Module 1</span></h1>
+      <p><strong>Geometrical optics</strong> · see sessions in data.json</p>
+    </div>
+    <button class="sb" id="sb" type="button" aria-label="Open match centre">
+      <span class="sb-main">
+        <span class="sb-team" data-home>Focus</span>
+        <span class="sb-score"><b id="sbYou">0</b><i>–</i><b id="sbOpp">0</b></span>
+        <span class="sb-team" data-away>Time</span>
+      </span>
+      <span class="sb-clock"><span class="sb-phase" id="sbPhase">Pre-match</span><span class="sb-time" id="sbTime">Kick off</span></span>
+    </button>
+    <div class="sb-meters" aria-label="Streak and wrong-answer meters">
+      <span title="3 right in a row scores a goal">Streak <i class="pip" data-s></i><i class="pip" data-s></i><i class="pip" data-s></i></span>
+      <span title="Every 3rd wrong answer concedes a goal">Wrongs <i class="pip" data-w></i><i class="pip" data-w></i><i class="pip" data-w></i></span>
+    </div>
+    <div class="nav-row">
+      <nav class="nav" id="nav" aria-label="Sections"></nav>
+      <span class="tools">
+        <button type="button" id="calcBtn" title="Calculator (=)" aria-label="Open calculator">=</button>
+        <button type="button" id="stackBtn" title="Stack all sheets (S)" aria-label="Stack all sheets">&#9707;</button>
+        <button type="button" id="themeBtn" title="Switch theme (T)" aria-label="Switch theme">&#9790;</button>
+        <button type="button" id="fsBtn" title="Fullscreen (F)" aria-label="Fullscreen">&#x26F6;</button>
+        <button type="button" id="installBtn" title="Install as app" aria-label="Install as app">&#x2913;</button>
+      </span>
+    </div>
+    <div class="cov">
+      <div class="cov-row">
+        <div class="seg-bar" id="segBar" role="progressbar" aria-label="Course coverage" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+        <b class="cov-pct" id="covPct">0%</b>
+      </div>
+      <div class="crumb-row"><span class="crumb" id="crumb">Tap a pile to spread it</span><span class="qstat" id="qstat"></span></div>
+    </div>
+  </div>
+</header>
+
+<main class="shelf" id="shelf"></main>
+
+<section class="term-definition" id="termDefinition" role="dialog" aria-labelledby="termTitle" aria-describedby="termMeaning" hidden>
+  <div class="dialog-head"><h2 id="termTitle"></h2><button type="button" class="chip" id="termClose" aria-label="Close definition">×</button></div>
+  <p id="termMeaning"></p>
+  <p id="termExample" hidden></p>
+  <button type="button" class="chip" id="termBack" hidden>← Previous term</button>
+</section>
+
+<dialog class="study-dialog calculator" id="calculator" aria-labelledby="calcTitle">
+  <div class="dialog-head"><h2 id="calcTitle">Calculator</h2><button class="chip" type="button" id="calcClose" aria-label="Close calculator">×</button></div>
+  <div class="calc-bar"><span>Scientific · <span id="calcModeLabel">radians</span></span><span><button type="button" class="chip" id="calcMode" aria-label="Switch to degrees">RAD</button> <button type="button" class="chip" id="calcHelpBtn" aria-label="Calculator help" aria-expanded="false" aria-controls="calcHelp">?</button></span></div>
+  <form id="calcForm">
+    <label for="calcExpression">Expression</label>
+    <input id="calcExpression" class="omr-input" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="e.g. sqrt(3^2 + 4^2)">
+    <p id="calcError" class="calc-error" role="alert" hidden></p>
+    <output id="calcResult" aria-live="polite">Enter an expression to begin.</output>
+    <div class="calc-actions"><button class="btn amber" type="submit" id="calcEvaluate">Calculate =</button><button class="btn ghost" type="button" id="calcUse" disabled>Use answer</button></div>
+  </form>
+  <div class="calc-keys" id="calcKeys" aria-label="Scientific shortcuts"></div>
+  <section class="calc-help" id="calcHelp" hidden aria-label="How to use the calculator">
+    <h3>Quick guide</h3>
+    <p>Press <b>=</b> on a card to open. In a numerical answer box, type <b>=</b> or start an expression with it. Press <b>Enter</b> to calculate. “Use answer” copies a real number back to that box. Escape closes.</p>
+    <p><b>Angles:</b> RAD is the default. Toggle DEG for plain-number trigonometry and inverse trig. An explicit unit always works: <code>sin(30 deg)</code>.</p>
+    <dl>
+      <dt>Arithmetic &amp; powers</dt><dd><code>(2+3)*4</code>, <code>2^3</code>, <code>sqrt(16)</code>, <code>nthRoot(27,3)</code>, <code>abs(-5)</code>, <code>5!</code>, <code>20% * 80</code></dd>
+      <dt>Trig &amp; hyperbolic</dt><dd><code>sin(pi/2)</code>, <code>cos(0)</code>, <code>tan(pi/4)</code>, <code>asin(0.5)</code>, <code>sec(0)</code>, <code>sinh(1)</code>, <code>atan2(1,1)</code></dd>
+      <dt>Logs &amp; constants</dt><dd><code>log(e)</code> (natural log), <code>log(100,10)</code>, <code>log10(100)</code>, <code>exp(2)</code>, <code>pi</code>, <code>e</code>, <code>1.6e-19</code></dd>
+      <dt>Complex numbers</dt><dd><code>sqrt(-4)</code>, <code>abs(3+4i)</code>, <code>conj(2+3i)</code>, <code>arg(1+i)</code>, <code>re(2+3i)</code></dd>
+      <dt>Units &amp; matrices</dt><dd><code>5 cm to m</code>, <code>det([1,2;3,4])</code>, <code>inv([1,2;3,4])</code>, <code>dot([1,2],[3,4])</code></dd>
+      <dt>Statistics &amp; combinations</dt><dd><code>mean(2,4,6)</code>, <code>std(2,4,6)</code>, <code>combinations(5,2)</code>, <code>permutations(5,2)</code></dd>
+      <dt>Algebra &amp; memory</dt><dd><code>derivative('x^3','x')</code>, <code>simplify('2*x+x')</code>, <code>a=5</code>, <code>a^2</code>, <code>ans/2</code> (previous result). Memory lasts until this page closes or a calculation times out.</dd>
+    </dl>
+    <p>Uses math.js 15.1.0, bundled for offline use. <a href="https://mathjs.org/docs/reference/functions.html" target="_blank" rel="noopener noreferrer">Full function reference ↗</a></p>
+  </section>
+</dialog>
+
+<dialog class="study-dialog break-alert" id="breakAlert" role="alertdialog" aria-modal="true" aria-labelledby="breakTitle" aria-describedby="breakMessage">
+  <span class="break-symbol" aria-hidden="true">☕</span>
+  <p class="card-index">Time to recharge</p>
+  <h2 id="breakTitle">Take a break</h2>
+  <p id="breakMessage">Stand up, drink some water, and rest your eyes. Your study timers are paused.</p>
+  <p class="break-count" id="breakCountdown" role="timer" aria-label="Break time remaining">05:00</p>
+  <p id="breakStatus" role="status">Your next study stretch can wait.</p>
+  <button type="button" class="btn amber" id="breakResume" disabled>Enjoy your break</button>
+  <button type="button" class="btn ghost" id="breakSkip">Skip break · resume now</button>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"><b></b><span></span></div>
+
+<div class="mc" id="mc" hidden>
+  <div class="mc-backdrop" data-close></div>
+  <section class="mc-sheet" role="dialog" aria-label="Match centre">
+    <div class="mc-grab"></div>
+    <div class="mc-score">
+      <div class="mc-team"><span class="crest you" id="crestYou">F</span><span data-home>Focus</span></div>
+      <div class="mc-num"><div><span id="mcYou">0</span> – <span id="mcOpp">0</span></div><small id="mcStatus">Pre-match</small></div>
+      <div class="mc-team"><span class="crest opp" id="crestOpp">T</span><span data-away>Time</span></div>
+    </div>
+    <section class="mc-timing" aria-labelledby="timingTitle">
+      <h3 id="timingTitle">Match timing</h3>
+      <label class="timing-toggle"><input type="checkbox" id="customTiming"> Custom halves</label>
+      <div id="customTimingFields" hidden>
+        <div class="timing-range"><label for="halfMinutes">Real minutes per half <output id="halfMinutesValue" for="halfMinutes">30 min</output></label>
+          <input type="range" id="halfMinutes" min="20" max="90" step="5" value="30" list="halfMinuteSnaps" aria-describedby="timingSummary">
+          <div class="range-ends" aria-hidden="true"><span>20 min</span><span>90 min</span></div>
+          <datalist id="halfMinuteSnaps"><option value="20"></option><option value="30"></option><option value="45"></option><option value="60"></option><option value="90"></option></datalist>
+        </div>
+        <div class="timing-range"><label for="halfTimeMinutes">Half-time break <output id="halfTimeMinutesValue" for="halfTimeMinutes">10 min</output></label>
+          <input type="range" id="halfTimeMinutes" min="1" max="30" step="1" value="10" list="breakMinuteSnaps" aria-describedby="timingSummary">
+          <div class="range-ends" aria-hidden="true"><span>1 min</span><span>30 min</span></div>
+          <datalist id="breakMinuteSnaps"><option value="1"></option><option value="5"></option><option value="10"></option><option value="15"></option><option value="20"></option><option value="25"></option><option value="30"></option></datalist>
+        </div>
+        <div class="timing-range" id="hydrationSettings" hidden>
+          <label for="hydrationMinutes">Hydration break <output id="hydrationMinutesValue" for="hydrationMinutes">5 min</output></label>
+          <input type="range" id="hydrationMinutes" min="1" max="30" step="1" value="5" aria-describedby="timingSummary">
+          <div class="range-ends" aria-hidden="true"><span>1 min</span><span>30 min</span></div>
+        </div>
+      </div>
+      <p id="timingSummary"></p><p id="timingLock" hidden>Timing is fixed for this match. Reset the match to change it; your study progress is kept.</p>
+    </section>
+    <div class="mc-ctrl" id="mcCtrl"></div>
+    <h3>Match events</h3>
+    <ol class="mc-events" id="mcEvents"></ol>
+    <h3>Stats</h3>
+    <div id="mcStats"></div>
+    <h3>Team sheet · topic deadlines</h3>
+    <div id="mcTopics"></div>
+    <h3>App</h3>
+    <div class="mc-foot" style="margin-top:0">
+      <button type="button" class="btn ghost" id="mcFs">Fullscreen</button>
+      <button type="button" class="btn ghost" id="mcInstall">Install as app</button>
+      <button type="button" class="btn ghost" id="mcSound">Sound: on</button>
+    </div>
+    <div class="mc-help" id="mcHelp" hidden>
+      <b>Install on Android (Chrome):</b> menu ⋮ → <i>Add to Home screen</i> → Install. It opens fullscreen with its own icon.<br>
+      <b>Install on desktop (Chrome / Edge):</b> the install icon at the right end of the address bar, or menu → <i>Cast, save and share</i> → <i>Install page as app</i>.<br>
+      <b>iPhone (Safari):</b> Share → <i>Add to Home Screen</i>.<br>
+      <b>Keys:</b> ← → cards · Enter/Space reveal or open · 1–6 answer · Space play/pause a derivation · F fullscreen · M match · S stack · T theme.
+    </div>
+    <div class="mc-foot">
+      <button type="button" class="btn ghost" id="mcReset">Reset match</button>
+      <button type="button" class="btn ghost" id="mcResetAll">Reset everything</button>
+      <button type="button" class="btn" data-close>Back to study</button>
+    </div>
+  </section>
+</div>
+
+<script id="course-data" type="application/json">{{DATA}}</script>
+<script id="calculator-engine" type="text/plain">{{CALCULATOR_ENGINE}}</script>
+{{APP_FLAG}}
+<script>
+{{SCRIPTS}}
+</script>
+</body>
+</html>

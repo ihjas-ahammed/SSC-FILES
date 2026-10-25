@@ -1,0 +1,192 @@
+{
+  "meta": {
+    "title": "Example course",
+    "subject": "Physics",
+    "home": "Focus",
+    "opponent": "Time",
+    "version": 1
+  },
+  "sections": [
+    {
+      "short": "Nuclear",
+      "title": "Radioactivity",
+      "sheets": [
+        {
+          "id": "nuclear-decay-law",
+          "title": "Decay law",
+          "icon": "atom",
+          "cards": [
+            {
+              "type": "info",
+              "label": "01",
+              "title": "Random decay",
+              "body": "Each nucleus has the same chance \\(\\lambda\\) of decaying per second, so the rate of decay is proportional to how many are left.",
+              "examples": [
+                "\\(\\lambda\\) = decay constant",
+                "Unit: s⁻¹"
+              ],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "decay",
+                    "objects": [
+                      { "type": "segment", "p1": [30, 160], "p2": [30, 25], "role": "lk", "width": 2, "name": "y-axis" },
+                      { "type": "segment", "p1": [30, 25], "p2": [245, 25], "role": "lk", "width": 2, "name": "x-axis" },
+                      { "type": "curve", "points": [[30, 150], [80, 70], [140, 40], [240, 30]], "role": "ik", "width": 3, "name": "decay" },
+                      { "type": "label", "coords": [42, 152], "text": "N", "size": 14, "role": "t", "name": "y-axis" },
+                      { "type": "label", "coords": [238, 12], "text": "t", "size": 14, "align": "right", "role": "t", "name": "x-axis" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "type": "derivation",
+              "title": "From rate to the decay law",
+              "legend": "\\(N\\) nuclei left, \\(N_0\\) at \\(t = 0\\), \\(\\lambda\\) decay constant.",
+              "phases": [
+                {
+                  "name": "Rate",
+                  "why": "decay rate is proportional to N"
+                },
+                {
+                  "name": "Separate",
+                  "why": "get N on one side"
+                },
+                {
+                  "name": "Integrate",
+                  "why": "undo the derivative"
+                },
+                {
+                  "name": "Solve",
+                  "why": "remove the logarithm"
+                }
+              ],
+              "steps": [
+                {
+                  "phase": "Rate",
+                  "tex": "\\frac{dN}{dt} = -\\lambda N",
+                  "note": "The minus sign: N goes down."
+                },
+                {
+                  "phase": "Separate",
+                  "move": {
+                    "type": "divide",
+                    "by": "N"
+                  },
+                  "tex": "\\frac{1}{N}\\frac{dN}{dt} = -\\lambda",
+                  "note": "\\(N\\) cancels on the right.",
+                  "ask": {
+                    "q": "How do we get every \\(N\\) on one side?",
+                    "options": [
+                      "Divide both sides by \\(N\\)",
+                      "Multiply by \\(t\\)",
+                      "Add \\(\\lambda\\)",
+                      "Square both sides"
+                    ],
+                    "answer": 0,
+                    "why": "Dividing by \\(N\\) leaves only \\(\\lambda\\) on the right."
+                  }
+                },
+                {
+                  "phase": "Integrate",
+                  "move": {
+                    "type": "integrate",
+                    "wrt": "t"
+                  },
+                  "tex": "\\ln N = -\\lambda t + C",
+                  "note": "\\(\\int \\frac{1}{N}dN = \\ln N\\); a constant appears.",
+                  "ask": {
+                    "q": "What undoes \\(\\frac{d}{dt}\\)?",
+                    "options": [
+                      "Integrate with respect to \\(t\\)",
+                      "Differentiate again",
+                      "Take a square root",
+                      "Set \\(t = 0\\)"
+                    ],
+                    "answer": 0,
+                    "why": "Integration is the inverse of differentiation."
+                  }
+                },
+                {
+                  "move": {
+                    "type": "substitute",
+                    "by": "C = \\ln N_0"
+                  },
+                  "tex": "\\ln N = -\\lambda t + \\ln N_0",
+                  "note": "At \\(t = 0\\), \\(N = N_0\\), so \\(C = \\ln N_0\\)."
+                },
+                {
+                  "move": {
+                    "type": "subtract",
+                    "by": "\\ln N_0"
+                  },
+                  "tex": "\\ln N - \\ln N_0 = -\\lambda t",
+                  "note": "\\(\\ln N_0\\) cancels on the right."
+                },
+                {
+                  "phase": "Solve",
+                  "move": {
+                    "type": "combine"
+                  },
+                  "tex": "\\ln\\frac{N}{N_0} = -\\lambda t",
+                  "note": "Difference of logs is the log of a ratio."
+                },
+                {
+                  "move": {
+                    "type": "exp"
+                  },
+                  "tex": "\\frac{N}{N_0} = e^{-\\lambda t}",
+                  "note": "\\(e\\) and \\(\\ln\\) undo each other.",
+                  "ask": {
+                    "q": "How do we get rid of \\(\\ln\\)?",
+                    "options": [
+                      "Exponentiate both sides",
+                      "Divide by \\(\\ln\\)",
+                      "Differentiate",
+                      "Multiply by \\(e\\)"
+                    ],
+                    "answer": 0,
+                    "why": "\\(e^{\\ln x} = x\\)."
+                  }
+                },
+                {
+                  "move": {
+                    "type": "multiply",
+                    "by": "N_0"
+                  },
+                  "tex": "N = N_0 e^{-\\lambda t}",
+                  "note": "The decay law."
+                }
+              ]
+            },
+            {
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "After one half-life, what fraction of nuclei is left?",
+              "options": [
+                "\\(\\tfrac{1}{4}\\)",
+                "\\(\\tfrac{1}{2}\\)",
+                "\\(\\tfrac{1}{e}\\)",
+                "None"
+              ],
+              "answer": 1,
+              "why": "That is the definition of half-life."
+            },
+            {
+              "type": "number",
+              "label": "Quiz · Number",
+              "time": 60,
+              "q": "A sample has 800 nuclei. How many are left after 3 half-lives?",
+              "answer": 100,
+              "why": "\\(800 \\to 400 \\to 200 \\to 100\\)."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+/* MathFlow player card */
+.card.mf-card:not(.mf-flip-card) { padding: 14px 12px; gap: 9px; }
+.mf-top { display: flex; justify-content: space-between; align-items: center; gap: 6px; }
+.mf-top-actions { display: flex; align-items: center; gap: 6px; }
+.mf-back-title { font-size: 14px; font-weight: 800; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mf-flip-btn { background: var(--violet); color: var(--on-violet); }
+.mf-count { font-size: 11px; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
+.mf-phases { display: flex; gap: 5px; overflow-x: auto; scrollbar-width: none; flex: 0 0 auto; }
+.mf-phases::-webkit-scrollbar { display: none; }
+.mf-ph { flex: 0 0 auto; font-size: 10.5px; font-weight: 700; padding: 4px 8px; border-radius: 999px; background: var(--lav); color: var(--muted); transition: background 0.3s, color 0.3s; }
+.mf-ph.is-past { color: var(--sage); box-shadow: inset 0 0 0 1px var(--sage); }
+.mf-ph.is-now { background: var(--violet); color: var(--on-violet); }
+.mf-work { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; gap: 6px; }
+.mf-right { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; gap: 6px; }
+.mf-board {
+  flex: 1 1 auto; min-height: 76px; display: flex; flex-direction: column; justify-content: flex-start;
+  border-radius: 16px; background-color: var(--lav);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 16px 16px; padding: 4px; gap: 4px; position: relative;
+  overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch;
+}
+.mf-setup {
+  width: 100%; flex: 0 0 calc((var(--sheet-h, 620px) - 22px) * 0.46);
+  min-height: calc((var(--sheet-h, 620px) - 22px) * 0.45);
+  padding: 4px; border-radius: 12px; background: var(--card);
+}
+.mf-setup > svg { width: 100%; height: 100%; max-height: 100%; }
+.mf-setup > canvas { width: 100%; height: 100%; max-height: 100%; display: block; }
+.mf-setup svg text.mf-part-on { fill: var(--hl) !important; font-weight: 800; text-decoration: underline; }
+.mf-setup svg path.mf-part-on,
+.mf-setup svg line.mf-part-on,
+.mf-setup svg polyline.mf-part-on { stroke: var(--hl) !important; stroke-width: 2.8 !important; fill: none !important; }
+.mf-setup svg circle.mf-part-on,
+.mf-setup svg polygon.mf-part-on,
+.mf-setup svg rect.mf-part-on { stroke: var(--hl) !important; stroke-width: 2.4 !important; }
+.mf-stage { position: relative; width: 100%; flex: 0 0 auto; user-select: none; }
+.mf-stage[hidden], .mf-summary[hidden] { display: none; }
+.mf-summary { width: 100%; height: 100%; overflow-y: auto; padding: 6px; }
+.mf-sum-list { display: flex; flex-direction: column; gap: 6px; }
+.mf-sum-row { display: grid; grid-template-columns: 24px minmax(0, 1fr) auto; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 10px; background: var(--card); font-size: 12px; }
+.mf-sum-num { font-size: 10px; font-weight: 800; color: var(--violet); background: var(--lav); border-radius: 999px; padding: 2px 6px; text-align: center; }
+.mf-sum-eq { overflow-x: auto; color: var(--ink); font-weight: 600; }
+.mf-sum-mv { font-size: 11px; font-weight: 700; color: var(--hl); text-align: right; }
+.mf-sp { position: absolute; left: 0; top: 0; overflow: visible; color: var(--ink); transform-origin: 2px 2px; transition: color 0.6s ease; will-change: transform, opacity; }
+.mf-sp path, .mf-sp rect { fill: currentColor; stroke: none; }
+.mf-sp.is-new, .mf-sp.is-op { color: var(--hl); }
+.mf-sp.is-out { color: var(--muted); }
+.mf-ghost { position: absolute; left: 0; top: 0; color: var(--ink-2); transform-origin: 0 0; white-space: nowrap;
+  transition: transform 0.75s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.75s ease; }
+.mf-ghost svg { display: block; }
+.mf-strike { position: absolute; left: 0; top: 0; height: 2.5px; border-radius: 2px; background: var(--muted); transform-origin: 0 50%; }
+.mf-box { position: absolute; left: 0; top: 0; overflow: visible; }
+.mf-box rect { fill: none; stroke: var(--violet); stroke-width: 2.4; }
+.mf-err { position: absolute; left: 6px; right: 6px; font: 600 11px/1.4 ui-monospace, Menlo, monospace; color: var(--coral); background: var(--coral-bg); border-radius: 8px; padding: 6px 8px; white-space: pre-wrap; word-break: break-all; }
+.mf-note { font-size: 12px; line-height: 1.32; font-weight: 600; color: var(--ink-2); min-height: 26px; transition: opacity 0.2s ease; }
+.mf-note b { color: var(--ink); }
+.mf-dots { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; }
+.mf-dot { appearance: none; border: 0; cursor: pointer; height: 7px; width: 7px; border-radius: 999px; background: var(--lav-2); padding: 0; transition: width 0.3s ease, background 0.3s; }
+.mf-dot.is-ask { box-shadow: 0 0 0 2px var(--amber-bg), 0 0 0 3px var(--amber); }
+.mf-dot.is-done { background: var(--violet); opacity: 0.45; }
+.mf-dot.is-now { width: 18px; background: var(--violet); opacity: 1; }
+.mf-ctrl { display: flex; gap: 5px; align-items: center; flex-wrap: wrap; }
+.mf-ctrl .chip { min-width: 34px; text-align: center; padding: 5px 8px; }
+.mf-ctrl .mf-play { background: var(--violet); color: var(--on-violet); }
+.mf-practise { display: none; margin-left: auto; background: var(--lav-2); color: var(--violet); }
+.card.mf-card.is-completed .mf-practise { display: inline-block; }
+.mf-panel, .mf-ask { display: flex; flex-direction: column; gap: 5px; flex: 0 0 auto; }
+.mf-ask[hidden], .mf-panel[hidden] { display: none; }
+.mf-ask-tag { align-self: flex-start; font-size: 10px; font-weight: 800; letter-spacing: 0.07em; text-transform: uppercase; background: var(--amber-bg); color: var(--hl); border-radius: 999px; padding: 3px 8px; }
+.mf-ask-q { font-size: 12.5px; font-weight: 700; line-height: 1.28; }
+.mf-ask-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+.mf-ask-opts button { appearance: none; border: 0; cursor: pointer; background: var(--lav); color: var(--ink); border-radius: 10px; padding: 6px 8px; font-size: 11.5px; font-weight: 600; text-align: left; line-height: 1.22; overflow-wrap: anywhere; }
+.mf-ask-opts button.is-correct { background: var(--sage-bg); box-shadow: inset 0 0 0 2px var(--sage); }
+.mf-ask-opts button.is-wrong { background: var(--coral-bg); box-shadow: inset 0 0 0 2px var(--coral); text-decoration: line-through; }
+.mf-ask-why { font-size: 12px; line-height: 1.32; color: var(--ink-2); font-weight: 600; }
+.mf-ask-why[hidden], .mf-ask-go[hidden] { display: none; }

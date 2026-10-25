@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>{{TITLE}}</title>
+<meta name="theme-color" content="#FAF8F3">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="{{TITLE}}">
+{{HEAD_APP}}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+{{STYLE}}
+</style>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'none' },
+    options: { enableMenu: false }
+  };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+</head>
+<body>
+
+<header class="topbar" id="topbar">
+  <button class="notch" id="notch" type="button" aria-label="Show header">
+    <span data-home>Focus</span>
+    <span class="n-score"><b id="nYou">0</b> – <b id="nOpp">0</b></span>
+    <span data-away>Time</span>
+    <span class="n-clock" id="nClock">00:00</span>
+    <span class="n-pips"><i class="pip" data-s></i><i class="pip" data-s></i><i class="pip" data-s></i></span>
+    <i class="n-cov"><i id="nCov"></i></i>
+  </button>
+  <div class="tb-full">
+    <button class="sb" id="sb" type="button" aria-label="Open match centre">
+      <span class="sb-main">
+        <span class="sb-team" data-home>Focus</span>
+        <span class="sb-score"><b id="sbYou">0</b><i>–</i><b id="sbOpp">0</b></span>
+        <span class="sb-team" data-away>Time</span>
+      </span>
+      <span class="sb-clock"><span class="sb-phase" id="sbPhase">Pre-match</span><span class="sb-time" id="sbTime">Kick off</span></span>
+    </button>
+    <div class="sb-meters" aria-label="Streak and wrong-answer meters">
+      <span title="3 right in a row scores a goal">Streak <i class="pip" data-s></i><i class="pip" data-s></i><i class="pip" data-s></i></span>
+      <span title="Every 3rd wrong answer concedes a goal">Wrongs <i class="pip" data-w></i><i class="pip" data-w></i><i class="pip" data-w></i></span>
+    </div>
+    <div class="nav-row">
+      <nav class="nav" id="nav" aria-label="Sections"></nav>
+      <span class="tools">
+        <button type="button" id="stackBtn" title="Stack all sheets (S)" aria-label="Stack all sheets">&#9707;</button>
+        <button type="button" id="themeBtn" title="Switch theme (T)" aria-label="Switch theme">&#9790;</button>
+        <button type="button" id="fsBtn" title="Fullscreen (F)" aria-label="Fullscreen">&#x26F6;</button>
+        <button type="button" id="installBtn" title="Install as app" aria-label="Install as app">&#x2913;</button>
+      </span>
+    </div>
+    <div class="cov">
+      <div class="cov-row">
+        <div class="seg-bar" id="segBar" role="progressbar" aria-label="Course coverage" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+        <b class="cov-pct" id="covPct">0%</b>
+      </div>
+      <div class="crumb-row"><span class="crumb" id="crumb">Tap a pile to spread it</span><span class="qstat" id="qstat"></span></div>
+    </div>
+  </div>
+</header>
+
+<main class="shelf" id="shelf"></main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"><b></b><span></span></div>
+
+<div class="mc" id="mc" hidden>
+  <div class="mc-backdrop" data-close></div>
+  <section class="mc-sheet" role="dialog" aria-label="Match centre">
+    <div class="mc-grab"></div>
+    <div class="mc-score">
+      <div class="mc-team"><span class="crest you" id="crestYou">F</span><span data-home>Focus</span></div>
+      <div class="mc-num"><div><span id="mcYou">0</span> – <span id="mcOpp">0</span></div><small id="mcStatus">Pre-match</small></div>
+      <div class="mc-team"><span class="crest opp" id="crestOpp">T</span><span data-away>Time</span></div>
+    </div>
+    <div class="mc-ctrl" id="mcCtrl"></div>
+    <h3>Match events</h3>
+    <ol class="mc-events" id="mcEvents"></ol>
+    <h3>Stats</h3>
+    <div id="mcStats"></div>
+    <h3>Team sheet · topic deadlines</h3>
+    <div id="mcTopics"></div>
+    <h3>App</h3>
+    <div class="mc-foot" style="margin-top:0">
+      <button type="button" class="btn ghost" id="mcFs">Fullscreen</button>
+      <button type="button" class="btn ghost" id="mcInstall">Install as app</button>
+      <button type="button" class="btn ghost" id="mcSound">Sound: on</button>
+    </div>
+    <div class="mc-help" id="mcHelp" hidden>
+      <b>Install on Android (Chrome):</b> menu ⋮ → <i>Add to Home screen</i> → Install. It opens fullscreen with its own icon.<br>
+      <b>Install on desktop (Chrome / Edge):</b> the install icon at the right end of the address bar, or menu → <i>Cast, save and share</i> → <i>Install page as app</i>.<br>
+      <b>iPhone (Safari):</b> Share → <i>Add to Home Screen</i>.<br>
+      <b>Keys:</b> ← → cards · Enter/Space reveal or open · 1–6 answer · Space play/pause a derivation · F fullscreen · M match · S stack · T theme.
+    </div>
+    <div class="mc-foot">
+      <button type="button" class="btn ghost" id="mcReset">Reset match</button>
+      <button type="button" class="btn ghost" id="mcResetAll">Reset everything</button>
+      <button type="button" class="btn" data-close>Back to study</button>
+    </div>
+  </section>
+</div>
+
+<script id="course-data" type="application/json">{{DATA}}</script>
+{{APP_FLAG}}
+<script>
+{{SCRIPTS}}
+</script>
+</body>
+</html>

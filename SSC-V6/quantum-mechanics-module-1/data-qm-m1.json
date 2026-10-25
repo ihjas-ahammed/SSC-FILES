@@ -1,0 +1,1997 @@
+{
+  "meta": {
+    "title": "Quantum Mechanics I — Module I: The Wave Function",
+    "subject": "Quantum Mechanics I (MAT/PHY, Sem 5)",
+    "home": "Focus",
+    "opponent": "Time",
+    "version": 1,
+    "inlineChecks": false,
+    "autoRevealQuestions": true,
+    "definitionChecks": true
+  },
+  "match": {
+    "periodEnds": [25, 45, 70, 90],
+    "breaks": [5, 10, 5]
+  },
+  "glossary": [
+    {
+      "id": "qm-m1-quantum-state",
+      "term": "quantum state",
+      "aliases": ["state"],
+      "definition": "A quantum state is the complete description of how a physical system is prepared, used to predict the probabilities of all measurement outcomes.",
+      "example": "A particle prepared in state \\(\\Psi(x, t)\\) inside a laboratory bottle."
+    },
+    {
+      "id": "qm-m1-conservative-system",
+      "term": "conservative system",
+      "definition": "A conservative system is a physical system in which the force can be written as the negative spatial derivative of a potential energy function, \\(F = -\\partial V/\\partial x\\).",
+      "example": "An electron moving in an electrostatic potential \\(V(x)\\)."
+    },
+    {
+      "id": "qm-m1-complex-conjugate",
+      "term": "complex conjugate",
+      "aliases": ["conjugate"],
+      "definition": "The complex conjugate of a complex number or function \\(\\Psi\\), written \\(\\Psi^*\\), is formed by reversing the sign of \\(i = \\sqrt{-1}\\) everywhere it appears.",
+      "example": "If \\(\\Psi = A e^{-i\\omega t}\\), then \\(\\Psi^* = A^* e^{+i\\omega t}\\)."
+    },
+    {
+      "id": "qm-m1-wave-function",
+      "term": "wave function",
+      "definition": "The wave function \\(\\Psi(x, t)\\) is a complex-valued function of position \\(x\\) and time \\(t\\) that encodes the complete quantum state of a particle.",
+      "example": "Solving Equation (1.1) with initial condition \\(\\Psi(x, 0)\\) gives \\(\\Psi(x, t)\\) for all future times."
+    },
+    {
+      "id": "qm-m1-schrodinger-equation",
+      "term": "Schrödinger equation",
+      "definition": "The Schrödinger equation is the fundamental partial differential equation of quantum mechanics that governs how the wave function \\(\\Psi(x, t)\\) evolves in time.",
+      "example": "Equation (1.1): \\(i\\hbar\\frac{\\partial\\Psi}{\\partial t} = -\\frac{\\hbar^2}{2m}\\frac{\\partial^2\\Psi}{\\partial x^2} + V\\Psi\\)."
+    },
+    {
+      "id": "qm-m1-plancks-constant",
+      "term": "Planck's constant",
+      "aliases": ["reduced Planck's constant"],
+      "definition": "Planck's constant \\(h\\) is the fundamental action constant of quantum mechanics, usually written in reduced form as \\(\\hbar = h/(2\\pi) = 1.054573 \\times 10^{-34}\\text{ J s}\\).",
+      "example": "Equation (1.2) defines \\(\\hbar\\) as \\(h\\) divided by \\(2\\pi\\)."
+    },
+    {
+      "id": "qm-m1-statistical-interpretation",
+      "term": "statistical interpretation",
+      "aliases": ["Born's statistical interpretation", "Born rule"],
+      "definition": "Born's statistical interpretation states that \\(|\\Psi(x, t)|^2\\,dx\\) is the probability of finding the particle between \\(x\\) and \\(x + dx\\) at time \\(t\\).",
+      "example": "In Equation (1.3), the area under \\(|\\Psi(x, t)|^2\\) from \\(a\\) to \\(b\\) gives the probability of finding the particle in that interval."
+    },
+    {
+      "id": "qm-m1-indeterminacy",
+      "term": "indeterminacy",
+      "aliases": ["quantum indeterminacy"],
+      "definition": "Quantum indeterminacy is the principle that even when the wave function \\(\\Psi(x, t)\\) is completely known, the exact outcome of an individual measurement cannot be predicted with certainty.",
+      "example": "Before measurement, quantum theory gives only probabilities for where an electron will land on a screen."
+    },
+    {
+      "id": "qm-m1-realist-position",
+      "term": "realist position",
+      "definition": "The realist position is the view advocated by Einstein that a particle already had a definite position before measurement, making quantum mechanics an incomplete theory.",
+      "example": "If a detector finds the particle at \\(C\\), the realist says the particle was already at \\(C\\) just before the measurement."
+    },
+    {
+      "id": "qm-m1-hidden-variable",
+      "term": "hidden variable",
+      "aliases": ["hidden variables"],
+      "definition": "A hidden variable is hypothetical extra information beyond the wave function \\(\\Psi\\) needed in a realist theory to specify a particle's exact properties prior to measurement.",
+      "example": "Einstein argued that \\(\\Psi\\) is not the whole story and must be supplemented by hidden variables."
+    },
+    {
+      "id": "qm-m1-copenhagen-interpretation",
+      "term": "Copenhagen interpretation",
+      "aliases": ["orthodox position", "orthodox interpretation"],
+      "definition": "The Copenhagen (or orthodox) interpretation is the view associated with Bohr that a particle has no definite position before measurement, and the measurement itself compels it to take a definite value.",
+      "example": "Bell's theorem and subsequent experiments confirmed the orthodox view over local hidden variables."
+    },
+    {
+      "id": "qm-m1-agnostic-position",
+      "term": "agnostic position",
+      "definition": "The agnostic position is the stance that refuses to answer where a particle was before measurement because any test requires making a measurement first.",
+      "example": "John Bell showed in 1964 that whether a particle had a definite prior position makes an observable experimental difference, ruling out agnosticism."
+    },
+    {
+      "id": "qm-m1-wave-function-collapse",
+      "term": "wave function collapse",
+      "aliases": ["collapse of the wave function", "collapse"],
+      "definition": "Wave function collapse is the sudden, discontinuous change of \\(\\Psi(x, t)\\) during a measurement into a sharp spike centered at the measured value.",
+      "example": "Measuring the particle at point \\(C\\) collapses \\(|\\Psi|^2\\) to a sharp peak at \\(C\\), so an immediate second measurement returns \\(C\\) again."
+    },
+    {
+      "id": "qm-m1-interference",
+      "term": "interference",
+      "definition": "Interference is the superposition of waves in which in-phase waves add constructively to form bright fringes and out-of-phase waves cancel destructively to form dark fringes.",
+      "example": "In Example 1.1, single electrons sent through two slits accumulate into a two-slit interference pattern."
+    },
+    {
+      "id": "qm-m1-discrete-probability",
+      "term": "discrete variable",
+      "aliases": ["discrete probability"],
+      "definition": "A discrete variable is a variable that can take only isolated values, where the probability of outcome \\(j\\) is \\(P(j) = N(j)/N\\).",
+      "example": "In Section 1.3.1, the integer age \\(j\\) in years of a person chosen from a room of \\(N = 14\\) people."
+    },
+    {
+      "id": "qm-m1-most-probable-value",
+      "term": "most probable value",
+      "definition": "The most probable value of a variable is the outcome \\(j\\) that has the highest probability \\(P(j)\\) (or highest peak of \\(\\rho(x)\\)).",
+      "example": "In the room of 14 people in Section 1.3.1, age 25 is the most probable value because five people share that age."
+    },
+    {
+      "id": "qm-m1-median",
+      "term": "median",
+      "definition": "The median is the value of a variable for which the probability of obtaining a larger result equals the probability of obtaining a smaller result.",
+      "example": "In Section 1.3.1, the median age is 23 because 7 people are younger than 23 and 7 are older."
+    },
+    {
+      "id": "qm-m1-expectation-value",
+      "term": "expectation value",
+      "aliases": ["average value", "mean value"],
+      "definition": "The expectation value \\(\\langle j\\rangle\\) or \\(\\langle x\\rangle\\) is the weighted average of a quantity over all possible outcomes, weighted by their probabilities.",
+      "example": "In Equation (1.7), \\(\\langle j\\rangle = \\sum_{j=0}^{\\infty} jP(j)\\); in Equation (1.28), \\(\\langle x\\rangle = \\int_{-\\infty}^{+\\infty} x|\\Psi(x, t)|^2\\,dx\\)."
+    },
+    {
+      "id": "qm-m1-variance",
+      "term": "variance",
+      "definition": "The variance \\(\\sigma^2\\) of a distribution is the expectation value of the squared deviation from the average: \\(\\sigma^2 \\equiv \\langle(\\Delta j)^2\\rangle = \\langle j^2\\rangle - \\langle j\\rangle^2\\).",
+      "example": "Squaring \\(\\Delta j = j - \\langle j\\rangle\\) before averaging prevents positive and negative deviations from canceling."
+    },
+    {
+      "id": "qm-m1-standard-deviation",
+      "term": "standard deviation",
+      "definition": "The standard deviation \\(\\sigma = \\sqrt{\\langle j^2\\rangle - \\langle j\\rangle^2}\\) is the square root of the variance and measures the spread of a distribution about its expectation value.",
+      "example": "A distribution with zero spread has \\(\\sigma = 0\\) and \\(\\langle j^2\\rangle = \\langle j\\rangle^2\\)."
+    },
+    {
+      "id": "qm-m1-probability-density",
+      "term": "probability density",
+      "definition": "The probability density \\(\\rho(x)\\) for a continuous variable is the probability per unit length, so that \\(\\rho(x)\\,dx\\) is the probability of landing between \\(x\\) and \\(x + dx\\).",
+      "example": "In Equation (1.15), the probability of finding \\(x\\) between \\(a\\) and \\(b\\) is \\(P_{ab} = \\int_a^b \\rho(x)\\,dx\\)."
+    },
+    {
+      "id": "qm-m1-gaussian-distribution",
+      "term": "gaussian distribution",
+      "definition": "A gaussian distribution is a symmetric bell-shaped continuous probability density of the form \\(\\rho(x) = A e^{-\\lambda(x-a)^2}\\) centered at \\(x = a\\).",
+      "example": "For \\(\\rho(x) = A e^{-\\lambda(x-a)^2}\\), normalization gives \\(A = \\sqrt{\\lambda/\\pi}\\) and expectation value \\(\\langle x\\rangle = a\\)."
+    },
+    {
+      "id": "qm-m1-normalization",
+      "term": "normalizing",
+      "aliases": ["normalization"],
+      "definition": "Normalizing a wave function is the process of choosing its complex multiplicative constant \\(A\\) so that the total probability over all space equals 1: \\(\\int_{-\\infty}^{+\\infty} |\\Psi(x, t)|^2\\,dx = 1\\).",
+      "example": "Equation (1.20) fixes the modulus \\(|A|\\) of the wave function while leaving its overall phase undetermined."
+    },
+    {
+      "id": "qm-m1-square-integrable",
+      "term": "square-integrable",
+      "definition": "A square-integrable function is a wave function \\(\\Psi(x, t)\\) for which the integral of \\(|\\Psi(x, t)|^2\\) over all space is finite and non-zero, so it can be normalized.",
+      "example": "Physically realizable quantum states correspond to square-integrable solutions of the Schrödinger equation."
+    },
+    {
+      "id": "qm-m1-non-normalizable",
+      "term": "non-normalizable",
+      "definition": "A non-normalizable function is a solution to the Schrödinger equation whose integral \\(\\int_{-\\infty}^{+\\infty} |\\Psi|^2\\,dx\\) is infinite or zero, so it cannot represent a physical particle.",
+      "example": "The trivial solution \\(\\Psi = 0\\) and functions that do not vanish as \\(|x| \\to \\infty\\) are non-normalizable."
+    },
+    {
+      "id": "qm-m1-ensemble",
+      "term": "ensemble",
+      "definition": "An ensemble is a large collection of independent systems all prepared in the exact same quantum state \\(\\Psi\\), used to define and measure expectation values.",
+      "example": "Measuring position once on each bottle in a long row of identically prepared bottles yields the average \\(\\langle x\\rangle\\)."
+    },
+    {
+      "id": "qm-m1-operator",
+      "term": "operator",
+      "aliases": ["operators"],
+      "definition": "An operator is a mathematical instruction that acts on the function following it to produce another function, used between \\(\\Psi^*\\) and \\(\\Psi\\) to compute expectation values.",
+      "example": "In Equation (1.36), \\(\\langle Q(x, p)\\rangle = \\int \\Psi^* [Q(x, -i\\hbar\\partial/\\partial x)]\\Psi\\,dx\\)."
+    },
+    {
+      "id": "qm-m1-momentum-operator",
+      "term": "momentum",
+      "aliases": ["momentum operator"],
+      "definition": "In quantum mechanics on a line, momentum \\(p\\) is represented by the differential operator \\(-i\\hbar(\\partial/\\partial x)\\) acting on the wave function \\(\\Psi(x, t)\\).",
+      "example": "Equation (1.33) gives \\(\\langle p\\rangle = -i\\hbar \\int \\Psi^*(\\partial\\Psi/\\partial x)\\,dx\\)."
+    },
+    {
+      "id": "qm-m1-ehrenfests-theorem",
+      "term": "Ehrenfest's theorem",
+      "definition": "Ehrenfest's theorem is the principle that quantum expectation values obey relations analogous to classical mechanics, such as \\(d\\langle p\\rangle/dt = \\langle -\\partial V/\\partial x\\rangle\\).",
+      "example": "Equation (1.32) \\(\\langle p\\rangle = m\\,d\\langle x\\rangle/dt\\) and Equation (1.38) \\(d\\langle p\\rangle/dt = \\langle -\\partial V/\\partial x\\rangle\\) form Ehrenfest's theorem."
+    },
+    {
+      "id": "qm-m1-de-broglie-formula",
+      "term": "de Broglie formula",
+      "definition": "The de Broglie formula \\(p = h/\\lambda = 2\\pi\\hbar/\\lambda\\) relates the momentum \\(p\\) of a quantum particle inversely to the wavelength \\(\\lambda\\) of its wave function.",
+      "example": "By Equation (1.39), a wave function with a single sharp wavelength \\(\\lambda\\) has a single definite momentum \\(p\\)."
+    },
+    {
+      "id": "qm-m1-uncertainty-principle",
+      "term": "uncertainty principle",
+      "aliases": ["Heisenberg's uncertainty principle"],
+      "definition": "Heisenberg's uncertainty principle states that the product of the standard deviation in position \\(\\sigma_x\\) and the standard deviation in momentum \\(\\sigma_p\\) is at least \\(\\hbar/2\\).",
+      "example": "Equation (1.40): \\(\\sigma_x\\sigma_p \\ge \\hbar/2\\), meaning a state sharply localized in position must have a wide spread in momentum."
+    }
+  ],
+  "sections": [
+    {
+      "id": "qm-m1-section-1",
+      "short": "Module I",
+      "title": "Module I: The Wave Function",
+      "sheets": [
+        {
+          "id": "qm-m1-unit-1",
+          "title": "Schrödinger Equation & Born Rule",
+          "icon": "wave",
+          "source": "Griffiths §1.1–1.2",
+          "cards": [
+            {
+              "id": "qm-m1-u1-c1",
+              "type": "intuition",
+              "term": "qm-m1-wave-function",
+              "title": "From a classical point path to a spread-out wave",
+              "meaning": "Instead of tracking a single point x(t), quantum mechanics describes a particle by a wave function spread along the x axis.",
+              "art": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"18\" y1=\"56\" x2=\"242\" y2=\"56\" class=\"ik\"/><rect x=\"130\" y=\"36\" width=\"34\" height=\"16\" class=\"s ok\"/><circle cx=\"138\" cy=\"54\" r=\"3\" class=\"f\"/><circle cx=\"156\" cy=\"54\" r=\"3\" class=\"f\"/><line x1=\"164\" y1=\"44\" x2=\"202\" y2=\"44\" class=\"lk\"/><text x=\"24\" y=\"28\" class=\"t\">Classical: point x(t), force F(x,t)</text><text x=\"210\" y=\"48\" class=\"t\">F(x,t)</text><line x1=\"18\" y1=\"148\" x2=\"242\" y2=\"148\" class=\"ik\"/><path d=\"M 22 148 Q 52 146 72 132 Q 95 112 125 88 Q 145 72 165 110 Q 185 142 236 148\" class=\"lk\"/><text x=\"24\" y=\"92\" class=\"t\">Quantum: wave function Ψ(x,t)</text><text x=\"236\" y=\"164\" class=\"t\">x</text></svg>",
+              "picture": "Compare the classical cart at one position x(t) on top with the spread-out wave function Ψ(x,t) below.",
+              "example": "In classical mechanics Newton's law finds x(t); in quantum mechanics the Schrödinger equation finds Ψ(x,t).",
+              "bridge": "Given the initial wave function Ψ(x,0), the Schrödinger equation determines Ψ(x,t) for all future time."
+            },
+            {
+              "id": "qm-m1-u1-c2",
+              "type": "info",
+              "label": "01 · §1.1",
+              "title": "What is the Schrödinger equation?",
+              "defines": ["qm-m1-wave-function", "qm-m1-schrodinger-equation", "qm-m1-plancks-constant"],
+              "body": "The wave function \\(\\Psi(x,t)\\) describes the quantum state of a mass \\(m\\) in potential \\(V\\) and evolves by the Schrödinger equation, Equation (1.1).",
+              "tex": "i\\hbar\\frac{\\partial \\Psi}{\\partial t} = -\\frac{\\hbar^2}{2m}\\frac{\\partial^2 \\Psi}{\\partial x^2} + V\\Psi, \\quad \\hbar = \\frac{h}{2\\pi} = 1.054573 \\times 10^{-34}\\ \\text{J s}",
+              "examples": ["Equation (1.1)", "Equation (1.2)", "Initial state Ψ(x,0)"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "schrodinger-flow",
+                    "objects": [
+                      { "type": "segment", "p1": [18, 42], "p2": [242, 42], "role": "ik", "width": 2, "name": "xaxis" },
+                      { "type": "curve", "points": [[28, 42], [75, 138], [122, 42]], "role": "lk", "width": 2.2, "name": "psi0" },
+                      { "type": "arrow", "p1": [108, 96], "p2": [152, 96], "role": "ik", "width": 2, "name": "evol" },
+                      { "type": "curve", "points": [[136, 42], [186, 122], [236, 42]], "role": "lk", "width": 2.2, "name": "psit" },
+                      { "type": "label", "coords": [75, 152], "text": "Ψ(x,0)", "size": 11, "align": "center", "role": "t", "name": "psi0" },
+                      { "type": "label", "coords": [130, 114], "text": "Eq. (1.1)", "size": 11, "align": "center", "role": "t", "name": "evol" },
+                      { "type": "label", "coords": [186, 138], "text": "Ψ(x,t)", "size": 11, "align": "center", "role": "t", "name": "psit" },
+                      { "type": "label", "coords": [238, 24], "text": "x", "size": 11, "align": "center", "role": "t", "name": "xaxis" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "qm-m1-u1-c3",
+              "type": "intuition",
+              "term": "qm-m1-statistical-interpretation",
+              "title": "How a spread-out wave predicts where a point particle is found",
+              "meaning": "Born's statistical interpretation says the area under |Ψ(x,t)|² between a and b is the probability of finding the particle in that interval.",
+              "art": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\"><polygon points=\"78,142 78,108 92,86 106,62 114,52 114,142\" class=\"s\"/><line x1=\"18\" y1=\"142\" x2=\"244\" y2=\"142\" class=\"ik\"/><line x1=\"62\" y1=\"156\" x2=\"62\" y2=\"20\" class=\"ik\"/><path d=\"M 22 138 Q 48 112 68 122 Q 86 130 108 58 Q 124 22 142 76 Q 162 136 184 126 Q 208 114 238 138\" class=\"lk\"/><line x1=\"78\" y1=\"142\" x2=\"78\" y2=\"108\" class=\"gk\"/><line x1=\"114\" y1=\"142\" x2=\"114\" y2=\"52\" class=\"gk\"/><text x=\"76\" y=\"30\" class=\"t\">|Ψ|²</text><text x=\"78\" y=\"158\" text-anchor=\"middle\" class=\"t\">a</text><text x=\"114\" y=\"158\" text-anchor=\"middle\" class=\"t\">b</text><text x=\"128\" y=\"158\" text-anchor=\"middle\" class=\"t\">A</text><text x=\"168\" y=\"158\" text-anchor=\"middle\" class=\"t\">B</text><text x=\"194\" y=\"158\" text-anchor=\"middle\" class=\"t\">C</text><text x=\"240\" y=\"158\" class=\"t\">x</text></svg>",
+              "picture": "Look at Figure 1.2: the shaded region between a and b gives the probability of finding the particle in [a, b].",
+              "example": "You are likely to find the particle near A where |Ψ|² is tall, and unlikely near B where |Ψ|² is low.",
+              "bridge": "Integrating |Ψ(x,t)|² = Ψ*Ψ from x = a to x = b gives Equation (1.3)."
+            },
+            {
+              "id": "qm-m1-u1-c4",
+              "type": "info",
+              "label": "02 · §1.2",
+              "title": "What is Born's statistical interpretation?",
+              "defines": ["qm-m1-statistical-interpretation", "qm-m1-indeterminacy"],
+              "body": "Born's statistical interpretation says \\(|\\Psi(x,t)|^2 = \\Psi^*\\Psi\\) is the probability density, so integrating from \\(a\\) to \\(b\\) gives the probability in \\([a,b]\\).",
+              "tex": "\\int_a^b |\\Psi(x, t)|^2\\,dx = \\text{probability of finding the particle between } a \\text{ and } b\\text{, at time } t",
+              "examples": ["Equation (1.3)", "|Ψ|² = Ψ*Ψ ≥ 0", "Indeterminacy"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "born-area",
+                    "objects": [
+                      { "type": "polygon", "points": [[82, 36], [82, 88], [100, 126], [118, 146], [118, 36]], "role": "s", "name": "area" },
+                      { "type": "segment", "p1": [18, 36], "p2": [242, 36], "role": "ik", "width": 2, "name": "xaxis" },
+                      { "type": "segment", "p1": [56, 22], "p2": [56, 162], "role": "ik", "width": 2, "name": "yaxis" },
+                      { "type": "polyline", "points": [[24, 42], [48, 62], [68, 52], [82, 88], [100, 126], [118, 146], [130, 152], [148, 96], [168, 44], [196, 58], [234, 40]], "role": "lk", "width": 2.2, "dash": 0, "name": "curve" },
+                      { "type": "label", "coords": [72, 158], "text": "|Ψ|²", "size": 11, "align": "center", "role": "t", "name": "yaxis" },
+                      { "type": "label", "coords": [82, 20], "text": "a", "size": 11, "align": "center", "role": "t", "name": "area" },
+                      { "type": "label", "coords": [118, 20], "text": "b", "size": 11, "align": "center", "role": "t", "name": "area" },
+                      { "type": "label", "coords": [134, 20], "text": "A", "size": 11, "align": "center", "role": "t", "name": "curve" },
+                      { "type": "label", "coords": [168, 20], "text": "B", "size": 11, "align": "center", "role": "t", "name": "curve" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "qm-m1-u1-c5",
+              "type": "info",
+              "label": "03 · §1.2",
+              "title": "What are the realist, orthodox, and agnostic views?",
+              "defines": ["qm-m1-realist-position", "qm-m1-hidden-variable", "qm-m1-copenhagen-interpretation", "qm-m1-agnostic-position"],
+              "body": "Before measurement finds a particle at \\(C\\), realists say it was at \\(C\\) via a hidden variable, the orthodox (Copenhagen) view says measurement produced \\(C\\), and agnostics refuse to answer.",
+              "examples": ["Realist: Einstein", "Orthodox: Bohr", "Bell (1964) test"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "three-schools",
+                    "objects": [
+                      { "type": "circle", "center": [50, 118], "r": 24, "role": "s ok", "name": "realist" },
+                      { "type": "circle", "center": [130, 118], "r": 24, "role": "f", "name": "orthodox" },
+                      { "type": "circle", "center": [210, 118], "r": 24, "role": "s ok", "name": "agnostic" },
+                      { "type": "label", "coords": [50, 118], "text": "Realist", "size": 11, "align": "center", "role": "t", "name": "realist" },
+                      { "type": "label", "coords": [130, 118], "text": "Orthodox", "size": 11, "align": "center", "role": "i", "name": "orthodox" },
+                      { "type": "label", "coords": [210, 118], "text": "Agnostic", "size": 11, "align": "center", "role": "t", "name": "agnostic" },
+                      { "type": "label", "coords": [50, 74], "text": "At C (λ)", "size": 11, "align": "center", "role": "t", "name": "realist" },
+                      { "type": "label", "coords": [130, 74], "text": "Created at C", "size": 11, "align": "center", "role": "t", "name": "orthodox" },
+                      { "type": "label", "coords": [210, 74], "text": "No answer", "size": 11, "align": "center", "role": "t", "name": "agnostic" },
+                      { "type": "label", "coords": [130, 32], "text": "Bell (1964): experiment confirms Orthodox", "size": 11, "align": "center", "role": "t", "name": "orthodox" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "qm-m1-u1-c6",
+              "type": "info",
+              "label": "04 · §1.2",
+              "title": "What is wave function collapse?",
+              "defines": ["qm-m1-wave-function-collapse"],
+              "body": "Wave function collapse is the sudden jump of \\(\\Psi(x,t)\\) during a measurement into a sharp spike at the measured point \\(C\\), so an immediate repeat measurement gives \\(C\\) again.",
+              "examples": ["Sharp peak at C", "Immediate repeat gives C", "Figure 1.3"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "collapse-spike",
+                    "objects": [
+                      { "type": "segment", "p1": [18, 36], "p2": [242, 36], "role": "ik", "width": 2, "name": "xaxis" },
+                      { "type": "segment", "p1": [62, 20], "p2": [62, 162], "role": "ik", "width": 2, "name": "yaxis" },
+                      { "type": "polyline", "points": [[24, 36], [164, 36], [170, 54], [174, 158], [178, 54], [184, 36], [236, 36]], "role": "lk", "width": 2.2, "dash": 0, "name": "spike" },
+                      { "type": "label", "coords": [78, 154], "text": "|Ψ|²", "size": 11, "align": "center", "role": "t", "name": "yaxis" },
+                      { "type": "label", "coords": [174, 20], "text": "C", "size": 11, "align": "center", "role": "t", "name": "spike" },
+                      { "type": "label", "coords": [238, 20], "text": "x", "size": 11, "align": "center", "role": "t", "name": "xaxis" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "qm-m1-u1-c7",
+              "type": "derivation",
+              "label": "Example 1.1 · §1.2",
+              "title": "Example 1.1: Electron Interference",
+              "legend": "\\(\\Psi_1, \\Psi_2\\) waves from slit 1 and slit 2, \\(|\\Psi|^2\\) landing probability density on the screen, \\(I_{\\text{int}}\\) interference term.",
+              "setup": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "slits",
+                    "objects": [
+                      { "type": "segment", "p1": [70, 156], "p2": [70, 122], "role": "ik", "width": 2.4, "name": "slits" },
+                      { "type": "segment", "p1": [70, 106], "p2": [70, 74], "role": "ik", "width": 2.4, "name": "slits" },
+                      { "type": "segment", "p1": [70, 58], "p2": [70, 24], "role": "ik", "width": 2.4, "name": "slits" },
+                      { "type": "segment", "p1": [196, 24], "p2": [196, 156], "role": "ik", "width": 2, "name": "screen" },
+                      { "type": "arrow", "p1": [22, 90], "p2": [64, 90], "role": "lk", "width": 2, "name": "beam" },
+                      { "type": "label", "coords": [42, 106], "text": "e⁻", "size": 11, "align": "center", "role": "t", "name": "beam" },
+                      { "type": "label", "coords": [70, 166], "text": "Slits", "size": 11, "align": "center", "role": "t", "name": "slits" }
+                    ]
+                  },
+                  {
+                    "step": 2,
+                    "name": "paths",
+                    "objects": [
+                      { "type": "segment", "p1": [70, 114], "p2": [196, 110], "role": "lk", "width": 1.8, "name": "paths" },
+                      { "type": "segment", "p1": [70, 66], "p2": [196, 110], "role": "lk", "width": 1.8, "name": "paths" },
+                      { "type": "label", "coords": [126, 126], "text": "Ψ₁", "size": 11, "align": "center", "role": "t", "name": "paths" },
+                      { "type": "label", "coords": [126, 72], "text": "Ψ₂", "size": 11, "align": "center", "role": "t", "name": "paths" }
+                    ]
+                  },
+                  {
+                    "step": 4,
+                    "name": "fringes",
+                    "objects": [
+                      { "type": "polyline", "points": [[196, 28], [218, 40], [196, 52], [234, 66], [196, 78], [244, 90], [196, 102], [234, 114], [196, 128], [218, 140], [196, 152]], "role": "lk", "width": 2, "dash": 0, "name": "fringes" },
+                      { "type": "label", "coords": [220, 166], "text": "|Ψ|² fringes", "size": 11, "align": "center", "role": "t", "name": "fringes" }
+                    ]
+                  }
+                ]
+              },
+              "phases": [
+                { "name": "Two-slit wave", "why": "each electron wave passes through both slits at once" },
+                { "name": "Born probability", "why": "compute |Ψ|² = Ψ*Ψ for spots on the screen" },
+                { "name": "Interference fringes", "why": "cross terms create bright and dark fringes over many electrons" },
+                { "name": "Slit detection", "why": "measuring which slit collapses Ψ and destroys fringes" }
+              ],
+              "steps": [
+                {
+                  "phase": "Two-slit wave",
+                  "tex": "\\Psi(x, t) = \\Psi_1(x, t) + \\Psi_2(x, t)",
+                  "focus": ["beam", "slits"],
+                  "note": "With both slits open, one electron's wave function is the sum of waves from both slits.",
+                  "ask": {
+                    "q": "By Born's rule in Equation (1.3), what gives the screen spot probability density?",
+                    "options": [
+                      "Modulus squared \\(|\\Psi|^2 = \\Psi^*\\Psi\\)",
+                      "The sum \\(\\Psi_1 + \\Psi_2\\) alone",
+                      "The ratio \\(\\Psi_1 / \\Psi_2\\)",
+                      "The derivative \\(\\partial\\Psi/\\partial t\\)"
+                    ],
+                    "answer": 0,
+                    "why": "According to Equation (1.3), the probability density of an electron landing at x is |Ψ(x,t)|² = Ψ*(x,t)Ψ(x,t)."
+                  }
+                },
+                {
+                  "phase": "Born probability",
+                  "move": { "type": "define", "by": "|\\Psi|^2 = \\Psi^*\\Psi" },
+                  "tex": "|\\Psi(x, t)|^2 = \\Psi^*(x, t)\\Psi(x, t)",
+                  "focus": ["screen"],
+                  "note": "Each individual electron produces one dot at a random spot weighted by \\(|\\Psi(x, t)|^2\\)."
+                },
+                {
+                  "move": { "type": "substitute", "by": "\\Psi = \\Psi_1 + \\Psi_2" },
+                  "tex": "|\\Psi(x, t)|^2 = (\\Psi_1^* + \\Psi_2^*)(\\Psi_1 + \\Psi_2)",
+                  "focus": ["paths", "screen"],
+                  "note": "Substitute the two-slit superposition into \\(\\Psi^*\\Psi\\).",
+                  "ask": {
+                    "q": "What do we get when we expand the product \\((\\Psi_1^* + \\Psi_2^*)(\\Psi_1 + \\Psi_2)\\)?",
+                    "options": [
+                      "\\(|\\Psi_1|^2 + |\\Psi_2|^2 + \\Psi_1^*\\Psi_2 + \\Psi_2^*\\Psi_1\\)",
+                      "\\(|\\Psi_1|^2 + |\\Psi_2|^2\\) only",
+                      "\\(|\\Psi_1|^2 - |\\Psi_2|^2\\)",
+                      "\\(\\Psi_1^*\\Psi_2\\) only"
+                    ],
+                    "answer": 0,
+                    "why": "Multiplying the two brackets produces the two single-slit intensities plus two cross terms."
+                  }
+                },
+                {
+                  "move": { "type": "expand" },
+                  "tex": "|\\Psi(x, t)|^2 = |\\Psi_1|^2 + |\\Psi_2|^2 + \\Psi_1^*\\Psi_2 + \\Psi_2^*\\Psi_1",
+                  "focus": ["paths", "fringes"],
+                  "note": "The cross terms \\(\\Psi_1^*\\Psi_2 + \\Psi_2^*\\Psi_1\\) encode constructive and destructive interference."
+                },
+                {
+                  "phase": "Interference fringes",
+                  "move": { "type": "define", "by": "I_{\\text{int}}(x) = \\Psi_1^*\\Psi_2 + \\Psi_2^*\\Psi_1" },
+                  "tex": "|\\Psi(x, t)|^2 = |\\Psi_1|^2 + |\\Psi_2|^2 + I_{\\text{int}}(x)",
+                  "focus": ["fringes"],
+                  "note": "Waiting for many single electrons builds up the two-slit fringe pattern dot by dot.",
+                  "ask": {
+                    "q": "In Example 1.1, why do single electrons still form an interference pattern?",
+                    "options": [
+                      "Each electron interferes with itself",
+                      "Different electrons collide in flight",
+                      "The screen attracts bright fringes",
+                      "Electrons split into half-charges"
+                    ],
+                    "answer": 0,
+                    "why": "With both slits open and no measurement in flight, each electron's wave passes through both slits and interferes with itself."
+                  }
+                },
+                {
+                  "phase": "Slit detection",
+                  "move": { "type": "evaluate", "by": "\\Psi_2 = 0" },
+                  "tex": "|\\Psi_{\\text{collapsed}}(x, t)|^2 = |\\Psi_1(x, t)|^2",
+                  "focus": ["slits", "screen"],
+                  "note": "Closing slit 2 or detecting the electron at slit 1 collapses \\(\\Psi\\) and erases the fringes.",
+                  "ask": {
+                    "q": "Why does detecting which slit each electron passes through destroy the interference fringes?",
+                    "options": [
+                      "Measurement collapses \\(\\Psi\\) to one slit",
+                      "The electron loses all its mass",
+                      "Planck's constant becomes zero",
+                      "The screen stops recording spots"
+                    ],
+                    "answer": 0,
+                    "why": "Detecting the electron at one slit collapses the wave function to that slit alone, removing the second wave and the interference term."
+                  }
+                }
+              ]
+            },
+            {
+              "id": "qm-m1-u1-c8",
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "In Equation (1.3), what does the integral \\(\\int_a^b |\\Psi(x,t)|^2\\,dx\\) represent?",
+              "options": [
+                "Probability of finding particle in \\([a, b]\\)",
+                "Average velocity between \\(a\\) and \\(b\\)",
+                "Total energy of the particle",
+                "Exact trajectory \\(x(t)\\) of the particle"
+              ],
+              "answer": 0,
+              "why": "Born's statistical interpretation in Equation (1.3) states that the area under |Ψ(x,t)|² between a and b is the probability of finding the particle in that interval at time t."
+            },
+            {
+              "id": "qm-m1-u1-c9",
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "If a particle is measured at \\(C\\), what does the orthodox (Copenhagen) view say?",
+              "options": [
+                "Measurement compelled it to take position \\(C\\)",
+                "It was already at \\(C\\) before measurement",
+                "Hidden variables fixed \\(C\\) from birth",
+                "A second measurement will never give \\(C\\)"
+              ],
+              "answer": 0,
+              "why": "In the orthodox (Copenhagen) interpretation, the particle had no precise position prior to measurement; the act of measurement forced it to take the value C."
+            },
+            {
+              "id": "qm-m1-u1-c10",
+              "type": "fill",
+              "label": "Quiz · Fill in",
+              "time": 60,
+              "q": "When a measurement finds a particle at \\(C\\), the wave function suddenly ______ to a spike at \\(C\\).",
+              "answer": "collapses|collapse",
+              "why": "Upon measurement, the wave function collapses discontinuously to a sharp spike about C so an immediate second measurement returns the same value C."
+            },
+            {
+              "id": "qm-m1-u1-c11",
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "In Example 1.1, how does the pattern form when electrons arrive one at a time?",
+              "options": [
+                "Individual spots accumulate into interference fringes",
+                "One electron draws the entire smooth pattern",
+                "Two smooth bands appear without any fringes",
+                "All electrons hit the exact same point"
+              ],
+              "answer": 0,
+              "why": "Each electron lands as a single localized dot at a random position governed by |Ψ|², and over thousands of electrons the dots build up the two-slit interference fringes."
+            }
+          ]
+        },
+        {
+          "id": "qm-m1-unit-2",
+          "title": "Probability: Discrete & Continuous",
+          "icon": "graph",
+          "source": "Griffiths §1.3",
+          "cards": [
+            {
+              "id": "qm-m1-u2-c1",
+              "type": "intuition",
+              "term": "qm-m1-expectation-value",
+              "title": "Most probable, median, and average in a histogram",
+              "meaning": "A discrete distribution counts how many members N(j) have each value j, giving probabilities P(j) = N(j)/N.",
+              "art": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"146\" x2=\"244\" y2=\"146\" class=\"ik\"/><line x1=\"28\" y1=\"154\" x2=\"28\" y2=\"22\" class=\"ik\"/><rect x=\"48\" y=\"128\" width=\"16\" height=\"18\" class=\"s ok\"/><rect x=\"64\" y=\"128\" width=\"16\" height=\"18\" class=\"s ok\"/><rect x=\"80\" y=\"92\" width=\"16\" height=\"54\" class=\"s ok\"/><rect x=\"148\" y=\"110\" width=\"16\" height=\"36\" class=\"s ok\"/><rect x=\"180\" y=\"110\" width=\"16\" height=\"36\" class=\"s ok\"/><rect x=\"196\" y=\"56\" width=\"16\" height=\"90\" class=\"f\"/><line x1=\"138\" y1=\"146\" x2=\"138\" y2=\"38\" class=\"gk\"/><text x=\"36\" y=\"32\" class=\"t\">N(j)</text><text x=\"56\" y=\"162\" text-anchor=\"middle\" class=\"t\">14</text><text x=\"88\" y=\"162\" text-anchor=\"middle\" class=\"t\">16</text><text x=\"138\" y=\"32\" text-anchor=\"middle\" class=\"t\">⟨j⟩ = 21</text><text x=\"172\" y=\"162\" text-anchor=\"middle\" class=\"t\">23</text><text x=\"204\" y=\"162\" text-anchor=\"middle\" class=\"t\">25</text><text x=\"240\" y=\"162\" class=\"t\">j</text></svg>",
+              "picture": "Look at Figure 1.5 for the 14 people: the tallest bar is at 25, the halfway split is at 23, and the balance point is ⟨j⟩ = 21.",
+              "example": "In Section 1.3.1, nobody has age 21 or 23, yet the average age is 21 and the median age is 23.",
+              "bridge": "Weighting each value j by its probability P(j) = N(j)/N defines the expectation value ⟨j⟩ in Equation (1.7)."
+            },
+            {
+              "id": "qm-m1-u2-c2",
+              "type": "info",
+              "label": "01 · §1.3.1",
+              "title": "What are discrete probability, mode, and median?",
+              "defines": ["qm-m1-discrete-probability", "qm-m1-most-probable-value", "qm-m1-median"],
+              "body": "For a discrete variable with \\(N = \\sum_{j=0}^{\\infty} N(j)\\), the probability of \\(j\\) is \\(P(j) = N(j)/N\\) with \\(\\sum_{j=0}^{\\infty} P(j) = 1\\); the most probable \\(j\\) maximizes \\(P(j)\\) and the median splits probability equally.",
+              "tex": "N = \\sum_{j=0}^{\\infty} N(j), \\qquad P(j) = \\frac{N(j)}{N}, \\qquad \\sum_{j=0}^{\\infty} P(j) = 1",
+              "examples": ["Equations (1.4)–(1.6)", "Most probable = 25", "Median = 23"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "discrete-bars",
+                    "objects": [
+                      { "type": "segment", "p1": [20, 34], "p2": [240, 34], "role": "ik", "width": 2, "name": "axis" },
+                      { "type": "polygon", "points": [[46, 34], [46, 52], [64, 52], [64, 34]], "role": "s ok", "name": "b14" },
+                      { "type": "polygon", "points": [[64, 34], [64, 52], [82, 52], [82, 34]], "role": "s ok", "name": "b15" },
+                      { "type": "polygon", "points": [[82, 34], [82, 88], [100, 88], [100, 34]], "role": "s ok", "name": "b16" },
+                      { "type": "polygon", "points": [[144, 34], [144, 70], [162, 70], [162, 34]], "role": "s ok", "name": "b22" },
+                      { "type": "polygon", "points": [[180, 34], [180, 70], [198, 70], [198, 34]], "role": "s ok", "name": "b24" },
+                      { "type": "polygon", "points": [[198, 34], [198, 124], [216, 124], [216, 34]], "role": "f", "name": "b25" },
+                      { "type": "segment", "p1": [171, 34], "p2": [171, 136], "role": "gk", "dash": 2, "width": 1.6, "name": "med" },
+                      { "type": "label", "coords": [171, 148], "text": "Median = 23", "size": 11, "align": "center", "role": "t", "name": "med" },
+                      { "type": "label", "coords": [207, 136], "text": "Mode = 25", "size": 11, "align": "center", "role": "t", "name": "b25" },
+                      { "type": "label", "coords": [91, 18], "text": "16", "size": 11, "align": "center", "role": "t", "name": "b16" },
+                      { "type": "label", "coords": [207, 18], "text": "25", "size": 11, "align": "center", "role": "t", "name": "b25" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "qm-m1-u2-c3",
+              "type": "info",
+              "label": "02 · §1.3.1",
+              "title": "What is the expectation value of a discrete variable?",
+              "defines": ["qm-m1-expectation-value"],
+              "body": "The expectation value \\(\\langle j\\rangle\\) is the weighted average \\(\\sum_{j=0}^{\\infty} jP(j)\\), and for any function \\(f(j)\\) it is \\(\\langle f(j)\\rangle = \\sum_{j=0}^{\\infty} f(j)P(j)\\).",
+              "tex": "\\langle j\\rangle = \\frac{\\sum jN(j)}{N} = \\sum_{j=0}^{\\infty} jP(j), \\qquad \\langle f(j)\\rangle = \\sum_{j=0}^{\\infty} f(j)P(j)",
+              "examples": ["Equations (1.7)–(1.9)", "⟨j²⟩ ≠ ⟨j⟩² in general", "Average age = 21"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "expectation-balance",
+                    "objects": [
+                      { "type": "segment", "p1": [34, 72], "p2": [226, 72], "role": "ik", "width": 2.4, "name": "beam" },
+                      { "type": "polygon", "points": [[118, 36], [142, 36], [130, 72]], "role": "f", "name": "fulcrum" },
+                      { "type": "polygon", "points": [[56, 72], [56, 118], [84, 118], [84, 72]], "role": "s ok", "name": "w1" },
+                      { "type": "polygon", "points": [[176, 72], [176, 118], [204, 118], [204, 72]], "role": "s ok", "name": "w2" },
+                      { "type": "label", "coords": [70, 132], "text": "j = 1", "size": 11, "align": "center", "role": "t", "name": "w1" },
+                      { "type": "label", "coords": [190, 132], "text": "j = 3", "size": 11, "align": "center", "role": "t", "name": "w2" },
+                      { "type": "label", "coords": [130, 20], "text": "⟨j⟩ = 2, ⟨j²⟩ = 5 ≠ ⟨j⟩² = 4", "size": 11, "align": "center", "role": "t", "name": "fulcrum" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "qm-m1-u2-c4",
+              "type": "info",
+              "label": "03 · §1.3.1",
+              "title": "What are variance and standard deviation?",
+              "defines": ["qm-m1-variance", "qm-m1-standard-deviation"],
+              "body": "The variance \\(\\sigma^2 \\equiv \\langle(\\Delta j)^2\\rangle\\) is the average squared deviation from \\(\\langle j\\rangle\\), and its square root \\(\\sigma = \\sqrt{\\langle j^2\\rangle - \\langle j\\rangle^2}\\) is the standard deviation measuring spread.",
+              "tex": "\\Delta j = j - \\langle j\\rangle, \\quad \\sigma^2 \\equiv \\langle (\\Delta j)^2\\rangle, \\quad \\sigma = \\sqrt{\\langle j^2\\rangle - \\langle j\\rangle^2}, \\quad \\langle j^2\\rangle \\ge \\langle j\\rangle^2",
+              "examples": ["Equations (1.10)–(1.13)", "⟨Δj⟩ = 0 always", "σ = 0 iff no spread"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "spread-compare",
+                    "objects": [
+                      { "type": "segment", "p1": [16, 36], "p2": [120, 36], "role": "ik", "width": 2, "name": "ax1" },
+                      { "type": "polygon", "points": [[58, 36], [58, 142], [78, 142], [78, 36]], "role": "s ok", "name": "narrow" },
+                      { "type": "segment", "p1": [140, 36], "p2": [244, 36], "role": "ik", "width": 2, "name": "ax2" },
+                      { "type": "polygon", "points": [[154, 36], [154, 66], [230, 66], [230, 36]], "role": "s ok", "name": "wide" },
+                      { "type": "polygon", "points": [[182, 66], [182, 92], [202, 92], [202, 66]], "role": "f", "name": "peak2" },
+                      { "type": "label", "coords": [68, 156], "text": "Small σ", "size": 11, "align": "center", "role": "t", "name": "narrow" },
+                      { "type": "label", "coords": [192, 156], "text": "Large σ", "size": 11, "align": "center", "role": "t", "name": "wide" },
+                      { "type": "label", "coords": [130, 18], "text": "Figure 1.6: same ⟨j⟩, different σ", "size": 11, "align": "center", "role": "t", "name": "ax1" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "qm-m1-u2-c5",
+              "type": "derivation",
+              "label": "Derivation · §1.3.1",
+              "title": "Variance theorem and Equation (1.12), step by step",
+              "legend": "\\(\\Delta j = j - \\langle j\\rangle\\) deviation from average, \\(P(j)\\) probability of \\(j\\), \\(\\sigma^2\\) variance, \\(\\sigma\\) standard deviation.",
+              "setup": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "dev",
+                    "objects": [
+                      { "type": "segment", "p1": [22, 46], "p2": [238, 46], "role": "ik", "width": 2, "name": "dev" },
+                      { "type": "point", "coords": [110, 46], "size": 4, "role": "f", "name": "mean" },
+                      { "type": "point", "coords": [182, 46], "size": 4, "role": "f", "name": "val" },
+                      { "type": "arrow", "p1": [110, 72], "p2": [182, 72], "role": "lk", "width": 2, "name": "dev" },
+                      { "type": "label", "coords": [110, 26], "text": "⟨j⟩", "size": 11, "align": "center", "role": "t", "name": "mean" },
+                      { "type": "label", "coords": [182, 26], "text": "j", "size": 11, "align": "center", "role": "t", "name": "val" },
+                      { "type": "label", "coords": [146, 88], "text": "Δj = j − ⟨j⟩", "size": 11, "align": "center", "role": "t", "name": "dev" }
+                    ]
+                  },
+                  {
+                    "step": 3,
+                    "name": "moments",
+                    "objects": [
+                      { "type": "polygon", "points": [[40, 114], [40, 148], [116, 148], [116, 114]], "role": "s ok", "name": "moments" },
+                      { "type": "polygon", "points": [[144, 114], [144, 148], [220, 148], [220, 114]], "role": "s ok", "name": "moments" },
+                      { "type": "label", "coords": [78, 131], "text": "⟨j²⟩ = Σ j²P(j)", "size": 11, "align": "center", "role": "t", "name": "moments" },
+                      { "type": "label", "coords": [182, 131], "text": "⟨j⟩ = Σ jP(j)", "size": 11, "align": "center", "role": "t", "name": "moments" }
+                    ]
+                  }
+                ]
+              },
+              "phases": [
+                { "name": "Definition", "why": "write variance as the average of (j - <j>)²" },
+                { "name": "Expand square", "why": "multiply out (j - <j>)² inside the sum" },
+                { "name": "Identify averages", "why": "use Equations (1.6), (1.7), and (1.8)" },
+                { "name": "Standard deviation", "why": "combine terms and take the square root" }
+              ],
+              "steps": [
+                {
+                  "phase": "Definition",
+                  "tex": "\\sigma^2 = \\sum (j - \\langle j\\rangle)^2 P(j)",
+                  "focus": ["dev", "mean", "val"],
+                  "note": "Start from Equation (1.10) and Equation (1.11) for the variance \\(\\sigma^2 = \\langle(\\Delta j)^2\\rangle\\).",
+                  "ask": {
+                    "q": "Why do we square \\(\\Delta j = j - \\langle j\\rangle\\) before averaging?",
+                    "options": [
+                      "Because \\(\\langle \\Delta j\\rangle = 0\\) without squaring",
+                      "Because probabilities \\(P(j)\\) are negative",
+                      "To make the median equal zero",
+                      "To eliminate \\(P(j)\\) from the sum"
+                    ],
+                    "answer": 0,
+                    "why": "Positive and negative deviations cancel so ⟨Δj⟩ = ⟨j⟩ − ⟨j⟩ = 0; squaring makes every term non-negative."
+                  }
+                },
+                {
+                  "phase": "Expand square",
+                  "move": { "type": "expand" },
+                  "tex": "\\sigma^2 = \\sum \\left(j^2 - 2j\\langle j\\rangle + \\langle j\\rangle^2\\right) P(j)",
+                  "focus": ["dev"],
+                  "note": "Expand \\((j - \\langle j\\rangle)^2 = j^2 - 2j\\langle j\\rangle + \\langle j\\rangle^2\\).",
+                  "ask": {
+                    "q": "Since \\(\\langle j\\rangle\\) is a constant number, how does the sum split?",
+                    "options": [
+                      "Factor \\(\\langle j\\rangle\\) outside the \\(j\\) sums",
+                      "Keep \\(\\langle j\\rangle\\) trapped inside \\(P(j)\\)",
+                      "Set \\(\\langle j\\rangle = 0\\) everywhere",
+                      "Differentiate with respect to \\(j\\)"
+                    ],
+                    "answer": 0,
+                    "why": "Because ⟨j⟩ does not depend on the summation index j, both 2⟨j⟩ and ⟨j⟩² can be factored outside the sums."
+                  }
+                },
+                {
+                  "move": { "type": "rearrange" },
+                  "tex": "\\sigma^2 = \\sum j^2 P(j) - 2\\langle j\\rangle \\sum j P(j) + \\langle j\\rangle^2 \\sum P(j)",
+                  "focus": ["moments"],
+                  "note": "Separate the three sums and pull the constant \\(\\langle j\\rangle\\) outside.",
+                  "ask": {
+                    "q": "What are the values of \\(\\sum j^2P(j)\\), \\(\\sum jP(j)\\), and \\(\\sum P(j)\\)?",
+                    "options": [
+                      "\\(\\langle j^2\\rangle\\), \\(\\langle j\\rangle\\), and \\(1\\)",
+                      "\\(\\langle j\\rangle^2\\), \\(1\\), and \\(0\\)",
+                      "\\(1\\), \\(\\langle j\\rangle\\), and \\(N\\)",
+                      "\\(\\sigma\\), \\(\\langle j\\rangle\\), and \\(1\\)"
+                    ],
+                    "answer": 0,
+                    "why": "By Equations (1.8), (1.7), and (1.6), the three sums equal ⟨j²⟩, ⟨j⟩, and 1 respectively."
+                  }
+                },
+                {
+                  "phase": "Identify averages",
+                  "move": { "type": "substitute", "by": "\\sum j^2P(j) = \\langle j^2\\rangle,\\ \\sum jP(j) = \\langle j\\rangle,\\ \\sum P(j) = 1" },
+                  "tex": "\\sigma^2 = \\langle j^2\\rangle - 2\\langle j\\rangle\\langle j\\rangle + \\langle j\\rangle^2",
+                  "focus": ["moments"],
+                  "note": "Replace each sum using Equations (1.8), (1.7), and (1.6)."
+                },
+                {
+                  "move": { "type": "combine" },
+                  "tex": "\\sigma^2 = \\langle j^2\\rangle - \\langle j\\rangle^2",
+                  "focus": ["moments"],
+                  "note": "Combine \\(-2\\langle j\\rangle^2 + \\langle j\\rangle^2 = -\\langle j\\rangle^2\\).",
+                  "ask": {
+                    "q": "How do we obtain the standard deviation \\(\\sigma\\) in Equation (1.12)?",
+                    "options": [
+                      "Take the square root of \\(\\sigma^2\\)",
+                      "Square both sides again",
+                      "Divide by the total number \\(N\\)",
+                      "Subtract \\(\\langle j\\rangle\\) from \\(\\sigma^2\\)"
+                    ],
+                    "answer": 0,
+                    "why": "The standard deviation σ is the square root of the variance σ², yielding Equation (1.12)."
+                  }
+                },
+                {
+                  "phase": "Standard deviation",
+                  "move": { "type": "root" },
+                  "tex": "\\sigma = \\sqrt{\\langle j^2\\rangle - \\langle j\\rangle^2}",
+                  "focus": ["dev", "moments"],
+                  "note": "Taking the square root gives Equation (1.12), and \\(\\sigma^2 \\ge 0\\) implies \\(\\langle j^2\\rangle \\ge \\langle j\\rangle^2\\)."
+                }
+              ]
+            },
+            {
+              "id": "qm-m1-u2-c6",
+              "type": "intuition",
+              "term": "qm-m1-probability-density",
+              "title": "Why continuous variables use probability density ρ(x)",
+              "meaning": "For a continuous variable x, the chance of hitting one exact real number is zero, so we measure the probability ρ(x)dx of landing in a tiny interval dx.",
+              "art": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\"><polygon points=\"112,142 112,56 126,62 126,142\" class=\"f\"/><polygon points=\"76,142 76,84 94,62 112,56 126,62 146,82 162,102 162,142\" class=\"s\"/><line x1=\"18\" y1=\"142\" x2=\"242\" y2=\"142\" class=\"ik\"/><line x1=\"42\" y1=\"156\" x2=\"42\" y2=\"20\" class=\"ik\"/><path d=\"M 22 140 Q 56 132 76 84 Q 104 34 134 70 Q 168 112 234 140\" class=\"lk\"/><text x=\"56\" y=\"30\" class=\"t\">ρ(x)</text><text x=\"76\" y=\"158\" text-anchor=\"middle\" class=\"t\">a</text><text x=\"119\" y=\"158\" text-anchor=\"middle\" class=\"t\">dx</text><text x=\"162\" y=\"158\" text-anchor=\"middle\" class=\"t\">b</text><text x=\"186\" y=\"52\" class=\"t\">Strip area = ρ(x)dx</text><text x=\"238\" y=\"158\" class=\"t\">x</text></svg>",
+              "picture": "A thin strip of width dx has area ρ(x)dx; adding all strips from a to b gives the integral P_ab.",
+              "example": "The chance a person's age lies in a two-day window is twice the chance for a one-day window.",
+              "bridge": "Sums over discrete j become integrals over continuous x in Equations (1.15) to (1.19)."
+            },
+            {
+              "id": "qm-m1-u2-c7",
+              "type": "info",
+              "label": "04 · §1.3.2",
+              "title": "What is probability density for continuous variables?",
+              "defines": ["qm-m1-probability-density", "qm-m1-gaussian-distribution"],
+              "body": "The probability density \\(\\rho(x)\\) gives the probability \\(\\rho(x)\\,dx\\) in \\([x, x+dx]\\), so \\(P_{ab} = \\int_a^b \\rho(x)\\,dx\\), \\(\\int_{-\\infty}^{+\\infty}\\rho(x)\\,dx = 1\\), and \\(\\langle f(x)\\rangle = \\int_{-\\infty}^{+\\infty} f(x)\\rho(x)\\,dx\\).",
+              "tex": "P_{ab} = \\int_a^b \\rho(x)\\,dx, \\quad \\int_{-\\infty}^{+\\infty} \\rho(x)\\,dx = 1, \\quad \\langle x\\rangle = \\int_{-\\infty}^{+\\infty} x\\rho(x)\\,dx, \\quad \\sigma^2 = \\langle x^2\\rangle - \\langle x\\rangle^2",
+              "examples": ["Equations (1.14)–(1.19)", "Gaussian Ae^{-λ(x-a)²}"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "gaussian-bell",
+                    "objects": [
+                      { "type": "polygon", "points": [[88, 36], [88, 92], [110, 134], [130, 148], [150, 134], [172, 92], [172, 36]], "role": "s", "name": "bellarea" },
+                      { "type": "segment", "p1": [18, 36], "p2": [242, 36], "role": "ik", "width": 2, "name": "xaxis" },
+                      { "type": "polyline", "points": [[24, 38], [52, 44], [72, 62], [92, 100], [112, 136], [130, 148], [148, 136], [168, 100], [188, 62], [208, 44], [236, 38]], "role": "lk", "width": 2.2, "dash": 0, "name": "bell" },
+                      { "type": "segment", "p1": [130, 36], "p2": [130, 148], "role": "gk", "dash": 2, "width": 1.6, "name": "center" },
+                      { "type": "label", "coords": [130, 162], "text": "ρ(x) = Ae^{-λ(x-a)²}", "size": 11, "align": "center", "role": "t", "name": "bell" },
+                      { "type": "label", "coords": [130, 20], "text": "a = ⟨x⟩", "size": 11, "align": "center", "role": "t", "name": "center" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "qm-m1-u2-c8",
+              "type": "derivation",
+              "label": "Example 1.2 · §1.3.2",
+              "title": "Example 1.2: Falling rock probability density and ⟨x⟩",
+              "legend": "\\(h\\) cliff height, \\(x(t)\\) distance fallen at time \\(t\\), \\(T = \\sqrt{2h/g}\\) total flight time, \\(\\rho(x)\\) probability density.",
+              "setup": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "cliff",
+                    "objects": [
+                      { "type": "segment", "p1": [44, 156], "p2": [44, 28], "role": "ik", "width": 2.2, "name": "cliff" },
+                      { "type": "point", "coords": [44, 118], "size": 4, "role": "f", "name": "rock" },
+                      { "type": "arrow", "p1": [44, 118], "p2": [44, 78], "role": "lk", "width": 2, "name": "cliff" },
+                      { "type": "label", "coords": [44, 166], "text": "x = 0", "size": 11, "align": "center", "role": "t", "name": "cliff" },
+                      { "type": "label", "coords": [44, 16], "text": "x = h", "size": 11, "align": "center", "role": "t", "name": "cliff" },
+                      { "type": "label", "coords": [72, 118], "text": "x(t)", "size": 11, "align": "center", "role": "t", "name": "rock" }
+                    ]
+                  },
+                  {
+                    "step": 4,
+                    "name": "rhograph",
+                    "objects": [
+                      { "type": "segment", "p1": [112, 36], "p2": [242, 36], "role": "ik", "width": 2, "name": "rhograph" },
+                      { "type": "segment", "p1": [122, 24], "p2": [122, 158], "role": "ik", "width": 2, "name": "rhograph" },
+                      { "type": "polyline", "points": [[128, 152], [136, 112], [148, 86], [166, 70], [190, 58], [218, 52]], "role": "lk", "width": 2.2, "dash": 0, "name": "rhograph" },
+                      { "type": "segment", "p1": [218, 36], "p2": [218, 52], "role": "gk", "dash": 2, "width": 1.6, "name": "rhograph" },
+                      { "type": "label", "coords": [146, 152], "text": "ρ(x)", "size": 11, "align": "center", "role": "t", "name": "rhograph" },
+                      { "type": "label", "coords": [218, 20], "text": "h", "size": 11, "align": "center", "role": "t", "name": "rhograph" }
+                    ]
+                  },
+                  {
+                    "step": 7,
+                    "name": "meanx",
+                    "objects": [
+                      { "type": "point", "coords": [154, 36], "size": 4, "role": "f", "name": "meanx" },
+                      { "type": "label", "coords": [154, 20], "text": "h/3", "size": 11, "align": "center", "role": "t", "name": "meanx" }
+                    ]
+                  }
+                ]
+              },
+              "phases": [
+                { "name": "Kinematics", "why": "relate distance fallen x(t) to speed dx/dt" },
+                { "name": "Time fraction", "why": "equate snapshot probability ρ(x)dx to dt/T" },
+                { "name": "Probability density", "why": "simplify to find ρ(x) on 0 ≤ x ≤ h" },
+                { "name": "Average distance", "why": "integrate xρ(x) from 0 to h using Equation (1.17)" }
+              ],
+              "steps": [
+                {
+                  "phase": "Kinematics",
+                  "tex": "x(t) = \\frac{1}{2}gt^2",
+                  "focus": ["cliff", "rock"],
+                  "note": "A rock dropped from rest falls distance \\(x(t) = \\frac{1}{2}gt^2\\) in time \\(t\\), with total flight time \\(T = \\sqrt{2h/g}\\)."
+                },
+                {
+                  "move": { "type": "differentiate", "wrt": "t" },
+                  "tex": "\\frac{dx}{dt} = gt",
+                  "focus": ["cliff", "rock"],
+                  "note": "Differentiate \\(x(t)\\) with respect to \\(t\\) to find the downward velocity.",
+                  "ask": {
+                    "q": "In Example 1.2, what is the probability of a random snapshot occurring in \\([t, t+dt]\\)?",
+                    "options": [
+                      "\\(dt / T\\)",
+                      "\\(dx / h\\)",
+                      "\\(gt / h\\)",
+                      "\\(t / T^2\\)"
+                    ],
+                    "answer": 0,
+                    "why": "Since photographs are snapped at random times over the total flight duration T, the probability of landing in interval dt is dt/T."
+                  }
+                },
+                {
+                  "phase": "Time fraction",
+                  "move": { "type": "define", "by": "\\rho(x)\\,dx = dt/T" },
+                  "tex": "\\rho(x)\\,dx = \\frac{dt}{T}",
+                  "focus": ["cliff"],
+                  "note": "Set the distance probability \\(\\rho(x)\\,dx\\) equal to the time fraction \\(dt/T\\)."
+                },
+                {
+                  "move": { "type": "substitute", "by": "dt = \\frac{dx}{gt},\\ T = \\sqrt{\\frac{2h}{g}}" },
+                  "tex": "\\rho(x)\\,dx = \\frac{dx}{gt}\\sqrt{\\frac{g}{2h}}",
+                  "focus": ["cliff", "rhograph"],
+                  "note": "Substitute \\(dt = dx/(gt)\\) and \\(T = \\sqrt{2h/g}\\).",
+                  "ask": {
+                    "q": "Using \\(gt = \\sqrt{2gx}\\), what does \\(\\frac{dx}{gt}\\sqrt{\\frac{g}{2h}}\\) simplify to?",
+                    "options": [
+                      "\\(\\frac{1}{2\\sqrt{hx}}\\,dx\\)",
+                      "\\(\\frac{1}{h}\\,dx\\)",
+                      "\\(\\sqrt{\\frac{x}{h}}\\,dx\\)",
+                      "\\(\\frac{2}{\\sqrt{gx}}\\,dx\\)"
+                    ],
+                    "answer": 0,
+                    "why": "Replacing gt by √(2gx) cancels √g and gives dx / (2√(hx))."
+                  }
+                },
+                {
+                  "phase": "Probability density",
+                  "move": { "type": "simplify" },
+                  "tex": "\\rho(x) = \\frac{1}{2\\sqrt{hx}}",
+                  "focus": ["rhograph"],
+                  "note": "This is the probability density for \\(0 \\le x \\le h\\) (Figure 1.7), whose integral from \\(0\\) to \\(h\\) equals \\(1\\).",
+                  "ask": {
+                    "q": "Which integral gives the average distance \\(\\langle x\\rangle\\) by Equation (1.17)?",
+                    "options": [
+                      "\\(\\int_0^h x\\left(\\frac{1}{2\\sqrt{hx}}\\right)dx\\)",
+                      "\\(\\int_0^h \\left(\\frac{1}{2\\sqrt{hx}}\\right)dx\\)",
+                      "\\(\\int_0^h x^2\\left(\\frac{1}{2\\sqrt{hx}}\\right)dx\\)",
+                      "\\(\\int_0^T x(t)\\,dt\\)"
+                    ],
+                    "answer": 0,
+                    "why": "By Equation (1.17), the expectation value of x is the integral of xρ(x) over the allowed range 0 to h."
+                  }
+                },
+                {
+                  "phase": "Average distance",
+                  "move": { "type": "substitute", "by": "\\langle x\\rangle = \\int_0^h x\\rho(x)\\,dx" },
+                  "tex": "\\langle x\\rangle = \\int_0^h \\frac{\\sqrt{x}}{2\\sqrt{h}}\\,dx",
+                  "focus": ["rhograph"],
+                  "note": "Substitute \\(\\rho(x)\\) into Equation (1.17) and simplify \\(x/\\sqrt{x} = x^{1/2}\\).",
+                  "ask": {
+                    "q": "What is the antiderivative of \\(x^{1/2}\\) with respect to \\(x\\)?",
+                    "options": [
+                      "\\(\\frac{2}{3}x^{3/2}\\)",
+                      "\\(2x^{1/2}\\)",
+                      "\\(\\frac{1}{2}x^{-1/2}\\)",
+                      "\\(\\frac{3}{2}x^{3/2}\\)"
+                    ],
+                    "answer": 0,
+                    "why": "By the power rule, ∫ x^{1/2} dx = (2/3)x^{3/2}."
+                  }
+                },
+                {
+                  "move": { "type": "integrate", "wrt": "x" },
+                  "tex": "\\langle x\\rangle = \\frac{1}{2\\sqrt{h}}\\left(\\frac{2}{3}h^{3/2}\\right)",
+                  "focus": ["rhograph", "meanx"],
+                  "note": "Evaluate the antiderivative \\(\\frac{2}{3}x^{3/2}\\) from \\(0\\) to \\(h\\)."
+                },
+                {
+                  "move": { "type": "simplify" },
+                  "tex": "\\langle x\\rangle = \\frac{h}{3}",
+                  "focus": ["meanx"],
+                  "note": "The average distance fallen is \\(h/3\\), which is less than \\(h/2\\) because the rock moves slowly near the top."
+                }
+              ]
+            },
+            {
+              "id": "qm-m1-u2-c9",
+              "type": "number",
+              "label": "Quiz · Number",
+              "time": 60,
+              "q": "In Section 1.3.1, what is the average age \\(\\langle j\\rangle\\) of the 14 people in the room?",
+              "answer": 21,
+              "tolerance": 0,
+              "unit": "years",
+              "why": "Adding all 14 ages gives 14 + 15 + 3(16) + 2(22) + 2(24) + 5(25) = 294, and dividing by 14 gives ⟨j⟩ = 21 years."
+            },
+            {
+              "id": "qm-m1-u2-c10",
+              "type": "number",
+              "label": "Quiz · Number",
+              "time": 60,
+              "q": "A room has two babies aged 1 and 3 years. What is the standard deviation \\(\\sigma\\)?",
+              "answer": 1,
+              "tolerance": 0,
+              "unit": "years",
+              "why": "Here ⟨j⟩ = 2 so ⟨j⟩² = 4, and ⟨j²⟩ = (1² + 3²)/2 = 5. By Equation (1.12), σ = √(5 − 4) = 1 year."
+            },
+            {
+              "id": "qm-m1-u2-c11",
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "In Example 1.2, why is the average distance \\(\\langle x\\rangle = h/3\\) less than \\(h/2\\)?",
+              "options": [
+                "The rock spends more time near the top",
+                "Gravity weakens as the rock falls",
+                "Total probability is less than 1",
+                "Air resistance stops the rock at \\(h/3\\)"
+              ],
+              "answer": 0,
+              "why": "Starting from rest, the rock moves slowly near x = 0 and speeds up as it falls, so random time snapshots catch it near the top more often."
+            },
+            {
+              "id": "qm-m1-u2-c12",
+              "type": "fill",
+              "label": "Quiz · Fill in",
+              "time": 60,
+              "q": "For a continuous variable \\(x\\), the function \\(\\rho(x)\\) in Equation (1.14) is called the probability ______.",
+              "answer": "density|density function",
+              "why": "Because ρ(x)dx is a probability and dx has units of length, ρ(x) is probability per unit length, called the probability density."
+            }
+          ]
+        },
+        {
+          "id": "qm-m1-unit-3",
+          "title": "Normalization of the Wave Function",
+          "icon": "sigma",
+          "source": "Griffiths §1.4",
+          "cards": [
+            {
+              "id": "qm-m1-u3-c1",
+              "type": "intuition",
+              "term": "qm-m1-normalization",
+              "title": "Scaling a wave function so total probability equals 1",
+              "meaning": "Because the particle must be somewhere on the x axis, the total area under |Ψ(x,t)|² from −∞ to +∞ must equal 1.",
+              "art": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\"><polygon points=\"24,142 54,136 82,110 108,68 130,44 152,68 178,110 206,136 236,142\" class=\"s\"/><line x1=\"16\" y1=\"142\" x2=\"244\" y2=\"142\" class=\"ik\"/><line x1=\"130\" y1=\"154\" x2=\"130\" y2=\"20\" class=\"ik\"/><path d=\"M 24 142 Q 66 138 92 92 Q 112 52 130 44 Q 148 52 168 92 Q 194 138 236 142\" class=\"lk\"/><path d=\"M 24 142 Q 66 140 92 114 Q 112 90 130 84 Q 148 90 168 114 Q 194 140 236 142\" class=\"gk\"/><text x=\"130\" y=\"122\" text-anchor=\"middle\" class=\"t\">Total area = 1</text><text x=\"196\" y=\"56\" class=\"t\">Normalized |AΨ|²</text><text x=\"202\" y=\"96\" class=\"t\">Unscaled |Ψ|²</text><text x=\"238\" y=\"158\" class=\"t\">x</text></svg>",
+              "picture": "Multiplying Ψ by a constant A scales the height of |Ψ|² until the shaded area over all x equals 1.",
+              "example": "If ∫|Ψ|²dx = 4, multiplying Ψ by A = 1/2 divides the area by |A|² = 1/4 so the new area is 1.",
+              "bridge": "Because Equation (1.1) is linear in Ψ, AΨ(x,t) is also a solution, allowing us to enforce Equation (1.20)."
+            },
+            {
+              "id": "qm-m1-u3-c2",
+              "type": "info",
+              "label": "01 · §1.4",
+              "title": "What is normalizing a wave function?",
+              "defines": ["qm-m1-normalization"],
+              "body": "Normalizing a wave function means choosing its multiplicative constant \\(A\\) so that the integral of \\(|\\Psi(x,t)|^2\\) over all space equals \\(1\\), as required by Equation (1.20).",
+              "tex": "\\int_{-\\infty}^{+\\infty} |\\Psi(x, t)|^2\\,dx = 1",
+              "examples": ["Equation (1.20)", "Fixes modulus |A|", "Phase stays free"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "norm-area",
+                    "objects": [
+                      { "type": "polygon", "points": [[26, 36], [66, 48], [98, 96], [130, 146], [162, 96], [194, 48], [234, 36]], "role": "s ok", "name": "area1" },
+                      { "type": "segment", "p1": [16, 36], "p2": [244, 36], "role": "ik", "width": 2, "name": "xaxis" },
+                      { "type": "segment", "p1": [130, 22], "p2": [130, 162], "role": "ik", "width": 2, "name": "yaxis" },
+                      { "type": "label", "coords": [130, 74], "text": "Area = 1", "size": 11, "align": "center", "role": "t", "name": "area1" },
+                      { "type": "label", "coords": [152, 156], "text": "|Ψ(x,t)|²", "size": 11, "align": "center", "role": "t", "name": "yaxis" },
+                      { "type": "label", "coords": [34, 20], "text": "-∞", "size": 11, "align": "center", "role": "t", "name": "xaxis" },
+                      { "type": "label", "coords": [228, 20], "text": "+∞", "size": 11, "align": "center", "role": "t", "name": "xaxis" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "qm-m1-u3-c3",
+              "type": "info",
+              "label": "02 · §1.4",
+              "title": "What are square-integrable and non-normalizable states?",
+              "defines": ["qm-m1-square-integrable", "qm-m1-non-normalizable"],
+              "body": "Square-integrable functions have a finite non-zero integral \\(\\int_{-\\infty}^{+\\infty}|\\Psi|^2\\,dx\\) and represent physical states, whereas non-normalizable solutions (infinite integral or \\(\\Psi=0\\)) are rejected.",
+              "tex": "0 < \\int_{-\\infty}^{+\\infty} |\\Psi(x, t)|^2\\,dx < \\infty \\implies \\Psi(x, t) \\to 0 \\text{ as } |x| \\to \\infty",
+              "examples": ["Faster than 1/√|x|", "Ψ = 0 rejected", "Physical states"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "tails-decay",
+                    "objects": [
+                      { "type": "segment", "p1": [18, 36], "p2": [242, 36], "role": "ik", "width": 2, "name": "xaxis" },
+                      { "type": "polyline", "points": [[22, 37], [56, 40], [88, 66], [112, 122], [130, 148], [148, 122], [172, 66], [204, 40], [238, 37]], "role": "lk", "width": 2.2, "dash": 0, "name": "good" },
+                      { "type": "polyline", "points": [[22, 118], [76, 112], [130, 124], [184, 112], [238, 118]], "role": "gk", "width": 1.8, "dash": 2, "name": "bad" },
+                      { "type": "label", "coords": [130, 160], "text": "Square-integrable: Ψ → 0", "size": 11, "align": "center", "role": "t", "name": "good" },
+                      { "type": "label", "coords": [194, 128], "text": "Non-normalizable", "size": 11, "align": "center", "role": "t", "name": "bad" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "qm-m1-u3-c4",
+              "type": "derivation",
+              "label": "Derivation · §1.4",
+              "title": "Conservation of normalization (Equations (1.21)–(1.27))",
+              "legend": "\\(\\Psi(x,t)\\) wave function, \\(\\Psi^*(x,t)\\) complex conjugate, \\(V(x)\\) real potential energy, \\(m\\) particle mass.",
+              "setup": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "evol",
+                    "objects": [
+                      { "type": "segment", "p1": [18, 36], "p2": [242, 36], "role": "ik", "width": 2, "name": "evol" },
+                      { "type": "polyline", "points": [[36, 36], [64, 62], [86, 144], [108, 62], [136, 36]], "role": "lk", "width": 2.2, "dash": 0, "name": "evol" },
+                      { "type": "polyline", "points": [[96, 36], [132, 56], [164, 116], [196, 56], [228, 36]], "role": "gk", "width": 2, "dash": 2, "name": "evol" },
+                      { "type": "label", "coords": [86, 156], "text": "|Ψ(x,0)|²", "size": 11, "align": "center", "role": "t", "name": "evol" },
+                      { "type": "label", "coords": [164, 130], "text": "|Ψ(x,t)|²", "size": 11, "align": "center", "role": "t", "name": "evol" }
+                    ]
+                  },
+                  {
+                    "step": 4,
+                    "name": "tails",
+                    "objects": [
+                      { "type": "point", "coords": [24, 36], "size": 4, "role": "f", "name": "tails" },
+                      { "type": "point", "coords": [236, 36], "size": 4, "role": "f", "name": "tails" },
+                      { "type": "label", "coords": [46, 20], "text": "Ψ(-∞) = 0", "size": 11, "align": "center", "role": "t", "name": "tails" },
+                      { "type": "label", "coords": [214, 20], "text": "Ψ(+∞) = 0", "size": 11, "align": "center", "role": "t", "name": "tails" }
+                    ]
+                  }
+                ]
+              },
+              "phases": [
+                { "name": "Differentiate integral", "why": "bring d/dt inside the spatial integral as ∂/∂t" },
+                { "name": "Use Schrödinger equation", "why": "substitute ∂Ψ/∂t and ∂Ψ*/∂t from Equations (1.23) and (1.24)" },
+                { "name": "Exact x-derivative", "why": "rewrite ∂|Ψ|²/∂t as ∂/∂x of a bracket in Equation (1.25)" },
+                { "name": "Boundary evaluation", "why": "integrate over x and use Ψ(±∞,t) = 0 to get Equation (1.27)" }
+              ],
+              "steps": [
+                {
+                  "phase": "Differentiate integral",
+                  "tex": "\\frac{d}{dt}\\int_{-\\infty}^{+\\infty} |\\Psi(x, t)|^2\\,dx = \\int_{-\\infty}^{+\\infty} \\frac{\\partial}{\\partial t}|\\Psi(x, t)|^2\\,dx",
+                  "focus": ["evol"],
+                  "note": "Start with Equation (1.21): total derivative \\(d/dt\\) outside becomes \\(\\partial/\\partial t\\) inside.",
+                  "ask": {
+                    "q": "By the product rule on \\(|\\Psi|^2 = \\Psi^*\\Psi\\), what is \\(\\frac{\\partial}{\\partial t}|\\Psi|^2\\)?",
+                    "options": [
+                      "\\(\\Psi^*\\frac{\\partial\\Psi}{\\partial t} + \\frac{\\partial\\Psi^*}{\\partial t}\\Psi\\)",
+                      "\\(2\\Psi\\frac{\\partial\\Psi}{\\partial t}\\)",
+                      "\\(\\frac{\\partial\\Psi^*}{\\partial t}\\frac{\\partial\\Psi}{\\partial t}\\)",
+                      "\\(\\Psi^*\\frac{\\partial^2\\Psi}{\\partial x^2}\\)"
+                    ],
+                    "answer": 0,
+                    "why": "Since |Ψ|² = Ψ*Ψ is a product of two time-dependent functions, the product rule gives Equation (1.22)."
+                  }
+                },
+                {
+                  "move": { "type": "differentiate", "wrt": "t" },
+                  "tex": "\\frac{\\partial}{\\partial t}|\\Psi|^2 = \\Psi^*\\frac{\\partial \\Psi}{\\partial t} + \\frac{\\partial \\Psi^*}{\\partial t}\\Psi",
+                  "focus": ["evol"],
+                  "note": "Apply the product rule to \\(\\Psi^*\\Psi\\) to get Equation (1.22).",
+                  "ask": {
+                    "q": "When we substitute Equations (1.23) and (1.24), what happens to the \\(V\\Psi^*\\Psi\\) terms?",
+                    "options": [
+                      "They cancel with opposite signs",
+                      "They double in size",
+                      "They become \\(V^2\\)",
+                      "They turn into kinetic energy"
+                    ],
+                    "answer": 0,
+                    "why": "Because V is real, −(i/ħ)VΨ*Ψ from ∂Ψ/∂t and +(i/ħ)VΨ*Ψ from ∂Ψ*/∂t cancel completely."
+                  }
+                },
+                {
+                  "phase": "Use Schrödinger equation",
+                  "move": { "type": "substitute", "by": "\\frac{\\partial \\Psi}{\\partial t} = \\frac{i\\hbar}{2m}\\frac{\\partial^2 \\Psi}{\\partial x^2} - \\frac{i}{\\hbar}V\\Psi" },
+                  "tex": "\\frac{\\partial}{\\partial t}|\\Psi|^2 = \\frac{i\\hbar}{2m}\\left(\\Psi^*\\frac{\\partial^2 \\Psi}{\\partial x^2} - \\frac{\\partial^2 \\Psi^*}{\\partial x^2}\\Psi\\right)",
+                  "focus": ["evol"],
+                  "note": "Substitute Equations (1.23) and (1.24); the potential terms \\(\\mp(i/\\hbar)V\\Psi^*\\Psi\\) cancel."
+                },
+                {
+                  "phase": "Exact x-derivative",
+                  "move": { "type": "factor" },
+                  "tex": "\\frac{\\partial}{\\partial t}|\\Psi|^2 = \\frac{\\partial}{\\partial x}\\left[\\frac{i\\hbar}{2m}\\left(\\Psi^*\\frac{\\partial \\Psi}{\\partial x} - \\frac{\\partial \\Psi^*}{\\partial x}\\Psi\\right)\\right]",
+                  "focus": ["evol"],
+                  "note": "Write the right side as an exact \\(x\\)-derivative (Equation (1.25)), since \\(\\frac{\\partial\\Psi^*}{\\partial x}\\frac{\\partial\\Psi}{\\partial x}\\) cancels.",
+                  "ask": {
+                    "q": "How do we evaluate \\(\\int_{-\\infty}^{+\\infty}\\frac{\\partial}{\\partial x}[\\cdots]\\,dx\\) in Equation (1.26)?",
+                    "options": [
+                      "Evaluate the bracket at \\(x = \\pm\\infty\\)",
+                      "Differentiate a second time",
+                      "Multiply by \\(2m/\\hbar\\)",
+                      "Set \\(\\Psi(x,t) = 1\\) everywhere"
+                    ],
+                    "answer": 0,
+                    "why": "By the fundamental theorem of calculus, the integral of ∂F/∂x from −∞ to +∞ is simply F(+∞) − F(−∞)."
+                  }
+                },
+                {
+                  "phase": "Boundary evaluation",
+                  "move": { "type": "integrate", "wrt": "x" },
+                  "tex": "\\frac{d}{dt}\\int_{-\\infty}^{+\\infty} |\\Psi(x, t)|^2\\,dx = \\left.\\frac{i\\hbar}{2m}\\left(\\Psi^*\\frac{\\partial \\Psi}{\\partial x} - \\frac{\\partial \\Psi^*}{\\partial x}\\Psi\\right)\\right|_{-\\infty}^{+\\infty}",
+                  "focus": ["evol", "tails"],
+                  "note": "Integrating Equation (1.25) with respect to \\(x\\) gives the boundary expression in Equation (1.26).",
+                  "ask": {
+                    "q": "Why does the boundary term at \\(x = \\pm\\infty\\) equal zero?",
+                    "options": [
+                      "Normalizable \\(\\Psi(x,t) \\to 0\\) at \\(\\pm\\infty\\)",
+                      "Planck's constant \\(\\hbar\\) is zero at \\(\\pm\\infty\\)",
+                      "Time \\(t\\) stops at \\(\\pm\\infty\\)",
+                      "Mass \\(m\\) becomes infinite at \\(\\pm\\infty\\)"
+                    ],
+                    "answer": 0,
+                    "why": "A square-integrable wave function and its spatial derivatives must vanish as x → ±∞."
+                  }
+                },
+                {
+                  "move": { "type": "evaluate", "by": "\\Psi(\\pm\\infty, t) = 0" },
+                  "tex": "\\frac{d}{dt}\\int_{-\\infty}^{+\\infty} |\\Psi(x, t)|^2\\,dx = 0",
+                  "focus": ["tails"],
+                  "note": "Equation (1.27): the integral is constant in time, so if \\(\\Psi\\) is normalized at \\(t=0\\), it stays normalized forever."
+                }
+              ]
+            },
+            {
+              "id": "qm-m1-u3-c5",
+              "type": "derivation",
+              "label": "Worked Derivation · §1.4",
+              "title": "Normalizing Ψ(x,t) = Ae^{-λ|x|}e^{-iωt} (Section 1.4)",
+              "legend": "\\(A, \\lambda, \\omega\\) positive real constants, \\(|\\Psi(x,t)|^2\\) probability density.",
+              "setup": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "cusp",
+                    "objects": [
+                      { "type": "polygon", "points": [[24, 36], [68, 44], [102, 76], [130, 146], [158, 76], [192, 44], [236, 36]], "role": "s", "name": "cusp" },
+                      { "type": "segment", "p1": [18, 36], "p2": [242, 36], "role": "ik", "width": 2, "name": "cusp" },
+                      { "type": "segment", "p1": [130, 22], "p2": [130, 160], "role": "ik", "width": 2, "name": "cusp" },
+                      { "type": "polyline", "points": [[24, 38], [68, 44], [102, 76], [130, 146], [158, 76], [192, 44], [236, 38]], "role": "lk", "width": 2.2, "dash": 0, "name": "cusp" },
+                      { "type": "label", "coords": [168, 146], "text": "A²e^{-2λ|x|}", "size": 11, "align": "center", "role": "t", "name": "cusp" }
+                    ]
+                  },
+                  {
+                    "step": 2,
+                    "name": "half",
+                    "objects": [
+                      { "type": "polygon", "points": [[130, 36], [130, 146], [158, 76], [192, 44], [236, 36]], "role": "f", "name": "half" },
+                      { "type": "label", "coords": [176, 94], "text": "2 ∫₀^∞ dx", "size": 11, "align": "center", "role": "t", "name": "half" }
+                    ]
+                  }
+                ]
+              },
+              "phases": [
+                { "name": "Modulus squared", "why": "find |Ψ(x,t)|² = Ψ*Ψ and cancel the time phase" },
+                { "name": "Normalization integral", "why": "set the integral over (−∞, +∞) equal to 1 and use symmetry" },
+                { "name": "Integrate", "why": "evaluate the exponential integral on [0, ∞)" },
+                { "name": "Solve for A", "why": "isolate the positive constant A" }
+              ],
+              "steps": [
+                {
+                  "phase": "Modulus squared",
+                  "tex": "|\\Psi(x, t)|^2 = A^2 e^{-2\\lambda |x|}",
+                  "focus": ["cusp"],
+                  "note": "Since \\(e^{+i\\omega t}e^{-i\\omega t} = 1\\) and \\(A\\) is positive real, \\(|\\Psi(x,t)|^2 = A^2 e^{-2\\lambda|x|}\\).",
+                  "ask": {
+                    "q": "What condition must \\(|\\Psi(x,t)|^2\\) satisfy by Equation (1.20)?",
+                    "options": [
+                      "\\(\\int_{-\\infty}^{+\\infty} A^2 e^{-2\\lambda|x|}\\,dx = 1\\)",
+                      "\\(\\int_0^{\\infty} A e^{-\\lambda x}\\,dx = 1\\)",
+                      "\\(A^2 e^{-2\\lambda|x|} = 1\\)",
+                      "\\(\\frac{d}{dx}|\\Psi|^2 = 1\\)"
+                    ],
+                    "answer": 0,
+                    "why": "Normalization (Equation (1.20)) requires that the integral of |Ψ(x,t)|² from −∞ to +∞ equals 1."
+                  }
+                },
+                {
+                  "phase": "Normalization integral",
+                  "move": { "type": "substitute", "by": "\\int_{-\\infty}^{+\\infty} |\\Psi|^2\\,dx = 1" },
+                  "tex": "\\int_{-\\infty}^{+\\infty} A^2 e^{-2\\lambda |x|}\\,dx = 1",
+                  "focus": ["cusp"],
+                  "note": "Substitute \\(|\\Psi(x,t)|^2\\) into the normalization condition Equation (1.20).",
+                  "ask": {
+                    "q": "Because \\(e^{-2\\lambda|x|}\\) is an even function of \\(x\\), how can we simplify the integral?",
+                    "options": [
+                      "Double the integral from \\(0\\) to \\(+\\infty\\)",
+                      "Set the integral equal to zero",
+                      "Drop the factor of \\(2\\lambda\\)",
+                      "Replace \\(|x|\\) with \\(x^2\\)"
+                    ],
+                    "answer": 0,
+                    "why": "For any even integrand, the integral from −∞ to +∞ is twice the integral from 0 to +∞, where |x| = x."
+                  }
+                },
+                {
+                  "move": { "type": "simplify" },
+                  "tex": "2A^2 \\int_0^{+\\infty} e^{-2\\lambda x}\\,dx = 1",
+                  "focus": ["half"],
+                  "note": "Use even symmetry to write twice the integral over \\(0 \\le x < \\infty\\), where \\(|x| = x\\).",
+                  "ask": {
+                    "q": "What is the value of \\(\\int_0^{+\\infty} e^{-2\\lambda x}\\,dx\\) for \\(\\lambda > 0\\)?",
+                    "options": [
+                      "\\(\\frac{1}{2\\lambda}\\)",
+                      "\\(2\\lambda\\)",
+                      "\\(\\frac{1}{\\lambda^2}\\)",
+                      "\\(1\\)"
+                    ],
+                    "answer": 0,
+                    "why": "The antiderivative is −e^{−2λx}/(2λ), which evaluates to 0 − (−1/(2λ)) = 1/(2λ)."
+                  }
+                },
+                {
+                  "phase": "Integrate",
+                  "move": { "type": "integrate", "wrt": "x" },
+                  "tex": "\\frac{A^2}{\\lambda} = 1",
+                  "focus": ["half"],
+                  "note": "Evaluating \\(2A^2 \\left(\\frac{1}{2\\lambda}\\right) = 1\\) cancels the factor of \\(2\\)."
+                },
+                {
+                  "move": { "type": "multiply", "by": "\\lambda" },
+                  "tex": "A^2 = \\lambda",
+                  "focus": ["cusp"],
+                  "note": "Multiply both sides by \\(\\lambda\\).",
+                  "ask": {
+                    "q": "Given that \\(A\\) is a positive real constant, what is \\(A\\)?",
+                    "options": [
+                      "\\(\\sqrt{\\lambda}\\)",
+                      "\\(\\lambda^2\\)",
+                      "\\(1/\\sqrt{\\lambda}\\)",
+                      "\\(2\\lambda\\)"
+                    ],
+                    "answer": 0,
+                    "why": "Taking the positive square root of A² = λ gives A = √λ."
+                  }
+                },
+                {
+                  "phase": "Solve for A",
+                  "move": { "type": "root" },
+                  "tex": "A = \\sqrt{\\lambda}",
+                  "focus": ["cusp"],
+                  "note": "Taking the positive square root gives the normalized constant \\(A = \\sqrt{\\lambda}\\)."
+                }
+              ]
+            },
+            {
+              "id": "qm-m1-u3-c6",
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "Which solution to the Schrödinger equation can represent a physically realizable particle?",
+              "options": [
+                "A square-integrable solution",
+                "The trivial solution \\(\\Psi(x,t) = 0\\)",
+                "A wave function with infinite integral",
+                "A function where \\(|\\Psi| \\to 1\\) as \\(|x| \\to \\infty\\)"
+              ],
+              "answer": 0,
+              "why": "Only square-integrable solutions—those with a finite, non-zero integral of |Ψ|² over all space—can be normalized to satisfy Equation (1.20)."
+            },
+            {
+              "id": "qm-m1-u3-c7",
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "Why must we not keep renormalizing \\(\\Psi(x,t)\\) with a time-dependent factor \\(A(t)\\)?",
+              "options": [
+                "\\(A(t)\\Psi(x,t)\\) would not solve Equation (1.1)",
+                "\\(A(t)\\) would make mass \\(m\\) negative",
+                "Planck's constant \\(\\hbar\\) depends on \\(A\\)",
+                "The integral of \\(|\\Psi|^2\\) must equal \\(t\\)"
+              ],
+              "answer": 0,
+              "why": "If A were a function of t, the time derivative ∂/∂t in Equation (1.1) would pick up an extra (dA/dt)Ψ term, so A(t)Ψ would no longer solve the Schrödinger equation."
+            },
+            {
+              "id": "qm-m1-u3-c8",
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "What property of a complex normalization factor \\(A\\) is left undetermined by Equation (1.20)?",
+              "options": [
+                "Its phase",
+                "Its modulus \\(|A|\\)",
+                "Its square \\(|A|^2\\)",
+                "Its units"
+              ],
+              "answer": 0,
+              "why": "Normalization fixes only the modulus |A| because |e^{iθ}|² = 1; the complex phase of A remains undetermined and carries no physical significance."
+            },
+            {
+              "id": "qm-m1-u3-c9",
+              "type": "fill",
+              "label": "Quiz · Fill in",
+              "time": 60,
+              "q": "Physically realizable quantum states correspond to ______-integrable solutions of the Schrödinger equation.",
+              "answer": "square",
+              "why": "A wave function is normalizable if and only if the integral of its modulus squared |Ψ|² is finite and non-zero, i.e., it is square-integrable."
+            }
+          ]
+        },
+        {
+          "id": "qm-m1-unit-4",
+          "title": "Momentum and Expectation Values",
+          "icon": "motion",
+          "source": "Griffiths §1.5",
+          "cards": [
+            {
+              "id": "qm-m1-u4-c1",
+              "type": "intuition",
+              "term": "qm-m1-ensemble",
+              "title": "Why ⟨x⟩ is measured on a shelf of identical bottles",
+              "meaning": "An expectation value is the average of single measurements made on a large ensemble of identically prepared systems, not repeated measurements on one particle.",
+              "art": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"16\" y1=\"122\" x2=\"244\" y2=\"122\" class=\"ik\"/><rect x=\"28\" y=\"64\" width=\"52\" height=\"58\" class=\"s ok\"/><rect x=\"104\" y=\"64\" width=\"52\" height=\"58\" class=\"s ok\"/><rect x=\"180\" y=\"64\" width=\"52\" height=\"58\" class=\"s ok\"/><path d=\"M 34 114 Q 54 72 74 114\" class=\"lk\"/><path d=\"M 110 114 Q 130 72 150 114\" class=\"lk\"/><path d=\"M 186 114 Q 206 72 226 114\" class=\"lk\"/><circle cx=\"48\" cy=\"104\" r=\"3.5\" class=\"f\"/><circle cx=\"138\" cy=\"104\" r=\"3.5\" class=\"f\"/><circle cx=\"204\" cy=\"104\" r=\"3.5\" class=\"f\"/><text x=\"54\" y=\"52\" text-anchor=\"middle\" class=\"t\">State Ψ</text><text x=\"130\" y=\"52\" text-anchor=\"middle\" class=\"t\">State Ψ</text><text x=\"206\" y=\"52\" text-anchor=\"middle\" class=\"t\">State Ψ</text><text x=\"130\" y=\"152\" text-anchor=\"middle\" class=\"t\">Ensemble average = ⟨x⟩</text></svg>",
+              "picture": "Picture a row of bottles on a shelf, each holding a particle prepared in the same state Ψ, measured all at once.",
+              "example": "Measuring one particle repeatedly just repeats the first collapsed value C; measuring 1000 identical bottles gives ⟨x⟩.",
+              "bridge": "Weighting every position x by the probability density |Ψ(x,t)|² gives Equation (1.28) for ⟨x⟩."
+            },
+            {
+              "id": "qm-m1-u4-c2",
+              "type": "info",
+              "label": "01 · §1.5",
+              "title": "What is a quantum ensemble and ⟨x⟩?",
+              "defines": ["qm-m1-ensemble"],
+              "body": "An ensemble is a collection of identically prepared systems all in state \\(\\Psi\\); the expectation value \\(\\langle x\\rangle\\) in Equation (1.28) is the average of position measurements across this ensemble.",
+              "tex": "\\langle x\\rangle = \\int_{-\\infty}^{+\\infty} x\\,|\\Psi(x, t)|^2\\,dx",
+              "examples": ["Equation (1.28)", "Identical preparation Ψ", "Not repeated collapse"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "bottles-shelf",
+                    "objects": [
+                      { "type": "segment", "p1": [18, 48], "p2": [242, 48], "role": "ik", "width": 2, "name": "shelf" },
+                      { "type": "polygon", "points": [[30, 48], [30, 118], [78, 118], [78, 48]], "role": "s ok", "name": "b1" },
+                      { "type": "polygon", "points": [[106, 48], [106, 118], [154, 118], [154, 48]], "role": "s ok", "name": "b2" },
+                      { "type": "polygon", "points": [[182, 48], [182, 118], [230, 118], [230, 48]], "role": "s ok", "name": "b3" },
+                      { "type": "point", "coords": [48, 72], "size": 4, "role": "f", "name": "p1" },
+                      { "type": "point", "coords": [136, 72], "size": 4, "role": "f", "name": "p2" },
+                      { "type": "point", "coords": [204, 72], "size": 4, "role": "f", "name": "p3" },
+                      { "type": "label", "coords": [130, 142], "text": "Ensemble of states Ψ", "size": 11, "align": "center", "role": "t", "name": "b2" },
+                      { "type": "label", "coords": [130, 24], "text": "Average position = ⟨x⟩", "size": 11, "align": "center", "role": "t", "name": "shelf" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "qm-m1-u4-c3",
+              "type": "derivation",
+              "label": "Derivation · §1.5",
+              "title": "Expectation value of momentum (Equations (1.29)–(1.33))",
+              "legend": "\\(\\langle x\\rangle\\) expectation value of position, \\(\\langle v\\rangle = d\\langle x\\rangle/dt\\) velocity expectation value, \\(\\langle p\\rangle = m\\langle v\\rangle\\) momentum expectation value.",
+              "setup": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "packet",
+                    "objects": [
+                      { "type": "segment", "p1": [18, 36], "p2": [242, 36], "role": "ik", "width": 2, "name": "packet" },
+                      { "type": "polyline", "points": [[36, 36], [66, 58], [96, 138], [126, 58], [156, 36]], "role": "lk", "width": 2.2, "dash": 0, "name": "packet" },
+                      { "type": "point", "coords": [96, 36], "size": 4, "role": "f", "name": "packet" },
+                      { "type": "label", "coords": [96, 20], "text": "⟨x⟩", "size": 11, "align": "center", "role": "t", "name": "packet" }
+                    ]
+                  },
+                  {
+                    "step": 3,
+                    "name": "drift",
+                    "objects": [
+                      { "type": "arrow", "p1": [104, 104], "p2": [172, 104], "role": "ik", "width": 2.2, "name": "drift" },
+                      { "type": "label", "coords": [138, 122], "text": "⟨v⟩ = d⟨x⟩/dt", "size": 11, "align": "center", "role": "t", "name": "drift" },
+                      { "type": "label", "coords": [138, 152], "text": "⟨p⟩ = m d⟨x⟩/dt", "size": 11, "align": "center", "role": "t", "name": "drift" }
+                    ]
+                  }
+                ]
+              },
+              "phases": [
+                { "name": "Differentiate <x>", "why": "take d/dt of Equation (1.28) and substitute Equation (1.25)" },
+                { "name": "First integration by parts", "why": "move ∂/∂x onto x to reach Equation (1.30)" },
+                { "name": "Second integration by parts", "why": "move ∂/∂x off Ψ* onto Ψ to reach Equation (1.31)" },
+                { "name": "Momentum formula", "why": "multiply by mass m using Equations (1.32) and (1.33)" }
+              ],
+              "steps": [
+                {
+                  "phase": "Differentiate <x>",
+                  "tex": "\\frac{d\\langle x\\rangle}{dt} = \\int x\\frac{\\partial}{\\partial t}|\\Psi|^2\\,dx",
+                  "focus": ["packet"],
+                  "note": "Differentiate Equation (1.28) with respect to time \\(t\\) (limits \\(\\pm\\infty\\) understood).",
+                  "ask": {
+                    "q": "Which identity replaces \\(\\frac{\\partial}{\\partial t}|\\Psi|^2\\) to give Equation (1.29)?",
+                    "options": [
+                      "Equation (1.25) from the Schrödinger equation",
+                      "Equation (1.12) for standard deviation",
+                      "Setting \\(\\partial x/\\partial t = 1\\)",
+                      "The de Broglie formula"
+                    ],
+                    "answer": 0,
+                    "why": "Substituting Equation (1.25) expresses ∂|Ψ|²/∂t as a spatial derivative ∂/∂x so we can integrate by parts."
+                  }
+                },
+                {
+                  "move": { "type": "substitute", "by": "\\frac{\\partial |\\Psi|^2}{\\partial t} = \\frac{i\\hbar}{2m}\\frac{\\partial}{\\partial x}\\left(\\Psi^*\\frac{\\partial \\Psi}{\\partial x} - \\frac{\\partial \\Psi^*}{\\partial x}\\Psi\\right)" },
+                  "tex": "\\frac{d\\langle x\\rangle}{dt} = \\frac{i\\hbar}{2m}\\int x\\frac{\\partial}{\\partial x}\\left(\\Psi^*\\frac{\\partial \\Psi}{\\partial x} - \\frac{\\partial \\Psi^*}{\\partial x}\\Psi\\right)dx",
+                  "focus": ["packet"],
+                  "note": "This is Equation (1.29), with \\(\\frac{\\partial}{\\partial x}\\) acting on the bracket.",
+                  "ask": {
+                    "q": "When we integrate by parts to move \\(\\partial/\\partial x\\) onto \\(x\\), what changes?",
+                    "options": [
+                      "Pick up a minus sign and \\(\\partial x/\\partial x = 1\\)",
+                      "Pick up a factor of \\(x^2/2\\)",
+                      "The integral becomes zero",
+                      "Mass \\(m\\) cancels out"
+                    ],
+                    "answer": 0,
+                    "why": "Integration by parts peels ∂/∂x off the bracket onto x (giving ∂x/∂x = 1) with a minus sign, and the boundary term vanishes at ±∞."
+                  }
+                },
+                {
+                  "phase": "First integration by parts",
+                  "move": { "type": "integrate", "wrt": "x" },
+                  "tex": "\\frac{d\\langle x\\rangle}{dt} = -\\frac{i\\hbar}{2m}\\int \\left(\\Psi^*\\frac{\\partial \\Psi}{\\partial x} - \\frac{\\partial \\Psi^*}{\\partial x}\\Psi\\right)dx",
+                  "focus": ["packet"],
+                  "note": "Equation (1.30): used \\(\\partial x/\\partial x = 1\\) and dropped the boundary term at \\(\\pm\\infty\\).",
+                  "ask": {
+                    "q": "What does a second integration by parts on \\(-\\int \\frac{\\partial\\Psi^*}{\\partial x}\\Psi\\,dx\\) give?",
+                    "options": [
+                      "\\(+\\int \\Psi^*\\frac{\\partial\\Psi}{\\partial x}\\,dx\\)",
+                      "\\(-\\int \\Psi^*\\frac{\\partial\\Psi}{\\partial x}\\,dx\\)",
+                      "Zero",
+                      "\\(\\int |\\Psi|^2\\,dx\\)"
+                    ],
+                    "answer": 0,
+                    "why": "Moving ∂/∂x from Ψ* onto Ψ introduces another minus sign, turning −∫(∂Ψ*/∂x)Ψ dx into +∫Ψ*(∂Ψ/∂x) dx."
+                  }
+                },
+                {
+                  "phase": "Second integration by parts",
+                  "move": { "type": "simplify" },
+                  "tex": "\\frac{d\\langle x\\rangle}{dt} = -\\frac{i\\hbar}{m}\\int \\Psi^*\\frac{\\partial \\Psi}{\\partial x}\\,dx",
+                  "focus": ["packet", "drift"],
+                  "note": "Equation (1.31): the two identical terms \\(\\Psi^*\\frac{\\partial\\Psi}{\\partial x}\\) add together, canceling the \\(2\\).",
+                  "ask": {
+                    "q": "Using \\(\\langle v\\rangle = d\\langle x\\rangle/dt\\) in Equation (1.32), how do we get \\(\\langle p\\rangle\\)?",
+                    "options": [
+                      "Multiply both sides by mass \\(m\\)",
+                      "Divide both sides by \\(\\hbar\\)",
+                      "Differentiate with respect to \\(x\\)",
+                      "Multiply by velocity \\(v\\)"
+                    ],
+                    "answer": 0,
+                    "why": "Since momentum is p = mv, Equation (1.33) defines ⟨p⟩ = m(d⟨x⟩/dt), which cancels 1/m."
+                  }
+                },
+                {
+                  "phase": "Momentum formula",
+                  "move": { "type": "multiply", "by": "m" },
+                  "tex": "\\langle p\\rangle = -i\\hbar\\int \\left(\\Psi^*\\frac{\\partial \\Psi}{\\partial x}\\right)dx",
+                  "focus": ["drift"],
+                  "note": "Equation (1.33): multiplying by \\(m\\) gives the expectation value of momentum directly from \\(\\Psi\\)."
+                }
+              ]
+            },
+            {
+              "id": "qm-m1-u4-c4",
+              "type": "intuition",
+              "term": "qm-m1-operator",
+              "title": "Sandwiching an operator between Ψ* and Ψ",
+              "meaning": "An operator is an instruction to do something to the function that follows it, such as multiplying by x or differentiating with respect to x.",
+              "art": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"24\" y=\"62\" width=\"54\" height=\"48\" class=\"s ok\"/><rect x=\"92\" y=\"54\" width=\"76\" height=\"64\" class=\"f\"/><rect x=\"182\" y=\"62\" width=\"54\" height=\"48\" class=\"s ok\"/><line x1=\"78\" y1=\"86\" x2=\"92\" y2=\"86\" class=\"ik\"/><line x1=\"168\" y1=\"86\" x2=\"182\" y2=\"86\" class=\"ik\"/><text x=\"51\" y=\"90\" text-anchor=\"middle\" class=\"t\">Ψ*</text><text x=\"130\" y=\"82\" text-anchor=\"middle\" class=\"i\">Operator</text><text x=\"130\" y=\"100\" text-anchor=\"middle\" class=\"i\">Q(x, -iħ∂/∂x)</text><text x=\"209\" y=\"90\" text-anchor=\"middle\" class=\"t\">Ψ</text><text x=\"130\" y=\"34\" text-anchor=\"middle\" class=\"t\">Sandwich inside ∫ ... dx</text><text x=\"130\" y=\"148\" text-anchor=\"middle\" class=\"t\">Output: expectation value ⟨Q⟩</text></svg>",
+              "picture": "To find any expectation value ⟨Q⟩, sandwich the operator for Q between Ψ* on the left and Ψ on the right, then integrate.",
+              "example": "The position operator [x] multiplies Ψ by x; the momentum operator [−iħ∂/∂x] differentiates Ψ and multiplies by −iħ.",
+              "bridge": "Replacing every p in a classical variable Q(x,p) by −iħ(∂/∂x) gives Equation (1.36)."
+            },
+            {
+              "id": "qm-m1-u4-c5",
+              "type": "info",
+              "label": "02 · §1.5",
+              "title": "What are the position and momentum operators?",
+              "defines": ["qm-m1-operator", "qm-m1-momentum-operator"],
+              "body": "An operator is an instruction acting on the function that follows: the operator \\(x\\) represents position and the operator \\(-i\\hbar(\\partial/\\partial x)\\) represents momentum, sandwiched between \\(\\Psi^*\\) and \\(\\Psi\\).",
+              "tex": "\\langle x\\rangle = \\int \\Psi^*\\,[x]\\,\\Psi\\,dx, \\qquad \\langle p\\rangle = \\int \\Psi^*\\,\\left[-i\\hbar(\\partial/\\partial x)\\right]\\,\\Psi\\,dx",
+              "examples": ["Equations (1.34)–(1.35)", "Position: multiply by x", "Momentum: -iħ∂/∂x"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "op-boxes",
+                    "objects": [
+                      { "type": "polygon", "points": [[24, 96], [24, 144], [120, 144], [120, 96]], "role": "s ok", "name": "xop" },
+                      { "type": "polygon", "points": [[140, 96], [140, 144], [236, 144], [236, 96]], "role": "s ok", "name": "pop" },
+                      { "type": "polygon", "points": [[48, 28], [48, 68], [212, 68], [212, 28]], "role": "f", "name": "sand" },
+                      { "type": "label", "coords": [72, 120], "text": "x → [x]", "size": 11, "align": "center", "role": "t", "name": "xop" },
+                      { "type": "label", "coords": [188, 120], "text": "p → -iħ∂/∂x", "size": 11, "align": "center", "role": "t", "name": "pop" },
+                      { "type": "label", "coords": [130, 48], "text": "∫ Ψ* [Operator] Ψ dx", "size": 11, "align": "center", "role": "i", "name": "sand" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "qm-m1-u4-c6",
+              "type": "info",
+              "label": "03 · §1.5",
+              "title": "Expectation value of any dynamical variable Q(x,p)",
+              "body": "For any classical dynamical variable \\(Q(x,p)\\), replace every \\(p\\) by \\(-i\\hbar(\\partial/\\partial x)\\), sandwich the operator between \\(\\Psi^*\\) and \\(\\Psi\\), and integrate (Equations (1.36) and (1.37)).",
+              "tex": "\\langle Q(x, p)\\rangle = \\int \\Psi^*\\left[Q(x, -i\\hbar\\,\\partial/\\partial x)\\right]\\Psi\\,dx, \\qquad \\langle T\\rangle = -\\frac{\\hbar^2}{2m}\\int \\Psi^*\\frac{\\partial^2 \\Psi}{\\partial x^2}\\,dx",
+              "examples": ["Equation (1.36)", "Equation (1.37) for ⟨T⟩", "T = p²/(2m)"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "kinetic-op",
+                    "objects": [
+                      { "type": "polygon", "points": [[28, 102], [28, 146], [114, 146], [114, 102]], "role": "s ok", "name": "classT" },
+                      { "type": "arrow", "p1": [118, 124], "p2": [142, 124], "role": "ik", "width": 2, "name": "map" },
+                      { "type": "polygon", "points": [[146, 102], [146, 146], [236, 146], [236, 102]], "role": "s ok", "name": "quantT" },
+                      { "type": "label", "coords": [71, 124], "text": "T = p²/(2m)", "size": 11, "align": "center", "role": "t", "name": "classT" },
+                      { "type": "label", "coords": [191, 124], "text": "-(ħ²/2m)∂²/∂x²", "size": 11, "align": "center", "role": "t", "name": "quantT" },
+                      { "type": "label", "coords": [130, 48], "text": "Eq. (1.37): ⟨T⟩ = -(ħ²/2m) ∫ Ψ*(∂²Ψ/∂x²)dx", "size": 11, "align": "center", "role": "t", "name": "map" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "qm-m1-u4-c7",
+              "type": "info",
+              "label": "04 · §1.5",
+              "title": "What is Ehrenfest's theorem?",
+              "defines": ["qm-m1-ehrenfests-theorem"],
+              "body": "Ehrenfest's theorem states that quantum expectation values obey classical laws, such as \\(\\langle p\\rangle = m\\,d\\langle x\\rangle/dt\\) and Equation (1.38) \\(d\\langle p\\rangle/dt = \\langle -\\partial V/\\partial x\\rangle\\).",
+              "tex": "\\frac{d\\langle p\\rangle}{dt} = \\left\\langle -\\frac{\\partial V}{\\partial x}\\right\\rangle, \\qquad \\langle p\\rangle = m\\frac{d\\langle x\\rangle}{dt}",
+              "examples": ["Equation (1.38)", "Equation (1.32)", "Classical form for ⟨x⟩, ⟨p⟩"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "ehrenfest-loop",
+                    "objects": [
+                      { "type": "polygon", "points": [[24, 72], [24, 126], [108, 126], [108, 72]], "role": "s ok", "name": "pos" },
+                      { "type": "polygon", "points": [[152, 72], [152, 126], [236, 126], [236, 72]], "role": "f", "name": "mom" },
+                      { "type": "arrow", "p1": [108, 110], "p2": [152, 110], "role": "lk", "width": 2, "name": "top" },
+                      { "type": "arrow", "p1": [152, 86], "p2": [108, 86], "role": "ik", "width": 2, "name": "bot" },
+                      { "type": "label", "coords": [66, 99], "text": "⟨x⟩", "size": 11, "align": "center", "role": "t", "name": "pos" },
+                      { "type": "label", "coords": [194, 99], "text": "⟨p⟩", "size": 11, "align": "center", "role": "i", "name": "mom" },
+                      { "type": "label", "coords": [130, 144], "text": "⟨p⟩ = m d⟨x⟩/dt", "size": 11, "align": "center", "role": "t", "name": "top" },
+                      { "type": "label", "coords": [130, 42], "text": "Eq. (1.38): d⟨p⟩/dt = ⟨-∂V/∂x⟩", "size": 11, "align": "center", "role": "t", "name": "bot" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "qm-m1-u4-c8",
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "In Equation (1.35), which operator represents momentum \\(p\\) in position space?",
+              "options": [
+                "\\(-i\\hbar(\\partial/\\partial x)\\)",
+                "\\(+i\\hbar(\\partial/\\partial t)\\)",
+                "\\(-\\frac{\\hbar^2}{2m}\\frac{\\partial^2}{\\partial x^2}\\)",
+                "\\(mx\\)"
+              ],
+              "answer": 0,
+              "why": "By Equation (1.35), the momentum operator is −iħ(∂/∂x), which differentiates the wave function with respect to x and multiplies by −iħ."
+            },
+            {
+              "id": "qm-m1-u4-c9",
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "By Equation (1.37), which expression gives the expectation value of kinetic energy \\(\\langle T\\rangle\\)?",
+              "options": [
+                "\\(-\\frac{\\hbar^2}{2m}\\int \\Psi^*\\frac{\\partial^2\\Psi}{\\partial x^2}\\,dx\\)",
+                "\\(\\frac{1}{2}m\\int x^2|\\Psi|^2\\,dx\\)",
+                "\\(-i\\hbar\\int \\Psi^*\\frac{\\partial\\Psi}{\\partial x}\\,dx\\)",
+                "\\(\\int V(x)|\\Psi|^2\\,dx\\)"
+              ],
+              "answer": 0,
+              "why": "Since T = p²/(2m), replacing p by −iħ(∂/∂x) twice gives the operator −(ħ²/2m)(∂²/∂x²), yielding Equation (1.37)."
+            },
+            {
+              "id": "qm-m1-u4-c10",
+              "type": "fill",
+              "label": "Quiz · Fill in",
+              "time": 60,
+              "q": "The expectation value \\(\\langle x\\rangle\\) is the average of measurements on an ______ of identically prepared systems.",
+              "answer": "ensemble",
+              "why": "Repeatedly measuring one particle just repeats the collapsed value; ⟨x⟩ is the average across an ensemble of identically prepared systems all in state Ψ."
+            },
+            {
+              "id": "qm-m1-u4-c11",
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "What does Ehrenfest's theorem in Equation (1.38) state?",
+              "options": [
+                "\\(\\frac{d\\langle p\\rangle}{dt} = \\left\\langle -\\frac{\\partial V}{\\partial x}\\right\\rangle\\)",
+                "\\(\\frac{d\\langle p\\rangle}{dt} = 0\\) for all potentials",
+                "\\(\\langle p\\rangle = \\frac{h}{\\lambda}\\) for every state",
+                "\\(\\sigma_x\\sigma_p = 0\\) in classical potentials"
+              ],
+              "answer": 0,
+              "why": "Equation (1.38) states that d⟨p⟩/dt = ⟨−∂V/∂x⟩, which is the quantum expectation-value analog of Newton's second law F = dp/dt."
+            }
+          ]
+        },
+        {
+          "id": "qm-m1-unit-5",
+          "title": "The Uncertainty Principle",
+          "icon": "atom",
+          "source": "Griffiths §1.6",
+          "cards": [
+            {
+              "id": "qm-m1-u5-c1",
+              "type": "intuition",
+              "term": "qm-m1-de-broglie-formula",
+              "title": "Why a wave on a rope cannot have both a sharp position and a sharp wavelength",
+              "meaning": "A long regular wave has a clear wavelength λ but is spread out in position x, whereas a narrow bump has a clear position x but no well-defined wavelength λ.",
+              "art": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"18\" y1=\"58\" x2=\"242\" y2=\"58\" class=\"gk\"/><path d=\"M 22 58 Q 34 30 46 58 Q 58 86 70 58 Q 82 30 94 58 Q 106 86 118 58 Q 130 30 142 58 Q 154 86 166 58 Q 178 30 190 58 Q 202 86 214 58 Q 226 30 238 58\" class=\"lk\"/><text x=\"24\" y=\"22\" class=\"t\">Figure 1.8: Clear λ (and p), spread-out x</text><line x1=\"18\" y1=\"144\" x2=\"242\" y2=\"144\" class=\"gk\"/><path d=\"M 22 144 L 112 144 Q 124 144 130 96 Q 136 144 148 144 L 238 144\" class=\"lk\"/><text x=\"24\" y=\"112\" class=\"t\">Figure 1.9: Sharp position x, ill-defined λ</text><text x=\"238\" y=\"162\" class=\"t\">x</text></svg>",
+              "picture": "Compare Figure 1.8 (many cycles, clear wavelength λ) with Figure 1.9 (one narrow bump, clear position x).",
+              "example": "Shaking a rope rhythmically makes a wave spread over 50 feet with λ ≈ 6 feet; one sudden jerk makes a narrow bump with no clear λ.",
+              "bridge": "Because the de Broglie formula p = h/λ = 2πħ/λ links wavelength to momentum, position spread and momentum spread trade off."
+            },
+            {
+              "id": "qm-m1-u5-c2",
+              "type": "info",
+              "label": "01 · §1.6",
+              "title": "What is the de Broglie formula?",
+              "defines": ["qm-m1-de-broglie-formula"],
+              "body": "The de Broglie formula in Equation (1.39) states that the momentum \\(p\\) of a particle is inversely proportional to the wavelength \\(\\lambda\\) of its wave function: \\(p = h/\\lambda = 2\\pi\\hbar/\\lambda\\).",
+              "tex": "p = \\frac{h}{\\lambda} = \\frac{2\\pi\\hbar}{\\lambda}",
+              "examples": ["Equation (1.39)", "Short λ → large p", "Spread in λ → spread in p"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "debroglie-wave",
+                    "objects": [
+                      { "type": "segment", "p1": [18, 86], "p2": [242, 86], "role": "gk", "dash": 2, "width": 1.6, "name": "axis" },
+                      { "type": "polyline", "points": [[22, 86], [42, 126], [62, 86], [82, 46], [102, 86], [122, 126], [142, 86], [162, 46], [182, 86], [202, 126], [222, 86]], "role": "lk", "width": 2.2, "dash": 0, "name": "sine" },
+                      { "type": "arrow", "p1": [42, 140], "p2": [122, 140], "role": "ik", "width": 2, "name": "lam" },
+                      { "type": "arrow", "p1": [122, 140], "p2": [42, 140], "role": "ik", "width": 2, "name": "lam" },
+                      { "type": "label", "coords": [82, 156], "text": "Wavelength λ", "size": 11, "align": "center", "role": "t", "name": "lam" },
+                      { "type": "label", "coords": [130, 24], "text": "Eq. (1.39): p = h/λ = 2πħ/λ", "size": 11, "align": "center", "role": "t", "name": "sine" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "qm-m1-u5-c3",
+              "type": "intuition",
+              "term": "qm-m1-uncertainty-principle",
+              "title": "The trade-off between position spread σ_x and momentum spread σ_p",
+              "meaning": "Squeezing the position spread σ_x of a quantum state forces its momentum spread σ_p to grow so that their product stays at least ħ/2.",
+              "art": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\"><polygon points=\"52,24 56,56 68,88 92,114 132,130 188,138 236,142 236,24\" class=\"s\"/><line x1=\"36\" y1=\"148\" x2=\"242\" y2=\"148\" class=\"ik\"/><line x1=\"36\" y1=\"148\" x2=\"36\" y2=\"20\" class=\"ik\"/><path d=\"M 52 24 Q 60 104 108 124 Q 156 140 236 142\" class=\"lk\"/><circle cx=\"86\" cy=\"110\" r=\"4\" class=\"f\"/><text x=\"152\" y=\"68\" text-anchor=\"middle\" class=\"t\">Allowed: σ_x σ_p ≥ ħ/2</text><text x=\"128\" y=\"114\" class=\"t\">Gaussian: ħ/2</text><text x=\"56\" y=\"32\" class=\"t\">σ_p</text><text x=\"232\" y=\"164\" class=\"t\">σ_x</text></svg>",
+              "picture": "Every physical state lies on or above the boundary curve σ_x σ_p = ħ/2 in the (σ_x, σ_p) plane.",
+              "example": "A narrow spike has small σ_x and large σ_p; a long sine wave has small σ_p and large σ_x.",
+              "bridge": "Heisenberg's uncertainty principle in Equation (1.40) states this lower bound quantitatively as σ_x σ_p ≥ ħ/2."
+            },
+            {
+              "id": "qm-m1-u5-c4",
+              "type": "info",
+              "label": "02 · §1.6",
+              "title": "What is Heisenberg's uncertainty principle?",
+              "defines": ["qm-m1-uncertainty-principle"],
+              "body": "Heisenberg's uncertainty principle in Equation (1.40) states that the product of the standard deviation in position \\(\\sigma_x\\) and the standard deviation in momentum \\(\\sigma_p\\) is at least \\(\\hbar/2\\).",
+              "tex": "\\sigma_x \\sigma_p \\ge \\frac{\\hbar}{2}",
+              "examples": ["Equation (1.40)", "σ_x position spread", "σ_p momentum spread"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "uncertainty-hyperbola",
+                    "objects": [
+                      { "type": "polygon", "points": [[54, 154], [64, 102], [86, 68], [128, 48], [188, 38], [236, 34], [236, 154]], "role": "s", "name": "allowed" },
+                      { "type": "segment", "p1": [36, 28], "p2": [242, 28], "role": "ik", "width": 2, "name": "xaxis" },
+                      { "type": "segment", "p1": [36, 28], "p2": [36, 162], "role": "ik", "width": 2, "name": "yaxis" },
+                      { "type": "polyline", "points": [[54, 154], [64, 102], [86, 68], [128, 48], [188, 38], [236, 34]], "role": "lk", "width": 2.2, "dash": 0, "name": "bound" },
+                      { "type": "point", "coords": [86, 68], "size": 4, "role": "f", "name": "minpt" },
+                      { "type": "label", "coords": [156, 112], "text": "σ_x σ_p ≥ ħ/2", "size": 11, "align": "center", "role": "t", "name": "allowed" },
+                      { "type": "label", "coords": [54, 156], "text": "σ_p", "size": 11, "align": "center", "role": "t", "name": "yaxis" },
+                      { "type": "label", "coords": [236, 14], "text": "σ_x", "size": 11, "align": "center", "role": "t", "name": "xaxis" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "qm-m1-u5-c5",
+              "type": "info",
+              "label": "03 · §1.6",
+              "title": "What do σ_x and σ_p mean in measurements?",
+              "body": "Individual position or momentum measurements still yield precise numbers; \\(\\sigma_x\\) and \\(\\sigma_p\\) measure the spread of outcomes across an ensemble of identically prepared systems.",
+              "tex": "\\sigma_x = \\sqrt{\\langle x^2\\rangle - \\langle x\\rangle^2}, \\qquad \\sigma_p = \\sqrt{\\langle p^2\\rangle - \\langle p\\rangle^2}",
+              "examples": ["Spike: small σ_x, big σ_p", "Sine: big σ_x, small σ_p", "No upper limit on σ_xσ_p"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "dual-hist",
+                    "objects": [
+                      { "type": "segment", "p1": [18, 36], "p2": [118, 36], "role": "ik", "width": 2, "name": "xax" },
+                      { "type": "polyline", "points": [[42, 36], [62, 52], [68, 146], [74, 52], [94, 36]], "role": "lk", "width": 2.2, "dash": 0, "name": "xspike" },
+                      { "type": "segment", "p1": [142, 36], "p2": [242, 36], "role": "ik", "width": 2, "name": "pax" },
+                      { "type": "polyline", "points": [[146, 40], [166, 66], [192, 92], [218, 66], [238, 40]], "role": "lk", "width": 2.2, "dash": 0, "name": "pwide" },
+                      { "type": "label", "coords": [68, 158], "text": "Narrow σ_x", "size": 11, "align": "center", "role": "t", "name": "xspike" },
+                      { "type": "label", "coords": [192, 110], "text": "Wide σ_p", "size": 11, "align": "center", "role": "t", "name": "pwide" },
+                      { "type": "label", "coords": [68, 18], "text": "x outcomes", "size": 11, "align": "center", "role": "t", "name": "xax" },
+                      { "type": "label", "coords": [192, 18], "text": "p outcomes", "size": 11, "align": "center", "role": "t", "name": "pax" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "qm-m1-u5-c6",
+              "type": "derivation",
+              "label": "Worked Derivation · §1.6",
+              "title": "Uncertainty product for a Gaussian wave packet (Section 1.6)",
+              "legend": "\\(\\Psi(x,t) = Ae^{-a[(mx^2/\\hbar)+it]}\\), \\(A, a, m\\) positive constants, \\(\\sigma_x\\) position spread, \\(\\sigma_p\\) momentum spread.",
+              "setup": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "gauss",
+                    "objects": [
+                      { "type": "polygon", "points": [[36, 36], [72, 48], [102, 96], [130, 146], [158, 96], [188, 48], [224, 36]], "role": "s", "name": "gauss" },
+                      { "type": "segment", "p1": [18, 36], "p2": [242, 36], "role": "ik", "width": 2, "name": "gauss" },
+                      { "type": "polyline", "points": [[24, 37], [64, 44], [96, 86], [130, 146], [164, 86], [196, 44], [236, 37]], "role": "lk", "width": 2.2, "dash": 0, "name": "gauss" },
+                      { "type": "label", "coords": [130, 160], "text": "|Ψ|² = |A|²e^{-2amx²/ħ}", "size": 11, "align": "center", "role": "t", "name": "gauss" }
+                    ]
+                  },
+                  {
+                    "step": 3,
+                    "name": "sigmax",
+                    "objects": [
+                      { "type": "arrow", "p1": [130, 88], "p2": [168, 88], "role": "ik", "width": 2, "name": "sigmax" },
+                      { "type": "label", "coords": [149, 102], "text": "σ_x", "size": 11, "align": "center", "role": "t", "name": "sigmax" },
+                      { "type": "label", "coords": [130, 20], "text": "σ_x σ_p = ħ/2", "size": 11, "align": "center", "role": "t", "name": "sigmax" }
+                    ]
+                  }
+                ]
+              },
+              "phases": [
+                { "name": "Probability density", "why": "take |Ψ(x,t)|² for the Gaussian wave function" },
+                { "name": "Normalize", "why": "use Equation (1.20) to determine |A|²" },
+                { "name": "Position spread", "why": "compute σ_x from ⟨x²⟩ and ⟨x⟩ = 0" },
+                { "name": "Momentum & product", "why": "compute σ_p and verify σ_x σ_p = ħ/2" }
+              ],
+              "steps": [
+                {
+                  "phase": "Probability density",
+                  "tex": "|\\Psi(x, t)|^2 = |A|^2 e^{-2amx^2/\\hbar}",
+                  "focus": ["gauss"],
+                  "note": "For \\(\\Psi(x,t) = Ae^{-a[(mx^2/\\hbar)+it]}\\), the time factor \\(|e^{-iat}|^2 = 1\\) drops out.",
+                  "ask": {
+                    "q": "Using \\(\\int_{-\\infty}^{+\\infty} e^{-2amx^2/\\hbar}\\,dx = \\sqrt{\\frac{\\pi\\hbar}{2am}}\\), what does normalization give for \\(|A|^2\\)?",
+                    "options": [
+                      "\\(\\sqrt{\\frac{2am}{\\pi\\hbar}}\\)",
+                      "\\(\\sqrt{\\frac{\\pi\\hbar}{2am}}\\)",
+                      "\\(\\frac{2am}{\\pi\\hbar}\\)",
+                      "\\(1\\)"
+                    ],
+                    "answer": 0,
+                    "why": "Setting |A|² times the Gaussian integral √(πħ/(2am)) equal to 1 gives |A|² = √(2am/(πħ))."
+                  }
+                },
+                {
+                  "phase": "Normalize",
+                  "move": { "type": "evaluate", "by": "\\int_{-\\infty}^{+\\infty} |\\Psi|^2\\,dx = 1" },
+                  "tex": "|A|^2 = \\sqrt{\\frac{2am}{\\pi\\hbar}}",
+                  "focus": ["gauss"],
+                  "note": "Equation (1.20) fixes the normalization factor \\(|A|^2 = \\sqrt{2am/(\\pi\\hbar)}\\).",
+                  "ask": {
+                    "q": "Since \\(|\\Psi|^2\\) is even about \\(x = 0\\), what is \\(\\langle x\\rangle\\)?",
+                    "options": [
+                      "\\(0\\)",
+                      "\\(\\sqrt{\\hbar/(4am)}\\)",
+                      "\\(a\\)",
+                      "\\(\\hbar/m\\)"
+                    ],
+                    "answer": 0,
+                    "why": "The integrand x|Ψ(x,t)|² is an odd function of x, so its integral from −∞ to +∞ is zero."
+                  }
+                },
+                {
+                  "phase": "Position spread",
+                  "move": { "type": "integrate", "wrt": "x" },
+                  "tex": "\\sigma_x^2 = \\frac{\\hbar}{4am}",
+                  "focus": ["gauss", "sigmax"],
+                  "note": "With \\(\\langle x\\rangle = 0\\), the Gaussian integral for \\(\\langle x^2\\rangle\\) gives \\(\\sigma_x^2 = \\langle x^2\\rangle = \\frac{\\hbar}{4am}\\)."
+                },
+                {
+                  "move": { "type": "root" },
+                  "tex": "\\sigma_x = \\sqrt{\\frac{\\hbar}{4am}}",
+                  "focus": ["sigmax"],
+                  "note": "Take the square root to get the position standard deviation \\(\\sigma_x\\).",
+                  "ask": {
+                    "q": "With \\(\\langle p\\rangle = 0\\) and \\(\\langle p^2\\rangle = am\\hbar\\), what is the momentum spread \\(\\sigma_p\\)?",
+                    "options": [
+                      "\\(\\sqrt{am\\hbar}\\)",
+                      "\\(am\\hbar\\)",
+                      "\\(\\sqrt{\\hbar/(am)}\\)",
+                      "\\(0\\)"
+                    ],
+                    "answer": 0,
+                    "why": "By Equation (1.12) applied to p, σ_p = √(⟨p²⟩ − ⟨p⟩²) = √(amħ − 0) = √(amħ)."
+                  }
+                },
+                {
+                  "phase": "Momentum & product",
+                  "move": { "type": "evaluate", "by": "\\sigma_p = \\sqrt{\\langle p^2\\rangle - \\langle p\\rangle^2}" },
+                  "tex": "\\sigma_p = \\sqrt{am\\hbar}",
+                  "focus": ["sigmax"],
+                  "note": "From \\(\\langle p^2\\rangle = -\\hbar^2\\int \\Psi^*\\frac{\\partial^2\\Psi}{\\partial x^2}\\,dx = am\\hbar\\) and \\(\\langle p\\rangle = 0\\), we get \\(\\sigma_p = \\sqrt{am\\hbar}\\).",
+                  "ask": {
+                    "q": "What do we get when we multiply \\(\\sigma_x = \\sqrt{\\frac{\\hbar}{4am}}\\) and \\(\\sigma_p = \\sqrt{am\\hbar}\\)?",
+                    "options": [
+                      "\\(\\frac{\\hbar}{2}\\)",
+                      "\\(\\hbar\\)",
+                      "\\(2\\hbar\\)",
+                      "\\(am\\hbar\\)"
+                    ],
+                    "answer": 0,
+                    "why": "The factors of a and m cancel inside the square root, leaving √(ħ²/4) = ħ/2, which achieves the minimum in Equation (1.40)."
+                  }
+                },
+                {
+                  "move": { "type": "multiply", "by": "\\sigma_x" },
+                  "tex": "\\sigma_x \\sigma_p = \\frac{\\hbar}{2}",
+                  "focus": ["sigmax"],
+                  "note": "A Gaussian wave packet achieves the minimum uncertainty product \\(\\sigma_x\\sigma_p = \\hbar/2\\) in Equation (1.40)."
+                }
+              ]
+            },
+            {
+              "id": "qm-m1-u5-c7",
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "According to the de Broglie formula in Equation (1.39), how is momentum \\(p\\) related to wavelength \\(\\lambda\\)?",
+              "options": [
+                "\\(p = \\frac{h}{\\lambda} = \\frac{2\\pi\\hbar}{\\lambda}\\)",
+                "\\(p = h\\lambda = 2\\pi\\hbar\\lambda\\)",
+                "\\(p = \\frac{\\lambda}{h}\\)",
+                "\\(p = \\frac{\\hbar}{2\\lambda}\\)"
+              ],
+              "answer": 0,
+              "why": "Equation (1.39) states that p = h/λ = 2πħ/λ, so a shorter wavelength corresponds to a larger momentum."
+            },
+            {
+              "id": "qm-m1-u5-c8",
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "What is Heisenberg's uncertainty principle as stated in Equation (1.40)?",
+              "options": [
+                "\\(\\sigma_x \\sigma_p \\ge \\frac{\\hbar}{2}\\)",
+                "\\(\\sigma_x \\sigma_p \\le \\frac{\\hbar}{2}\\)",
+                "\\(\\sigma_x + \\sigma_p = \\hbar\\)",
+                "\\(\\frac{\\sigma_x}{\\sigma_p} = 2\\pi\\hbar\\)"
+              ],
+              "answer": 0,
+              "why": "Equation (1.40) states that the product of the standard deviations in position and momentum is always greater than or equal to ħ/2."
+            },
+            {
+              "id": "qm-m1-u5-c9",
+              "type": "number",
+              "label": "Quiz · Number",
+              "time": 60,
+              "q": "For a minimum-uncertainty state with \\(\\sigma_x\\sigma_p = \\hbar/2\\) and \\(\\sigma_x = 0.5\\text{ nm}\\), what is \\(\\sigma_p/\\hbar\\)?",
+              "answer": 1,
+              "tolerance": 0,
+              "unit": "nm⁻¹",
+              "why": "From σ_x σ_p = ħ/2, we have σ_p/ħ = 1/(2σ_x) = 1/(2 × 0.5 nm) = 1 nm⁻¹."
+            },
+            {
+              "id": "qm-m1-u5-c10",
+              "type": "fill",
+              "label": "Quiz · Fill in",
+              "time": 60,
+              "q": "A state shaped like a long sinusoidal wave has a well-defined ______ but widely scattered position measurements.",
+              "answer": "momentum|wavelength",
+              "why": "A long sinusoidal wave has a well-defined wavelength λ and therefore a well-defined momentum p = 2πħ/λ, at the cost of a large spread in position x."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

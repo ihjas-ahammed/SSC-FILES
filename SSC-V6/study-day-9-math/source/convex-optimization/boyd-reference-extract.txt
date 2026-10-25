@@ -1,0 +1,1253 @@
+        Chapter 2
+
+        Convex sets
+
+2.1     Affine and convex sets
+2.1.1   Lines and line segments
+
+        Suppose x1 6= x2 are two points in Rn . Points of the form
+
+                                         y = θx1 + (1 − θ)x2 ,
+
+        where θ ∈ R, form the line passing through x1 and x2 . The parameter value θ = 0
+        corresponds to y = x2 , and the parameter value θ = 1 corresponds to y = x1 .
+        Values of the parameter θ between 0 and 1 correspond to the (closed) line segment
+        between x1 and x2 .
+           Expressing y in the form
+
+                                         y = x2 + θ(x1 − x2 )
+
+        gives another interpretation: y is the sum of the base point x2 (corresponding
+        to θ = 0) and the direction x1 − x2 (which points from x2 to x1 ) scaled by the
+        parameter θ. Thus, θ gives the fraction of the way from x2 to x1 where y lies. As
+        θ increases from 0 to 1, the point y moves from x2 to x1 ; for θ > 1, the point y lies
+        on the line beyond x1 . This is illustrated in figure 2.1.
+
+
+2.1.2   Affine sets
+        A set C ⊆ Rn is affine if the line through any two distinct points in C lies in C,
+        i.e., if for any x1 , x2 ∈ C and θ ∈ R, we have θx1 + (1 − θ)x2 ∈ C. In other words,
+        C contains the linear combination of any two points in C, provided the coefficients
+        in the linear combination sum to one.
+            This idea can be generalized to more than two points. We refer to a point
+        of the form θ1 x1 + · · · + θk xk , where θ1 + · · · + θk = 1, as an affine combination
+        of the points x1 , . . . , xk . Using induction from the definition of affine set (i.e.,
+        that it contains every affine combination of two points in it), it can be shown that
+22                                                                               2   Convex sets
+
+
+
+                     θ = 1.2         x1
+                               θ=1
+
+                                          θ = 0.6
+
+                                                                    x2
+                                                               θ=0
+                                                                θ = −0.2
+
+
+            Figure 2.1 The line passing through x1 and x2 is described parametrically
+            by θx1 + (1 − θ)x2 , where θ varies over R. The line segment between x1 and
+            x2 , which corresponds to θ between 0 and 1, is shown darker.
+
+
+
+     an affine set contains every affine combination of its points: If C is an affine set,
+     x1 , . . . , xk ∈ C, and θ1 + · · · + θk = 1, then the point θ1 x1 + · · · + θk xk also belongs
+     to C.
+          If C is an affine set and x0 ∈ C, then the set
+                                  V = C − x0 = {x − x0 | x ∈ C}
+     is a subspace, i.e., closed under sums and scalar multiplication. To see this, suppose
+     v1 , v2 ∈ V and α, β ∈ R. Then we have v1 + x0 ∈ C and v2 + x0 ∈ C, and so
+               αv1 + βv2 + x0 = α(v1 + x0 ) + β(v2 + x0 ) + (1 − α − β)x0 ∈ C,
+     since C is affine, and α + β + (1 − α − β) = 1. We conclude that αv1 + βv2 ∈ V ,
+     since αv1 + βv2 + x0 ∈ C.
+         Thus, the affine set C can be expressed as
+                                  C = V + x0 = {v + x0 | v ∈ V },
+     i.e., as a subspace plus an offset. The subspace V associated with the affine set C
+     does not depend on the choice of x0 , so x0 can be chosen as any point in C. We
+     define the dimension of an affine set C as the dimension of the subspace V = C −x0 ,
+     where x0 is any element of C.
+
+         Example 2.1 Solution set of linear equations. The solution set of a system of linear
+         equations, C = {x | Ax = b}, where A ∈ Rm×n and b ∈ Rm , is an affine set. To
+         show this, suppose x1 , x2 ∈ C, i.e., Ax1 = b, Ax2 = b. Then for any θ, we have
+                               A(θx1 + (1 − θ)x2 )   =    θAx1 + (1 − θ)Ax2
+                                                     =    θb + (1 − θ)b
+                                                     =    b,
+         which shows that the affine combination θx1 + (1 − θ)x2 is also in C. The subspace
+         associated with the affine set C is the nullspace of A.
+         We also have a converse: every affine set can be expressed as the solution set of a
+         system of linear equations.
+        2.1    Affine and convex sets                                                                       23
+
+
+            The set of all affine combinations of points in some set C ⊆ Rn is called the
+        affine hull of C, and denoted aff C:
+
+                    aff C = {θ1 x1 + · · · + θk xk | x1 , . . . , xk ∈ C, θ1 + · · · + θk = 1}.
+
+        The affine hull is the smallest affine set that contains C, in the following sense: if
+        S is any affine set with C ⊆ S, then aff C ⊆ S.
+
+
+2.1.3   Affine dimension and relative interior
+
+        We define the affine dimension of a set C as the dimension of its affine hull. Affine
+        dimension is useful in the context of convex analysis and optimization, but is not
+        always consistent with other definitions of dimension. As an example consider the
+        unit circle in R2 , i.e., {x ∈ R2 | x21 + x22 = 1}. Its affine hull is all of R2 , so its
+        affine dimension is two. By most definitions of dimension, however, the unit circle
+        in R2 has dimension one.
+            If the affine dimension of a set C ⊆ Rn is less than n, then the set lies in
+        the affine set aff C 6= Rn . We define the relative interior of the set C, denoted
+        relint C, as its interior relative to aff C:
+
+                       relint C = {x ∈ C | B(x, r) ∩ aff C ⊆ C for some r > 0},
+
+        where B(x, r) = {y | ky − xk ≤ r}, the ball of radius r and center x in the norm
+        k · k. (Here k · k is any norm; all norms define the same relative interior.) We can
+        then define the relative boundary of a set C as cl C \ relint C, where cl C is the
+        closure of C.
+
+              Example 2.2 Consider a square in the (x1 , x2 )-plane in R3 , defined as
+
+                               C = {x ∈ R3 | − 1 ≤ x1 ≤ 1, −1 ≤ x2 ≤ 1, x3 = 0}.
+
+              Its affine hull is the (x1 , x2 )-plane, i.e., aff C = {x ∈ R3 | x3 = 0}. The interior of C
+              is empty, but the relative interior is
+
+                           relint C = {x ∈ R3 | − 1 < x1 < 1, −1 < x2 < 1, x3 = 0}.
+
+              Its boundary (in R3 ) is itself; its relative boundary is the wire-frame outline,
+
+                                      {x ∈ R3 | max{|x1 |, |x2 |} = 1, x3 = 0}.
+
+
+
+
+2.1.4   Convex sets
+
+        A set C is convex if the line segment between any two points in C lies in C, i.e.,
+        if for any x1 , x2 ∈ C and any θ with 0 ≤ θ ≤ 1, we have
+
+                                             θx1 + (1 − θ)x2 ∈ C.
+24                                                                             2   Convex sets
+
+
+
+
+           Figure 2.2 Some simple convex and nonconvex sets. Left. The hexagon,
+           which includes its boundary (shown darker), is convex. Middle. The kidney
+           shaped set is not convex, since the line segment between the two points in
+           the set shown as dots is not contained in the set. Right. The square contains
+           some boundary points but not others, and is not convex.
+
+
+
+
+           Figure 2.3 The convex hulls of two sets in R2 . Left. The convex hull of a
+           set of fifteen points (shown as dots) is the pentagon (shown shaded). Right.
+           The convex hull of the kidney shaped set in figure 2.2 is the shaded set.
+
+
+
+
+     Roughly speaking, a set is convex if every point in the set can be seen by every other
+     point, along an unobstructed straight path between them, where unobstructed
+     means lying in the set. Every affine set is also convex, since it contains the entire
+     line between any two distinct points in it, and therefore also the line segment
+     between the points. Figure 2.2 illustrates some simple convex and nonconvex sets
+     in R2 .
+         We call a point of the form θ1 x1 + · · · + θk xk , where θ1 + · · · + θk = 1 and
+     θi ≥ 0, i = 1, . . . , k, a convex combination of the points x1 , . . . , xk . As with affine
+     sets, it can be shown that a set is convex if and only if it contains every convex
+     combination of its points. A convex combination of points can be thought of as a
+     mixture or weighted average of the points, with θi the fraction of xi in the mixture.
+
+         The convex hull of a set C, denoted conv C, is the set of all convex combinations
+     of points in C:
+
+      conv C = {θ1 x1 + · · · + θk xk | xi ∈ C, θi ≥ 0, i = 1, . . . , k, θ1 + · · · + θk = 1}.
+
+     As the name suggests, the convex hull conv C is always convex. It is the smallest
+     convex set that contains C: If B is any convex set that contains C, then conv C ⊆
+     B. Figure 2.3 illustrates the definition of convex hull.
+        The idea of a convex combination can be generalized to include infinite sums, in-
+     tegrals, and, in the most general form, probability distributions. Suppose θ1 , θ2 , . . .
+        2.1   Affine and convex sets                                                               25
+
+
+        satisfy
+                                                                   ∞
+                                                                   X
+                                θi ≥ 0,    i = 1, 2, . . . ,             θi = 1,
+                                                                   i=1
+
+        and x1 , x2 , . . . ∈ C, where C ⊆ Rn is convex. Then
+
+                                                ∞
+                                                X
+                                                      θi xi ∈ C,
+                                                i=1
+
+
+        if the series converges.
+                        R        More generally, suppose p : Rn → R satisfies p(x) ≥ 0 for
+        all x ∈ C and C p(x) dx = 1, where C ⊆ Rn is convex. Then
+                                            Z
+                                                 p(x)x dx ∈ C,
+                                             C
+
+
+        if the integral exists.
+            In the most general form, suppose C ⊆ Rn is convex and x is a random vector
+        with x ∈ C with probability one. Then E x ∈ C. Indeed, this form includes all
+        the others as special cases. For example, suppose the random variable x only takes
+        on the two values x1 and x2 , with prob(x = x1 ) = θ and prob(x = x2 ) = 1 − θ,
+        where 0 ≤ θ ≤ 1. Then E x = θx1 + (1 − θ)x2 , and we are back to a simple convex
+        combination of two points.
+
+
+2.1.5   Cones
+
+        A set C is called a cone, or nonnegative homogeneous, if for every x ∈ C and θ ≥ 0
+        we have θx ∈ C. A set C is a convex cone if it is convex and a cone, which means
+        that for any x1 , x2 ∈ C and θ1 , θ2 ≥ 0, we have
+
+                                            θ1 x1 + θ2 x2 ∈ C.
+
+        Points of this form can be described geometrically as forming the two-dimensional
+        pie slice with apex 0 and edges passing through x1 and x2 . (See figure 2.4.)
+            A point of the form θ1 x1 + · · · + θk xk with θ1 , . . . , θk ≥ 0 is called a conic
+        combination (or a nonnegative linear combination) of x1 , . . . , xk . If xi are in a
+        convex cone C, then every conic combination of xi is in C. Conversely, a set C is
+        a convex cone if and only if it contains all conic combinations of its elements. Like
+        convex (or affine) combinations, the idea of conic combination can be generalized
+        to infinite sums and integrals.
+            The conic hull of a set C is the set of all conic combinations of points in C, i.e.,
+
+                         {θ1 x1 + · · · + θk xk | xi ∈ C, θi ≥ 0, i = 1, . . . , k},
+
+        which is also the smallest convex cone that contains C (see figure 2.5).
+26                                                                    2   Convex sets
+
+
+
+
+                             x1
+
+
+
+                                           x2
+
+                   0
+     Figure 2.4 The pie slice shows all points of the form θ1 x1 + θ2 x2 , where
+     θ1 , θ2 ≥ 0. The apex of the slice (which corresponds to θ1 = θ2 = 0) is at
+     0; its edges (which correspond to θ1 = 0 or θ2 = 0) pass through the points
+     x1 and x2 .
+
+
+
+
+                                    0                                       0
+       Figure 2.5 The conic hulls (shown shaded) of the two sets of figure 2.3.
+        2.2     Some important examples                                                          27
+
+
+2.2     Some important examples
+        In this section we describe some important examples of convex sets which we will
+        encounter throughout the rest of the book. We start with some simple examples.
+              • The empty set ∅, any single point (i.e., singleton) {x0 }, and the whole space
+                Rn are affine (hence, convex) subsets of Rn .
+              • Any line is affine. If it passes through zero, it is a subspace, hence also a
+                convex cone.
+              • A line segment is convex, but not affine (unless it reduces to a point).
+              • A ray, which has the form {x0 + θv | θ ≥ 0}, where v 6= 0, is convex, but not
+                affine. It is a convex cone if its base x0 is 0.
+              • Any subspace is affine, and a convex cone (hence convex).
+
+
+2.2.1   Hyperplanes and halfspaces
+
+        A hyperplane is a set of the form
+
+                                             {x | aT x = b},
+
+        where a ∈ Rn , a 6= 0, and b ∈ R. Analytically it is the solution set of a nontrivial
+        linear equation among the components of x (and hence an affine set). Geometri-
+        cally, the hyperplane {x | aT x = b} can be interpreted as the set of points with a
+        constant inner product to a given vector a, or as a hyperplane with normal vector
+        a; the constant b ∈ R determines the offset of the hyperplane from the origin. This
+        geometric interpretation can be understood by expressing the hyperplane in the
+        form
+                                       {x | aT (x − x0 ) = 0},
+        where x0 is any point in the hyperplane (i.e., any point that satisfies aT x0 = b).
+        This representation can in turn be expressed as
+
+                                    {x | aT (x − x0 ) = 0} = x0 + a⊥ ,
+
+        where a⊥ denotes the orthogonal complement of a, i.e., the set of all vectors or-
+        thogonal to it:
+                                    a⊥ = {v | aT v = 0}.
+        This shows that the hyperplane consists of an offset x0 , plus all vectors orthog-
+        onal to the (normal) vector a. These geometric interpretations are illustrated in
+        figure 2.6.
+            A hyperplane divides Rn into two halfspaces. A (closed) halfspace is a set of
+        the form
+                                        {x | aT x ≤ b},                               (2.1)
+        where a 6= 0, i.e., the solution set of one (nontrivial) linear inequality. Halfspaces
+        are convex, but not affine. This is illustrated in figure 2.7.
+28                                                                           2   Convex sets
+
+
+
+
+                                                 a
+
+
+
+                                    x0
+
+                                                      x
+
+                                                                  aT x = b
+
+
+     Figure 2.6 Hyperplane in R2 , with normal vector a and a point x0 in the
+     hyperplane. For any point x in the hyperplane, x − x0 (shown as the darker
+     arrow) is orthogonal to a.
+
+
+
+
+                                                          a
+
+
+                                                              aT x ≥ b
+                                            x0
+
+
+
+                                                 aT x ≤ b
+
+
+
+
+     Figure 2.7 A hyperplane defined by aT x = b in R2 determines two halfspaces.
+     The halfspace determined by aT x ≥ b (not shaded) is the halfspace extending
+     in the direction a. The halfspace determined by aT x ≤ b (which is shown
+     shaded) extends in the direction −a. The vector a is the outward normal of
+     this halfspace.
+        2.2     Some important examples                                                                 29
+
+                                                     x1
+
+
+                                                                 a
+
+
+
+                                                       x0
+
+
+
+
+                                                                       x2
+
+
+
+                Figure 2.8 The shaded set is the halfspace determined by aT (x − x0 ) ≤ 0.
+                The vector x1 −x0 makes an acute angle with a, so x1 is not in the halfspace.
+                The vector x2 − x0 makes an obtuse angle with a, and so is in the halfspace.
+
+
+
+
+              The halfspace (2.1) can also be expressed as
+
+                                          {x | aT (x − x0 ) ≤ 0},                               (2.2)
+
+        where x0 is any point on the associated hyperplane, i.e., satisfies aT x0 = b. The
+        representation (2.2) suggests a simple geometric interpretation: the halfspace con-
+        sists of x0 plus any vector that makes an obtuse (or right) angle with the (outward
+        normal) vector a. This is illustrated in figure 2.8.
+            The boundary of the halfspace (2.1) is the hyperplane {x | aT x = b}. The set
+        {x | aT x < b}, which is the interior of the halfspace {x | aT x ≤ b}, is called an
+        open halfspace.
+
+
+2.2.2   Euclidean balls and ellipsoids
+
+        A (Euclidean) ball (or just ball) in Rn has the form
+
+                    B(xc , r) = {x | kx − xc k2 ≤ r} = {x | (x − xc )T (x − xc ) ≤ r2 },
+
+        where r > 0, and k · k2 denotes the Euclidean norm, i.e., kuk2 = (uT u)1/2 . The
+        vector xc is the center of the ball and the scalar r is its radius; B(xc , r) consists
+        of all points within a distance r of the center xc . Another common representation
+        for the Euclidean ball is
+
+                                    B(xc , r) = {xc + ru | kuk2 ≤ 1}.
+30                                                                            2   Convex sets
+
+
+
+
+                                                xc
+
+
+
+
+              Figure 2.9 An ellipsoid in R2 , shown shaded. The center xc is shown as a
+              dot, and the two semi-axes are shown as line segments.
+
+
+
+           A Euclidean ball is a convex set: if kx1 − xc k2 ≤ r, kx2 − xc k2 ≤ r, and
+        0 ≤ θ ≤ 1, then
+                  kθx1 + (1 − θ)x2 − xc k2    = kθ(x1 − xc ) + (1 − θ)(x2 − xc )k2
+                                              ≤ θkx1 − xc k2 + (1 − θ)kx2 − xc k2
+                                              ≤ r.
+        (Here we use the homogeneity property and triangle inequality for k·k2 ; see §A.1.2.)
+           A related family of convex sets is the ellipsoids, which have the form
+                                E = {x | (x − xc )T P −1 (x − xc ) ≤ 1},                  (2.3)
+        where P = P T ≻ 0, i.e., P is symmetric and positive definite. The vector xc ∈ Rn
+        is the center of the ellipsoid. The matrix P determines how far the ellipsoid
+                                                                                   √ extends
+        in every direction from xc ; the lengths of the semi-axes of E are given by λi , where
+        λi are the eigenvalues of P . A ball is an ellipsoid with P = r2 I. Figure 2.9 shows
+        an ellipsoid in R2 .
+            Another common representation of an ellipsoid is
+                                     E = {xc + Au | kuk2 ≤ 1},                            (2.4)
+        where A is square and nonsingular. In this representation we can assume without
+        loss of generality that A is symmetric and positive definite. By taking A = P 1/2 ,
+        this representation gives the ellipsoid defined in (2.3). When the matrix A in (2.4)
+        is symmetric positive semidefinite but singular, the set in (2.4) is called a degenerate
+        ellipsoid ; its affine dimension is equal to the rank of A. Degenerate ellipsoids are
+        also convex.
+
+
+2.2.3   Norm balls and norm cones
+
+        Suppose k·k is any norm on Rn (see §A.1.2). From the general properties of norms it
+        can be shown that a norm ball of radius r and center xc , given by {x | kx−xc k ≤ r},
+        is convex. The norm cone associated with the norm k · k is the set
+                                   C = {(x, t) | kxk ≤ t} ⊆ Rn+1 .
+        2.2    Some important examples                                                                               31
+
+
+
+
+                         1
+
+
+
+
+                   t   0.5
+
+
+
+                         0
+                         1
+                                                                                                     1
+                                      0
+                                                                                0
+                                          x2       −1 −1
+                                                                       x1
+
+                Figure 2.10 Boundary of second-order cone in R3 , {(x1 , x2 , t) | (x21 +x22 )1/2 ≤
+                t}.
+
+
+
+        It is (as the name suggests) a convex cone.
+
+              Example 2.3 The second-order cone is the norm cone for the Euclidean norm, i.e.,
+
+                             C   =   {(x, t) ∈ Rn+1 | kxk2 ≤ t}
+                                     (                  T                                )
+                                          x            x          I    0        x
+                                 =                                                      ≤ 0, t ≥ 0       .
+                                          t            t          0   −1        t
+
+              The second-order cone is also known by several other names. It is called the quadratic
+              cone, since it is defined by a quadratic inequality. It is also called the Lorentz cone
+              or ice-cream cone. Figure 2.10 shows the second-order cone in R3 .
+
+
+
+
+2.2.4   Polyhedra
+
+        A polyhedron is defined as the solution set of a finite number of linear equalities
+        and inequalities:
+
+                       P = {x | aTj x ≤ bj , j = 1, . . . , m, cTj x = dj , j = 1, . . . , p}.               (2.5)
+
+        A polyhedron is thus the intersection of a finite number of halfspaces and hyper-
+        planes. Affine sets (e.g., subspaces, hyperplanes, lines), rays, line segments, and
+        halfspaces are all polyhedra. It is easily shown that polyhedra are convex sets.
+        A bounded polyhedron is sometimes called a polytope, but some authors use the
+        opposite convention (i.e., polytope for any set of the form (2.5), and polyhedron
+32                                                                             2   Convex sets
+
+                                   a1
+                                                                     a2
+
+
+
+
+                                                  P
+                          a5
+
+                                                                          a3
+
+
+
+                                            a4
+
+           Figure 2.11 The polyhedron P (shown shaded) is the intersection of five
+           halfspaces, with outward normal vectors a1 , . . . . , a5 .
+
+
+
+     when it is bounded). Figure 2.11 shows an example of a polyhedron defined as the
+     intersection of five halfspaces.
+         It will be convenient to use the compact notation
+
+                                    P = {x | Ax  b, Cx = d}                             (2.6)
+
+     for (2.5), where                                        
+                                       aT1                  cT1
+                                                      C =  ...  ,
+                                                             
+                                 A =  ...  ,
+                                       aTm                     cTp
+     and the symbol  denotes vector inequality or componentwise inequality in Rm :
+     u  v means ui ≤ vi for i = 1, . . . , m.
+
+         Example 2.4 The nonnegative orthant is the set of points with nonnegative compo-
+         nents, i.e.,
+
+                        Rn         n                                    n
+                         + = {x ∈ R | xi ≥ 0, i = 1, . . . , n} = {x ∈ R | x  0}.
+
+         (Here R+ denotes the set of nonnegative numbers: R+ = {x ∈ R | x ≥ 0}.) The
+         nonnegative orthant is a polyhedron and a cone (and therefore called a polyhedral
+         cone).
+
+
+     Simplexes
+     Simplexes are another important family of polyhedra. Suppose the k + 1 points
+     v0 , . . . , vk ∈ Rn are affinely independent, which means v1 − v0 , . . . , vk − v0 are
+     linearly independent. The simplex determined by them is given by
+
+               C = conv{v0 , . . . , vk } = {θ0 v0 + · · · + θk vk | θ  0, 1T θ = 1},   (2.7)
+2.2    Some important examples                                                                       33
+
+
+where 1 denotes the vector with all entries one. The affine dimension of this simplex
+is k, so it is sometimes referred to as a k-dimensional simplex in Rn .
+
+      Example 2.5 Some common simplexes. A 1-dimensional simplex is a line segment;
+      a 2-dimensional simplex is a triangle (including its interior); and a 3-dimensional
+      simplex is a tetrahedron.
+      The unit simplex is the n-dimensional simplex determined by the zero vector and the
+      unit vectors, i.e., 0, e1 , . . . , en ∈ Rn . It can be expressed as the set of vectors that
+      satisfy
+                                              x  0,     1T x ≤ 1.
+
+      The probability simplex is the (n − 1)-dimensional simplex determined by the unit
+      vectors e1 , . . . , en ∈ Rn . It is the set of vectors that satisfy
+
+                                         x  0,          1T x = 1.
+
+      Vectors in the probability simplex correspond to probability distributions on a set
+      with n elements, with xi interpreted as the probability of the ith element.
+
+
+    To describe the simplex (2.7) as a polyhedron, i.e., in the form (2.6), we proceed
+as follows. By definition, x ∈ C if and only if x = θ0 v0 + θ1 v1 + · · · + θk vk for some
+θ  0 with 1T θ = 1. Equivalently, if we define y = (θ1 , . . . , θk ) and
+                                                                      
+                          B=       v1 − v0    ···       vk − v 0           ∈ Rn×k ,
+
+we can say that x ∈ C if and only if
+
+                                          x = v0 + By                                       (2.8)
+
+for some y  0 with 1T y ≤ 1. Now we note that affine independence of the
+points v0 , . . . , vk implies that the matrix B has rank k. Therefore there exists a
+nonsingular matrix A = (A1 , A2 ) ∈ Rn×n such that
+                                                                        
+                                              A1                   I
+                                   AB =                 B=                     .
+                                              A2                   0
+
+Multiplying (2.8) on the left with A, we obtain
+
+                             A1 x = A1 v0 + y,             A2 x = A2 v0 .
+
+From this we see that x ∈ C if and only if A2 x = A2 v0 , and the vector y =
+A1 x − A1 v0 satisfies y  0 and 1T y ≤ 1. In other words we have x ∈ C if and only
+if
+             A2 x = A2 v0 ,     A1 x  A1 v0 ,    1T A1 x ≤ 1 + 1T A1 v0 ,
+
+which is a set of linear equalities and inequalities in x, and so describes a polyhe-
+dron.
+34                                                                                   2      Convex sets
+
+
+        Convex hull description of polyhedra
+        The convex hull of the finite set {v1 , . . . , vk } is
+
+                      conv{v1 , . . . , vk } = {θ1 v1 + · · · + θk vk | θ  0, 1T θ = 1}.
+
+        This set is a polyhedron, and bounded, but (except in special cases, e.g., a simplex)
+        it is not simple to express it in the form (2.5), i.e., by a set of linear equalities and
+        inequalities.
+             A generalization of this convex hull description is
+
+                    {θ1 v1 + · · · + θk vk | θ1 + · · · + θm = 1, θi ≥ 0, i = 1, . . . , k},      (2.9)
+
+        where m ≤ k. Here we consider nonnegative linear combinations of vi , but only
+        the first m coefficients are required to sum to one. Alternatively, we can inter-
+        pret (2.9) as the convex hull of the points v1 , . . . , vm , plus the conic hull of the
+        points vm+1 , . . . , vk . The set (2.9) defines a polyhedron, and conversely, every
+        polyhedron can be represented in this form (although we will not show this).
+            The question of how a polyhedron is represented is subtle, and has very im-
+        portant practical consequences. As a simple example consider the unit ball in the
+        ℓ∞ -norm in Rn ,
+                                     C = {x | |xi | ≤ 1, i = 1, . . . , n}.
+        The set C can be described in the form (2.5) with 2n linear inequalities ±eTi x ≤ 1,
+        where ei is the ith unit vector. To describe it in the convex hull form (2.9) requires
+        at least 2n points:
+                                       C = conv{v1 , . . . , v2n },
+        where v1 , . . . , v2n are the 2n vectors all of whose components are 1 or −1. Thus
+        the size of the two descriptions differs greatly, for large n.
+
+
+2.2.5   The positive semidefinite cone
+
+        We use the notation Sn to denote the set of symmetric n × n matrices,
+
+                                      Sn = {X ∈ Rn×n | X = X T },
+
+        which is a vector space with dimension n(n + 1)/2. We use the notation Sn+ to
+        denote the set of symmetric positive semidefinite matrices:
+
+                                         Sn+ = {X ∈ Sn | X  0},
+
+        and the notation Sn++ to denote the set of symmetric positive definite matrices:
+
+                                        Sn++ = {X ∈ Sn | X ≻ 0}.
+
+        (This notation is meant to be analogous to R+ , which denotes the nonnegative
+        reals, and R++ , which denotes the positive reals.)
+      2.3    Operations that preserve convexity                                                 35
+
+
+
+
+                       1
+
+
+
+
+                 z   0.5
+
+
+
+                      0
+                      1
+                                                                                           1
+                                    0
+                                                                          0.5
+                                        y          −1 0               x
+
+
+                      Figure 2.12 Boundary of positive semidefinite cone in S2 .
+
+
+
+         The set Sn+ is a convex cone: if θ1 , θ2 ≥ 0 and A, B ∈ Sn+ , then θ1 A+θ2 B ∈ Sn+ .
+      This can be seen directly from the definition of positive semidefiniteness: for any
+      x ∈ Rn , we have
+
+                             xT (θ1 A + θ2 B)x = θ1 xT Ax + θ2 xT Bx ≥ 0,
+
+      if A  0, B  0 and θ1 , θ2 ≥ 0.
+
+
+            Example 2.6 Positive semidefinite cone in S2 . We have
+
+                                           
+                                    x   y
+                           X=                   ∈ S2+   ⇐⇒   x ≥ 0,       z ≥ 0,   xz ≥ y 2 .
+                                    y   z
+
+
+            The boundary of this cone is shown in figure 2.12, plotted in R3 as (x, y, z).
+
+
+
+
+2.3   Operations that preserve convexity
+      In this section we describe some operations that preserve convexity of sets, or
+      allow us to construct convex sets from others. These operations, together with the
+      simple examples described in §2.2, form a calculus of convex sets that is useful for
+      determining or establishing convexity of sets.
+36                                                                                  2   Convex sets
+
+
+2.3.1   Intersection
+
+        Convexity is preserved under intersection: if S1 and S2 are convex, then S1 ∩ S2 is
+        convex. This property extends to theT intersection of an infinite number of sets: if
+        Sα is convex for every α ∈ A, then α∈A Sα is convex. (Subspaces, affine sets, and
+        convex cones are also closed under arbitrary intersections.) As a simple example,
+        a polyhedron is the intersection of halfspaces and hyperplanes (which are convex),
+        and therefore is convex.
+
+            Example 2.7 The positive semidefinite cone Sn
+                                                        + can be expressed as
+                                           \
+                                                 {X ∈ Sn | z T Xz ≥ 0}.
+                                          z6=0
+
+
+            For each z 6= 0, z T Xz is a (not identically zero) linear function of X, so the sets
+
+                                             {X ∈ Sn | z T Xz ≥ 0}
+
+            are, in fact, halfspaces in Sn . Thus the positive semidefinite cone is the intersection
+            of an infinite number of halfspaces, and so is convex.
+
+
+            Example 2.8 We consider the set
+
+                                   S = {x ∈ Rm | |p(t)| ≤ 1 for |t| ≤ π/3},                   (2.10)
+                          Pm
+            where p(t) =    k=1 k
+                                 x cos kt. TThe set S can be expressed as the intersection of an
+            infinite number of slabs: S = |t|≤π/3 St , where
+
+                                 St = {x | − 1 ≤ (cos t, . . . , cos mt)T x ≤ 1},
+
+            and so is convex. The definition and the set are illustrated in figures 2.13 and 2.14,
+            for m = 2.
+
+
+            In the examples above we establish convexity of a set by expressing it as a
+        (possibly infinite) intersection of halfspaces. We will see in §2.5.1 that a converse
+        holds: every closed convex set S is a (usually infinite) intersection of halfspaces.
+        In fact, a closed convex set S is the intersection of all halfspaces that contain it:
+                                       \
+                                  S=      {H | H halfspace, S ⊆ H}.
+
+
+2.3.2   Affine functions
+
+        Recall that a function f : Rn → Rm is affine if it is a sum of a linear function and
+        a constant, i.e., if it has the form f (x) = Ax + b, where A ∈ Rm×n and b ∈ Rm .
+        Suppose S ⊆ Rn is convex and f : Rn → Rm is an affine function. Then the image
+        of S under f ,
+                                         f (S) = {f (x) | x ∈ S},
+2.3   Operations that preserve convexity                                           37
+
+
+
+
+                         1
+                         0
+              p(t)
+                     −1
+
+
+
+
+                         0         π/3          2π/3             π
+                                           t
+      Figure 2.13 Three trigonometric polynomials associated with points in the
+      set S defined in (2.10), for m = 2. The trigonometric polynomial plotted
+      with dashed line type is the average of the other two.
+
+                     2
+
+
+                     1
+
+
+               x2    0                      S
+
+
+
+                −1
+
+
+                 −2
+                  −2          −1           0           1             2
+                                          x1
+      Figure 2.14 The set S defined in (2.10), for m = 2, is shown as the white
+      area in the middle of the plot. The set is the intersection of an infinite
+      number of slabs (20 of which are shown), hence convex.
+38                                                                               2   Convex sets
+
+
+     is convex. Similarly, if f : Rk → Rn is an affine function, the inverse image of S
+     under f ,
+                                   f −1 (S) = {x | f (x) ∈ S},
+     is convex.
+         Two simple examples are scaling and translation. If S ⊆ Rn is convex, α ∈ R,
+     and a ∈ Rn , then the sets αS and S + a are convex, where
+                      αS = {αx | x ∈ S},              S + a = {x + a | x ∈ S}.
+     The projection of a convex set onto some of its coordinates is convex: if S ⊆
+     Rm × Rn is convex, then
+                       T = {x1 ∈ Rm | (x1 , x2 ) ∈ S for some x2 ∈ Rn }
+     is convex.
+         The sum of two sets is defined as
+                                  S1 + S2 = {x + y | x ∈ S1 , y ∈ S2 }.
+     If S1 and S2 are convex, then S1 + S2 is convex. To see this, if S1 and S2 are
+     convex, then so is the direct or Cartesian product
+                                S1 × S2 = {(x1 , x2 ) | x1 ∈ S1 , x2 ∈ S2 }.
+     The image of this set under the linear function f (x1 , x2 ) = x1 + x2 is the sum
+     S1 + S2 .
+        We can also consider the partial sum of S1 , S2 ∈ Rn × Rm , defined as
+                        S = {(x, y1 + y2 ) | (x, y1 ) ∈ S1 , (x, y2 ) ∈ S2 },
+     where x ∈ R and yi ∈ Rm . For m = 0, the partial sum gives the intersection of
+                  n
+
+     S1 and S2 ; for n = 0, it is set addition. Partial sums of convex sets are convex (see
+     exercise 2.16).
+
+         Example 2.9 Polyhedron. The polyhedron {x | Ax  b, Cx = d} can be expressed as
+         the inverse image of the Cartesian product of the nonnegative orthant and the origin
+         under the affine function f (x) = (b − Ax, d − Cx):
+                            {x | Ax  b, Cx = d} = {x | f (x) ∈ Rm
+                                                                 + × {0}}.
+
+
+
+
+         Example 2.10 Solution set of linear matrix inequality. The condition
+                                       A(x) = x1 A1 + · · · + xn An  B,                   (2.11)
+                            m
+         where B, Ai ∈ S , is called a linear matrix inequality (LMI) in x (Note the similarity
+         to an ordinary linear inequality,
+                                         aT x = x1 a1 + · · · + xn an ≤ b,
+         with b, ai ∈ R.)
+         The solution set of a linear matrix inequality, {x | A(x)  B}, is convex. Indeed,
+         it is the inverse image of the positive semidefinite cone under the affine function
+         f : Rn → Sm given by f (x) = B − A(x).
+        2.3     Operations that preserve convexity                                                         39
+
+
+
+              Example 2.11 Hyperbolic cone. The set
+
+                                           {x | xT P x ≤ (cT x)2 , cT x ≥ 0}
+
+              where P ∈ Sn          n
+                         + and c ∈ R , is convex, since it is the inverse image of the second-order
+              cone,
+                                          {(z, t) | z T z ≤ t2 , t ≥ 0},
+              under the affine function f (x) = (P 1/2 x, cT x).
+
+
+              Example 2.12 Ellipsoid. The ellipsoid
+
+                                       E = {x | (x − xc )T P −1 (x − xc ) ≤ 1},
+
+              where P ∈ Sn ++ , is the image of the unit Euclidean ball {u | kuk2 ≤ 1} under the
+              affine mapping f (u) = P 1/2 u + xc . (It is also the inverse image of the unit ball under
+              the affine mapping g(x) = P −1/2 (x − xc ).)
+
+
+
+
+2.3.3   Linear-fractional and perspective functions
+
+        In this section we explore a class of functions, called linear-fractional, that is more
+        general than affine but still preserves convexity.
+
+        The perspective function
+        We define the perspective function P : Rn+1 → Rn , with domain dom P = Rn ×
+        R++ , as P (z, t) = z/t. (Here R++ denotes the set of positive numbers: R++ =
+        {x ∈ R | x > 0}.) The perspective function scales or normalizes vectors so the last
+        component is one, and then drops the last component.
+
+              Remark 2.1 We can interpret the perspective function as the action of a pin-hole
+              camera. A pin-hole camera (in R3 ) consists of an opaque horizontal plane x3 = 0,
+              with a single pin-hole at the origin, through which light can pass, and a horizontal
+              image plane x3 = −1. An object at x, above the camera (i.e., with x3 > 0), forms
+              an image at the point −(x1 /x3 , x2 /x3 , 1) on the image plane. Dropping the last
+              component of the image point (since it is always −1), the image of a point at x
+              appears at y = −(x1 /x3 , x2 /x3 ) = −P (x) on the image plane. This is illustrated in
+              figure 2.15.
+
+
+              If C ⊆ dom P is convex, then its image
+
+                                           P (C) = {P (x) | x ∈ C}
+
+        is convex. This result is certainly intuitive: a convex object, viewed through a
+        pin-hole camera, yields a convex image. To establish this fact we show that line
+        segments are mapped to line segments under the perspective function. (This too
+40                                                                            2    Convex sets
+
+
+
+
+                                                                           x3 = 0
+
+
+
+                                                                           x3 = −1
+             Figure 2.15 Pin-hole camera interpretation of perspective function. The
+             dark horizontal line represents the plane x3 = 0 in R3 , which is opaque,
+             except for a pin-hole at the origin. Objects or light sources above the plane
+             appear on the image plane x3 = −1, which is shown as the lighter horizontal
+             line. The mapping of the position of a source to the position of its image is
+             related to the perspective function.
+
+
+
+
+     makes sense: a line segment, viewed through a pin-hole camera, yields a line seg-
+     ment image.) Suppose that x = (x̃, xn+1 ), y = (ỹ, yn+1 ) ∈ Rn+1 with xn+1 > 0,
+     yn+1 > 0. Then for 0 ≤ θ ≤ 1,
+
+                                         θx̃ + (1 − θ)ỹ
+               P (θx + (1 − θ)y) =                        = µP (x) + (1 − µ)P (y),
+                                      θxn+1 + (1 − θ)yn+1
+
+     where
+                                            θxn+1
+                                 µ=                       ∈ [0, 1].
+                                      θxn+1 + (1 − θ)yn+1
+     This correspondence between θ and µ is monotonic: as θ varies between 0 and 1
+     (which sweeps out the line segment [x, y]), µ varies between 0 and 1 (which sweeps
+     out the line segment [P (x), P (y)]). This shows that P ([x, y]) = [P (x), P (y)].
+         Now suppose C is convex with C ⊆ dom P (i.e., xn+1 > 0 for all x ∈ C), and
+     x, y ∈ C. To establish convexity of P (C) we need to show that the line segment
+     [P (x), P (y)] is in P (C). But this line segment is the image of the line segment
+     [x, y] under P , and so lies in P (C).
+         The inverse image of a convex set under the perspective function is also convex:
+     if C ⊆ Rn is convex, then
+
+                           P −1 (C) = {(x, t) ∈ Rn+1 | x/t ∈ C, t > 0}
+
+     is convex. To show this, suppose (x, t) ∈ P −1 (C), (y, s) ∈ P −1 (C), and 0 ≤ θ ≤ 1.
+     We need to show that
+
+                                 θ(x, t) + (1 − θ)(y, s) ∈ P −1 (C),
+
+     i.e., that
+                                         θx + (1 − θ)y
+                                                       ∈C
+                                         θt + (1 − θ)s
+2.3    Operations that preserve convexity                                                      41
+
+
+(θt + (1 − θ)s > 0 is obvious). This follows from
+
+                         θx + (1 − θ)y
+                                       = µ(x/t) + (1 − µ)(y/s),
+                         θt + (1 − θ)s
+
+where
+                                           θt
+                                µ=                 ∈ [0, 1].
+                                     θt + (1 − θ)s
+
+Linear-fractional functions
+A linear-fractional function is formed by composing the perspective function with
+an affine function. Suppose g : Rn → Rm+1 is affine, i.e.,
+                                                 
+                                       A          b
+                             g(x) =         x +       ,                    (2.12)
+                                      cT          d
+
+where A ∈ Rm×n , b ∈ Rm , c ∈ Rn , and d ∈ R. The function f : Rn → Rm given
+by f = P ◦ g, i.e.,
+
+          f (x) = (Ax + b)/(cT x + d),        dom f = {x | cT x + d > 0},            (2.13)
+
+is called a linear-fractional (or projective) function. If c = 0 and d > 0, the domain
+of f is Rn , and f is an affine function. So we can think of affine and linear functions
+as special cases of linear-fractional functions.
+
+      Remark 2.2 Projective interpretation. It is often convenient to represent a linear-
+      fractional function as a matrix
+                                                 
+                                         A    b
+                                Q=                    ∈ R(m+1)×(n+1)                  (2.14)
+                                         cT   d
+
+      that acts on (multiplies) points of form (x, 1), which yields (Ax + b, cT x + d). This
+      result is then scaled or normalized so that its last component is one, which yields
+      (f (x), 1).
+      This representation can be interpreted geometrically by associating Rn with a set
+      of rays in Rn+1 as follows. With each point z in Rn we associate the (open) ray
+      P(z) = {t(z, 1) | t > 0} in Rn+1 . The last component of this ray takes on positive
+      values. Conversely any ray in Rn+1 , with base at the origin and last component
+      which takes on positive values, can be written as P(v) = {t(v, 1) | t ≥ 0} for some
+      v ∈ Rn . This (projective) correspondence P between Rn and the halfspace of rays
+      with positive last component is one-to-one and onto.
+      The linear-fractional function (2.13) can be expressed as
+
+                                      f (x) = P −1 (QP(x)).
+
+      Thus, we start with x ∈ dom f , i.e., cT x + d > 0. We then form the ray P(x) in
+      Rn+1 . The linear transformation with matrix Q acts on this ray to produce another
+      ray QP(x). Since x ∈ dom f , the last component of this ray assumes positive values.
+      Finally we take the inverse projective transformation to recover f (x).
+42                                                                                    2   Convex sets
+
+          1                                                   1
+
+
+
+
+     x2   0                     C                        x2   0
+                                                                              f (C)
+
+
+
+
+     −1                                                   −1
+      −1                        0                    1     −1                    0                     1
+                                x1                                               x1
+                Figure 2.16 Left. A set C ⊆ R2 . The dashed line shows the boundary of
+                the domain of the linear-fractional function f (x) = x/(x1 + x2 + 1) with
+                dom f = {(x1 , x2 ) | x1 + x2 + 1 > 0}. Right. Image of C under f . The
+                dashed line shows the boundary of the domain of f −1 .
+
+
+
+
+         Like the perspective function, linear-fractional functions preserve convexity. If
+      C is convex and lies in the domain of f (i.e., cT x + d > 0 for x ∈ C), then its
+      image f (C) is convex. This follows immediately from results above: the image of C
+      under the affine mapping (2.12) is convex, and the image of the resulting set under
+      the perspective function P , which yields f (C), is convex. Similarly, if C ⊆ Rm is
+      convex, then the inverse image f −1 (C) is convex.
+
+
+              Example 2.13 Conditional probabilities. Suppose u and v are random variables
+              that take on values in {1, . . . , n} and {1, . . . , m}, respectively, and let pij denote
+              prob(u = i, v = j). Then the conditional probability fij = prob(u = i|v = j) is
+              given by
+                                                            pij
+                                                   fij = Pn           .
+                                                           k=1 kj
+                                                                  p
+              Thus f is obtained by a linear-fractional mapping from p.
+
+              It follows that if C is a convex set of joint probabilities for (u, v), then the associated
+              set of conditional probabilities of u given v is also convex.
+
+
+         Figure 2.16 shows a set C ⊆ R2 , and its image under the linear-fractional
+      function
+
+                                  1
+                   f (x) =               x,       dom f = {(x1 , x2 ) | x1 + x2 + 1 > 0}.
+                             x1 + x2 + 1
+        2.4     Generalized inequalities                                                                 43
+
+
+2.4     Generalized inequalities
+2.4.1   Proper cones and generalized inequalities
+        A cone K ⊆ Rn is called a proper cone if it satisfies the following:
+              • K is convex.
+              • K is closed.
+              • K is solid, which means it has nonempty interior.
+              • K is pointed, which means that it contains no line (or equivalently, x ∈
+                K, − x ∈ K =⇒ x = 0).
+        A proper cone K can be used to define a generalized inequality, which is a partial
+        ordering on Rn that has many of the properties of the standard ordering on R.
+        We associate with the proper cone K the partial ordering on Rn defined by
+                                         x K y ⇐⇒ y − x ∈ K.
+        We also write x K y for y K x. Similarly, we define an associated strict partial
+        ordering by
+                                  x ≺K y ⇐⇒ y − x ∈ int K,
+        and write x ≻K y for y ≺K x. (To distinguish the generalized inequality K
+        from the strict generalized inequality, we sometimes refer to K as the nonstrict
+        generalized inequality.)
+           When K = R+ , the partial ordering K is the usual ordering ≤ on R, and
+        the strict partial ordering ≺K is the same as the usual strict ordering < on R.
+        So generalized inequalities include as a special case ordinary (nonstrict and strict)
+        inequality in R.
+
+              Example 2.14 Nonnegative orthant and componentwise inequality. The nonnegative
+              orthant K = Rn     + is a proper cone. The associated generalized inequality K corre-
+              sponds to componentwise inequality between vectors: x K y means that xi ≤ yi ,
+              i = 1, . . . , n. The associated strict inequality corresponds to componentwise strict
+              inequality: x ≺K y means that xi < yi , i = 1, . . . , n.
+              The nonstrict and strict partial orderings associated with the nonnegative orthant
+              arise so frequently that we drop the subscript Rn
+                                                              + ; it is understood when the symbol
+               or ≺ appears between vectors.
+
+
+              Example 2.15 Positive semidefinite cone and matrix inequality. The positive semidef-
+              inite cone Sn                      n
+                          + is a proper cone in S . The associated generalized inequality K is the
+              usual matrix inequality: X K Y means Y − X is positive semidefinite. The inte-
+              rior of Sn       n
+                       + (in S ) consists of the positive definite matrices, so the strict generalized
+              inequality also agrees with the usual strict inequality between symmetric matrices:
+              X ≺K Y means Y − X is positive definite.
+              Here, too, the partial ordering arises so frequently that we drop the subscript: for
+              symmetric matrices we write simply X  Y or X ≺ Y . It is understood that the
+              generalized inequalities are with respect to the positive semidefinite cone.
+44                                                                                         2   Convex sets
+
+
+
+         Example 2.16 Cone of polynomials nonnegative on [0, 1]. Let K be defined as
+
+                          K = {c ∈ Rn | c1 + c2 t + · · · + cn tn−1 ≥ 0 for t ∈ [0, 1]},             (2.15)
+
+         i.e., K is the cone of (coefficients of) polynomials of degree n−1 that are nonnegative
+         on the interval [0, 1]. It can be shown that K is a proper cone; its interior is the set
+         of coefficients of polynomials that are positive on the interval [0, 1].
+         Two vectors c, d ∈ Rn satisfy c K d if and only if
+
+                               c1 + c2 t + · · · + cn tn−1 ≤ d1 + d2 t + · · · + dn tn−1
+
+         for all t ∈ [0, 1].
+
+
+     Properties of generalized inequalities
+     A generalized inequality K satisfies many properties, such as
+
+        • K is preserved under addition: if x K y and u K v, then x + u K y + v.
+
+        • K is transitive: if x K y and y K z then x K z.
+
+        • K is preserved under nonnegative scaling: if x K y and α ≥ 0 then
+          αx K αy.
+
+        • K is reflexive: x K x.
+
+        • K is antisymmetric: if x K y and y K x, then x = y.
+
+        • K is preserved under limits: if xi K yi for i = 1, 2, . . ., xi → x and yi → y
+          as i → ∞, then x K y.
+
+     The corresponding strict generalized inequality ≺K satisfies, for example,
+
+        • if x ≺K y then x K y.
+
+        • if x ≺K y and u K v then x + u ≺K y + v.
+
+        • if x ≺K y and α > 0 then αx ≺K αy.
+
+        • x 6≺K x.
+
+        • if x ≺K y, then for u and v small enough, x + u ≺K y + v.
+
+     These properties are inherited from the definitions of K and ≺K , and the prop-
+     erties of proper cones; see exercise 2.30.
+        2.4    Generalized inequalities                                                             45
+
+
+2.4.2   Minimum and minimal elements
+        The notation of generalized inequality (i.e., K , ≺K ) is meant to suggest the
+        analogy to ordinary inequality on R (i.e., ≤, <). While many properties of ordinary
+        inequality do hold for generalized inequalities, some important ones do not. The
+        most obvious difference is that ≤ on R is a linear ordering: any two points are
+        comparable, meaning either x ≤ y or y ≤ x. This property does not hold for
+        other generalized inequalities. One implication is that concepts like minimum and
+        maximum are more complicated in the context of generalized inequalities. We
+        briefly discuss this in this section.
+            We say that x ∈ S is the minimum element of S (with respect to the general-
+        ized inequality K ) if for every y ∈ S we have x K y. We define the maximum
+        element of a set S, with respect to a generalized inequality, in a similar way. If a
+        set has a minimum (maximum) element, then it is unique. A related concept is
+        minimal element. We say that x ∈ S is a minimal element of S (with respect to
+        the generalized inequality K ) if y ∈ S, y K x only if y = x. We define maxi-
+        mal element in a similar way. A set can have many different minimal (maximal)
+        elements.
+            We can describe minimum and minimal elements using simple set notation. A
+        point x ∈ S is the minimum element of S if and only if
+                                                   S ⊆ x + K.
+        Here x + K denotes all the points that are comparable to x and greater than or
+        equal to x (according to K ). A point x ∈ S is a minimal element if and only if
+                                              (x − K) ∩ S = {x}.
+        Here x − K denotes all the points that are comparable to x and less than or equal
+        to x (according to K ); the only point in common with S is x.
+           For K = R+ , which induces the usual ordering on R, the concepts of minimal
+        and minimum are the same, and agree with the usual definition of the minimum
+        element of a set.
+
+              Example 2.17 Consider the cone R2+ , which induces componentwise inequality in
+              R2 . Here we can give some simple geometric descriptions of minimal and minimum
+              elements. The inequality x  y means y is above and to the right of x. To say that
+              x ∈ S is the minimum element of a set S means that all other points of S lie above
+              and to the right. To say that x is a minimal element of a set S means that no other
+              point of S lies to the left and below x. This is illustrated in figure 2.17.
+
+
+              Example 2.18 Minimum and minimal elements of a set of symmetric matrices. We
+              associate with each A ∈ Sn
+                                       ++ an ellipsoid centered at the origin, given by
+
+                                               EA = {x | xT A−1 x ≤ 1}.
+              We have A  B if and only if EA ⊆ EB .
+              Let v1 , . . . , vk ∈ Rn be given and define
+                                    S = {P ∈ Sn     T −1
+                                              ++ | vi P  vi ≤ 1, i = 1, . . . , k},
+46                                                                                 2   Convex sets
+
+
+
+
+                                                                              S2
+                         S1                                              x2
+
+
+              x1
+
+
+
+              Figure 2.17 Left. The set S1 has a minimum element x1 with respect to
+              componentwise inequality in R2 . The set x1 + K is shaded lightly; x1 is
+              the minimum element of S1 since S1 ⊆ x1 + K. Right. The point x2 is a
+              minimal point of S2 . The set x2 − K is shown lightly shaded. The point x2
+              is minimal because x2 − K and S2 intersect only at x2 .
+
+
+
+            which corresponds to the set of ellipsoids that contain the points v1 , . . . , vk . The
+            set S does not have a minimum element: for any ellipsoid that contains the points
+            v1 , . . . , vk we can find another one that contains the points, and is not comparable
+            to it. An ellipsoid is minimal if it contains the points, but no smaller ellipsoid does.
+            Figure 2.18 shows an example in R2 with k = 2.
+
+
+
+
+ 2.5    Separating and supporting hyperplanes
+2.5.1   Separating hyperplane theorem
+
+        In this section we describe an idea that will be important later: the use of hyper-
+        planes or affine functions to separate convex sets that do not intersect. The basic
+        result is the separating hyperplane theorem: Suppose C and D are two convex sets
+        that do not intersect, i.e., C ∩ D = ∅. Then there exist a 6= 0 and b such that
+        aT x ≤ b for all x ∈ C and aT x ≥ b for all x ∈ D. In other words, the affine function
+        aT x − b is nonpositive on C and nonnegative on D. The hyperplane {x | aT x = b}
+        is called a separating hyperplane for the sets C and D, or is said to separate the
+        sets C and D. This is illustrated in figure 2.19.
+
+        Proof of separating hyperplane theorem
+        Here we consider a special case, and leave the extension of the proof to the gen-
+        eral case as an exercise (exercise 2.22). We assume that the (Euclidean) distance
+        between C and D, defined as
+
+                              dist(C, D) = inf{ku − vk2 | u ∈ C, v ∈ D},
+

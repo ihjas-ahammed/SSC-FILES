@@ -1,0 +1,3073 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>[Subject] · [Session]</title>
+
+<!-- Apply the saved theme before first paint (no light flash in dark mode) -->
+<script>
+  (function () {
+    var theme = null;
+    try { theme = JSON.parse(localStorage.getItem('skeleton-day-2:v1') || '{}').theme; } catch (e) {}
+    if (!theme && window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches) theme = 'dark';
+    document.documentElement.dataset.theme = theme || 'light';
+  })();
+</script>
+
+<!-- Fonts: Atkinson Hyperlegible Next is designed for maximum reading legibility -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
+<!-- MathJax 3 (SVG output) -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true
+    },
+    svg: { fontCache: 'global' },
+    options: { ignoreHtmlClass: 'no-math' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+
+<style>
+/* ==========================================================================
+   OPTICS · DAY 2 — STYLES
+   0. Tokens (light + pitch-black dark)   8. Derivations
+   1. Base & typography                   9. OMR questions
+   2. Scrollbars                          10. Tables, diagrams, SVG palette
+   3. Layout: top bar, rail, content      11. Wide maths
+   4. Small components                    12. Sheet & toasts
+   5. Today's plan (hero)                 13. Focus mode
+   6. Sections, cards, callouts           14. Match Mode
+   7. Simulators & 3D                     15. Utilities & responsive
+   ========================================================================== */
+
+/* ---------- 0. Tokens ---------- */
+:root {
+  --font: 'Atkinson Hyperlegible Next', 'Atkinson Hyperlegible', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --bg: #F6F5F0;
+  --bg-grid: rgba(16, 33, 63, 0.035);
+  --surface: #FFFFFF;
+  --surface-2: #F5F6F8;
+  --surface-3: #ECEFF3;
+  --line: #E2E5EA;
+  --line-strong: #C9D0DA;
+  --bar-bg: rgba(246, 245, 240, 0.92);
+
+  --ink: #10213F;
+  --text: #1E2A3B;
+  --muted: #5A6678;
+
+  --brand: #0B2C63;
+  --brand-solid: #0B2C63;
+  --on-brand: #FFFFFF;
+  --blue: #1565C0;
+  --green: #198754;
+  --amber: #F5B433;
+  --amber-ink: #8A5800;
+  --red: #D9383A;
+  --purple: #6B4EFF;
+  --orange: #D96B00;
+
+  --tint-blue: #EEF4FF;
+  --tint-green: #EAF6EE;
+  --tint-amber: #FFF7E3;
+  --tint-red: #FFF0F0;
+  --tint-purple: #F3EFFF;
+  --good-bg: #E3F6EA;  --good-ink: #14532D;
+  --bad-bg: #FDE8E8;   --bad-ink: #7F1D1D;
+
+  --canvas-bg: #091931;
+  --shadow: 0 1px 2px rgba(16, 33, 63, 0.04), 0 8px 24px rgba(16, 33, 63, 0.06);
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
+
+  /* SVG diagram palette (see section 10) */
+  --svg-ink: #0B2C63;   --svg-muted: #64748B;  --svg-grid: #CBD5E1;  --svg-grid-2: #94A3B8;
+  --svg-surface: #F8FAFC; --svg-blue: #1565C0; --svg-green: #198754; --svg-orange: #D96B00;
+  --svg-purple: #6B4EFF; --svg-red: #D9383A;   --svg-sky: #0284C7;
+  --svg-tint-pink: #FCE7F3; --svg-tint-sky: #E0F2FE; --svg-tint-green: #DCFCE7;
+  --svg-tint-blue: #DBEAFE; --svg-tint-sky-2: #BAE6FD;
+
+  color-scheme: light;
+}
+
+html[data-theme="dark"] {
+  --bg: #000000;
+  --bg-grid: transparent;
+  --surface: #0A0A0B;
+  --surface-2: #121214;
+  --surface-3: #1A1A1D;
+  --line: #222226;
+  --line-strong: #34343A;
+  --bar-bg: rgba(0, 0, 0, 0.88);
+
+  --ink: #F4F4F5;
+  --text: #E4E4E7;
+  --muted: #A1A1AA;
+
+  --brand: #9DBBFF;
+  --brand-solid: #1E3A8A;
+  --blue: #6AA8FF;
+  --green: #3DD68C;
+  --amber-ink: #F5C35A;
+  --red: #FF6B6B;
+  --purple: #B39DFF;
+  --orange: #FF9F43;
+
+  --tint-blue: rgba(106, 168, 255, 0.09);
+  --tint-green: rgba(61, 214, 140, 0.08);
+  --tint-amber: rgba(245, 180, 51, 0.09);
+  --tint-red: rgba(255, 107, 107, 0.09);
+  --tint-purple: rgba(179, 157, 255, 0.09);
+  --good-bg: rgba(61, 214, 140, 0.12);  --good-ink: #8BECC0;
+  --bad-bg: rgba(255, 107, 107, 0.12);  --bad-ink: #FFB0B0;
+
+  --canvas-bg: #000000;
+  --shadow: none;
+
+  --svg-ink: #E4E4E7;   --svg-muted: #8B8B94;  --svg-grid: #2C2C31;  --svg-grid-2: #45454C;
+  --svg-surface: #0F0F11; --svg-blue: #6AA8FF; --svg-green: #3DD68C; --svg-orange: #FF9F43;
+  --svg-purple: #B39DFF; --svg-red: #FF6B6B;   --svg-sky: #38BDF8;
+  --svg-tint-pink: rgba(244, 114, 182, 0.16); --svg-tint-sky: rgba(56, 189, 248, 0.14);
+  --svg-tint-green: rgba(61, 214, 140, 0.14); --svg-tint-blue: rgba(106, 168, 255, 0.14);
+  --svg-tint-sky-2: rgba(56, 189, 248, 0.22);
+
+  color-scheme: dark;
+}
+
+/* ---------- 1. Base & typography ---------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+* { -webkit-tap-highlight-color: transparent; }
+
+html {
+  font-family: var(--font);
+  font-size: 16.5px;
+  line-height: 1.65;
+  color: var(--text);
+  background: var(--bg);
+  scroll-behavior: smooth;
+  scroll-padding-top: 120px;
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(var(--bg-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--bg-grid) 1px, transparent 1px);
+  background-size: 28px 28px;
+  overflow-x: hidden;
+  padding-bottom: 96px;
+}
+
+h1, h2, h3, h4 { color: var(--ink); line-height: 1.25; letter-spacing: -0.01em; }
+p + p { margin-top: 0.6em; }
+strong { font-weight: 700; color: var(--ink); }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2.5px solid var(--blue); outline-offset: 2px; border-radius: 6px; }
+.material-icons-outlined { font-size: 1.25em; line-height: 1; vertical-align: middle; user-select: none; }
+
+/* ---------- 2. Scrollbars (thin everywhere) ---------- */
+* { scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent; }
+::-webkit-scrollbar { width: 6px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+/* ---------- 3. Layout ---------- */
+.topbar {
+  position: sticky; top: 0; z-index: 1000;
+  background: var(--bar-bg);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
+  padding: 8px 16px 10px;
+  touch-action: manipulation;
+  user-select: none; -webkit-user-select: none;
+}
+.topbar-inner { max-width: 1280px; margin: 0 auto; display: flex; flex-direction: column; gap: 6px; }
+.topbar-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.brand { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 1.08rem; color: var(--ink); }
+.brand .material-icons-outlined { color: var(--blue); }
+.brand-day { font-size: 0.72rem; font-weight: 700; color: var(--muted); border: 1px solid var(--line); border-radius: 99px; padding: 1px 8px; }
+.toolbar { display: flex; gap: 4px; }
+.topbar-progress { display: flex; align-items: center; gap: 10px; }
+.topbar-progress .bar { flex: 1; }
+.topbar-count { font-size: 0.8rem; font-weight: 700; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+.layout {
+  max-width: 1280px; margin: 0 auto; padding: 18px 16px 0;
+  display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px;
+}
+.content { min-width: 0; max-width: 920px; width: 100%; margin: 0 auto; }
+
+.rail { display: none; }
+@media (min-width: 1080px) {
+  html { font-size: 17.5px; }
+  .layout { grid-template-columns: 260px minmax(0, 1fr); padding-top: 26px; }
+  .rail {
+    display: block; position: sticky; top: 104px; align-self: start;
+    max-height: calc(100vh - 124px); overflow-y: auto; padding-right: 4px;
+  }
+  .only-mobile { display: none !important; }
+}
+
+/* Section list (rail on desktop, sheet on mobile) */
+.nav-title { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0 10px 10px; }
+.nav-item {
+  display: flex; align-items: center; gap: 10px; width: 100%; text-align: left;
+  background: none; border: 0; border-radius: 12px; padding: 9px 10px; cursor: pointer; color: var(--text);
+}
+.nav-item:hover { background: var(--surface-2); }
+.nav-item.is-current { background: var(--surface); box-shadow: inset 0 0 0 1.5px var(--line-strong); }
+.nav-item.is-current .nav-name { color: var(--ink); font-weight: 800; }
+.nav-ring { --p: 0; width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0; display: grid; place-items: center;
+  background: conic-gradient(var(--green) calc(var(--p) * 1%), var(--line-strong) 0); }
+.nav-ring::after { content: ''; width: 18px; height: 18px; border-radius: 50%; background: var(--bg); }
+.nav-ring.is-done { background: var(--green); }
+.nav-ring.is-done::after { content: '✓'; background: none; color: #fff; font-size: 0.7rem; font-weight: 800; width: auto; height: auto; }
+.nav-text { min-width: 0; flex: 1; }
+.nav-name { display: block; font-size: 0.88rem; font-weight: 600; line-height: 1.3; }
+.nav-sub { display: block; font-size: 0.72rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.rail-tip { font-size: 0.74rem; color: var(--muted); margin: 14px 10px 0; line-height: 1.5; }
+
+/* ---------- 4. Small components ---------- */
+.bar { height: 6px; background: var(--surface-3); border-radius: 99px; overflow: hidden; }
+.bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #FCE39D, var(--amber)); border-radius: 99px; transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
+
+.chip { display: inline-flex; align-items: center; gap: 4px; font-size: 0.7rem; font-weight: 800; padding: 2px 9px; border-radius: 99px; white-space: nowrap; letter-spacing: 0.02em; }
+.chip-amber { background: #FFF1C9; color: #6B4600; }
+.chip-good { background: var(--good-bg); color: var(--good-ink); }
+.chip-bad { background: var(--bad-bg); color: var(--bad-ink); }
+.chip-muted { background: var(--surface-3); color: var(--muted); }
+.chip-L { background: var(--bad-bg); color: var(--bad-ink); }
+.chip-M { background: #FFF1C9; color: #6B4600; }
+.chip-H { background: var(--good-bg); color: var(--good-ink); }
+
+.icon-btn {
+  width: 38px; height: 38px; border-radius: 50%; border: 1px solid transparent; background: none;
+  display: grid; place-items: center; cursor: pointer; color: var(--ink);
+}
+.icon-btn:hover { background: var(--surface-2); border-color: var(--line); }
+.icon-btn[aria-pressed="true"] { background: var(--brand-solid); color: var(--on-brand); }
+
+.btn, .btn-pill {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 8px 14px; border-radius: 99px; border: 1.5px solid var(--line-strong);
+  background: var(--surface); color: var(--ink); font-size: 0.84rem; font-weight: 700; cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.btn:hover, .btn-pill:hover { border-color: var(--brand); }
+.btn-pill.active, .btn-solid { background: var(--brand-solid); border-color: var(--brand-solid); color: var(--on-brand); }
+.btn:disabled { opacity: 0.45; cursor: default; }
+.btn-danger { background: var(--red); border-color: var(--red); color: #fff; }
+.btn-block { width: 100%; }
+.btn-group-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+
+/* ---------- 5. Today's plan (hero) ---------- */
+.hero-planner-card {
+  position: relative; overflow: hidden;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 26px;
+  padding: 24px 22px; box-shadow: var(--shadow); margin-bottom: 28px;
+}
+.hero-leaf-decor { position: absolute; top: -10px; right: -10px; width: 140px; height: 140px; pointer-events: none; opacity: 0.9; }
+.date-header { display: flex; align-items: center; gap: 16px; margin-bottom: 18px; position: relative; }
+.date-number { font-size: 3.4rem; font-weight: 800; line-height: 1; letter-spacing: -2px; color: var(--ink); background: var(--tint-amber); padding: 8px 14px; border-radius: 18px; }
+.date-divider { width: 2px; height: 44px; background: var(--line-strong); }
+.date-day { font-size: 1.5rem; font-weight: 700; color: var(--ink); }
+.subject-banner { position: relative; display: flex; align-items: center; gap: 18px; background: var(--tint-green); border-radius: 20px; padding: 18px; margin-bottom: 20px; }
+.subject-wave-box { width: 92px; height: 80px; flex-shrink: 0; border-radius: 50%; display: grid; place-items: center; background: color-mix(in srgb, var(--surface) 55%, transparent); }
+.subject-banner-divider { width: 1.5px; height: 60px; background: color-mix(in srgb, var(--green) 35%, transparent); }
+.subject-title-group h1 { font-size: 2rem; font-weight: 800; }
+.subject-title-group p { font-size: 1.25rem; color: var(--muted); }
+.topic-checklist { list-style: none; display: grid; gap: 12px; margin-bottom: 22px; padding: 0 4px; }
+.topic-checklist li { display: flex; align-items: flex-start; gap: 14px; font-size: 1.02rem; font-weight: 600; color: var(--ink); line-height: 1.4; }
+.topic-dot { width: 16px; height: 16px; border-radius: 50%; background: var(--amber); flex-shrink: 0; margin-top: 4px; display: grid; place-items: center; color: #fff; transition: background 0.3s; }
+.topic-dot .material-icons-outlined { font-size: 12px; display: none; }
+.topic-dot.done { background: var(--green); }
+.topic-dot.done .material-icons-outlined { display: block; }
+.coverage-box { background: var(--surface-2); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; }
+.coverage-title { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 0.92rem; font-weight: 700; color: var(--ink); margin-bottom: 10px; }
+.coverage-row { display: flex; align-items: center; gap: 14px; }
+.coverage-bar-outer { flex: 1; height: 18px; background: var(--surface-3); border-radius: 99px; overflow: hidden; }
+.coverage-bar-inner { height: 100%; width: 18%; background: linear-gradient(90deg, #FDE293, var(--amber)); border-radius: 99px; transition: width 0.5s ease; }
+.coverage-Numbers { text-align: right; min-width: 112px; }
+.coverage-Numbers strong { display: block; font-size: 1.05rem; font-weight: 800; }
+.coverage-Numbers span { font-size: 0.82rem; color: var(--muted); font-weight: 600; }
+
+/* ---------- 6. Sections, cards, callouts ---------- */
+.section-block { margin-bottom: 40px; scroll-margin-top: 120px; }
+.section-header-pill {
+  display: inline-flex; align-items: center; gap: 6px; margin-bottom: 10px;
+  background: var(--brand-solid); color: var(--on-brand);
+  font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em;
+  padding: 5px 12px; border-radius: 99px;
+}
+.section-header-pill .material-icons-outlined { font-size: 16px; }
+.section-title { font-size: 1.6rem; font-weight: 800; margin-bottom: 6px; }
+.section-subtitle { color: var(--muted); margin-bottom: 18px; max-width: 70ch; }
+.part-title { font-size: 1.25rem; margin: 22px 0 8px; }
+.derivation-title { font-size: 1.12rem; margin-top: 6px; }
+
+.study-card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg);
+  padding: 20px; box-shadow: var(--shadow); margin-bottom: 18px;
+}
+.card-outline { border: 2px solid var(--brand); }
+
+.callout-box {
+  border-radius: var(--radius-md); padding: 15px 16px; margin-bottom: 16px;
+  border-left: 4px solid var(--brand); font-size: 0.96rem;
+}
+.callout-header {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 6px;
+  font-size: 0.74rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em;
+}
+.callout-header .material-icons-outlined { font-size: 18px; }
+.callout-header.is-brand { color: var(--brand); font-size: 0.86rem; }
+.callout-remind { background: var(--tint-amber); border-left-color: var(--amber); }
+.callout-remind .callout-header { color: var(--amber-ink); }
+.callout-math { background: var(--tint-purple); border-left-color: var(--purple); }
+.callout-math .callout-header { color: var(--purple); }
+.callout-idea { background: var(--tint-blue); border-left-color: var(--blue); }
+.callout-idea .callout-header { color: var(--blue); }
+.callout-kerala { background: var(--tint-green); border-left-color: var(--green); }
+.callout-kerala .callout-header { color: var(--green); }
+.callout-trap { background: var(--tint-red); border-left-color: var(--red); }
+.callout-trap .callout-header { color: var(--red); }
+.callout-result { background: var(--surface); border: 2px solid var(--brand); border-left-width: 6px; }
+.callout-result .callout-header { color: var(--brand); }
+
+.list { padding-left: 20px; font-size: 0.94rem; line-height: 1.7; }
+.lead { color: var(--muted); margin-bottom: 12px; font-size: 0.94rem; }
+.note { font-size: 0.84rem; color: var(--muted); margin-bottom: 8px; }
+.meta { font-size: 0.76rem; font-weight: 600; color: var(--muted); }
+.small { font-size: 0.9rem; }
+.text-good { color: var(--green); }
+
+/* ---------- 7. Simulators & 3D ---------- */
+.sim-box { background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 14px; margin: 16px 0; }
+.sim-title-bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.sim-title { display: flex; align-items: center; gap: 6px; font-size: 0.92rem; font-weight: 700; color: var(--ink); }
+.sim-title .material-icons-outlined { font-size: 18px; color: var(--blue); }
+.touch-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 0.72rem; font-weight: 700; color: var(--blue); background: var(--tint-blue); padding: 3px 10px; border-radius: 99px; }
+.touch-badge .material-icons-outlined { font-size: 14px; }
+.canvas-3d-wrap { position: relative; width: 100%; background: var(--canvas-bg); border-radius: 12px; overflow: hidden; touch-action: none; user-select: none; border: 1px solid var(--line); }
+.canvas-3d-wrap canvas { display: block; width: 100%; height: 300px; cursor: grab; }
+.canvas-3d-wrap canvas:active { cursor: grabbing; }
+.canvas-overlay-hint { position: absolute; bottom: 8px; right: 10px; display: flex; align-items: center; gap: 4px; background: rgba(0, 0, 0, 0.6); color: #E5E7EB; font-size: 0.72rem; padding: 3px 8px; border-radius: 6px; pointer-events: none; }
+.canvas-overlay-hint .material-icons-outlined { font-size: 14px; }
+.sim-controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-top: 12px; }
+.control-group { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 8px 12px; }
+.control-group label { display: flex; justify-content: space-between; gap: 8px; font-size: 0.82rem; font-weight: 600; margin-bottom: 4px; }
+.control-group input[type="range"] { width: 100%; accent-color: var(--blue); cursor: pointer; }
+.readout-strip { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.readout-chip { flex: 1; min-width: 120px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 7px 10px; font-size: 0.78rem; color: var(--muted); }
+.readout-chip strong { display: block; font-size: 0.94rem; color: var(--ink); margin-top: 2px; font-variant-numeric: tabular-nums; }
+
+/* ---------- 8. Derivations ---------- */
+.derivation-card { background: var(--surface); border: 2px solid var(--line-strong); border-radius: var(--radius-lg); padding: 20px 18px; margin: 20px 0; box-shadow: var(--shadow); }
+.derivation-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; border-bottom: 1px solid var(--line); padding-bottom: 12px; margin-bottom: 14px; }
+.derivation-header > * { min-width: 0; max-width: 100%; }
+.derivation-badge { display: inline-flex; align-items: center; gap: 5px; background: var(--tint-blue); color: var(--blue); font-size: 0.72rem; font-weight: 800; padding: 3px 10px; border-radius: 99px; text-transform: uppercase; letter-spacing: 0.04em; }
+.derivation-badge .material-icons-outlined { font-size: 15px; }
+.derivation-step-counter { font-size: 0.82rem; font-weight: 700; color: var(--blue); font-variant-numeric: tabular-nums; }
+.unlocked-steps-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+.unlocked-step-item { background: var(--tint-blue); border: 1px solid color-mix(in srgb, var(--blue) 25%, transparent); border-left: 4px solid var(--blue); border-radius: 12px; padding: 12px 14px; animation: fadeIn 0.35s ease; }
+.unlocked-step-title { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; font-weight: 800; color: var(--blue); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 4px; }
+.unlocked-step-title .material-icons-outlined { font-size: 16px; }
+.unlocked-step-body { font-size: 0.94rem; }
+.prediction-box { background: var(--tint-amber); border: 1.5px dashed var(--amber); border-radius: 14px; padding: 15px 14px; }
+.prediction-hint { font-size: 0.94rem; margin-bottom: 12px; background: color-mix(in srgb, var(--amber) 14%, transparent); padding: 10px 12px; border-radius: 10px; }
+.prediction-hint strong { color: var(--amber-ink); }
+.prediction-question { font-weight: 500; font-size: 0.9rem; color: var(--muted); }
+.derivation-complete-sheet { display: none; background: var(--tint-green); border: 2px solid var(--green); border-radius: 16px; padding: 16px; margin-top: 14px; }
+.derivation-complete-sheet.show { display: block; animation: fadeIn 0.4s ease; }
+
+/* ---------- 9. OMR questions ---------- */
+.omr-section { background: var(--surface); border: 1.5px solid var(--line-strong); border-radius: var(--radius-lg); padding: 18px 16px; margin: 18px 0; box-shadow: var(--shadow); }
+.omr-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+.omr-header-title { display: flex; align-items: center; gap: 8px; font-size: 1.02rem; font-weight: 800; color: var(--ink); }
+.omr-question-card { background: var(--surface-2); border: 1px solid var(--line); border-radius: 14px; padding: 14px; margin-bottom: 14px; }
+.omr-question-card:last-child { margin-bottom: 0; }
+.omr-q-text { font-size: 0.97rem; font-weight: 700; color: var(--ink); margin-bottom: 12px; line-height: 1.5; }
+.omr-options-list { display: flex; flex-direction: column; gap: 9px; overflow-x: auto; padding-bottom: 4px; }
+.omr-option-btn {
+  display: flex; align-items: center; gap: 12px; width: 100%; text-align: left;
+  background: var(--surface); border: 1.5px solid var(--line-strong); border-radius: 12px;
+  padding: 10px 12px; font-size: 0.92rem; font-weight: 500; line-height: 1.45; color: var(--text); cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.omr-option-btn:hover:not(:disabled) { border-color: var(--brand); background: var(--surface-2); }
+.omr-option-btn:disabled { cursor: default; }
+.omr-bubble { width: 30px; height: 30px; flex-shrink: 0; border-radius: 50%; border: 2px solid var(--brand); display: grid; place-items: center; font-weight: 800; font-size: 0.8rem; color: var(--brand); }
+.omr-option-btn.selected-correct { border-color: var(--green); background: var(--good-bg); }
+.omr-option-btn.selected-correct .omr-bubble { background: var(--green); border-color: var(--green); color: #fff; }
+.omr-option-btn.selected-wrong { border-color: var(--red); background: var(--bad-bg); }
+.omr-option-btn.selected-wrong .omr-bubble { background: var(--red); border-color: var(--red); color: #fff; }
+.omr-option-btn.is-idk { justify-content: center; border-style: dashed; color: var(--muted); font-weight: 700; }
+.omr-feedback { display: none; margin-top: 10px; padding: 10px 12px; border-radius: 10px; font-size: 0.88rem; line-height: 1.5; }
+.omr-feedback.show { display: block; }
+.omr-feedback.correct { background: var(--good-bg); color: var(--good-ink); }
+.omr-feedback.wrong { background: var(--bad-bg); color: var(--bad-ink); }
+.omr-feedback strong { color: inherit; }
+.omr-feedback .material-icons-outlined { font-size: 16px; }
+
+/* ---------- 10. Tables, diagrams, SVG palette ---------- */
+.table-scroll { overflow-x: auto; margin: 12px 0; border-radius: 12px; border: 1px solid var(--line); }
+table.clean-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; background: var(--surface); }
+table.clean-table th { background: var(--surface-2); color: var(--ink); font-weight: 800; text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+table.clean-table td { padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table.clean-table tr:last-child td { border-bottom: 0; }
+
+.svg-diagram-container { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 10px; margin: 12px 0; text-align: center; }
+.svg-diagram-container > svg { width: 100%; height: auto; max-height: 320px; }
+.svg-caption { font-size: 0.82rem; color: var(--muted); margin-top: 6px; }
+.svg-diagram-container text { font-family: var(--font); }
+
+/* Diagram colours are written as hex in the markup; these rules map them to theme tokens */
+svg [fill="#0B2C63"] { fill: var(--svg-ink); }    svg [stroke="#0B2C63"] { stroke: var(--svg-ink); }
+svg [fill="#1565C0"] { fill: var(--svg-blue); }   svg [stroke="#1565C0"] { stroke: var(--svg-blue); }
+svg [fill="#198754"] { fill: var(--svg-green); }  svg [stroke="#198754"] { stroke: var(--svg-green); }
+svg [fill="#D96B00"] { fill: var(--svg-orange); } svg [stroke="#D96B00"] { stroke: var(--svg-orange); }
+svg [fill="#6B4EFF"] { fill: var(--svg-purple); } svg [stroke="#6B4EFF"] { stroke: var(--svg-purple); }
+svg [fill="#D9383A"] { fill: var(--svg-red); }
+svg [fill="#64748B"] { fill: var(--svg-muted); }  svg [stroke="#64748B"] { stroke: var(--svg-muted); }
+svg [stroke="#CBD5E1"] { stroke: var(--svg-grid); }
+svg [stroke="#94A3B8"] { stroke: var(--svg-grid-2); }
+svg [fill="#F8FAFC"] { fill: var(--svg-surface); }
+svg [fill="#0284C7"] { fill: var(--svg-sky); }    svg [stroke="#0284C7"] { stroke: var(--svg-sky); }
+svg [fill="#FCE7F3"] { fill: var(--svg-tint-pink); }
+svg [fill="#E0F2FE"] { fill: var(--svg-tint-sky); }
+svg [fill="#DCFCE7"] { fill: var(--svg-tint-green); }
+svg [fill="#DBEAFE"] { fill: var(--svg-tint-blue); }
+svg [fill="#BAE6FD"] { fill: var(--svg-tint-sky-2); }
+
+/* ---------- 11. Wide maths scrolls inside its own block ---------- */
+p:has(> mjx-container), li:has(> mjx-container), div:has(> mjx-container),
+h1:has(> mjx-container), h2:has(> mjx-container), h3:has(> mjx-container) { overflow-x: auto; overflow-y: hidden; }
+mjx-container[display="true"] { margin: 0.6em 0 !important; }
+
+/* ---------- 12. Sheet & toasts ---------- */
+.sheet-wrap { position: fixed; inset: 0; z-index: 2100; display: none; align-items: flex-end; justify-content: center; background: rgba(0, 0, 0, 0.55); }
+.sheet-wrap.show { display: flex; }
+.sheet-wrap.center { align-items: center; padding: 16px; }
+.sheet { width: 100%; max-width: 540px; max-height: 85vh; overflow-y: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 24px 24px 0 0; padding: 20px 20px 28px; animation: rise 0.25s ease; }
+.sheet-wrap.center .sheet { border-radius: 24px; }
+.sheet-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.sheet-head h3 { flex: 1; font-size: 1.1rem; }
+.sheet h4 { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); margin: 16px 0 8px; }
+.sheet-actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; margin-top: 18px; }
+.sheet-actions.is-center { justify-content: center; }
+.sheet-text { color: var(--muted); font-size: 0.94rem; }
+
+.toasts { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); z-index: 2200; display: flex; flex-direction: column; gap: 8px; width: calc(100% - 28px); max-width: 520px; pointer-events: none; }
+body.focus-on .toasts, body.mm-panel-open .toasts { bottom: 86px; }
+.toast { pointer-events: auto; display: flex; align-items: center; gap: 10px; background: var(--brand-solid); color: #fff; border-radius: 16px; padding: 12px 14px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); font-size: 0.88rem; line-height: 1.4; animation: rise 0.25s ease; }
+.toast.goal { background: #15803D; }
+.toast.conc { background: #B42324; }
+.toast-body { flex: 1; min-width: 0; }
+.toast-body b { display: block; font-size: 0.94rem; }
+.toast .btn { background: transparent; color: #fff; border-color: rgba(255, 255, 255, 0.6); padding: 4px 10px; }
+
+/* ---------- 13. Focus mode: one section at a time ---------- */
+.focus-nav {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 900; display: none;
+  align-items: center; gap: 10px; padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+  background: var(--bar-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid var(--line);
+}
+.focus-nav-mid { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.focus-nav-title { font-size: 0.8rem; font-weight: 700; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; }
+body.focus-on .focus-nav { display: flex; }
+body.focus-on .content > .section-block:not(.is-current) { display: none; }
+body.focus-on .content > .section-block.is-current { animation: fadeIn 0.3s ease; }
+@media (min-width: 1080px) {
+  .focus-nav { left: 50%; right: auto; bottom: 16px; transform: translateX(-50%); width: min(620px, calc(100% - 32px)); border: 1px solid var(--line); border-radius: 18px; }
+}
+
+/* ---------- 14. Match Mode (experimental, double-tap the top bar) ---------- */
+.mm-strip { display: none; width: 100%; align-items: center; gap: 10px; background: var(--brand-solid); color: #fff; border: 0; border-radius: 12px; padding: 7px 10px; cursor: pointer; text-align: left; }
+body.mm-on .mm-strip { display: flex; }
+.mm-strip.is-break { background: #0E5A8A; }
+.mm-strip-score { font-weight: 800; font-size: 0.8rem; white-space: nowrap; display: flex; align-items: center; gap: 5px; }
+.mm-strip-score .num { background: #fff; color: #0B2C63; border-radius: 6px; padding: 0 6px; font-variant-numeric: tabular-nums; }
+.mm-strip-clock { display: flex; align-items: center; gap: 3px; font-weight: 800; font-size: 0.82rem; color: var(--amber); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.mm-strip-clock .material-icons-outlined { font-size: 15px; }
+.mm-strip-sec { flex: 1; min-width: 0; font-size: 0.76rem; color: #D6DEEE; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.mm-overlay { position: fixed; inset: 0; z-index: 2000; display: none; background: var(--bg); overflow-y: auto; }
+.mm-overlay.show { display: block; }
+.mm-inner { max-width: 760px; margin: 0 auto; padding: 0 16px 120px; }
+.mm-head { position: sticky; top: 0; z-index: 5; background: var(--bar-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 12px 0 10px; border-bottom: 1px solid var(--line); margin-bottom: 16px; }
+.mm-head-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.mm-title { display: flex; align-items: center; gap: 8px; font-weight: 800; color: var(--ink); font-size: 1.08rem; }
+.mm-tabs { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+
+.mm-intro { font-size: 0.94rem; }
+.mm-counts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 4px 0 14px; }
+.mm-count { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 8px 12px; font-size: 0.74rem; font-weight: 700; color: var(--muted); }
+.mm-count strong { display: block; font-size: 1.2rem; }
+.mm-count.h strong { color: var(--green); } .mm-count.m strong { color: var(--amber-ink); } .mm-count.l strong { color: var(--red); }
+
+.mm-group { margin-bottom: 18px; }
+.mm-group-title { display: flex; justify-content: space-between; gap: 8px; margin: 0 4px 8px; font-size: 0.74rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); }
+.mm-skill { display: flex; align-items: center; gap: 10px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; margin-bottom: 8px; }
+.mm-skill-body { flex: 1; min-width: 0; }
+.mm-skill-name { font-weight: 700; font-size: 0.92rem; color: var(--ink); line-height: 1.35; }
+.mm-skill-tags { font-size: 0.74rem; color: var(--muted); margin-top: 2px; }
+.mm-lmh { display: flex; flex-shrink: 0; border: 1.5px solid var(--line-strong); border-radius: 99px; overflow: hidden; }
+.mm-lmh button { width: 36px; height: 30px; border: 0; background: var(--surface); font-weight: 800; font-size: 0.8rem; color: var(--ink); cursor: pointer; }
+.mm-lmh button + button { border-left: 1.5px solid var(--line-strong); }
+.mm-lmh button.on[data-v="L"] { background: var(--red); color: #fff; }
+.mm-lmh button.on[data-v="M"] { background: var(--amber); color: #111; }
+.mm-lmh button.on[data-v="H"] { background: var(--green); color: #fff; }
+
+.mm-foot { position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; background: var(--bar-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-top: 1px solid var(--line); padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); }
+.mm-foot-inner { max-width: 760px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.mm-foot-note { font-size: 0.76rem; color: var(--muted); font-weight: 600; line-height: 1.35; }
+
+.mm-board { background: #0B2C63; color: #fff; border-radius: 22px; padding: 16px; margin-bottom: 14px; }
+html[data-theme="dark"] .mm-board { background: #0A1A3D; border: 1px solid #1E3A8A; }
+.mm-board-teams { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px; text-align: center; }
+.mm-team-name { font-weight: 800; font-size: 0.94rem; }
+.mm-team-sub { font-size: 0.68rem; color: #A9BBDB; margin-top: 2px; }
+.mm-score { font-size: 2.4rem; font-weight: 800; letter-spacing: -1px; line-height: 1; font-variant-numeric: tabular-nums; }
+.mm-clock-row { display: flex; justify-content: center; align-items: center; gap: 14px; margin-top: 14px; }
+.mm-clock { font-size: 2.1rem; font-weight: 800; line-height: 1; color: var(--amber); font-variant-numeric: tabular-nums; }
+.mm-play { width: 52px; height: 52px; border-radius: 50%; border: 0; display: grid; place-items: center; background: var(--amber); color: #111; cursor: pointer; }
+.mm-play:disabled { opacity: 0.4; cursor: default; }
+.mm-play .material-icons-outlined { font-size: 30px; }
+.mm-phase { text-align: center; margin-top: 8px; font-size: 0.74rem; font-weight: 700; color: #D6DEEE; text-transform: uppercase; letter-spacing: 0.07em; }
+.mm-board-foot { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 12px; font-size: 0.72rem; color: #A9BBDB; }
+.mm-board-foot .material-icons-outlined { font-size: 13px; }
+.mm-ghost { display: inline-flex; align-items: center; gap: 4px; background: transparent; border: 1px solid rgba(255, 255, 255, 0.3); color: #fff; border-radius: 99px; padding: 4px 10px; font-size: 0.72rem; font-weight: 700; cursor: pointer; }
+
+.mm-now { background: var(--tint-amber); border: 1.5px dashed var(--amber); border-radius: 18px; padding: 14px; margin-bottom: 16px; }
+.mm-now-label { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.07em; color: var(--amber-ink); margin-bottom: 4px; }
+.mm-now-name { font-weight: 800; color: var(--ink); font-size: 1.02rem; }
+.mm-now-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 8px; font-size: 0.8rem; color: var(--muted); font-weight: 600; }
+
+.mm-pitch { position: relative; width: 100%; max-width: 460px; margin: 0 auto 18px; aspect-ratio: 68 / 100; border-radius: 20px; overflow: hidden; border: 3px solid #2E5E35; background: repeating-linear-gradient(180deg, #3F7A47 0 10%, #48874F 10% 20%); }
+html[data-theme="dark"] .mm-pitch { border-color: #1B3A20; background: repeating-linear-gradient(180deg, #1F4426 0 10%, #24502C 10% 20%); }
+.mm-pitch.empty { display: grid; place-items: center; text-align: center; padding: 24px; color: #fff; font-weight: 700; }
+.mm-line { position: absolute; border: 2px solid rgba(255, 255, 255, 0.65); pointer-events: none; }
+.mm-l-half { left: 0; right: 0; top: 50%; height: 0; border-width: 2px 0 0; }
+.mm-l-circle { left: 50%; top: 50%; width: 26%; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; }
+.mm-l-boxt { left: 22%; right: 22%; top: -2px; height: 14%; }  .mm-l-boxb { left: 22%; right: 22%; bottom: -2px; height: 14%; }
+.mm-l-sixt { left: 37%; right: 37%; top: -2px; height: 5.5%; } .mm-l-sixb { left: 37%; right: 37%; bottom: -2px; height: 5.5%; }
+.mm-player { position: absolute; transform: translate(-50%, -50%); width: 78px; display: flex; flex-direction: column; align-items: center; gap: 2px; background: none; border: 0; padding: 0; cursor: pointer; }
+.mm-player .dot { position: relative; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 0.76rem; color: #fff; border: 2px solid #fff; box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25); }
+.mm-player.me .dot { background: #1D4ED8; }
+.mm-player.time .dot { background: #D9383A; }
+.mm-player .lbl { max-width: 78px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.6rem; font-weight: 700; color: #fff; background: rgba(0, 0, 0, 0.55); padding: 1px 5px; border-radius: 6px; }
+.mm-player .gb { position: absolute; top: -7px; right: -10px; display: flex; align-items: center; gap: 1px; background: #fff; color: #0B2C63; font-size: 0.58rem; font-weight: 800; border-radius: 99px; padding: 1px 4px; }
+.mm-player .gb .material-icons-outlined { font-size: 10px; }
+.mm-team-tag { position: absolute; left: 8px; font-size: 0.62rem; font-weight: 800; color: #fff; background: rgba(0, 0, 0, 0.45); padding: 3px 8px; border-radius: 99px; text-transform: uppercase; letter-spacing: 0.06em; pointer-events: none; }
+
+.mm-fix { display: flex; align-items: flex-start; gap: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px; margin-bottom: 8px; }
+.mm-fix.live { border: 2px solid var(--amber); background: var(--tint-amber); }
+.mm-min { min-width: 48px; flex-shrink: 0; text-align: center; font-weight: 800; color: var(--ink); background: var(--surface-3); border-radius: 10px; padding: 6px 4px; font-size: 0.92rem; }
+.mm-min small { display: block; font-size: 0.58rem; color: var(--muted); font-weight: 700; text-transform: uppercase; }
+.mm-fix-body { flex: 1; min-width: 0; }
+.mm-fix-name { font-weight: 700; font-size: 0.92rem; color: var(--ink); line-height: 1.35; }
+.mm-fix-meta { font-size: 0.76rem; color: var(--muted); margin-top: 4px; }
+.mm-big { font-size: 3.2rem; font-weight: 800; color: var(--ink); letter-spacing: -1px; margin: 10px 0 4px; font-variant-numeric: tabular-nums; text-align: center; }
+.mm-modal-icon { width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 8px; display: grid; place-items: center; background: var(--tint-blue); color: var(--blue); }
+.mm-modal-icon .material-icons-outlined { font-size: 34px; }
+.mm-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 0.9rem; }
+.mm-center { text-align: center; }
+.mm-dot-lg { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 800; flex-shrink: 0; }
+
+/* ---------- 15. Utilities & responsive ---------- */
+.mt-1 { margin-top: 4px; } .mt-2 { margin-top: 8px; } .mb-0 { margin-bottom: 0; } .mb-2 { margin-bottom: 8px; } .mb-3 { margin-bottom: 12px; } .my-2 { margin: 8px 0; }
+.hidden { display: none !important; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+
+@media (max-width: 480px) {
+  .layout { padding: 14px 12px 0; }
+  .study-card, .omr-section { padding: 16px 14px; }
+  .derivation-card { padding: 16px 12px; }
+  .date-number { font-size: 2.8rem; }
+  .date-day { font-size: 1.25rem; }
+  .subject-title-group h1 { font-size: 1.6rem; }
+  .section-title { font-size: 1.38rem; }
+  .canvas-3d-wrap canvas { height: 260px; }
+}
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+/* ---------- E1. Exam: diagram palette (hex colours inside the question diagrams -> theme tokens) ---------- */
+:root {
+  --x-ink: #0F172A;  --x-ink-2: #334155;  --x-muted: #64748B;  --x-grid: #94A3B8;
+  --x-sky: #0284C7;  --x-orange: #EA580C; --x-green: #16A34A;  --x-pink: #DB2777;
+  --x-red: #DC2626;  --x-purple: #7C3AED; --x-blue: #1D4ED8;
+  --x-tint-sky: #E0F2FE; --x-tint-green: #DCFCE7; --x-tint-blue: #DBEAFE;
+  --x-surface: #F8FAFC;
+}
+html[data-theme="dark"] {
+  --x-ink: #E4E4E7;  --x-ink-2: #C4C4CC;  --x-muted: #8B8B94;  --x-grid: #55555E;
+  --x-sky: #38BDF8;  --x-orange: #FF9F43; --x-green: #3DD68C;  --x-pink: #F472B6;
+  --x-red: #FF6B6B;  --x-purple: #B39DFF; --x-blue: #6AA8FF;
+  --x-tint-sky: rgba(56, 189, 248, 0.16); --x-tint-green: rgba(61, 214, 140, 0.16); --x-tint-blue: rgba(106, 168, 255, 0.16);
+  --x-surface: #0F0F11;
+}
+.eval-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 20px 0 10px; }
+.eval-title { display: flex; align-items: center; gap: 8px; font-size: 1.02rem; font-weight: 800; color: var(--ink); }
+.subq-card { background: var(--surface); border: 1.5px solid var(--line); border-radius: var(--radius-md); padding: 14px; margin-bottom: 12px; }
+.subq-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; font-size: 0.76rem; font-weight: 700; color: var(--muted); }
+.subq-step { background: var(--tint-blue); color: var(--blue); padding: 3px 10px; border-radius: 99px; font-weight: 800; }
+.subq-prompt { font-size: 0.98rem; font-weight: 700; color: var(--ink); margin-bottom: 12px; line-height: 1.5; }
+.options-list { display: flex; flex-direction: column; gap: 8px; }
+.opt-btn { display: flex; align-items: flex-start; gap: 10px; width: 100%; text-align: left; cursor: pointer;
+  background: var(--surface-2); border: 1.5px solid var(--line-strong); border-radius: 12px; padding: 10px 12px; font-size: 0.92rem; line-height: 1.5; color: var(--text);
+  transition: border-color 0.15s, background 0.15s; }
+.opt-btn:hover { border-color: var(--brand); }
+.opt-btn > .material-icons-outlined { flex-shrink: 0; margin-top: 1px; color: var(--muted); }
+.opt-body { flex: 1; min-width: 0; overflow-x: auto; }
+.opt-marks { display: block; margin-top: 3px; font-size: 0.74rem; font-weight: 800; opacity: 0.85; }
+.opt-btn.selected-full { background: var(--good-bg); border-color: var(--green); color: var(--good-ink); }
+.opt-btn.selected-partial { background: var(--tint-amber); border-color: var(--amber); color: var(--amber-ink); }
+.opt-btn.selected-none { background: var(--bad-bg); border-color: var(--red); color: var(--bad-ink); }
+.opt-btn.selected-full > .material-icons-outlined { color: var(--green); }
+.opt-btn.selected-partial > .material-icons-outlined { color: var(--amber-ink); }
+.opt-btn.selected-none > .material-icons-outlined { color: var(--red); }
+/* ---------- E7. Concept checks: everyday pictures and understanding checks ---------- */
+:root { --x-tint-amber: #FEF3C7; }
+html[data-theme="dark"] { --x-tint-amber: rgba(245, 180, 51, 0.14); }
+
+.cx-locked { display: flex; align-items: center; gap: 10px; margin-top: 18px; padding: 12px 14px; border: 1.5px dashed var(--line-strong); border-radius: var(--radius-md); color: var(--muted); font-size: 0.9rem; }
+.cx-scene { background: var(--x-surface); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 12px; margin-bottom: 14px; }
+.cx-scene-title { display: flex; align-items: center; gap: 8px; font-weight: 800; color: var(--ink); font-size: 0.95rem; margin-bottom: 8px; }
+.cx-caption { margin: 8px 2px 0; font-size: 0.86rem; color: var(--muted); line-height: 1.5; }
+
+/* The drawings: strokes and fills come from theme tokens, so they work in light and pitch black */
+.ev { width: 100%; height: auto; max-height: 280px; display: block; margin: 0 auto; }
+.ev text { fill: var(--x-ink); font-family: var(--font); font-size: 11px; }
+.ev text.ts { fill: var(--x-muted); font-size: 10px; }
+.ev .k, .ev .m, .ev .d, .ev .s1, .ev .s2, .ev .s3 { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.ev .k { stroke: var(--x-ink); stroke-width: 1.6; }
+.ev .m { stroke: var(--x-muted); stroke-width: 1.2; }
+.ev .d { stroke: var(--x-muted); stroke-width: 1.2; stroke-dasharray: 4 3; }
+.ev .s1 { stroke: var(--x-blue); stroke-width: 2.2; }
+.ev .s2 { stroke: var(--x-orange); stroke-width: 2.2; }
+.ev .s3 { stroke: var(--x-green); stroke-width: 2.2; }
+.ev .pt { fill: var(--x-ink); }
+.ev .fa { fill: var(--x-tint-amber); }
+.ev .fw { fill: var(--x-tint-sky); }
+.ev .fg { fill: var(--x-tint-green); }
+.ev .fl { fill: var(--x-tint-sky); }
+.ev .bd circle { stroke: none; }
+.ev .bd text { fill: #fff; font-weight: 800; font-size: 11px; text-anchor: middle; }
+.ev .bd.b1 circle, .cbadge.b1 { background: #1D4ED8; fill: #1D4ED8; }
+.ev .bd.b2 circle, .cbadge.b2 { background: #C2540A; fill: #C2540A; }
+.ev .bd.b3 circle, .cbadge.b3 { background: #15803D; fill: #15803D; }
+html[data-theme="dark"] .ev .bd.b1 circle, html[data-theme="dark"] .cbadge.b1 { background: #6AA8FF; fill: #6AA8FF; }
+html[data-theme="dark"] .ev .bd.b2 circle, html[data-theme="dark"] .cbadge.b2 { background: #FF9F43; fill: #FF9F43; }
+html[data-theme="dark"] .ev .bd.b3 circle, html[data-theme="dark"] .cbadge.b3 { background: #3DD68C; fill: #3DD68C; }
+html[data-theme="dark"] .ev .bd text, html[data-theme="dark"] .cbadge { color: #000; }
+html[data-theme="dark"] .ev .bd text { fill: #000; }
+
+.cx-card { background: var(--surface); border: 1.5px solid var(--line); border-left-width: 6px; border-radius: var(--radius-md); padding: 14px; margin-bottom: 12px; }
+.cx-card.b1 { border-left-color: #1D4ED8; } .cx-card.b2 { border-left-color: #C2540A; } .cx-card.b3 { border-left-color: #15803D; }
+html[data-theme="dark"] .cx-card.b1 { border-left-color: #6AA8FF; } html[data-theme="dark"] .cx-card.b2 { border-left-color: #FF9F43; } html[data-theme="dark"] .cx-card.b3 { border-left-color: #3DD68C; }
+.cx-card-top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+.cbadge { flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 800; font-size: 0.85rem; }
+.cx-term { flex: 1; min-width: 0; color: var(--ink); font-size: 1rem; }
+.cx-line { margin: 0 0 8px; font-size: 0.93rem; line-height: 1.55; overflow-x: auto; }
+.cx-tag { display: inline-flex; align-items: center; gap: 4px; background: var(--surface-3); color: var(--muted); font-size: 0.72rem; font-weight: 800; padding: 2px 8px; border-radius: 99px; margin-right: 4px; vertical-align: 1px; }
+.cx-check { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--line-strong); }
+.cx-q { font-weight: 700; color: var(--ink); line-height: 1.55; margin-bottom: 10px; font-size: 0.97rem; overflow-x: auto; }
+.cx-letter { color: var(--muted); margin-right: 4px; }
+.cx-answer { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.cx-input { flex: 1; min-width: 150px; font: inherit; font-size: 1rem; color: var(--ink); background: var(--surface-2); border: 1.5px solid var(--line-strong); border-radius: 12px; padding: 10px 12px; }
+.cx-input:focus { outline: 2px solid var(--brand); outline-offset: 1px; }
+.cx-unit { color: var(--muted); font-weight: 700; }
+.cx-idk { margin-top: 10px; }
+.cx-given { font-size: 0.92rem; color: var(--muted); }
+.cx-given b { color: var(--ink); }
+.cx-verdict { display: flex; gap: 10px; align-items: flex-start; margin-top: 10px; padding: 10px 12px; border-radius: 12px; font-size: 0.92rem; line-height: 1.55; }
+.cx-verdict.ok { background: var(--good-bg); color: var(--good-ink); }
+.cx-verdict.bad { background: var(--bad-bg); color: var(--bad-ink); }
+.cx-verdict > .material-icons-outlined { flex-shrink: 0; margin-top: 1px; }
+.cx-verdict > div { min-width: 0; overflow-x: auto; }
+.cx-why { display: block; margin-top: 4px; opacity: 0.92; }
+
+.cx-streak { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 12px 0 0; padding: 8px 12px; border-radius: 12px; background: var(--tint-blue); color: var(--ink); font-size: 0.86rem; font-weight: 600; }
+.cx-streak.hot { background: var(--tint-red); }
+.cx-streak-dots { display: inline-flex; gap: 5px; }
+.cx-dot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--muted); }
+.cx-dot.on { background: var(--red); border-color: var(--red); }
+
+/* Match Mode: slip streak, section credit picker */
+.mm-streak { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 8px; font-size: 0.82rem; color: var(--muted); font-weight: 600; }
+.mm-pick-list { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; max-height: 46vh; overflow-y: auto; }
+.mm-pick { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; cursor: pointer; background: var(--surface-2); border: 1.5px solid var(--line-strong); border-radius: 12px; padding: 9px 12px; color: var(--text); font-size: 0.92rem; }
+.mm-pick > .material-icons-outlined { flex-shrink: 0; color: var(--muted); }
+.mm-pick.on { background: var(--good-bg); border-color: var(--green); color: var(--good-ink); }
+.mm-pick.on > .material-icons-outlined { color: var(--green); }
+.mm-pick-body { flex: 1; min-width: 0; }
+.mm-pick-body small { display: block; color: var(--muted); font-size: 0.76rem; font-weight: 600; margin-top: 1px; }
+.mm-pick.on .mm-pick-body small { color: inherit; opacity: 0.85; }
+
+.cx2 { margin: 18px 0 8px; }
+.bg-blue { background: #1D4ED8; }
+.bg-red { background: #D9383A; }
+</style>
+</head>
+
+<body>
+
+<!-- ======================================================================
+     TOP BAR · progress, tools. Double-tap an empty part to toggle Match Mode
+     ====================================================================== -->
+<header class="topbar" id="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-row">
+      <div class="brand">
+        <span class="material-icons-outlined">waves</span>
+        <span>[Subject]</span>
+        <span class="brand-day">Day 2</span>
+      </div>
+      <div class="toolbar">
+        <button class="icon-btn only-mobile" data-ui="sections" title="Sections" aria-label="Sections">
+          <span class="material-icons-outlined">toc</span>
+        </button>
+        <button class="icon-btn" data-ui="focus" title="Focus mode: one section at a time" aria-label="Focus mode" aria-pressed="false">
+          <span class="material-icons-outlined">center_focus_strong</span>
+        </button>
+        <button class="icon-btn" data-ui="theme" title="Switch light / dark" aria-label="Switch theme">
+          <span class="material-icons-outlined" id="themeIcon">dark_mode</span>
+        </button>
+        <button class="icon-btn" data-ui="reset" title="Reset progress" aria-label="Reset progress">
+          <span class="material-icons-outlined">restart_alt</span>
+        </button>
+      </div>
+    </div>
+    <div class="topbar-progress">
+      <div class="bar"><div class="bar-fill" id="topProgressFill"></div></div>
+      <span class="topbar-count" id="sessionScoreText">0 / 0</span>
+      <span class="chip chip-amber" id="sessionPercentText">0%</span>
+    </div>
+    <!-- Match Mode scoreboard strip is inserted here by match.js -->
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- Desktop side rail: sections with live progress -->
+  <nav class="rail" id="rail" aria-label="Sections"></nav>
+
+  <main class="content" id="content">
+<!-- [FILL] overview: the session in two sentences and the course coverage numbers (COURSE, below) -->
+        <section class="hero-planner-card section-block" id="overview" data-title="Today's plan">
+                  <h2 class="section-title">Today's plan</h2>
+                  <p class="lead">[Two sentences: what this session covers and why it matters.]</p>
+                  <div class="coverage-title">
+                    <span>Course coverage</span>
+                    <span class="meta text-good" id="liveUnitStatus">[Where this session sits in the course]</span>
+                  </div>
+                  <div class="coverage-row">
+                    <div class="coverage-bar-outer"><div class="coverage-bar-inner" id="courseCoverageBar"></div></div>
+                    <div class="coverage-Numbers"><strong id="courseCoveragePct">0%</strong><span id="courseCoverageUnits">(0 of [N] units)</span></div>
+                  </div>
+                </section>
+        
+        <!-- [FILL] section 1 (m1s1): study content, its three OMR checks (same ids as MATCHES tasks) -->
+        <section class="section-block" id="m1s1" data-title="[Section 1 title]">
+          <h2 class="section-title">1. [Section 1 title]</h2>
+          <p class="lead">[One-line subtitle: what this section does.]</p>
+          <div class="card">
+            <p>[Section 1 content: the study material for this section, word for word. Formulas in $…$, figures as SVG.]</p>
+          </div>
+        <div class="omr-question-card" data-qid="m1s1-omr-1">
+          <div class="omr-q-text">1. [Check question 1, testing the section's idea. Maths in $…$.]</div>
+          <div class="omr-options-list">
+            <button class="omr-option-btn" data-correct="true"><span class="omr-bubble">A</span><span class="omr-opt-text">[Right answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">B</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">C</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">D</span><span class="omr-opt-text">[Wrong answer]</span></button>
+          </div>
+          <div class="omr-feedback" data-fb-correct="[Why the right answer is right.]" data-fb-wrong="[A hint that points to the idea, without giving the answer.]"></div>
+        </div>
+        <div class="omr-question-card" data-qid="m1s1-omr-2">
+          <div class="omr-q-text">2. [Check question 2, testing the section's idea. Maths in $…$.]</div>
+          <div class="omr-options-list">
+            <button class="omr-option-btn" data-correct="true"><span class="omr-bubble">A</span><span class="omr-opt-text">[Right answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">B</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">C</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">D</span><span class="omr-opt-text">[Wrong answer]</span></button>
+          </div>
+          <div class="omr-feedback" data-fb-correct="[Why the right answer is right.]" data-fb-wrong="[A hint that points to the idea, without giving the answer.]"></div>
+        </div>
+        <div class="omr-question-card" data-qid="m1s1-omr-3">
+          <div class="omr-q-text">3. [Check question 3, testing the section's idea. Maths in $…$.]</div>
+          <div class="omr-options-list">
+            <button class="omr-option-btn" data-correct="true"><span class="omr-bubble">A</span><span class="omr-opt-text">[Right answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">B</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">C</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">D</span><span class="omr-opt-text">[Wrong answer]</span></button>
+          </div>
+          <div class="omr-feedback" data-fb-correct="[Why the right answer is right.]" data-fb-wrong="[A hint that points to the idea, without giving the answer.]"></div>
+        </div>
+        </section>
+        
+        <!-- [FILL] section 2 (m1s2): study content, its three OMR checks (same ids as MATCHES tasks) -->
+        <section class="section-block" id="m1s2" data-title="[Section 2 title]">
+          <h2 class="section-title">2. [Section 2 title]</h2>
+          <p class="lead">[One-line subtitle: what this section does.]</p>
+          <div class="card">
+            <p>[Section 2 content: the study material for this section, word for word. Formulas in $…$, figures as SVG.]</p>
+          </div>
+        <div class="omr-question-card" data-qid="m1s2-omr-1">
+          <div class="omr-q-text">1. [Check question 1, testing the section's idea. Maths in $…$.]</div>
+          <div class="omr-options-list">
+            <button class="omr-option-btn" data-correct="true"><span class="omr-bubble">A</span><span class="omr-opt-text">[Right answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">B</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">C</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">D</span><span class="omr-opt-text">[Wrong answer]</span></button>
+          </div>
+          <div class="omr-feedback" data-fb-correct="[Why the right answer is right.]" data-fb-wrong="[A hint that points to the idea, without giving the answer.]"></div>
+        </div>
+        <div class="omr-question-card" data-qid="m1s2-omr-2">
+          <div class="omr-q-text">2. [Check question 2, testing the section's idea. Maths in $…$.]</div>
+          <div class="omr-options-list">
+            <button class="omr-option-btn" data-correct="true"><span class="omr-bubble">A</span><span class="omr-opt-text">[Right answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">B</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">C</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">D</span><span class="omr-opt-text">[Wrong answer]</span></button>
+          </div>
+          <div class="omr-feedback" data-fb-correct="[Why the right answer is right.]" data-fb-wrong="[A hint that points to the idea, without giving the answer.]"></div>
+        </div>
+        <div class="omr-question-card" data-qid="m1s2-omr-3">
+          <div class="omr-q-text">3. [Check question 3, testing the section's idea. Maths in $…$.]</div>
+          <div class="omr-options-list">
+            <button class="omr-option-btn" data-correct="true"><span class="omr-bubble">A</span><span class="omr-opt-text">[Right answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">B</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">C</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">D</span><span class="omr-opt-text">[Wrong answer]</span></button>
+          </div>
+          <div class="omr-feedback" data-fb-correct="[Why the right answer is right.]" data-fb-wrong="[A hint that points to the idea, without giving the answer.]"></div>
+        </div>
+        </section>
+        
+        <!-- [FILL] section 3 (m1s3): study content, its three OMR checks (same ids as MATCHES tasks) -->
+        <section class="section-block" id="m1s3" data-title="[Section 3 title]">
+          <h2 class="section-title">3. [Section 3 title]</h2>
+          <p class="lead">[One-line subtitle: what this section does.]</p>
+          <div class="card">
+            <p>[Section 3 content: the study material for this section, word for word. Formulas in $…$, figures as SVG.]</p>
+          </div>
+        <div class="omr-question-card" data-qid="m1s3-omr-1">
+          <div class="omr-q-text">1. [Check question 1, testing the section's idea. Maths in $…$.]</div>
+          <div class="omr-options-list">
+            <button class="omr-option-btn" data-correct="true"><span class="omr-bubble">A</span><span class="omr-opt-text">[Right answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">B</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">C</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">D</span><span class="omr-opt-text">[Wrong answer]</span></button>
+          </div>
+          <div class="omr-feedback" data-fb-correct="[Why the right answer is right.]" data-fb-wrong="[A hint that points to the idea, without giving the answer.]"></div>
+        </div>
+        <div class="omr-question-card" data-qid="m1s3-omr-2">
+          <div class="omr-q-text">2. [Check question 2, testing the section's idea. Maths in $…$.]</div>
+          <div class="omr-options-list">
+            <button class="omr-option-btn" data-correct="true"><span class="omr-bubble">A</span><span class="omr-opt-text">[Right answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">B</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">C</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">D</span><span class="omr-opt-text">[Wrong answer]</span></button>
+          </div>
+          <div class="omr-feedback" data-fb-correct="[Why the right answer is right.]" data-fb-wrong="[A hint that points to the idea, without giving the answer.]"></div>
+        </div>
+        <div class="omr-question-card" data-qid="m1s3-omr-3">
+          <div class="omr-q-text">3. [Check question 3, testing the section's idea. Maths in $…$.]</div>
+          <div class="omr-options-list">
+            <button class="omr-option-btn" data-correct="true"><span class="omr-bubble">A</span><span class="omr-opt-text">[Right answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">B</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">C</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">D</span><span class="omr-opt-text">[Wrong answer]</span></button>
+          </div>
+          <div class="omr-feedback" data-fb-correct="[Why the right answer is right.]" data-fb-wrong="[A hint that points to the idea, without giving the answer.]"></div>
+        </div>
+        </section>
+        
+        <!-- [FILL] section 4 (m1s4): study content, its three OMR checks (same ids as MATCHES tasks) -->
+        <section class="section-block" id="m1s4" data-title="[Section 4 title]">
+          <h2 class="section-title">4. [Section 4 title]</h2>
+          <p class="lead">[One-line subtitle: what this section does.]</p>
+          <div class="card">
+            <p>[Section 4 content: the study material for this section, word for word. Formulas in $…$, figures as SVG.]</p>
+          </div>
+        <div class="omr-question-card" data-qid="m1s4-omr-1">
+          <div class="omr-q-text">1. [Check question 1, testing the section's idea. Maths in $…$.]</div>
+          <div class="omr-options-list">
+            <button class="omr-option-btn" data-correct="true"><span class="omr-bubble">A</span><span class="omr-opt-text">[Right answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">B</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">C</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">D</span><span class="omr-opt-text">[Wrong answer]</span></button>
+          </div>
+          <div class="omr-feedback" data-fb-correct="[Why the right answer is right.]" data-fb-wrong="[A hint that points to the idea, without giving the answer.]"></div>
+        </div>
+        <div class="omr-question-card" data-qid="m1s4-omr-2">
+          <div class="omr-q-text">2. [Check question 2, testing the section's idea. Maths in $…$.]</div>
+          <div class="omr-options-list">
+            <button class="omr-option-btn" data-correct="true"><span class="omr-bubble">A</span><span class="omr-opt-text">[Right answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">B</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">C</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">D</span><span class="omr-opt-text">[Wrong answer]</span></button>
+          </div>
+          <div class="omr-feedback" data-fb-correct="[Why the right answer is right.]" data-fb-wrong="[A hint that points to the idea, without giving the answer.]"></div>
+        </div>
+        <div class="omr-question-card" data-qid="m1s4-omr-3">
+          <div class="omr-q-text">3. [Check question 3, testing the section's idea. Maths in $…$.]</div>
+          <div class="omr-options-list">
+            <button class="omr-option-btn" data-correct="true"><span class="omr-bubble">A</span><span class="omr-opt-text">[Right answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">B</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">C</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">D</span><span class="omr-opt-text">[Wrong answer]</span></button>
+          </div>
+          <div class="omr-feedback" data-fb-correct="[Why the right answer is right.]" data-fb-wrong="[A hint that points to the idea, without giving the answer.]"></div>
+        </div>
+        </section>
+        
+        <!-- [FILL] section 5 (m1s5): study content, its three OMR checks (same ids as MATCHES tasks) -->
+        <section class="section-block" id="m1s5" data-title="[Section 5 title]">
+          <h2 class="section-title">5. [Section 5 title]</h2>
+          <p class="lead">[One-line subtitle: what this section does.]</p>
+          <div class="card">
+            <p>[Section 5 content: the study material for this section, word for word. Formulas in $…$, figures as SVG.]</p>
+          </div>
+        <div class="omr-question-card" data-qid="m1s5-omr-1">
+          <div class="omr-q-text">1. [Check question 1, testing the section's idea. Maths in $…$.]</div>
+          <div class="omr-options-list">
+            <button class="omr-option-btn" data-correct="true"><span class="omr-bubble">A</span><span class="omr-opt-text">[Right answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">B</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">C</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">D</span><span class="omr-opt-text">[Wrong answer]</span></button>
+          </div>
+          <div class="omr-feedback" data-fb-correct="[Why the right answer is right.]" data-fb-wrong="[A hint that points to the idea, without giving the answer.]"></div>
+        </div>
+        <div class="omr-question-card" data-qid="m1s5-omr-2">
+          <div class="omr-q-text">2. [Check question 2, testing the section's idea. Maths in $…$.]</div>
+          <div class="omr-options-list">
+            <button class="omr-option-btn" data-correct="true"><span class="omr-bubble">A</span><span class="omr-opt-text">[Right answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">B</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">C</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">D</span><span class="omr-opt-text">[Wrong answer]</span></button>
+          </div>
+          <div class="omr-feedback" data-fb-correct="[Why the right answer is right.]" data-fb-wrong="[A hint that points to the idea, without giving the answer.]"></div>
+        </div>
+        <div class="omr-question-card" data-qid="m1s5-omr-3">
+          <div class="omr-q-text">3. [Check question 3, testing the section's idea. Maths in $…$.]</div>
+          <div class="omr-options-list">
+            <button class="omr-option-btn" data-correct="true"><span class="omr-bubble">A</span><span class="omr-opt-text">[Right answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">B</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">C</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">D</span><span class="omr-opt-text">[Wrong answer]</span></button>
+          </div>
+          <div class="omr-feedback" data-fb-correct="[Why the right answer is right.]" data-fb-wrong="[A hint that points to the idea, without giving the answer.]"></div>
+        </div>
+        </section>
+        
+        <!-- [FILL] section 6 (m2s1): study content, its three OMR checks (same ids as MATCHES tasks) -->
+        <section class="section-block" id="m2s1" data-title="[Section 6 title]">
+          <h2 class="section-title">6. [Section 6 title]</h2>
+          <p class="lead">[One-line subtitle: what this section does.]</p>
+          <div class="card">
+            <p>[Section 6 content: the study material for this section, word for word. Formulas in $…$, figures as SVG.]</p>
+          </div>
+        <div class="omr-question-card" data-qid="m2s1-omr-1">
+          <div class="omr-q-text">1. [Check question 1, testing the section's idea. Maths in $…$.]</div>
+          <div class="omr-options-list">
+            <button class="omr-option-btn" data-correct="true"><span class="omr-bubble">A</span><span class="omr-opt-text">[Right answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">B</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">C</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">D</span><span class="omr-opt-text">[Wrong answer]</span></button>
+          </div>
+          <div class="omr-feedback" data-fb-correct="[Why the right answer is right.]" data-fb-wrong="[A hint that points to the idea, without giving the answer.]"></div>
+        </div>
+        <div class="omr-question-card" data-qid="m2s1-omr-2">
+          <div class="omr-q-text">2. [Check question 2, testing the section's idea. Maths in $…$.]</div>
+          <div class="omr-options-list">
+            <button class="omr-option-btn" data-correct="true"><span class="omr-bubble">A</span><span class="omr-opt-text">[Right answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">B</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">C</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">D</span><span class="omr-opt-text">[Wrong answer]</span></button>
+          </div>
+          <div class="omr-feedback" data-fb-correct="[Why the right answer is right.]" data-fb-wrong="[A hint that points to the idea, without giving the answer.]"></div>
+        </div>
+        <div class="omr-question-card" data-qid="m2s1-omr-3">
+          <div class="omr-q-text">3. [Check question 3, testing the section's idea. Maths in $…$.]</div>
+          <div class="omr-options-list">
+            <button class="omr-option-btn" data-correct="true"><span class="omr-bubble">A</span><span class="omr-opt-text">[Right answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">B</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">C</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">D</span><span class="omr-opt-text">[Wrong answer]</span></button>
+          </div>
+          <div class="omr-feedback" data-fb-correct="[Why the right answer is right.]" data-fb-wrong="[A hint that points to the idea, without giving the answer.]"></div>
+        </div>
+        </section>
+        
+        <!-- [FILL] section 7 (m2s2): study content, its three OMR checks (same ids as MATCHES tasks) -->
+        <section class="section-block" id="m2s2" data-title="[Section 7 title]">
+          <h2 class="section-title">7. [Section 7 title]</h2>
+          <p class="lead">[One-line subtitle: what this section does.]</p>
+          <div class="card">
+            <p>[Section 7 content: the study material for this section, word for word. Formulas in $…$, figures as SVG.]</p>
+          </div>
+        <div class="omr-question-card" data-qid="m2s2-omr-1">
+          <div class="omr-q-text">1. [Check question 1, testing the section's idea. Maths in $…$.]</div>
+          <div class="omr-options-list">
+            <button class="omr-option-btn" data-correct="true"><span class="omr-bubble">A</span><span class="omr-opt-text">[Right answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">B</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">C</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">D</span><span class="omr-opt-text">[Wrong answer]</span></button>
+          </div>
+          <div class="omr-feedback" data-fb-correct="[Why the right answer is right.]" data-fb-wrong="[A hint that points to the idea, without giving the answer.]"></div>
+        </div>
+        <div class="omr-question-card" data-qid="m2s2-omr-2">
+          <div class="omr-q-text">2. [Check question 2, testing the section's idea. Maths in $…$.]</div>
+          <div class="omr-options-list">
+            <button class="omr-option-btn" data-correct="true"><span class="omr-bubble">A</span><span class="omr-opt-text">[Right answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">B</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">C</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">D</span><span class="omr-opt-text">[Wrong answer]</span></button>
+          </div>
+          <div class="omr-feedback" data-fb-correct="[Why the right answer is right.]" data-fb-wrong="[A hint that points to the idea, without giving the answer.]"></div>
+        </div>
+        <div class="omr-question-card" data-qid="m2s2-omr-3">
+          <div class="omr-q-text">3. [Check question 3, testing the section's idea. Maths in $…$.]</div>
+          <div class="omr-options-list">
+            <button class="omr-option-btn" data-correct="true"><span class="omr-bubble">A</span><span class="omr-opt-text">[Right answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">B</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">C</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">D</span><span class="omr-opt-text">[Wrong answer]</span></button>
+          </div>
+          <div class="omr-feedback" data-fb-correct="[Why the right answer is right.]" data-fb-wrong="[A hint that points to the idea, without giving the answer.]"></div>
+        </div>
+        </section>
+        
+        <!-- [FILL] section 8 (m2s3): study content, its three OMR checks (same ids as MATCHES tasks) -->
+        <section class="section-block" id="m2s3" data-title="[Section 8 title]">
+          <h2 class="section-title">8. [Section 8 title]</h2>
+          <p class="lead">[One-line subtitle: what this section does.]</p>
+          <div class="card">
+            <p>[Section 8 content: the study material for this section, word for word. Formulas in $…$, figures as SVG.]</p>
+          </div>
+        <div class="omr-question-card" data-qid="m2s3-omr-1">
+          <div class="omr-q-text">1. [Check question 1, testing the section's idea. Maths in $…$.]</div>
+          <div class="omr-options-list">
+            <button class="omr-option-btn" data-correct="true"><span class="omr-bubble">A</span><span class="omr-opt-text">[Right answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">B</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">C</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">D</span><span class="omr-opt-text">[Wrong answer]</span></button>
+          </div>
+          <div class="omr-feedback" data-fb-correct="[Why the right answer is right.]" data-fb-wrong="[A hint that points to the idea, without giving the answer.]"></div>
+        </div>
+        <div class="omr-question-card" data-qid="m2s3-omr-2">
+          <div class="omr-q-text">2. [Check question 2, testing the section's idea. Maths in $…$.]</div>
+          <div class="omr-options-list">
+            <button class="omr-option-btn" data-correct="true"><span class="omr-bubble">A</span><span class="omr-opt-text">[Right answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">B</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">C</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">D</span><span class="omr-opt-text">[Wrong answer]</span></button>
+          </div>
+          <div class="omr-feedback" data-fb-correct="[Why the right answer is right.]" data-fb-wrong="[A hint that points to the idea, without giving the answer.]"></div>
+        </div>
+        <div class="omr-question-card" data-qid="m2s3-omr-3">
+          <div class="omr-q-text">3. [Check question 3, testing the section's idea. Maths in $…$.]</div>
+          <div class="omr-options-list">
+            <button class="omr-option-btn" data-correct="true"><span class="omr-bubble">A</span><span class="omr-opt-text">[Right answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">B</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">C</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">D</span><span class="omr-opt-text">[Wrong answer]</span></button>
+          </div>
+          <div class="omr-feedback" data-fb-correct="[Why the right answer is right.]" data-fb-wrong="[A hint that points to the idea, without giving the answer.]"></div>
+        </div>
+        </section>
+        
+        <!-- [FILL] section 9 (m2s4): study content, its three OMR checks (same ids as MATCHES tasks) -->
+        <section class="section-block" id="m2s4" data-title="[Section 9 title]">
+          <h2 class="section-title">9. [Section 9 title]</h2>
+          <p class="lead">[One-line subtitle: what this section does.]</p>
+          <div class="card">
+            <p>[Section 9 content: the study material for this section, word for word. Formulas in $…$, figures as SVG.]</p>
+          </div>
+        <div class="omr-question-card" data-qid="m2s4-omr-1">
+          <div class="omr-q-text">1. [Check question 1, testing the section's idea. Maths in $…$.]</div>
+          <div class="omr-options-list">
+            <button class="omr-option-btn" data-correct="true"><span class="omr-bubble">A</span><span class="omr-opt-text">[Right answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">B</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">C</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">D</span><span class="omr-opt-text">[Wrong answer]</span></button>
+          </div>
+          <div class="omr-feedback" data-fb-correct="[Why the right answer is right.]" data-fb-wrong="[A hint that points to the idea, without giving the answer.]"></div>
+        </div>
+        <div class="omr-question-card" data-qid="m2s4-omr-2">
+          <div class="omr-q-text">2. [Check question 2, testing the section's idea. Maths in $…$.]</div>
+          <div class="omr-options-list">
+            <button class="omr-option-btn" data-correct="true"><span class="omr-bubble">A</span><span class="omr-opt-text">[Right answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">B</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">C</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">D</span><span class="omr-opt-text">[Wrong answer]</span></button>
+          </div>
+          <div class="omr-feedback" data-fb-correct="[Why the right answer is right.]" data-fb-wrong="[A hint that points to the idea, without giving the answer.]"></div>
+        </div>
+        <div class="omr-question-card" data-qid="m2s4-omr-3">
+          <div class="omr-q-text">3. [Check question 3, testing the section's idea. Maths in $…$.]</div>
+          <div class="omr-options-list">
+            <button class="omr-option-btn" data-correct="true"><span class="omr-bubble">A</span><span class="omr-opt-text">[Right answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">B</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">C</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">D</span><span class="omr-opt-text">[Wrong answer]</span></button>
+          </div>
+          <div class="omr-feedback" data-fb-correct="[Why the right answer is right.]" data-fb-wrong="[A hint that points to the idea, without giving the answer.]"></div>
+        </div>
+        </section>
+        
+        <!-- [FILL] section 10 (m2s5): study content, its three OMR checks (same ids as MATCHES tasks) -->
+        <section class="section-block" id="m2s5" data-title="[Section 10 title]">
+          <h2 class="section-title">10. [Section 10 title]</h2>
+          <p class="lead">[One-line subtitle: what this section does.]</p>
+          <div class="card">
+            <p>[Section 10 content: the study material for this section, word for word. Formulas in $…$, figures as SVG.]</p>
+          </div>
+        <div class="omr-question-card" data-qid="m2s5-omr-1">
+          <div class="omr-q-text">1. [Check question 1, testing the section's idea. Maths in $…$.]</div>
+          <div class="omr-options-list">
+            <button class="omr-option-btn" data-correct="true"><span class="omr-bubble">A</span><span class="omr-opt-text">[Right answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">B</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">C</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">D</span><span class="omr-opt-text">[Wrong answer]</span></button>
+          </div>
+          <div class="omr-feedback" data-fb-correct="[Why the right answer is right.]" data-fb-wrong="[A hint that points to the idea, without giving the answer.]"></div>
+        </div>
+        <div class="omr-question-card" data-qid="m2s5-omr-2">
+          <div class="omr-q-text">2. [Check question 2, testing the section's idea. Maths in $…$.]</div>
+          <div class="omr-options-list">
+            <button class="omr-option-btn" data-correct="true"><span class="omr-bubble">A</span><span class="omr-opt-text">[Right answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">B</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">C</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">D</span><span class="omr-opt-text">[Wrong answer]</span></button>
+          </div>
+          <div class="omr-feedback" data-fb-correct="[Why the right answer is right.]" data-fb-wrong="[A hint that points to the idea, without giving the answer.]"></div>
+        </div>
+        <div class="omr-question-card" data-qid="m2s5-omr-3">
+          <div class="omr-q-text">3. [Check question 3, testing the section's idea. Maths in $…$.]</div>
+          <div class="omr-options-list">
+            <button class="omr-option-btn" data-correct="true"><span class="omr-bubble">A</span><span class="omr-opt-text">[Right answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">B</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">C</span><span class="omr-opt-text">[Wrong answer]</span></button>
+            <button class="omr-option-btn" data-correct="false"><span class="omr-bubble">D</span><span class="omr-opt-text">[Wrong answer]</span></button>
+          </div>
+          <div class="omr-feedback" data-fb-correct="[Why the right answer is right.]" data-fb-wrong="[A hint that points to the idea, without giving the answer.]"></div>
+        </div>
+        </section>
+  </main>
+</div>
+
+<!-- Focus mode: previous / next section -->
+<nav class="focus-nav" id="focusNav" aria-label="Focus navigation">
+  <button class="btn" data-ui="prev"><span class="material-icons-outlined">arrow_back</span><span>Prev</span></button>
+  <div class="focus-nav-mid">
+    <span class="focus-nav-title" id="focusTitle"></span>
+    <div class="bar"><div class="bar-fill" id="focusFill"></div></div>
+  </div>
+  <button class="btn btn-solid" data-ui="next"><span>Next</span><span class="material-icons-outlined">arrow_forward</span></button>
+</nav>
+
+<!-- Shared bottom sheet / dialog -->
+<div class="sheet-wrap" id="sheetWrap">
+  <div class="sheet" id="sheet" role="dialog" aria-modal="true"></div>
+</div>
+<div class="toasts" id="toasts"></div>
+
+<script>
+/* ==========================================================================
+   OPTICS · DAY 2 — APP
+    1. Helpers                 7. Controls memory (sliders + mode buttons)
+    2. Store (localStorage)    8. Sections, side rail & focus mode
+    3. Theme                   9. Sheet, toasts & toolbar
+    4. Progress               10. Boot
+    5. OMR questions
+    6. Derivations · Simulators · 3D models (content data from the original page)
+   ========================================================================== */
+
+/* ---------- 1. Helpers ---------- */
+const $ = (sel, root = document) => root.querySelector(sel);
+const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+const esc = text => String(text).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const icon = (name, size) => `<span class="material-icons-outlined"${size ? ` style="font-size:${size}px"` : ''}>${name}</span>`;
+const LETTERS = ['A', 'B', 'C', 'D', 'E'];
+
+/** Fisher–Yates shuffle (in place) so the right answer never sits in a fixed spot. */
+function shuffleArray(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+/** Typeset maths in the given elements. Calls are queued so MathJax never runs twice at once. */
+let mathQueue = Promise.resolve();
+function typeset(...elements) {
+  const targets = elements.filter(Boolean);
+  mathQueue = mathQueue
+    .then(() => {
+      const mj = window.MathJax;
+      if (!mj || !mj.startup || !mj.typesetPromise) return null; // not loaded yet: startup typesets the page
+      return mj.startup.promise.then(() => mj.typesetPromise(targets));
+    })
+    .catch(() => {});
+  return mathQueue;
+}
+
+/* ---------- 2. Store: everything you do on the page is saved in this browser ---------- */
+const Store = (() => {
+  const KEY = 'skeleton-day-2:v1';
+  const blank = () => ({
+    theme: null,
+    tasks: {},        // taskId -> time it was completed (OMR answers + derivation steps)
+    inputs: {},       // slider id -> value
+    modes: {},        // remembered mode buttons, e.g. { setScreenMode: 'perp' }
+    focus: { on: false, section: 'overview' },
+    scrollY: 0,
+    match: null       // Match Mode state (match.js)
+  });
+
+  let data;
+  try { data = Object.assign(blank(), JSON.parse(localStorage.getItem(KEY) || '{}')); }
+  catch (e) { data = blank(); }
+
+  let timer = null;
+  function save() {
+    clearTimeout(timer);
+    timer = null;
+    try { localStorage.setItem(KEY, JSON.stringify(data)); } catch (e) { /* private mode / storage full */ }
+  }
+  function saveSoon() {
+    clearTimeout(timer);
+    timer = setTimeout(save, 250);
+  }
+  function reset() {
+    const theme = data.theme;
+    data = blank();
+    data.theme = theme;
+    save();
+  }
+
+  window.addEventListener('pagehide', save);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) save(); });
+  return { get data() { return data; }, save, saveSoon, reset };
+})();
+
+/* ---------- 3. Theme ---------- */
+const Theme = {
+  get() { return document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light'; },
+  set(theme) {
+    document.documentElement.dataset.theme = theme;
+    $('#themeIcon').textContent = theme === 'dark' ? 'light_mode' : 'dark_mode';
+    Store.data.theme = theme;
+    Store.save();
+  },
+  toggle() { this.set(this.get() === 'dark' ? 'light' : 'dark'); }
+};
+
+/* ---------- 4. Progress ---------- */
+/* [FILL] course coverage: units already done before this session, units this session adds, total units in the course */
+const COURSE = { before: 0, today: 0, total: 1 };
+
+const Progress = {
+  all: [],
+
+  init() {
+    this.all = this.tasksIn(document);
+  },
+
+  /** Every task inside an element: OMR question ids + one id per derivation step. */
+  tasksIn(root) {
+    const omr = $$('.omr-question-card', root).map(card => card.dataset.qid);
+    const steps = $$('.derivation-card', root).flatMap(card =>
+      (derivationsData[card.id] || []).map((_, i) => `${card.id}-${i}`));
+    return [...omr, ...steps];
+  },
+
+  isDone(id) { return Boolean(Store.data.tasks[id]); },
+  count(ids) { return ids.filter(id => this.isDone(id)).length; },
+
+  done(id) {
+    if (this.isDone(id)) return;
+    Store.data.tasks[id] = Date.now();
+    Store.saveSoon();
+    this.render();
+    document.dispatchEvent(new CustomEvent('task:done', { detail: id }));
+  },
+
+  render() {
+    const total = this.all.length;
+    const done = this.count(this.all);
+    const pct = total ? Math.round((done / total) * 100) : 0;
+    $('#sessionScoreText').textContent = `${done} / ${total} tasks`;
+    $('#sessionPercentText').textContent = `${pct}%`;
+    $('#topProgressFill').style.width = `${pct}%`;
+
+    // Course coverage: COURSE.before units already done, COURSE.today more as you finish them
+    const unitsDone = COURSE.before + (total ? (done / total) * COURSE.today : 0);
+    $('#courseCoverageBar').style.width = `${(unitsDone / COURSE.total) * 100}%`;
+    $('#courseCoveragePct').textContent = `${Math.round((unitsDone / COURSE.total) * 100)}% covered`;
+    $('#courseCoverageUnits').textContent = `(${unitsDone.toFixed(1)} of ${COURSE.total} units)`;
+
+    // Tick a unit on today's plan once every task in that section is done
+    ['unit5', 'unit6', 'unit7', 'unit8'].forEach(unit => {
+      const section = document.getElementById(`sec-${unit}`);
+      const ids = section ? this.tasksIn(section) : [];
+      const dot = document.getElementById(`dot-${unit}`);
+      if (dot) dot.classList.toggle('done', ids.length > 0 && this.count(ids) === ids.length);
+    });
+
+    Sections.renderProgress();
+  }
+};
+
+/* ---------- 5. OMR questions ---------- */
+function feedbackHTML(kind, text) {
+  const head = {
+    correct: `${icon('check_circle')} Correct!`,
+    wrong: `${icon('error_outline')} Try again:`,
+    hint: `${icon('info')} Check the hint above:`
+  }[kind];
+  return `<strong>${head}</strong> ${text}`;
+}
+
+const OMR = {
+  init() {
+    $$('.omr-question-card').forEach(card => this.setup(card));
+  },
+
+  setup(card) {
+    const list = $('.omr-options-list', card);
+    const buttons = shuffleArray($$('.omr-option-btn', list));
+    buttons.forEach((btn, i) => {
+      $('.omr-bubble', btn).textContent = LETTERS[i];
+      btn.addEventListener('click', () => this.answer(card, btn));
+    });
+    list.replaceChildren(...buttons);
+    if (Progress.isDone(card.dataset.qid)) this.showCorrect(card);
+  },
+
+  answer(card, btn) {
+    const buttons = $$('.omr-option-btn', card);
+    const fb = $('.omr-feedback', card);
+    buttons.forEach(b => b.classList.remove('selected-wrong'));
+
+    if (btn.dataset.correct === 'true') {
+      this.showCorrect(card);
+      Progress.done(card.dataset.qid);
+    } else {
+      btn.classList.add('selected-wrong');
+      fb.className = 'omr-feedback show wrong';
+      fb.innerHTML = feedbackHTML('wrong', fb.dataset.fbWrong);
+      typeset(fb);
+    }
+  },
+
+  showCorrect(card) {
+    const fb = $('.omr-feedback', card);
+    $$('.omr-option-btn', card).forEach(b => {
+      b.disabled = true;
+      if (b.dataset.correct === 'true') b.classList.add('selected-correct');
+    });
+    fb.className = 'omr-feedback show correct';
+    fb.innerHTML = feedbackHTML('correct', fb.dataset.fbCorrect);
+    typeset(fb);
+  }
+};
+
+/* ---------- 6a. Derivation data (from the original page) ---------- */
+const derivationsData = {};
+
+const Derivations = {
+  init() {
+    Object.keys(derivationsData).forEach(id => {
+      const unlocked = $(`#${id}-unlocked`);
+      const steps = derivationsData[id];
+      let i = 0;
+      while (i < steps.length && Progress.isDone(`${id}-${i}`)) {
+        unlocked.appendChild(this.unlockedItem(steps[i]));
+        i++;
+      }
+      this.render(id, i);
+    });
+  },
+
+  unlockedItem(step) {
+    const item = document.createElement('div');
+    item.className = 'unlocked-step-item';
+    item.innerHTML = `
+      <div class="unlocked-step-title">${icon('check_circle')}<span>${step.title}</span></div>
+      <div class="unlocked-step-body">${step.unlockedHtml}</div>`;
+    return item;
+  },
+
+  render(id, index) {
+    const steps = derivationsData[id];
+    const counter = $(`#${id}-counter`);
+    const predict = $(`#${id}-predict`);
+    const summary = $(`#${id}-summary`);
+
+    if (index >= steps.length) {
+      counter.textContent = `Completed (${steps.length}/${steps.length})`;
+      predict.style.display = 'none';
+      summary.classList.add('show');
+      typeset($(`#${id}-unlocked`), summary);
+      return;
+    }
+
+    const step = steps[index];
+    counter.textContent = `Step ${index + 1} of ${steps.length}`;
+    const options = shuffleArray([...step.options]).map((opt, i) => `
+      <button class="omr-option-btn" data-correct="${opt.correct}">
+        <span class="omr-bubble">${LETTERS[i]}</span>
+        <span class="omr-opt-text">${opt.text}</span>
+      </button>`).join('');
+
+    predict.innerHTML = `
+      <div class="prediction-hint">${step.hint}</div>
+      <div class="omr-q-text">Predict ${step.title}:<br><span class="prediction-question">${step.question}</span></div>
+      <div class="omr-options-list">${options}</div>
+      <div class="omr-feedback"></div>`;
+
+    const fb = $('.omr-feedback', predict);
+    $$('.omr-option-btn', predict).forEach(btn => btn.addEventListener('click', () => {
+      const buttons = $$('.omr-option-btn', predict);
+      buttons.forEach(b => b.classList.remove('selected-wrong'));
+      if (btn.dataset.correct !== 'true') {
+        btn.classList.add('selected-wrong');
+        fb.className = 'omr-feedback show wrong';
+        fb.innerHTML = feedbackHTML('hint', 'Look closely at the signs and identity in the hint box and try another option.');
+        return;
+      }
+      btn.classList.add('selected-correct');
+      buttons.forEach(b => (b.disabled = true));
+      $(`#${id}-unlocked`).appendChild(this.unlockedItem(step));
+      Progress.done(`${id}-${index}`);
+      this.render(id, index + 1);
+      typeset($(`#${id}-unlocked`), predict);
+    }));
+    typeset(predict);
+  }
+};
+
+/* ---------- 6c. Simulators & 3D models (from the original page) ---------- */
+/* ---------- 7. Controls memory: sliders and mode buttons survive reloads ---------- */
+const Controls = {
+  // Buttons whose choice is a lasting "mode" (re-applied on load)
+  MODES: [],
+
+  restoreInputs() {
+    Object.entries(Store.data.inputs).forEach(([id, value]) => {
+      const el = document.getElementById(id);
+      if (el) el.value = value;
+    });
+  },
+
+  restoreModes() {
+    Object.entries(Store.data.modes).forEach(([fn, arg]) => {
+      if (typeof window[fn] === 'function') window[fn](arg);
+    });
+  },
+
+  snapshot() {
+    $$('input[type="range"][id]').forEach(el => { Store.data.inputs[el.id] = el.value; });
+    Store.saveSoon();
+  },
+
+  watch() {
+    document.addEventListener('input', e => {
+      if (e.target.matches('input[type="range"][id]')) this.snapshot();
+    });
+    document.addEventListener('click', e => {
+      const btn = e.target.closest('[data-action]');
+      if (!btn || typeof window[btn.dataset.action] !== 'function') return;
+      const raw = btn.dataset.arg;
+      const arg = raw !== undefined && /^-?\d+(\.\d+)?$/.test(raw) ? Number(raw) : raw;
+      window[btn.dataset.action](arg);
+      if (this.MODES.includes(btn.dataset.action)) Store.data.modes[btn.dataset.action] = arg;
+      this.snapshot();
+    });
+  }
+};
+
+/* ---------- 8. Sections, side rail & focus mode ---------- */
+const Sections = {
+  list: [],
+  current: 'overview',
+  focus: false,
+
+  init() {
+    this.list = $$('.content > .section-block').map(el => ({
+      id: el.id, el, title: el.dataset.title || el.id, tasks: Progress.tasksIn(el)
+    }));
+    $('#rail').innerHTML = `<div class="nav-title">Today's sections</div>${this.navHTML()}
+      <p class="rail-tip">Focus mode shows one section at a time. Double-tap the top bar for Match Mode.</p>`;
+
+    // Highlight the section you are reading (normal scroll mode)
+    const observer = new IntersectionObserver(entries => {
+      if (this.focus) return;
+      entries.forEach(entry => { if (entry.isIntersecting) this.setCurrent(entry.target.id); });
+    }, { rootMargin: '-35% 0px -60% 0px' });
+    this.list.forEach(s => observer.observe(s.el));
+
+    this.focus = Store.data.focus.on;
+    this.current = this.find(Store.data.focus.section) ? Store.data.focus.section : 'overview';
+    this.applyFocus();
+  },
+
+  find(id) { return this.list.find(s => s.id === id); },
+  index(id) { return this.list.findIndex(s => s.id === id); },
+
+  navHTML() {
+    return this.list.map(s => `
+      <button class="nav-item" data-ui="goto" data-section="${s.id}">
+        <span class="nav-ring" data-ring="${s.id}"></span>
+        <span class="nav-text"><span class="nav-name">${esc(s.title)}</span><span class="nav-sub" data-sub="${s.id}"></span></span>
+      </button>`).join('');
+  },
+
+  renderProgress() {
+    this.list.forEach(s => {
+      const done = Progress.count(s.tasks), total = s.tasks.length;
+      $$(`[data-ring="${s.id}"]`).forEach(ring => {
+        ring.style.setProperty('--p', total ? Math.round((done / total) * 100) : 0);
+        ring.classList.toggle('is-done', total > 0 && done === total);
+      });
+      $$(`[data-sub="${s.id}"]`).forEach(sub => { sub.textContent = total ? `${done} / ${total} tasks` : 'Read through'; });
+    });
+    this.renderFocusBar();
+  },
+
+  setCurrent(id) {
+    this.current = id;
+    $$('.nav-item').forEach(n => n.classList.toggle('is-current', n.dataset.section === id));
+    this.list.forEach(s => s.el.classList.toggle('is-current', s.id === id));
+    Store.data.focus.section = id;
+    Store.saveSoon();
+    this.renderFocusBar();
+  },
+
+  renderFocusBar() {
+    const s = this.find(this.current);
+    if (!s) return;
+    const i = this.index(s.id);
+    $('#focusTitle').textContent = `${i + 1} / ${this.list.length} · ${s.title}`;
+    $('#focusFill').style.width = s.tasks.length ? `${(Progress.count(s.tasks) / s.tasks.length) * 100}%` : '0%';
+    $('[data-ui="prev"]').disabled = i === 0;
+    $('[data-ui="next"]').disabled = i === this.list.length - 1;
+  },
+
+  applyFocus() {
+    document.body.classList.toggle('focus-on', this.focus);
+    $('[data-ui="focus"]').setAttribute('aria-pressed', String(this.focus));
+    this.setCurrent(this.current);
+  },
+
+  toggleFocus() {
+    this.focus = !this.focus;
+    Store.data.focus.on = this.focus;
+    Store.save();
+    this.applyFocus();
+    this.show(this.current);
+  },
+
+  /** Jump to a section (and optionally to an element inside it). */
+  show(id, target) {
+    if (!this.find(id)) return;
+    this.setCurrent(id);
+    const el = target || this.find(id).el;
+    requestAnimationFrame(() => el.scrollIntoView({ behavior: this.focus && !target ? 'auto' : 'smooth', block: 'start' }));
+  },
+
+  step(delta) {
+    const next = this.list[this.index(this.current) + delta];
+    if (next) this.show(next.id);
+  },
+
+  /** Used by Match Mode: jump to any element on the page. */
+  goToElement(el) {
+    const section = el.closest('.content > .section-block');
+    if (section) this.show(section.id, el);
+  }
+};
+
+/* ---------- 9. Sheet, toasts & toolbar ---------- */
+const Sheet = {
+  kind: null,
+  sticky: false,
+  open(html, { center = false, kind = 'sheet', sticky = false } = {}) {
+    this.kind = kind;
+    this.sticky = sticky;
+    $('#sheet').innerHTML = html;
+    $('#sheetWrap').classList.toggle('center', center);
+    $('#sheetWrap').classList.add('show');
+    typeset($('#sheet'));
+  },
+  close() {
+    $('#sheetWrap').classList.remove('show');
+    this.kind = null;
+  }
+};
+
+function toast(kind, title, body = '', action = null) {
+  const el = document.createElement('div');
+  el.className = `toast ${kind || ''}`;
+  const ico = { goal: 'sports_soccer', conc: 'hourglass_bottom' }[kind] || 'campaign';
+  el.innerHTML = `${icon(ico, 22)}<div class="toast-body"><b>${title}</b>${body}</div>`;
+  if (action) {
+    const btn = document.createElement('button');
+    btn.className = 'btn';
+    btn.innerHTML = `${action.label} ${icon('arrow_forward', 14)}`;
+    btn.addEventListener('click', () => { action.run(); el.remove(); });
+    el.appendChild(btn);
+  }
+  const box = $('#toasts');
+  box.appendChild(el);
+  while (box.children.length > 3) box.firstChild.remove();
+  setTimeout(() => el.remove(), action ? 9000 : 5000);
+}
+
+const Toolbar = {
+  init() {
+    document.addEventListener('click', e => {
+      const btn = e.target.closest('[data-ui]');
+      if (!btn) return;
+      const ui = btn.dataset.ui;
+      if (ui === 'theme') Theme.toggle();
+      if (ui === 'focus') Sections.toggleFocus();
+      if (ui === 'prev') Sections.step(-1);
+      if (ui === 'next') Sections.step(1);
+      if (ui === 'goto') { Sheet.close(); Sections.show(btn.dataset.section); }
+      if (ui === 'sections') this.openSections();
+      if (ui === 'reset') this.confirmReset();
+      if (ui === 'close-sheet') Sheet.close();
+      if (ui === 'confirm-reset') this.reset();
+    });
+
+    $('#sheetWrap').addEventListener('click', e => {
+      if (e.target.id === 'sheetWrap' && !Sheet.sticky) Sheet.close();
+    });
+
+    // Double-tap an empty part of the top bar to toggle the experimental Match Mode
+    let lastTap = 0;
+    $('#topbar').addEventListener('click', e => {
+      if (e.target.closest('button')) return;
+      const now = Date.now();
+      if (now - lastTap < 380) {
+        lastTap = 0;
+        document.dispatchEvent(new Event('match:toggle'));
+      } else {
+        lastTap = now;
+      }
+    });
+
+    // Remember where you were reading
+    window.addEventListener('scroll', () => {
+      Store.data.scrollY = Math.round(window.scrollY);
+      Store.saveSoon();
+    }, { passive: true });
+  },
+
+  openSections() {
+    Sheet.open(`
+      <div class="sheet-head">${icon('toc')}<h3>Sections</h3><button class="icon-btn" data-ui="close-sheet">${icon('close')}</button></div>
+      ${Sections.navHTML()}`);
+    Sections.renderProgress();
+    $$('#sheet .nav-item').forEach(n => n.classList.toggle('is-current', n.dataset.section === Sections.current));
+  },
+
+  confirmReset() {
+    Sheet.open(`
+      <div class="sheet-head">
+        <span class="mm-dot-lg" style="background:var(--red)">${icon('restart_alt')}</span>
+        <h3>Reset everything?</h3>
+      </div>
+      <p class="sheet-text">This clears every answered question, unlocked derivation step, slider position, your reading
+        position and Match Mode (skill check, squads and scores). Your theme stays as it is.</p>
+      <div class="sheet-actions">
+        <button class="btn" data-ui="close-sheet">Cancel</button>
+        <button class="btn btn-danger" data-ui="confirm-reset">${icon('restart_alt', 18)} Reset</button>
+      </div>`, { center: true });
+  },
+
+  reset() {
+    Store.reset();
+    window.scrollTo(0, 0);
+    location.reload();
+  }
+};
+
+/* ---------- 10. Boot ---------- */
+(function boot() {
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+
+  Theme.set(Theme.get());
+  Controls.restoreInputs();       // sliders first, so simulators start from saved values
+  Progress.init();
+  OMR.init();
+  Derivations.init();
+
+
+  Controls.restoreModes();
+  Controls.watch();
+  Sections.init();
+  Toolbar.init();
+  Progress.render();
+
+  // Return to your reading position once maths has been typeset (it changes page height)
+  window.addEventListener('load', () => {
+    const restore = () => window.scrollTo({ top: Store.data.scrollY || 0, behavior: 'auto' });
+    const mj = window.MathJax;
+    if (mj && mj.startup && mj.startup.promise) mj.startup.promise.then(restore);
+    else restore();
+  });
+})();
+</script>
+
+<script>
+/* ==========================================================================
+   DAY 2 · CONCEPT CHECKS for the ten match sections
+   One everyday picture per section (numbered badges 1-3), and three tricky checks,
+   each with the study skills it tests (`sk`). A wrong check is a slip; three in a row
+   give Time FC a goal, scored through those skills.
+     c.t   mcq | num | fill | word
+     mcq   o: [right, wrong, wrong, wrong]          (shuffled when drawn)
+     num   a: number, tol: allowed difference, u: unit shown after the box
+     fill / word   a: accepted answers, show: how the right answer is written
+   ========================================================================== */
+const D2EV = {
+  svg: (body, label) => `<svg class="ev" viewBox="0 0 320 180" role="img" aria-label="${label}">${body}</svg>`,
+  b: (n, x, y) => `<g class="bd b${n}"><circle cx="${x}" cy="${y}" r="10"/><text x="${x}" y="${y + 4}">${n}</text></g>`,
+  t: (x, y, s, cls = '', anchor = 'middle') => `<text${cls ? ` class="${cls}"` : ''} x="${x}" y="${y}" text-anchor="${anchor}">${s}</text>`,
+  ah: (x, y, a, cls = 'k') => `<path class="${cls}" d="M-7,-4 L0,0 L-7,4" transform="translate(${x} ${y}) rotate(${a})"/>`,
+  dim: (x1, x2, y, cls = 'm') => `<path class="${cls}" d="M${x1},${y} H${x2} M${x1},${y - 4} V${y + 4} M${x2},${y - 4} V${y + 4}"/>`
+};
+
+/* [FILL] D2CONCEPTS: one picture and three checks per section, keyed by section id (m1s1 … m2s5). */
+const D2CONCEPTS = {
+  m1s1: {
+    title: '[Picture title for m1s1]',
+    caption: '[One sentence: what the picture shows and what to look at.]',
+    scene: D2EV.svg(`${D2EV.t(160, 90, '[drawing label]', 'ts')}${D2EV.b(1, 226, 60)}${D2EV.b(2, 226, 96)}${D2EV.b(3, 226, 132)}`, '[Describe the drawing for screen readers.]'),
+    items: [
+      { sk: ['skill-01', 'skill-11'],
+        eg: '[Everyday example, one or two plain sentences.]',
+        map: '[Badge 1 is the concept because …]',
+        c: { t: 'mcq', q: '[Tricky check that tests a common misconception.]',
+             o: ['[Right answer]', '[Plausible wrong answer]', '[Plausible wrong answer]', '[Plausible wrong answer]'],
+             why: '[Why the right answer is right.]' } },
+      { sk: ['skill-02', 'skill-12'],
+        eg: '[Everyday example.]',
+        map: '[Badge 2 is the concept because …]',
+        c: { t: 'num', q: '[Number question, unit in the question.]',
+             a: 0, tol: 0, u: '[unit]',
+             why: '[Working that gives the number.]' } },
+      { sk: ['skill-03', 'skill-13'],
+        eg: '[Everyday example.]',
+        map: '[Badge 3 is the concept because …]',
+        c: { t: 'fill', q: '[Sentence with a blank: ______ .]',
+             a: ['[accepted answer]', '[another accepted spelling]'], show: '[the right answer, written as it should appear]',
+             why: '[Why.]' } }
+    ]
+  },
+  m1s2: {
+    title: '[Picture title for m1s2]',
+    caption: '[One sentence: what the picture shows and what to look at.]',
+    scene: D2EV.svg(`${D2EV.t(160, 90, '[drawing label]', 'ts')}${D2EV.b(1, 226, 60)}${D2EV.b(2, 226, 96)}${D2EV.b(3, 226, 132)}`, '[Describe the drawing for screen readers.]'),
+    items: [
+      { sk: ['skill-01', 'skill-11'],
+        eg: '[Everyday example, one or two plain sentences.]',
+        map: '[Badge 1 is the concept because …]',
+        c: { t: 'mcq', q: '[Tricky check that tests a common misconception.]',
+             o: ['[Right answer]', '[Plausible wrong answer]', '[Plausible wrong answer]', '[Plausible wrong answer]'],
+             why: '[Why the right answer is right.]' } },
+      { sk: ['skill-02', 'skill-12'],
+        eg: '[Everyday example.]',
+        map: '[Badge 2 is the concept because …]',
+        c: { t: 'num', q: '[Number question, unit in the question.]',
+             a: 0, tol: 0, u: '[unit]',
+             why: '[Working that gives the number.]' } },
+      { sk: ['skill-03', 'skill-13'],
+        eg: '[Everyday example.]',
+        map: '[Badge 3 is the concept because …]',
+        c: { t: 'fill', q: '[Sentence with a blank: ______ .]',
+             a: ['[accepted answer]', '[another accepted spelling]'], show: '[the right answer, written as it should appear]',
+             why: '[Why.]' } }
+    ]
+  },
+  m1s3: {
+    title: '[Picture title for m1s3]',
+    caption: '[One sentence: what the picture shows and what to look at.]',
+    scene: D2EV.svg(`${D2EV.t(160, 90, '[drawing label]', 'ts')}${D2EV.b(1, 226, 60)}${D2EV.b(2, 226, 96)}${D2EV.b(3, 226, 132)}`, '[Describe the drawing for screen readers.]'),
+    items: [
+      { sk: ['skill-01', 'skill-11'],
+        eg: '[Everyday example, one or two plain sentences.]',
+        map: '[Badge 1 is the concept because …]',
+        c: { t: 'mcq', q: '[Tricky check that tests a common misconception.]',
+             o: ['[Right answer]', '[Plausible wrong answer]', '[Plausible wrong answer]', '[Plausible wrong answer]'],
+             why: '[Why the right answer is right.]' } },
+      { sk: ['skill-02', 'skill-12'],
+        eg: '[Everyday example.]',
+        map: '[Badge 2 is the concept because …]',
+        c: { t: 'num', q: '[Number question, unit in the question.]',
+             a: 0, tol: 0, u: '[unit]',
+             why: '[Working that gives the number.]' } },
+      { sk: ['skill-03', 'skill-13'],
+        eg: '[Everyday example.]',
+        map: '[Badge 3 is the concept because …]',
+        c: { t: 'fill', q: '[Sentence with a blank: ______ .]',
+             a: ['[accepted answer]', '[another accepted spelling]'], show: '[the right answer, written as it should appear]',
+             why: '[Why.]' } }
+    ]
+  },
+  m1s4: {
+    title: '[Picture title for m1s4]',
+    caption: '[One sentence: what the picture shows and what to look at.]',
+    scene: D2EV.svg(`${D2EV.t(160, 90, '[drawing label]', 'ts')}${D2EV.b(1, 226, 60)}${D2EV.b(2, 226, 96)}${D2EV.b(3, 226, 132)}`, '[Describe the drawing for screen readers.]'),
+    items: [
+      { sk: ['skill-01', 'skill-11'],
+        eg: '[Everyday example, one or two plain sentences.]',
+        map: '[Badge 1 is the concept because …]',
+        c: { t: 'mcq', q: '[Tricky check that tests a common misconception.]',
+             o: ['[Right answer]', '[Plausible wrong answer]', '[Plausible wrong answer]', '[Plausible wrong answer]'],
+             why: '[Why the right answer is right.]' } },
+      { sk: ['skill-02', 'skill-12'],
+        eg: '[Everyday example.]',
+        map: '[Badge 2 is the concept because …]',
+        c: { t: 'num', q: '[Number question, unit in the question.]',
+             a: 0, tol: 0, u: '[unit]',
+             why: '[Working that gives the number.]' } },
+      { sk: ['skill-03', 'skill-13'],
+        eg: '[Everyday example.]',
+        map: '[Badge 3 is the concept because …]',
+        c: { t: 'fill', q: '[Sentence with a blank: ______ .]',
+             a: ['[accepted answer]', '[another accepted spelling]'], show: '[the right answer, written as it should appear]',
+             why: '[Why.]' } }
+    ]
+  },
+  m1s5: {
+    title: '[Picture title for m1s5]',
+    caption: '[One sentence: what the picture shows and what to look at.]',
+    scene: D2EV.svg(`${D2EV.t(160, 90, '[drawing label]', 'ts')}${D2EV.b(1, 226, 60)}${D2EV.b(2, 226, 96)}${D2EV.b(3, 226, 132)}`, '[Describe the drawing for screen readers.]'),
+    items: [
+      { sk: ['skill-01', 'skill-11'],
+        eg: '[Everyday example, one or two plain sentences.]',
+        map: '[Badge 1 is the concept because …]',
+        c: { t: 'mcq', q: '[Tricky check that tests a common misconception.]',
+             o: ['[Right answer]', '[Plausible wrong answer]', '[Plausible wrong answer]', '[Plausible wrong answer]'],
+             why: '[Why the right answer is right.]' } },
+      { sk: ['skill-02', 'skill-12'],
+        eg: '[Everyday example.]',
+        map: '[Badge 2 is the concept because …]',
+        c: { t: 'num', q: '[Number question, unit in the question.]',
+             a: 0, tol: 0, u: '[unit]',
+             why: '[Working that gives the number.]' } },
+      { sk: ['skill-03', 'skill-13'],
+        eg: '[Everyday example.]',
+        map: '[Badge 3 is the concept because …]',
+        c: { t: 'fill', q: '[Sentence with a blank: ______ .]',
+             a: ['[accepted answer]', '[another accepted spelling]'], show: '[the right answer, written as it should appear]',
+             why: '[Why.]' } }
+    ]
+  },
+  m2s1: {
+    title: '[Picture title for m2s1]',
+    caption: '[One sentence: what the picture shows and what to look at.]',
+    scene: D2EV.svg(`${D2EV.t(160, 90, '[drawing label]', 'ts')}${D2EV.b(1, 226, 60)}${D2EV.b(2, 226, 96)}${D2EV.b(3, 226, 132)}`, '[Describe the drawing for screen readers.]'),
+    items: [
+      { sk: ['skill-01', 'skill-11'],
+        eg: '[Everyday example, one or two plain sentences.]',
+        map: '[Badge 1 is the concept because …]',
+        c: { t: 'mcq', q: '[Tricky check that tests a common misconception.]',
+             o: ['[Right answer]', '[Plausible wrong answer]', '[Plausible wrong answer]', '[Plausible wrong answer]'],
+             why: '[Why the right answer is right.]' } },
+      { sk: ['skill-02', 'skill-12'],
+        eg: '[Everyday example.]',
+        map: '[Badge 2 is the concept because …]',
+        c: { t: 'num', q: '[Number question, unit in the question.]',
+             a: 0, tol: 0, u: '[unit]',
+             why: '[Working that gives the number.]' } },
+      { sk: ['skill-03', 'skill-13'],
+        eg: '[Everyday example.]',
+        map: '[Badge 3 is the concept because …]',
+        c: { t: 'fill', q: '[Sentence with a blank: ______ .]',
+             a: ['[accepted answer]', '[another accepted spelling]'], show: '[the right answer, written as it should appear]',
+             why: '[Why.]' } }
+    ]
+  },
+  m2s2: {
+    title: '[Picture title for m2s2]',
+    caption: '[One sentence: what the picture shows and what to look at.]',
+    scene: D2EV.svg(`${D2EV.t(160, 90, '[drawing label]', 'ts')}${D2EV.b(1, 226, 60)}${D2EV.b(2, 226, 96)}${D2EV.b(3, 226, 132)}`, '[Describe the drawing for screen readers.]'),
+    items: [
+      { sk: ['skill-01', 'skill-11'],
+        eg: '[Everyday example, one or two plain sentences.]',
+        map: '[Badge 1 is the concept because …]',
+        c: { t: 'mcq', q: '[Tricky check that tests a common misconception.]',
+             o: ['[Right answer]', '[Plausible wrong answer]', '[Plausible wrong answer]', '[Plausible wrong answer]'],
+             why: '[Why the right answer is right.]' } },
+      { sk: ['skill-02', 'skill-12'],
+        eg: '[Everyday example.]',
+        map: '[Badge 2 is the concept because …]',
+        c: { t: 'num', q: '[Number question, unit in the question.]',
+             a: 0, tol: 0, u: '[unit]',
+             why: '[Working that gives the number.]' } },
+      { sk: ['skill-03', 'skill-13'],
+        eg: '[Everyday example.]',
+        map: '[Badge 3 is the concept because …]',
+        c: { t: 'fill', q: '[Sentence with a blank: ______ .]',
+             a: ['[accepted answer]', '[another accepted spelling]'], show: '[the right answer, written as it should appear]',
+             why: '[Why.]' } }
+    ]
+  },
+  m2s3: {
+    title: '[Picture title for m2s3]',
+    caption: '[One sentence: what the picture shows and what to look at.]',
+    scene: D2EV.svg(`${D2EV.t(160, 90, '[drawing label]', 'ts')}${D2EV.b(1, 226, 60)}${D2EV.b(2, 226, 96)}${D2EV.b(3, 226, 132)}`, '[Describe the drawing for screen readers.]'),
+    items: [
+      { sk: ['skill-01', 'skill-11'],
+        eg: '[Everyday example, one or two plain sentences.]',
+        map: '[Badge 1 is the concept because …]',
+        c: { t: 'mcq', q: '[Tricky check that tests a common misconception.]',
+             o: ['[Right answer]', '[Plausible wrong answer]', '[Plausible wrong answer]', '[Plausible wrong answer]'],
+             why: '[Why the right answer is right.]' } },
+      { sk: ['skill-02', 'skill-12'],
+        eg: '[Everyday example.]',
+        map: '[Badge 2 is the concept because …]',
+        c: { t: 'num', q: '[Number question, unit in the question.]',
+             a: 0, tol: 0, u: '[unit]',
+             why: '[Working that gives the number.]' } },
+      { sk: ['skill-03', 'skill-13'],
+        eg: '[Everyday example.]',
+        map: '[Badge 3 is the concept because …]',
+        c: { t: 'fill', q: '[Sentence with a blank: ______ .]',
+             a: ['[accepted answer]', '[another accepted spelling]'], show: '[the right answer, written as it should appear]',
+             why: '[Why.]' } }
+    ]
+  },
+  m2s4: {
+    title: '[Picture title for m2s4]',
+    caption: '[One sentence: what the picture shows and what to look at.]',
+    scene: D2EV.svg(`${D2EV.t(160, 90, '[drawing label]', 'ts')}${D2EV.b(1, 226, 60)}${D2EV.b(2, 226, 96)}${D2EV.b(3, 226, 132)}`, '[Describe the drawing for screen readers.]'),
+    items: [
+      { sk: ['skill-01', 'skill-11'],
+        eg: '[Everyday example, one or two plain sentences.]',
+        map: '[Badge 1 is the concept because …]',
+        c: { t: 'mcq', q: '[Tricky check that tests a common misconception.]',
+             o: ['[Right answer]', '[Plausible wrong answer]', '[Plausible wrong answer]', '[Plausible wrong answer]'],
+             why: '[Why the right answer is right.]' } },
+      { sk: ['skill-02', 'skill-12'],
+        eg: '[Everyday example.]',
+        map: '[Badge 2 is the concept because …]',
+        c: { t: 'num', q: '[Number question, unit in the question.]',
+             a: 0, tol: 0, u: '[unit]',
+             why: '[Working that gives the number.]' } },
+      { sk: ['skill-03', 'skill-13'],
+        eg: '[Everyday example.]',
+        map: '[Badge 3 is the concept because …]',
+        c: { t: 'fill', q: '[Sentence with a blank: ______ .]',
+             a: ['[accepted answer]', '[another accepted spelling]'], show: '[the right answer, written as it should appear]',
+             why: '[Why.]' } }
+    ]
+  },
+  m2s5: {
+    title: '[Picture title for m2s5]',
+    caption: '[One sentence: what the picture shows and what to look at.]',
+    scene: D2EV.svg(`${D2EV.t(160, 90, '[drawing label]', 'ts')}${D2EV.b(1, 226, 60)}${D2EV.b(2, 226, 96)}${D2EV.b(3, 226, 132)}`, '[Describe the drawing for screen readers.]'),
+    items: [
+      { sk: ['skill-01', 'skill-11'],
+        eg: '[Everyday example, one or two plain sentences.]',
+        map: '[Badge 1 is the concept because …]',
+        c: { t: 'mcq', q: '[Tricky check that tests a common misconception.]',
+             o: ['[Right answer]', '[Plausible wrong answer]', '[Plausible wrong answer]', '[Plausible wrong answer]'],
+             why: '[Why the right answer is right.]' } },
+      { sk: ['skill-02', 'skill-12'],
+        eg: '[Everyday example.]',
+        map: '[Badge 2 is the concept because …]',
+        c: { t: 'num', q: '[Number question, unit in the question.]',
+             a: 0, tol: 0, u: '[unit]',
+             why: '[Working that gives the number.]' } },
+      { sk: ['skill-03', 'skill-13'],
+        eg: '[Everyday example.]',
+        map: '[Badge 3 is the concept because …]',
+        c: { t: 'fill', q: '[Sentence with a blank: ______ .]',
+             a: ['[accepted answer]', '[another accepted spelling]'], show: '[the right answer, written as it should appear]',
+             why: '[Why.]' } }
+    ]
+  }
+};
+
+/* ==========================================================================
+   MATCH MODE (experimental) — double-tap the top bar to switch on / off
+
+   1. Skill check: 10 OMR questions on the PREREQUISITES you need for today
+      (maths tools + school physics + study skills), not on the new topics.
+   2. Your answers rate each prerequisite High / Medium / Low; you confirm.
+   3. Med + High skills form your team (Focus FC), Low + Med form Time FC.
+   4. Two 90' matches. Each section has a finish-by minute: finish all of
+      its tasks in time and you score, miss it and Time FC scores.
+      Hydration breaks at 25' and 70' (5 min), half-time at 45' (30 min).
+   ========================================================================== */
+(function MatchMode() {
+  const MIN = 60000;
+  const FULL = 90;
+  const BREAKS = [
+    { key: 'h1', at: 25, dur: 5,  label: 'Hydration break', icon: 'water_drop' },
+    { key: 'ht', at: 45, dur: 30, label: 'Half-time',       icon: 'local_cafe' },
+    { key: 'h2', at: 70, dur: 5,  label: 'Hydration break', icon: 'water_drop' }
+  ];
+  const ME = 'Focus FC';
+  const TIME = 'Time FC';
+  const range = (prefix, n) => Array.from({ length: n }, (_, i) => prefix + i);
+
+  /* ---------- Fixtures: today's study split into two matches ---------- */
+  // [FILL] MATCHES: the two matches, their sections, finish-by minutes and the OMR tasks each section needs.
+  const MATCHES = [
+    { name: 'Match 1', sub: '[Match 1 subtitle]', sections: [
+      { id: 'm1s1', short: '[Short name]', name: '[Section name]', deadline: 12, anchor: '#m1s1', tasks: ['m1s1-omr-1', 'm1s1-omr-2', 'm1s1-omr-3'] },
+      { id: 'm1s2', short: '[Short name]', name: '[Section name]', deadline: 34, anchor: '#m1s2', tasks: ['m1s2-omr-1', 'm1s2-omr-2', 'm1s2-omr-3'] },
+      { id: 'm1s3', short: '[Short name]', name: '[Section name]', deadline: 45, anchor: '#m1s3', tasks: ['m1s3-omr-1', 'm1s3-omr-2', 'm1s3-omr-3'] },
+      { id: 'm1s4', short: '[Short name]', name: '[Section name]', deadline: 68, anchor: '#m1s4', tasks: ['m1s4-omr-1', 'm1s4-omr-2', 'm1s4-omr-3'] },
+      { id: 'm1s5', short: '[Short name]', name: '[Section name]', deadline: 90, anchor: '#m1s5', tasks: ['m1s5-omr-1', 'm1s5-omr-2', 'm1s5-omr-3'] }
+    ] },
+    { name: 'Match 2', sub: '[Match 2 subtitle]', sections: [
+      { id: 'm2s1', short: '[Short name]', name: '[Section name]', deadline: 20, anchor: '#m2s1', tasks: ['m2s1-omr-1', 'm2s1-omr-2', 'm2s1-omr-3'] },
+      { id: 'm2s2', short: '[Short name]', name: '[Section name]', deadline: 38, anchor: '#m2s2', tasks: ['m2s2-omr-1', 'm2s2-omr-2', 'm2s2-omr-3'] },
+      { id: 'm2s3', short: '[Short name]', name: '[Section name]', deadline: 58, anchor: '#m2s3', tasks: ['m2s3-omr-1', 'm2s3-omr-2', 'm2s3-omr-3'] },
+      { id: 'm2s4', short: '[Short name]', name: '[Section name]', deadline: 76, anchor: '#m2s4', tasks: ['m2s4-omr-1', 'm2s4-omr-2', 'm2s4-omr-3'] },
+      { id: 'm2s5', short: '[Short name]', name: '[Section name]', deadline: 90, anchor: '#m2s5', tasks: ['m2s5-omr-1', 'm2s5-omr-2', 'm2s5-omr-3'] }
+    ] }
+  ];
+  const SECTION = {};
+  MATCHES.forEach((m, mi) => m.sections.forEach(s => { s.mi = mi; SECTION[s.id] = s; }));
+
+  /* ---------- Prerequisite skills: what you need BEFORE learning today's topics ----------
+     [id, name, player name, group, sections that rely on it] */
+  const GROUPS = [['math', 'Maths tools'], ['phys', 'Background knowledge'], ['study', 'Study skills']];
+  const SKILLS = [
+    ['skill-01', '[Prerequisite 1 name]', '[Player 1]', 'math', 'm1s1 m1s2'],
+    ['skill-02', '[Prerequisite 2 name]', '[Player 2]', 'math', 'm1s2 m1s3'],
+    ['skill-03', '[Prerequisite 3 name]', '[Player 3]', 'math', 'm1s3 m1s4'],
+    ['skill-04', '[Prerequisite 4 name]', '[Player 4]', 'math', 'm1s4 m1s5'],
+    ['skill-05', '[Prerequisite 5 name]', '[Player 5]', 'math', 'm1s5 m2s1'],
+    ['skill-06', '[Prerequisite 6 name]', '[Player 6]', 'math', 'm2s1 m2s2'],
+    ['skill-07', '[Prerequisite 7 name]', '[Player 7]', 'math', 'm2s2 m2s3'],
+    ['skill-08', '[Prerequisite 8 name]', '[Player 8]', 'math', 'm2s3 m2s4'],
+    ['skill-09', '[Prerequisite 9 name]', '[Player 9]', 'math', 'm2s4 m2s5'],
+    ['skill-10', '[Prerequisite 10 name]', '[Player 10]', 'math', 'm2s5 m1s1'],
+    ['skill-11', '[Prerequisite 11 name]', '[Player 11]', 'phys', 'm1s1 m1s2'],
+    ['skill-12', '[Prerequisite 12 name]', '[Player 12]', 'phys', 'm1s2 m1s3'],
+    ['skill-13', '[Prerequisite 13 name]', '[Player 13]', 'phys', 'm1s3 m1s4'],
+    ['skill-14', '[Prerequisite 14 name]', '[Player 14]', 'phys', 'm1s4 m1s5'],
+    ['skill-15', '[Prerequisite 15 name]', '[Player 15]', 'phys', 'm1s5 m2s1'],
+    ['skill-16', '[Prerequisite 16 name]', '[Player 16]', 'phys', 'm2s1 m2s2'],
+    ['skill-17', '[Prerequisite 17 name]', '[Player 17]', 'phys', 'm2s2 m2s3'],
+    ['skill-18', '[Prerequisite 18 name]', '[Player 18]', 'phys', 'm2s3 m2s4'],
+    ['skill-19', '[Prerequisite 19 name]', '[Player 19]', 'phys', 'm2s4 m2s5'],
+    ['skill-20', '[Prerequisite 20 name]', '[Player 20]', 'phys', 'm2s5 m1s1'],
+    ['skill-21', '[Prerequisite 21 name]', '[Player 21]', 'study', 'm1s1 m1s2'],
+    ['skill-22', '[Prerequisite 22 name]', '[Player 22]', 'study', 'm1s2 m1s3'],
+    ['skill-23', '[Prerequisite 23 name]', '[Player 23]', 'study', 'm1s3 m1s4'],
+    ['skill-24', '[Prerequisite 24 name]', '[Player 24]', 'study', 'm1s4 m1s5'],
+    ['skill-25', '[Prerequisite 25 name]', '[Player 25]', 'study', 'm1s5 m2s1'],
+    ['skill-26', '[Prerequisite 26 name]', '[Player 26]', 'study', 'm2s1 m2s2'],
+    ['skill-27', '[Prerequisite 27 name]', '[Player 27]', 'study', 'm2s2 m2s3'],
+    ['skill-28', '[Prerequisite 28 name]', '[Player 28]', 'study', 'm2s3 m2s4'],
+    ['skill-29', '[Prerequisite 29 name]', '[Player 29]', 'study', 'm2s4 m2s5'],
+    ['skill-30', '[Prerequisite 30 name]', '[Player 30]', 'study', 'm2s5 m1s1']
+  ].map(([id, name, player, group, sections]) => ({ id, name, player, group, sections: sections.split(' ') }));
+  const SKILL = Object.fromEntries(SKILLS.map(s => [s.id, s]));
+  const NEEDS = {};
+  SKILLS.forEach(s => s.sections.forEach(sid => (NEEDS[sid] = NEEDS[sid] || []).push(s.id)));
+
+  /* ---------- Skill check: 10 prerequisite questions. options[0] is the right one (shown shuffled) ---------- */
+  // [FILL] QUIZ: 10 skill-check questions. o[0] is the right answer (shown shuffled). skills: ids from SKILLS.
+  const QUIZ = [
+    { q: '[Skill-check question 1. Maths in $…$.]',
+      o: ['[Right answer]', '[Wrong answer]', '[Wrong answer]', '[Wrong answer]'],
+      why: '[Why the right answer is right.]',
+      skills: ['skill-01', 'skill-11'] },
+    { q: '[Skill-check question 2. Maths in $…$.]',
+      o: ['[Right answer]', '[Wrong answer]', '[Wrong answer]', '[Wrong answer]'],
+      why: '[Why the right answer is right.]',
+      skills: ['skill-02', 'skill-12'] },
+    { q: '[Skill-check question 3. Maths in $…$.]',
+      o: ['[Right answer]', '[Wrong answer]', '[Wrong answer]', '[Wrong answer]'],
+      why: '[Why the right answer is right.]',
+      skills: ['skill-03', 'skill-13'] },
+    { q: '[Skill-check question 4. Maths in $…$.]',
+      o: ['[Right answer]', '[Wrong answer]', '[Wrong answer]', '[Wrong answer]'],
+      why: '[Why the right answer is right.]',
+      skills: ['skill-04', 'skill-14'] },
+    { q: '[Skill-check question 5. Maths in $…$.]',
+      o: ['[Right answer]', '[Wrong answer]', '[Wrong answer]', '[Wrong answer]'],
+      why: '[Why the right answer is right.]',
+      skills: ['skill-05', 'skill-15'] },
+    { q: '[Skill-check question 6. Maths in $…$.]',
+      o: ['[Right answer]', '[Wrong answer]', '[Wrong answer]', '[Wrong answer]'],
+      why: '[Why the right answer is right.]',
+      skills: ['skill-06', 'skill-16'] },
+    { q: '[Skill-check question 7. Maths in $…$.]',
+      o: ['[Right answer]', '[Wrong answer]', '[Wrong answer]', '[Wrong answer]'],
+      why: '[Why the right answer is right.]',
+      skills: ['skill-07', 'skill-17'] },
+    { q: '[Skill-check question 8. Maths in $…$.]',
+      o: ['[Right answer]', '[Wrong answer]', '[Wrong answer]', '[Wrong answer]'],
+      why: '[Why the right answer is right.]',
+      skills: ['skill-08', 'skill-18'] },
+    { q: '[Skill-check question 9. Maths in $…$.]',
+      o: ['[Right answer]', '[Wrong answer]', '[Wrong answer]', '[Wrong answer]'],
+      why: '[Why the right answer is right.]',
+      skills: ['skill-09', 'skill-19'] },
+    { q: '[Skill-check question 10. Maths in $…$.]',
+      o: ['[Right answer]', '[Wrong answer]', '[Wrong answer]', '[Wrong answer]'],
+      why: '[Why the right answer is right.]',
+      skills: ['skill-10', 'skill-20'] }
+  ];
+  const TESTED_IN = {};
+  QUIZ.forEach((q, i) => q.skills.forEach(id => (TESTED_IN[id] = TESTED_IN[id] || []).push(i + 1)));
+
+  /* ---------- State (saved in the shared Store) ---------- */
+  const freshMatch = () => ({ status: 'pre', squads: null, elapsedMs: 0, runStartedAt: null, breakKey: null, breakEndsAt: null, breaksDone: {}, sectionIdx: 0, results: [], streak: [], pending: [], ftWait: false });
+  const freshQuiz = () => ({ i: 0, pick: {}, order: {}, done: false });
+  if (!Store.data.match) Store.data.match = { enabled: false, ratings: {}, quiz: freshQuiz(), active: 0, tab: 'skills', matches: [freshMatch(), freshMatch()] };
+  const S = Store.data.match;
+  const save = () => Store.save();
+  const rating = id => S.ratings[id] || 'M';
+  // Matches saved before slips and credit existed get the new fields
+  S.matches.forEach(m => { m.streak = m.streak || []; m.pending = m.pending || []; m.ftWait = m.ftWait || false; });
+  const CX = Store.data.cx2 = Store.data.cx2 || {};     // understanding checks: CX[sectionId][k] = { ans, ok }
+  const running = m => ['live', 'paused', 'break'].includes(m.status);
+
+  const fmt = ms => {
+    const t = Math.floor(Math.max(0, ms) / 1000);
+    return `${String(Math.floor(t / 60)).padStart(2, '0')}:${String(t % 60).padStart(2, '0')}`;
+  };
+  const sectionDone = sec => sec.tasks.every(t => Progress.isDone(t));
+  const doneCount = sec => sec.tasks.filter(t => Progress.isDone(t)).length;
+
+  /* ---------- Squads: split skills into 11 players each, line up 4-3-3 ---------- */
+  function buildSquad(side) {
+    const wanted = side === 'me' ? ['M', 'H'] : ['L', 'M'];
+    const pool = SKILLS.filter(s => wanted.includes(rating(s.id)));
+    if (!pool.length) return [];
+    const groups = [];
+    if (pool.length >= 11) {
+      const base = Math.floor(pool.length / 11), extra = pool.length % 11;
+      let i = 0;
+      for (let p = 0; p < 11; p++) { const size = base + (p < extra ? 1 : 0); groups.push(pool.slice(i, i + size)); i += size; }
+    } else {
+      for (let p = 0; p < 11; p++) groups.push([pool[p % pool.length]]);
+    }
+    const value = r => (side === 'me' ? (r === 'H' ? 3 : 2) : (r === 'L' ? 3 : 2));
+    const used = {};
+    const players = groups.map((g, i) => {
+      const lead = [...g].sort((a, b) => value(rating(b.id)) - value(rating(a.id)))[0];
+      used[lead.player] = (used[lead.player] || 0) + 1;
+      const name = lead.player + (used[lead.player] > 1 ? ' ' + 'I'.repeat(used[lead.player]) : '');
+      return { id: `${side}-${i}`, side, name, skills: g.map(s => s.id), strength: g.reduce((a, s) => a + value(rating(s.id)), 0) / g.length };
+    });
+    // Strongest skills play up front: for Time FC that means your weakest prerequisites attack
+    const slots = ['FWD', 'FWD', 'FWD', 'MID', 'MID', 'MID', 'DEF', 'DEF', 'DEF', 'DEF', 'GK'];
+    const shirt = { GK: 1, DEF: 2, MID: 6, FWD: 9 }, count = { GK: 0, DEF: 0, MID: 0, FWD: 0 };
+    players.map((p, i) => i)
+      .sort((a, b) => players[b].strength - players[a].strength || a - b)
+      .forEach((pi, k) => { const p = players[pi]; p.pos = slots[k]; p.slot = count[p.pos]++; p.num = shirt[p.pos] + p.slot; });
+    return players;
+  }
+  const buildSquads = () => ({ me: buildSquad('me'), time: buildSquad('time') });
+
+  /** The player whose skills the section needs most takes the goal. */
+  function pickScorer(team, sec) {
+    const need = NEEDS[sec.id] || [];
+    const posWeight = { FWD: 3, MID: 2, DEF: 1, GK: 0 };
+    let best = null, bestScore = -1;
+    team.forEach(p => {
+      const score = p.skills.filter(k => need.includes(k)).length * 10 + posWeight[p.pos];
+      if (score > bestScore) { bestScore = score; best = p; }
+    });
+    return best ? { id: best.id, via: best.skills.filter(k => need.includes(k)).slice(0, 3).map(k => SKILL[k].name) } : { id: null, via: [] };
+  }
+
+  /* ---------- Match engine: timestamp based, so sleep / reloads never break the clock ---------- */
+  const clockMs = (m, now = Date.now()) => m.elapsedMs + (m.status === 'live' && m.runStartedAt ? now - m.runStartedAt : 0);
+  const score = m => ({ me: m.results.filter(r => r.side === 'me').length, time: m.results.filter(r => r.side === 'time').length });
+  const busyMatch = () => S.matches.findIndex(m => ['live', 'paused', 'break'].includes(m.status));
+
+  function settle(mi, clock, events) {
+    const m = S.matches[mi], secs = MATCHES[mi].sections;
+    while (m.sectionIdx < secs.length) {
+      const sec = secs[m.sectionIdx];
+      if (sectionDone(sec)) addGoal(mi, sec, 'me', Math.min(sec.deadline, Math.floor(clock / MIN) + 1), events);
+      else if (clock >= sec.deadline * MIN) addGoal(mi, sec, 'time', sec.deadline, events);
+      else break;
+      m.sectionIdx++;
+    }
+    if (m.sectionIdx >= secs.length && m.status !== 'ft') {
+      if (m.status === 'live') { m.elapsedMs = clock; m.runStartedAt = null; }
+      m.status = 'ft'; m.breakEndsAt = null; m.breakKey = null;
+      events.push({ type: 'ft', early: clock < FULL * MIN });
+    }
+  }
+
+  function addGoal(mi, sec, side, minute, events) {
+    const m = S.matches[mi];
+    if (side === 'me') {
+      // Your goal: the scorer is chosen at the end of the section (credit sheet), see finishCredit
+      const result = { sec: sec.id, side, min: minute, scorer: null, via: [], open: true };
+      m.results.push(result);
+      m.pending.push(sec.id);
+      events.push({ type: 'goal', result }, { type: 'credit', sec: sec.id });
+      return;
+    }
+    const scorer = pickScorer(m.squads.time, sec);
+    const result = { sec: sec.id, side, min: minute, scorer: scorer.id, via: scorer.via };
+    m.results.push(result);
+    events.push({ type: 'goal', result });
+  }
+
+  function advance(mi, now) {
+    const m = S.matches[mi], events = [];
+    for (let guard = 0; guard < 60; guard++) {
+      if (m.status === 'break') {
+        if (now >= m.breakEndsAt) {
+          const key = m.breakKey;
+          m.status = 'live'; m.runStartedAt = m.breakEndsAt; m.breakEndsAt = null; m.breakKey = null;
+          events.push({ type: 'resume', key });
+          continue;
+        }
+        settle(mi, m.elapsedMs, events);
+        break;
+      }
+      if (m.status === 'paused') { settle(mi, m.elapsedMs, events); break; }
+      if (m.status !== 'live') break;
+
+      const ms = clockMs(m, now);
+      const nextBreak = BREAKS.find(b => !m.breaksDone[b.key]);
+      const stopAt = (nextBreak ? nextBreak.at : FULL) * MIN;
+      settle(mi, Math.min(ms, stopAt), events);
+      if (m.status !== 'live') break;
+      if (ms < stopAt) break;
+
+      const hitAt = m.runStartedAt + (stopAt - m.elapsedMs);
+      m.elapsedMs = stopAt; m.runStartedAt = null;
+      if (nextBreak) {
+        m.breaksDone[nextBreak.key] = true;
+        m.status = 'break'; m.breakKey = nextBreak.key; m.breakEndsAt = hitAt + nextBreak.dur * MIN;
+        events.push({ type: 'break', key: nextBreak.key });
+      } else {
+        m.status = 'ft';
+        events.push({ type: 'ft' });
+      }
+    }
+    return events;
+  }
+
+  function tick() {
+    const now = Date.now();
+    let changed = false;
+    S.matches.forEach((m, mi) => {
+      const events = advance(mi, now);
+      if (events.length) { changed = true; announce(events, mi); }
+    });
+    if (changed) { save(); if (panelOpen()) renderPanel(); }
+    maybeOpenCredit();
+    renderLive();
+  }
+
+  /* ---------- Sound & vibration ---------- */
+  let audio = null;
+  function audioCtx() {
+    try { audio = audio || new (window.AudioContext || window.webkitAudioContext)(); if (audio.state === 'suspended') audio.resume(); }
+    catch (e) { audio = null; }
+    return audio;
+  }
+  function tone(freq, start, dur, type = 'square', vol = 0.05) {
+    const a = audioCtx(); if (!a) return;
+    const o = a.createOscillator(), g = a.createGain(), t = a.currentTime + start;
+    o.type = type; o.frequency.value = freq;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(vol, t + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(a.destination); o.start(t); o.stop(t + dur + 0.05);
+  }
+  const vibrate = p => { try { navigator.vibrate && navigator.vibrate(p); } catch (e) {} };
+  const whistle = n => { for (let i = 0; i < n; i++) { tone(2300, i * 0.55, 0.42); tone(2460, i * 0.55, 0.42); } vibrate([300, 120, 300]); };
+  const goalSound = () => { [523, 659, 784, 1047].forEach((f, i) => tone(f, i * 0.12, 0.28, 'triangle', 0.09)); vibrate([120, 60, 120, 60, 240]); };
+  const concedeSound = () => { [392, 330, 262].forEach((f, i) => tone(f, i * 0.18, 0.32, 'sawtooth', 0.035)); vibrate(400); };
+
+  /* ---------- Events -> toasts, sheets, sounds ---------- */
+  function announce(events, mi) {
+    const M = MATCHES[mi], m = S.matches[mi];
+    const burst = events.filter(e => e.type === 'goal').length > 2;
+    let sound = null;
+    events.forEach(e => {
+      if (e.type === 'goal') {
+        const r = e.result, sc = score(m), credit = events.some(x => x.type === 'credit');
+        const player = [...m.squads.me, ...m.squads.time].find(p => p.id === r.scorer);
+        const sec = r.sec ? SECTION[r.sec] : null;
+        const next = sec && M.sections[M.sections.indexOf(sec) + 1];
+        if (r.kind === 'slip') {
+          if (!burst && !credit) toast('conc', `${TIME} score ${r.min}' · ${sc.me}–${sc.time}`, `${player ? esc(player.name) : 'Time FC'} · three understanding slips in a row`);
+        } else if (r.side === 'me') {
+          // the credit sheet explains your goal, so no toast covers its buttons
+          if (!burst && !credit) toast('goal', `GOAL ${r.min}' · ${ME} ${sc.me}–${sc.time}`, `${esc(sec.short)} · pick the scorer when the section is done`);
+        } else if (!burst && !credit) toast('conc',
+          `${TIME} score ${r.min}' · ${sc.me}–${sc.time}`,
+          `${player ? esc(player.name) : 'The clock'} · ${esc(sec.short)}${next ? ` · Next: ${esc(next.short)}` : ''}`,
+          next ? { label: 'Go', run: () => goTo(next.id) } : null);
+        if (sound !== 'ft') sound = r.side === 'me' || sound === 'goal' ? 'goal' : 'conc';
+      }
+      if (e.type === 'break') { openBreak(mi); sound = sound || 'break'; }
+      if (e.type === 'resume') {
+        if (Sheet.kind === 'break') Sheet.close();
+        toast('', e.key === 'ht' ? 'Second half is on' : 'Back to play', `${M.name} · clock running again`);
+        sound = sound || 'resume';
+      }
+      if (e.type === 'ft') {
+        sound = 'ft';
+        // the full-time sheet waits until every section's credit is settled
+        if (m.pending.length) m.ftWait = { early: Boolean(e.early) }; else openFullTime(mi, e.early);
+      }
+    });
+    if (burst) { const sc = score(m); toast('', `${M.name} caught up: ${ME} ${sc.me}–${sc.time} ${TIME}`, 'See the fixtures for scorers'); }
+    if (sound === 'goal') goalSound();
+    else if (sound === 'conc') concedeSound();
+    else if (sound === 'break' || sound === 'ft') whistle(sound === 'ft' ? 3 : 2);
+    else if (sound === 'resume') whistle(1);
+  }
+
+  function goTo(secId) {
+    const sec = SECTION[secId];
+    const el = sec && document.querySelector(sec.anchor);
+    if (!el) return;
+    closePanel();
+    if (Sheet.kind !== 'break') Sheet.close();
+    Sections.goToElement(el);
+  }
+
+  /* ---------- DOM ---------- */
+  let overlay, body, strip;
+
+  function mount() {
+    strip = document.createElement('button');
+    strip.className = 'mm-strip';
+    strip.type = 'button';
+    strip.innerHTML = `
+      <span class="mm-strip-score">FOC <span class="num" data-mm="score">0–0</span> TFC</span>
+      <span class="mm-strip-clock">${icon('sports_soccer')}<span data-mm="clock">00:00</span></span>
+      <span class="mm-strip-sec" data-mm="sec">Tap to set up the match</span>`;
+    strip.addEventListener('click', () => openPanel());
+    $('.topbar-inner').appendChild(strip);
+
+    overlay = document.createElement('div');
+    overlay.className = 'mm-overlay';
+    overlay.innerHTML = `
+      <div class="mm-inner">
+        <div class="mm-head">
+          <div class="mm-head-row">
+            <div class="mm-title">${icon('sports_soccer')}<span>Match Centre</span><span class="chip chip-amber">Experimental</span></div>
+            <button class="icon-btn" data-mm-act="close" aria-label="Close">${icon('close')}</button>
+          </div>
+          <div class="mm-tabs">
+            <button class="btn-pill" data-mm-act="tab" data-tab="skills">${icon('fact_check', 16)} Skill check</button>
+            <button class="btn-pill" data-mm-act="tab" data-tab="match">${icon('stadium', 16)} Match</button>
+          </div>
+        </div>
+        <div data-mm="body"></div>
+      </div>`;
+    document.body.appendChild(overlay);
+    body = overlay.querySelector('[data-mm="body"]');
+
+    overlay.addEventListener('click', onAction);
+    $('#sheet').addEventListener('click', onAction);
+  }
+
+  const panelOpen = () => overlay.classList.contains('show');
+  function openPanel(tab) {
+    if (tab) S.tab = tab;
+    overlay.classList.add('show');
+    document.body.classList.add('mm-panel-open');
+    document.body.style.overflow = 'hidden';
+    renderPanel();
+  }
+  function closePanel() {
+    overlay.classList.remove('show');
+    document.body.classList.remove('mm-panel-open');
+    document.body.style.overflow = '';
+  }
+
+  function toggle() {
+    S.enabled = !S.enabled;
+    save();
+    document.body.classList.toggle('mm-on', S.enabled);
+    if (S.enabled) {
+      tick();
+      toast('', 'Match Mode on', 'Tap the scoreboard to open the Match Centre. Double-tap the bar again to hide it.');
+    } else {
+      closePanel();
+      if (Sheet.kind && (Sheet.kind.startsWith('mm-') || Sheet.kind === 'break')) Sheet.close();
+      toast('', 'Match Mode hidden', 'Everything is saved. Double-tap the bar to bring it back.');
+    }
+  }
+
+  /* ---------- Actions ---------- */
+  function onAction(e) {
+    const b = e.target.closest('[data-mm-act]');
+    if (!b) return;
+    audioCtx();
+    const act = b.dataset.mmAct, mi = S.active, m = S.matches[mi];
+    switch (act) {
+      case 'close': closePanel(); break;
+      case 'tab': S.tab = b.dataset.tab; save(); renderPanel(); overlay.scrollTop = 0; break;
+      case 'pick':
+        if (S.quiz.pick[S.quiz.i] == null) { S.quiz.pick[S.quiz.i] = Number(b.dataset.opt); save(); renderPanel(); }
+        break;
+      case 'next':
+        if (S.quiz.i < QUIZ.length - 1) S.quiz.i++;
+        else { autoRate(); S.quiz.done = true; }
+        save(); renderPanel(); overlay.scrollTop = 0;
+        break;
+      case 'retake':
+        S.quiz = freshQuiz(); S.ratings = {}; save(); renderPanel(); overlay.scrollTop = 0;
+        break;
+      case 'rate':
+        S.ratings[b.dataset.id] = b.dataset.v; save();
+        b.parentElement.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
+        renderCounts();
+        break;
+      case 'build':
+        if (m.status !== 'pre') { toast('', 'Squads are locked', 'This match has already kicked off.'); break; }
+        m.squads = buildSquads(); S.tab = 'match'; save(); renderPanel(); overlay.scrollTop = 0;
+        toast('', `Squads picked for ${MATCHES[mi].name}`, 'Tap any player to see their skills.');
+        break;
+      case 'match': S.active = Number(b.dataset.mi); save(); renderPanel(); break;
+      case 'play': playPause(mi); break;
+      case 'restart':
+        Sheet.open(`
+          <div class="sheet-head"><h3>Restart ${MATCHES[mi].name}?</h3></div>
+          <p class="sheet-text">Score, clock and breaks reset. Squads are rebuilt from your current skill split. Your study progress is not touched.</p>
+          <div class="sheet-actions"><button class="btn" data-ui="close-sheet">Cancel</button>
+            <button class="btn btn-danger" data-mm-act="restart-yes">Restart</button></div>`, { center: true, kind: 'mm-confirm' });
+        break;
+      case 'restart-yes': S.matches[mi] = freshMatch(); save(); Sheet.close(); renderPanel(); renderLive(); break;
+      case 'player': openPlayer(b.dataset.pid); break;
+      case 'go': goTo(b.dataset.sec); break;
+      case 'skip': skipBreak(Number(b.dataset.mi)); break;
+      case 'hide': Sheet.close(); break;
+      case 'to-match2': Sheet.close(); S.active = 1; save(); openPanel('match'); break;
+    }
+  }
+
+  function playPause(mi) {
+    const m = S.matches[mi], now = Date.now();
+    if (m.status === 'pre') {
+      const busy = busyMatch();
+      if (busy >= 0 && busy !== mi) { toast('', `Finish ${MATCHES[busy].name} first`, 'Only one match can run at a time.'); return; }
+      if (!m.squads && !S.quiz.done) { toast('', 'Do the skill check first', '10 quick questions decide both squads.'); S.tab = 'skills'; renderPanel(); return; }
+      if (!m.squads) m.squads = buildSquads();
+      m.status = 'live'; m.runStartedAt = now; m.elapsedMs = 0;
+      const first = MATCHES[mi].sections[0];
+      whistle(1);
+      toast('', `Kick-off · ${MATCHES[mi].name}`, `First up: ${esc(first.short)}, finish by ${first.deadline}'`, { label: 'Go', run: () => goTo(first.id) });
+    } else if (m.status === 'live') {
+      m.elapsedMs = clockMs(m, now); m.runStartedAt = null; m.status = 'paused';
+    } else if (m.status === 'paused') {
+      m.status = 'live'; m.runStartedAt = now;
+    } else if (m.status === 'break') {
+      skipBreak(mi); return;
+    }
+    save(); tick(); renderPanel();
+  }
+
+  function skipBreak(mi) {
+    const m = S.matches[mi];
+    if (m.status !== 'break') return;
+    const key = m.breakKey;
+    m.status = 'live'; m.runStartedAt = Date.now(); m.breakEndsAt = null; m.breakKey = null;
+    Sheet.close(); whistle(1);
+    toast('', key === 'ht' ? 'Second half is on' : 'Back to play', 'Break skipped.');
+    save(); if (panelOpen()) renderPanel(); renderLive();
+  }
+
+/* ---------- Understanding checks: slips, slip goals ---------- */
+  /** Shared by the check panels. Only counts while the match is on; a right answer resets the streak. */
+  function judged(secId, ok, skills) {
+    const mi = SECTION[secId].mi, m = S.matches[mi];
+    if (!S.enabled || !m.squads || !running(m)) return;
+    if (ok) m.streak = [];
+    else {
+      m.streak.push({ sec: secId, sk: skills });
+      if (m.streak.length >= 3) { addSlipGoal(mi); m.streak = []; }
+    }
+    save();
+    if (panelOpen()) renderPanel();
+  }
+
+  /** The Time FC player whose skills the three slips needed most takes the goal. */
+  function pickBySkills(team, ids) {
+    const posWeight = { FWD: 3, MID: 2, DEF: 1, GK: 0 };
+    let best = null, bestScore = -1;
+    team.forEach(p => {
+      const score = p.skills.filter(k => ids.includes(k)).length * 10 + posWeight[p.pos];
+      if (score > bestScore) { bestScore = score; best = p; }
+    });
+    return best ? { id: best.id, via: best.skills.filter(k => ids.includes(k)).slice(0, 3).map(k => SKILL[k].name) } : { id: null, via: [] };
+  }
+
+  function addSlipGoal(mi) {
+    const m = S.matches[mi], clock = clockMs(m);
+    const ids = [...new Set(m.streak.flatMap(x => x.sk))];
+    const pick = pickBySkills(m.squads.time, ids);
+    const result = { sec: null, kind: 'slip', side: 'time', min: Math.min(FULL, Math.floor(clock / MIN) + 1), scorer: pick.id, via: pick.via };
+    m.results.push(result);
+    announce([{ type: 'goal', result }], mi);
+  }
+
+  /* ---------- Section credit: the skills that helped most pick the scorer ---------- */
+  const creditState = { mi: -1, sec: null, sel: new Set() };
+  /** Random draw between tied players. Used for goal credit only, never for answering checks. */
+  const draw = list => list[Math.floor(Math.random() * list.length)];
+  const ownerOf = (squad, id) => squad.find(p => p.skills.includes(id));
+
+  /** Prerequisite skills this section relies on that Focus FC owns. */
+  function creditSkills(mi, secId) {
+    const squad = S.matches[mi].squads.me;
+    return SKILLS.filter(s => s.sections.includes(secId) && ownerOf(squad, s.id));
+  }
+
+  function maybeOpenCredit() {
+    if (!S.enabled) return;
+    S.matches.forEach((m, mi) => {
+      if (!m.pending.length || !m.squads) return;
+      if (Sheet.kind === 'break' || Sheet.kind === 'mm-credit') return;     // one sheet at a time; never re-draw it
+      const secId = m.pending[0];
+      if (!creditSkills(mi, secId).length) { finishCredit(mi, secId, null); return; }
+      creditState.mi = mi; creditState.sec = secId; creditState.sel.clear();
+      renderCredit();
+    });
+  }
+
+  function renderCredit() {
+    const { mi, sec: secId } = creditState, m = S.matches[mi], sec = SECTION[secId];
+    const goals = m.results.filter(r => r.open && r.sec === secId).length, plural = goals > 1 ? 's' : '';
+    Sheet.open(`
+      <div class="sheet-head">
+        <span class="mm-dot-lg bg-blue">${icon('sports_soccer')}</span>
+        <h3>${esc(sec.name)} is done<br><span class="meta">${goals} goal${plural} for ${ME}. Who scored?</span></h3>
+      </div>
+      <p class="sheet-text">Tick the skills that helped you most in this section. The player who owns the most ticked skills takes the goal${plural}.
+        If two players are level, a random draw settles it.</p>
+      <div class="mm-pick-list">${creditSkills(mi, secId).map(s => {
+        const on = creditState.sel.has(s.id), owner = ownerOf(m.squads.me, s.id);
+        return `<button class="mm-pick${on ? ' on' : ''}" data-mm-act="cpick" data-id="${s.id}">${icon(on ? 'check_box' : 'check_box_outline_blank')}
+          <span class="mm-pick-body">${esc(s.name)}<small>${esc(owner.name)} · ${s.group === 'math' ? 'Maths tool' : s.group === 'phys' ? 'Physics' : 'Study skill'}</small></span></button>`;
+      }).join('')}</div>
+      <div class="sheet-actions">
+        <button class="btn" data-mm-act="cskip">Skip, pick for me</button>
+        <button class="btn btn-solid" data-mm-act="cdone" data-mm="cdone" ${creditState.sel.size ? '' : 'disabled'}>${icon('check', 18)} Credit the goal${plural}</button>
+      </div>`, { kind: 'mm-credit', sticky: true });
+  }
+
+  function toggleCreditSkill(btn) {
+    const id = btn.dataset.id;
+    if (creditState.sel.has(id)) creditState.sel.delete(id); else creditState.sel.add(id);
+    const on = creditState.sel.has(id);
+    btn.classList.toggle('on', on);
+    btn.querySelector('.material-icons-outlined').textContent = on ? 'check_box' : 'check_box_outline_blank';
+    const done = $('#sheet [data-mm="cdone"]');
+    if (done) done.disabled = !creditState.sel.size;
+  }
+
+  /** picked: skill ids, or null for "pick for me" (the old automatic choice). */
+  function finishCredit(mi, secId, picked) {
+    const m = S.matches[mi];
+    const goals = m.results.filter(r => r.open && r.sec === secId);
+    let winner = null, via = [], tie = null;
+    if (picked && picked.length) {
+      const votes = {};
+      picked.forEach(id => { const p = ownerOf(m.squads.me, id); if (p) votes[p.id] = (votes[p.id] || 0) + 1; });
+      const top = Math.max(...Object.values(votes));
+      const tied = Object.keys(votes).filter(id => votes[id] === top);
+      winner = tied.length > 1 ? draw(tied) : tied[0];
+      if (tied.length > 1) tie = tied.map(id => m.squads.me.find(p => p.id === id).name);
+      via = picked.filter(id => ownerOf(m.squads.me, id).id === winner).map(id => SKILL[id].name).slice(0, 3);
+    }
+    goals.forEach(r => {
+      delete r.open;
+      if (winner) { r.scorer = winner; r.via = via; if (tie) r.tie = tie; }
+      else { const a = pickScorer(m.squads.me, SECTION[secId]); r.scorer = a.id; r.via = a.via; r.auto = true; }
+    });
+    m.pending = m.pending.filter(x => x !== secId);
+    creditState.sel.clear(); creditState.sec = null;
+    const who = m.squads.me.find(p => p.id === (goals[0] && goals[0].scorer));
+    Sheet.close();
+    save();
+    if (who && goals.length) toast('goal', `${esc(who.name)} scores`, `${esc(SECTION[secId].short)}${tie ? ` · random draw between ${tie.map(esc).join(' and ')}` : ''}`);
+    if (m.pending.length) maybeOpenCredit();
+    else if (m.ftWait) { const early = m.ftWait.early; m.ftWait = false; save(); openFullTime(mi, early); }
+    if (panelOpen()) renderPanel();
+    renderLive();
+  }
+
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-mm-act="cpick"],[data-mm-act="cdone"],[data-mm-act="cskip"]');
+    if (!b) return;
+    const act = b.dataset.mmAct, { mi, sec } = creditState;
+    if (act === 'cpick') toggleCreditSkill(b);
+    else if (act === 'cdone' && sec) finishCredit(mi, sec, [...creditState.sel]);
+    else if (act === 'cskip' && sec) finishCredit(mi, sec, null);
+  });
+
+  /* ---------- Understanding checks, one panel above each study section ---------- */
+  const shuffleFor = (secId, k, n) => {
+    let seed = [...secId].reduce((a, ch) => a * 31 + ch.charCodeAt(0), 7) + k * 17;
+    const rand = () => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; };
+    const idx = Array.from({ length: n }, (_, i) => i);
+    for (let i = n - 1; i > 0; i--) { const j = Math.floor(rand() * (i + 1)); [idx[i], idx[j]] = [idx[j], idx[i]]; }
+    return idx;
+  };
+  const normText = t => String(t).toLowerCase().replace(/[−–—]/g, '-').replace(/θ/g, 'theta').replace(/[₀-₉]/g, d => String(d.charCodeAt(0) - 0x2080))
+    .replace(/[\s·*×()\[\]{}$\\_,.;:'"′]/g, '').replace(/^minus/, '-');
+  function readNumber(text) {
+    const m = String(text).replace(/[−–—]/g, '-').replace(/,/g, '').match(/-?\s*\d*\.?\d+(?:\s*\/\s*\d*\.?\d+)?/);
+    if (!m) return null;
+    const x = m[0].replace(/\s+/g, '');
+    if (x.includes('/')) { const [a, b] = x.split('/'); return Number(a) / Number(b); }
+    return Number(x);
+  }
+  function judgeCheck(c, raw) {
+    if (raw === null || raw === '') return false;
+    if (c.t === 'mcq') return raw === 0;
+    if (c.t === 'num') { const x = readNumber(raw); return x !== null && Math.abs(x - c.a) <= c.tol + 1e-9; }
+    const given = normText(raw);
+    return c.a.some(a => normText(a) === given);
+  }
+  const rightText = c => c.t === 'mcq' ? c.o[0] : c.t === 'num' ? `${c.a}${c.u ? ' ' + c.u : ''}` : c.show || c.a[0];
+  const TYPE_NAME = { mcq: 'Multiple choice', fill: 'Fill in the blank', word: 'One word', num: 'Number' };
+
+  function checkCard(secId, k) {
+    const item = D2CONCEPTS[secId].items[k], c = item.c, st = (CX[secId] || {})[k];
+    const n = k + 1;
+    let body = '';
+    if (c.t === 'mcq') {
+      body = `<div class="options-list">${shuffleFor(secId, k, c.o.length).map((o, pos) => {
+        let cls = '';
+        if (st) cls = o === 0 ? 'selected-full' : st.ans === o ? 'selected-none' : '';
+        const ico = st ? (o === 0 ? 'check_circle' : st.ans === o ? 'cancel' : 'radio_button_unchecked') : 'radio_button_unchecked';
+        return `<button class="opt-btn ${cls}" data-cx2="pick" data-sec="${secId}" data-k="${k}" data-opt="${o}" ${st ? 'disabled' : ''}>
+          ${icon(ico)}<span class="opt-body"><b class="cx-letter">${LETTERS[pos]}</b> ${c.o[o]}</span></button>`;
+      }).join('')}</div>`;
+    } else if (st) {
+      body = `<div class="cx-given">You wrote: <b>${st.ans === null ? 'no answer' : esc(st.ans)}</b></div>`;
+    } else {
+      const hint = c.t === 'num' ? 'Type a number (use − for negative)' : c.t === 'word' ? 'Type one word' : 'Type the missing part';
+      body = `<div class="cx-answer"><input class="cx-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${hint}" aria-label="Your answer">
+        ${c.u ? `<span class="cx-unit">${c.u}</span>` : ''}
+        <button class="btn btn-solid" data-cx2="submit" data-sec="${secId}" data-k="${k}">Check</button></div>`;
+    }
+    const idk = st ? '' : `<button class="btn cx-idk" data-cx2="idk" data-sec="${secId}" data-k="${k}">I don't know</button>`;
+    const verdict = st ? `<div class="cx-verdict ${st.ok ? 'ok' : 'bad'}">${icon(st.ok ? 'check_circle' : 'error_outline', 20)}
+        <div><b>${st.ok ? 'Correct.' : st.ans === null ? 'Skipped.' : 'Not quite.'}</b>${st.ok ? '' : ` The answer is <b>${esc(rightText(c))}</b>.`}
+        <span class="cx-why">${c.why}</span></div></div>` : '';
+    return `<div class="cx-card b${n}">
+      <div class="cx-card-top"><span class="cbadge b${n}">${n}</span><span class="chip chip-muted">${TYPE_NAME[c.t]}</span></div>
+      <p class="cx-line"><span class="cx-tag">${icon('home', 14)} Everyday</span> ${item.eg}</p>
+      <p class="cx-line"><span class="cx-tag">${icon('image', 14)} In the picture</span> ${item.map}</p>
+      <div class="cx-check"><div class="cx-q"><span class="cx-tag">${icon('psychology_alt', 14)} Tricky check</span> ${c.q}</div>${body}${idk}</div>${verdict}
+    </div>`;
+  }
+
+  function renderChecks(secId) {
+    const box = document.getElementById('cx2-' + secId), d = D2CONCEPTS[secId];
+    if (!box || !d) return;
+    const done = Object.keys(CX[secId] || {}).length, right = Object.values(CX[secId] || {}).filter(x => x.ok).length;
+    box.innerHTML = `<div class="cx-scene">
+        <div class="cx-scene-title">${icon('home', 16)} Everyday picture · ${esc(d.title)}</div>
+        ${d.scene}
+        <p class="cx-caption">${d.caption}</p>
+      </div>
+      <div class="eval-head"><div class="eval-title">${icon('psychology')} Understanding checks</div><span class="meta">${right} right · ${done} / ${d.items.length} answered</span></div>
+      ${d.items.map((_, k) => checkCard(secId, k)).join('')}`;
+    typeset(box);
+  }
+
+  function mountChecks() {
+    MATCHES.forEach(M => M.sections.forEach(sec => {
+      const anchor = document.querySelector(sec.anchor);
+      if (!anchor || document.getElementById('cx2-' + sec.id) || !D2CONCEPTS[sec.id]) return;
+      const box = document.createElement('section');
+      box.className = 'cx2';
+      box.id = 'cx2-' + sec.id;
+      box.dataset.title = `${sec.short} · checks`;
+      anchor.before(box);
+      renderChecks(sec.id);
+    }));
+  }
+
+  function answerCheck(secId, k, raw) {
+    CX[secId] = CX[secId] || {};
+    if (CX[secId][k]) return;                       // one judged attempt per check
+    const c = D2CONCEPTS[secId].items[k].c, ok = judgeCheck(c, raw);
+    CX[secId][k] = { ans: raw, ok };
+    save();
+    judged(secId, ok, D2CONCEPTS[secId].items[k].sk);
+    renderChecks(secId);
+  }
+
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-cx2]');
+    if (!b) return;
+    const secId = b.dataset.sec, k = Number(b.dataset.k), act = b.dataset.cx2;
+    if (act === 'pick') answerCheck(secId, k, Number(b.dataset.opt));
+    if (act === 'idk') answerCheck(secId, k, null);
+    if (act === 'submit') {
+      const input = b.closest('.cx-card').querySelector('.cx-input');
+      if (!input.value.trim()) { input.focus(); return; }
+      answerCheck(secId, k, input.value.trim());
+    }
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && e.target.matches('.cx2 .cx-input')) {
+      e.preventDefault();
+      e.target.closest('.cx-card').querySelector('[data-cx2="submit"]').click();
+    }
+  });
+
+  /* ---------- Sheets: break, full time, player ---------- */
+  function openBreak(mi) {
+    const m = S.matches[mi], br = BREAKS.find(b => b.key === m.breakKey);
+    if (!br) return;
+    Sheet.open(`
+      <div class="mm-center">
+        <div class="mm-modal-icon">${icon(br.icon)}</div>
+        <h3>${br.label}</h3>
+        <p class="sheet-text">${MATCHES[mi].name} paused at ${br.at}'. ${br.key === 'ht' ? 'Step away, eat, stretch.' : 'Drink water and rest your eyes.'}</p>
+        <div class="mm-big" data-mm="break-count">${fmt(m.breakEndsAt - Date.now())}</div>
+        <p class="sheet-text">The match restarts by itself when this hits zero.</p>
+        <div class="sheet-actions is-center">
+          <button class="btn" data-mm-act="hide">Minimise</button>
+          <button class="btn btn-solid" data-mm-act="skip" data-mi="${mi}">${icon('skip_next', 18)} Skip break</button>
+        </div>
+      </div>`, { center: true, kind: 'break', sticky: true });
+  }
+
+  function openFullTime(mi, early) {
+    const m = S.matches[mi], sc = score(m);
+    const verdict = sc.me > sc.time ? 'You beat the clock.' : sc.me === sc.time ? 'Level with the clock.' : 'The clock took this one.';
+    Sheet.open(`
+      <div class="mm-center">
+        <div class="mm-modal-icon">${icon('flag')}</div>
+        <h3>Full time · ${MATCHES[mi].name}${early ? ' (every section settled)' : ''}</h3>
+        <div class="mm-big">${sc.me} – ${sc.time}</div>
+        <p class="sheet-text">${ME} vs ${TIME} · ${verdict}</p>
+        <div class="sheet-actions is-center">
+          <button class="btn" data-mm-act="hide">Close</button>
+          ${mi === 0 && S.matches[1].status === 'pre' ? `<button class="btn btn-solid" data-mm-act="to-match2">${icon('sports_soccer', 18)} Set up Match 2</button>` : ''}
+        </div>
+      </div>`, { center: true, kind: 'mm-ft' });
+  }
+
+  function openPlayer(pid) {
+    const m = S.matches[S.active];
+    const p = m.squads && [...m.squads.me, ...m.squads.time].find(x => x.id === pid);
+    if (!p) return;
+    const goals = m.results.filter(r => r.scorer === p.id);
+    const position = { GK: 'Goalkeeper', DEF: 'Defender', MID: 'Midfielder', FWD: 'Forward' }[p.pos];
+    Sheet.open(`
+      <div class="sheet-head">
+        <span class="mm-dot-lg" style="background:${p.side === 'me' ? '#1D4ED8' : '#D9383A'}">${p.num}</span>
+        <h3>${esc(p.name)}<br><span class="meta">${p.side === 'me' ? ME : TIME} · ${position}</span></h3>
+        <button class="icon-btn" data-mm-act="hide">${icon('close')}</button>
+      </div>
+      <h4>Skills (${p.skills.length})</h4>
+      ${p.skills.map(k => `<div class="mm-row"><span>${esc(SKILL[k].name)}</span><span class="chip chip-${rating(k)}">${{ L: 'Low', M: 'Medium', H: 'High' }[rating(k)]}</span></div>`).join('')}
+      <h4>Goals · ${goals.length}</h4>
+      ${goals.length
+        ? goals.map(r => `<div class="mm-row"><span>${r.kind === 'slip' ? 'Three understanding slips in a row' : esc(SECTION[r.sec].name)}</span><strong>${r.min}'</strong></div>`).join('')
+        : `<p class="sheet-text">${p.side === 'me' ? 'No goals yet. Finish a section that needs these skills before its deadline.' : 'No goals yet. Keep it that way by beating the deadlines.'}</p>`}`,
+      { kind: 'mm-player' });
+  }
+
+  /* ---------- Skill check ---------- */
+  function autoRate() {
+    const right = {}, asked = {};
+    QUIZ.forEach((q, i) => q.skills.forEach(id => {
+      asked[id] = (asked[id] || 0) + 1;
+      right[id] = (right[id] || 0) + (S.quiz.pick[i] === 0 ? 1 : 0);
+    }));
+    S.ratings = {};
+    SKILLS.forEach(s => {
+      const share = asked[s.id] ? right[s.id] / asked[s.id] : 0.5;
+      S.ratings[s.id] = share === 1 ? 'H' : share === 0 ? 'L' : 'M';
+    });
+  }
+
+  function quizHTML() {
+    const z = S.quiz, i = z.i, q = QUIZ[i];
+    if (!z.order[i]) { z.order[i] = shuffleArray(q.o.map((_, k) => k)); save(); }
+    const picked = z.pick[i];
+    const answered = picked != null;
+    const correctCount = Object.values(z.pick).filter(v => v === 0).length;
+
+    const options = z.order[i].map((opt, k) => {
+      let state = '';
+      if (answered && opt === 0) state = 'selected-correct';
+      else if (answered && opt === picked) state = 'selected-wrong';
+      return `<button class="omr-option-btn ${state}" data-mm-act="pick" data-opt="${opt}" ${answered ? 'disabled' : ''}>
+        <span class="omr-bubble">${LETTERS[k]}</span><span class="omr-opt-text">${q.o[opt]}</span></button>`;
+    }).join('');
+    const idk = answered ? '' : `<button class="omr-option-btn is-idk" data-mm-act="pick" data-opt="-1">I don't know</button>`;
+    const verdict = picked === 0 ? 'Correct.' : picked === -1 ? 'No problem, these skills go down as Low.' : 'Not quite.';
+
+    return `
+      <div class="callout-box callout-idea mm-intro">
+        <div class="callout-header">${icon('fact_check')}<span>Skill check · what you need before today's [subject]</span></div>
+        10 quick questions on maths tools and school physics that today's topics rely on, not on the new topics themselves.
+        Options are shuffled, and <strong>I don't know</strong> is always fine. Your answers decide which prerequisites are High, Medium or Low.
+      </div>
+      <div class="bar mb-3"><div class="bar-fill" style="width:${(i + (answered ? 1 : 0)) * 10}%"></div></div>
+      <div class="omr-section">
+        <div class="omr-header">
+          <div class="omr-header-title">${icon('quiz')}<span>Question ${i + 1} of ${QUIZ.length}</span></div>
+          <span class="meta">${correctCount} correct</span>
+        </div>
+        <div class="omr-question-card">
+          <div class="omr-q-text">${q.q}</div>
+          <div class="omr-options-list">${options}${idk}</div>
+          ${answered ? `<div class="omr-feedback show ${picked === 0 ? 'correct' : 'wrong'}"><strong>${verdict}</strong> ${q.why}</div>` : ''}
+        </div>
+        ${answered ? `<div class="sheet-actions"><button class="btn btn-solid" data-mm-act="next">${i < QUIZ.length - 1 ? 'Next question' : 'See my skill split'} ${icon('arrow_forward', 18)}</button></div>` : ''}
+      </div>`;
+  }
+
+  function counts() {
+    const c = { L: 0, M: 0, H: 0 };
+    SKILLS.forEach(s => c[rating(s.id)]++);
+    return c;
+  }
+  function renderCounts() {
+    const c = counts();
+    ['L', 'M', 'H'].forEach(k => { const el = body.querySelector(`[data-count="${k}"]`); if (el) el.textContent = c[k]; });
+    const note = body.querySelector('[data-mm="pool"]');
+    if (note) note.innerHTML = poolNote(c);
+  }
+  const poolNote = c => `${ME}: ${c.M + c.H} skills<br>${TIME}: ${c.L + c.M} skills`;
+
+  function skillsHTML() {
+    if (!S.quiz.done) return quizHTML();
+    const c = counts(), m = S.matches[S.active];
+    const correctCount = Object.values(S.quiz.pick).filter(v => v === 0).length;
+    const groups = [['H', 'High · ready to use'], ['M', 'Medium · could go either way'], ['L', 'Low · brush up first']];
+    return `
+      <div class="callout-box callout-idea mm-intro">
+        <div class="callout-header">${icon('tune')}<span>Your prerequisite split · ${correctCount}/10 correct</span></div>
+        Picked from your answers. Skills no question tested start at Medium, so set those yourself. Tap L / M / H on anything that feels off, then confirm.
+        Low + Medium become <strong>${TIME}</strong>, Medium + High become <strong>${ME}</strong>.
+      </div>
+      <div class="mm-counts">
+        <div class="mm-count h"><strong data-count="H">${c.H}</strong>High</div>
+        <div class="mm-count m"><strong data-count="M">${c.M}</strong>Medium</div>
+        <div class="mm-count l"><strong data-count="L">${c.L}</strong>Low</div>
+      </div>
+      <div class="btn-group-row mb-3"><button class="btn" data-mm-act="retake">${icon('restart_alt', 16)} Retake the 10 questions</button></div>
+      ${groups.map(([v, title]) => {
+        const list = SKILLS.filter(s => rating(s.id) === v);
+        if (!list.length) return '';
+        return `<div class="mm-group"><div class="mm-group-title"><span>${title}</span><span>${list.length}</span></div>
+          ${list.map(s => `
+            <div class="mm-skill">
+              <div class="mm-skill-body">
+                <div class="mm-skill-name">${esc(s.name)}</div>
+                <div class="mm-skill-tags">${GROUPS.find(g => g[0] === s.group)[1]} · ${TESTED_IN[s.id] ? 'Tested in Q' + TESTED_IN[s.id].join(', Q') : 'Not tested, set it yourself'}</div>
+              </div>
+              <div class="mm-lmh">${['L', 'M', 'H'].map(x => `<button type="button" data-mm-act="rate" data-id="${s.id}" data-v="${x}" class="${rating(s.id) === x && S.ratings[s.id] ? 'on' : ''}">${x}</button>`).join('')}</div>
+            </div>`).join('')}</div>`;
+      }).join('')}
+      <div class="mm-foot"><div class="mm-foot-inner">
+        <div class="mm-foot-note" data-mm="pool">${poolNote(c)}</div>
+        <button class="btn btn-solid" data-mm-act="build" ${m.status !== 'pre' ? 'disabled' : ''}>${icon('check_circle', 18)} Confirm & pick squads</button>
+      </div></div>`;
+  }
+
+  /* ---------- Match tab ---------- */
+  function phaseText(m, mi) {
+    if (m.status === 'pre') return `Press play to kick off · ${MATCHES[mi].sub}`;
+    if (m.status === 'ft') return 'Full time';
+    if (m.status === 'break') { const br = BREAKS.find(b => b.key === m.breakKey); return `${br.label} · back in ${fmt(m.breakEndsAt - Date.now())}`; }
+    const half = clockMs(m) < 45 * MIN ? '1st half' : '2nd half';
+    return m.status === 'paused' ? `Paused · ${half}` : half;
+  }
+  const playIcon = m => ({ pre: 'play_arrow', live: 'pause', paused: 'play_arrow', break: 'skip_next', ft: 'flag' }[m.status]);
+  const currentSection = (m, mi) => MATCHES[mi].sections[Math.min(m.sectionIdx, MATCHES[mi].sections.length - 1)];
+
+  function nowHTML(m, mi) {
+    if (m.status === 'ft') { const sc = score(m); return `<div class="mm-now"><div class="mm-now-label">Full time</div><div class="mm-now-name">${ME} ${sc.me} – ${sc.time} ${TIME}</div></div>`; }
+    const sec = currentSection(m, mi);
+    return `<div class="mm-now">
+      <div class="mm-now-label">${m.status === 'pre' ? 'First up' : 'On the ball now'}</div>
+      <div class="mm-now-name">${esc(sec.name)}</div>
+      <div class="mm-now-meta">
+        <span class="chip chip-amber">Finish by ${sec.deadline}'</span>
+        <span data-mm="left">${m.status === 'pre' ? '' : fmt(sec.deadline * MIN - clockMs(m)) + ' left'}</span>
+        <span>${doneCount(sec)}/${sec.tasks.length} tasks</span>
+        <button class="btn" data-mm-act="go" data-sec="${sec.id}">Go to section ${icon('arrow_forward', 14)}</button>
+      </div></div>`;
+  }
+
+  function pitchHTML(m) {
+    if (!m.squads) return `<div class="mm-pitch empty">Finish the skill check and confirm your split to pick both squads.</div>`;
+    const spots = { GK: [[50, 93]], DEF: [[13, 81], [37, 84], [63, 84], [87, 81]], MID: [[24, 69], [50, 71], [76, 69]], FWD: [[17, 58], [50, 59], [83, 58]] };
+    const goalsBy = id => m.results.filter(r => r.scorer === id).length;
+    const player = p => {
+      let [x, y] = spots[p.pos][p.slot] || [50, 75];
+      if (p.side === 'time') y = 100 - y;
+      const g = goalsBy(p.id);
+      return `<button class="mm-player ${p.side}" style="left:${x}%;top:${y}%" data-mm-act="player" data-pid="${p.id}">
+        <span class="dot">${p.num}${g ? `<span class="gb">${icon('sports_soccer')}${g}</span>` : ''}</span><span class="lbl">${esc(p.name)}</span></button>`;
+    };
+    return `<div class="mm-pitch">
+      <div class="mm-line mm-l-half"></div><div class="mm-line mm-l-circle"></div>
+      <div class="mm-line mm-l-boxt"></div><div class="mm-line mm-l-sixt"></div>
+      <div class="mm-line mm-l-boxb"></div><div class="mm-line mm-l-sixb"></div>
+      <span class="mm-team-tag" style="top:8px">${TIME} · 4-3-3</span>
+      <span class="mm-team-tag" style="bottom:8px">${ME} · 4-3-3</span>
+      ${m.squads.time.map(player).join('')}${m.squads.me.map(player).join('')}
+    </div>`;
+  }
+
+  function fixturesHTML(m, mi) {
+    const everyone = m.squads ? [...m.squads.me, ...m.squads.time] : [];
+    return MATCHES[mi].sections.map((sec, i) => {
+      const r = m.results.find(x => x.sec === sec.id);
+      const live = !r && i === m.sectionIdx && ['live', 'paused', 'break'].includes(m.status);
+      let chip = '<span class="chip chip-muted">Upcoming</span>';
+      let meta = `${doneCount(sec)}/${sec.tasks.length} tasks done`;
+      if (r) {
+        const p = everyone.find(x => x.id === r.scorer);
+        chip = r.side === 'me' ? `<span class="chip chip-good">Goal ${r.min}'</span>` : `<span class="chip chip-bad">Conceded ${r.min}'</span>`;
+        meta = r.open ? `${ME} · scorer picked when the section is done`
+          : `${r.side === 'me' ? ME : TIME} · ${p ? esc(p.name) : 'The clock'}${r.via.length ? ' · via ' + r.via.map(esc).join(', ') : ''}${r.tie ? ' · random draw' : ''}${r.auto ? ' · picked for you' : ''}`;
+      } else if (live) {
+        chip = '<span class="chip chip-amber">Live</span>';
+      }
+      return `<div class="mm-fix ${live ? 'live' : ''}">
+        <div class="mm-min">${sec.deadline}'<small>by</small></div>
+        <div class="mm-fix-body"><div class="mm-fix-name">${esc(sec.name)}</div><div class="mm-fix-meta">${chip} ${meta}</div></div>
+        <button class="icon-btn" data-mm-act="go" data-sec="${sec.id}" aria-label="Go to section">${icon('arrow_forward')}</button>
+      </div>`;
+    }).join('');
+  }
+
+  function matchHTML() {
+    const mi = S.active, m = S.matches[mi], sc = score(m), busy = busyMatch();
+    const locked = m.status === 'pre' && busy >= 0 && busy !== mi;
+    return `
+      <div class="btn-group-row mb-3">${MATCHES.map((M, i) => {
+        const s = score(S.matches[i]), st = S.matches[i].status;
+        return `<button class="btn-pill ${i === mi ? 'active' : ''}" data-mm-act="match" data-mi="${i}">${M.name}${st !== 'pre' ? ` · ${s.me}–${s.time}` : ''}${st === 'ft' ? ' FT' : ''}</button>`;
+      }).join('')}</div>
+      <div class="mm-board">
+        <div class="mm-board-teams">
+          <div><div class="mm-team-name">${ME}</div><div class="mm-team-sub">Med + High skills</div></div>
+          <div class="mm-score">${sc.me} – ${sc.time}</div>
+          <div><div class="mm-team-name">${TIME}</div><div class="mm-team-sub">Low + Med skills</div></div>
+        </div>
+        <div class="mm-clock-row">
+          <span class="mm-clock" data-mm="board-clock">${fmt(clockMs(m))}</span>
+          <button class="mm-play" data-mm-act="play" ${m.status === 'ft' || locked ? 'disabled' : ''} aria-label="Play or pause">
+            <span class="material-icons-outlined" data-mm="play-icon">${playIcon(m)}</span></button>
+        </div>
+        <div class="mm-phase" data-mm="phase">${locked ? `${MATCHES[busy].name} is still on` : phaseText(m, mi)}</div>
+        <div class="mm-board-foot">
+          <span>${icon('water_drop')} 25' & 70' · 5 min</span><span>${icon('local_cafe')} 45' · 30 min</span>
+          ${m.status !== 'pre' ? `<button class="mm-ghost" data-mm-act="restart">${icon('restart_alt', 14)} Restart</button>` : ''}
+        </div>
+      </div>
+      ${nowHTML(m, mi)}
+      ${pitchHTML(m)}
+      <div class="section-header-pill">${icon('event_note')}<span>Fixtures · ${MATCHES[mi].sub}</span></div>
+      ${fixturesHTML(m, mi)}
+      <p class="note mt-2">Finish every task in a section before its minute and your best-matched player scores.
+        Miss it and ${TIME} scores through the Low / Med prerequisites that section needs. Then move straight on.</p>`;
+  }
+
+  function renderPanel() {
+    overlay.querySelectorAll('[data-mm-act="tab"]').forEach(b => b.classList.toggle('active', b.dataset.tab === S.tab));
+    body.innerHTML = S.tab === 'match' ? matchHTML() : skillsHTML();
+    typeset(body);
+  }
+
+  /** Cheap per-tick updates: strip, clocks, break countdown. */
+  function renderLive() {
+    document.body.classList.toggle('mm-on', S.enabled);
+    if (!S.enabled) return;
+    const busy = busyMatch(), mi = busy >= 0 ? busy : S.active, m = S.matches[mi], sc = score(m);
+    const set = (key, text, root = strip) => { const el = root.querySelector(`[data-mm="${key}"]`); if (el) el.textContent = text; };
+
+    set('score', `${sc.me}–${sc.time}`);
+    strip.classList.toggle('is-break', m.status === 'break');
+    if (m.status === 'break') {
+      const br = BREAKS.find(b => b.key === m.breakKey);
+      set('clock', fmt(m.breakEndsAt - Date.now()));
+      set('sec', `${br.label} · ${MATCHES[mi].name}`);
+    } else {
+      set('clock', fmt(clockMs(m)));
+      const sec = currentSection(m, mi);
+      set('sec', m.status === 'pre' ? (m.squads ? `${MATCHES[mi].name} · press play to kick off` : 'Tap to set up the match')
+        : m.status === 'ft' ? `${MATCHES[mi].name} · full time`
+        : `${m.status === 'paused' ? 'Paused · ' : ''}${sec.short} · by ${sec.deadline}' · ${doneCount(sec)}/${sec.tasks.length}`);
+    }
+
+    if (panelOpen() && S.tab === 'match') {
+      const am = S.matches[S.active], locked = am.status === 'pre' && busy >= 0 && busy !== S.active;
+      set('board-clock', fmt(clockMs(am)), body);
+      set('phase', locked ? `${MATCHES[busy].name} is still on` : phaseText(am, S.active), body);
+      set('play-icon', playIcon(am), body);
+      if (['live', 'paused', 'break'].includes(am.status)) set('left', fmt(currentSection(am, S.active).deadline * MIN - clockMs(am)) + ' left', body);
+    }
+    if (Sheet.kind === 'break') {
+      const bm = S.matches.find(x => x.status === 'break');
+      if (bm) set('break-count', fmt(bm.breakEndsAt - Date.now()), $('#sheet'));
+    }
+  }
+
+  /* ---------- Start ---------- */
+  mount();
+  document.addEventListener('match:toggle', toggle);
+  document.addEventListener('task:done', () => { if (S.enabled) tick(); });
+  mountChecks();
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && S.enabled) tick(); });
+  setInterval(() => { if (S.enabled) tick(); }, 250);
+  renderLive();
+  if (S.enabled) {
+    tick();
+    maybeOpenCredit();
+    S.matches.forEach((m, mi) => { if (!m.pending.length && m.ftWait) { const early = m.ftWait.early; m.ftWait = false; openFullTime(mi, early); } });
+    const b = busyMatch();
+    if (b >= 0 && S.matches[b].status === 'break') openBreak(b);
+  }
+})();
+</script>
+
+</body>
+</html>

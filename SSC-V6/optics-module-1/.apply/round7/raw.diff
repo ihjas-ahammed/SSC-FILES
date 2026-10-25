@@ -1,0 +1,204 @@
+--- a/study-match/src/components/03-render.js
++++ b/study-match/src/components/03-render.js
+@@ -63,7 +63,7 @@
+         return '<article class="card intuition-card"' + a + '><span class="card-index">In plain words</span>' +
+           '<div class="intuition-content scroll-y"><h2 class="card-title">' + esc(c.title) + '</h2>' +
+           '<p class="intuition-meaning">' + esc(c.meaning) + '</p>' +
+           '<h3>Picture it</h3>' +
+-          (c.three ? '<div class="art intuition-art" data-three="1" role="img" aria-label="' + esc(c.title) + '"></div>' : hasDiag(c.art) ? '<div class="art intuition-art" data-diagram="art" role="img" aria-label="' + esc(c.title) + '"></div>' : '') +
++          (typeof c.art === 'string' && c.art.trim() ? '<div class="art intuition-art" role="img" aria-label="' + esc(c.title) + '">' + c.art + '</div>' : c.three ? '<div class="art intuition-art" data-three="1" role="img" aria-label="' + esc(c.title) + '"></div>' : hasDiag(c.art) ? '<div class="art intuition-art" data-diagram="art" role="img" aria-label="' + esc(c.title) + '"></div>' : '') +
+           '<p class="card-body">' + esc(c.picture) + '</p>' +
+           '<div class="intuition-example"><h3>For example</h3><p class="card-body">' + esc(c.example) + '</p></div>' +
+           '<h3>Connect it to the definition</h3><p class="card-body">' + esc(c.bridge) + '</p></div></article>';
+--- a/study-match/src/styles/05-cards.css
++++ b/study-match/src/styles/05-cards.css
+@@ -26,11 +26,10 @@
+ .art > .sm-jxg { width: 100%; height: 100%; max-height: 100%; position: relative; overflow: hidden; border-radius: 12px; }
+ .art .f { fill: var(--violet); }
+ .art .s { fill: var(--lav-2); }
+-.art .ok { stroke: var(--violet); stroke-width: 2; }
+-.art .t { fill: var(--ink); font-family: inherit; font-weight: 700; }
+-.art .i { fill: var(--on-violet); font-family: inherit; font-weight: 700; }
+-.art .h { fill: var(--violet); }
+-.art .hk { stroke: var(--ink); stroke-width: 2; stroke-linecap: round; fill: none; }
+-.art .lk { stroke: var(--violet); stroke-width: 2; stroke-linecap: round; fill: none; }
+-.art .gk { stroke: var(--ink-2); stroke-width: 1.6; stroke-linecap: round; fill: none; opacity: 0.5; }
++.art .ok { stroke: var(--violet); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
++.art .t { fill: var(--ink); stroke: none; font-family: inherit; font-size: 11px; font-weight: 700; }
++.art .i { fill: var(--on-violet); stroke: none; font-family: inherit; font-size: 11px; font-weight: 700; }
++.art .ik { stroke: var(--ink); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; fill: none; }
++.art .lk { stroke: var(--violet); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; fill: none; }
++.art .gk { stroke: var(--ink-2); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 4 3; fill: none; opacity: 0.68; }
+ .math { font-size: 15px; width: 100%; text-align: center; overflow-x: auto; overflow-y: hidden; color: var(--ink); }
+--- a/study-match/build.py
++++ b/study-match/build.py
+@@ -10,7 +10,7 @@
+ 
+ Standard library only. Python 3.7+.
+ """
+-import argparse, base64, glob, json, os, re, sys
++import argparse, base64, glob, json, os, re, sys, xml.etree.ElementTree as ET
+ 
+ ROOT = os.path.dirname(os.path.abspath(__file__))
+ SRC = os.path.join(ROOT, 'src')
+@@ -122,6 +122,30 @@
+ def _is_pt_ref(v):
+     return (isinstance(v, str) and bool(v.strip())) or (isinstance(v, list) and len(v) == 2 and all(isinstance(x, (int, float)) for x in v))
+ 
++
++def check_svg_art(svg, where, rep):
++    if not isinstance(svg, str) or not svg.strip():
++        rep.err(where, 'intuition art must be a non-empty SVG string')
++        return
++    s = svg.strip()
++    if not (s.startswith('<svg') and s.endswith('</svg>')) or s.count('<svg') != 1:
++        rep.err(where, 'intuition art must be a single <svg ...>...</svg> element')
++        return
++    if 'viewBox=' not in s:
++        rep.err(where, 'SVG needs a viewBox attribute (e.g. viewBox="0 0 260 180")')
++    if re.search(r'<\s*script\b|javascript:|\bon[a-z]+\s*=', s, re.I):
++        rep.err(where, 'SVG must not contain scripts or event handlers')
++    if re.search(r'#[0-9a-fA-F]{3,8}\b|\brgb\s*\(|\bhsl\s*\(|\byellow\b|\bamber\b', s, re.I):
++        rep.err(where, 'SVG must use palette classes only, with no hard-coded or yellow/amber colours')
++    for m in re.finditer(r'\bclass="([^"]*)"', s):
++        for cls in m.group(1).split():
++            if cls not in JXG_ROLES:
++                rep.err(where, 'disallowed SVG class "%s" (allowed: %s)' % (cls, ', '.join(sorted(JXG_ROLES))))
++    try:
++        ET.fromstring(s)
++    except ET.ParseError as e:
++        rep.err(where, 'invalid SVG XML: %s' % e)
++
+ 
+ def check_jxg_diagram(diag, where, rep):
+     names = set()
+@@ -280,9 +304,11 @@
+         for field in ('term', 'meaning', 'picture', 'example', 'bridge'):
+             if not isinstance(c.get(field), str) or not c[field].strip():
+                 rep.err(w, 'intuition needs a non-empty ' + field)
+-        if not c.get('art') and not c.get('three'):
+-            rep.err(w, 'intuition card needs a JSXGraph "art" figure (or "three" on the meridional-ray card)')
+-    if t in ('info', 'intuition', 'question') and c.get('art') is not None:
++        if not c.get('art'):
++            rep.err(w, 'intuition card needs an SVG string in "art"')
++        else:
++            check_svg_art(c.get('art'), w + '.art', rep)
++    if t in ('info', 'question') and c.get('art') is not None:
+         check_jxg_diagram(c['art'], w + '.art', rep)
+     if t == 'question':
+         if 'textAnswer' in c and not isinstance(c['textAnswer'], bool):
+@@ -493,8 +519,11 @@
+             if merged is None:
+                 merged = d
+                 merged.setdefault('sections', [])
+             else:
+                 merged['sections'].extend(d.get('sections', []))
++                if 'glossary' in d:
++                    merged.setdefault('glossary', []).extend(d.get('glossary', []))
+                 for k in ('meta', 'match'):
+                     if k in d and k not in merged:
+                         merged[k] = d[k]
+--- a/skills/03-svg-art.md
++++ b/skills/03-svg-art.md
+@@ -1,12 +1,41 @@
+-# 03 — JSXGraph figures (and Three.js for the meridional ray)
++# 03 — SVG pictures for intuition cards & JSXGraph figures for derivations and recall
+ 
+-All 2D figures (`art` on `intuition`, `info`, and definition-recall cards; `setup` on `derivation` cards)
+-are rendered on JSXGraph (`1.14.0`) boards from a declarative JSON object (`view` + construction `steps`).
+-Never write SVG strings, JavaScript code, or hard-coded hex/RGB colours in `data.json`.
++Pictures in the deck use two formats depending on the card type:
++1. **Intuition cards (`type = "intuition"`)**: `art` is a single inline **SVG string** (`<svg viewBox="0 0 260 180" xmlns="http://www.w3.org/2000/svg">...</svg>`) styled with palette classes from `05-cards.css`.
++2. **Derivations (`setup`) and concept / definition-recall cards (`info.art`)**: declarative **JSXGraph (`1.14.0`)** objects (`view` + construction `steps`).
++
++Never write JavaScript code, event handlers, or hard-coded hex/RGB/yellow/amber colours in `data.json`.
+ The runtime (`02-diagram.js`) reads the calm palette tokens from `01-tokens.css` in light and dark mode,
+ resizes boards with their containers on phone and desktop, builds derivation figures up step by step,
+ and zooms smoothly into focused regions without any yellow or amber highlights.
+ 
+-## Hard rules
++## Part 1 — SVG rules for `intuition` cards (`art`)
++
++- Write `art` as **one** `<svg viewBox="0 0 260 180" xmlns="http://www.w3.org/2000/svg">...</svg>` string.
++- Use only the calm palette classes below (defined in `05-cards.css` using tokens from `01-tokens.css`, adapting automatically to light and dark mode):
++  - `f`: fill `var(--violet)` (key points, sources, foci)
++  - `s`: fill `var(--lav-2)` (soft shaded regions, prisms, lenses, thin films)
++  - `ok`: stroke `var(--violet)`, width 2 (outlines on `s` shapes: `class="s ok"`)
++  - `lk`: stroke `var(--violet)`, width 2, `fill: none` (primary rays, wavefronts, axes, curves)
++  - `ik`: stroke `var(--ink)`, width 2, `fill: none` (secondary rays, screens, barriers, object/image arrows)
++  - `gk`: stroke `var(--ink-2)`, dashed (`4 3`), `fill: none`, opacity 0.68 (normals, construction guides, virtual rays)
++  - `t`: fill `var(--ink)`, bold 11px text (`<text x="..." y="..." class="t">...</text>`)
++  - `i`: fill `var(--on-violet)`, bold 11px text on top of `f` shapes
++- Keep all `<text>` coordinates inside `x: 8..252` and `y: 10..176`, with no overlapping labels.
++- No `<script>`, no inline `on*` handlers, no hex/RGB colours, and no yellow or amber highlights.
++
++### Example `intuition` SVG (as it appears inside `data.json`)
++
++```json
++"art": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"65\" y=\"24\" width=\"80\" height=\"52\" class=\"s ok\"/><line x1=\"24\" y1=\"50\" x2=\"185\" y2=\"50\" class=\"lk\"/><line x1=\"65\" y1=\"130\" x2=\"185\" y2=\"130\" class=\"ik\"/><circle cx=\"65\" cy=\"130\" r=\"3.5\" class=\"f\"/><circle cx=\"185\" cy=\"130\" r=\"3.5\" class=\"f\"/><text x=\"105\" y=\"42\" text-anchor=\"middle\" class=\"t\">Glass (n = 1.5)</text><text x=\"125\" y=\"118\" text-anchor=\"middle\" class=\"t\">L_op = n d = 3 cm</text></svg>"
++```
++
++---
++
++## Part 2 — JSXGraph rules for `derivation` (`setup`) and `info` / recall (`art`)
+ 
+ - **View (`view`)**: Cartesian bounding box `"bbox": [0, 180, 260, 0]` (`[left, top, right, bottom]`, with `+x` right `0..260` and `+y` upward `0..180`), `"axis": false`, `"grid": false`. Leave ~8 units of margin.
+ - **Construction steps (`steps`)**: non-empty array of step objects:
+   `{ "step": 0, "name": "base", "objects": [ ... ] }`.
+   - On `derivation` cards (`setup`), `"step"` is the 0-based derivation step index at which those objects are added to the board. Base objects start at `"step": 0`; subsequent steps add triangles, rays, angles, and labels that animate in and remain visible for the rest of the derivation.
+-  - On `intuition` and `info` cards (`art`), all steps in `art.steps` are shown.
++  - On `info` and definition-recall cards (`art`), all steps in `art.steps` are shown.
+ - **Allowed object `type`s in `objects`**:
+--- a/skills/01-schema.md
++++ b/skills/01-schema.md
+@@ -143,29 +143,17 @@
+-### `intuition` — plain-words introduction with required JSXGraph figure (or `three` for meridional ray)
++### `intuition` — plain-words introduction with required SVG picture
+ 
+ Place an `intuition` card immediately before a new concept's technical `info` card;
+ see `07-plain-words-and-glossary.md`. Every `intuition` card **must** include an
+-`art` JSXGraph figure object (`view` + construction `steps`, following `03-svg-art.md`), or a `three` 3D scene object on the meridional-ray card only, followed by `picture` as a short
++`art` SVG string (one `<svg viewBox="0 0 260 180" ...>...</svg>` element following `03-svg-art.md`), followed by `picture` as a short
+ one-line caption explaining what to look at in the diagram.
+ ```json
+ { "type": "intuition", "term": "paraxial-approximation",
+   "title": "Why only rays close to the axis focus sharply",
+   "meaning": "The paraxial approximation keeps only rays that make very small angles with the axis.",
+-  "art": {
+-    "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+-    "steps": [
+-      {
+-        "step": 0,
+-        "name": "OSI",
+-        "objects": [
+-          { "type": "segment", "p1": [16, 75], "p2": [244, 75], "role": "lk", "width": 2, "name": "axis" },
+-          { "type": "polyline", "points": [[28, 75], [118, 124], [226, 75]], "role": "lk", "width": 2.6, "name": "OSI" },
+-          { "type": "arc", "center": [28, 75], "r": 32, "start": 0, "end": 28, "role": "lk", "width": 1.8, "name": "alpha1" }
+-        ]
+-      }
+-    ]
+-  },
++  "art": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"16\" y1=\"105\" x2=\"244\" y2=\"105\" class=\"lk\"/><polyline points=\"28,105 118,56 226,105\" class=\"lk\"/><path d=\"M 56 90 A 32 32 0 0 1 60 105\" class=\"lk\"/></svg>",
+   "picture": "Look at the small angle arc α near O where height h over distance x gives the angle.",
+   "example": "At 0.1 rad, sin(0.1) and tan(0.1) are both very close to 0.1.",
+   "bridge": "Under this small-angle rule, all paraxial rays from O meet at one image point I." }
+ ```
+--- a/skills/07-plain-words-and-glossary.md
++++ b/skills/07-plain-words-and-glossary.md
+@@ -11,7 +11,7 @@
+ Place an intuition card immediately before the technical introduction. Fields:
+ `type = "intuition"`, `term` = glossary entry ID, `title`, `meaning`, `art`
+-(required: a declarative JSXGraph figure with `view` and construction `steps` following `03-svg-art.md`, or `three` on the meridional-ray card only), `picture` (one short
++(required: one `<svg viewBox="0 0 260 180" ...>...</svg>` string following `03-svg-art.md`), `picture` (one short
+ caption line under the diagram saying what to look at), `example` and `bridge`.
+ All text fields are non-empty plain text. The app renders `art` followed by the
+ `picture` caption inside the scrollable reading area.
+--- a/skills/05-checklist.md
++++ b/skills/05-checklist.md
+@@ -13,7 +13,7 @@
+ ## JSON
+ - [ ] Starts with `{` and ends with `}`. Nothing before or after. No code fence.
+ - [ ] Every backslash in every string is doubled (`\\frac`, `\\(`, `\\alpha`).
+-- [ ] No SVG strings or canvas2d lists remain in `art` or `setup`; every 2D diagram is a declarative JSXGraph object (`view` + construction `steps`).
++- [ ] Every `intuition.art` is a single `<svg>` string with allowed palette classes; every `derivation.setup` and `info.art` is a declarative JSXGraph object (`view` + construction `steps`).
+ - [ ] No trailing commas. No comments.

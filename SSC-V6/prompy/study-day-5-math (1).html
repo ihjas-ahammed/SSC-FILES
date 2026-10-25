@@ -1,0 +1,3410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>Complex Analysis I &amp; Abstract Algebra I</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Material Icons Outlined (Strictly NO Emojis) -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
+  <!-- MathJax 3 Configuration -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      chtml: {
+        mtextInheritFont: true
+      },
+      startup: {
+        typeset: false
+      }
+    };
+  </script>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="dns-prefetch" href="https://unpkg.com">
+  <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+  <script>
+    (function () {
+      var sources = [
+        'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js',
+        'https://unpkg.com/mathjax@3/es5/tex-chtml.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-chtml.js'
+      ];
+      var next = 0;
+      function loadNext() {
+        if (next >= sources.length) { window.__mathjaxFailed = true; return; }
+        var s = document.createElement('script');
+        s.async = true; s.src = sources[next++]; s.onerror = loadNext;
+        document.head.appendChild(s);
+      }
+      loadNext();
+    })();
+  </script>
+
+  <style>
+    :root {
+      --bg-cream: #fdf8e7;
+      --bg-wood: #f3dfc8;
+      --card-white: #ffffff;
+      --grid-line: rgba(15, 41, 66, 0.038);
+      --navy-dark: #0f2942;
+      --navy-mid: #2c4660;
+      --text-muted: #5b6e82;
+      --mint-bg: #e1f6ec;
+      --mint-border: #b8e8d2;
+      --mint-accent: #107c55;
+      --yellow-bg: #fef4d1;
+      --yellow-border: #f8dfa1;
+      --yellow-accent: #9a6700;
+      --orange-dot: #f5a623;
+      --bar-grad: linear-gradient(90deg, #f59e0b 0%, #fbbf24 100%);
+      --bar-track: #e5e7eb;
+      --green-leaf: #2e8540;
+      --green-light: #68b654;
+      --correct-bg: #ecfdf5;
+      --correct-border: #10b981;
+      --correct-text: #065f46;
+      --wrong-bg: #fef2f2;
+      --wrong-border: #ef4444;
+      --wrong-text: #991b1b;
+      --shadow-soft: 0 10px 30px rgba(15, 41, 66, 0.07);
+      --shadow-card: 0 4px 16px rgba(15, 41, 66, 0.06);
+      --radius-lg: 22px;
+      --radius-md: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--navy-dark);
+      background-color: var(--bg-cream);
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 12% 8%, rgba(254, 240, 195, 0.7) 0%, transparent 28%),
+        radial-gradient(circle at 88% 15%, rgba(254, 240, 195, 0.75) 0%, transparent 32%),
+        var(--bg-cream);
+      min-height: 100vh;
+      padding-bottom: 80px;
+      line-height: 1.65;
+    }
+
+    /* Sticky Top Progress & Navigation Header */
+    .sticky-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(253, 248, 231, 0.94);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(15, 41, 66, 0.08);
+      padding: 10px 16px;
+      box-shadow: 0 2px 10px rgba(15, 41, 66, 0.04);
+    }
+
+    .sticky-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .subject-main-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--navy-dark);
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .live-progress-wrap {
+      flex: 1;
+      min-width: 210px;
+      max-width: 420px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #ffffff;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(15, 41, 66, 0.1);
+    }
+
+    .live-progress-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--navy-mid);
+      white-space: nowrap;
+    }
+
+    .live-progress-track {
+      flex: 1;
+      height: 10px;
+      background: var(--bar-track);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .live-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--bar-grad);
+      border-radius: 999px;
+      transition: width 0.35s ease;
+    }
+
+    .live-progress-pct {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--navy-dark);
+      min-width: 36px;
+      text-align: right;
+    }
+
+    .quick-jump-links {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+
+    .jump-chip {
+      text-decoration: none;
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 5px 10px;
+      border-radius: 999px;
+      color: var(--navy-dark);
+      background: #ffffff;
+      border: 1px solid rgba(15, 41, 66, 0.12);
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+
+    .jump-chip:hover {
+      background: var(--navy-dark);
+      color: #ffffff;
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 20px 16px;
+    }
+
+    /* Hero Schedule Cards matching the UI Image */
+    .schedule-board {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-top: 18px;
+      margin-bottom: 36px;
+      padding: 24px 20px 30px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, rgba(243,223,200,0.45) 100%);
+      border-radius: 28px;
+      border-bottom: 6px solid #e7cbb0;
+      position: relative;
+    }
+
+    @media (max-width: 820px) {
+      .schedule-board {
+        grid-template-columns: 1fr;
+        padding: 18px 12px 24px;
+      }
+    }
+
+    .ui-card {
+      background-color: var(--card-white);
+      background-image:
+        linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+      background-size: 20px 20px;
+      border-radius: var(--radius-lg);
+      padding: 24px 22px 20px;
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 1px solid rgba(15, 41, 66, 0.06);
+    }
+
+    .potted-plant {
+      position: absolute;
+      top: -28px;
+      right: 18px;
+      width: 92px;
+      height: 76px;
+      pointer-events: none;
+    }
+
+    .date-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .date-num {
+      font-size: 2.65rem;
+      font-weight: 800;
+      color: var(--navy-dark);
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    .date-divider {
+      width: 2px;
+      height: 30px;
+      background: #cbd5e1;
+    }
+
+    .date-day {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--navy-dark);
+    }
+
+    .subject-banner {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 18px;
+      border-radius: 16px;
+      margin-bottom: 18px;
+    }
+
+    .subject-banner.mint {
+      background-color: var(--mint-bg);
+    }
+
+    .subject-banner.yellow {
+      background-color: var(--yellow-bg);
+    }
+
+    .banner-icon-wrap {
+      width: 58px;
+      height: 58px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .banner-divider {
+      width: 1.5px;
+      height: 44px;
+      background: rgba(15, 41, 66, 0.18);
+    }
+
+    .banner-text h2 {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--navy-dark);
+      line-height: 1.25;
+    }
+
+    .banner-text p {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--navy-mid);
+      margin-top: 2px;
+    }
+
+    .topic-list {
+      list-style: none;
+      margin-bottom: 20px;
+      flex: 1;
+    }
+
+    .topic-list li {
+      margin-bottom: 9px;
+    }
+
+    .topic-link {
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      text-decoration: none;
+      color: var(--navy-dark);
+      font-size: 0.92rem;
+      font-weight: 600;
+      padding: 4px 6px;
+      border-radius: 8px;
+      transition: background 0.15s, transform 0.15s;
+    }
+
+    .topic-link:hover {
+      background: rgba(245, 166, 35, 0.12);
+      transform: translateX(3px);
+    }
+
+    .orange-bullet {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--orange-dot);
+      margin-top: 6px;
+      flex-shrink: 0;
+      box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.2);
+    }
+
+    .coverage-box {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 12px 16px;
+    }
+
+    .coverage-title {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--navy-dark);
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .coverage-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .coverage-track {
+      flex: 1;
+      height: 13px;
+      background: var(--bar-track);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .coverage-fill {
+      height: 100%;
+      background: var(--bar-grad);
+      border-radius: 999px;
+      transition: width 0.4s ease;
+    }
+
+    .coverage-pct {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--navy-dark);
+    }
+
+    /* Section Dividers & Module Headers */
+    .subject-section-header {
+      margin: 44px 0 22px;
+      padding: 20px 24px;
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .subject-section-header.mint-theme {
+      background: var(--mint-bg);
+      border: 2px solid var(--mint-border);
+    }
+
+    .subject-section-header.yellow-theme {
+      background: var(--yellow-bg);
+      border: 2px solid var(--yellow-border);
+    }
+
+    .subject-section-header h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--navy-dark);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .badge-pill {
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.85);
+      color: var(--navy-dark);
+      border: 1px solid rgba(15, 41, 66, 0.12);
+    }
+
+    /* Content Cards */
+    .study-card {
+      background-color: var(--card-white);
+      background-image:
+        linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+      background-size: 20px 20px;
+      border-radius: var(--radius-lg);
+      padding: 26px 24px;
+      margin-bottom: 28px;
+      box-shadow: var(--shadow-card);
+      border: 1px solid rgba(15, 41, 66, 0.07);
+    }
+
+    @media (max-width: 600px) {
+      .study-card {
+        padding: 18px 15px;
+      }
+    }
+
+    .card-header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid rgba(15, 41, 66, 0.06);
+    }
+
+    .card-title-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-title-group .material-icons-outlined {
+      font-size: 1.55rem;
+      color: var(--orange-dot);
+      background: rgba(245, 166, 35, 0.14);
+      padding: 7px;
+      border-radius: 10px;
+    }
+
+    .card-title-group h3 {
+      font-size: 1.22rem;
+      font-weight: 800;
+      color: var(--navy-dark);
+    }
+
+    .section-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: #f1f5f9;
+      color: var(--navy-mid);
+    }
+
+    /* Callout Boxes: Definitions, Theorems, Recall, Kerala Daily Life */
+    .box-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin: 16px 0;
+    }
+
+    .info-box {
+      padding: 16px 18px;
+      border-radius: var(--radius-md);
+      margin: 14px 0;
+      background: #ffffff;
+      border-left: 5px solid var(--navy-dark);
+      box-shadow: 0 2px 8px rgba(15, 41, 66, 0.04);
+    }
+
+    .info-box.def-box {
+      border-left-color: #0284c7;
+      background: #f0f9ff;
+    }
+
+    .info-box.thm-box {
+      border-left-color: #059669;
+      background: #ecfdf5;
+    }
+
+    .info-box.warn-box {
+      border-left-color: #dc2626;
+      background: #fef2f2;
+    }
+
+    .info-box.kerala-box {
+      border-left-color: #d97706;
+      background: #fffbeb;
+    }
+
+    .info-box-title {
+      font-size: 0.86rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .def-box .info-box-title { color: #0369a1; }
+    .thm-box .info-box-title { color: #047857; }
+    .warn-box .info-box-title { color: #b91c1c; }
+    .kerala-box .info-box-title { color: #b45309; }
+
+    .simple-text {
+      font-size: 0.96rem;
+      color: var(--navy-dark);
+      margin-bottom: 10px;
+    }
+
+    .math-scroll {
+      overflow-x: auto;
+      padding: 6px 0;
+      max-width: 100%;
+    }
+
+    /* Interactive Diagram & 3D View Containers */
+    .interactive-stage {
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 16px;
+      margin: 18px 0;
+    }
+
+    .stage-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .stage-title {
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: var(--navy-dark);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .touch-hint {
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: #ffffff;
+      padding: 3px 9px;
+      border-radius: 999px;
+      border: 1px solid #cbd5e1;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .svg-canvas-wrap {
+      width: 100%;
+      display: flex;
+       flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    svg.interactive-svg {
+      width: 100%;
+      max-width: 560px;
+      height: auto;
+      background: #ffffff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      touch-action: none;
+      user-select: none;
+    }
+
+    canvas.interactive-3d {
+      width: 100%;
+      max-width: 580px;
+      height: 340px;
+      background: #0f172a;
+      border-radius: 12px;
+      border: 1px solid #334155;
+      touch-action: none;
+      cursor: grab;
+    }
+
+    canvas.interactive-3d:active {
+      cursor: grabbing;
+    }
+
+    .controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      margin-top: 12px;
+      width: 100%;
+    }
+
+    .ctrl-btn {
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 7px 13px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: var(--navy-dark);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s;
+    }
+
+    .ctrl-btn:hover, .ctrl-btn.active {
+      background: var(--navy-dark);
+      color: #ffffff;
+      border-color: var(--navy-dark);
+    }
+
+    .readout-bar {
+      margin-top: 10px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      color: var(--navy-dark);
+      background: #ffffff;
+      padding: 8px 14px;
+      border-radius: 10px;
+      border: 1px solid #e2e8f0;
+      text-align: center;
+      width: 100%;
+      max-width: 580px;
+    }
+
+    /* OMR Question Block Styling */
+    .omr-section {
+      margin-top: 22px;
+      background: #fcfaf2;
+      border: 1.5px solid #ecd9a8;
+      border-radius: 16px;
+      padding: 18px;
+    }
+
+    .omr-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--yellow-accent);
+    }
+
+    .omr-question-card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 14px;
+    }
+
+    .omr-question-card:last-child {
+      margin-bottom: 0;
+    }
+
+    .omr-q-text {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--navy-dark);
+      margin-bottom: 12px;
+    }
+
+    .omr-options-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    @media (max-width: 680px) {
+      .omr-options-list {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .omr-option-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      text-align: left;
+      padding: 11px 14px;
+      border-radius: 10px;
+      border: 1.5px solid #cbd5e1;
+      background: #ffffff;
+      color: var(--navy-dark);
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .omr-option-btn:hover:not(:disabled) {
+      border-color: var(--orange-dot);
+      background: #fffdf7;
+    }
+
+    .omr-bubble {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid #64748b;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: #475569;
+      flex-shrink: 0;
+      transition: all 0.15s;
+    }
+
+    .omr-option-btn.correct-choice {
+      background: var(--correct-bg);
+      border-color: var(--correct-border);
+      color: var(--correct-text);
+      font-weight: 600;
+    }
+
+    .omr-option-btn.correct-choice .omr-bubble {
+      background: var(--correct-border);
+      border-color: var(--correct-border);
+      color: #ffffff;
+    }
+
+    .omr-option-btn.wrong-choice {
+      background: var(--wrong-bg);
+      border-color: var(--wrong-border);
+      color: var(--wrong-text);
+    }
+
+    .omr-option-btn.wrong-choice .omr-bubble {
+      background: var(--wrong-border);
+      border-color: var(--wrong-border);
+      color: #ffffff;
+    }
+
+    .omr-feedback {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      display: none;
+    }
+
+    .omr-feedback.show-correct {
+      display: block;
+      background: var(--correct-bg);
+      color: var(--correct-text);
+      border: 1px solid var(--correct-border);
+    }
+
+    .omr-feedback.show-wrong {
+      display: block;
+      background: var(--wrong-bg);
+      color: var(--wrong-text);
+      border: 1px solid var(--wrong-border);
+    }
+
+    /* Multi-Step Interactive Derivation Builder */
+    .derivation-box {
+      margin: 22px 0;
+      background: #f0fdf4;
+      border: 2px solid #86efac;
+      border-radius: 18px;
+      padding: 20px;
+    }
+
+    .derivation-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .derivation-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #065f46;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .derivation-step-counter {
+      font-size: 0.8rem;
+      font-weight: 800;
+      background: #ffffff;
+      color: #065f46;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid #86efac;
+    }
+
+    .derivation-goal-banner {
+      background: #ffffff;
+      border-left: 4px solid #10b981;
+      padding: 12px 14px;
+      border-radius: 10px;
+      margin-bottom: 14px;
+      font-size: 0.92rem;
+      color: var(--navy-dark);
+    }
+
+    .derivation-svg-slot {
+      margin: 12px 0;
+      text-align: center;
+    }
+
+    .derivation-complete-summary {
+      display: none;
+      margin-top: 16px;
+      background: #ffffff;
+      border: 2px solid #10b981;
+      border-radius: 14px;
+      padding: 18px;
+    }
+
+    .derivation-complete-summary.visible {
+      display: block;
+    }
+
+    .summary-step-item {
+      padding: 10px 12px;
+      border-bottom: 1px dashed #cbd5e1;
+      font-size: 0.92rem;
+    }
+
+    .summary-step-item:last-child {
+      border-bottom: none;
+    }
+
+    /* Algebra Tables */
+    .cayley-table {
+      border-collapse: collapse;
+      margin: 12px auto;
+      background: #ffffff;
+      font-size: 0.92rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .cayley-table th, .cayley-table td {
+      border: 1.5px solid #94a3b8;
+      width: 42px;
+      height: 40px;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .cayley-table th {
+      background: #e2e8f0;
+      color: var(--navy-dark);
+    }
+
+    .cayley-table td.diag-cell {
+      background: #fef3c7;
+    }
+
+    .cayley-table td.interactive-cell {
+      cursor: pointer;
+      background: #f0f9ff;
+      color: #0284c7;
+      transition: background 0.15s;
+    }
+
+    .cayley-table td.interactive-cell:hover {
+      background: #bae6fd;
+    }
+
+    /* ---------- LOADER ---------- */
+    #page-loader { position: fixed; inset: 0; z-index: 9999; background: var(--bg-cream); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; text-align: center; padding: 24px; transition: opacity .35s ease, visibility .35s ease; }
+    #page-loader.done { opacity: 0; visibility: hidden; }
+    .loader-ring { width: 44px; height: 44px; border-radius: 50%; border: 5px solid #E2E8F0; border-top-color: #f59e0b; animation: loader-spin .9s linear infinite; }
+    @keyframes loader-spin { to { transform: rotate(360deg); } }
+    .loader-text { font-weight: 800; color: var(--navy-dark); font-size: 1rem; }
+    .loader-sub { font-size: .82rem; color: #64748B; }
+    .math-pending { visibility: hidden; }
+    @media (prefers-reduced-motion: reduce) { .loader-ring { animation-duration: 2.5s; } html { scroll-behavior: auto; } }
+
+    /* ---------- MOBILE FIT, SCROLLBARS & FLOW ---------- */
+    html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; overflow-x: clip; scroll-padding-top: 118px; }
+    body { overflow-x: clip; overscroll-behavior-y: none; }
+    img, svg, canvas { max-width: 100%; }
+    .container, .study-card { min-width: 0; }
+    article.study-card, section[id], [id^="ca-"], [id^="aa-"] { scroll-margin-top: 118px; }
+    h1, h2, h3, p, li { overflow-wrap: anywhere; }
+
+    /* Equations: wide display math scrolls sideways with no visible bar */
+    mjx-container { max-width: 100%; }
+    mjx-container[display="true"] { overflow-x: auto; overflow-y: hidden; scrollbar-width: none; -ms-overflow-style: none; }
+    mjx-container[display="true"]::-webkit-scrollbar { display: none; }
+    mjx-container:not([display="true"]) { overflow: visible; }
+
+    /* Tables and diagrams: scroll sideways if needed, no visible bar; diagrams scale down */
+    .table-scroll { width: 100%; overflow-x: auto; scrollbar-width: none; margin: 14px 0; -webkit-overflow-scrolling: touch; }
+    .table-scroll::-webkit-scrollbar { display: none; }
+    .svg-canvas-wrap svg { max-width: 100%; height: auto; }
+    .quick-jump-links { overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+    .quick-jump-links::-webkit-scrollbar { display: none; }
+    .omr-option { scrollbar-width: none; overflow-x: auto; }
+    .omr-option::-webkit-scrollbar { display: none; }
+
+    @media (max-width: 600px) {
+      /* Whole page 20% smaller on phones */
+      .sticky-header, main.container { zoom: 0.8; width: 100%; }
+      .sticky-inner { padding-top: 6px; padding-bottom: 6px; }
+      .live-progress-track { height: 6px; }
+      .quick-jump-links { flex-wrap: nowrap; }
+      .study-card { margin-bottom: 20px; }
+
+      /* Green derivation frame: no margin, square corners, original padding */
+      .derivation-box { margin: 0; border-radius: 0; padding: 20px; }
+      /* Card holding a green frame: no padding, so the frame touches its edges */
+      .study-card:has(> .derivation-box) { padding: 0; }
+      .study-card:has(> .derivation-box) > :not(.derivation-box) { margin-left: 16px; margin-right: 16px; }
+
+      .omr-option { gap: 8px; padding: 10px 9px; font-size: .88rem; }
+      .omr-bubble { width: 28px; height: 28px; font-size: .8rem; }
+    }
+  </style>
+</head>
+<body>
+<div id="page-loader" role="status" aria-live="polite">
+  <div class="loader-ring"></div>
+  <div class="loader-text">Loading your study session</div>
+  <div class="loader-sub">Preparing equations and diagrams...</div>
+</div>
+
+  <!-- STICKY TOP BAR: Subject Name & Live Progress Bar -->
+  <header class="sticky-header">
+    <div class="sticky-inner">
+      <div class="subject-main-title">
+        <span class="material-icons-outlined" style="color:#f59e0b;">school</span>
+        <span>Complex Analysis I &amp; Abstract Algebra I</span>
+      </div>
+
+      <div class="live-progress-wrap" title="Your interactive completion progress across all Recall, Concept OMRs, and Step-by-Step Derivations">
+        <span class="live-progress-label">Today's Mastery</span>
+        <div class="live-progress-track">
+          <div class="live-progress-fill" id="globalProgressFill"></div>
+        </div>
+        <span class="live-progress-pct" id="globalProgressText">0%</span>
+      </div>
+
+      <nav class="quick-jump-links">
+        <a href="#ca-section" class="jump-chip">
+          <span class="material-icons-outlined" style="font-size:16px;color:#107c55;">explore</span>
+          Complex Analysis I
+        </a>
+        <a href="#aa-section" class="jump-chip">
+          <span class="material-icons-outlined" style="font-size:16px;color:#d97706;">change_history</span>
+          Abstract Algebra I
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- SCHEDULE BOARD (EXACT DESIGN FROM THE UI IMAGE) -->
+    <section class="schedule-board" aria-label="Tuesday Study Schedule">
+
+      <!-- Card 1: Complex Analysis I -->
+      <div class="ui-card">
+        <!-- Potted Plant SVG (Top Right) -->
+        <svg class="potted-plant" viewBox="0 0 100 85" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M52 46 C38 22, 18 18, 12 22 C18 34, 34 44, 52 46 Z" fill="#68b654"/>
+          <path d="M54 46 C44 16, 36 6, 40 2 C52 10, 56 28, 54 46 Z" fill="#2e8540"/>
+          <path d="M56 46 C64 16, 78 8, 84 12 C78 28, 66 40, 56 46 Z" fill="#2e8540"/>
+          <path d="M58 46 C74 28, 92 28, 96 34 C84 44, 68 48, 58 46 Z" fill="#4ca64c"/>
+          <circle cx="10" cy="24" r="3" fill="#f5a623"/>
+          <rect x="38" y="46" width="34" height="6" rx="2" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.2"/>
+          <path d="M40 52 L68 52 L65 78 L43 78 Z" fill="#ffffff" stroke="#94a3b8" stroke-width="1.2"/>
+        </svg>
+
+        <div>
+          <div class="date-row">
+            <span class="date-num">20</span>
+            <span class="date-divider"></span>
+            <span class="date-day">Tuesday</span>
+          </div>
+
+          <div class="subject-banner mint">
+            <div class="banner-icon-wrap">
+              <!-- Complex Plane Icon matching UI image -->
+              <svg width="52" height="52" viewBox="0 0 54 54" fill="none">
+                <line x1="6" y1="27" x2="48" y2="27" stroke="#0f2942" stroke-width="2" stroke-linecap="round"/>
+                <line x1="27" y1="6" x2="27" y2="48" stroke="#0f2942" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="27" cy="27" r="12" stroke="#0f2942" stroke-width="1.8"/>
+                <line x1="27" y1="27" x2="41" y2="36" stroke="#0f2942" stroke-width="1.8"/>
+                <line x1="27" y1="15" x2="41" y2="36" stroke="#0f2942" stroke-width="1.5"/>
+                <circle cx="27" cy="15" r="3.2" fill="#fbbf24" stroke="#0f2942" stroke-width="1.5"/>
+                <circle cx="41" cy="36" r="3.2" fill="#fbbf24" stroke="#0f2942" stroke-width="1.5"/>
+                <circle cx="20" cy="27" r="2.8" fill="#fbbf24" stroke="#0f2942" stroke-width="1.4"/>
+              </svg>
+            </div>
+            <div class="banner-divider"></div>
+            <div class="banner-text">
+              <h2>Complex Analysis I</h2>
+              <p>3.5 hours</p>
+            </div>
+          </div>
+
+          <ul class="topic-list">
+            <li><a class="topic-link" href="#ca-recall"><span class="orange-bullet"></span><span>High School (Plus Two) Recall Session</span></a></li>
+            <li><a class="topic-link" href="#ca-sec1-1"><span class="orange-bullet"></span><span>Complex numbers and their properties (1.1)</span></a></li>
+            <li><a class="topic-link" href="#ca-sec1-2"><span class="orange-bullet"></span><span>Complex plane and modulus (1.2)</span></a></li>
+            <li><a class="topic-link" href="#ca-sec1-3"><span class="orange-bullet"></span><span>Polar form of complex numbers (1.3)</span></a></li>
+            <li><a class="topic-link" href="#ca-sec1-4"><span class="orange-bullet"></span><span>Powers and roots; De Moivre's formula (1.3 &amp; 1.4)</span></a></li>
+          </ul>
+        </div>
+
+        <div class="coverage-box">
+          <div class="coverage-title">
+            <span>Course coverage</span>
+            <span style="font-size:0.75rem;color:var(--text-muted);" id="caInteractiveStat">0 / 12 tasks done</span>
+          </div>
+          <div class="coverage-row">
+            <div class="coverage-track">
+              <div class="coverage-fill" id="caCoverageBar" style="width: 22%;"></div>
+            </div>
+            <span class="coverage-pct" id="caCoveragePct">22%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Abstract Algebra I -->
+      <div class="ui-card">
+        <!-- Potted Plant SVG (Top Right) -->
+        <svg class="potted-plant" viewBox="0 0 100 85" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M52 46 C38 22, 18 18, 12 22 C18 34, 34 44, 52 46 Z" fill="#68b654"/>
+          <path d="M54 46 C44 16, 36 6, 40 2 C52 10, 56 28, 54 46 Z" fill="#2e8540"/>
+          <path d="M56 46 C64 16, 78 8, 84 12 C78 28, 66 40, 56 46 Z" fill="#2e8540"/>
+          <path d="M58 46 C74 28, 92 28, 96 34 C84 44, 68 48, 58 46 Z" fill="#4ca64c"/>
+          <circle cx="10" cy="24" r="3" fill="#f5a623"/>
+          <rect x="38" y="46" width="34" height="6" rx="2" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.2"/>
+          <path d="M40 52 L68 52 L65 78 L43 78 Z" fill="#ffffff" stroke="#94a3b8" stroke-width="1.2"/>
+        </svg>
+
+        <div>
+          <div class="date-row">
+            <span class="date-num">20</span>
+            <span class="date-divider"></span>
+            <span class="date-day">Tuesday</span>
+          </div>
+
+          <div class="subject-banner yellow">
+            <div class="banner-icon-wrap">
+              <!-- Triangle Symmetry Icon matching UI image -->
+              <svg width="52" height="52" viewBox="0 0 54 54" fill="none">
+                <polygon points="27,9 10,41 44,41" stroke="#0f2942" stroke-width="2.2" fill="none"/>
+                <circle cx="27" cy="30" r="8" stroke="#0f2942" stroke-width="1.6" stroke-dasharray="2.5 2.5"/>
+                <circle cx="27" cy="9" r="3.4" fill="#fbbf24" stroke="#0f2942" stroke-width="1.6"/>
+                <circle cx="10" cy="41" r="3.4" fill="#fbbf24" stroke="#0f2942" stroke-width="1.6"/>
+                <circle cx="44" cy="41" r="3.4" fill="#fbbf24" stroke="#0f2942" stroke-width="1.6"/>
+              </svg>
+            </div>
+            <div class="banner-divider"></div>
+            <div class="banner-text">
+              <h2>Abstract Algebra I</h2>
+              <p>3.5 hours</p>
+            </div>
+          </div>
+
+          <ul class="topic-list">
+            <li><a class="topic-link" href="#aa-recall"><span class="orange-bullet"></span><span>High School (Plus Two) Recall Session</span></a></li>
+            <li><a class="topic-link" href="#aa-sec1"><span class="orange-bullet"></span><span>Binary operations and closure</span></a></li>
+            <li><a class="topic-link" href="#aa-sec2"><span class="orange-bullet"></span><span>Commutative and associative binary operations</span></a></li>
+            <li><a class="topic-link" href="#aa-sec3"><span class="orange-bullet"></span><span>Isomorphic binary structures &amp; structural properties</span></a></li>
+            <li><a class="topic-link" href="#aa-sec4"><span class="orange-bullet"></span><span>Groups: axioms and examples</span></a></li>
+            <li><a class="topic-link" href="#aa-sec5"><span class="orange-bullet"></span><span>Elementary properties of groups, finite groups &amp; group tables (4.15+)</span></a></li>
+            <li><a class="topic-link" href="#aa-sec6"><span class="orange-bullet"></span><span>Subgroups and subgroup criteria (5.1–5.16)</span></a></li>
+            <li><a class="topic-link" href="#aa-sec7"><span class="orange-bullet"></span><span>Cyclic subgroups and generators (5.17–5.26)</span></a></li>
+          </ul>
+        </div>
+
+        <div class="coverage-box">
+          <div class="coverage-title">
+            <span>Course coverage</span>
+            <span style="font-size:0.75rem;color:var(--text-muted);" id="aaInteractiveStat">0 / 16 tasks done</span>
+          </div>
+          <div class="coverage-row">
+            <div class="coverage-track">
+              <div class="coverage-fill" id="aaCoverageBar" style="width: 35%;"></div>
+            </div>
+            <span class="coverage-pct" id="aaCoveragePct">35%</span>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- =====================================================================
+         PART 1: COMPLEX ANALYSIS I (ZILL & SHANAHAN, CHAPTER 1: 1.1 - 1.4)
+         ===================================================================== -->
+    <div id="ca-section" class="subject-section-header mint-theme">
+      <h2>
+        <span class="material-icons-outlined">explore</span>
+        Complex Analysis I
+      </h2>
+      <span class="badge-pill">Textbook: Zill &amp; Shanahan (3rd Ed.) &bull; Module I (Sections 1.1 – 1.4)</span>
+    </div>
+
+    <!-- 1.0 HIGH SCHOOL (PLUS TWO) RECALL SESSION: COMPLEX ANALYSIS -->
+    <article id="ca-recall" class="study-card">
+      <div class="card-header-bar">
+        <div class="card-title-group">
+          <span class="material-icons-outlined">history_edu</span>
+          <h3>1.0 High School (Plus Two) Prerequisite Recall</h3>
+        </div>
+        <span class="section-tag">Warm-Up Session</span>
+      </div>
+
+      <p class="simple-text">
+        Before starting university-level Complex Analysis, let us quickly recall four simple tools from Plus Two mathematics that we use on every page today.
+      </p>
+
+      <div class="box-grid">
+        <div class="info-box def-box">
+          <div class="info-box-title"><span class="material-icons-outlined">calculate</span>1. Quadratic Formula &amp; Negative Discriminant</div>
+          <p class="simple-text">
+            For $ax^2 + bx + c = 0$, the roots are $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$. In school algebra, when $b^2 - 4ac < 0$ (such as $x^2 + 2x + 2 = 0$), we had $\sqrt{-1}$, which has no solution on the real number line $\mathbb{R}$.
+          </p>
+        </div>
+
+        <div class="info-box def-box">
+          <div class="info-box-title"><span class="material-icons-outlined">straighten</span>2. Distance &amp; Pythagoras Theorem</div>
+          <p class="simple-text">
+            In the $xy$-plane, a point $(x,y)$ is at distance $r = \sqrt{x^2 + y^2}$ from the origin $(0,0)$. The distance between $(x_1, y_1)$ and $(x_2, y_2)$ is $\sqrt{(x_2-x_1)^2 + (y_2-y_1)^2}$.
+          </p>
+        </div>
+
+        <div class="info-box def-box">
+          <div class="info-box-title"><span class="material-icons-outlined">architecture</span>3. Trigonometry Addition Formulas</div>
+          <p class="simple-text">
+            For any two angles $A$ and $B$:
+            $$\cos(A \pm B) = \cos A\cos B \mp \sin A\sin B$$
+            $$\sin(A \pm B) = \sin A\cos B \pm \cos A\sin B$$
+          </p>
+        </div>
+
+        <div class="info-box def-box">
+          <div class="info-box-title"><span class="material-icons-outlined">functions</span>4. Binomial Expansion &amp; Difference of Squares</div>
+          <p class="simple-text">
+            $(A+B)(A-B) = A^2 - B^2$, and for positive integers $n$:
+            $$(A+B)^n = A^n + \binom{n}{1}A^{n-1}B + \binom{n}{2}A^{n-2}B^2 + \dots + B^n$$
+          </p>
+        </div>
+      </div>
+
+      <div class="omr-section" data-omr-group="ca">
+        <div class="omr-header">
+          <span><span class="material-icons-outlined" style="vertical-align:middle;font-size:18px;">quiz</span> Recall OMR Check</span>
+          <span>Balanced Options &bull; Auto-Checked</span>
+        </div>
+        <div class="omr-question-card" data-qid="ca-rec-1"></div>
+        <div class="omr-question-card" data-qid="ca-rec-2"></div>
+      </div>
+    </article>
+
+    <!-- 1.1 COMPLEX NUMBERS AND THEIR PROPERTIES -->
+    <article id="ca-sec1-1" class="study-card">
+      <div class="card-header-bar">
+        <div class="card-title-group">
+          <span class="material-icons-outlined">memory</span>
+          <h3>1.1 Complex Numbers and Their Properties</h3>
+        </div>
+        <span class="section-tag">Zill Section 1.1 (pp. 3–7)</span>
+      </div>
+
+      <p class="simple-text">
+        In the 16th century, mathematicians trying to solve equations like $x^2 + 2x + 2 = 0$ and $x^3 = 6x + 4$ encountered square roots of negative numbers. Later, Carl Friedrich Gauss and Augustin Louis Cauchy put these numbers on a solid logical foundation by defining the <strong>imaginary unit</strong> $i$ through the rule:
+        $$i^2 = -1$$
+      </p>
+
+      <div class="info-box def-box">
+        <div class="info-box-title"><span class="material-icons-outlined">menu_book</span>Definition 1.1.1 &amp; 1.1.2: Complex Number, Parts, and Equality</div>
+        <p class="simple-text">
+          A <strong>complex number</strong> is any number of the form $z = a + ib$ (or $a + bi$), where $a$ and $b$ are real numbers and $i$ is the imaginary unit ($i^2 = -1$).
+        </p>
+        <ul style="margin-left:20px;font-size:0.94rem;">
+          <li><strong>Real part:</strong> $\text{Re}(z) = a$ (a real number).</li>
+          <li><strong>Imaginary part:</strong> $\text{Im}(z) = b$ (also a <em>real</em> number!).</li>
+          <li><strong>Pure imaginary number:</strong> When $a = 0$ and $b \neq 0$, such as $z = 6i$.</li>
+          <li><strong>Equality (Def 1.1.2):</strong> $z_1 = a_1 + ib_1$ and $z_2 = a_2 + ib_2$ are equal ($z_1 = z_2$) if and only if $a_1 = a_2$ and $b_1 = b_2$ (that is, $\text{Re}(z_1)=\text{Re}(z_2)$ and $\text{Im}(z_1)=\text{Im}(z_2)$).</li>
+        </ul>
+      </div>
+
+      <div class="info-box warn-box">
+        <div class="info-box-title"><span class="material-icons-outlined">warning_amber</span>Important Exam Warning on $\text{Im}(z)$ and Order</div>
+        <p class="simple-text">
+          <strong>1. Imaginary part has no $i$:</strong> For $z = 4 - 9i$, $\text{Re}(z) = 4$ and $\text{Im}(z) = -9$ (never write $-9i$).<br>
+          <strong>2. No inequality order in $\mathbb{C}$:</strong> Unlike real numbers, we cannot compare two non-real complex numbers using $<$ or $>$. Writing $2 + 3i < 5 + 8i$ is meaningless in $\mathbb{C}$! Only moduli $|z_1| < |z_2|$ or real numbers can be compared.
+        </p>
+      </div>
+
+      <div class="info-box kerala-box">
+        <div class="info-box-title"><span class="material-icons-outlined">bolt</span>Everyday Kerala Example: Two-Counter Bakery Bill &amp; AC Power</div>
+        <p class="simple-text">
+          Think of a bakery counter in Ernakulam where a customer buys <strong>tea</strong> (tracked in the first column $a$) and <strong>snacks</strong> (tracked in the second column $b$). Two bills $z_1$ and $z_2$ are identical only if both the tea amount matches ($a_1 = a_2$) and the snack amount matches ($b_1 = b_2$). In electrical engineering across the Kerala power grid, voltage and impedance are written as $Z = R + iX$ (resistance $R$ plus reactance $X$), where $i^2 = -1$ tracks the $90^\circ$ phase shift of alternating current!
+        </p>
+      </div>
+
+      <h4 style="margin:18px 0 8px;color:var(--navy-dark);">Arithmetic Operations, Zero, Unity, Inverses, and Conjugate</h4>
+      <p class="simple-text">
+        For $z_1 = a_1 + ib_1$ and $z_2 = a_2 + ib_2$, complex numbers obey the familiar <strong>commutative, associative, and distributive laws</strong>:
+      </p>
+      <div class="box-grid">
+        <div class="info-box">
+          <div class="info-box-title"><span class="material-icons-outlined">add_circle_outline</span>Addition, Subtraction &amp; Multiplication</div>
+          <p class="simple-text">
+            <strong>Add/Subtract:</strong> Combine real parts and combine imaginary parts:
+            $$z_1 \pm z_2 = (a_1 \pm a_2) + i(b_1 \pm b_2)$$
+            <strong>Multiply:</strong> Expand using distributive law and replace $i^2 = -1$:
+            $$z_1 z_2 = (a_1a_2 - b_1b_2) + i(b_1a_2 + a_1b_2)$$
+            <em>Example 1:</em> $(2+4i)(-3+8i) = -6 + 16i - 12i + 32i^2 = -38 + 4i$.
+          </p>
+        </div>
+
+        <div class="info-box">
+          <div class="info-box-title"><span class="material-icons-outlined">sync_alt</span>Zero, Unity, Conjugate &amp; Inverses</div>
+          <p class="simple-text">
+            <strong>Zero (Additive Identity):</strong> $0 = 0 + 0i$, with $z + 0 = z$. Additive inverse of $z=a+ib$ is $-z = -a - ib$.<br>
+            <strong>Unity (Multiplicative Identity):</strong> $1 = 1 + 0i$, with $z \cdot 1 = z$.<br>
+            <strong>Conjugate $\bar{z}$:</strong> Flip the sign of the imaginary part: $\bar{z} = a - ib$.<br>
+            $\overline{z_1 \pm z_2} = \bar{z}_1 \pm \bar{z}_2$, $\overline{z_1z_2} = \bar{z}_1\bar{z}_2$, $\overline{(z_1/z_2)} = \bar{z}_1/\bar{z}_2$, $\bar{\bar{z}} = z$.
+          </p>
+        </div>
+      </div>
+
+      <div class="info-box thm-box">
+        <div class="info-box-title"><span class="material-icons-outlined">verified</span>Essential Conjugate Identities (Equations 3–6 in Zill)</div>
+        <p class="simple-text">
+          For any $z = a + ib$ and its conjugate $\bar{z} = a - ib$:
+          $$z + \bar{z} = 2a \implies \text{Re}(z) = \frac{z + \bar{z}}{2}, \qquad z - \bar{z} = 2ib \implies \text{Im}(z) = \frac{z - \bar{z}}{2i}$$
+          $$z\bar{z} = (a + ib)(a - ib) = a^2 - i^2b^2 = a^2 + b^2 \quad (\text{always a non-negative real number!})$$
+        </p>
+      </div>
+
+      <!-- STEP-BY-STEP DERIVATION 1: Complex Division & Multiplicative Inverse -->
+      <div class="derivation-box" id="deriv-ca-1" data-deriv-id="ca1"></div>
+
+      <div class="omr-section" data-omr-group="ca">
+        <div class="omr-header">
+          <span><span class="material-icons-outlined" style="vertical-align:middle;font-size:18px;">quiz</span> Concept 1.1 OMR Check</span>
+          <span>Equal-Weight Randomized Options</span>
+        </div>
+        <div class="omr-question-card" data-qid="ca-1-1"></div>
+        <div class="omr-question-card" data-qid="ca-1-2"></div>
+      </div>
+    </article>
+
+    <!-- 1.2 COMPLEX PLANE, MODULUS, DISTANCE & TRIANGLE INEQUALITY -->
+    <article id="ca-sec1-2" class="study-card">
+      <div class="card-header-bar">
+        <div class="card-title-group">
+          <span class="material-icons-outlined">grid_on</span>
+          <h3>1.2 Complex Plane, Modulus, and Triangle Inequality</h3>
+        </div>
+        <span class="section-tag">Zill Section 1.2 (pp. 10–13)</span>
+      </div>
+
+      <p class="simple-text">
+        Every complex number $z = x + iy$ corresponds to a unique ordered pair $(x,y)$ in the coordinate plane, called the <strong>complex plane</strong> or <strong>$z$-plane</strong>. The horizontal $x$-axis is the <strong>real axis</strong> and the vertical $y$-axis is the <strong>imaginary axis</strong>. Viewing $z$ as a position vector from $(0,0)$ to $(x,y)$ gives us a natural notion of length and distance.
+      </p>
+
+      <div class="box-grid">
+        <div class="info-box def-box">
+          <div class="info-box-title"><span class="material-icons-outlined">straighten</span>Definition 1.2.1: Modulus &amp; Distance</div>
+          <p class="simple-text">
+            The <strong>modulus</strong> (or <strong>absolute value</strong>) of $z = x + iy$ is the distance from the origin to $(x,y)$:
+            $$|z| = \sqrt{x^2 + y^2} = \sqrt{z\bar{z}} \implies |z|^2 = x^2 + y^2 = z\bar{z}$$
+            The <strong>distance</strong> between two points $z_1 = x_1 + iy_1$ and $z_2 = x_2 + iy_2$ is:
+            $$|z_2 - z_1| = \sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}$$
+            <em>Example 1:</em> $|2 - 3i| = \sqrt{2^2 + (-3)^2} = \sqrt{13}$, and $|-9i| = 9$.
+          </p>
+        </div>
+
+        <div class="info-box thm-box">
+          <div class="info-box-title"><span class="material-icons-outlined">change_history</span>Modulus &amp; Triangle Inequalities</div>
+          <p class="simple-text">
+            <strong>Product &amp; Quotient:</strong> $|z_1 z_2| = |z_1||z_2|$, $\left|\frac{z_1}{z_2}\right| = \frac{|z_1|}{|z_2|}$, $|z^2| = |z|^2$.<br>
+            <strong>Triangle Inequality (Eq. 6):</strong> $|z_1 + z_2| \le |z_1| + |z_2|$<br>
+            <strong>Reverse Triangle Inequality (Eq. 8 &amp; 10):</strong>
+            $$\big||z_1| - |z_2|\big| \le |z_1 + z_2| \quad \text{and} \quad \big||z_1| - |z_2|\big| \le |z_1 - z_2|$$
+          </p>
+        </div>
+      </div>
+
+      <div class="info-box kerala-box">
+        <div class="info-box-title"><span class="material-icons-outlined">directions_boat</span>Everyday Kerala Example: Backwater Ferry &amp; Locus $|z| = |z - i|$</div>
+        <p class="simple-text">
+          <strong>1. Triangle Inequality on Backwaters:</strong> If a boat travels straight from jetty $O$ to $z_1 + z_2$, the direct distance $|z_1 + z_2|$ is always less than or equal to taking two separate legs $|z_1| + |z_2|$.<br>
+          <strong>2. Equidistant Boundary (Zill Example 2):</strong> What is the set of points satisfying $|z| = |z - i|$? It means the distance from $z$ to $(0,0)$ equals the distance from $z$ to $(0,1)$. Squaring gives $x^2 + y^2 = x^2 + (y-1)^2 \implies 2y = 1 \implies y = \frac{1}{2}$, the horizontal line halfway between $0$ and $i$!<br>
+          <strong>3. Upper Bound (Zill Example 3):</strong> To find an upper bound for $\left|\frac{-1}{z^4+3z^2+2}\right|$ when $|z|=2$, factor the denominator as $(z^2+1)(z^2+2)$. By the reverse triangle inequality, $|z^2+1||z^2+2| \ge (|z|^2-1)(|z|^2-2) = (4-1)(4-2) = 6$. Thus the fraction is at most $\frac{1}{6}$.
+        </p>
+      </div>
+
+      <!-- INTERACTIVE SVG DIAGRAM: Vector Parallelogram & Triangle Inequality Explorer -->
+      <div class="interactive-stage">
+        <div class="stage-header">
+          <div class="stage-title">
+            <span class="material-icons-outlined" style="color:#107c55;">touch_app</span>
+            Interactive Vector Parallelogram &amp; Triangle Inequality Explorer
+          </div>
+          <span class="touch-hint"><span class="material-icons-outlined" style="font-size:15px;">pan_tool_alt</span> Drag points $z_1$ (blue) or $z_2$ (orange) with finger or mouse</span>
+        </div>
+        <div class="svg-canvas-wrap">
+          <svg id="triangleSvg" class="interactive-svg" viewBox="0 0 500 340">
+            <!-- Grid lines -->
+            <defs>
+              <pattern id="smallGrid" width="25" height="25" patternUnits="userSpaceOnUse">
+                <path d="M 25 0 L 0 0 0 25" fill="none" stroke="#f1f5f9" stroke-width="1"/>
+              </pattern>
+            </defs>
+            <rect width="500" height="340" fill="url(#smallGrid)" />
+            <!-- Axes centered at (250, 170), scale: 25px = 1 unit -->
+            <line x1="0" y1="170" x2="500" y2="170" stroke="#94a3b8" stroke-width="1.5"/>
+            <line x1="250" y1="0" x2="250" y2="340" stroke="#94a3b8" stroke-width="1.5"/>
+            <text x="480" y="164" font-size="12" fill="#475569" font-weight="bold">Re</text>
+            <text x="256" y="16" font-size="12" fill="#475569" font-weight="bold">Im</text>
+
+            <!-- Parallelogram dashed lines -->
+            <line id="paraLine1" x1="250" y1="170" x2="350" y2="120" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,5"/>
+            <line id="paraLine2" x1="250" y1="170" x2="350" y2="120" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,5"/>
+
+            <!-- Vector z1 + z2 (Green) -->
+            <line id="vecSum" x1="250" y1="170" x2="375" y2="70" stroke="#10b981" stroke-width="3"/>
+            <circle id="ptSum" cx="375" cy="70" r="6" fill="#10b981"/>
+            <text id="lblSum" x="383" y="68" font-size="12" font-weight="bold" fill="#047857">z1 + z2</text>
+
+            <!-- Vector z1 (Blue, draggable) -->
+            <line id="vecZ1" x1="250" y1="170" x2="350" y2="145" stroke="#0284c7" stroke-width="3"/>
+            <circle id="ptZ1" cx="350" cy="145" r="10" fill="#0284c7" stroke="#ffffff" stroke-width="2" style="cursor:pointer;"/>
+            <text id="lblZ1" x="358" y="142" font-size="12" font-weight="bold" fill="#0369a1">z1</text>
+
+            <!-- Vector z2 (Orange, draggable) -->
+            <line id="vecZ2" x1="250" y1="170" x2="275" y2="95" stroke="#f59e0b" stroke-width="3"/>
+            <circle id="ptZ2" cx="275" cy="95" r="10" fill="#f59e0b" stroke="#ffffff" stroke-width="2" style="cursor:pointer;"/>
+            <text id="lblZ2" x="285" y="92" font-size="12" font-weight="bold" fill="#b45309">z2</text>
+          </svg>
+          <div class="readout-bar" id="triangleReadout">
+            Drag $z_1$ and $z_2$ to compare $||z_1|-|z_2|| \le |z_1+z_2| \le |z_1|+|z_2|$
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP-BY-STEP DERIVATION 2: Triangle Inequality & Reverse Triangle Inequality -->
+      <div class="derivation-box" id="deriv-ca-2" data-deriv-id="ca2"></div>
+
+      <div class="omr-section" data-omr-group="ca">
+        <div class="omr-header">
+          <span><span class="material-icons-outlined" style="vertical-align:middle;font-size:18px;">quiz</span> Concept 1.2 OMR Check</span>
+          <span>Equal-Weight Randomized Options</span>
+        </div>
+        <div class="omr-question-card" data-qid="ca-2-1"></div>
+        <div class="omr-question-card" data-qid="ca-2-2"></div>
+      </div>
+    </article>
+
+    <!-- 1.3 POLAR FORM OF COMPLEX NUMBERS & DE MOIVRE'S FORMULA -->
+    <article id="ca-sec1-3" class="study-card">
+      <div class="card-header-bar">
+        <div class="card-title-group">
+          <span class="material-icons-outlined">radar</span>
+          <h3>1.3 Polar Form of Complex Numbers &amp; De Moivre's Formula</h3>
+        </div>
+        <span class="section-tag">Zill Section 1.3 (pp. 16–20)</span>
+      </div>
+
+      <p class="simple-text">
+        Using polar coordinates $x = r\cos\theta$ and $y = r\sin\theta$ where $r = |z| \ge 0$ is the modulus and $\theta = \arg(z)$ is the angle in radians from the positive real axis, any nonzero complex number $z = x + iy$ takes the <strong>polar form</strong>:
+        $$z = r(\cos\theta + i\sin\theta)$$
+      </p>
+
+      <div class="box-grid">
+        <div class="info-box def-box">
+          <div class="info-box-title"><span class="material-icons-outlined">explore</span>Argument $\arg(z)$ vs Principal Argument $\text{Arg}(z)$</div>
+          <p class="simple-text">
+            <strong>Argument $\arg(z)$:</strong> The infinite set of angles $\theta$ such that $\cos\theta = x/r$ and $\sin\theta = y/r$.<br>
+            <strong>Principal Argument $\text{Arg}(z)$:</strong> The unique angle $\Theta$ in the half-open interval:
+            $$-\pi < \text{Arg}(z) \le \pi$$
+            They are related by $\arg(z) = \text{Arg}(z) + 2n\pi$ ($n = 0, \pm 1, \pm 2, \dots$).<br>
+            <em>Zill Example 1:</em> For $z = -\sqrt{3} - i$ (in Quadrant III), $r = 2$ and $\tan^{-1}(1/\sqrt{3}) = \pi/6$. Adding $\pi$ gives $\theta = 7\pi/6$, while subtracting $\pi$ gives the principal argument $\text{Arg}(z) = \frac{\pi}{6} - \pi = -\frac{5\pi}{6}$.
+          </p>
+        </div>
+
+        <div class="info-box thm-box">
+          <div class="info-box-title"><span class="material-icons-outlined">auto_awesome</span>Polar Multiplication, Division &amp; De Moivre</div>
+          <p class="simple-text">
+            For $z_1 = r_1(\cos\theta_1 + i\sin\theta_1)$ and $z_2 = r_2(\cos\theta_2 + i\sin\theta_2)$:
+            $$z_1 z_2 = r_1 r_2[\cos(\theta_1 + \theta_2) + i\sin(\theta_1 + \theta_2)]$$
+            $$\frac{z_1}{z_2} = \frac{r_1}{r_2}[\cos(\theta_1 - \theta_2) + i\sin(\theta_1 - \theta_2)]$$
+            <strong>Integer Powers:</strong> $z^n = r^n(\cos n\theta + i\sin n\theta)$ for $n \in \mathbb{Z}$.<br>
+            <strong>De Moivre's Formula ($r=1$):</strong>
+            $$(\cos\theta + i\sin\theta)^n = \cos n\theta + i\sin n\theta$$
+          </p>
+        </div>
+      </div>
+
+      <div class="info-box warn-box">
+        <div class="info-box-title"><span class="material-icons-outlined">report_problem</span>Crucial Exam Trap: $\arg(z_1z_2)$ vs $\text{Arg}(z_1z_2)$</div>
+        <p class="simple-text">
+          As sets of angles, $\arg(z_1z_2) = \arg(z_1) + \arg(z_2)$ and $\arg(z_1/z_2) = \arg(z_1) - \arg(z_2)$ always hold. However, for the <strong>principal argument</strong>, $\text{Arg}(z_1z_2)$ is <strong>not always equal</strong> to $\text{Arg}(z_1) + \text{Arg}(z_2)$ because the sum of two angles in $(-\pi,\pi]$ can jump outside $(-\pi,\pi]$! For example, in Zill Example 2, $z_1 = i$ ($\text{Arg}=\pi/2$) and $z_2 = -\sqrt{3}-i$ ($\text{Arg}=-5\pi/6$) give $\text{Arg}(z_1) - \text{Arg}(z_2) = 4\pi/3 \notin (-\pi,\pi]$, so $\text{Arg}(z_1/z_2) = 4\pi/3 - 2\pi = -2\pi/3$.
+        </p>
+      </div>
+
+      <!-- STEP-BY-STEP DERIVATION 3: Polar Multiplication & De Moivre's Formula -->
+      <div class="derivation-box" id="deriv-ca-3" data-deriv-id="ca3"></div>
+
+      <div class="omr-section" data-omr-group="ca">
+        <div class="omr-header">
+          <span><span class="material-icons-outlined" style="vertical-align:middle;font-size:18px;">quiz</span> Concept 1.3 OMR Check</span>
+          <span>Equal-Weight Randomized Options</span>
+        </div>
+        <div class="omr-question-card" data-qid="ca-3-1"></div>
+        <div class="omr-question-card" data-qid="ca-3-2"></div>
+      </div>
+    </article>
+
+    <!-- 1.4 POWERS AND ROOTS OF COMPLEX NUMBERS (+ 3D INTERACTIVE TOUCH VIEW) -->
+    <article id="ca-sec1-4" class="study-card">
+      <div class="card-header-bar">
+        <div class="card-title-group">
+          <span class="material-icons-outlined">3d_rotation</span>
+          <h3>1.4 Powers and Roots of Complex Numbers</h3>
+        </div>
+        <span class="section-tag">Zill Section 1.4 (pp. 22–25)</span>
+      </div>
+
+      <p class="simple-text">
+        A complex number $w$ is an <strong>$n$-th root</strong> of a nonzero complex number $z$ if $w^n = z$. Every nonzero complex number $z = r(\cos\theta + i\sin\theta)$ has <strong>exactly $n$ distinct $n$-th roots</strong>.
+      </p>
+
+      <div class="info-box thm-box">
+        <div class="info-box-title"><span class="material-icons-outlined">stars</span>Formula (4): The $n$ Distinct $n$-th Roots &amp; Principal $n$-th Root</div>
+        <p class="simple-text">
+          For $z = r(\cos\theta + i\sin\theta) \neq 0$, the $n$ distinct roots of $w^n = z$ are given by:
+          $$w_k = \sqrt[n]{r}\left[\cos\left(\frac{\theta + 2k\pi}{n}\right) + i\sin\left(\frac{\theta + 2k\pi}{n}\right)\right], \qquad k = 0, 1, 2, \dots, n - 1$$
+          <strong>Principal $n$-th root ($w_0$):</strong> The unique root obtained when we choose $\theta = \text{Arg}(z)$ and set $k = 0$.<br>
+          <strong>Geometric Spacing:</strong> All $n$ roots lie on a circle of radius $\sqrt[n]{r}$ centered at the origin, spaced equally at angular intervals of $\frac{2\pi}{n}$ radians (forming the vertices of a regular $n$-sided polygon!).
+        </p>
+      </div>
+
+      <div class="box-grid">
+        <div class="info-box def-box">
+          <div class="info-box-title"><span class="material-icons-outlined">filter_3</span>Zill Example 1: Three Cube Roots of $z = i$</div>
+          <p class="simple-text">
+            Here $r = 1$ and $\theta = \text{Arg}(i) = \pi/2$, with $n = 3$:
+            $$w_k = \cos\left(\frac{\pi/2 + 2k\pi}{3}\right) + i\sin\left(\frac{\pi/2 + 2k\pi}{3}\right)$$
+            &bull; $k=0$ (Principal root): $w_0 = \cos\frac{\pi}{6} + i\sin\frac{\pi}{6} = \frac{\sqrt{3}}{2} + \frac{1}{2}i$<br>
+            &bull; $k=1$: $w_1 = \cos\frac{5\pi}{6} + i\sin\frac{5\pi}{6} = -\frac{\sqrt{3}}{2} + \frac{1}{2}i$<br>
+            &bull; $k=2$: $w_2 = \cos\frac{3\pi}{2} + i\sin\frac{3\pi}{2} = -i$.
+          </p>
+        </div>
+
+        <div class="info-box def-box">
+          <div class="info-box-title"><span class="material-icons-outlined">donut_large</span>$n$-th Roots of Unity ($w^n = 1$)</div>
+          <p class="simple-text">
+            For $z = 1$ ($r=1, \theta=0$), the $n$ roots of unity are $1, \omega_n, \omega_n^2, \dots, \omega_n^{n-1}$ where:
+            $$\omega_n = \cos\frac{2\pi}{n} + i\sin\frac{2\pi}{n}$$
+            Their sum is always zero for $n \ge 2$:
+            $$1 + \omega_n + \omega_n^2 + \dots + \omega_n^{n-1} = 0$$
+          </p>
+        </div>
+      </div>
+
+      <div class="info-box kerala-box">
+        <div class="info-box-title"><span class="material-icons-outlined">local_parking</span>Simple 3D Intuition: Multi-Floor Spiral Ramp in a Kochi Mall</div>
+        <p class="simple-text">
+          Why does a single complex number $z$ produce $n$ different roots when we divide the angle by $n$? Imagine a spiral car ramp in a multi-level shopping mall in Kochi. On the ground floor ($2\text{D}$ map), level $k=0$ ($\theta$), level $k=1$ ($\theta + 2\pi$), and level $k=2$ ($\theta + 4\pi$) sit directly on top of the exact same spot $z$. But when you divide your height/angle by $n$ ($\frac{\theta + 2k\pi}{n}$), each floor $k=0, 1, \dots, n-1$ lands at a <strong>different angle</strong> around the circle! Rotate the 3D view below with your finger to see this spiral in action.
+        </p>
+      </div>
+
+
+      <!-- STEP-BY-STEP DERIVATION 4: n-th Root Formula -->
+      <div class="derivation-box" id="deriv-ca-4" data-deriv-id="ca4"></div>
+
+      <div class="omr-section" data-omr-group="ca">
+        <div class="omr-header">
+          <span><span class="material-icons-outlined" style="vertical-align:middle;font-size:18px;">quiz</span> Concept 1.4 OMR Check</span>
+          <span>Equal-Weight Randomized Options</span>
+        </div>
+        <div class="omr-question-card" data-qid="ca-4-1"></div>
+        <div class="omr-question-card" data-qid="ca-4-2"></div>
+      </div>
+    </article>
+
+
+    <!-- =====================================================================
+         PART 2: ABSTRACT ALGEBRA I (FRALEIGH, MODULE I & II: UNITS 1–8)
+         ===================================================================== -->
+    <div id="aa-section" class="subject-section-header yellow-theme">
+      <h2>
+        <span class="material-icons-outlined">change_history</span>
+        Abstract Algebra I
+      </h2>
+      <span class="badge-pill">Textbook: John B. Fraleigh &bull; Module I &amp; II (Binary Operations, Groups, Subgroups, Cyclic Subgroups)</span>
+    </div>
+
+    <!-- 2.0 HIGH SCHOOL (PLUS TWO) RECALL SESSION: ABSTRACT ALGEBRA -->
+    <article id="aa-recall" class="study-card">
+      <div class="card-header-bar">
+        <div class="card-title-group">
+          <span class="material-icons-outlined">history_edu</span>
+          <h3>2.0 High School (Plus Two) Prerequisite Recall</h3>
+        </div>
+        <span class="section-tag">Fraleigh "Plus Two Recall" Notes</span>
+      </div>
+
+      <p class="simple-text">
+        Our structured notes highlight five specific Plus Two topics that form the foundation for binary operations, groups, and subgroups. Review them below before testing yourself.
+      </p>
+
+      <div class="box-grid">
+        <div class="info-box def-box">
+          <div class="info-box-title"><span class="material-icons-outlined">dataset</span>1. Sets, Number Systems &amp; Ordered Pairs</div>
+          <p class="simple-text">
+            &bull; $S \times S = \{(a,b) \mid a,b \in S\}$ is the set of ordered pairs.<br>
+            &bull; $\mathbb{Z}^+$ = positive integers $\{1,2,3,\dots\}$; $\mathbb{R}^*$ = nonzero reals $\mathbb{R} \setminus \{0\}$; $\mathbb{R}^+$ = positive reals.
+          </p>
+        </div>
+
+        <div class="info-box def-box">
+          <div class="info-box-title"><span class="material-icons-outlined">account_tree</span>2. Function Composition &amp; Bijections</div>
+          <p class="simple-text">
+            &bull; $(f \circ g)(x) = f(g(x))$ means "apply $g$ first, then $f$".<br>
+            &bull; A function $f: A \to B$ has an inverse $f^{-1}$ with $f \circ f^{-1} = \iota$ if and only if $f$ is <strong>one-to-one</strong> (injective) and <strong>onto</strong> (surjective).
+          </p>
+        </div>
+
+        <div class="info-box def-box">
+          <div class="info-box-title"><span class="material-icons-outlined">calculate</span>3. Number Laws vs Subtraction</div>
+          <p class="simple-text">
+            Addition $+$ and multiplication $\cdot$ on $\mathbb{R}$ are commutative and associative, with identities $0$ and $1$. Subtraction $-$ is <strong>neither</strong> commutative ($2-3 \neq 3-2$) nor associative ($(2-3)-4 \neq 2-(3-4)$), and $0$ is only a right identity ($a-0=a$, $0-a \neq a$).
+          </p>
+        </div>
+
+        <div class="info-box def-box">
+          <div class="info-box-title"><span class="material-icons-outlined">apps</span>4. Matrices &amp; Determinant of a Product</div>
+          <p class="simple-text">
+            &bull; Zero matrix $O$ is additive identity ($A+O=A$), but $OA = O \neq I_n$, so $O$ has no multiplicative inverse.<br>
+            &bull; $\det(AB) = \det(A)\det(B)$, and $A$ is invertible $\iff \det(A) \neq 0$. If $\det(A)=1$, then $\det(A^{-1})=1$.
+          </p>
+        </div>
+      </div>
+
+      <div class="omr-section" data-omr-group="aa">
+        <div class="omr-header">
+          <span><span class="material-icons-outlined" style="vertical-align:middle;font-size:18px;">quiz</span> Plus Two Recall OMR Check</span>
+          <span>Balanced Options &bull; Auto-Checked</span>
+        </div>
+        <div class="omr-question-card" data-qid="aa-rec-1"></div>
+        <div class="omr-question-card" data-qid="aa-rec-2"></div>
+      </div>
+    </article>
+
+    <!-- 2.1 BINARY OPERATIONS, CLOSURE, AND CONDITIONS -->
+    <article id="aa-sec1" class="study-card">
+      <div class="card-header-bar">
+        <div class="card-title-group">
+          <span class="material-icons-outlined">rule</span>
+          <h3>2.1 Binary Operations, Closure, and Warnings</h3>
+        </div>
+        <span class="section-tag">Fraleigh 8th Sec 1 (1.1–1.10, 1.26–1.30) / 7th Sec 2</span>
+      </div>
+
+      <div class="box-grid">
+        <div class="info-box def-box">
+          <div class="info-box-title"><span class="material-icons-outlined">menu_book</span>Definition 1.1: Binary Operation</div>
+          <p class="simple-text">
+            A <strong>binary operation</strong> $*$ on a set $S$ is a function from $S \times S$ into $S$. For each ordered pair $(a,b) \in S \times S$, the value $*((a,b))$ is written $a * b$.<br>
+            <strong>Two Conditions (Section 1.3):</strong><br>
+            1. <strong>Everywhere &amp; Well-Defined:</strong> Exactly one element is assigned to every ordered pair $(a,b) \in S \times S$.<br>
+            2. <strong>Closed:</strong> The assigned result $a * b$ must belong to $S$.
+          </p>
+        </div>
+
+        <div class="info-box def-box">
+          <div class="info-box-title"><span class="material-icons-outlined">lock</span>Definition 1.4: Closed Subset &amp; Induced Operation</div>
+          <p class="simple-text">
+            Let $*$ be a binary operation on $S$ and let $H \subseteq S$ be a subset. $H$ is <strong>closed under $*$</strong> if for all $a,b \in H$, we also have $a * b \in H$.<br>
+            When $H$ is closed under $*$, restricting $*$ to inputs from $H$ gives the <strong>induced operation</strong> on $H$.
+          </p>
+        </div>
+      </div>
+
+      <div class="info-box kerala-box">
+        <div class="info-box-title"><span class="material-icons-outlined">route</span>Everyday Kerala Example (Fraleigh Example 1.8 Remark): GPS Route Selection</div>
+        <p class="simple-text">
+          On $\mathbb{Z}^+$, define $a * b = \min\{a, b\}$ (the smaller of $a$ and $b$, so $2 * 11 = 2$ and $15 * 10 = 10$). As Fraleigh notes, this exact binary operation is used every day by a <strong>GPS navigation app</strong> when choosing between two highway routes from Thrissur to Kochi: it compares travel times $(a, b)$ and keeps the shorter route $\min\{a,b\}$!
+        </p>
+      </div>
+
+      <h4 style="margin:16px 0 8px;color:var(--navy-dark);">Complete Catalogue of Book Examples &amp; Warnings (1.2 – 1.10 &amp; 1.26 – 1.30)</h4>
+      <div class="box-grid">
+        <div class="info-box">
+          <div class="info-box-title"><span class="material-icons-outlined">check_circle_outline</span>Closure Examples (1.2 – 1.7)</div>
+          <p class="simple-text">
+            &bull; <strong>Ex 1.3:</strong> Matrix addition $A+B$ is <em>not</em> a binary operation on the set $M(\mathbb{R})$ of all matrices of all sizes, because $A+B$ is undefined when $A$ and $B$ have different sizes.<br>
+            &bull; <strong>Ex 1.5:</strong> Ordinary addition $+$ on $\mathbb{R}$ does <em>not</em> induce an operation on $\mathbb{R}^*$ (nonzero reals) because $2, -2 \in \mathbb{R}^*$, but $2 + (-2) = 0 \notin \mathbb{R}^*$.<br>
+            &bull; <strong>Ex 1.6:</strong> Let $H = \{n^2 \mid n \in \mathbb{Z}^+\}$. $H$ is <em>not</em> closed under addition ($1^2 + 2^2 = 5 \notin H$), but $H$ <em>is</em> closed under multiplication: $r=n^2, s=m^2 \implies rs = (nm)^2 \in H$.<br>
+            &bull; <strong>Ex 1.7:</strong> Real-valued functions $F$ on $\mathbb{R}$ are closed under $+, -, \cdot,$ and $\circ$.
+          </p>
+        </div>
+
+        <div class="info-box warn-box">
+          <div class="info-box-title"><span class="material-icons-outlined">error_outline</span>When a Rule Fails (Examples 1.26 – 1.30)</div>
+          <p class="simple-text">
+            &bull; <strong>Ex 1.26 ($a * b = a/b$):</strong> On $\mathbb{Q}$, fails Condition 1 at $b=0$ (not everywhere defined). On $\mathbb{Q}^*$, both hold (valid operation!). On $\mathbb{Z}^+$, fails Condition 2 ($1/2 \notin \mathbb{Z}^+$, not closed).<br>
+            &bull; <strong>Ex 1.27:</strong> $f * g = f/g$ on $F$ fails closure because $g(x)=x^2$ is $0$ at $x=0$, so $h(0)$ is undefined.<br>
+            &bull; <strong>Ex 1.28:</strong> $f * g =$ "a function greater than both $f$ and $g$" is <strong>not well-defined</strong> (many functions qualify).<br>
+            &bull; <strong>Ex 1.29 &amp; 1.30:</strong> Among 20 people of distinct heights, $a*b=$ "tallest person in $S$" is a valid binary operation, but $a*b=$ "shortest person taller than both $a$ and $b$" is <strong>not everywhere defined</strong> (fails if $a$ or $b$ is the tallest person).
+          </p>
+        </div>
+      </div>
+
+      <div class="omr-section" data-omr-group="aa">
+        <div class="omr-header">
+          <span><span class="material-icons-outlined" style="vertical-align:middle;font-size:18px;">quiz</span> Concept 2.1 OMR Check</span>
+          <span>Equal-Weight Randomized Options</span>
+        </div>
+        <div class="omr-question-card" data-qid="aa-1-1"></div>
+        <div class="omr-question-card" data-qid="aa-1-2"></div>
+      </div>
+    </article>
+
+    <!-- 2.2 COMMUTATIVITY, ASSOCIATIVITY, IDENTITIES, INVERSES & TABLES -->
+    <article id="aa-sec2" class="study-card">
+      <div class="card-header-bar">
+        <div class="card-title-group">
+          <span class="material-icons-outlined">table_chart</span>
+          <h3>2.2 Commutative &amp; Associative Operations, Identities, Inverses &amp; Tables</h3>
+        </div>
+        <span class="section-tag">Fraleigh 8th Sec 1 (1.11–1.25) / 7th Sec 2</span>
+      </div>
+
+      <p class="simple-text">
+        Let us compare the three operations defined on $\mathbb{Z}^+$ in Examples 1.8, 1.9, and 1.10:<br>
+        &bull; <strong>Example 1.8:</strong> $a * b = \min\{a,b\}$ &mdash; Both <strong>commutative</strong> and <strong>associative</strong>.<br>
+        &bull; <strong>Example 1.9:</strong> $a *' b = a$ (always picks the first input) &mdash; <strong>Not commutative</strong> ($5 *' 7 = 5 \neq 7 = 7 *' 5$), though it is associative.<br>
+        &bull; <strong>Example 1.10:</strong> $a *'' b = \min\{a,b\} + 2$ &mdash; Commutative, but <strong>not associative</strong>:
+        $$(2 *'' 5) *'' 9 = 4 *'' 9 = 6 \quad \neq \quad 2 *'' (5 *'' 9) = 2 *'' 7 = 4$$
+      </p>
+
+      <div class="box-grid">
+        <div class="info-box def-box">
+          <div class="info-box-title"><span class="material-icons-outlined">swap_horiz</span>Def 1.11, Def 1.12 &amp; Thm 1.13</div>
+          <p class="simple-text">
+            <strong>Commutative (Def 1.11):</strong> $a * b = b * a$ for all $a,b \in S$.<br>
+            <strong>Associative (Def 1.12):</strong> $(a * b) * c = a * (b * c)$ for all $a,b,c \in S$.<br>
+            <strong>Theorem 1.13 (Composition is Associative):</strong> For maps $f,g,h: S \to S$, $f \circ (g \circ h) = (f \circ g) \circ h$ because both evaluate to $f(g(h(x)))$ at every $x \in S$. Consequently, matrix multiplication is associative!
+          </p>
+        </div>
+
+        <div class="info-box thm-box">
+          <div class="info-box-title"><span class="material-icons-outlined">fingerprint</span>Identity (Def 1.14, Thm 1.15) &amp; Inverses (Def 1.17)</div>
+          <p class="simple-text">
+            <strong>Identity Element (Def 1.14):</strong> $e \in S$ is an identity for $*$ if $a * e = e * a = a$ for all $a \in S$.<br>
+            <strong>Theorem 1.15 (Uniqueness):</strong> A set with a binary operation has at most one identity ($e = e * e' = e'$).<br>
+            <strong>Inverse (Def 1.17):</strong> Given identity $e$, $x'$ is an inverse of $x$ if $x * x' = x' * x = e$.<br>
+            <em>Example 1.16 &amp; 1.18 (Functions $F$ on $\mathbb{R}$):</em> Identity is $\iota(x)=x$ for $\circ$, $m(x)=1$ for $\cdot$, $a(x)=0$ for $+$, and none for $-$. Under $\circ$, $f$ has an inverse $f'$ with $f \circ f' = f' \circ f = \iota$ $\iff f$ is one-to-one and onto.
+          </p>
+        </div>
+      </div>
+
+      <!-- INTERACTIVE TABLE WIDGET: Table 1.22 -> 1.23 Commutative Completion -->
+      <div class="interactive-stage">
+        <div class="stage-header">
+          <div class="stage-title">
+            <span class="material-icons-outlined" style="color:#d97706;">grid_view</span>
+            Interactive Table Test (Example 1.21: Complete Table 1.22 to make $*$ Commutative)
+          </div>
+          <span class="touch-hint"><span class="material-icons-outlined" style="font-size:15px;">touch_app</span> Tap any blue "?" cell to fill it by symmetry across the yellow diagonal</span>
+        </div>
+        <p class="simple-text" style="text-align:center;font-size:0.88rem;">
+          In a finite operation table, row $i$, column $j$ is $(\text{row } i\text{ left}) * (\text{col } j\text{ top})$. A table is <strong>commutative</strong> if and only if it is symmetric about the main diagonal: entry $(i,j) =$ entry $(j,i)$. When an identity $e$ exists, it is listed first so row 1 and column 1 repeat the headers (Example 1.24, Table 1.25).
+        </p>
+        <div class="table-scroll"><table class="cayley-table" id="table122">
+          <thead>
+            <tr><th>$*$</th><th>$a$</th><th>$b$</th><th>$c$</th><th>$d$</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>$a$</th>
+              <td class="diag-cell">$b$</td>
+              <td class="interactive-cell" onclick="fillSymCell(this, 'd', 'b*a = d forces a*b = d')">?</td>
+              <td class="interactive-cell" onclick="fillSymCell(this, 'a', 'c*a = a forces a*c = a')">?</td>
+              <td class="interactive-cell" onclick="fillSymCell(this, 'a', 'd*a = a forces a*d = a')">?</td>
+            </tr>
+            <tr>
+              <th>$b$</th>
+              <td>$d$</td>
+              <td class="diag-cell">$a$</td>
+              <td class="interactive-cell" onclick="fillSymCell(this, 'c', 'c*b = c forces b*c = c')">?</td>
+              <td class="interactive-cell" onclick="fillSymCell(this, 'b', 'd*b = b forces b*d = b')">?</td>
+            </tr>
+            <tr>
+              <th>$c$</th>
+              <td>$a$</td>
+              <td>$c$</td>
+              <td class="diag-cell">$d$</td>
+              <td class="interactive-cell" onclick="fillSymCell(this, 'b', 'd*c = b forces c*d = b')">?</td>
+            </tr>
+            <tr>
+              <th>$d$</th>
+              <td>$a$</td>
+              <td>$b$</td>
+              <td>$b$</td>
+              <td class="diag-cell">$c$</td>
+            </tr>
+          </tbody>
+        </table></div>
+        <div class="readout-bar" id="table122Readout" style="margin:8px auto 0;">
+          Tap the 6 blue "?" cells above to complete Table 1.23 symmetrically!
+        </div>
+      </div>
+
+      <div class="omr-section" data-omr-group="aa">
+        <div class="omr-header">
+          <span><span class="material-icons-outlined" style="vertical-align:middle;font-size:18px;">quiz</span> Concept 2.2 OMR Check</span>
+          <span>Equal-Weight Randomized Options</span>
+        </div>
+        <div class="omr-question-card" data-qid="aa-2-1"></div>
+        <div class="omr-question-card" data-qid="aa-2-2"></div>
+      </div>
+    </article>
+
+    <!-- 2.3 ISOMORPHIC BINARY STRUCTURES & STRUCTURAL PROPERTIES -->
+    <article id="aa-sec3" class="study-card">
+      <div class="card-header-bar">
+        <div class="card-title-group">
+          <span class="material-icons-outlined">compare_arrows</span>
+          <h3>2.3 Isomorphic Binary Structures &amp; Structural Properties</h3>
+        </div>
+        <span class="section-tag">Fraleigh 7th Sec 3 / 8th Sec 2 (2.14–2.15)</span>
+      </div>
+
+      <p class="simple-text">
+        Two binary algebraic structures $\langle S, * \rangle$ and $\langle S', *' \rangle$ are <strong>isomorphic</strong> (written $S \simeq S'$) if they have the exact same algebraic structure and differ only in the names/labels of their elements.
+      </p>
+
+      <div class="box-grid">
+        <div class="info-box def-box">
+          <div class="info-box-title"><span class="material-icons-outlined">verified_user</span>Definition 2.22: Isomorphism</div>
+          <p class="simple-text">
+            A map $f: S \to S'$ between $\langle S, * \rangle$ and $\langle S', *' \rangle$ is an <strong>isomorphism</strong> if:<br>
+            <strong>1. Bijection (Relabelling):</strong> $f$ is one-to-one (injective) and onto $S'$ (surjective).<br>
+            <strong>2. Homomorphism Property:</strong> For all $a, b \in S$:
+            $$f(a * b) = f(a) *' f(b)$$
+            <em>Example 2.23:</em> $f: \langle \mathbb{Z}, + \rangle \to \langle 2\mathbb{Z}, + \rangle$ given by $f(m) = 2m$ is an isomorphism because $2a=2b \implies a=b$ (1-to-1), every even integer is $2c$ (onto), and $f(a+b) = 2(a+b) = 2a + 2b = f(a) + f(b)$.
+          </p>
+        </div>
+
+        <div class="info-box thm-box">
+          <div class="info-box-title"><span class="material-icons-outlined">fact_check</span>Structural Properties under Isomorphism</div>
+          <p class="simple-text">
+            A <strong>structural property</strong> depends only on the operation table, not on element names. Under an isomorphism $\phi: S \to S'$, every structural property is preserved:<br>
+            &bull; Same cardinality $|S| = |S'|$.<br>
+            &bull; $S$ is commutative/associative $\iff S'$ is.<br>
+            &bull; $e$ is an identity for $S \iff \phi(e)$ is an identity for $S'$.<br>
+            &bull; Equation $x * x = a$ has $k$ solutions in $S \iff y *' y = \phi(a)$ has $k$ solutions in $S'$.<br>
+            <em>How to prove $S \not\simeq S'$:</em> Find one structural property true in $S$ that fails in $S'$!
+          </p>
+        </div>
+      </div>
+
+      <div class="info-box kerala-box">
+        <div class="info-box-title"><span class="material-icons-outlined">translate</span>Everyday Kerala Example: Malayalam vs English Metro Station Map</div>
+        <p class="simple-text">
+          Consider the Kochi Metro route map printed in Malayalam script ($S$) and in English script ($S'$). Translating each station name $\phi(a)$ is a one-to-one onto relabelling, and the travel connection operation between any two stations satisfies $\phi(a * b) = \phi(a) *' \phi(b)$. The two maps are <strong>isomorphic</strong>!
+        </p>
+      </div>
+
+      <div class="omr-section" data-omr-group="aa">
+        <div class="omr-header">
+          <span><span class="material-icons-outlined" style="vertical-align:middle;font-size:18px;">quiz</span> Concept 2.3 OMR Check</span>
+          <span>Equal-Weight Randomized Options</span>
+        </div>
+        <div class="omr-question-card" data-qid="aa-3-1"></div>
+        <div class="omr-question-card" data-qid="aa-3-2"></div>
+      </div>
+    </article>
+
+    <!-- 2.4 GROUPS: AXIOMS AND EXAMPLES -->
+    <article id="aa-sec4" class="study-card">
+      <div class="card-header-bar">
+        <div class="card-title-group">
+          <span class="material-icons-outlined">hub</span>
+          <h3>2.4 Groups: Axioms, Abelian &amp; Non-Abelian Examples</h3>
+        </div>
+        <span class="section-tag">Fraleigh 8th Sec 2 (2.1–2.15) / 7th Sec 4 (4.1–4.14)</span>
+      </div>
+
+      <p class="simple-text">
+        Why can we always solve $5 + x = 2$ in $\mathbb{R}$ and $2x = 3$ in $\mathbb{R}^*$? Because both structures have closure, associativity, an identity element, and inverses for every element! Abstracting these exact properties gives the definition of a <strong>group</strong>.
+      </p>
+
+      <div class="info-box def-box">
+        <div class="info-box-title"><span class="material-icons-outlined">menu_book</span>Definition 2.1 &amp; 2.3: Group $\langle G, * \rangle$ and Abelian Group</div>
+        <p class="simple-text">
+          A <strong>group</strong> $\langle G, * \rangle$ is a set $G$, closed under a binary operation $*$, such that:<br>
+          &bull; <strong>$\mathcal{G}_1$ (Associativity):</strong> $(a * b) * c = a * (b * c)$ for all $a, b, c \in G$.<br>
+          &bull; <strong>$\mathcal{G}_2$ (Identity):</strong> There is an element $e \in G$ such that $e * x = x * e = x$ for all $x \in G$.<br>
+          &bull; <strong>$\mathcal{G}_3$ (Inverses):</strong> For each $a \in G$, there is an element $a' \in G$ with $a * a' = a' * a = e$.<br>
+          <strong>Definition 2.3:</strong> A group $G$ is <strong>abelian</strong> if its binary operation $*$ is commutative ($a * b = b * a$ for all $a,b \in G$).
+        </p>
+      </div>
+
+      <div class="box-grid">
+        <div class="info-box thm-box">
+          <div class="info-box-title"><span class="material-icons-outlined">check_circle</span>Abelian &amp; Non-Abelian Group Examples</div>
+          <p class="simple-text">
+            &bull; <strong>Abelian under $+$:</strong> $\mathbb{Z}, \mathbb{Q}, \mathbb{R}, \mathbb{C}$, real functions $F$, vector spaces $V$, and $m \times n$ matrices $M_{m\times n}(\mathbb{R})$ (Ex 2.6, 2.9–2.11).<br>
+            &bull; <strong>Abelian under $\cdot$:</strong> $\mathbb{Q}^+, \mathbb{R}^+$ and $\mathbb{Q}^*, \mathbb{R}^*, \mathbb{C}^*$ (Ex 2.8).<br>
+            &bull; <strong>Twisted Product (Ex 2.15):</strong> On $\mathbb{Q}^+$, $a * b = \frac{ab}{2}$ is an abelian group with identity $e = 2$ (since $a*2 = 2a/2 = a$) and inverse $a' = \frac{4}{a}$ (since $a * \frac{4}{a} = \frac{4a}{2a} = 2 = e$).<br>
+            &bull; <strong>Non-Abelian Groups:</strong> Plane isometries $T$ under composition (Ex 2.13) and $GL(n, \mathbb{R})$ = invertible $n \times n$ real matrices under multiplication (Ex 2.14).
+          </p>
+        </div>
+
+        <div class="info-box warn-box">
+          <div class="info-box-title"><span class="material-icons-outlined">cancel</span>Important Non-Examples (Why They Fail)</div>
+          <p class="simple-text">
+            &bull; <strong>$\langle \mathbb{R}, \cdot \rangle$ (Ex 2.2):</strong> Not a group ($0$ has no multiplicative inverse).<br>
+            &bull; <strong>$\langle \mathbb{Z}^+, + \rangle$ (Ex 2.4):</strong> Not a group (no identity element $0 \notin \mathbb{Z}^+$).<br>
+            &bull; <strong>Nonnegative integers under $+$ (Ex 2.5):</strong> Identity is $0$, but $2$ has no inverse ($-2$ is missing).<br>
+            &bull; <strong>$\langle \mathbb{Z}^+, \cdot \rangle$ (Ex 2.7):</strong> Identity is $1$, but $3$ has no inverse ($1/3 \notin \mathbb{Z}^+$).<br>
+            &bull; <strong>$\langle M_n(\mathbb{R}), \cdot \rangle$ (Ex 2.12):</strong> All $n \times n$ matrices under multiplication fail $\mathcal{G}_3$ (zero matrix $O$ and singular matrices have no inverse).
+          </p>
+        </div>
+      </div>
+
+      <div class="omr-section" data-omr-group="aa">
+        <div class="omr-header">
+          <span><span class="material-icons-outlined" style="vertical-align:middle;font-size:18px;">quiz</span> Concept 2.4 OMR Check</span>
+          <span>Equal-Weight Randomized Options</span>
+        </div>
+        <div class="omr-question-card" data-qid="aa-4-1"></div>
+        <div class="omr-question-card" data-qid="aa-4-2"></div>
+      </div>
+    </article>
+
+    <!-- 2.5 ELEMENTARY PROPERTIES OF GROUPS, FINITE GROUPS & GROUP TABLES -->
+    <article id="aa-sec5" class="study-card">
+      <div class="card-header-bar">
+        <div class="card-title-group">
+          <span class="material-icons-outlined">grid_4x4</span>
+          <h3>2.5 Elementary Properties of Groups, Finite Groups &amp; Group Tables</h3>
+        </div>
+        <span class="section-tag">Fraleigh 8th Sec 2 (2.16–2.25) / 7th Sec 4 (4.15+)</span>
+      </div>
+
+      <div class="box-grid">
+        <div class="info-box thm-box">
+          <div class="info-box-title"><span class="material-icons-outlined">gavel</span>Theorems 2.16 – 2.19: Core Group Laws</div>
+          <p class="simple-text">
+            &bull; <strong>Thm 2.16 (Cancellation Laws):</strong> $a * b = a * c \implies b = c$ (left) and $b * a = c * a \implies b = c$ (right).<br>
+            &bull; <strong>Thm 2.17 (Linear Equations):</strong> $a * x = b$ has unique solution $x = a' * b$; $y * a = b$ has unique solution $y = b * a'$.<br>
+            &bull; <strong>Thm 2.18 (Unique Identity &amp; Inverse):</strong> Identity $e$ is unique, and each $a \in G$ has a unique inverse $a'$.<br>
+            &bull; <strong>Corollary 2.19 (Inverse of a Product):</strong> For all $a, b \in G$, $(a * b)' = b' * a'$ (reverse order!).<br>
+            &bull; <strong>Sec 2.13 (Semigroups, Monoids &amp; One-Sided Axioms):</strong> A <em>semigroup</em> has an associative operation; a <em>monoid</em> is a semigroup with identity. Also, associativity + left identity ($e*x=x$) + left inverse ($a'*a=e$) automatically imply two-sided group axioms!
+          </p>
+        </div>
+
+        <div class="info-box def-box">
+          <div class="info-box-title"><span class="material-icons-outlined">view_module</span>Group Table Test &amp; Small Order Groups</div>
+          <p class="simple-text">
+            <strong>Result (Group Table Test):</strong> In a finite group table, each element of $G$ appears <strong>exactly once in each row and column</strong> (by Theorem 2.17!).<br>
+            <strong>Groups of Order 1, 2, 3, 4 up to Isomorphism:</strong><br>
+            &bull; <strong>Order 1:</strong> $\{e\}$ (1 group).<br>
+            &bull; <strong>Order 2:</strong> $\{e, a\}$ with $a*a=e$, isomorphic to $\langle \{1,-1\},\times \rangle$ (1 group).<br>
+            &bull; <strong>Order 3:</strong> $\{e, a, b\}$ forced by the once-per-row/col rule to be Table 2.25 ($a*a=b, a*b=e, b*b=a$), so any two groups of order 3 are isomorphic (1 group, $\mathbb{Z}_3$).<br>
+            &bull; <strong>Order 4 (Ex 20 / Ex 5.7):</strong> Exactly <strong>2</strong> non-isomorphic groups of order 4 (both abelian): cyclic $\mathbb{Z}_4$ and the Klein 4-group $V$.
+          </p>
+        </div>
+      </div>
+
+      <div class="info-box kerala-box">
+        <div class="info-box-title"><span class="material-icons-outlined">checkroom</span>Everyday Kerala Example: Corollary 2.19 (Shoes &amp; Socks / Temple Footwear Counter)</div>
+        <p class="simple-text">
+          Why is the inverse of $a * b$ equal to $b' * a'$ in reverse order? When getting ready in the morning, if you first put on your <strong>socks</strong> ($a$) and then put on your <strong>shoes</strong> ($b$), to undo the process at the temple entrance you must <strong>first remove your shoes</strong> ($b'$) and <strong>then remove your socks</strong> ($a'$) &mdash; so $(a * b)' = b' * a'$!
+        </p>
+      </div>
+
+      <!-- STEP-BY-STEP DERIVATION 5: Cancellation Law & Inverse of Product (a*b)' = b'*a' -->
+      <div class="derivation-box" id="deriv-aa-1" data-deriv-id="aa1"></div>
+
+      <div class="omr-section" data-omr-group="aa">
+        <div class="omr-header">
+          <span><span class="material-icons-outlined" style="vertical-align:middle;font-size:18px;">quiz</span> Concept 2.5 OMR Check</span>
+          <span>Equal-Weight Randomized Options</span>
+        </div>
+        <div class="omr-question-card" data-qid="aa-5-1"></div>
+        <div class="omr-question-card" data-qid="aa-5-2"></div>
+      </div>
+    </article>
+
+    <!-- 2.6 SUBGROUPS AND SUBGROUP CRITERIA (5.1 - 5.16) -->
+    <article id="aa-sec6" class="study-card">
+      <div class="card-header-bar">
+        <div class="card-title-group">
+          <span class="material-icons-outlined">account_tree</span>
+          <h3>2.6 Subgroups, Subgroup Lattices, and Subgroup Criteria</h3>
+        </div>
+        <span class="section-tag">Fraleigh Section 5 (5.1–5.18) / Syllabus Unit 7</span>
+      </div>
+
+      <div class="box-grid">
+        <div class="info-box def-box">
+          <div class="info-box-title"><span class="material-icons-outlined">menu_book</span>Definitions 5.1 &amp; 5.2: Subgroups</div>
+          <p class="simple-text">
+            <strong>Subgroup (Def 5.1):</strong> A subset $H$ of a group $G$ that is closed under the binary operation of $G$ and is a group under the induced operation is a <strong>subgroup</strong> of $G$, written $H \le G$ (or $H < G$ if $H \neq G$).<br>
+            <strong>Improper vs Proper (Def 5.2):</strong> $G$ itself is the <strong>improper subgroup</strong> of $G$; all other subgroups are <strong>proper</strong>.<br>
+            <strong>Trivial vs Nontrivial (Def 5.2):</strong> $\{e\}$ is the <strong>trivial subgroup</strong>; all other subgroups are <strong>nontrivial</strong>.<br>
+            <em>Identity &amp; Inverse Remark:</em> If $H \le G$, the identity of $H$ is the same as the identity $e$ of $G$, and the inverse of $a \in H$ is the same as $a^{-1}$ in $G$.
+          </p>
+        </div>
+
+        <div class="info-box thm-box">
+          <div class="info-box-title"><span class="material-icons-outlined">verified</span>The Three Subgroup Criteria (Theorems 5.12, 5.15, 5.16)</div>
+          <p class="simple-text">
+            <strong>1. Theorem 5.12 (Standard 3-Step Test):</strong> $H \subseteq G$ is a subgroup $\iff$<br>
+            (1) $H$ is closed under the operation of $G$, (2) $e \in H$, and (3) $a \in H \implies a^{-1} \in H$.<br>
+            <strong>2. Theorem 5.15 (1-Step Subgroup Test):</strong> A nonempty subset $H \subseteq G$ is a subgroup $\iff$ for all $a, b \in H$, we have $ab^{-1} \in H$.<br>
+            <strong>3. Theorem 5.16 (Finite Subgroup Test):</strong> A finite nonempty subset $H \subseteq G$ is a subgroup $\iff H$ is closed under the operation of $G$!
+          </p>
+        </div>
+      </div>
+
+      <div class="info-box warn-box">
+        <div class="info-box-title"><span class="material-icons-outlined">priority_high</span>Book Examples 5.3–5.7 &amp; 5.11–5.18 (Must Know!)</div>
+        <p class="simple-text">
+          &bull; <strong>Same Operation Required:</strong> $\langle \mathbb{Z}, + \rangle < \langle \mathbb{R}, + \rangle$ and $\langle \mathbb{Q}^+, \cdot \rangle < \langle \mathbb{R}^+, \cdot \rangle$, but $\langle \mathbb{Q}^+, \cdot \rangle \not\le \langle \mathbb{R}, + \rangle$ because the operations differ!<br>
+          &bull; <strong>Roots of Unity Chain (Ex 5.5 &amp; 5.17):</strong> $U_n \le U \le \mathbb{C}^*$, where $U_n = \{z \in \mathbb{C} \mid z^n = 1\}$ is finite and closed ($z_1^n z_2^n = 1$), so $U_n \le \mathbb{C}^*$ by Theorem 5.16.<br>
+          &bull; <strong>Matrices of Determinant 1 (Ex 5.14):</strong> $T = \{A \in GL(n,\mathbb{C}) \mid \det(A)=1\} \le GL(n,\mathbb{C})$ by Theorem 5.12 since $\det(AB)=\det(A)\det(B)=1$, $\det(I_n)=1$, and $\det(A^{-1})=1$.<br>
+          &bull; <strong>$\mathbb{Z}_4$ vs Klein 4-Group $V$ (Ex 5.7):</strong> In $\mathbb{Z}_4 = \{0,1,2,3\}$, the only nontrivial proper subgroup is $\{0,2\}$ ($\{0,3\}$ is not closed since $3+3=2$). In $V = \{e,a,b,c\}$ (where $a^2=b^2=c^2=e$ and $ab=c$), there are <strong>three</strong> nontrivial proper subgroups: $\{e,a\}, \{e,b\}, \{e,c\}$ ($\{e,a,b\}$ is not closed since $ab=c$).
+        </p>
+      </div>
+
+      <!-- STEP-BY-STEP DERIVATION 6: Proof of Theorem 5.15 (One-Step Subgroup Test) -->
+      <div class="derivation-box" id="deriv-aa-2" data-deriv-id="aa2"></div>
+
+      <div class="omr-section" data-omr-group="aa">
+        <div class="omr-header">
+          <span><span class="material-icons-outlined" style="vertical-align:middle;font-size:18px;">quiz</span> Concept 2.6 OMR Check</span>
+          <span>Equal-Weight Randomized Options</span>
+        </div>
+        <div class="omr-question-card" data-qid="aa-6-1"></div>
+        <div class="omr-question-card" data-qid="aa-6-2"></div>
+      </div>
+    </article>
+
+    <!-- 2.7 CYCLIC SUBGROUPS AND GENERATORS (5.17 - 5.26) + 3D INTERACTIVE TOUCH VIEW -->
+    <article id="aa-sec7" class="study-card">
+      <div class="card-header-bar">
+        <div class="card-title-group">
+          <span class="material-icons-outlined">autorenew</span>
+          <h3>2.7 Cyclic Subgroups and Generators</h3>
+        </div>
+        <span class="section-tag">Fraleigh Section 5 (5.19–5.26) / Syllabus Unit 8</span>
+      </div>
+
+      <p class="simple-text">
+        If we pick a single element $a \in G$ and take all its integer powers $a^n$ ($n \in \mathbb{Z}$, where $a^0 = e$ and $a^{-n} = (a^{-1})^n$; written $na$ in additive notation), we automatically get a subgroup of $G$!
+      </p>
+
+      <div class="box-grid">
+        <div class="info-box thm-box">
+          <div class="info-box-title"><span class="material-icons-outlined">stars</span>Theorem 5.19, Def 5.20 &amp; Def 5.22</div>
+          <p class="simple-text">
+            <strong>Theorem 5.19 &amp; Def 5.20:</strong> For any $a \in G$, the set
+            $$\langle a \rangle = \{a^n \mid n \in \mathbb{Z}\}$$
+            is a subgroup of $G$, called the <strong>cyclic subgroup of $G$ generated by $a$</strong>, and it is the <strong>smallest</strong> subgroup of $G$ containing $a$.<br>
+            <strong>Definition 5.22 (Generator &amp; Cyclic Group):</strong> An element $a$ <strong>generates</strong> $G$ if $\langle a \rangle = G$. A group $G$ is <strong>cyclic</strong> if there is some element $a \in G$ that generates $G$.
+          </p>
+        </div>
+
+        <div class="info-box def-box">
+          <div class="info-box-title"><span class="material-icons-outlined">playlist_add_check</span>Book Examples 5.21 – 5.26 &amp; Minimal vs Smallest</div>
+          <p class="simple-text">
+            &bull; <strong>Minimal vs Smallest (Footnote p. 55):</strong> In the Klein 4-group $V$, $\{e,a\}, \{e,b\}, \{e,c\}$ are all <em>minimal</em> nontrivial subgroups (no smaller nontrivial subgroup sits inside them), but $V$ has <em>no smallest</em> nontrivial subgroup!<br>
+            &bull; <strong>Ex 5.23:</strong> $\mathbb{Z}_4$ is cyclic with generators $1$ and $3$ ($\langle 1 \rangle = \langle 3 \rangle = \mathbb{Z}_4$, while $\langle 2 \rangle = \{0,2\}$). The Klein 4-group $V$ is <strong>not cyclic</strong> because $\langle a \rangle, \langle b \rangle, \langle c \rangle$ only have 2 elements.<br>
+            &bull; <strong>Ex 5.24 &amp; 5.25:</strong> $\langle \mathbb{Z}, + \rangle$ is cyclic with generators $1$ and $-1$ only; $\langle n \rangle = n\mathbb{Z}$ (note $6\mathbb{Z} < 3\mathbb{Z}$). $\mathbb{Z}_n$ is cyclic ($1$ and $n-1$ are always generators).<br>
+            &bull; <strong>Ex 5.26:</strong> $U_n = \langle \zeta \rangle$ with $\zeta = \cos\frac{2\pi}{n} + i\sin\frac{2\pi}{n}$ is cyclic!
+          </p>
+        </div>
+      </div>
+
+
+      <div class="omr-section" data-omr-group="aa">
+        <div class="omr-header">
+          <span><span class="material-icons-outlined" style="vertical-align:middle;font-size:18px;">quiz</span> Concept 2.7 OMR Check</span>
+          <span>Equal-Weight Randomized Options</span>
+        </div>
+        <div class="omr-question-card" data-qid="aa-7-1"></div>
+        <div class="omr-question-card" data-qid="aa-7-2"></div>
+      </div>
+    </article>
+
+  </main>
+
+  <!-- =========================================================================
+       JAVASCRIPT: OMR ENGINE (EQUAL-WEIGHT RANDOMIZED), DERIVATION ENGINE & 3D
+       ========================================================================= -->
+  <script>
+    /***************************************************************************
+     * 1. GLOBAL PROGRESS TRACKING (Updates Top Progress Bar & Card Coverage)
+     ***************************************************************************/
+    const completedTasks = {
+      ca: new Set(),
+      aa: new Set()
+    };
+    const totalTasksCA = 14; // 10 OMR questions + 4 multi-step derivations
+    const totalTasksAA = 18; // 16 OMR questions + 2 multi-step derivations
+
+    function markTaskComplete(group, taskId) {
+      if (!completedTasks[group].has(taskId)) {
+        completedTasks[group].add(taskId);
+        updateProgressBars();
+      }
+    }
+
+    function updateProgressBars() {
+      const caDone = completedTasks.ca.size;
+      const aaDone = completedTasks.aa.size;
+      const totalDone = caDone + aaDone;
+      const grandTotal = totalTasksCA + totalTasksAA;
+
+      const globalPct = Math.round((totalDone / grandTotal) * 100);
+      document.getElementById('globalProgressFill').style.width = globalPct + '%';
+      document.getElementById('globalProgressText').textContent = globalPct + '%';
+
+      document.getElementById('caInteractiveStat').textContent = `${caDone} / ${totalTasksCA} tasks done`;
+      document.getElementById('aaInteractiveStat').textContent = `${aaDone} / ${totalTasksAA} tasks done`;
+    }
+
+    /***************************************************************************
+     * 2. OMR QUESTIONS DATABASE (STRICTLY EQUAL-WEIGHT OPTIONS & SHUFFLED)
+     * Every option in a question has balanced length & parallel structure
+     * so no option looks right simply by being longest or most detailed.
+     ***************************************************************************/
+    const omrDatabase = {
+      // Complex Analysis Recall
+      'ca-rec-1': {
+        group: 'ca',
+        q: 'In the Cartesian plane, what is the exact distance between the points $(-1, 2)$ and $(2, -2)$?',
+        options: [
+          { text: 'The distance is $5$ units because $\\sqrt{(2 - (-1))^2 + (-2 - 2)^2} = \\sqrt{9 + 16}$.', correct: true },
+          { text: 'The distance is $7$ units because $|2 - (-1)| + |-2 - 2| = 3 + 4$ along axes.', correct: false },
+          { text: 'The distance is $\\sqrt{7}$ units because $\\sqrt{(2 - 1)^2 + (-2 + 2)^2 + 6} = \\sqrt{7}$.', correct: false },
+          { text: 'The distance is $\\sqrt{13}$ units because $\\sqrt{(2 + (-1))^2 + (-2 - 2)^2} = \\sqrt{1 + 12}$.', correct: false }
+        ],
+        explanation: 'By the distance formula, $\\sqrt{(2 - (-1))^2 + (-2 - 2)^2} = \\sqrt{3^2 + (-4)^2} = \\sqrt{25} = 5$.'
+      },
+      'ca-rec-2': {
+        group: 'ca',
+        q: 'Which trigonometric addition identity is completely valid for all real angles $A$ and $B$?',
+        options: [
+          { text: '$\\cos(A + B) = \\cos A\\cos B - \\sin A\\sin B$ and $\\sin(A + B) = \\sin A\\cos B + \\cos A\\sin B$.', correct: true },
+          { text: '$\\cos(A + B) = \\cos A\\cos B + \\sin A\\sin B$ and $\\sin(A + B) = \\sin A\\cos B - \\cos A\\sin B$.', correct: false },
+          { text: '$\\cos(A + B) = \\sin A\\cos B - \\cos A\\sin B$ and $\\sin(A + B) = \\cos A\\cos B + \\sin A\\sin B$.', correct: false },
+          { text: '$\\cos(A + B) = \\cos A\\sin B + \\sin A\\cos B$ and $\\sin(A + B) = \\sin A\\sin B - \\cos A\\cos B$.', correct: false }
+        ],
+        explanation: 'The cosine of a sum has a minus sign ($\\cos A\\cos B - \\sin A\\sin B$), while the sine of a sum has a plus sign.'
+      },
+
+      // Concept 1.1
+      'ca-1-1': {
+        group: 'ca',
+        q: 'For the complex number $z = (2 + 4i)(-3 + 8i)$, what are the values of $\\text{Re}(z)$ and $\\text{Im}(z)$?',
+        options: [
+          { text: 'The real part is $\\text{Re}(z) = -38$ and the imaginary part is $\\text{Im}(z) = 4$.', correct: true },
+          { text: 'The real part is $\\text{Re}(z) = -38$ and the imaginary part is $\\text{Im}(z) = 4i$.', correct: false },
+          { text: 'The real part is $\\text{Re}(z) = 26$ and the imaginary part is $\\text{Im}(z) = -4$.', correct: false },
+          { text: 'The real part is $\\text{Re}(z) = -6$ and the imaginary part is $\\text{Im}(z) = 32$.', correct: false }
+        ],
+        explanation: '$(2+4i)(-3+8i) = -6 + 16i - 12i + 32i^2 = -38 + 4i$. Remember $\\text{Im}(z)$ is the real number $4$, never $4i$.'
+      },
+      'ca-1-2': {
+        group: 'ca',
+        q: 'What is the multiplicative inverse (reciprocal) $z^{-1}$ of $z = 2 - 3i$ written in the standard form $a + ib$?',
+        options: [
+          { text: 'The multiplicative inverse is $z^{-1} = \\frac{2}{13} + \\frac{3}{13}i$ since $z\\bar{z} = 2^2 + (-3)^2 = 13$.', correct: true },
+          { text: 'The multiplicative inverse is $z^{-1} = \\frac{2}{13} - \\frac{3}{13}i$ since $z\\bar{z} = 2^2 + (-3)^2 = 13$.', correct: false },
+          { text: 'The multiplicative inverse is $z^{-1} = \\frac{2}{5} + \\frac{3}{5}i$ since $z\\bar{z} = 2^2 - (-3)^2 = -5$.', correct: false },
+          { text: 'The multiplicative inverse is $z^{-1} = -\\frac{2}{13} + \\frac{3}{13}i$ since $-z = -2 + 3i$ is used.', correct: false }
+        ],
+        explanation: 'Multiplying numerator and denominator of $1/(2-3i)$ by the conjugate $2+3i$ gives $(2+3i)/(4+9) = \\frac{2}{13} + \\frac{3}{13}i$.'
+      },
+
+      // Concept 1.2
+      'ca-2-1': {
+        group: 'ca',
+        q: 'Which geometric set in the complex plane is described by the modulus equation $|z| = |z - i|$?',
+        options: [
+          { text: 'The horizontal line $y = \\frac{1}{2}$ consisting of all points $z = x + \\frac{1}{2}i$ equidistant from $0$ and $i$.', correct: true },
+          { text: 'The vertical line $x = \\frac{1}{2}$ consisting of all points $z = \\frac{1}{2} + iy$ equidistant from $0$ and $1$.', correct: false },
+          { text: 'The circle of radius $1$ centered at $z_0 = i$ passing through the origin $(0,0)$ in the plane.', correct: false },
+          { text: 'The diagonal line $y = x$ passing through the origin with equal real and imaginary parts.', correct: false }
+        ],
+        explanation: 'Squaring $|z| = |z-i|$ gives $x^2 + y^2 = x^2 + (y-1)^2 \\implies 2y = 1 \\implies y = 1/2$, a horizontal line.'
+      },
+      'ca-2-2': {
+        group: 'ca',
+        q: 'Using the reverse triangle inequality, what is the upper bound for $\\left|\\frac{-1}{z^4 - 5z^2 + 6}\\right|$ when $|z| = 2$?',
+        options: [
+          { text: 'The upper bound is $\\frac{1}{2}$ because $|(z^2-3)(z^2-2)| \\ge (|z|^2-3)(|z|^2-2) = (1)(2) = 2$.', correct: true },
+          { text: 'The upper bound is $\\frac{1}{6}$ because $|(z^2-3)(z^2-2)| \\ge (|z|^2-1)(|z|^2-2) = (3)(2) = 6$.', correct: false },
+          { text: 'The upper bound is $\\frac{1}{12}$ because $|z^4 - 5z^2 + 6| \\ge |z|^4 - 5|z|^2 - 6 = 16 - 4 = 12$.', correct: false },
+          { text: 'The upper bound is $\\frac{1}{42}$ because $|z^4 - 5z^2 + 6| \\le |z|^4 + 5|z|^2 + 6 = 16 + 26 = 42$.', correct: false }
+        ],
+        explanation: 'Factor $z^4 - 5z^2 + 6 = (z^2-3)(z^2-2)$. For $|z|=2$, $|z^2-3| \\ge ||z|^2-3| = 1$ and $|z^2-2| \\ge ||z|^2-2| = 2$, so the denominator is at least $1 \\times 2 = 2$, giving upper bound $1/2$.'
+      },
+
+      // Concept 1.3
+      'ca-3-1': {
+        group: 'ca',
+        q: 'What is the polar form of $z = -\\sqrt{3} - i$ written using its principal argument $\\text{Arg}(z) \\in (-\\pi, \\pi]$?',
+        options: [
+          { text: '$z = 2\\left[\\cos\\left(-\\frac{5\\pi}{6}\\right) + i\\sin\\left(-\\frac{5\\pi}{6}\\right)\\right]$ because $z$ lies in the third quadrant.', correct: true },
+          { text: '$z = 2\\left[\\cos\\left(\\frac{7\\pi}{6}\\right) + i\\sin\\left(\\frac{7\\pi}{6}\\right)\\right]$ because $\\frac{7\\pi}{6}$ lies inside $(-\\pi, \\pi]$.', correct: false },
+          { text: '$z = 2\\left[\\cos\\left(\\frac{\\pi}{6}\\right) + i\\sin\\left(\\frac{\\pi}{6}\\right)\\right]$ because $\\tan^{-1}(y/x) = \\tan^{-1}(1/\\sqrt{3}) = \\frac{\\pi}{6}$.', correct: false },
+          { text: '$z = 4\\left[\\cos\\left(-\\frac{5\\pi}{6}\\right) + i\\sin\\left(-\\frac{5\\pi}{6}\\right)\\right]$ because $r = (-\\sqrt{3})^2 + (-1)^2 = 4$.', correct: false }
+        ],
+        explanation: '$r = \\sqrt{3+1} = 2$. Since $z$ is in Quadrant III, the angle in $(-\\pi, \\pi]$ is $\\pi/6 - \\pi = -5\\pi/6$ (while $7\\pi/6 > \\pi$ is not the principal argument).'
+      },
+      'ca-3-2': {
+        group: 'ca',
+        q: 'Using De Moivre\'s formula, what is the exact value of $\\left(\\frac{\\sqrt{3}}{2} + \\frac{1}{2}i\\right)^3$ in standard form?',
+        options: [
+          { text: 'The value is $i$ because $\\theta = \\frac{\\pi}{6}$ and $\\cos\\left(3\\cdot\\frac{\\pi}{6}\\right) + i\\sin\\left(3\\cdot\\frac{\\pi}{6}\\right) = \\cos\\frac{\\pi}{2} + i\\sin\\frac{\\pi}{2}$.', correct: true },
+          { text: 'The value is $-1$ because $\\theta = \\frac{\\pi}{3}$ and $\\cos\\left(3\\cdot\\frac{\\pi}{3}\\right) + i\\sin\\left(3\\cdot\\frac{\\pi}{3}\\right) = \\cos\\pi + i\\sin\\pi$.', correct: false },
+          { text: 'The value is $-i$ because $\\theta = -\\frac{\\pi}{6}$ and $\\cos\\left(-\\frac{\\pi}{2}\\right) + i\\sin\\left(-\\frac{\\pi}{2}\\right) = 0 - i$.', correct: false },
+          { text: 'The value is $1$ because $\\theta = \\frac{2\\pi}{3}$ and $\\cos\\left(3\\cdot\\frac{2\\pi}{3}\\right) + i\\sin\\left(3\\cdot\\frac{2\\pi}{3}\\right) = \\cos 2\\pi$.', correct: false }
+        ],
+        explanation: 'Here $\\cos(\\pi/6) = \\sqrt{3}/2$ and $\\sin(\\pi/6) = 1/2$. By De Moivre\'s formula, cubing multiplies the angle by $3$ to give $\\pi/2$, yielding $\\cos(\\pi/2) + i\\sin(\\pi/2) = i$.'
+      },
+
+      // Concept 1.4
+      'ca-4-1': {
+        group: 'ca',
+        q: 'What are the three cube roots $w_0, w_1, w_2$ of $z = i$, and which one is the principal cube root?',
+        options: [
+          { text: '$w_0 = \\frac{\\sqrt{3}}{2} + \\frac{1}{2}i$ (principal root), $w_1 = -\\frac{\\sqrt{3}}{2} + \\frac{1}{2}i$, and $w_2 = -i$.', correct: true },
+          { text: '$w_0 = \\frac{1}{2} + \\frac{\\sqrt{3}}{2}i$ (principal root), $w_1 = -\\frac{1}{2} + \\frac{\\sqrt{3}}{2}i$, and $w_2 = i$.', correct: false },
+          { text: '$w_0 = -i$ (principal root), $w_1 = \\frac{\\sqrt{3}}{2} - \\frac{1}{2}i$, and $w_2 = -\\frac{\\sqrt{3}}{2} - \\frac{1}{2}i$.', correct: false },
+          { text: '$w_0 = 1$ (principal root), $w_1 = -\\frac{1}{2} + \\frac{\\sqrt{3}}{2}i$, and $w_2 = -\\frac{1}{2} - \\frac{\\sqrt{3}}{2}i$.', correct: false }
+        ],
+        explanation: 'With $r=1$ and $\\text{Arg}(i) = \\pi/2$, the angles are $(\\pi/2 + 2k\\pi)/3 = \\pi/6, 5\\pi/6, 3\\pi/2$, giving $w_0 = \\frac{\\sqrt{3}}{2} + \\frac{1}{2}i$ as the principal cube root.'
+      },
+      'ca-4-2': {
+        group: 'ca',
+        q: 'How are the four fourth roots $w_0, w_1, w_2, w_3$ of $z = 1 + i$ arranged in the complex plane?',
+        options: [
+          { text: 'They lie on a circle of radius $\\sqrt[8]{2}$ spaced $90^\\circ$ apart, starting at $\\text{Arg}(w_0) = \\frac{\\pi}{16}$.', correct: true },
+          { text: 'They lie on a circle of radius $\\sqrt[4]{2}$ spaced $60^\\circ$ apart, starting at $\\text{Arg}(w_0) = \\frac{\\pi}{4}$.', correct: false },
+          { text: 'They lie on a circle of radius $\\sqrt{2}$ spaced $90^\\circ$ apart, starting at $\\text{Arg}(w_0) = \\frac{\\pi}{8}$.', correct: false },
+          { text: 'They lie on the unit circle of radius $1$ spaced $45^\\circ$ apart, starting at $\\text{Arg}(w_0) = \\frac{\\pi}{16}$.', correct: false }
+        ],
+        explanation: 'Since $|1+i| = \\sqrt{2}$ and $\\text{Arg}(1+i) = \\pi/4$, the fourth roots have modulus $(\\sqrt{2})^{1/4} = \\sqrt[8]{2}$, initial angle $(\\pi/4)/4 = \\pi/16$, and spacing $2\\pi/4 = \\pi/2 = 90^\\circ$.'
+      },
+
+      // Abstract Algebra Recall
+      'aa-rec-1': {
+        group: 'aa',
+        q: 'Why does the number $0$ fail to be an identity element for subtraction $-$ on the real numbers $\\mathbb{R}$?',
+        options: [
+          { text: 'Because $a - 0 = a$ holds on the right, but $0 - a = -a \\neq a$ fails on the left side.', correct: true },
+          { text: 'Because $0 - a = a$ holds on the left, but $a - 0 = -a \\neq a$ fails on the right side.', correct: false },
+          { text: 'Because $0$ is not a member of the set of real numbers $\\mathbb{R}$ under subtraction.', correct: false },
+          { text: 'Because subtraction is commutative on $\\mathbb{R}$ and therefore has two distinct identities.', correct: false }
+        ],
+        explanation: 'Definition 1.14 requires both $a * e = a$ and $e * a = a$. For subtraction, $0$ is a right identity ($a-0=a$) but not a left identity ($0-a=-a$).'
+      },
+      'aa-rec-2': {
+        group: 'aa',
+        q: 'When does a function $f: F \\to F$ on $\\mathbb{R}$ have an inverse function $f\'$ under function composition $\\circ$?',
+        options: [
+          { text: 'Exactly when $f$ is both one-to-one (injective) and onto (surjective) on the domain $\\mathbb{R}$.', correct: true },
+          { text: 'Whenever $f(x) \\neq 0$ for all $x \\in \\mathbb{R}$, so that the reciprocal $1/f(x)$ is defined everywhere.', correct: false },
+          { text: 'Whenever $f$ is a continuous polynomial function of degree at least two on the real line.', correct: false },
+          { text: 'Every function in $F$ automatically has a composition inverse because $\\iota(x)=x$ is in $F$.', correct: false }
+        ],
+        explanation: 'As reviewed in Example 1.18, $f$ has a composition inverse $f\'$ satisfying $f \\circ f\' = f\' \\circ f = \\iota$ if and only if $f$ is one-to-one and onto.'
+      },
+
+      // Concept 2.1
+      'aa-1-1': {
+        group: 'aa',
+        q: 'Consider the subset $H = \\{n^2 \\mid n \\in \\mathbb{Z}^+\\}$ of $\\mathbb{Z}^+$. Which statement about closure of $H$ is true?',
+        options: [
+          { text: '$H$ is not closed under addition ($1+4=5 \\notin H$), but $H$ is closed under multiplication ($n^2m^2=(nm)^2$).', correct: true },
+          { text: '$H$ is closed under both addition and multiplication because sums of squares are squares.', correct: false },
+          { text: '$H$ is closed under addition ($1+4=5 \\in H$), but $H$ is not closed under multiplication.', correct: false },
+          { text: '$H$ fails to be closed under multiplication because $(2^2)(3^2) = 36$ is not in $H$.', correct: false }
+        ],
+        explanation: 'In Example 1.6, $1, 4 \\in H$ but $1+4=5 \\notin H$. However, for $r=n^2$ and $s=m^2$, $rs = (nm)^2 \\in H$, so $H$ is closed under multiplication.'
+      },
+      'aa-1-2': {
+        group: 'aa',
+        q: 'Test the rule $a * b = a/b$ on the three sets $\\mathbb{Q}$, $\\mathbb{Q}^*$ (nonzero rationals), and $\\mathbb{Z}^+$. Where is $*$ a binary operation?',
+        options: [
+          { text: 'Only on $\\mathbb{Q}^*$; on $\\mathbb{Q}$ it is undefined at $b=0$, and on $\\mathbb{Z}^+$ it is not closed ($1/2 \\notin \\mathbb{Z}^+$).', correct: true },
+          { text: 'On both $\\mathbb{Q}$ and $\\mathbb{Q}^*$, because rational numbers are always closed under division.', correct: false },
+          { text: 'On $\\mathbb{Z}^+$ and $\\mathbb{Q}^*$, because positive integers are never equal to zero in the denominator.', correct: false },
+          { text: 'On none of the three sets, because division is not associative and therefore not an operation.', correct: false }
+        ],
+        explanation: 'See Example 1.26: On $\\mathbb{Q}$, $2*0 = 2/0$ fails Condition 1; on $\\mathbb{Z}^+$, $1*2 = 1/2 \\notin \\mathbb{Z}^+$ fails Condition 2; on $\\mathbb{Q}^*$, both conditions hold!'
+      },
+
+      // Concept 2.2
+      'aa-2-1': {
+        group: 'aa',
+        q: 'On $\\mathbb{Z}^+$, let $a *\'\' b = \\min\\{a,b\\} + 2$ (Example 1.10). Which properties hold for the operation $*\'\'$?',
+        options: [
+          { text: '$*\'\'$ is commutative, but not associative since $(2 *\'\' 5) *\'\' 9 = 6 \\neq 4 = 2 *\'\' (5 *\'\' 9)$.', correct: true },
+          { text: '$*\'\'$ is associative, but not commutative since $2 *\'\' 5 = 4$ while $5 *\'\' 2 = 7$ in $\\mathbb{Z}^+$.', correct: false },
+          { text: '$*\'\'$ is both commutative and associative on $\\mathbb{Z}^+$ because $\\min\\{a,b\\}$ is associative.', correct: false },
+          { text: '$*\'\'$ is neither commutative nor associative because $\\min\\{a,b\\} + 2$ can be negative.', correct: false }
+        ],
+        explanation: '$\\min\\{a,b\\}+2 = \\min\\{b,a\\}+2$ is commutative, but $(2 *\'\' 5) *\'\' 9 = 4 *\'\' 9 = 6$ while $2 *\'\' (5 *\'\' 9) = 2 *\'\' 7 = 4$, so associativity fails.'
+      },
+      'aa-2-2': {
+        group: 'aa',
+        q: 'How can you immediately tell from a finite operation table whether the operation $*$ is commutative?',
+        options: [
+          { text: 'The table entries are symmetric about the main diagonal from top-left to bottom-right.', correct: true },
+          { text: 'Each element of the set appears exactly once in every row and every column of the table.', correct: false },
+          { text: 'The main diagonal from top-left to bottom-right consists entirely of the identity element.', correct: false },
+          { text: 'The first row and the first column of the table repeat the header elements in exact order.', correct: false }
+        ],
+        explanation: 'By the Table Test (Section 1.2), $a_i * a_j = a_j * a_i$ for all $i,j$ means entry $(i,j)$ equals entry $(j,i)$ across the main diagonal.'
+      },
+
+      // Concept 2.3
+      'aa-3-1': {
+        group: 'aa',
+        q: 'Why is the map $\\phi: \\langle \\mathbb{Z}, + \\rangle \\to \\langle \\mathbb{Z}, + \\rangle$ defined by $\\phi(n) = n + 1$ NOT a group isomorphism?',
+        options: [
+          { text: 'It is a bijection, but fails the homomorphism property: $\\phi(a+b) = a+b+1 \\neq a+b+2 = \\phi(a)+\\phi(b)$.', correct: true },
+          { text: 'It satisfies $\\phi(a+b)=\\phi(a)+\\phi(b)$, but fails to be one-to-one on the set of integers $\\mathbb{Z}$.', correct: false },
+          { text: 'It is one-to-one and a homomorphism, but fails to be onto $\\mathbb{Z}$ since $0$ has no pre-image.', correct: false },
+          { text: 'It maps the additive identity $0$ to $0$, which is not allowed for an isomorphism on $\\mathbb{Z}$.', correct: false }
+        ],
+        explanation: '$\\phi(n)=n+1$ shifts every integer (so it is 1-to-1 and onto), but $\\phi(a+b) = a+b+1$ whereas $\\phi(a)+\\phi(b) = (a+1)+(b+1) = a+b+2$.'
+      },
+      'aa-3-2': {
+        group: 'aa',
+        q: 'Which structural property proves that $\\langle \\mathbb{Q}^*, \\cdot \\rangle$ and $\\langle \\mathbb{R}^*, \\cdot \\rangle$ (or $\\langle \\mathbb{Z}_4, + \\rangle$ and Klein $V$) are NOT isomorphic?',
+        options: [
+          { text: 'In Klein $V$, every element satisfies $x * x = e$ ($4$ solutions), whereas in $\\mathbb{Z}_4$ only $0$ and $2$ satisfy $x +_4 x = 0$.', correct: true },
+          { text: 'Klein $V$ is a non-abelian group of order $4$, whereas $\\mathbb{Z}_4$ is an abelian group of order $4$.', correct: false },
+          { text: 'Klein $V$ has no identity element, whereas $\\mathbb{Z}_4$ has the unique additive identity element $0$.', correct: false },
+          { text: 'The group $\\mathbb{Z}_4$ has $4$ elements, whereas the Klein 4-group $V$ has $6$ distinct elements.', correct: false }
+        ],
+        explanation: 'Both $\\mathbb{Z}_4$ and $V$ are abelian groups of order 4, but the number of solutions to $x*x=e$ is a structural invariant: 4 solutions in $V$ vs 2 solutions ($0$ and $2$) in $\\mathbb{Z}_4$.'
+      },
+
+      // Concept 2.4
+      'aa-4-1': {
+        group: 'aa',
+        q: 'On $\\mathbb{Q}^+$, define the twisted product $a * b = \\frac{ab}{2}$ (Example 2.15). What are the identity $e$ and the inverse $a\'$ of $a$?',
+        options: [
+          { text: 'The identity element is $e = 2$, and the inverse of $a \\in \\mathbb{Q}^+$ is $a\' = \\frac{4}{a}$.', correct: true },
+          { text: 'The identity element is $e = 1$, and the inverse of $a \\in \\mathbb{Q}^+$ is $a\' = \\frac{2}{a}$.', correct: false },
+          { text: 'The identity element is $e = 2$, and the inverse of $a \\in \\mathbb{Q}^+$ is $a\' = \\frac{1}{a}$.', correct: false },
+          { text: 'The identity element is $e = \\frac{1}{2}$, and the inverse of $a \\in \\mathbb{Q}^+$ is $a\' = \\frac{4}{a}$.', correct: false }
+        ],
+        explanation: 'For $a * e = a$, we need $ae/2 = a \\implies e = 2$. Then for $a * a\' = e = 2$, we need $aa\'/2 = 2 \\implies a\' = 4/a$.'
+      },
+      'aa-4-2': {
+        group: 'aa',
+        q: 'Which of the following matrix sets forms a group under its stated operation?',
+        options: [
+          { text: 'The set $GL(n, \\mathbb{R})$ of invertible $n \\times n$ real matrices under matrix multiplication.', correct: true },
+          { text: 'The set $M_n(\\mathbb{R})$ of all $n \\times n$ real matrices under matrix multiplication.', correct: false },
+          { text: 'The set of all $n \\times n$ real matrices with determinant equal to $0$ under multiplication.', correct: false },
+          { text: 'The set $M(\\mathbb{R})$ of all real matrices of all possible dimensions under matrix addition.', correct: false }
+        ],
+        explanation: '$GL(n, \\mathbb{R})$ is closed under multiplication ($(AB)(B^{-1}A^{-1}) = I_n$), associative, has identity $I_n$, and every matrix in $GL(n,\\mathbb{R})$ has an inverse.'
+      },
+
+      // Concept 2.5
+      'aa-5-1': {
+        group: 'aa',
+        q: 'In any group $\\langle G, * \\rangle$, what are the unique solutions to the linear equations $a * x = b$ and $y * a = b$?',
+        options: [
+          { text: 'The unique solutions are $x = a\' * b$ and $y = b * a\'$, which need not be equal unless $G$ is abelian.', correct: true },
+          { text: 'The unique solutions are $x = b * a\'$ and $y = a\' * b$, which are always equal in every group $G$.', correct: false },
+          { text: 'The unique solutions are $x = a * b\'$ and $y = b\' * a$, obtained by inverting $b$ on both sides.', correct: false },
+          { text: 'The unique solutions are $x = a\' * b * a$ and $y = a * b * a\'$, by multiplying on both sides.', correct: false }
+        ],
+        explanation: 'By Theorem 2.17, multiplying $a * x = b$ on the left by $a\'$ gives $x = a\' * b$, and multiplying $y * a = b$ on the right by $a\'$ gives $y = b * a\'$.'
+      },
+      'aa-5-2': {
+        group: 'aa',
+        q: 'Up to isomorphism, how many distinct groups exist of order $1$, order $2$, order $3$, and order $4$, respectively?',
+        options: [
+          { text: 'There is $1$ group of order $1$, $1$ of order $2$, $1$ of order $3$, and $2$ of order $4$ ($\\mathbb{Z}_4$ and $V$).', correct: true },
+          { text: 'There is $1$ group of order $1$, $2$ of order $2$, $3$ of order $3$, and $4$ of order $4$ up to isomorphism.', correct: false },
+          { text: 'There is $1$ group of order $1$, $1$ of order $2$, $2$ of order $3$, and $2$ of order $4$ up to isomorphism.', correct: false },
+          { text: 'There is $1$ group of order $1$, $1$ of order $2$, $1$ of order $3$, and $1$ of order $4$ up to isomorphism.', correct: false }
+        ],
+        explanation: 'Orders 1, 2, and 3 each have only 1 possible group table up to relabelling (so 1 group each), while order 4 has exactly 2 ($\mathbb{Z}_4$ and Klein 4-group $V$).'
+      },
+
+      // Concept 2.6
+      'aa-6-1': {
+        group: 'aa',
+        q: 'According to Theorem 5.16 (Finite Subgroup Test), what is sufficient to prove a nonempty finite subset $H \\subseteq G$ is a subgroup?',
+        options: [
+          { text: 'It suffices to verify only that $H$ is closed under the binary operation of the group $G$.', correct: true },
+          { text: 'It suffices to verify only that the identity element $e$ of $G$ is contained inside $H$.', correct: false },
+          { text: 'It suffices to verify that $H$ has an even number of elements that divides the order of $G$.', correct: false },
+          { text: 'It suffices to verify that every element in $H$ commutes with every other element in $G$.', correct: false }
+        ],
+        explanation: 'By Theorem 5.16, if $H$ is a finite nonempty subset of $G$, closure under the operation of $G$ automatically guarantees that $e \\in H$ and inverses lie in $H$!'
+      },
+      'aa-6-2': {
+        group: 'aa',
+        q: 'In the group $\\mathbb{Z}_4 = \\{0, 1, 2, 3\\}$ under $+_4$, why is the subset $S = \\{0, 3\\}$ NOT a subgroup of $\\mathbb{Z}_4$?',
+        options: [
+          { text: 'Because $S$ is not closed under $+_4$: $3 +_4 3 = 2 \\notin S$ (and the inverse of $3$ is $1 \\notin S$).', correct: true },
+          { text: 'Because $S$ does not contain the additive identity element $0$ of the group $\\mathbb{Z}_4$.', correct: false },
+          { text: 'Because addition modulo $4$ is not associative when restricted to the subset $S = \\{0, 3\\}$.', correct: false },
+          { text: 'Because $\\mathbb{Z}_4$ is a simple group that has no nontrivial proper subgroups of any size.', correct: false }
+        ],
+        explanation: 'As noted in Example 5.7, $3 +_4 3 = 2 \\notin \\{0,3\\}$, so $\\{0,3\\}$ fails closure. The only nontrivial proper subgroup of $\\mathbb{Z}_4$ is $\\{0,2\\}$.'
+      },
+
+      // Concept 2.7
+      'aa-7-1': {
+        group: 'aa',
+        q: 'What are all the generators of the infinite cyclic group $\\langle \\mathbb{Z}, + \\rangle$ and the finite cyclic group $\\langle \\mathbb{Z}_4, +_4 \\rangle$?',
+        options: [
+          { text: '$\\mathbb{Z}$ has generators $1$ and $-1$ only, while $\\mathbb{Z}_4$ has generators $1$ and $3$.', correct: true },
+          { text: '$\\mathbb{Z}$ has generator $1$ only, while $\\mathbb{Z}_4$ has generators $1, 2,$ and $3$.', correct: false },
+          { text: '$\\mathbb{Z}$ has every nonzero integer as a generator, while $\\mathbb{Z}_4$ has generators $1$ and $2$.', correct: false },
+          { text: '$\\mathbb{Z}$ has generators $0, 1, -1$, while $\\mathbb{Z}_4$ has only $1$ as its unique generator.', correct: false }
+        ],
+        explanation: 'See Examples 5.23 and 5.24: In $\\mathbb{Z}$, only $\\langle 1 \\rangle = \\langle -1 \\rangle = \\mathbb{Z}$. In $\\mathbb{Z}_4$, $\\langle 1 \\rangle = \\langle 3 \\rangle = \\mathbb{Z}_4$, whereas $\\langle 2 \\rangle = \\{0,2\\}$.'
+      },
+      'aa-7-2': {
+        group: 'aa',
+        q: 'Which statement accurately explains the difference between a "minimal" subgroup and the "smallest" subgroup in Klein $V$?',
+        options: [
+          { text: '$\\{e,a\\}, \\{e,b\\}, \\{e,c\\}$ are minimal nontrivial subgroups of $V$, but $V$ has no smallest nontrivial subgroup.', correct: true },
+          { text: '$\\{e,a\\}$ is the smallest nontrivial subgroup of $V$ because $a$ is listed first in the group table.', correct: false },
+          { text: '$V$ has no minimal nontrivial subgroups, but $V$ itself is the smallest nontrivial subgroup of $V$.', correct: false },
+          { text: 'Every minimal subgroup of a group $G$ is automatically the unique smallest subgroup of $G$.', correct: false }
+        ],
+        explanation: 'A subgroup is minimal with a property if no proper subset has it; it is smallest if it is contained in EVERY subgroup with that property. Since $\\{e,a\\} \\cap \\{e,b\\} = \\{e\\}$, $V$ has no smallest nontrivial subgroup!'
+      }
+    };
+
+    // Helper: Fisher-Yates shuffle so correct answers are randomly distributed across A, B, C, D
+    function shuffleArray(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function renderAllOMRQuestions() {
+      const cards = document.querySelectorAll('.omr-question-card');
+      const letters = ['A', 'B', 'C', 'D'];
+
+      cards.forEach(card => {
+        const qid = card.getAttribute('data-qid');
+        const data = omrDatabase[qid];
+        if (!data) return;
+
+        const shuffled = shuffleArray(data.options);
+
+        let html = `<div class="omr-q-text">${data.q}</div>`;
+        html += `<div class="omr-options-list">`;
+        shuffled.forEach((opt, idx) => {
+          html += `
+            <button type="button" class="omr-option-btn" data-correct="${opt.correct}" onclick="checkOMRChoice(this, '${qid}', '${data.group}')">
+              <span class="omr-bubble">${letters[idx]}</span>
+              <span>${opt.text}</span>
+            </button>
+          `;
+        });
+        html += `</div>`;
+        html += `<div class="omr-feedback" id="fb-${qid}"></div>`;
+        card.innerHTML = html;
+      });
+    }
+
+    function checkOMRChoice(btn, qid, group) {
+      const card = btn.closest('.omr-question-card');
+      const allBtns = card.querySelectorAll('.omr-option-btn');
+      const fb = document.getElementById('fb-' + qid);
+      const isCorrect = btn.getAttribute('data-correct') === 'true';
+      const data = omrDatabase[qid];
+
+      allBtns.forEach(b => {
+        b.classList.remove('wrong-choice');
+      });
+
+      if (isCorrect) {
+        btn.classList.add('correct-choice');
+        allBtns.forEach(b => b.disabled = true);
+        fb.className = 'omr-feedback show-correct';
+        fb.innerHTML = `<span class="material-icons-outlined" style="vertical-align:middle;font-size:17px;">check_circle</span> <strong>Correct!</strong> ${data.explanation}`;
+        markTaskComplete(group, qid);
+      } else {
+        btn.classList.add('wrong-choice');
+        fb.className = 'omr-feedback show-wrong';
+        fb.innerHTML = `<span class="material-icons-outlined" style="vertical-align:middle;font-size:17px;">error_outline</span> <strong>Not quite.</strong> Try another option! Remember to check the exact definition.`;
+      }
+
+      if (window.MathJax && MathJax.typesetPromise) {
+        MathJax.typesetPromise([fb]);
+      }
+    }
+
+    /***************************************************************************
+     * 3. MULTI-STEP INTERACTIVE DERIVATIONS (WITH SVG DIAGRAMS IN STEPS)
+     ***************************************************************************/
+    const derivationsData = {
+      ca1: {
+        group: 'ca',
+        title: 'Derivation 1: Complex Division & Reciprocal Formula (Zill Section 1.1)',
+        steps: [
+          {
+            goal: 'We want to express the quotient $\\frac{z_1}{z_2} = \\frac{a_1 + ib_1}{a_2 + ib_2}$ (where $z_2 \\neq 0$) in standard form $A + iB$ by eliminating $i$ from the denominator.',
+            svg: `<svg width="380" height="80" viewBox="0 0 380 80" style="background:#fff;border-radius:8px;border:1px solid #cbd5e1;">
+              <rect x="15" y="15" width="140" height="50" rx="8" fill="#e0f2fe" stroke="#0284c7"/>
+              <text x="85" y="45" text-anchor="middle" font-size="13" font-weight="bold" fill="#0369a1">Denominator: a2 + i b2</text>
+              <path d="M165 40 L205 40" stroke="#10b981" stroke-width="2.5" marker-end="url(#arrow)"/>
+              <rect x="215" y="15" width="150" height="50" rx="8" fill="#dcfce7" stroke="#10b981"/>
+              <text x="290" y="38" text-anchor="middle" font-size="12" font-weight="bold" fill="#047857">Multiply top &amp; bottom</text>
+              <text x="290" y="54" text-anchor="middle" font-size="12" font-weight="bold" fill="#047857">by conjugate: a2 - i b2</text>
+            </svg>`,
+            question: 'Predict Step 1: What should we multiply both the numerator and denominator of $\\frac{z_1}{z_2}$ by?',
+            options: [
+              { text: 'Multiply numerator and denominator by the complex conjugate $\\bar{z}_2 = a_2 - ib_2$ to get $\\frac{z_1 \\bar{z}_2}{z_2 \\bar{z}_2}$.', correct: true },
+              { text: 'Multiply numerator and denominator by $z_2 = a_2 + ib_2$ so the denominator becomes $z_2^2$.', correct: false },
+              { text: 'Multiply numerator and denominator by the imaginary unit $i$ to cancel the imaginary part $ib_2$.', correct: false },
+              { text: 'Multiply numerator and denominator by $\\bar{z}_1 = a_1 - ib_1$ so the numerator becomes real.', correct: false }
+            ],
+            stepSummary: '<strong>Step 1:</strong> Multiply numerator and denominator by $\\bar{z}_2 = a_2 - ib_2$: $$\\frac{z_1}{z_2} = \\frac{z_1 \\bar{z}_2}{z_2 \\bar{z}_2} = \\frac{(a_1 + ib_1)(a_2 - ib_2)}{(a_2 + ib_2)(a_2 - ib_2)}$$'
+          },
+          {
+            goal: 'Next, we simplify the denominator $z_2 \\bar{z}_2 = (a_2 + ib_2)(a_2 - ib_2)$ and expand the numerator using $i^2 = -1$.',
+            svg: `<svg width="380" height="80" viewBox="0 0 380 80" style="background:#fff;border-radius:8px;border:1px solid #cbd5e1;">
+              <text x="190" y="32" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f2942">(a2 + i b2)(a2 - i b2) = a2² - i² b2² = a2² + b2²</text>
+              <text x="190" y="58" text-anchor="middle" font-size="12" fill="#047857">(Real number: sum of squares of real &amp; imaginary parts!)</text>
+            </svg>`,
+            question: 'Predict Step 2: What do the numerator $(a_1+ib_1)(a_2-ib_2)$ and denominator $(a_2+ib_2)(a_2-ib_2)$ simplify to?',
+            options: [
+              { text: 'Numerator is $(a_1a_2 + b_1b_2) + i(b_1a_2 - a_1b_2)$ and denominator is the real number $a_2^2 + b_2^2$.', correct: true },
+              { text: 'Numerator is $(a_1a_2 - b_1b_2) + i(b_1a_2 + a_1b_2)$ and denominator is the real number $a_2^2 - b_2^2$.', correct: false },
+              { text: 'Numerator is $(a_1a_2 + b_1b_2) - i(b_1a_2 + a_1b_2)$ and denominator is the complex number $a_2^2 + ib_2^2$.', correct: false },
+              { text: 'Numerator is $(a_1a_2 - b_1b_2) - i(b_1a_2 - a_1b_2)$ and denominator is the real number $a_2^2 + b_2^2$.', correct: false }
+            ],
+            stepSummary: '<strong>Step 2:</strong> Since $-ib_1(ib_2) = -i^2 b_1b_2 = +b_1b_2$ and $z_2\\bar{z}_2 = a_2^2 + b_2^2$, we get: $$\\frac{z_1}{z_2} = \\frac{a_1a_2 + b_1b_2}{a_2^2 + b_2^2} + i\\frac{b_1a_2 - a_1b_2}{a_2^2 + b_2^2}$$'
+          },
+          {
+            goal: 'Finally, set $z_1 = 1 = 1 + 0i$ and $z_2 = z = a + ib$ to obtain the general formula for the multiplicative inverse $z^{-1} = 1/z$.',
+            svg: `<svg width="380" height="75" viewBox="0 0 380 75" style="background:#fff;border-radius:8px;border:1px solid #cbd5e1;">
+              <text x="190" y="30" text-anchor="middle" font-size="13" font-weight="bold" fill="#0369a1">Reciprocal (z1 = 1):  z⁻¹ = z̄ / |z|²</text>
+              <text x="190" y="54" text-anchor="middle" font-size="12" fill="#0f2942">z⁻¹ = a / (a² + b²)  -  i [ b / (a² + b²) ]</text>
+            </svg>`,
+            question: 'Predict Step 3: Substituting $a_1 = 1, b_1 = 0$ and $z_2 = z = a + ib$, what is the reciprocal $z^{-1} = \\frac{1}{z}$?',
+            options: [
+              { text: '$z^{-1} = \\frac{\\bar{z}}{z\\bar{z}} = \\frac{a}{a^2 + b^2} - i\\frac{b}{a^2 + b^2}$, which satisfies $zz^{-1} = 1$.', correct: true },
+              { text: '$z^{-1} = \\frac{z}{z\\bar{z}} = \\frac{a}{a^2 + b^2} + i\\frac{b}{a^2 + b^2}$, which satisfies $zz^{-1} = 1$.', correct: false },
+              { text: '$z^{-1} = \\frac{1}{a} + i\\frac{1}{b}$, obtained by inverting the real and imaginary parts separately.', correct: false },
+              { text: '$z^{-1} = \\frac{a}{a^2 - b^2} - i\\frac{b}{a^2 - b^2}$, using the difference of squares in the denominator.', correct: false }
+            ],
+            stepSummary: '<strong>Step 3 (Final Formula):</strong> Setting $z_1 = 1$ gives the multiplicative inverse: $$z^{-1} = \\frac{1}{z} = \\frac{\\bar{z}}{|z|^2} = \\frac{a}{a^2 + b^2} - i\\frac{b}{a^2 + b^2}$$'
+          }
+        ]
+      },
+
+      ca2: {
+        group: 'ca',
+        title: 'Derivation 2: Analytical Proof of Triangle & Reverse Triangle Inequalities (Zill 1.2)',
+        steps: [
+          {
+            goal: 'We want to prove $|z_1 + z_2| \\le |z_1| + |z_2|$ analytically using $|z|^2 = z\\bar{z}$ (Zill Exercise 50, Section 1.2). First, expand $|z_1 + z_2|^2 = (z_1 + z_2)(\\overline{z_1 + z_2})$.',
+            svg: `<svg width="380" height="80" viewBox="0 0 380 80" style="background:#fff;border-radius:8px;border:1px solid #cbd5e1;">
+              <text x="190" y="30" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f2942">|z1 + z2|² = (z1 + z2)(z̄1 + z̄2)</text>
+              <text x="190" y="55" text-anchor="middle" font-size="12" fill="#0369a1">Note that z̄1 z2 = conjugate of (z1 z̄2)!</text>
+            </svg>`,
+            question: 'Predict Step 1: When we expand $(z_1 + z_2)(\\bar{z}_1 + \\bar{z}_2)$, how do the two middle cross-terms $z_1\\bar{z}_2 + \\bar{z}_1z_2$ combine?',
+            options: [
+              { text: 'Since $\\bar{z}_1z_2 = \\overline{z_1\\bar{z}_2}$ and $w + \\bar{w} = 2\\text{Re}(w)$, we get $|z_1+z_2|^2 = |z_1|^2 + 2\\text{Re}(z_1\\bar{z}_2) + |z_2|^2$.', correct: true },
+              { text: 'The cross-terms cancel out completely to zero, giving $|z_1+z_2|^2 = |z_1|^2 + |z_2|^2$ for all $z_1, z_2$.', correct: false },
+              { text: 'Since $w - \\bar{w} = 2i\\text{Im}(w)$, the middle terms combine into $|z_1+z_2|^2 = |z_1|^2 + 2\\text{Im}(z_1\\bar{z}_2) + |z_2|^2$.', correct: false },
+              { text: 'The cross-terms equal $2|z_1||z_2|$ for every pair of complex numbers, giving $(|z_1| + |z_2|)^2$ directly.', correct: false }
+            ],
+            stepSummary: '<strong>Step 1:</strong> Expand using $|z|^2 = z\\bar{z}$ and $z_1\\bar{z}_2 + \\overline{z_1\\bar{z}_2} = 2\\text{Re}(z_1\\bar{z}_2)$: $$|z_1 + z_2|^2 = (z_1 + z_2)(\\bar{z}_1 + \\bar{z}_2) = |z_1|^2 + 2\\text{Re}(z_1\\bar{z}_2) + |z_2|^2$$'
+          },
+          {
+            goal: 'Now use the fundamental inequality $\\text{Re}(w) \\le |\\text{Re}(w)| \\le |w|$ with $w = z_1\\bar{z}_2$ and $|\bar{z}_2| = |z_2|$ to bound the right-hand side.',
+            svg: `<svg width="380" height="80" viewBox="0 0 380 80" style="background:#fff;border-radius:8px;border:1px solid #cbd5e1;">
+              <line x1="40" y1="60" x2="180" y2="60" stroke="#0284c7" stroke-width="3"/>
+              <line x1="180" y1="60" x2="180" y2="18" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4,4"/>
+              <line x1="40" y1="60" x2="180" y2="18" stroke="#10b981" stroke-width="3"/>
+              <text x="110" y="74" font-size="11" font-weight="bold" fill="#0369a1">Re(w)</text>
+              <text x="100" y="32" font-size="11" font-weight="bold" fill="#047857">|w| (Hypotenuse ≥ Leg)</text>
+              <text x="275" y="44" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f2942">2 Re(z1 z̄2) ≤ 2 |z1||z2|</text>
+            </svg>`,
+            question: 'Predict Step 2: Replacing $2\\text{Re}(z_1\\bar{z}_2)$ by its upper bound $2|z_1\\bar{z}_2| = 2|z_1||z_2|$, what inequality do we obtain?',
+            options: [
+              { text: '$|z_1 + z_2|^2 \\le |z_1|^2 + 2|z_1||z_2| + |z_2|^2 = (|z_1| + |z_2|)^2$, so taking square roots gives $|z_1 + z_2| \\le |z_1| + |z_2|$.', correct: true },
+              { text: '$|z_1 + z_2|^2 \\ge |z_1|^2 + 2|z_1||z_2| + |z_2|^2 = (|z_1| + |z_2|)^2$, so taking square roots gives $|z_1 + z_2| \\ge |z_1| + |z_2|$.', correct: false },
+              { text: '$|z_1 + z_2|^2 \\le |z_1|^2 - 2|z_1||z_2| + |z_2|^2 = (|z_1| - |z_2|)^2$, so taking square roots gives $|z_1 + z_2| \\le ||z_1| - |z_2||$.', correct: false },
+              { text: '$|z_1 + z_2| \\le |z_1|^2 + |z_2|^2$ without taking the square root of either side of the inequality.', correct: false }
+            ],
+            stepSummary: '<strong>Step 2:</strong> Since $\\text{Re}(z_1\\bar{z}_2) \\le |z_1\\bar{z}_2| = |z_1||z_2|$: $$|z_1 + z_2|^2 \\le |z_1|^2 + 2|z_1||z_2| + |z_2|^2 = (|z_1| + |z_2|)^2 \\implies |z_1 + z_2| \\le |z_1| + |z_2|$$'
+          },
+          {
+            goal: 'Finally, to derive the Reverse Triangle Inequality $\\big||z_1| - |z_2|\\big| \\le |z_1 + z_2|$, write $z_1 = (z_1 + z_2) + (-z_2)$ and apply the Triangle Inequality.',
+            svg: `<svg width="380" height="75" viewBox="0 0 380 75" style="background:#fff;border-radius:8px;border:1px solid #cbd5e1;">
+              <text x="190" y="28" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f2942">|z1| = |(z1 + z2) + (-z2)| ≤ |z1 + z2| + |-z2|</text>
+              <text x="190" y="52" text-anchor="middle" font-size="12" font-weight="bold" fill="#b45309">⇒ |z1| - |z2| ≤ |z1 + z2|  and  |z2| - |z1| ≤ |z1 + z2|</text>
+            </svg>`,
+            question: 'Predict Step 3: How do $|z_1| - |z_2| \\le |z_1 + z_2|$ and $|z_2| - |z_1| \\le |z_1 + z_2|$ combine into a single absolute value inequality?',
+            options: [
+              { text: 'Since $\\pm(|z_1| - |z_2|) \\le |z_1 + z_2|$, we get $\\big||z_1| - |z_2|\\big| \\le |z_1 + z_2|$ (and similarly $\\le |z_1 - z_2|$).', correct: true },
+              { text: 'Adding the two inequalities together gives $0 \\le 2|z_1 + z_2|$, which proves $|z_1 + z_2| = |z_1| - |z_2|$.', correct: false },
+              { text: 'Subtracting the two inequalities gives $2(|z_1| - |z_2|) \\ge |z_1 + z_2|$, reversing the direction.', correct: false },
+              { text: 'Multiplying the two inequalities gives $||z_1|^2 - |z_2|^2| \\le |z_1 + z_2|$ for all complex numbers.', correct: false }
+            ],
+            stepSummary: '<strong>Step 3 (Reverse Triangle Inequality):</strong> Since $|z_1| - |z_2| \\le |z_1 + z_2|$ and $-(|z_1| - |z_2|) \\le |z_1 + z_2|$, we conclude: $$\\big||z_1| - |z_2|\\big| \\le |z_1 + z_2| \\quad \\text{and (replacing } z_2 \\text{ by } -z_2\\text{)} \\quad \\big||z_1| - |z_2|\\big| \\le |z_1 - z_2|$$'
+          }
+        ]
+      },
+
+      ca3: {
+        group: 'ca',
+        title: 'Derivation 3: Polar Multiplication & De Moivre\'s Formula (Zill Section 1.3)',
+        steps: [
+          {
+            goal: 'Let $z_1 = r_1(\\cos\\theta_1 + i\\sin\\theta_1)$ and $z_2 = r_2(\\cos\\theta_2 + i\\sin\\theta_2)$. We first multiply out the brackets and group the real part ($i^2 = -1$) and imaginary part.',
+            svg: `<svg width="380" height="75" viewBox="0 0 380 75" style="background:#fff;border-radius:8px;border:1px solid #cbd5e1;">
+              <text x="190" y="28" text-anchor="middle" font-size="12" font-weight="bold" fill="#0369a1">z1 z2 = r1 r2 (cos θ1 + i sin θ1)(cos θ2 + i sin θ2)</text>
+              <text x="190" y="52" text-anchor="middle" font-size="12" fill="#0f2942">Group real terms (with i² = -1) and imaginary terms (with i)</text>
+            </svg>`,
+            question: 'Predict Step 1: What do we get when we expand $(\\cos\\theta_1 + i\\sin\\theta_1)(\\cos\\theta_2 + i\\sin\\theta_2)$ and substitute $i^2 = -1$?',
+            options: [
+              { text: '$r_1r_2\\big[(\\cos\\theta_1\\cos\\theta_2 - \\sin\\theta_1\\sin\\theta_2) + i(\\sin\\theta_1\\cos\\theta_2 + \\cos\\theta_1\\sin\\theta_2)\\big]$.', correct: true },
+              { text: '$r_1r_2\\big[(\\cos\\theta_1\\cos\\theta_2 + \\sin\\theta_1\\sin\\theta_2) + i(\\sin\\theta_1\\cos\\theta_2 - \\cos\\theta_1\\sin\\theta_2)\\big]$.', correct: false },
+              { text: '$(r_1+r_2)\\big[(\\cos\\theta_1\\cos\\theta_2 - \\sin\\theta_1\\sin\\theta_2) + i(\\sin\\theta_1\\sin\\theta_2)\\big]$.', correct: false },
+              { text: '$r_1r_2\\big[(\\cos\\theta_1\\sin\\theta_2 - \\sin\\theta_1\\cos\\theta_2) + i(\\cos\\theta_1\\cos\\theta_2 + \\sin\\theta_1\\sin\\theta_2)\\big]$.', correct: false }
+            ],
+            stepSummary: '<strong>Step 1:</strong> Expand the product: $$z_1z_2 = r_1r_2\\big[(\\cos\\theta_1\\cos\\theta_2 - \\sin\\theta_1\\sin\\theta_2) + i(\\sin\\theta_1\\cos\\theta_2 + \\cos\\theta_1\\sin\\theta_2)\\big]$$'
+          },
+          {
+            goal: 'Now apply the Plus Two trigonometry addition formulas to compress the real and imaginary brackets, and then set $z_1 = z_2 = \\dots = z$ ($n$ times) with $r=1$.',
+            svg: `<svg width="380" height="80" viewBox="0 0 380 80" style="background:#fff;border-radius:8px;border:1px solid #cbd5e1;">
+              <text x="190" y="28" text-anchor="middle" font-size="12" font-weight="bold" fill="#047857">Angles Add:  z1 z2 = r1 r2 [ cos(θ1 + θ2) + i sin(θ1 + θ2) ]</text>
+              <text x="190" y="54" text-anchor="middle" font-size="12" font-weight="bold" fill="#b45309">Repeat n times (r=1): (cos θ + i sin θ)ⁿ = cos(nθ) + i sin(nθ)</text>
+            </svg>`,
+            question: 'Predict Step 2: How does the addition formula simplify $z_1z_2$, and what results when $z_1 = z_2 = \\dots = z$ ($n$ times)?',
+            options: [
+              { text: '$z_1z_2 = r_1r_2[\\cos(\\theta_1+\\theta_2)+i\\sin(\\theta_1+\\theta_2)]$, giving $z^n = r^n(\\cos n\\theta + i\\sin n\\theta)$ and De Moivre\'s formula.', correct: true },
+              { text: '$z_1z_2 = r_1r_2[\\cos(\\theta_1\\theta_2)+i\\sin(\\theta_1\\theta_2)]$, giving $z^n = r^n(\\cos(\\theta^n) + i\\sin(\\theta^n))$.', correct: false },
+              { text: '$z_1z_2 = r_1r_2[\\cos(\\theta_1-\\theta_2)+i\\sin(\\theta_1-\\theta_2)]$, giving $z^n = nr(\\cos n\\theta + i\\sin n\\theta)$.', correct: false },
+              { text: '$z_1z_2 = (r_1+r_2)[\\cos(\\theta_1+\\theta_2)+i\\sin(\\theta_1+\\theta_2)]$, giving $z^n = nr(\\cos n\\theta + i\\sin n\\theta)$.', correct: false }
+            ],
+            stepSummary: '<strong>Step 2 (Polar Product &amp; De Moivre):</strong> $$z_1z_2 = r_1r_2[\\cos(\\theta_1+\\theta_2) + i\\sin(\\theta_1+\\theta_2)] \\implies z^n = r^n(\\cos n\\theta + i\\sin n\\theta)$$ Setting $r=1$ gives <strong>De Moivre\'s Formula</strong>: $(\\cos\\theta + i\\sin\\theta)^n = \\cos n\\theta + i\\sin n\\theta$.'
+          }
+        ]
+      },
+
+      ca4: {
+        group: 'ca',
+        title: 'Derivation 4: Formula for the n Distinct n-th Roots of z (Zill Section 1.4)',
+        steps: [
+          {
+            goal: 'To solve $w^n = z$ for an unknown root $w = \\rho(\\cos\\phi + i\\sin\\phi)$ given $z = r(\\cos\\theta + i\\sin\\theta)$, we first apply De Moivre\'s formula to $w^n$.',
+            svg: `<svg width="380" height="75" viewBox="0 0 380 75" style="background:#fff;border-radius:8px;border:1px solid #cbd5e1;">
+              <text x="190" y="30" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f2942">wⁿ = z   ⇒   ρⁿ (cos nφ + i sin nφ) = r (cos θ + i sin θ)</text>
+              <text x="190" y="54" text-anchor="middle" font-size="12" fill="#0369a1">Equate moduli (ρⁿ = r) and equate angles up to 2kπ!</text>
+            </svg>`,
+            question: 'Predict Step 1: Equating the modulus and argument on both sides of $\\rho^n(\\cos n\\phi + i\\sin n\\phi) = r(\\cos\\theta + i\\sin\\theta)$, what equations must $\\rho$ and $\\phi$ satisfy?',
+            options: [
+              { text: '$\\rho^n = r \\implies \\rho = \\sqrt[n]{r}$, and $n\\phi = \\theta + 2k\\pi \\implies \\phi = \\frac{\\theta + 2k\\pi}{n}$ for integer $k$.', correct: true },
+              { text: '$n\\rho = r \\implies \\rho = \\frac{r}{n}$, and $\\phi^n = \\theta + 2k\\pi \\implies \\phi = \\sqrt[n]{\\theta + 2k\\pi}$ for integer $k$.', correct: false },
+              { text: '$\\rho^n = r \\implies \\rho = \\sqrt[n]{r}$, and $n\\phi = \\theta$ only, giving a single angle $\\phi = \\frac{\\theta}{n}$ with $k=0$.', correct: false },
+              { text: '$\\rho = r^n$ and $\\phi = n\\theta + 2k\\pi$ for integer $k$, by multiplying the modulus and angle by $n$.', correct: false }
+            ],
+            stepSummary: '<strong>Step 1:</strong> Equating moduli gives $\\rho = \\sqrt[n]{r}$. Since $\\cos n\\phi = \\cos\\theta$ and $\\sin n\\phi = \\sin\\theta$, $n\\phi$ and $\\theta$ differ by an integer multiple of $2\\pi$: $$n\\phi = \\theta + 2k\\pi \\implies \\phi_k = \\frac{\\theta + 2k\\pi}{n}$$'
+          },
+          {
+            goal: 'Now determine which integer values of $k$ give distinct roots $w_k$ before the values start repeating due to $2\\pi$-periodicity.',
+            svg: `<svg width="380" height="80" viewBox="0 0 380 80" style="background:#fff;border-radius:8px;border:1px solid #cbd5e1;">
+              <text x="190" y="28" text-anchor="middle" font-size="12" font-weight="bold" fill="#047857">k = 0, 1, 2, ..., n - 1  give n distinct angles spaced by 2π/n</text>
+              <text x="190" y="52" text-anchor="middle" font-size="12" fill="#475569">When k = n + m:  (θ + 2(n+m)π)/n = (θ + 2mπ)/n + 2π (Repeats!)</text>
+            </svg>`,
+            question: 'Predict Step 2: Why do we stop at $k = 0, 1, 2, \\dots, n-1$ in the formula for $w_k$?',
+            options: [
+              { text: 'Because for $k = n + m$, the angle $\\frac{\\theta + 2(n+m)\\pi}{n} = \\frac{\\theta + 2m\\pi}{n} + 2\\pi$ repeats the root $w_m$.', correct: true },
+              { text: 'Because for $k \\ge n$, the positive real modulus $\\sqrt[n]{r}$ becomes negative and invalid in polar form.', correct: false },
+              { text: 'Because cosine and sine are only defined for angles less than $\\pi$ radians in the complex plane.', correct: false },
+              { text: 'Because substituting $k = n$ makes the denominator $n$ equal to zero in the root formula.', correct: false }
+            ],
+            stepSummary: '<strong>Step 2 (Complete Root Formula):</strong> For $k = 0, 1, 2, \\dots, n-1$, we get the $n$ distinct $n$-th roots of $z$: $$w_k = \\sqrt[n]{r}\\left[\\cos\\left(\\frac{\\theta + 2k\\pi}{n}\\right) + i\\sin\\left(\\frac{\\theta + 2k\\pi}{n}\\right)\\right], \\quad k = 0, 1, \\dots, n-1$$'
+          }
+        ]
+      },
+
+      aa1: {
+        group: 'aa',
+        title: 'Derivation 5: Left Cancellation (Thm 2.16) & Shoe-Sock Inverse Rule (Cor 2.19)',
+        steps: [
+          {
+            goal: 'Suppose $a * b = a * c$ in a group $\\langle G, * \\rangle$. We want to prove $b = c$ using only the three group axioms $\\mathcal{G}_1, \\mathcal{G}_2, \\mathcal{G}_3$.',
+            svg: `<svg width="380" height="75" viewBox="0 0 380 75" style="background:#fff;border-radius:8px;border:1px solid #cbd5e1;">
+              <text x="190" y="28" text-anchor="middle" font-size="12" font-weight="bold" fill="#0369a1">Given:  a * b = a * c   in Group G</text>
+              <text x="190" y="52" text-anchor="middle" font-size="12" fill="#0f2942">Use G3 (inverse a' of a), then G1 (associativity), then G2 (identity e)</text>
+            </svg>`,
+            question: 'Predict Step 1: If $a\'$ is an inverse of $a$ (Axiom $\\mathcal{G}_3$), what is the exact sequence of steps to isolate $b = c$?',
+            options: [
+              { text: 'Operate on the left by $a\'$: $a\'*(a*b) = a\'*(a*c) \\implies (a\'*a)*b = (a\'*a)*c \\implies e*b = e*c \\implies b = c$.', correct: true },
+              { text: 'Divide both sides by the real number $a$: $\\frac{a*b}{a} = \\frac{a*c}{a} \\implies b = c$ by arithmetic division.', correct: false },
+              { text: 'Operate on the right by $a\'$: $(a*b)*a\' = (a*c)*a\' \\implies a*(b*a\') = a*(c*a\') \\implies b = c$ directly.', correct: false },
+              { text: 'Subtract $a$ from both sides of the equation: $(a*b) - a = (a*c) - a \\implies b = c$ in $G$.', correct: false }
+            ],
+            stepSummary: '<strong>Step 1 (Left Cancellation Proof):</strong> Let $a\'$ be an inverse of $a$ ($\\mathcal{G}_3$). Then: $$a\' * (a * b) = a\' * (a * c) \\stackrel{\\mathcal{G}_1}{\\implies} (a\' * a) * b = (a\' * a) * c \\stackrel{\\mathcal{G}_3}{\\implies} e * b = e * c \\stackrel{\\mathcal{G}_2}{\\implies} b = c$$'
+          },
+          {
+            goal: 'Now we prove Corollary 2.19: $(a * b)\' = b\' * a\'$. By uniqueness of inverses (Theorem 2.18), we test whether $(a * b) * (b\' * a\') = e$.',
+            svg: `<svg width="380" height="80" viewBox="0 0 380 80" style="background:#fff;border-radius:8px;border:1px solid #cbd5e1;">
+              <rect x="20" y="18" width="150" height="44" rx="8" fill="#fef3c7" stroke="#d97706"/>
+              <text x="95" y="45" text-anchor="middle" font-size="12" font-weight="bold" fill="#b45309">(a * b) * (b' * a')</text>
+              <path d="M178 40 L208 40" stroke="#10b981" stroke-width="2"/>
+              <rect x="215" y="18" width="145" height="44" rx="8" fill="#dcfce7" stroke="#10b981"/>
+              <text x="287" y="38" text-anchor="middle" font-size="12" font-weight="bold" fill="#047857">Pair middle b * b' = e</text>
+              <text x="287" y="54" text-anchor="middle" font-size="12" font-weight="bold" fill="#047857">then a * a' = e !</text>
+            </svg>`,
+            question: 'Predict Step 2: How does associativity collapse $(a * b) * (b\' * a\')$ down to the identity $e$?',
+            options: [
+              { text: '$(a * b) * (b\' * a\') = a * (b * b\') * a\' = a * e * a\' = a * a\' = e$, so $b\' * a\'$ is the unique inverse of $a * b$.', correct: true },
+              { text: '$(a * b) * (a\' * b\') = (a * a\') * (b * b\') = e * e = e$ without needing commutativity in $G$.', correct: false },
+              { text: '$(a * b) * (b\' * a\') = (a * b\') * (b * a\') = e * e = e$ because $a$ and $b\'$ are inverses.', correct: false },
+              { text: '$(a * b)\' = a\' * b\'$ because the inverse symbol distributes directly across any binary operation.', correct: false }
+            ],
+            stepSummary: '<strong>Step 2 (Proof of Corollary 2.19):</strong> By associativity: $$(a * b) * (b\' * a\') = a * (b * b\') * a\' = a * e * a\' = a * a\' = e$$ By Theorem 2.18 (uniqueness of inverse), $(a * b)\' = b\' * a\'$.'
+          }
+        ]
+      },
+
+      aa2: {
+        group: 'aa',
+        title: 'Derivation 6: Proof of One-Step Subgroup Test (Theorem 5.15 / Exercise 51)',
+        steps: [
+          {
+            goal: 'Assume $H$ is a nonempty subset of $G$ such that for all $a, b \\in H$, $ab^{-1} \\in H$. We must prove the 3 conditions of Theorem 5.12: (1) $e \\in H$, (2) $x^{-1} \\in H$, and (3) $xy \\in H$. First, use the fact that $H$ is nonempty!',
+            svg: `<svg width="380" height="75" viewBox="0 0 380 75" style="background:#fff;border-radius:8px;border:1px solid #cbd5e1;">
+              <text x="190" y="28" text-anchor="middle" font-size="12" font-weight="bold" fill="#0369a1">Given:  a, b ∈ H  ⇒  a b⁻¹ ∈ H   (and H ≠ ∅)</text>
+              <text x="190" y="52" text-anchor="middle" font-size="12" fill="#0f2942">Pick any x ∈ H. What happens if we choose both a = x and b = x?</text>
+            </svg>`,
+            question: 'Predict Step 1: Since $H \\neq \\emptyset$, pick some $x \\in H$. How do we prove that the identity $e$ belongs to $H$?',
+            options: [
+              { text: 'Set $a = x$ and $b = x$ in the hypothesis $ab^{-1} \\in H$ to obtain $xx^{-1} = e \\in H$.', correct: true },
+              { text: 'Set $a = e$ and $b = e$ in the hypothesis $ab^{-1} \\in H$ assuming $e$ is already inside $H$.', correct: false },
+              { text: 'Multiply $x$ by itself $n$ times until $x^n = e$ by the finite group order property.', correct: false },
+              { text: 'Set $a = x$ and $b = x^{-1}$ in the hypothesis to obtain $x(x^{-1})^{-1} = x^2 = e \\in H$.', correct: false }
+            ],
+            stepSummary: '<strong>Step 1 (Identity $e \\in H$):</strong> Since $H \\neq \\emptyset$, choose $x \\in H$. Taking $a = x$ and $b = x$ in $ab^{-1} \\in H$ gives: $$x x^{-1} = e \\in H$$'
+          },
+          {
+            goal: 'Now we know $e \\in H$. For any $x \\in H$, we want to prove its inverse $x^{-1}$ is in $H$, and then for any $x, y \\in H$, we want to prove the product $xy$ is in $H$.',
+            svg: `<svg width="380" height="80" viewBox="0 0 380 80" style="background:#fff;border-radius:8px;border:1px solid #cbd5e1;">
+              <text x="190" y="28" text-anchor="middle" font-size="12" font-weight="bold" fill="#047857">1) Inverses: Take a = e ∈ H and b = x ∈ H  ⇒  e x⁻¹ = x⁻¹ ∈ H</text>
+              <text x="190" y="54" text-anchor="middle" font-size="12" font-weight="bold" fill="#b45309">2) Closure: Take a = x ∈ H and b = y⁻¹ ∈ H  ⇒  x (y⁻¹)⁻¹ = x y ∈ H</text>
+            </svg>`,
+            question: 'Predict Step 2: How do we choose $a$ and $b$ in $ab^{-1} \\in H$ to prove (i) $x^{-1} \\in H$ and (ii) closure $xy \\in H$?',
+            options: [
+              { text: 'Take $a=e, b=x$ to get $ex^{-1} = x^{-1} \\in H$; then for $x,y \\in H$, take $a=x, b=y^{-1} \\in H$ to get $x(y^{-1})^{-1} = xy \\in H$.', correct: true },
+              { text: 'Take $a=x, b=e$ to get $xe^{-1} = x^{-1} \\in H$; then take $a=x, b=y$ to get $xy^{-1} = xy \\in H$ directly.', correct: false },
+              { text: 'Take $a=x^{-1}, b=e$ to get $x^{-1} \\in H$; then use commutativity $xy = yx$ to prove closure in $H$.', correct: false },
+              { text: 'Closure $xy \\in H$ holds automatically without needing to show $y^{-1} \\in H$ first.', correct: false }
+            ],
+            stepSummary: '<strong>Step 2 (Inverses &amp; Closure):</strong><br>&bull; Since $e, x \\in H$, setting $a = e, b = x$ gives $ex^{-1} = x^{-1} \\in H$.<br>&bull; For $x, y \\in H$, we now know $y^{-1} \\in H$. Setting $a = x$ and $b = y^{-1}$ gives $x(y^{-1})^{-1} = xy \\in H$. By Theorem 5.12, $H \\le G$!'
+          }
+        ]
+      }
+    };
+
+    const derivState = {};
+
+    function initDerivations() {
+      Object.keys(derivationsData).forEach(did => {
+        derivState[did] = 0;
+        renderDerivationStep(did);
+      });
+    }
+
+    function renderDerivationStep(did) {
+      const container = document.querySelector(`[data-deriv-id="${did}"]`);
+      if (!container) return;
+      const data = derivationsData[did];
+      const stepIdx = derivState[did];
+      const totalSteps = data.steps.length;
+
+      if (stepIdx >= totalSteps) {
+        // Derivation Completed! Show all steps together
+        let summaryHtml = `
+          <div class="derivation-top">
+            <div class="derivation-title">
+              <span class="material-icons-outlined">task_alt</span>
+              ${data.title} &mdash; Complete!
+            </div>
+            <span class="derivation-step-counter">All ${totalSteps} Steps Unlocked</span>
+          </div>
+          <div class="derivation-complete-summary visible">
+            <div style="font-weight:800;color:#065f46;margin-bottom:10px;display:flex;align-items:center;gap:6px;">
+              <span class="material-icons-outlined">auto_stories</span> Complete Step-by-Step Derivation Summary:
+            </div>
+        `;
+        data.steps.forEach((st, idx) => {
+          summaryHtml += `
+            <div class="summary-step-item">
+              ${st.stepSummary}
+              <div class="derivation-svg-slot">${st.svg}</div>
+            </div>
+          `;
+        });
+        summaryHtml += `</div>`;
+        container.innerHTML = summaryHtml;
+        markTaskComplete(data.group, 'deriv-' + did);
+        if (window.MathJax && MathJax.typesetPromise) {
+          MathJax.typesetPromise([container]);
+        }
+        return;
+      }
+
+      const currentStep = data.steps[stepIdx];
+      const shuffledOpts = shuffleArray(currentStep.options);
+      const letters = ['A', 'B', 'C', 'D'];
+
+      let html = `
+        <div class="derivation-top">
+          <div class="derivation-title">
+            <span class="material-icons-outlined">account_tree</span>
+            ${data.title}
+          </div>
+          <span class="derivation-step-counter">Step ${stepIdx + 1} of ${totalSteps}</span>
+        </div>
+        <div class="derivation-goal-banner">
+          <strong>What we will do in Step ${stepIdx + 1}:</strong> ${currentStep.goal}
+        </div>
+        <div class="derivation-svg-slot">${currentStep.svg}</div>
+        <div class="omr-question-card">
+          <div class="omr-q-text">${currentStep.question}</div>
+          <div class="omr-options-list">
+      `;
+
+      shuffledOpts.forEach((opt, i) => {
+        html += `
+          <button type="button" class="omr-option-btn" data-correct="${opt.correct}" onclick="checkDerivationOption(this, '${did}')">
+            <span class="omr-bubble">${letters[i]}</span>
+            <span>${opt.text}</span>
+          </button>
+        `;
+      });
+
+      html += `
+          </div>
+          <div class="omr-feedback" id="deriv-fb-${did}"></div>
+        </div>
+      `;
+
+      container.innerHTML = html;
+      if (window.MathJax && MathJax.typesetPromise) {
+        MathJax.typesetPromise([container]);
+      }
+    }
+
+    function checkDerivationOption(btn, did) {
+      const isCorrect = btn.getAttribute('data-correct') === 'true';
+      const fb = document.getElementById('deriv-fb-' + did);
+      const card = btn.closest('.omr-question-card');
+      const allBtns = card.querySelectorAll('.omr-option-btn');
+
+      allBtns.forEach(b => b.classList.remove('wrong-choice'));
+
+      if (isCorrect) {
+        btn.classList.add('correct-choice');
+        allBtns.forEach(b => b.disabled = true);
+        fb.className = 'omr-feedback show-correct';
+        fb.innerHTML = `<span class="material-icons-outlined" style="vertical-align:middle;font-size:17px;">check_circle</span> <strong>Spot on!</strong> Loading the next step...`;
+        setTimeout(() => {
+          derivState[did]++;
+          renderDerivationStep(did);
+        }, 900);
+      } else {
+        btn.classList.add('wrong-choice');
+        fb.className = 'omr-feedback show-wrong';
+        fb.innerHTML = `<span class="material-icons-outlined" style="vertical-align:middle;font-size:17px;">error_outline</span> <strong>Check the hint &amp; diagram above</strong> and try another option!`;
+      }
+    }
+
+    /***************************************************************************
+     * 4. INTERACTIVE SVG TRIANGLE INEQUALITY EXPLORER (MOBILE TOUCH + MOUSE)
+     ***************************************************************************/
+    function initTriangleInequalitySvg() {
+      const svg = document.getElementById('triangleSvg');
+      const ptZ1 = document.getElementById('ptZ1');
+      const ptZ2 = document.getElementById('ptZ2');
+      const vecZ1 = document.getElementById('vecZ1');
+      const vecZ2 = document.getElementById('vecZ2');
+      const vecSum = document.getElementById('vecSum');
+      const ptSum = document.getElementById('ptSum');
+      const para1 = document.getElementById('paraLine1');
+      const para2 = document.getElementById('paraLine2');
+      const lblZ1 = document.getElementById('lblZ1');
+      const lblZ2 = document.getElementById('lblZ2');
+      const lblSum = document.getElementById('lblSum');
+      const readout = document.getElementById('triangleReadout');
+
+      const ox = 250, oy = 170, scale = 25;
+      let z1 = { x: 3.0, y: 1.2 };
+      let z2 = { x: 1.0, y: 2.8 };
+      let activeDrag = null;
+
+      function updateDiagram() {
+        const x1 = ox + z1.x * scale;
+        const y1 = oy - z1.y * scale;
+        const x2 = ox + z2.x * scale;
+        const y2 = oy - z2.y * scale;
+        const xs = ox + (z1.x + z2.x) * scale;
+        const ys = oy - (z1.y + z2.y) * scale;
+
+        vecZ1.setAttribute('x2', x1); vecZ1.setAttribute('y2', y1);
+        ptZ1.setAttribute('cx', x1); ptZ1.setAttribute('cy', y1);
+        lblZ1.setAttribute('x', x1 + 8); lblZ1.setAttribute('y', y1 - 6);
+
+        vecZ2.setAttribute('x2', x2); vecZ2.setAttribute('y2', y2);
+        ptZ2.setAttribute('cx', x2); ptZ2.setAttribute('cy', y2);
+        lblZ2.setAttribute('x', x2 + 8); lblZ2.setAttribute('y', y2 - 6);
+
+        vecSum.setAttribute('x2', xs); vecSum.setAttribute('y2', ys);
+        ptSum.setAttribute('cx', xs); ptSum.setAttribute('cy', ys);
+        lblSum.setAttribute('x', xs + 8); lblSum.setAttribute('y', ys - 6);
+
+        para1.setAttribute('x1', x1); para1.setAttribute('y1', y1);
+        para1.setAttribute('x2', xs); para1.setAttribute('y2', ys);
+        para2.setAttribute('x1', x2); para2.setAttribute('y1', y2);
+        para2.setAttribute('x2', xs); para2.setAttribute('y2', ys);
+
+        const mod1 = Math.hypot(z1.x, z1.y);
+        const mod2 = Math.hypot(z2.x, z2.y);
+        const modSum = Math.hypot(z1.x + z2.x, z1.y + z2.y);
+        const diffMod = Math.abs(mod1 - mod2);
+        const sumMod = mod1 + mod2;
+
+        readout.innerHTML = `
+          $|z_1| = ${mod1.toFixed(2)}$, &nbsp; $|z_2| = ${mod2.toFixed(2)}$ &nbsp;&bull;&nbsp;
+          <strong>Reverse:</strong> $||z_1|-|z_2|| = ${diffMod.toFixed(2)} \\le |z_1+z_2| = ${modSum.toFixed(2)} \\le |z_1|+|z_2| = ${sumMod.toFixed(2)}$
+        `;
+        if (window.MathJax && MathJax.typesetPromise) {
+          MathJax.typesetPromise([readout]);
+        }
+      }
+
+      function getSvgCoords(evt) {
+        const rect = svg.getBoundingClientRect();
+        const clientX = evt.touches ? evt.touches[0].clientX : evt.clientX;
+        const clientY = evt.touches ? evt.touches[0].clientY : evt.clientY;
+        const svgX = ((clientX - rect.left) / rect.width) * 500;
+        const svgY = ((clientY - rect.top) / rect.height) * 340;
+        return {
+          x: Math.max(-4.5, Math.min(4.5, (svgX - ox) / scale)),
+          y: Math.max(-3.0, Math.min(3.0, (oy - svgY) / scale))
+        };
+      }
+
+      ptZ1.addEventListener('pointerdown', (e) => { activeDrag = 'z1'; e.preventDefault(); });
+      ptZ2.addEventListener('pointerdown', (e) => { activeDrag = 'z2'; e.preventDefault(); });
+      window.addEventListener('pointermove', (e) => {
+        if (!activeDrag) return;
+        const c = getSvgCoords(e);
+        if (activeDrag === 'z1') z1 = c;
+        else z2 = c;
+        updateDiagram();
+      });
+      window.addEventListener('pointerup', () => { activeDrag = null; });
+
+      updateDiagram();
+    }
+
+    /***************************************************************************
+     * 5. INTERACTIVE TABLE 1.22 -> 1.23 SYMMETRY COMPLETION
+     ***************************************************************************/
+    let tableCellsRemaining = 6;
+    function fillSymCell(cell, val, reason) {
+      if (cell.getAttribute('data-filled') === 'true') return;
+      cell.setAttribute('data-filled', 'true');
+      cell.innerHTML = `$${val}$`;
+      cell.style.background = '#dcfce7';
+      cell.style.color = '#065f46';
+      tableCellsRemaining--;
+      const readout = document.getElementById('table122Readout');
+      if (tableCellsRemaining > 0) {
+        readout.innerHTML = `Filled <strong>${val}</strong> (${reason}). ${tableCellsRemaining} symmetric cells remaining!`;
+      } else {
+        readout.innerHTML = `<strong>Table 1.23 Completed!</strong> Every entry $(i,j)$ now matches $(j,i)$ across the main diagonal, so $*$ is commutative.`;
+      }
+      if (window.MathJax && MathJax.typesetPromise) {
+        MathJax.typesetPromise([cell, readout]);
+      }
+    }
+
+    /***************************************************************************
+     * 6. 3D INTERACTIVE TOUCH VIEW 1: MULTI-LEVEL ARGUMENT HELIX & ROOTS OF Z
+     ***************************************************************************/
+    let ca3dState = {
+      n: 3,
+      baseDeg: 90,
+      rotX: 0.48,
+      rotY: -0.55,
+      dragging: false,
+      lastX: 0,
+      lastY: 0
+    };
+
+    function setCa3dRoots(n, baseDeg, btn) {
+      ca3dState.n = n;
+      ca3dState.baseDeg = baseDeg;
+      const row = btn.parentElement;
+      row.querySelectorAll('.ctrl-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const readout = document.getElementById('ca3dReadout');
+      readout.innerHTML = `Showing $n = ${n}$ roots spaced by $2\\pi/${n} = ${(360/n).toFixed(0)}^\\circ$. Gold point $w_0$ is the Principal Root ($k=0$ at angle ${(baseDeg/n).toFixed(1)}^\\circ$).`;
+      if (window.MathJax && MathJax.typesetPromise) {
+        MathJax.typesetPromise([readout]);
+      }
+      drawCa3d();
+    }
+
+    function project3D(x, y, z, rotX, rotY, cx, cy, scale) {
+      // Rotate around Y axis
+      const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
+      const x1 = x * cosY - z * sinY;
+      const z1 = x * sinY + z * cosY;
+      // Rotate around X axis
+      const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
+      const y2 = y * cosX - z1 * sinX;
+      const z2 = y * sinX + z1 * cosX;
+      const fov = 4.5 / (4.5 + z2 * 0.35);
+      return {
+        px: cx + x1 * scale * fov,
+        py: cy - y2 * scale * fov,
+        z: z2
+      };
+    }
+
+    function drawCa3d() {
+      const canvas = document.getElementById('ca3dCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const W = canvas.width, H = canvas.height;
+      ctx.clearRect(0, 0, W, H);
+
+      const cx = W / 2, cy = H * 0.56, scale = 92;
+      const { n, baseDeg, rotX, rotY } = ca3dState;
+
+      // Draw base complex plane axes (y = -0.6 in 3D space)
+      const basePlaneY = -0.65;
+      const axX1 = project3D(-1.4, basePlaneY, 0, rotX, rotY, cx, cy, scale);
+      const axX2 = project3D(1.4, basePlaneY, 0, rotX, rotY, cx, cy, scale);
+      const axZ1 = project3D(0, basePlaneY, -1.4, rotX, rotY, cx, cy, scale);
+      const axZ2 = project3D(0, basePlaneY, 1.4, rotX, rotY, cx, cy, scale);
+
+      ctx.strokeStyle = '#475569';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(axX1.px, axX1.py); ctx.lineTo(axX2.px, axX2.py); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(axZ1.px, axZ1.py); ctx.lineTo(axZ2.px, axZ2.py); ctx.stroke();
+
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = 'bold 12px Plus Jakarta Sans';
+      ctx.fillText('Re', axX2.px + 6, axX2.py);
+      ctx.fillText('Im', axZ2.px + 6, axZ2.py);
+
+      // Draw unit circle on base complex plane
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.45)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      for (let i = 0; i <= 72; i++) {
+        const ang = (i / 72) * Math.PI * 2;
+        const p = project3D(Math.cos(ang), basePlaneY, Math.sin(ang), rotX, rotY, cx, cy, scale);
+        if (i === 0) ctx.moveTo(p.px, p.py);
+        else ctx.lineTo(p.px, p.py);
+      }
+      ctx.stroke();
+
+      // Draw 3D Helix of multi-valued arguments (phi_k rises with k)
+      ctx.strokeStyle = 'rgba(167, 139, 250, 0.55)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      const totalSteps = 90;
+      for (let i = 0; i <= totalSteps; i++) {
+        const frac = i / totalSteps;
+        const ang = ((baseDeg * Math.PI / 180) + frac * 2 * Math.PI * n) / n;
+        const heightY = basePlaneY + frac * 1.35;
+        const p = project3D(Math.cos(ang), heightY, Math.sin(ang), rotX, rotY, cx, cy, scale);
+        if (i === 0) ctx.moveTo(p.px, p.py);
+        else ctx.lineTo(p.px, p.py);
+      }
+      ctx.stroke();
+
+      // Compute the n roots on the base plane and their corresponding helix points
+      const basePts = [];
+      for (let k = 0; k < n; k++) {
+        const ang = ((baseDeg * Math.PI / 180) + k * 2 * Math.PI) / n;
+        const rx = Math.cos(ang), rz = Math.sin(ang);
+        const pBase = project3D(rx, basePlaneY, rz, rotX, rotY, cx, cy, scale);
+        const pHelix = project3D(rx, basePlaneY + (k / n) * 1.35, rz, rotX, rotY, cx, cy, scale);
+        basePts.push({ k, pBase, pHelix });
+      }
+
+      // Draw regular n-gon connecting the roots on the complex plane
+      ctx.strokeStyle = '#10b981';
+      ctx.fillStyle = 'rgba(16, 185, 129, 0.14)';
+      ctx.lineWidth = 2.2;
+      ctx.beginPath();
+      basePts.forEach((pt, idx) => {
+        if (idx === 0) ctx.moveTo(pt.pBase.px, pt.pBase.py);
+        else ctx.lineTo(pt.pBase.px, pt.pBase.py);
+      });
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Draw vertical projection lines from 3D helix level k down to root w_k
+      basePts.forEach(pt => {
+        ctx.strokeStyle = 'rgba(251, 191, 36, 0.55)';
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+        ctx.moveTo(pt.pHelix.px, pt.pHelix.py);
+        ctx.lineTo(pt.pBase.px, pt.pBase.py);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Helix node (level k)
+        ctx.fillStyle = '#c084fc';
+        ctx.beginPath();
+        ctx.arc(pt.pHelix.px, pt.pHelix.py, 5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#e9d5ff';
+        ctx.font = '11px Plus Jakarta Sans';
+        ctx.fillText(`k=${pt.k}`, pt.pHelix.px + 7, pt.pHelix.py - 3);
+
+        // Root node on complex plane
+        ctx.fillStyle = pt.k === 0 ? '#fbbf24' : '#38bdf8';
+        ctx.beginPath();
+        ctx.arc(pt.pBase.px, pt.pBase.py, pt.k === 0 ? 7.5 : 6, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = pt.k === 0 ? '#fde68a' : '#e0f2fe';
+        ctx.font = 'bold 12px Plus Jakarta Sans';
+        ctx.fillText(pt.k === 0 ? `w0 (Principal)` : `w${pt.k}`, pt.pBase.px + 9, pt.pBase.py + 4);
+      });
+    }
+
+    function initCa3dEvents() {
+      const canvas = document.getElementById('ca3dCanvas');
+      if (!canvas) return;
+      canvas.addEventListener('pointerdown', (e) => {
+        ca3dState.dragging = true;
+        ca3dState.lastX = e.clientX;
+        ca3dState.lastY = e.clientY;
+        canvas.setPointerCapture(e.pointerId);
+      });
+      canvas.addEventListener('pointermove', (e) => {
+        if (!ca3dState.dragging) return;
+        const dx = e.clientX - ca3dState.lastX;
+        const dy = e.clientY - ca3dState.lastY;
+        ca3dState.rotY += dx * 0.01;
+        ca3dState.rotX = Math.max(-1.2, Math.min(1.2, ca3dState.rotX + dy * 0.01));
+        ca3dState.lastX = e.clientX;
+        ca3dState.lastY = e.clientY;
+        drawCa3d();
+      });
+      canvas.addEventListener('pointerup', () => { ca3dState.dragging = false; });
+      drawCa3d();
+    }
+
+    /***************************************************************************
+     * 7. 3D INTERACTIVE TOUCH VIEW 2: SUBGROUP LATTICES & PLANE ISOMETRIES
+     ***************************************************************************/
+    let aa3dState = {
+      mode: 'lattices',
+      rotX: 0.25,
+      rotY: -0.35,
+      dragging: false,
+      lastX: 0,
+      lastY: 0
+    };
+
+    function setAa3dMode(mode, btn) {
+      aa3dState.mode = mode;
+      const row = btn.parentElement;
+      row.querySelectorAll('.ctrl-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const readout = document.getElementById('aa3dReadout');
+      if (mode === 'lattices') {
+        readout.innerHTML = `Comparing cyclic $\\mathbb{Z}_4$ (single chain lattice, generated by $1$ or $3$) vs non-cyclic Klein 4-group $V$ (diamond lattice with 3 minimal subgroups $\\{e,a\\},\\{e,b\\},\\{e,c\\}$).`;
+      } else if (mode === 'isometry1') {
+        readout.innerHTML = `<strong>Example 2.13 ($\\phi \\circ \\theta$):</strong> First rotate $(1,0)$ by $90^\\circ$ to $(0,1)$, then reflect across $y$-axis $\\phi(x,y)=(-x,y)$ $\\implies$ lands at $(0, 1)$.`;
+      } else {
+        readout.innerHTML = `<strong>Example 2.13 ($\\theta \\circ \\phi$):</strong> First reflect $(1,0)$ across $y$-axis to $(-1,0)$, then rotate $90^\\circ$ $\\theta(x,y)=(-y,x)$ $\\implies$ lands at $(0, -1) \\neq (0, 1)$! Non-abelian!`;
+      }
+      if (window.MathJax && MathJax.typesetPromise) {
+        MathJax.typesetPromise([readout]);
+      }
+      drawAa3d();
+    }
+
+    function drawAa3d() {
+      const canvas = document.getElementById('aa3dCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const W = canvas.width, H = canvas.height;
+      ctx.clearRect(0, 0, W, H);
+
+      const cx = W / 2, cy = H / 2, scale = 95;
+      const { mode, rotX, rotY } = aa3dState;
+
+      if (mode === 'lattices') {
+        // Left side in 3D: Z_4 chain (-1.2, y, 0)
+        const z4Top = project3D(-1.25, 0.9, 0, rotX, rotY, cx, cy, scale);
+        const z4Mid = project3D(-1.25, 0.0, 0, rotX, rotY, cx, cy, scale);
+        const z4Bot = project3D(-1.25, -0.9, 0, rotX, rotY, cx, cy, scale);
+
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(z4Top.px, z4Top.py);
+        ctx.lineTo(z4Mid.px, z4Mid.py);
+        ctx.lineTo(z4Bot.px, z4Bot.py);
+        ctx.stroke();
+
+        const drawNode = (pt, label, color) => {
+          ctx.fillStyle = color;
+          ctx.beginPath(); ctx.arc(pt.px, pt.py, 9, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = '#ffffff';
+          ctx.font = 'bold 12px Plus Jakarta Sans';
+          ctx.fillText(label, pt.px + 13, pt.py + 4);
+        };
+
+        drawNode(z4Top, 'Z4 = <1> = <3>', '#38bdf8');
+        drawNode(z4Mid, '{0, 2} = <2>', '#0284c7');
+        drawNode(z4Bot, '{0} (Trivial)', '#64748b');
+
+        // Right side in 3D: Klein 4-group V diamond lattice (x around +0.8)
+        const vTop = project3D(0.95, 0.95, 0, rotX, rotY, cx, cy, scale);
+        const vA = project3D(0.35, 0.0, 0.55, rotX, rotY, cx, cy, scale);
+        const vB = project3D(0.95, 0.0, -0.6, rotX, rotY, cx, cy, scale);
+        const vC = project3D(1.55, 0.0, 0.55, rotX, rotY, cx, cy, scale);
+        const vBot = project3D(0.95, -0.95, 0, rotX, rotY, cx, cy, scale);
+
+        ctx.strokeStyle = '#fbbf24';
+        ctx.lineWidth = 2.4;
+        [vA, vB, vC].forEach(m => {
+          ctx.beginPath(); ctx.moveTo(vTop.px, vTop.py); ctx.lineTo(m.px, m.py); ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(m.px, m.py); ctx.lineTo(vBot.px, vBot.py); ctx.stroke();
+        });
+
+        drawNode(vTop, 'Klein V (Not Cyclic)', '#f59e0b');
+        drawNode(vA, '{e, a}', '#fbbf24');
+        drawNode(vB, '{e, b}', '#fbbf24');
+        drawNode(vC, '{e, c}', '#fbbf24');
+        drawNode(vBot, '{e} (Trivial)', '#64748b');
+      } else {
+        // 3D Plane Isometry visualization showing why phi o theta != theta o phi
+        const axX1 = project3D(-1.5, 0, 0, rotX, rotY, cx, cy, scale);
+        const axX2 = project3D(1.5, 0, 0, rotX, rotY, cx, cy, scale);
+        const axY1 = project3D(0, -1.3, 0, rotX, rotY, cx, cy, scale);
+        const axY2 = project3D(0, 1.3, 0, rotX, rotY, cx, cy, scale);
+
+        ctx.strokeStyle = '#64748b';
+        ctx.lineWidth = 1.8;
+        ctx.beginPath(); ctx.moveTo(axX1.px, axX1.py); ctx.lineTo(axX2.px, axX2.py); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(axY1.px, axY1.py); ctx.lineTo(axY2.px, axY2.py); ctx.stroke();
+
+        ctx.fillStyle = '#cbd5e1';
+        ctx.font = 'bold 12px Plus Jakarta Sans';
+        ctx.fillText('x-axis', axX2.px + 6, axX2.py);
+        ctx.fillText('y-axis (Mirror)', axY2.px + 6, axY2.py);
+
+        const pStart = project3D(1.0, 0, 0, rotX, rotY, cx, cy, scale);
+        ctx.fillStyle = '#38bdf8';
+        ctx.beginPath(); ctx.arc(pStart.px, pStart.py, 7, 0, Math.PI * 2); ctx.fill();
+        ctx.fillText('Start (1, 0)', pStart.px + 10, pStart.py + 16);
+
+        if (mode === 'isometry1') {
+          const pMid = project3D(0, 1.0, 0.25, rotX, rotY, cx, cy, scale);
+          const pEnd = project3D(0, 1.0, 0, rotX, rotY, cx, cy, scale);
+          ctx.strokeStyle = '#10b981';
+          ctx.lineWidth = 3;
+          ctx.beginPath(); ctx.moveTo(pStart.px, pStart.py); ctx.lineTo(pEnd.px, pEnd.py); ctx.stroke();
+          ctx.fillStyle = '#10b981';
+          ctx.beginPath(); ctx.arc(pEnd.px, pEnd.py, 9, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = '#a7f3d0';
+          ctx.fillText('Result φ(θ(1,0)) = (0, 1)', pEnd.px + 12, pEnd.py);
+        } else {
+          const pFlip = project3D(-1.0, 0, 0.3, rotX, rotY, cx, cy, scale);
+          const pEnd = project3D(0, -1.0, 0, rotX, rotY, cx, cy, scale);
+          ctx.strokeStyle = '#f59e0b';
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          ctx.moveTo(pStart.px, pStart.py);
+          ctx.lineTo(pFlip.px, pFlip.py);
+          ctx.lineTo(pEnd.px, pEnd.py);
+          ctx.stroke();
+
+          ctx.fillStyle = '#fbbf24';
+          ctx.beginPath(); ctx.arc(pFlip.px, pFlip.py, 6, 0, Math.PI * 2); ctx.fill();
+          ctx.fillText('After Flip φ: (-1, 0)', pFlip.px - 95, pFlip.py - 10);
+
+          ctx.fillStyle = '#ef4444';
+          ctx.beginPath(); ctx.arc(pEnd.px, pEnd.py, 9, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = '#fecaca';
+          ctx.fillText('Result θ(φ(1,0)) = (0, -1) ≠ (0, 1)', pEnd.px + 12, pEnd.py + 5);
+        }
+      }
+    }
+
+    function initAa3dEvents() {
+      const canvas = document.getElementById('aa3dCanvas');
+      if (!canvas) return;
+      canvas.addEventListener('pointerdown', (e) => {
+        aa3dState.dragging = true;
+        aa3dState.lastX = e.clientX;
+        aa3dState.lastY = e.clientY;
+        canvas.setPointerCapture(e.pointerId);
+      });
+      canvas.addEventListener('pointermove', (e) => {
+        if (!aa3dState.dragging) return;
+        const dx = e.clientX - aa3dState.lastX;
+        const dy = e.clientY - aa3dState.lastY;
+        aa3dState.rotY += dx * 0.01;
+        aa3dState.rotX = Math.max(-1.2, Math.min(1.2, aa3dState.rotX + dy * 0.01));
+        aa3dState.lastX = e.clientX;
+        aa3dState.lastY = e.clientY;
+        drawAa3d();
+      });
+      canvas.addEventListener('pointerup', () => { aa3dState.dragging = false; });
+      drawAa3d();
+    }
+
+    // Initialize everything on DOMContentLoaded
+    window.addEventListener('DOMContentLoaded', () => {
+      renderAllOMRQuestions();
+      initDerivations();
+      initTriangleInequalitySvg();
+      updateProgressBars();
+    });
+  </script>
+
+  <script>
+  (function () {
+    var articles = Array.prototype.slice.call(document.querySelectorAll('article.study-card'));
+    var MJ = null, showTimer = null;
+    articles.forEach(function (a) { a.classList.add('math-pending'); });
+
+    function reveal() {
+      var l = document.getElementById('page-loader');
+      if (!l || l.classList.contains('done')) return;
+      l.classList.add('done');
+      setTimeout(function () { l.remove(); }, 400);
+    }
+    function showAll() {
+      articles.forEach(function (a) { a.classList.remove('math-pending'); });
+      reveal();
+    }
+    function typeset(el) {
+      if (!MJ || !el || el.dataset.typeset === '1') return Promise.resolve();
+      el.dataset.typeset = '1';
+      return MJ.typesetPromise([el]).catch(function () {}).then(function () {
+        el.classList.remove('math-pending');
+      });
+    }
+
+    showTimer = setTimeout(showAll, 1200); // never wait on the network for more than 1.2s
+
+    (function waitForMathJax() {
+      var mj = window.MathJax;
+      if (mj && mj.startup && mj.startup.promise) {
+        mj.startup.promise.then(function () {
+          MJ = mj;
+          var header = document.querySelector('header');
+          var board = document.querySelector('.schedule-board');
+          var initial = [header, board].concat(articles.slice(0, 2));
+          Promise.all(initial.map(typeset)).then(function () {
+            clearTimeout(showTimer);
+            showAll();
+          });
+          if ('IntersectionObserver' in window) {
+            var io = new IntersectionObserver(function (entries) {
+              entries.forEach(function (en) {
+                if (en.isIntersecting) { io.unobserve(en.target); typeset(en.target); }
+              });
+            }, { rootMargin: '1500px 0px' });
+            articles.forEach(function (a) { io.observe(a); });
+          } else {
+            articles.forEach(typeset);
+          }
+        }, function () { showAll(); });
+        return;
+      }
+      if (window.__mathjaxFailed) { showAll(); return; }
+      setTimeout(waitForMathJax, 50);
+    })();
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,18 @@
++++ b/study-match/build.py
+@@ -410,12 +410,14 @@
+ def units_for_index(data):
+     # Module 2 topics have ids starting "optics-m2-"; everything else is Module 1.
+     mods = {'1': {'label': 'Module 1 · Geometrical optics', 'sections': []},
+-            '2': {'label': 'Module 2 · Interference', 'sections': []}}
++            '2': {'label': 'Module 2 · Interference', 'sections': []},
++            '3': {'label': 'Module 3 · Diffraction', 'sections': []}}
+     for sec in data.get('sections', []):
+         for sh in sec.get('sheets', []):
+             if not sh.get('id'):
+                 raise SystemExit('Error: every topic needs an "id" for the start page (missing in "%s").' % sh.get('title', '?'))
+-            key = '2' if str(sh['id']).startswith('optics-m2-') else '1'
++            sid = str(sh['id'])
++            key = '3' if sid.startswith('optics-m3-') else ('2' if sid.startswith('optics-m2-') else '1')
+             groups = mods[key]['sections']
+             if not groups or groups[-1]['title'] != (sec.get('short') or sec.get('title', '')):
+                 groups.append({'title': sec.get('short') or sec.get('title', ''), 'sheets': []})

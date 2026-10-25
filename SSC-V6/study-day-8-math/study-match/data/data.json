@@ -1,0 +1,1336 @@
+{
+  "meta": {
+    "title": "Study Match: Real Analysis II and Abstract Algebra I",
+    "subject": "Real Analysis II, Abstract Algebra I",
+    "home": "Focus",
+    "opponent": "Time",
+    "version": 1
+  },
+  "match": {
+    "periodEnds": [25, 45, 70, 90],
+    "breaks": [5, 10, 5]
+  },
+  "sections": [
+    {
+      "short": "Real Analysis",
+      "title": "Real Analysis II",
+      "sheets": [
+        {
+          "id": "ra2-riemann-problems",
+          "title": "Selected problems on Riemann integration",
+          "icon": "sigma",
+          "cards": [
+            {
+              "type": "info",
+              "label": "01",
+              "title": "Partition norm and Riemann sums",
+              "body": "For a partition \\(\\mathcal{P} = (x_0, x_1, \\dots, x_n)\\) of \\([a,b]\\), the norm \\(\\|\\mathcal{P}\\|\\) is the largest subinterval length \\(\\max(x_i - x_{i-1})\\).",
+              "examples": [
+                "\\(\\|\\mathcal{P}\\| = \\max \\Delta x_i\\)",
+                "Tags \\(t_i \\in [x_{i-1}, x_i]\\)"
+              ],
+              "art": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Riemann sum rectangles with largest subinterval highlighted\"><line x1=\"20\" y1=\"150\" x2=\"240\" y2=\"150\" class=\"lk\" stroke-width=\"2\"/><line x1=\"20\" y1=\"20\" x2=\"20\" y2=\"150\" class=\"lk\" stroke-width=\"2\"/><rect x=\"20\" y=\"110\" width=\"40\" height=\"40\" class=\"s ok\" stroke-width=\"1.5\"/><rect x=\"60\" y=\"85\" width=\"50\" height=\"65\" class=\"s ok\" stroke-width=\"1.5\"/><rect x=\"110\" y=\"45\" width=\"90\" height=\"105\" class=\"h\"/><rect x=\"200\" y=\"30\" width=\"30\" height=\"120\" class=\"s ok\" stroke-width=\"1.5\"/><path d=\"M 20 120 Q 110 70 230 25\" class=\"lk\" stroke-width=\"2.5\"/><text x=\"155\" y=\"168\" text-anchor=\"middle\" font-size=\"13\" class=\"t\">max width = norm</text></svg>"
+            },
+            {
+              "type": "info",
+              "label": "02",
+              "title": "Step functions and finite changes",
+              "body": "Every step function on \\([a,b]\\) is Riemann integrable. By Theorem 7.1.3, changing a function at finitely many points never alters its integrability or integral.",
+              "examples": [
+                "\\(\\int_c^d \\varphi_J = d - c\\)",
+                "Finite exceptions ignored"
+              ],
+              "tex": "\\int_a^b \\varphi = \\sum_{j=1}^m k_j(d_j - c_j)"
+            },
+            {
+              "type": "info",
+              "label": "03",
+              "title": "Lebesgue's Integrability Criterion",
+              "body": "A bounded function \\(f : [a,b] \\to \\mathbb{R}\\) belongs to \\(\\mathcal{R}[a,b]\\) if and only if its set of discontinuities is a null set (measure zero).",
+              "examples": [
+                "Thomae: integrable",
+                "Dirichlet: not integrable"
+              ]
+            },
+            {
+              "type": "info",
+              "label": "04",
+              "title": "Differentiating variable-limit integrals",
+              "body": "If \\(f\\) is continuous on \\([a,b]\\) and \\(v : [c,d] \\to [a,b]\\) is differentiable, the Second Fundamental Theorem and Chain Rule give the derivative of \\(G(x) = \\int_a^{v(x)} f\\).",
+              "examples": [
+                "\\(F'(c) = f(c)\\)",
+                "Chain Rule with FTC"
+              ],
+              "tex": "G'(x) = f(v(x))\\cdot v'(x)"
+            },
+            {
+              "type": "derivation",
+              "title": "Moving-window integral derivative (Ex. 7.3.15)",
+              "legend": "\\(f : \\mathbb{R} \\to \\mathbb{R}\\) continuous, \\(c > 0\\), \\(F(u) = \\int_0^u f(t)\\,dt\\) indefinite integral.",
+              "phases": [
+                {
+                  "name": "Split",
+                  "why": "break the integral at basepoint 0"
+                },
+                {
+                  "name": "Primitive",
+                  "why": "express both integrals using F"
+                },
+                {
+                  "name": "Differentiate",
+                  "why": "differentiate with respect to x"
+                },
+                {
+                  "name": "Apply FTC",
+                  "why": "replace F' with f"
+                }
+              ],
+              "steps": [
+                {
+                  "phase": "Split",
+                  "tex": "g(x) = \\int_{x-c}^{0} f(t)\\,dt + \\int_{0}^{x+c} f(t)\\,dt",
+                  "note": "Split \\(\\int_{x-c}^{x+c} f(t)\\,dt\\) at \\(0\\) using Theorem 7.2.13."
+                },
+                {
+                  "move": {
+                    "type": "rearrange"
+                  },
+                  "tex": "g(x) = \\int_{0}^{x+c} f(t)\\,dt - \\int_{0}^{x-c} f(t)\\,dt",
+                  "note": "Reverse limits on the first integral: \\(\\int_{x-c}^0 f = -\\int_0^{x-c} f\\).",
+                  "ask": {
+                    "q": "How do we write \\(\\int_{x-c}^0 f(t)\\,dt\\) with lower limit \\(0\\)?",
+                    "options": [
+                      "Replace it with \\(-\\int_0^{x-c} f(t)\\,dt\\)",
+                      "Replace it with \\(\\int_0^{x-c} f(t)\\,dt\\)",
+                      "Set the lower limit to \\(c\\)",
+                      "Differentiate inside the integral"
+                    ],
+                    "answer": 0,
+                    "why": "By Definition 7.2.12, swapping integration limits changes the sign."
+                  }
+                },
+                {
+                  "phase": "Primitive",
+                  "move": {
+                    "type": "substitute",
+                    "by": "F(u) = \\int_0^u f(t)\\,dt"
+                  },
+                  "tex": "g(x) = F(x+c) - F(x-c)",
+                  "note": "Write each integral in terms of the indefinite integral \\(F\\)."
+                },
+                {
+                  "phase": "Differentiate",
+                  "move": {
+                    "type": "differentiate",
+                    "wrt": "x"
+                  },
+                  "tex": "g'(x) = F'(x+c) - F'(x-c)",
+                  "note": "Apply the Chain Rule; \\(\\frac{d}{dx}(x \\pm c) = 1\\)."
+                },
+                {
+                  "phase": "Apply FTC",
+                  "move": {
+                    "type": "substitute",
+                    "by": "F'(u) = f(u)"
+                  },
+                  "tex": "g'(x) = f(x+c) - f(x-c)",
+                  "note": "By Theorem 7.3.6, \\(F'(u) = f(u)\\) everywhere since \\(f\\) is continuous.",
+                  "ask": {
+                    "q": "Why does \\(F'(u) = f(u)\\) hold for every \\(u \\in \\mathbb{R}\\)?",
+                    "options": [
+                      "By the Fundamental Theorem (Second Form), since \\(f\\) is continuous",
+                      "Because every integrable function is differentiable",
+                      "Because \\(c > 0\\) is constant",
+                      "By the Squeeze Theorem for step functions"
+                    ],
+                    "answer": 0,
+                    "why": "Theorem 7.3.6 guarantees that the indefinite integral of a continuous function \\(f\\) has derivative \\(f\\)."
+                  }
+                }
+              ]
+            },
+            {
+              "type": "math",
+              "label": "Example",
+              "title": "Modified step function (Ex. 7.1.6b)",
+              "tex": "\\int_0^2 h(x)\\,dx = 2(1 - 0) + 1(2 - 1) = 3",
+              "body": "For \\(h(x) = 2\\) on \\([0,1)\\), \\(h(1) = 3\\), and \\(h(x) = 1\\) on \\((1,2]\\), the single value \\(h(1) = 3\\) does not change the integral."
+            },
+            {
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 45,
+              "q": "On \\(I = [0, 4]\\), what is the norm \\(\\|\\mathcal{P}_3\\|\\) of the partition \\(\\mathcal{P}_3 = (0, 1, 1.5, 2, 3.4, 4)\\)?",
+              "options": [
+                "\\(1.4\\)",
+                "\\(1.0\\)",
+                "\\(0.6\\)",
+                "\\(4.0\\)"
+              ],
+              "answer": 0,
+              "why": "The subinterval lengths are \\(1, 0.5, 0.5, 1.4, 0.6\\), and their maximum is \\(1.4\\)."
+            },
+            {
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "If \\(F(x) = \\int_0^{x^2} (1 + t^3)^{-1}\\,dt\\) on \\([0, 1]\\), what is \\(F'(x)\\)?",
+              "options": [
+                "\\(\\frac{2x}{1 + x^6}\\)",
+                "\\(\\frac{1}{1 + x^6}\\)",
+                "\\(\\frac{2x}{1 + x^3}\\)",
+                "\\(\\frac{3x^2}{1 + x^6}\\)"
+              ],
+              "answer": 0,
+              "why": "By Exercise 7.3.10, \\(F'(x) = f(v(x))v'(x) = (1 + (x^2)^3)^{-1}\\cdot 2x = \\frac{2x}{1 + x^6}\\)."
+            },
+            {
+              "type": "fill",
+              "label": "Quiz · Fill in",
+              "time": 45,
+              "q": "By Lebesgue's Integrability Criterion, a bounded function on \\([a,b]\\) is Riemann integrable if and only if its set of discontinuities is a ______ set.",
+              "answer": "null|null set|measure zero",
+              "why": "Theorem 7.3.12 states that a bounded function is in \\(\\mathcal{R}[a,b]\\) iff it is continuous almost everywhere, meaning its discontinuities form a null set."
+            },
+            {
+              "type": "number",
+              "label": "Quiz · Number",
+              "time": 60,
+              "q": "For \\(f(x) = x^2\\) on \\([0, 4]\\) and partition \\(\\mathcal{P}_1 = (0, 1, 2, 4)\\) with tags at the left endpoints, calculate the Riemann sum \\(S(f; \\dot{\\mathcal{P}}_1)\\).",
+              "answer": 9,
+              "tolerance": 0,
+              "unit": "",
+              "why": "Using left endpoints \\(0, 1, 2\\): \\(S(f; \\dot{\\mathcal{P}}_1) = 0^2(1-0) + 1^2(2-1) + 2^2(4-2) = 0 + 1 + 8 = 9\\)."
+            }
+          ]
+        },
+        {
+          "id": "ra2-pointwise-convergence",
+          "title": "Pointwise convergence of functions",
+          "icon": "graph",
+          "cards": [
+            {
+              "type": "info",
+              "label": "01",
+              "title": "Pointwise convergence",
+              "body": "A sequence of functions \\((f_n)\\) on \\(A \\subseteq \\mathbb{R}\\) converges pointwise on \\(A_0 \\subseteq A\\) to \\(f\\) if for each fixed \\(x \\in A_0\\), the numerical sequence \\((f_n(x))\\) converges to \\(f(x)\\).",
+              "examples": [
+                "Fix \\(x\\), let \\(n \\to \\infty\\)",
+                "\\(f(x) = \\lim f_n(x)\\)"
+              ],
+              "art": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Lines f_n(x) = x/n flattening toward the x-axis at a fixed x\"><line x1=\"25\" y1=\"145\" x2=\"240\" y2=\"145\" class=\"lk\" stroke-width=\"2\"/><line x1=\"25\" y1=\"20\" x2=\"25\" y2=\"145\" class=\"lk\" stroke-width=\"2\"/><line x1=\"25\" y1=\"145\" x2=\"225\" y2=\"35\" class=\"gk\" stroke-width=\"1.5\"/><line x1=\"25\" y1=\"145\" x2=\"225\" y2=\"90\" class=\"lk\" stroke-width=\"2\"/><line x1=\"25\" y1=\"145\" x2=\"225\" y2=\"120\" class=\"lk\" stroke-width=\"2\"/><line x1=\"165\" y1=\"30\" x2=\"165\" y2=\"145\" class=\"gk\" stroke-dasharray=\"4 4\" stroke-width=\"1.5\"/><circle cx=\"165\" cy=\"145\" r=\"6\" class=\"h\"/><text x=\"165\" y=\"165\" text-anchor=\"middle\" font-size=\"13\" class=\"t\">fixed x</text><text x=\"232\" y=\"38\" font-size=\"12\" class=\"t\">f₁</text><text x=\"232\" y=\"92\" font-size=\"12\" class=\"t\">f₂</text><text x=\"232\" y=\"123\" font-size=\"12\" class=\"t\">f₃</text></svg>"
+            },
+            {
+              "type": "info",
+              "label": "02",
+              "title": "The \\(\\varepsilon\\)-\\(K(\\varepsilon, x)\\) criterion",
+              "body": "By Lemma 8.1.3, \\(f_n \\to f\\) on \\(A_0\\) iff for every \\(\\varepsilon > 0\\) and each \\(x \\in A_0\\), there is a natural number \\(K(\\varepsilon, x)\\) such that \\(|f_n(x) - f(x)| < \\varepsilon\\) for all \\(n \\ge K(\\varepsilon, x)\\).",
+              "examples": [
+                "\\(K\\) depends on \\(\\varepsilon\\) and \\(x\\)",
+                "Speed varies with \\(x\\)"
+              ],
+              "tex": "|f_n(x) - f(x)| < \\varepsilon \\quad (n \\ge K(\\varepsilon, x))"
+            },
+            {
+              "type": "info",
+              "label": "03",
+              "title": "The power sequence \\(g_n(x) = x^n\\)",
+              "body": "For \\(g_n(x) = x^n\\), we have \\(x^n \\to 0\\) when \\(-1 < x < 1\\) and \\(1^n \\to 1\\) at \\(x = 1\\). At \\(x = -1\\) or \\(|x| > 1\\), the sequence diverges, so the domain of convergence is \\((-1, 1]\\).",
+              "examples": [
+                "\\(g(x) = 0\\) on \\((-1, 1)\\)",
+                "\\(g(1) = 1\\)"
+              ]
+            },
+            {
+              "type": "derivation",
+              "title": "Why \\(K(\\varepsilon, x)\\) depends on \\(x\\) (Ex. 8.1.1)",
+              "legend": "\\(f_N(x) = \\frac{x}{x+N}\\) for \\(x > 0\\), pointwise limit \\(f(x) = 0\\), target error \\(\\varepsilon \\in (0,1)\\).",
+              "phases": [
+                {
+                  "name": "Error",
+                  "why": "write distance from f_N(x) to limit 0"
+                },
+                {
+                  "name": "Threshold",
+                  "why": "set error equal to epsilon at cutoff N"
+                },
+                {
+                  "name": "Clear fraction",
+                  "why": "multiply by x + N"
+                },
+                {
+                  "name": "Isolate N",
+                  "why": "solve for N in terms of x and epsilon"
+                }
+              ],
+              "steps": [
+                {
+                  "phase": "Error",
+                  "tex": "E = \\frac{x}{x + N} - 0",
+                  "note": "For \\(x > 0\\), the pointwise limit of \\(\\frac{x}{x+N}\\) is \\(0\\)."
+                },
+                {
+                  "move": {
+                    "type": "simplify"
+                  },
+                  "tex": "E = \\frac{x}{x + N}",
+                  "note": "Simplify the error expression."
+                },
+                {
+                  "phase": "Threshold",
+                  "move": {
+                    "type": "substitute",
+                    "by": "E = \\varepsilon"
+                  },
+                  "tex": "\\varepsilon = \\frac{x}{x + N}",
+                  "note": "Find the cutoff index \\(N\\) where the error equals \\(\\varepsilon\\)."
+                },
+                {
+                  "phase": "Clear fraction",
+                  "move": {
+                    "type": "multiply",
+                    "by": "x + N"
+                  },
+                  "tex": "\\varepsilon(x + N) = x",
+                  "note": "Multiply both sides by \\(x + N > 0\\).",
+                  "ask": {
+                    "q": "How do we bring \\(N\\) out of the denominator?",
+                    "options": [
+                      "Multiply both sides by \\(x + N\\)",
+                      "Divide both sides by \\(x + N\\)",
+                      "Subtract \\(x\\) from both sides",
+                      "Differentiate with respect to \\(x\\)"
+                    ],
+                    "answer": 0,
+                    "why": "Multiplying by \\(x + N\\) clears the denominator."
+                  }
+                },
+                {
+                  "move": {
+                    "type": "divide",
+                    "by": "\\varepsilon"
+                  },
+                  "tex": "x + N = \\frac{x}{\\varepsilon}",
+                  "note": "Divide both sides by \\(\\varepsilon > 0\\)."
+                },
+                {
+                  "phase": "Isolate N",
+                  "move": {
+                    "type": "subtract",
+                    "by": "x"
+                  },
+                  "tex": "N = \\frac{x}{\\varepsilon} - x",
+                  "note": "Subtract \\(x\\) from both sides to isolate \\(N\\).",
+                  "ask": {
+                    "q": "What happens to the required cutoff \\(N\\) as \\(x \\to \\infty\\) for a fixed \\(\\varepsilon \\in (0, 1)\\)?",
+                    "options": [
+                      "\\(N\\) grows without bound proportionally to \\(x\\)",
+                      "\\(N\\) stays constant for all \\(x > 0\\)",
+                      "\\(N\\) decreases toward \\(0\\)",
+                      "\\(N\\) depends only on \\(\\varepsilon\\)"
+                    ],
+                    "answer": 0,
+                    "why": "Since \\(N = x(1/\\varepsilon - 1)\\), larger values of \\(x\\) require larger \\(N\\)."
+                  }
+                },
+                {
+                  "move": {
+                    "type": "factor"
+                  },
+                  "tex": "N = x\\left(\\frac{1}{\\varepsilon} - 1\\right)",
+                  "note": "The cutoff \\(K(\\varepsilon, x)\\) grows linearly with \\(x\\)."
+                }
+              ]
+            },
+            {
+              "type": "math",
+              "label": "Example",
+              "title": "Piecewise limit (Ex. 8.1.4)",
+              "tex": "\\lim_{n\\to\\infty} \\frac{x^n}{1 + x^n} = \\begin{cases} 0 & 0 \\le x < 1 \\\\ 1/2 & x = 1 \\\\ 1 & x > 1 \\end{cases}",
+              "body": "For \\(x > 1\\), dividing numerator and denominator by \\(x^n\\) gives \\(\\frac{1}{x^{-n} + 1} \\to 1\\)."
+            },
+            {
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 45,
+              "q": "What is the largest subset of \\(\\mathbb{R}\\) on which \\(g_n(x) = x^n\\) converges pointwise?",
+              "options": [
+                "\\((-1, 1]\\)",
+                "\\([-1, 1]\\)",
+                "\\([0, 1]\\)",
+                "\\((-1, 1)\\)"
+              ],
+              "answer": 0,
+              "why": "The sequence \\((x^n)\\) converges to \\(0\\) on \\((-1, 1)\\) and to \\(1\\) at \\(x = 1\\), but oscillates at \\(x = -1\\) and is unbounded for \\(|x| > 1\\)."
+            },
+            {
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "For \\(x \\in \\mathbb{R}\\), what is the pointwise limit of \\(f_n(x) = \\operatorname{Arctan}(nx)\\) as \\(n \\to \\infty\\)?",
+              "options": [
+                "\\(\\frac{\\pi}{2}\\operatorname{sgn}(x)\\)",
+                "\\(\\pi\\operatorname{sgn}(x)\\)",
+                "\\(0\\) for all \\(x \\in \\mathbb{R}\\)",
+                "\\(\\frac{\\pi}{2}\\) for all \\(x \\in \\mathbb{R}\\)"
+              ],
+              "answer": 0,
+              "why": "As \\(n \\to \\infty\\), \\(nx \\to +\\infty\\) for \\(x > 0\\) (giving \\(\\pi/2\\)), \\(0\\) for \\(x = 0\\) (giving \\(0\\)), and \\(-\\infty\\) for \\(x < 0\\) (giving \\(-\\pi/2\\))."
+            },
+            {
+              "type": "fill",
+              "label": "Quiz · Fill in",
+              "time": 45,
+              "q": "In Lemma 8.1.3 for pointwise convergence, the natural number \\(K(\\varepsilon, x)\\) depends in general on both \\(\\varepsilon\\) and ______.",
+              "answer": "x|the point x",
+              "why": "In pointwise convergence, the rate of convergence varies from point to point, so \\(K\\) depends on both \\(\\varepsilon\\) and \\(x\\)."
+            },
+            {
+              "type": "number",
+              "label": "Quiz · Number",
+              "time": 45,
+              "q": "For \\(f_n(x) = \\frac{x^n}{1 + x^n}\\), what is the value of the pointwise limit \\(f(1) = \\lim_{n\\to\\infty} f_n(1)\\)?",
+              "answer": 0.5,
+              "tolerance": 0.01,
+              "unit": "",
+              "why": "At \\(x = 1\\), \\(f_n(1) = \\frac{1^n}{1 + 1^n} = \\frac{1}{2} = 0.5\\) for every \\(n \\in \\mathbb{N}\\)."
+            }
+          ]
+        },
+        {
+          "id": "ra2-uniform-convergence",
+          "title": "Uniform convergence and uniform norm",
+          "icon": "curve",
+          "cards": [
+            {
+              "type": "info",
+              "label": "01",
+              "title": "Uniform convergence",
+              "body": "A sequence \\((f_n)\\) converges uniformly on \\(A_0\\) to \\(f\\) (written \\(f_n \\rightrightarrows f\\)) if for every \\(\\varepsilon > 0\\) there is a \\(K(\\varepsilon)\\) independent of \\(x \\in A_0\\) such that \\(|f_n(x) - f(x)| < \\varepsilon\\) for all \\(n \\ge K(\\varepsilon)\\).",
+              "examples": [
+                "\\(K(\\varepsilon)\\) independent of \\(x\\)",
+                "Notation: \\(f_n \\rightrightarrows f\\)"
+              ],
+              "art": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Function f_n inside an epsilon band around limit f\"><path d=\"M 25 90 Q 130 40 235 80 L 235 130 Q 130 90 25 140 Z\" class=\"s\"/><path d=\"M 25 115 Q 130 65 235 105\" class=\"lk\" stroke-width=\"2\"/><path d=\"M 25 122 Q 130 52 235 98\" class=\"hk\" stroke-width=\"2.5\"/><line x1=\"25\" y1=\"160\" x2=\"235\" y2=\"160\" class=\"gk\" stroke-width=\"1.5\"/><text x=\"242\" y=\"108\" font-size=\"13\" class=\"t\">f</text><text x=\"130\" y=\"32\" text-anchor=\"middle\" font-size=\"13\" class=\"t\">epsilon tube</text></svg>"
+            },
+            {
+              "type": "info",
+              "label": "02",
+              "title": "Uniform norm on a set",
+              "body": "For a bounded function \\(\\varphi : A \\to \\mathbb{R}\\), the uniform norm is \\(\\|\\varphi\\|_A := \\sup\\{|\\varphi(x)| : x \\in A\\}\\). By Lemma 8.1.8, \\(f_n \\rightrightarrows f\\) on \\(A\\) iff \\(\\|f_n - f\\|_A \\to 0\\).",
+              "examples": [
+                "\\(\\|\\varphi\\|_A \\le \\varepsilon \\iff |\\varphi(x)| \\le \\varepsilon\\)",
+                "\\(\\|f_n - f\\|_A \\to 0\\)"
+              ],
+              "tex": "\\|f_n - f\\|_A = \\sup_{x \\in A} |f_n(x) - f(x)| \\to 0"
+            },
+            {
+              "type": "info",
+              "label": "03",
+              "title": "Non-uniformity and Cauchy Criterion",
+              "body": "By Lemma 8.1.5, \\(f_n \\not\\rightrightarrows f\\) if there exist \\(\\varepsilon_0 > 0\\), a subsequence \\((f_{n_k})\\), and \\(x_k \\in A_0\\) with \\(|f_{n_k}(x_k) - f(x_k)| \\ge \\varepsilon_0\\). By Theorem 8.1.10, bounded \\((f_n)\\) converge uniformly iff \\(\\|f_m - f_n\\|_A \\to 0\\).",
+              "examples": [
+                "Subsequence test",
+                "\\(\\|f_m - f_n\\|_A \\le \\varepsilon\\)"
+              ]
+            },
+            {
+              "type": "derivation",
+              "title": "Maximizing \\(G_n(x) = x^n(1-x)\\) on \\([0,1]\\) (Ex. 8.1.9e)",
+              "legend": "\\(G_n(x) = x^n(1-x)\\) on \\(A = [0,1]\\), interior critical point \\(x \\in (0,1)\\).",
+              "phases": [
+                {
+                  "name": "Expand",
+                  "why": "write G_n as a polynomial in x"
+                },
+                {
+                  "name": "Differentiate",
+                  "why": "find derivative G_n'(x)"
+                },
+                {
+                  "name": "Critical point",
+                  "why": "set derivative equal to 0"
+                },
+                {
+                  "name": "Solve",
+                  "why": "isolate the maximizer x"
+                }
+              ],
+              "steps": [
+                {
+                  "phase": "Expand",
+                  "tex": "G_n(x) = x^n - x^{n+1}",
+                  "note": "Expand \\(x^n(1 - x)\\) on \\([0, 1]\\) to differentiate term by term."
+                },
+                {
+                  "phase": "Differentiate",
+                  "move": {
+                    "type": "differentiate",
+                    "wrt": "x"
+                  },
+                  "tex": "G_n'(x) = nx^{n-1} - (n+1)x^n",
+                  "note": "Differentiate with respect to \\(x\\) to find the maximum on \\([0,1]\\).",
+                  "ask": {
+                    "q": "How do we find the interior point where \\(|G_n(x) - 0|\\) attains its supremum on \\([0, 1]\\)?",
+                    "options": [
+                      "Differentiate \\(G_n(x)\\) with respect to \\(x\\) and solve \\(G_n'(x) = 0\\)",
+                      "Integrate \\(G_n(x)\\) from \\(0\\) to \\(1\\)",
+                      "Evaluate \\(G_n(x)\\) only at \\(x = 0\\) and \\(x = 1\\)",
+                      "Take the limit as \\(x \\to \\infty\\)"
+                    ],
+                    "answer": 0,
+                    "why": "Since \\(G_n(0) = G_n(1) = 0\\) and \\(G_n(x) > 0\\) on \\((0,1)\\), its maximum occurs at an interior critical point."
+                  }
+                },
+                {
+                  "move": {
+                    "type": "factor"
+                  },
+                  "tex": "G_n'(x) = x^{n-1}(n - (n+1)x)",
+                  "note": "Factor out \\(x^{n-1}\\)."
+                },
+                {
+                  "phase": "Critical point",
+                  "move": {
+                    "type": "substitute",
+                    "by": "G_n'(x) = 0"
+                  },
+                  "tex": "0 = x^{n-1}(n - (n+1)x)",
+                  "note": "Set \\(G_n'(x) = 0\\) on the open interval \\((0, 1)\\)."
+                },
+                {
+                  "move": {
+                    "type": "divide",
+                    "by": "x^{n-1}"
+                  },
+                  "tex": "0 = n - (n+1)x",
+                  "note": "Since \\(x \\in (0, 1)\\), \\(x^{n-1} \\neq 0\\) cancels."
+                },
+                {
+                  "phase": "Solve",
+                  "move": {
+                    "type": "add",
+                    "by": "(n+1)x"
+                  },
+                  "tex": "(n+1)x = n",
+                  "note": "Move \\((n+1)x\\) to the left side."
+                },
+                {
+                  "move": {
+                    "type": "divide",
+                    "by": "n+1"
+                  },
+                  "tex": "x = \\frac{n}{n+1}",
+                  "note": "At \\(x_n = \\frac{n}{n+1}\\), \\(\\|G_n\\|_A = (1+1/n)^{-n}\\frac{1}{n+1} \\to 0\\).",
+                  "ask": {
+                    "q": "As \\(n \\to \\infty\\), what happens to \\(\\|G_n\\|_{[0,1]} = G_n\\left(\\frac{n}{n+1}\\right) = (1+1/n)^{-n}\\frac{1}{n+1}\\)?",
+                    "options": [
+                      "It converges to \\((1/e)\\cdot 0 = 0\\), so \\(G_n \\rightrightarrows 0\\)",
+                      "It converges to \\(1/e\\), so convergence is not uniform",
+                      "It stays equal to \\(1\\) for all \\(n\\)",
+                      "It diverges to \\(\\infty\\)"
+                    ],
+                    "answer": 0,
+                    "why": "Since \\((1+1/n)^{-n} \\to 1/e\\) and \\(1/(n+1) \\to 0\\), their product tends to \\(0\\)."
+                  }
+                }
+              ]
+            },
+            {
+              "type": "math",
+              "label": "Example",
+              "title": "Uniform norm on a bounded interval (Ex. 8.1.9c)",
+              "tex": "\\|h_n - h\\|_{[0,8]} = \\sup\\{x^2/n : 0 \\le x \\le 8\\} = \\frac{64}{n} \\to 0",
+              "body": "For \\(h_n(x) = \\frac{x^2 + nx}{n}\\) and \\(h(x) = x\\), convergence is not uniform on \\(\\mathbb{R}\\), but is uniform on \\([0, 8]\\)."
+            },
+            {
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 45,
+              "q": "On \\(A = [0, 1]\\), what is the uniform norm \\(\\|g_n - g\\|_A\\) for \\(g_n(x) = x^n\\) and its pointwise limit \\(g\\)?",
+              "options": [
+                "\\(1\\)",
+                "\\(0\\)",
+                "\\(\\frac{1}{n}\\)",
+                "\\(\\frac{1}{e}\\)"
+              ],
+              "answer": 0,
+              "why": "On \\([0, 1)\\), \\(|g_n(x) - g(x)| = x^n\\), whose supremum is \\(1\\). Since \\(1 \\not\\to 0\\), \\(g_n\\) does not converge uniformly on \\([0, 1]\\)."
+            },
+            {
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "Let \\(f_n(x) = x + \\frac{1}{n}\\) and \\(f(x) = x\\) for \\(x \\in \\mathbb{R}\\) (Exercise 8.1.22). Which statement is true?",
+              "options": [
+                "\\((f_n)\\) converges uniformly on \\(\\mathbb{R}\\), but \\((f_n^2)\\) does not",
+                "Both \\((f_n)\\) and \\((f_n^2)\\) converge uniformly on \\(\\mathbb{R}\\)",
+                "Neither \\((f_n)\\) nor \\((f_n^2)\\) converges uniformly on \\(\\mathbb{R}\\)",
+                "\\((f_n^2)\\) converges uniformly on \\(\\mathbb{R}\\), but \\((f_n)\\) does not"
+              ],
+              "answer": 0,
+              "why": "We have \\(\\|f_n - f\\|_{\\mathbb{R}} = 1/n \\to 0\\), whereas \\(|f_n^2(x) - f^2(x)| = |\\frac{2x}{n} + \\frac{1}{n^2}|\\) is unbounded on \\(\\mathbb{R}\\)."
+            },
+            {
+              "type": "fill",
+              "label": "Quiz · Fill in",
+              "time": 45,
+              "q": "By Lemma 8.1.8, a sequence of bounded functions \\((f_n)\\) on \\(A\\) converges uniformly to \\(f\\) if and only if the ______ norm \\(\\|f_n - f\\|_A\\) converges to \\(0\\).",
+              "answer": "uniform|supremum|sup",
+              "why": "The supremum \\(\\|f_n - f\\|_A = \\sup\\{|f_n(x) - f(x)| : x \\in A\\}\\) is called the uniform norm on \\(A\\)."
+            },
+            {
+              "type": "number",
+              "label": "Quiz · Number",
+              "time": 60,
+              "q": "For \\(h_n(x) = \\frac{x^2 + nx}{n}\\) and \\(h(x) = x\\) on \\(A = [0, 8]\\), what is the uniform norm \\(\\|h_n - h\\|_A\\) when \\(n = 16\\)?",
+              "answer": 4,
+              "tolerance": 0,
+              "unit": "",
+              "why": "Since \\(|h_n(x) - h(x)| = x^2/n\\) attains its supremum on \\([0, 8]\\) at \\(x = 8\\), \\(\\|h_{16} - h\\|_A = 64/16 = 4\\)."
+            }
+          ]
+        },
+        {
+          "id": "ra2-interchange-limits",
+          "title": "Interchange of limits",
+          "icon": "wave",
+          "cards": [
+            {
+              "type": "info",
+              "label": "01",
+              "title": "When limit interchange fails",
+              "body": "If \\(f_n \\to f\\) only pointwise, the limit function \\(f\\) need not preserve continuity, differentiability, or the value of the Riemann integral \\(\\lim \\int_a^b f_n\\).",
+              "examples": [
+                "Continuity can break",
+                "\\(\\int \\lim f_n \\neq \\lim \\int f_n\\)"
+              ]
+            },
+            {
+              "type": "info",
+              "label": "02",
+              "title": "Loss of continuity and derivative",
+              "body": "In Example 8.2.1(a)-(b), each \\(g_n(x) = x^n\\) is continuous and differentiable on \\([0,1]\\), yet the pointwise limit \\(g(x)\\) jumps at \\(x = 1\\) and has no derivative there.",
+              "examples": [
+                "\\(g(x) = 0\\) on \\([0,1)\\)",
+                "\\(g(1) = 1\\)"
+              ]
+            },
+            {
+              "type": "info",
+              "label": "03",
+              "title": "Triangular spike functions (Ex. 8.2.1c)",
+              "body": "For \\(n \\ge 2\\), let \\(f_n\\) have peak \\((1/n, n)\\) on \\([0, 2/n]\\) and \\(0\\) on \\([2/n, 1]\\). For every \\(x \\in [0, 1]\\), \\(f_n(x) \\to 0\\), so \\(\\int_0^1 f = 0\\), yet \\(\\int_0^1 f_n = 1\\).",
+              "examples": [
+                "Base \\(2/n\\), height \\(n\\)",
+                "Area stays \\(1\\)"
+              ],
+              "art": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Tall narrow triangle spike function of area 1\"><line x1=\"30\" y1=\"145\" x2=\"235\" y2=\"145\" class=\"lk\" stroke-width=\"2\"/><line x1=\"30\" y1=\"20\" x2=\"30\" y2=\"145\" class=\"lk\" stroke-width=\"2\"/><polygon points=\"30,145 65,25 100,145\" class=\"s ok\" stroke-width=\"1.5\"/><polyline points=\"30,145 65,25 100,145 225,145\" class=\"hk\" stroke-width=\"2.5\"/><text x=\"65\" y=\"18\" text-anchor=\"middle\" font-size=\"12\" class=\"t\">(1/n, n)</text><text x=\"100\" y=\"164\" text-anchor=\"middle\" font-size=\"12\" class=\"t\">2/n</text><text x=\"225\" y=\"164\" text-anchor=\"middle\" font-size=\"12\" class=\"t\">1</text></svg>"
+            },
+            {
+              "type": "derivation",
+              "title": "Integral of \\(h_n(x) = 2nxe^{-nx^2}\\) (Ex. 8.2.1d)",
+              "legend": "\\(h_n(x) = 2nxe^{-nx^2}\\) on \\([0,1]\\), antiderivative \\(H_n(x) = -e^{-nx^2}\\).",
+              "phases": [
+                {
+                  "name": "Setup",
+                  "why": "write the definite integral I_n"
+                },
+                {
+                  "name": "Antiderivative",
+                  "why": "express integrand as H_n'(x)"
+                },
+                {
+                  "name": "Evaluate",
+                  "why": "apply the Fundamental Theorem on [0,1]"
+                },
+                {
+                  "name": "Simplify",
+                  "why": "compute endpoint values"
+                }
+              ],
+              "steps": [
+                {
+                  "phase": "Setup",
+                  "tex": "I_n = \\int_0^1 2nxe^{-nx^2}\\,dx",
+                  "note": "Consider the smooth sequence \\(h_n(x) = 2nxe^{-nx^2}\\) on \\([0, 1]\\)."
+                },
+                {
+                  "phase": "Antiderivative",
+                  "move": {
+                    "type": "substitute",
+                    "by": "2nxe^{-nx^2} = H_n'(x)"
+                  },
+                  "tex": "I_n = \\int_0^1 H_n'(x)\\,dx",
+                  "note": "Notice that \\(H_n(x) = -e^{-nx^2}\\) has derivative \\(H_n'(x) = 2nxe^{-nx^2}\\).",
+                  "ask": {
+                    "q": "Which function \\(H_n(x)\\) is an antiderivative of \\(h_n(x) = 2nxe^{-nx^2}\\)?",
+                    "options": [
+                      "\\(H_n(x) = -e^{-nx^2}\\)",
+                      "\\(H_n(x) = e^{-nx^2}\\)",
+                      "\\(H_n(x) = -2ne^{-nx^2}\\)",
+                      "\\(H_n(x) = x^2e^{-nx^2}\\)"
+                    ],
+                    "answer": 0,
+                    "why": "By the Chain Rule, \\(\\frac{d}{dx}(-e^{-nx^2}) = -e^{-nx^2}(-2nx) = 2nxe^{-nx^2}\\)."
+                  }
+                },
+                {
+                  "phase": "Evaluate",
+                  "move": {
+                    "type": "evaluate",
+                    "by": "\\text{FTC on } [0, 1]"
+                  },
+                  "tex": "I_n = H_n(1) - H_n(0)",
+                  "note": "Apply the Fundamental Theorem of Calculus (First Form)."
+                },
+                {
+                  "move": {
+                    "type": "substitute",
+                    "by": "H_n(x) = -e^{-nx^2}"
+                  },
+                  "tex": "I_n = -e^{-n} - (-e^{0})",
+                  "note": "Substitute \\(x = 1\\) and \\(x = 0\\) into \\(-e^{-nx^2}\\)."
+                },
+                {
+                  "phase": "Simplify",
+                  "move": {
+                    "type": "simplify"
+                  },
+                  "tex": "I_n = 1 - e^{-n}",
+                  "note": "As \\(n \\to \\infty\\), \\(I_n \\to 1\\), whereas \\(\\int_0^1 (\\lim h_n) = 0\\).",
+                  "ask": {
+                    "q": "Since \\(h_n(x) \\to 0\\) pointwise on \\([0, 1]\\), what does \\(I_n = 1 - e^{-n} \\to 1\\) show?",
+                    "options": [
+                      "\\(\\int_0^1 (\\lim h_n) = 0 \\neq 1 = \\lim \\int_0^1 h_n\\), so limit and integral do not commute here",
+                      "The Fundamental Theorem of Calculus fails for \\(h_n\\)",
+                      "\\((h_n)\\) converges uniformly to \\(0\\) on \\([0, 1]\\)",
+                      "\\(h_n\\) is not Riemann integrable on \\([0, 1]\\)"
+                    ],
+                    "answer": 0,
+                    "why": "Pointwise convergence alone does not allow interchanging the limit and the Riemann integral."
+                  }
+                }
+              ]
+            },
+            {
+              "type": "math",
+              "label": "Example",
+              "title": "Area of the spike function (Ex. 8.2.1c)",
+              "tex": "\\int_0^1 f_n(x)\\,dx = \\frac{1}{2}\\left(\\frac{2}{n}\\right)(n) = 1 \\neq 0 = \\int_0^1 f(x)\\,dx",
+              "body": "Each triangle has base \\(2/n\\) and height \\(n\\), keeping area \\(1\\) even though \\(f_n(x) \\to 0\\) for every \\(x \\in [0, 1]\\)."
+            },
+            {
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "In Example 8.2.1(c), why does the spike function \\(f_n(x)\\) converge pointwise to \\(0\\) for every \\(x \\in [0, 1]\\)?",
+              "options": [
+                "\\(f_n(0) = 0\\) for all \\(n\\), and for any \\(x > 0\\), \\(f_n(x) = 0\\) whenever \\(n > 2/x\\)",
+                "The maximum height \\(n\\) tends to \\(0\\) as \\(n \\to \\infty\\)",
+                "\\(f_n(x) \\le 1/n\\) for all \\(x \\in [0, 1]\\)",
+                "The sequence \\((f_n)\\) is uniformly bounded on \\([0, 1]\\)"
+              ],
+              "answer": 0,
+              "why": "At \\(x = 0\\), \\(f_n(0) = 0\\). For any fixed \\(x > 0\\), once \\(2/n < x\\) (i.e. \\(n > 2/x\\)), \\(x\\) lies in \\([2/n, 1]\\) where \\(f_n(x) = 0\\)."
+            },
+            {
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 45,
+              "q": "For \\(h_n(x) = 2nxe^{-nx^2}\\) on \\([0, 1]\\), what are \\(\\int_0^1 (\\lim h_n(x))\\,dx\\) and \\(\\lim \\int_0^1 h_n(x)\\,dx\\) respectively?",
+              "options": [
+                "\\(0\\) and \\(1\\)",
+                "\\(1\\) and \\(1\\)",
+                "\\(0\\) and \\(0\\)",
+                "\\(1\\) and \\(0\\)"
+              ],
+              "answer": 0,
+              "why": "Since \\(h_n(x) \\to 0\\) for each \\(x \\in [0, 1]\\), \\(\\int_0^1 (\\lim h_n) = 0\\), while \\(\\int_0^1 h_n = 1 - e^{-n} \\to 1\\)."
+            },
+            {
+              "type": "fill",
+              "label": "Quiz · Fill in",
+              "time": 45,
+              "q": "Example 8.2.1(c) shows a sequence of continuous functions converging nonuniformly to \\(f(x) = 0\\), proving that uniform convergence is sufficient but not ______ for the limit function to be continuous.",
+              "answer": "necessary|required",
+              "why": "As noted in the Remark to Theorem 8.2.2 and Exercise 8.2.2, uniform convergence is sufficient but not necessary for a continuous limit."
+            },
+            {
+              "type": "number",
+              "label": "Quiz · Number",
+              "time": 45,
+              "q": "In Example 8.2.1(c), what is the maximum value \\(\\|f_5\\|_{[0,1]}\\) attained by \\(f_5(x)\\) at \\(x = 1/5\\)?",
+              "answer": 5,
+              "tolerance": 0,
+              "unit": "",
+              "why": "At \\(x = 1/n\\), \\(f_n(1/n) = n^2(1/n) = n\\), so for \\(n = 5\\) the peak height is \\(5\\)."
+            }
+          ]
+        },
+        {
+          "id": "ra2-limit-continuity",
+          "title": "Interchange of limit and continuity",
+          "icon": "motion",
+          "cards": [
+            {
+              "type": "info",
+              "label": "01",
+              "title": "Uniform limit of continuous functions",
+              "body": "Theorem 8.2.2 states that if \\((f_n)\\) is a sequence of continuous functions on a set \\(A \\subseteq \\mathbb{R}\\) and \\(f_n \\rightrightarrows f\\) uniformly on \\(A\\), then \\(f\\) is continuous on \\(A\\).",
+              "examples": [
+                "\\(f_n\\) continuous + \\(f_n \\rightrightarrows f\\)",
+                "\\(\\Rightarrow f\\) continuous on \\(A\\)"
+              ],
+              "art": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Three-part epsilon over 3 triangle inequality bound\"><path d=\"M 30 135 Q 130 95 230 45\" class=\"lk\" stroke-width=\"2.5\"/><path d=\"M 30 120 Q 130 80 230 60\" class=\"hk\" stroke-width=\"2\" stroke-dasharray=\"5 4\"/><circle cx=\"95\" cy=\"108\" r=\"4\" class=\"f\"/><circle cx=\"95\" cy=\"94\" r=\"4\" class=\"f\"/><circle cx=\"165\" cy=\"78\" r=\"4\" class=\"f\"/><circle cx=\"165\" cy=\"72\" r=\"4\" class=\"f\"/><line x1=\"95\" y1=\"94\" x2=\"95\" y2=\"155\" class=\"gk\" stroke-dasharray=\"3 3\" stroke-width=\"1.5\"/><line x1=\"165\" y1=\"72\" x2=\"165\" y2=\"155\" class=\"gk\" stroke-dasharray=\"3 3\" stroke-width=\"1.5\"/><text x=\"95\" y=\"168\" text-anchor=\"middle\" font-size=\"13\" class=\"t\">c</text><text x=\"165\" y=\"168\" text-anchor=\"middle\" font-size=\"13\" class=\"t\">x</text><text x=\"236\" y=\"48\" font-size=\"13\" class=\"t\">f</text><text x=\"236\" y=\"66\" font-size=\"13\" class=\"t\">f_H</text></svg>"
+            },
+            {
+              "type": "info",
+              "label": "02",
+              "title": "The \\(\\varepsilon/3\\) proof strategy",
+              "body": "We fix \\(H\\) so \\(\\|f_H - f\\|_A < \\varepsilon/3\\), then use continuity of \\(f_H\\) at \\(c\\) to find \\(\\delta > 0\\) with \\(|f_H(x) - f_H(c)| < \\varepsilon/3\\). The Triangle Inequality gives \\(|f(x) - f(c)| < \\varepsilon\\).",
+              "examples": [
+                "\\(\\varepsilon/3 + \\varepsilon/3 + \\varepsilon/3 = \\varepsilon\\)",
+                "Fix index \\(H\\) first"
+              ],
+              "tex": "|f(x) - f(c)| \\le |f(x) - f_H(x)| + |f_H(x) - f_H(c)| + |f_H(c) - f(c)|"
+            },
+            {
+              "type": "info",
+              "label": "03",
+              "title": "Contrapositive and sequential tests",
+              "body": "If every \\(f_n\\) is continuous on \\(A\\) but the pointwise limit \\(f\\) is discontinuous on \\(A\\), then \\(f_n \\not\\rightrightarrows f\\) on \\(A\\). Also, if \\(f_n \\rightrightarrows f\\) on \\(I\\) and \\(x_n \\to x_0 \\in I\\), then \\(\\lim f_n(x_n) = f(x_0)\\).",
+              "examples": [
+                "Discontinuous \\(f \\Rightarrow\\) non-uniform",
+                "\\(\\lim f_n(x_n) = f(x_0)\\)"
+              ]
+            },
+            {
+              "type": "info",
+              "label": "04",
+              "title": "Boundedness preservation (Ex. 8.2.7)",
+              "body": "If \\(f_n \\rightrightarrows f\\) on \\(A\\) and each \\(f_n\\) is bounded on \\(A\\), then \\(f\\) is bounded on \\(A\\). Consequently, if the pointwise limit \\(f\\) is unbounded on \\(A\\), convergence cannot be uniform.",
+              "examples": [
+                "\\(|f(x)| \\le M_H + 1\\)",
+                "Unbounded \\(f \\Rightarrow\\) non-uniform"
+              ]
+            },
+            {
+              "type": "derivation",
+              "title": "Unbounded limit test on \\([0, \\infty)\\) (Ex. 8.2.8)",
+              "legend": "\\(f_n(x) = \\frac{nx}{1 + nx^2}\\) for \\(x > 0\\), pointwise limit \\(f(x)\\).",
+              "phases": [
+                {
+                  "name": "Start",
+                  "why": "write f_n(x) for x > 0"
+                },
+                {
+                  "name": "Rescale",
+                  "why": "divide numerator and denominator by n"
+                },
+                {
+                  "name": "Pass to limit",
+                  "why": "let 1/n tend to 0 as n tends to infinity"
+                },
+                {
+                  "name": "Simplify",
+                  "why": "cancel x to reveal the unbounded limit 1/x"
+                }
+              ],
+              "steps": [
+                {
+                  "phase": "Start",
+                  "tex": "f_n(x) = \\frac{nx}{1 + nx^2}",
+                  "note": "Each \\(f_n\\) is bounded on \\(A = [0, \\infty)\\) with maximum \\(\\frac{\\sqrt{n}}{2}\\)."
+                },
+                {
+                  "phase": "Rescale",
+                  "move": {
+                    "type": "simplify",
+                    "label": "Divide top and bottom by n"
+                  },
+                  "tex": "f_n(x) = \\frac{x}{\\frac{1}{n} + x^2}",
+                  "note": "Divide numerator and denominator by \\(n\\) for \\(x > 0\\).",
+                  "ask": {
+                    "q": "For fixed \\(x > 0\\), how do we evaluate \\(\\lim_{n\\to\\infty} \\frac{nx}{1 + nx^2}\\)?",
+                    "options": [
+                      "Divide numerator and denominator by \\(n\\)",
+                      "Set \\(x = 0\\) in the denominator",
+                      "Multiply numerator and denominator by \\(x^2\\)",
+                      "Take the derivative with respect to \\(x\\)"
+                    ],
+                    "answer": 0,
+                    "why": "Dividing top and bottom by \\(n\\) isolates \\(1/n\\), which tends to \\(0\\)."
+                  }
+                },
+                {
+                  "phase": "Pass to limit",
+                  "move": {
+                    "type": "evaluate",
+                    "by": "\\frac{1}{n} \\to 0"
+                  },
+                  "tex": "f(x) = \\frac{x}{0 + x^2}",
+                  "note": "As \\(n \\to \\infty\\), \\(\\frac{1}{n} \\to 0\\) while \\(x > 0\\) is fixed."
+                },
+                {
+                  "phase": "Simplify",
+                  "move": {
+                    "type": "cancel"
+                  },
+                  "tex": "f(x) = \\frac{1}{x}",
+                  "note": "Since \\(f(x) = 1/x\\) for \\(x > 0\\) is unbounded on \\([0, \\infty)\\), \\(f_n \\not\\rightrightarrows f\\).",
+                  "ask": {
+                    "q": "Since each \\(f_n\\) is bounded on \\([0, \\infty)\\) and \\(f(x) = 1/x\\) for \\(x > 0\\), why does \\((f_n)\\) fail to converge uniformly on \\([0, \\infty)\\)?",
+                    "options": [
+                      "By Exercise 8.2.7, a uniform limit of bounded functions must be bounded, but \\(f\\) is unbounded near \\(0\\)",
+                      "Because \\(f_n(0) = 1\\) for all \\(n\\)",
+                      "Because \\(f(x) = 1/x\\) is discontinuous at \\(x = 1\\)",
+                      "Because \\(f_n\\) is not continuous on \\([0, \\infty)\\)"
+                    ],
+                    "answer": 0,
+                    "why": "Both Theorem 8.2.2 (discontinuity at \\(0\\)) and Exercise 8.2.7 (unbounded limit) rule out uniform convergence on \\([0, \\infty)\\)."
+                  }
+                }
+              ]
+            },
+            {
+              "type": "math",
+              "label": "Example",
+              "title": "Discontinuity rules out uniform convergence (Ex. 8.2.1)",
+              "tex": "f(x) = \\lim_{n\\to\\infty} \\frac{x^n}{1 + x^n} \\text{ jumps at } x = 1 \\implies f_n \\not\\rightrightarrows f \\text{ on } [0, 2]",
+              "body": "Each \\(f_n\\) is continuous on \\([0, 2]\\), but \\(f(x)\\) jumps from \\(0\\) to \\(1/2\\) to \\(1\\) at \\(x = 1\\)."
+            },
+            {
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "In the proof of Theorem 8.2.2, why can we choose a single index \\(H\\) such that \\(|f(x) - f_H(x)| < \\varepsilon/3\\) and \\(|f_H(c) - f(c)| < \\varepsilon/3\\) for all \\(x \\in A\\)?",
+              "options": [
+                "Because \\((f_n)\\) converges uniformly on \\(A\\)",
+                "Because \\(f\\) is assumed continuous at \\(c\\)",
+                "Because \\(A\\) must be a closed bounded interval",
+                "Because \\((f_n)\\) is a monotone sequence"
+              ],
+              "answer": 0,
+              "why": "Uniform convergence gives a single index \\(H = H(\\varepsilon/3)\\) that works simultaneously for every point in \\(A\\), including \\(x\\) and \\(c\\)."
+            },
+            {
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "Let \\(f_n(x) = \\frac{1}{(1+x)^n}\\) for \\(x \\in [0, 1]\\) (Exercise 8.2.6). What is its pointwise limit \\(f\\), and does \\((f_n)\\) converge uniformly on \\([0, 1]\\)?",
+              "options": [
+                "\\(f(0) = 1\\) and \\(f(x) = 0\\) for \\(x \\in (0, 1]\\); not uniform because \\(f\\) is discontinuous at \\(0\\)",
+                "\\(f(x) = 0\\) for all \\(x \\in [0, 1]\\); uniform on \\([0, 1]\\)",
+                "\\(f(x) = 1\\) for all \\(x \\in [0, 1]\\); uniform on \\([0, 1]\\)",
+                "\\(f(0) = 1\\) and \\(f(x) = 0\\) for \\(x \\in (0, 1]\\); uniform because \\([0, 1]\\) is closed"
+              ],
+              "answer": 0,
+              "why": "At \\(x = 0\\), \\(f_n(0) = 1 \\to 1\\), while for \\(x > 0\\), \\(1 + x > 1\\) so \\((1+x)^{-n} \\to 0\\). Since \\(f\\) is discontinuous at \\(0\\), Theorem 8.2.2 implies convergence is not uniform."
+            },
+            {
+              "type": "fill",
+              "label": "Quiz · Fill in",
+              "time": 45,
+              "q": "If a sequence \\((f_n)\\) converges uniformly to \\(f\\) on \\(A\\) and each \\(f_n\\) is bounded on \\(A\\), then the limit function \\(f\\) is ______ on \\(A\\).",
+              "answer": "bounded",
+              "why": "By Exercise 8.2.7, choosing \\(H\\) with \\(\\|f_H - f\\|_A \\le 1\\) gives \\(|f(x)| \\le |f_H(x)| + 1 \\le M_H + 1\\) for all \\(x \\in A\\)."
+            },
+            {
+              "type": "number",
+              "label": "Quiz · Number",
+              "time": 60,
+              "q": "Suppose continuous functions \\(f_n\\) on \\([0, 2]\\) converge uniformly to \\(f(x) = 3x^2 + 1\\). If \\(x_n = 1 + \\frac{1}{n}\\), what is \\(\\lim_{n\\to\\infty} f_n(x_n)\\)?",
+              "answer": 4,
+              "tolerance": 0,
+              "unit": "",
+              "why": "By Exercise 8.2.4, since \\(f_n \\rightrightarrows f\\) and \\(x_n \\to 1\\), \\(\\lim f_n(x_n) = f(1) = 3(1)^2 + 1 = 4\\)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "short": "Abstract Algebra",
+      "title": "Abstract Algebra I",
+      "sheets": [
+        {
+          "id": "aa1-cosets-subgroup",
+          "title": "Cosets of a subgroup",
+          "icon": "cell",
+          "cards": [
+            {
+              "type": "info",
+              "label": "01",
+              "title": "Equivalence relation and left cosets",
+              "body": "For a subgroup \\(H \\le G\\), the relation \\(a \\sim_L b\\) iff \\(a^{-1}b \\in H\\) is an equivalence relation on \\(G\\). The equivalence class containing \\(a\\) is the left coset \\(aH = \\{ah \\mid h \\in H\\}\\).",
+              "examples": [
+                "\\(a \\sim_L b \\iff a^{-1}b \\in H\\)",
+                "\\(aH = \\{ah \\mid h \\in H\\}\\)"
+              ],
+              "art": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Partition of a group G into three equal disjoint coset cells\"><rect x=\"20\" y=\"25\" width=\"220\" height=\"130\" rx=\"12\" class=\"s ok\" stroke-width=\"2\"/><rect x=\"28\" y=\"35\" width=\"64\" height=\"110\" rx=\"8\" class=\"h\"/><rect x=\"98\" y=\"35\" width=\"64\" height=\"110\" rx=\"8\" class=\"f\"/><rect x=\"168\" y=\"35\" width=\"64\" height=\"110\" rx=\"8\" class=\"f\"/><text x=\"60\" y=\"95\" text-anchor=\"middle\" font-size=\"16\" class=\"t\">H</text><text x=\"130\" y=\"95\" text-anchor=\"middle\" font-size=\"16\" class=\"i\">aH</text><text x=\"200\" y=\"95\" text-anchor=\"middle\" font-size=\"16\" class=\"i\">bH</text></svg>"
+            },
+            {
+              "type": "info",
+              "label": "02",
+              "title": "Additive cosets in \\(\\mathbb{Z}\\) and \\(\\mathbb{Z}_n\\)",
+              "body": "When the group operation is addition, the left coset of \\(H\\) containing \\(m\\) is written \\(m + H = \\{m + h \\mid h \\in H\\}\\). The cosets partition the group into disjoint sets.",
+              "examples": [
+                "\\(0 + 3\\mathbb{Z}\\), \\(1 + 3\\mathbb{Z}\\), \\(2 + 3\\mathbb{Z}\\)",
+                "\\(H = \\langle 3 \\rangle \\le \\mathbb{Z}_{12}\\)"
+              ],
+              "tex": "m + H = \\{m + h \\mid h \\in H\\}"
+            },
+            {
+              "type": "info",
+              "label": "03",
+              "title": "Right cosets and nonabelian groups",
+              "body": "The relation \\(a \\sim_R b\\) iff \\(ab^{-1} \\in H\\) yields right cosets \\(Ha = \\{ha \\mid h \\in H\\}\\). In abelian groups \\(aH = Ha\\), but in nonabelian groups such as \\(D_4\\), left and right cosets can differ.",
+              "examples": [
+                "\\(Ha = \\{ha \\mid h \\in H\\}\\)",
+                "In \\(D_4\\): \\(\\rho H \\neq H\\rho\\)"
+              ]
+            },
+            {
+              "type": "info",
+              "label": "04",
+              "title": "Properties of coset partitions",
+              "body": "The subgroup \\(H = eH\\) is always a coset of itself. Two left cosets \\(aH\\) and \\(bH\\) are either identical (when \\(b \\in aH\\)) or completely disjoint, and \\(gH = Hg\\) for all \\(g\\) iff \\(g^{-1}hg \\in H\\).",
+              "examples": [
+                "\\(aH = bH \\iff a^{-1}b \\in H\\)",
+                "Disjoint or identical"
+              ]
+            },
+            {
+              "type": "derivation",
+              "title": "Transitivity of \\(\\sim_L\\) and coset form (Thm 10.1)",
+              "legend": "\\(H \\le G\\) subgroup, \\(a, b, c \\in G\\) with \\(a \\sim_L b\\) and \\(b \\sim_L c\\), \\(h_1, h_2 \\in H\\).",
+              "phases": [
+                {
+                  "name": "First relation",
+                  "why": "express a ~_L b using an element h_1 in H"
+                },
+                {
+                  "name": "Coset form",
+                  "why": "solve for b to show b = a h_1 in aH"
+                },
+                {
+                  "name": "Second relation",
+                  "why": "combine with b ~_L c where b^-1 c = h_2"
+                },
+                {
+                  "name": "Transitivity",
+                  "why": "isolate a^-1 c as a product in H"
+                }
+              ],
+              "steps": [
+                {
+                  "phase": "First relation",
+                  "tex": "a^{-1}b = h_1",
+                  "note": "Since \\(a \\sim_L b\\), \\(a^{-1}b\\) equals some element \\(h_1 \\in H\\)."
+                },
+                {
+                  "phase": "Coset form",
+                  "move": {
+                    "type": "multiply",
+                    "by": "a"
+                  },
+                  "tex": "b = ah_1",
+                  "note": "Multiply on the left by \\(a\\); this shows \\(b \\in aH\\).",
+                  "ask": {
+                    "q": "If \\(a^{-1}b = h_1 \\in H\\), how do we isolate \\(b\\) to see the form of elements in the equivalence class of \\(a\\)?",
+                    "options": [
+                      "Multiply both sides on the left by \\(a\\)",
+                      "Multiply both sides on the right by \\(a\\)",
+                      "Divide by \\(h_1\\)",
+                      "Take inverses of both sides"
+                    ],
+                    "answer": 0,
+                    "why": "Left-multiplying by \\(a\\) uses \\(aa^{-1} = e\\) to give \\(b = ah_1 \\in aH\\)."
+                  }
+                },
+                {
+                  "phase": "Second relation",
+                  "move": {
+                    "type": "multiply",
+                    "by": "h_2"
+                  },
+                  "tex": "bh_2 = ah_1h_2",
+                  "note": "Multiply on the right by \\(h_2 = b^{-1}c \\in H\\)."
+                },
+                {
+                  "move": {
+                    "type": "substitute",
+                    "by": "bh_2 = c"
+                  },
+                  "tex": "c = ah_1h_2",
+                  "note": "Since \\(b^{-1}c = h_2\\), we have \\(bh_2 = c\\)."
+                },
+                {
+                  "phase": "Transitivity",
+                  "move": {
+                    "type": "multiply",
+                    "by": "a^{-1}"
+                  },
+                  "tex": "a^{-1}c = h_1h_2",
+                  "note": "Since \\(H\\) is a subgroup, \\(h_1h_2 \\in H\\), proving \\(a \\sim_L c\\).",
+                  "ask": {
+                    "q": "Why does \\(a^{-1}c = h_1h_2\\) guarantee that \\(a^{-1}c \\in H\\)?",
+                    "options": [
+                      "Because \\(H\\) is a subgroup and is closed under the group operation",
+                      "Because \\(G\\) is assumed to be abelian",
+                      "Because \\(h_1\\) and \\(h_2\\) are inverses of each other",
+                      "Because \\(H\\) is finite"
+                    ],
+                    "answer": 0,
+                    "why": "Closure of the subgroup \\(H\\) ensures that the product \\(h_1h_2\\) of two elements in \\(H\\) lies in \\(H\\)."
+                  }
+                }
+              ]
+            },
+            {
+              "type": "math",
+              "label": "Example",
+              "title": "Cosets of \\(\\langle 3 \\rangle\\) in \\(\\mathbb{Z}_{18}\\) (Ex. 10.3)",
+              "tex": "0+H = \\{0,3,6,9,12,15\\},\\ 1+H = \\{1,4,7,10,13,16\\},\\ 2+H = \\{2,5,8,11,14,17\\}",
+              "body": "These three cosets are disjoint and exhaust all \\(18\\) elements of \\(\\mathbb{Z}_{18}\\)."
+            },
+            {
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 45,
+              "q": "Let \\(H\\) be a subgroup of a group \\(G\\). By Theorem 10.1, when do two elements \\(a, b \\in G\\) belong to the same left coset of \\(H\\)?",
+              "options": [
+                "When \\(a^{-1}b \\in H\\)",
+                "When \\(ab \\in H\\)",
+                "When \\(ab^{-1} \\in H\\)",
+                "When \\(a^{-1}b = e\\)"
+              ],
+              "answer": 0,
+              "why": "The equivalence relation defining left cosets is \\(a \\sim_L b \\iff a^{-1}b \\in H\\)."
+            },
+            {
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "In the dihedral group \\(D_4\\) with subgroup \\(H = \\{\\iota, \\mu\\}\\), what are the left coset \\(\\rho H\\) and right coset \\(H\\rho\\) (Examples 10.5 & 10.12)?",
+              "options": [
+                "\\(\\rho H = \\{\\rho, \\mu\\rho^3\\}\\) and \\(H\\rho = \\{\\rho, \\mu\\rho\\}\\)",
+                "\\(\\rho H = \\{\\rho, \\mu\\rho\\}\\) and \\(H\\rho = \\{\\rho, \\mu\\rho^3\\}\\)",
+                "Both equal \\(\\{\\rho, \\mu\\rho\\}\\)",
+                "Both equal \\(\\{\\rho, \\rho^3\\}\\)"
+              ],
+              "answer": 0,
+              "why": "In \\(D_4\\), \\(\\rho\\mu = \\mu\\rho^3\\), so \\(\\rho\\{\\iota, \\mu\\} = \\{\\rho, \\mu\\rho^3\\}\\) while \\(\\{\\iota, \\mu\\}\\rho = \\{\\rho, \\mu\\rho\\}\\)."
+            },
+            {
+              "type": "fill",
+              "label": "Quiz · Fill in",
+              "time": 45,
+              "q": "Because the relation \\(\\sim_L\\) is reflexive, symmetric, and transitive, it is an ______ relation and partitions \\(G\\) into disjoint cosets.",
+              "answer": "equivalence|equivalence relation",
+              "why": "Theorem 10.1 proves that \\(\\sim_L\\) is an equivalence relation on \\(G\\), whose equivalence classes are the left cosets of \\(H\\)."
+            },
+            {
+              "type": "number",
+              "label": "Quiz · Number",
+              "time": 60,
+              "q": "How many distinct cosets does the subgroup \\(\\langle 6 \\rangle\\) have in \\(\\mathbb{Z}_{18}\\) (Exercise 10.4)?",
+              "answer": 6,
+              "tolerance": 0,
+              "unit": "cosets",
+              "why": "In \\(\\mathbb{Z}_{18}\\), \\(\\langle 6 \\rangle = \\{0, 6, 12\\}\\) has \\(3\\) elements, so it partitions \\(\\mathbb{Z}_{18}\\) into \\(18 / 3 = 6\\) cosets."
+            }
+          ]
+        },
+        {
+          "id": "aa1-lagrange-theorem",
+          "title": "Lagrange's theorem and consequences",
+          "icon": "book",
+          "cards": [
+            {
+              "type": "info",
+              "label": "01",
+              "title": "Equal cardinality and Lagrange's Theorem",
+              "body": "The map \\(f : H \\to aH\\) given by \\(f(h) = ah\\) is a bijection, so every coset of \\(H\\) has cardinality \\(|H|\\). If \\(G\\) is finite, \\(|G| = r|H|\\), so \\(|H|\\) divides \\(|G|\\).",
+              "examples": [
+                "\\(|aH| = |H|\\)",
+                "\\(|H|\\) divides \\(|G|\\)"
+              ],
+              "art": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Group of order 12 partitioned into 3 cosets of 4 elements each\"><rect x=\"20\" y=\"30\" width=\"65\" height=\"115\" rx=\"8\" class=\"h\"/><rect x=\"97\" y=\"30\" width=\"65\" height=\"115\" rx=\"8\" class=\"s ok\" stroke-width=\"1.5\"/><rect x=\"175\" y=\"30\" width=\"65\" height=\"115\" rx=\"8\" class=\"s ok\" stroke-width=\"1.5\"/><circle cx=\"40\" cy=\"58\" r=\"7\" class=\"f\"/><circle cx=\"65\" cy=\"58\" r=\"7\" class=\"f\"/><circle cx=\"40\" cy=\"92\" r=\"7\" class=\"f\"/><circle cx=\"65\" cy=\"92\" r=\"7\" class=\"f\"/><circle cx=\"117\" cy=\"58\" r=\"7\" class=\"f\"/><circle cx=\"142\" cy=\"58\" r=\"7\" class=\"f\"/><circle cx=\"117\" cy=\"92\" r=\"7\" class=\"f\"/><circle cx=\"142\" cy=\"92\" r=\"7\" class=\"f\"/><circle cx=\"195\" cy=\"58\" r=\"7\" class=\"f\"/><circle cx=\"220\" cy=\"58\" r=\"7\" class=\"f\"/><circle cx=\"195\" cy=\"92\" r=\"7\" class=\"f\"/><circle cx=\"220\" cy=\"92\" r=\"7\" class=\"f\"/><text x=\"130\" y=\"166\" text-anchor=\"middle\" font-size=\"13\" class=\"t\">|G| = 3 x 4 = 12</text></svg>"
+            },
+            {
+              "type": "info",
+              "label": "02",
+              "title": "Prime order groups and element orders",
+              "body": "By Corollary 10.8, every group of prime order \\(p\\) is cyclic and isomorphic to \\(\\mathbb{Z}_p\\). By Theorem 10.9, the order of any element \\(a\\) of a finite group \\(G\\) divides \\(|G|\\).",
+              "examples": [
+                "\\(|G| = p \\implies G \\simeq \\mathbb{Z}_p\\)",
+                "\\(|\\langle a \\rangle|\\) divides \\(|G|\\)"
+              ]
+            },
+            {
+              "type": "info",
+              "label": "03",
+              "title": "Index of a subgroup",
+              "body": "The index \\((G : H)\\) is the number of left cosets of \\(H\\) in \\(G\\). For finite \\(G\\), \\((G : H) = |G|/|H|\\). If \\(K \\le H \\le G\\) have finite indices, Theorem 10.11 gives \\((G : K) = (G : H)(H : K)\\).",
+              "examples": [
+                "\\((G : H) = |G|/|H|\\)",
+                "\\((G : K) = (G : H)(H : K)\\)"
+              ],
+              "tex": "(G : K) = (G : H)(H : K)"
+            },
+            {
+              "type": "info",
+              "label": "04",
+              "title": "Converse of Lagrange's Theorem",
+              "body": "The converse of Lagrange's Theorem is false in general: a finite group need not have a subgroup of every order dividing \\(|G|\\). However, every finite abelian group has a subgroup of every divisor order.",
+              "examples": [
+                "Converse fails in general",
+                "Holds for finite abelian \\(G\\)"
+              ]
+            },
+            {
+              "type": "derivation",
+              "title": "Proof that \\(a^n = e\\) in a group of order \\(n\\) (Ex. 10.42)",
+              "legend": "\\(G\\) finite group of order \\(n\\), \\(a \\in G\\) element of order \\(m = |\\langle a \\rangle|\\), \\(e\\) identity.",
+              "phases": [
+                {
+                  "name": "Lagrange",
+                  "why": "relate group order n to element order m"
+                },
+                {
+                  "name": "Substitute",
+                  "why": "replace n with rm in the exponent of a"
+                },
+                {
+                  "name": "Power law",
+                  "why": "rewrite a^(rm) as a power of a^m"
+                },
+                {
+                  "name": "Identity",
+                  "why": "use a^m = e to simplify to e"
+                }
+              ],
+              "steps": [
+                {
+                  "phase": "Lagrange",
+                  "tex": "n = rm",
+                  "note": "By Theorem 10.9, the order \\(m = |\\langle a \\rangle|\\) divides \\(n = |G|\\)."
+                },
+                {
+                  "phase": "Substitute",
+                  "move": {
+                    "type": "substitute",
+                    "by": "n = rm \\text{ in } a^n"
+                  },
+                  "tex": "a^n = a^{rm}",
+                  "note": "Replace the exponent \\(n\\) with \\(rm\\).",
+                  "ask": {
+                    "q": "Why does the order \\(m\\) of an element \\(a \\in G\\) divide the order \\(n\\) of the finite group \\(G\\)?",
+                    "options": [
+                      "Because \\(m\\) is the order of the cyclic subgroup \\(\\langle a \\rangle \\le G\\), and \\(|\\langle a \\rangle|\\) divides \\(|G|\\) by Lagrange's Theorem",
+                      "Because every finite group is cyclic",
+                      "Because \\(a\\) commutes with every element of \\(G\\)",
+                      "Because \\(m\\) is always prime"
+                    ],
+                    "answer": 0,
+                    "why": "By Theorem 10.9, the order of \\(a\\) equals the order of the cyclic subgroup \\(\\langle a \\rangle\\), which divides \\(|G|\\) by Theorem 10.7."
+                  }
+                },
+                {
+                  "phase": "Power law",
+                  "move": {
+                    "type": "rearrange"
+                  },
+                  "tex": "a^n = (a^m)^r",
+                  "note": "Use the exponent rule \\(a^{rm} = (a^m)^r\\)."
+                },
+                {
+                  "phase": "Identity",
+                  "move": {
+                    "type": "substitute",
+                    "by": "a^m = e"
+                  },
+                  "tex": "a^n = e^r",
+                  "note": "Since \\(a\\) has order \\(m\\), \\(a^m = e\\).",
+                  "ask": {
+                    "q": "What is the value of \\(a^m\\) when \\(m\\) is the order of \\(a\\)?",
+                    "options": [
+                      "The identity element \\(e\\)",
+                      "The inverse \\(a^{-1}\\)",
+                      "The generator \\(a\\)",
+                      "The index \\(r\\)"
+                    ],
+                    "answer": 0,
+                    "why": "By definition of element order, \\(a^m = e\\)."
+                  }
+                },
+                {
+                  "move": {
+                    "type": "simplify"
+                  },
+                  "tex": "a^n = e",
+                  "note": "Any power of the identity \\(e\\) is \\(e\\)."
+                }
+              ]
+            },
+            {
+              "type": "math",
+              "label": "Example",
+              "title": "Calculating subgroup indices (Ex. 10.11 & 10.15)",
+              "tex": "(D_6 : \\langle \\rho^2 \\rangle) = \\frac{12}{3} = 4, \\qquad (S_5 : \\langle (1,2,5,4)(2,3) \\rangle) = \\frac{120}{5} = 24",
+              "body": "In \\(D_6\\), \\(\\langle \\rho^2 \\rangle\\) has order \\(3\\). In \\(S_5\\), \\(\\sigma = (1,2,5,4)(2,3) = (1,2,3,5,4)\\) is a \\(5\\)-cycle of order \\(5\\)."
+            },
+            {
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 45,
+              "q": "Why is every group \\(G\\) of prime order \\(p\\) cyclic (Corollary 10.8)?",
+              "options": [
+                "Any \\(a \\neq e\\) generates \\(\\langle a \\rangle\\) of order \\(m \\ge 2\\) dividing \\(p\\), so \\(m = p\\) and \\(\\langle a \\rangle = G\\)",
+                "Every finite group has an element of order equal to \\(|G|\\)",
+                "The identity element \\(e\\) has order \\(p\\)",
+                "Every subgroup of \\(G\\) has index \\(2\\)"
+              ],
+              "answer": 0,
+              "why": "Since \\(p\\) is prime and \\(|\\langle a \\rangle| \\ge 2\\) divides \\(p\\) by Lagrange's Theorem, \\(|\\langle a \\rangle| = p\\), so \\(\\langle a \\rangle = G\\)."
+            },
+            {
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "Let \\(G\\) be a group of order \\(pq\\), where \\(p\\) and \\(q\\) are prime numbers (Exercise 10.36). What must be true of every proper subgroup \\(H < G\\)?",
+              "options": [
+                "\\(H\\) is cyclic because its order must be \\(1\\), \\(p\\), or \\(q\\)",
+                "\\(H\\) has order \\(p + q\\)",
+                "\\(G\\) itself must be cyclic",
+                "\\(H\\) is nonabelian"
+              ],
+              "answer": 0,
+              "why": "By Lagrange's Theorem, a proper subgroup \\(H\\) of \\(G\\) has order \\(1\\), \\(p\\), or \\(q\\). The trivial group and groups of prime order are all cyclic."
+            },
+            {
+              "type": "fill",
+              "label": "Quiz · Fill in",
+              "time": 45,
+              "q": "By Definition 10.10, the number of left cosets of a subgroup \\(H\\) in a group \\(G\\) is called the ______ of \\(H\\) in \\(G\\), denoted \\((G : H)\\).",
+              "answer": "index",
+              "why": "Definition 10.10 defines the index \\((G : H)\\) as the number of left cosets of \\(H\\) in \\(G\\)."
+            },
+            {
+              "type": "number",
+              "label": "Quiz · Number",
+              "time": 60,
+              "q": "Let \\(\\mu = (1, 2, 4, 5)(3, 6)\\) in \\(S_6\\) (Exercise 10.16). Find the index \\((S_6 : \\langle \\mu \\rangle)\\).",
+              "answer": 180,
+              "tolerance": 0,
+              "unit": "",
+              "why": "The disjoint cycles have lengths \\(4\\) and \\(2\\), so \\(|\\langle \\mu \\rangle| = \\operatorname{lcm}(4, 2) = 4\\). Thus \\((S_6 : \\langle \\mu \\rangle) = 6! / 4 = 720 / 4 = 180\\)."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

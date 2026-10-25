@@ -1,0 +1,926 @@
+--- a/skills/00-START-HERE.md
++++ b/skills/00-START-HERE.md
+@@ -69,12 +69,12 @@
+ 1. Plan first, privately: list the sections (big subject areas, 2–6), and inside each the topics
+    ("sheets", 2–5 per section). A topic is something I can finish in 10–25 minutes.
+ 2. For each syllabus topic write about 6–14 cards, following `01-schema.md`:
+-   - concepts first (`info` cards, one idea each, with an SVG picture when a picture helps),
++   - concepts first (`info` cards, one idea each, with a `ggb` GeoGebra figure when a picture helps),
+    - a `derivation` card whenever the topic has a formula that is derived (rules in `02-derivations.md`),
+    - one `math` worked example where numbers help,
+    - then 3–5 questions (`mcq`, `fill`, `number`) at the end of the topic (rules in `04-questions.md`).
+-2b. For physics topics also follow the "Physics subjects: required pictures" rules in `03-svg-art.md`
+-   (circuit diagrams, optics set-up diagrams, true graphs) and give every derivation 4 `ask` checkpoints.
++2b. For physics topics also follow the GeoGebra figure rules in `03-svg-art.md`
++   (interactive geometry with dependencies, `free` draggable points, and step `focus` names) and give every derivation 4 `ask` checkpoints.
+ 2c. For physics model-paper practice, preserve the paper's sections and question order.
+    Use one sheet per exam question, with `question` → marking `eval` cards → `score`
+    → model answer/figures/derivations → `key` (Remember) → exactly three new OMR
+--- a/skills/01-schema.md
++++ b/skills/01-schema.md
+@@ -61,7 +61,7 @@
+ ```
+ 
+ The prompt is `q`; `textAnswer` is an optional boolean for prose-only answers.
+-Optional `art` follows the same SVG rules as `info`. A `hint` can replace the
++Optional `ggb` follows the same GeoGebra rules as `info`. A `hint` can replace the
+ default instruction. Do not enable a prose box on questions requiring diagrams,
+ graphs, equations or calculations.
+ 
+@@ -91,17 +91,22 @@
+ `points` is a non-empty list. Place the Remember card after the model answer,
+ then append the three word-completion OMR cards described below.
+ 
+-### `intuition` — plain-words introduction with required SVG picture
++### `intuition` — plain-words introduction with required GeoGebra figure
+ 
+ Place an `intuition` card immediately before a new concept's technical `info` card;
+ see `07-plain-words-and-glossary.md`. Every `intuition` card **must** include an
+-`art` SVG (drawn according to `03-svg-art.md`), followed by `picture` as a short
++`ggb` figure (built according to `03-svg-art.md`), followed by `picture` as a short
+ one-line caption explaining what to look at in the diagram.
+ ```json
+ { "type": "intuition", "term": "paraxial-approximation",
+   "title": "Why only rays close to the axis focus sharply",
+   "meaning": "The paraxial approximation keeps only rays that make very small angles with the axis.",
+-  "art": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"...\">...</svg>",
++  "ggb": {
++    "view": { "xmin": -8, "xmax": 8, "ymin": -5.5, "ymax": 5.5, "grid": true },
++    "commands": [ "O = (-6, 0)", "P = (0, 0)", "S = (0, 2)", "OS = Segment(O, S)", "alpha1 = Angle(P, O, S)" ],
++    "free": [ "S" ],
++    "focus": [ "OS", "alpha1" ]
++  },
+   "picture": "Look at the small angle arc α near O where height h over distance x gives the angle.",
+   "example": "At 0.1 rad, sin(0.1) and tan(0.1) are both very close to 0.1.",
+   "bridge": "Under this small-angle rule, all paraxial rays from O meet at one image point I." }
+@@ -119,14 +124,18 @@
+ Keep the authored definition body on the flip card's front; writing belongs on
+ its back. Locked cards remain in the row with their original dimensions.
+ ```json
+-{ "type": "info", "label": "01", "title": "Ionic bond",
+-  "body": "One atom transfers electrons to another, creating oppositely charged ions that attract.",
+-  "examples": ["NaCl", "MgO"],
+-  "art": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"...\">...</svg>" }
++{ "type": "info", "label": "04 · §3.2 Reflection", "title": "Laws of reflection from Fermat's principle",
++  "body": "Reflecting A across mirror MN to A' makes AP + PB = A'P + PB. A straight line A'PB minimizes length, so i = r.",
++  "examples": ["AP = PA'", "i = r"],
++  "ggb": {
++    "view": { "xmin": -8, "xmax": 8, "ymin": -5.5, "ymax": 5.5, "grid": true },
++    "commands": [ "M = (-7, -1)", "N = (7, -1)", "MN = Segment(M, N)", "A = (-4, 3)", "B = (4, 3)" ],
++    "free": [ "A" ]
++  } }
+ ```
+ - `body`: 1–2 sentences, ≤ 220 characters. One idea per card.
+ - `examples`: 0–3 short chips (≤ 24 chars each).
+-- `art`: optional SVG (rules in `03-svg-art.md`). Instead of `art` you may give `"tex": "E = mc^2"` to show one formula large.
++- `ggb`: optional GeoGebra figure (rules in `03-svg-art.md`). Instead of `ggb` you may give `"tex": "E = mc^2"` to show one formula large.
+ 
+ ### `math` — a formula or worked example shown large
+ ```json
+--- a/skills/02-derivations.md
++++ b/skills/02-derivations.md
+@@ -1,10 +1,10 @@
+ # 02 — Writing derivations
+ 
+ You write **lines of TeX** and name the **move** that produced each line. The app animates
+-everything on a single card after the student flips it: the `setup` SVG sits next to the
++everything on a single card after the student flips it: the `ggb` GeoGebra figure sits next to the
+ equations on the same board, symbols glide to their new place, new symbols write in, and
+-cancelled ones are struck through and vanish.
++cancelled ones are struck through and vanish while the GeoGebra API highlights the active geometry.
+ 
+ ## Rules for every step
+ 
+ 1. `tex` is **one line** with **exactly one `=`** at the top level.
+@@ -19,10 +19,10 @@
+    surface 1 and surface 2 of a thin lens), write them one after the other as separate steps,
+    each with its own phase label—never side by side. The first step has no `move`; every later step has one.
+ 6. Every step has a `note`: one short sentence saying *why* or what just cancelled (≤ 120 chars).
+-7. Include a `"setup"` SVG (following `03-svg-art.md`) showing the geometry or circuit used by
+-   the derivation, with `data-part="name"` on each highlightable ray, side, angle arc and label.
+-   Each step names the parts it uses in `"focus": ["name1", "name2"]` so the picture highlights
+-   those lines at the same time.
++7. Include a `"ggb"` figure object (following `03-svg-art.md`) showing the interactive geometry used by
++   the derivation, with textbook object names in `commands` and draggable points in `free`.
++   Each step names the GeoGebra objects it uses in `"focus": ["name1", "name2"]` (and `ggb.steps`) so the
++   GeoGebra API highlights those lines, points and angles at the same moment.
+ 8. Mark 3–6 phases with `"phase"` on the step where each phase starts. List the same phases in
+    `"phases"` with a one-line `why` each. Do not create separate route, step, or full-page cards;
+    the card includes an **All steps** summary stage that opens after the last step or from the top button.
+--- a/skills/03-svg-art.md
++++ b/skills/03-svg-art.md
+@@ -1,61 +1,53 @@
+-# 03 — SVG pictures for `info`, `intuition` and `derivation` cards
+-
+-Pictures are simple, flat diagrams. The app colours them, including in dark mode, through
+-**classes**. Never write colours yourself.
+-
+-## Hard rules
+-
+-- Exactly one element: `<svg viewBox="0 0 260 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="what it shows">…</svg>`
+-- Draw inside x 0–260, y 0–180. Leave ~8 units of margin.
+-- Allowed elements: `circle, ellipse, rect, line, polyline, polygon, path, text, g`.
+-- **No** `fill="#…"`, `stroke="#…"`, `style=`, `<script>`, `<image>`, `href`, `on…=` attributes, gradients, filters, fonts.
+-- Use only these classes:
+-
+-| class | effect | use for |
+-|---|---|---|
+-| `f` | solid main colour (violet) | main objects, nuclei, arrows heads |
+-| `s` | soft fill (pale lavender) | backgrounds, secondary objects, areas |
+-| `ok` | violet outline (add to a filled shape: `class="s ok"`) | borders |
+-| `lk` | violet line, no fill | lines, paths, angle arcs, axes, orbits |
+-| `gk` | faint grey line | ground lines, guides, dashed helpers |
+-| `h` | amber fill | the ONE thing to look at (electron, ball, key point) |
+-| `hk` | amber line, no fill | the ONE key arrow or path |
+-| `t` | text in ink colour, bold | labels on light backgrounds |
+-| `i` | text in light colour, bold | labels on top of `f` shapes |
+-
+-- Set line thickness with `stroke-width="2"` (allowed). Dashes with `stroke-dasharray="5 5"` (allowed).
+-- **Angle arcs**: whenever an angle (such as θ, φ, α, β, i or r) is shown or used, draw its curved mark as a `<path d="M x1 y1 A r r 0 0 1 x2 y2" class="lk" stroke-width="1.8"/>` (line, no fill), placed **after** the lines/rays it marks so it stays visible on top.
+-- **Highlightable parts (`data-part`)**: give each ray, triangle side, surface, angle arc and matching label a `data-part="name"` attribute so derivation steps can highlight them via `"focus": ["name"]`.
+-- **Palette tokens only**: never hard-code hex/rgb colours in SVGs or maths CSS; use only the allowed classes and the tokens from `01-tokens.css`.
+-- Text: `font-size` 11–26, `text-anchor="middle"` to centre. Max ~4 words per label.
+-- Only **one** amber (`h`/`hk`) highlight per picture: it is where the eye goes.
+-- Inside the JSON string, every `"` in the SVG must be written `\"`.
+-
+-## Example (as it appears inside data.json)
+-
+-```json
+-"art": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Sodium ion giving an electron to a chloride ion\"><circle cx=\"80\" cy=\"95\" r=\"50\" class=\"s\"/><text x=\"80\" y=\"104\" text-anchor=\"middle\" font-size=\"24\" class=\"t\">Na⁺</text><circle cx=\"180\" cy=\"95\" r=\"50\" class=\"f\"/><text x=\"180\" y=\"104\" text-anchor=\"middle\" font-size=\"24\" class=\"i\">Cl⁻</text><path d=\"M 112 62 Q 130 22 148 62\" class=\"hk\" stroke-width=\"2.5\" stroke-dasharray=\"5 5\"/><circle cx=\"130\" cy=\"32\" r=\"6\" class=\"h\"/></svg>"
+-```
+-
+-## Good subjects for a picture
+-
+-Particles and charges, forces as arrows, rays and lenses, simple graphs (axes + one line + shaded
+-area), before/after comparisons side by side, cycles as circles with arrows, cells as ellipses.
+-
+-If a picture would need more than ~15 shapes, skip `art` and use `"tex"` for a key formula instead.
+-
+-## Physics subjects: required pictures (added 2026-10-23)
+-
+-- **Every circuit gets a circuit diagram card**: AC source (circle with a sine), the components on the loop
+-  (zig-zag resistor, humps for inductor, two plates for capacitor), labels R, L, C, the current arrow and the
+-  source EMF written underneath. Draw R, L, C alone, L-R, C-R, series LCR, parallel L-C and the coil-in-parallel
+-  tank circuit as separate pictures.
+-- **Every optics experiment gets the textbook set-up diagram**: plane wave, slit(s) or grating, lens, screen,
+-  the angle theta, the path difference marked (for example b sin theta for a slit, d sin theta for two slits or
+-  a grating) and the points O (centre) and P.
+-- **Every pattern gets a true graph**, not a sketch: single slit sinc squared with secondary maxima 4.5% and 1.6%;
+-  two slits as cosine squared fringes inside the single-slit envelope with the missing order circled; N slits with
+-  sharp principal maxima and N-2 weak maxima; straight edge rising to 1.37 I0 outside the shadow.
+-  Write the curve as ONE `<polyline points="...">` of 100+ points computed from the formula (`polyline` is allowed).
+-  Never draw these with a few Bezier segments.
+-- Keep every `<text>` inside x 8 to 252 and y 10 to 176, or it is clipped. Do not let two labels overlap.
++# 03 — GeoGebra figures (`ggb`) for `intuition`, `info` and `derivation` cards
++
++Figures are interactive GeoGebra constructions described by a `"ggb"` object in `data.json`.
++Do not use SVG strings (`art` or `setup`). The app loads `https://www.geogebra.org/apps/deployggb.js`
++once, builds the construction with the official GeoGebra Apps API, applies the palette from
++`01-tokens.css` (in both light and dark mode), and animates step changes through API calls.
++
++## Schema of a `ggb` object
++
++```json
++"ggb": {
++  "view": { "xmin": -8, "xmax": 8, "ymin": -5.5, "ymax": 5.5, "grid": true },
++  "commands": [
++    "A = (-5, 4)",
++    "R = (0, 0)",
++    "M = (x(A), 0)",
++    "AM = Segment(A, M)",
++    "MR = Segment(M, R)",
++    "AR = Segment(A, R)",
++    "theta1 = Angle(M, A, R)"
++  ],
++  "free": [ "A", "R" ],
++  "focus": [ "AR", "R" ],
++  "dashed": [ "AM" ],
++  "hidden": [ "M" ],
++  "labels": { "AM": "h₁", "MR": "x", "theta1": "θ₁" },
++  "steps": {
++    "1": { "show": [ "AR", "R" ], "focus": [ "AR", "R" ] },
++    "2": { "show": [ "AR", "AM", "MR" ], "focus": [ "AR", "AM", "MR" ] }
++  }
++}
++```
++
++## Keys and rules
++
++| key | required | meaning |
++|---|---|---|
++| `view` | yes | `{ "xmin", "xmax", "ymin", "ymax", "grid": true, "axes": false }`. The grid is visible (`grid: true`) and supports pan and zoom. |
++| `commands` | yes | Ordered list of GeoGebra commands `"name = Expression(...)"` passed to `api.evalCommand`. |
++| `free` | no | Array of point names in `commands` that the student may drag (`api.setFixed(name, false, true)`). Every other object is fixed (`api.setFixed(name, true, false)`) so fixed textbook geometry cannot be dragged. |
++| `focus` | no | Array of object names highlighted in amber (`--amber` / `--hl`) with thicker lines on static cards or before step playback. |
++| `dashed` | no | Array of guide/helper line names styled dashed (`api.setLineStyle(name, 1)`) in secondary ink (`--ink-2`). |
++| `hidden` | no | Array of construction helper names hidden by default (`api.setVisible(name, false)`). |
++| `labels` | no | Object mapping `name -> caption` applied with `api.setCaption`, `api.setLabelStyle(name, 3)` and `api.setLabelVisible(name, true)`. |
++| `steps` | derivations | Map of step number (`"1"`, `"2"`, …) to `{ "show": [...], "hide": [...], "focus": [...] }`. Every name in `show`, `hide`, and `focus` must exist in `commands`. |
++
++## Dependencies and textbook accuracy
++
++1. **Build with dependencies**: define feet of perpendiculars (`M = (x(A), 0)`), intersections (`Intersect(...)`), segments (`Segment(A, R)`), polylines (`PolyLine(...)`), arcs (`CircumcircularArc(...)`), and angles (`Angle(...)`) from the points and lines so dragging any `free` point updates the entire figure accurately.
++2. **Match the textbook**: use the exact symbols, signs, rays and point names from Ghatak, *Optics* (`unit-1` to `unit-4`, Cartesian sign convention).
++3. **API-only step animation**: on derivation step changes, the runtime calls `setVisible`, `setColor`, `setLineThickness`, `setPointSize`, `setFilling`, and `setLabelVisible` on the GeoGebra applet. Any object named in the step's `focus` or mentioned in the step text is highlighted at that moment.
++4. **Palette colours only**: JS maps `01-tokens.css` variables to RGB values for light and dark themes (`--violet`, `--ink`, `--ink-2`, `--amber`, `--hl`) and updates every applet when the theme changes. Never use red or rose in maths figures.
++5. **Clean chrome**: `showToolBar`, `showMenuBar`, `showAlgebraInput`, and `showResetIcon` are all `false`, with `perspective: "G"` (Graphics view only).
+--- a/skills/05-checklist.md
++++ b/skills/05-checklist.md
+@@ -78,10 +78,13 @@
+ - [ ] Keep syllabus topics compact; retain a full model-paper question and rubric in the same sheet even when that exceeds 14 cards.
+ 
+-## SVG
+-- [ ] `viewBox="0 0 260 180"`, only allowed classes, no colours, one amber highlight.
+-- [ ] Highlightable lines, arcs and labels have `data-part="name"`, and derivation steps name them in `focus`.
+-- [ ] Maths and derivation styles use only the colour tokens from `01-tokens.css` (no hard-coded red or rose).
++## GeoGebra figures
++- [ ] No SVG `art` or `setup` remains in `data.json`; every `intuition` and `derivation` card (and figure `info` card) uses `"ggb"`.
++- [ ] Every `ggb` has `view` (`grid: true`), dependent `commands`, draggable `free` points, and fixed textbook geometry.
++- [ ] Every name in `focus`, `free`, `dashed`, `hidden`, and `ggb.steps` exists on the left-hand side of `=` in `ggb.commands`.
++- [ ] Step changes animate via official GeoGebra Apps API methods (`evalCommand`, `setCoordSystem`, `setGridVisible`, `setAxesVisible`, `setVisible`, `setColor`, `setLineThickness`, `setLineStyle`, `setPointSize`, `setFilling`, `setFixed`, `setLabelVisible`, `setLabelStyle`, `setCaption`, `setSize`, `enableShiftDragZoom`, `setPerspective`, `setRepaintingActive`).
++- [ ] Colours are mapped from `01-tokens.css` for light and dark mode (amber highlight, no red or rose) and update on theme toggle.
++- [ ] Every figure and derivation step matches the textbook unit PDFs (`unit-1` to `unit-4`, Ghatak, *Optics*).
+ 
+ When I run `python build.py`, it prints every problem with its exact location
+ (e.g. `sections[1].sheets[0].cards[3].steps[2]`). If I paste that output back to you, fix exactly
+ those fields and send the whole corrected JSON again.
+--- a/skills/07-plain-words-and-glossary.md
++++ b/skills/07-plain-words-and-glossary.md
+@@ -5,15 +5,15 @@
+ 
+ For each newly introduced concept, answer “What is it?” first. Give its category
+-and meaning, then a concrete diagram (`art`) with a short caption (`picture`),
++and meaning, then a concrete interactive GeoGebra figure (`ggb`) with a short caption (`picture`),
+ an example and a connection to the formal definition. A list of properties or
+ applications does not replace this answer. Avoid defining one unfamiliar term
+ only through other unfamiliar terms.
+ 
+ Place an intuition card immediately before the technical introduction. Fields:
+-`type = "intuition"`, `term` = glossary entry ID, `title`, `meaning`, `art`
+-(required: one SVG drawn according to `03-svg-art.md`), `picture` (one short
+-caption line under the SVG saying what to look at), `example` and `bridge`.
+-All text fields are non-empty plain text. The app renders `art` followed by the
++`type = "intuition"`, `term` = glossary entry ID, `title`, `meaning`, `ggb`
++(required: one GeoGebra figure object following `03-svg-art.md`), `picture` (one short
++caption line under the figure saying what to look at), `example` and `bridge`.
++All text fields are non-empty plain text. The app renders `ggb` followed by the
+ `picture` caption inside the scrollable reading area.
+ 
+ Example mental picture: for a particle on a line, a Hilbert space is a collection
+--- a/skills/example-minimal.json
++++ b/skills/example-minimal.json
+@@ -27,10 +27,34 @@
+                 "\\(\\lambda\\) = decay constant",
+                 "Unit: s⁻¹"
+               ],
+-              "art": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Falling curve of remaining nuclei\"><line x1=\"30\" y1=\"20\" x2=\"30\" y2=\"155\" class=\"lk\" stroke-width=\"2\"/><line x1=\"30\" y1=\"155\" x2=\"245\" y2=\"155\" class=\"lk\" stroke-width=\"2\"/><path d=\"M 30 30 C 80 110 140 140 240 150\" class=\"hk\" stroke-width=\"3\"/><text x=\"40\" y=\"28\" font-size=\"14\" class=\"t\">N</text><text x=\"238\" y=\"172\" text-anchor=\"end\" font-size=\"14\" class=\"t\">t</text></svg>"
++              "ggb": {
++                "view": { "xmin": -1, "xmax": 6, "ymin": -1, "ymax": 5, "grid": true },
++                "commands": [
++                  "O = (0, 0)",
++                  "Tx = (5.5, 0)",
++                  "Ny = (0, 4.4)",
++                  "taxis = Segment(O, Tx)",
++                  "naxis = Segment(O, Ny)",
++                  "P = (1.5, 4 * exp(-0.6 * 1.5))",
++                  "curve = Function(4 * exp(-0.6 * x), 0, 5.2)"
++                ],
++                "free": [ "P" ],
++                "focus": [ "curve", "P" ],
++                "labels": { "taxis": "t", "naxis": "N", "P": "N(t)" }
++              }
+             },
+             {
+               "type": "derivation",
+               "title": "From rate to the decay law",
+               "legend": "\\(N\\) nuclei left, \\(N_0\\) at \\(t = 0\\), \\(\\lambda\\) decay constant.",
++              "ggb": {
++                "view": { "xmin": -1, "xmax": 6, "ymin": -1, "ymax": 5, "grid": true },
++                "commands": [
++                  "N0 = (0, 4)",
++                  "P = (2, 4 * exp(-0.5 * 2))",
++                  "curve = Function(4 * exp(-0.5 * x), 0, 5.2)"
++                ],
++                "free": [ "P" ],
++                "focus": [ "curve", "P" ]
++              },
+               "phases": [
+--- a/study-match/build.py
++++ b/study-match/build.py
+@@ -92,9 +92,9 @@
+             w = '%s.%s' % (where, k)
+             if isinstance(v, str):
+                 obj[k] = fix_text(v, w, rep, tex_field=k in tex_keys)
+                 if k not in tex_keys and k not in ('art', 'id', 'type', 'icon'):
+                     check_inline_math(obj[k], w, rep)
+-            else:
++            elif k != 'ggb':
+                 walk_text(v, w, rep, tex_keys)
+     elif isinstance(obj, list):
+         for i, v in enumerate(obj):
+@@ -116,6 +116,72 @@
+     if not a.get('why'):
+         rep.warn(where, 'ask has no "why"; the learner sees no reason after answering')
+ 
+ 
++def check_ggb(g, where, rep):
++    if not isinstance(g, dict):
++        rep.err(where, 'ggb must be an object'); return set()
++    view = g.get('view')
++    if not isinstance(view, dict):
++        rep.err(where + '.view', 'ggb needs a view object')
++    else:
++        for k in ('xmin', 'xmax', 'ymin', 'ymax'):
++            if not isinstance(view.get(k), (int, float)):
++                rep.err(where + '.view.' + k, 'must be a number')
++        if isinstance(view.get('xmin'), (int, float)) and isinstance(view.get('xmax'), (int, float)) and view['xmin'] >= view['xmax']:
++            rep.err(where + '.view', 'xmin must be less than xmax')
++        if isinstance(view.get('ymin'), (int, float)) and isinstance(view.get('ymax'), (int, float)) and view['ymin'] >= view['ymax']:
++            rep.err(where + '.view', 'ymin must be less than ymax')
++        if view.get('grid') is not True:
++            rep.err(where + '.view.grid', 'grid must be true')
++    cmds = g.get('commands')
++    names = set()
++    if not isinstance(cmds, list) or not cmds:
++        rep.err(where + '.commands', 'ggb needs a non-empty commands list'); return names
++    for i, cmd in enumerate(cmds):
++        cw = '%s.commands[%d]' % (where, i)
++        if not isinstance(cmd, str) or '=' not in cmd:
++            rep.err(cw, 'command must be a "name = expression" string'); continue
++        m = re.match(r'^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.+)$', cmd)
++        if not m:
++            rep.err(cw, 'invalid object name before "=": %s' % cmd); continue
++        names.add(m.group(1))
++    for key in ('free', 'focus', 'dashed', 'hidden'):
++        lst = g.get(key)
++        if lst is not None:
++            if not isinstance(lst, list) or any(not isinstance(x, str) for x in lst):
++                rep.err('%s.%s' % (where, key), 'must be a list of object names')
++            else:
++                for x in lst:
++                    if x not in names:
++                        rep.err('%s.%s' % (where, key), 'object "%s" is not defined in commands' % x)
++    labels = g.get('labels')
++    if labels is not None:
++        if not isinstance(labels, dict):
++            rep.err(where + '.labels', 'must be an object')
++        else:
++            for k in labels:
++                if k not in names:
++                    rep.err(where + '.labels', 'object "%s" is not defined in commands' % k)
++    steps = g.get('steps')
++    if steps is not None:
++        if not isinstance(steps, dict):
++            rep.err(where + '.steps', 'must be an object mapping step numbers to show/hide/focus')
++        else:
++            for sk, sv in steps.items():
++                sw = '%s.steps[%s]' % (where, sk)
++                if not isinstance(sv, dict):
++                    rep.err(sw, 'must be an object'); continue
++                for fk in ('show', 'hide', 'focus'):
++                    fl = sv.get(fk)
++                    if fl is not None:
++                        if not isinstance(fl, list):
++                            rep.err('%s.%s' % (sw, fk), 'must be a list')
++                        else:
++                            for x in fl:
++                                if x not in names:
++                                    rep.err('%s.%s' % (sw, fk), 'object "%s" is not defined in commands' % x)
++    return names
++
++
+ def validate(data, rep):
+     if not isinstance(data, dict):
+@@ -240,9 +275,17 @@
+ def check_derivation(d, w, rep):
++    ggb_names = set()
++    if 'ggb' not in d:
++        rep.err(w, 'derivation needs a "ggb" GeoGebra figure')
++    else:
++        ggb_names = check_ggb(d['ggb'], w + '.ggb', rep)
+     steps = d.get('steps')
+     if not isinstance(steps, list) or len(steps) < 2:
+         rep.err(w, 'derivation needs at least 2 steps'); return
+     if len(steps) > 16:
+         rep.warn(w, '%d steps is long; split it into two derivations if you can' % len(steps))
+     for i, st in enumerate(steps):
+         sw = '%s.steps[%d]' % (w, i)
++        for fn in (st.get('focus') or []):
++            if ggb_names and fn not in ggb_names:
++                rep.err(sw + '.focus', 'object "%s" is not defined in ggb.commands' % fn)
+         tex = st.get('tex')
+--- a/study-match/src/components/02-mathflow.js
++++ b/study-match/src/components/02-mathflow.js
+@@ -161,53 +161,14 @@
+       if (playBtn) playBtn.innerHTML = playing ? '&#10073;&#10073;' : '&#9654;';
+     }
+ 
+-    /* highlight the part of the setup SVG (labels and angle arcs) used in the current step */
++    /* highlight the active GeoGebra objects in the setup figure via the GeoGebra Apps API */
+     function highlightSetup(f) {
+-      if (!setupEl) return;
+-      var svg = setupEl.querySelector('svg');
+-      if (!svg) return;
+-      Array.prototype.forEach.call(svg.querySelectorAll('.mf-part-on'), function (el) { el.classList.remove('mf-part-on'); });
+-      if (!f) return;
++      if (!setupEl || !SM.GGB) return;
++      if (!f) { SM.GGB.step(setupEl, -1, [], ''); return; }
+       var st = spec.steps[f.si] || {};
+       var focusList = Array.isArray(st.focus) ? st.focus : (st.focus ? String(st.focus).split(/[\s,]+/) : []);
+-      var focusSet = {};
+-      focusList.forEach(function (k) { if (k) focusSet[k] = 1; });
+-      var hay = (f.tex || '') + ' ' + (st.note || '') + ' ' + focusList.join(' ');
+-      Array.prototype.forEach.call(svg.querySelectorAll('[data-part]'), function (el) {
+-        var dp = el.getAttribute('data-part') || '';
+-        if (focusSet[dp] || (!focusList.length && dp && hay.indexOf(dp) !== -1)) el.classList.add('mf-part-on');
+-      });
+-      var map = {
+-        '\\theta_1': 'θ₁', '\\theta_2': 'θ₂', '\\phi_1': 'φ₁', '\\phi_2': 'φ₂',
+-        '\\alpha_1': 'α₁', '\\alpha_2': 'α₂', '\\beta': 'β',
+-        'h_1': 'h₁', 'h_2': 'h₂', 'R_1': 'R₁', 'R_2': 'R₂',
+-        'F_1': 'F₁', 'F_2': 'F₂', 'f_1': 'f₁', 'f_2': 'f₂',
+-        'x_1': 'x₁', 'x_2': 'x₂', 'n_1': 'n₁', 'n_2': 'n₂'
+-      };
+-      var want = {};
+-      Object.keys(map).forEach(function (k) { if (hay.indexOf(k) !== -1) want[map[k]] = 1; });
+-      ['h', 'x', 'y', 'r', 'R', 'u', 'v', 'f', 'O', 'I', 'P', 'C', 'S', 'A', 'B', 'Q'].forEach(function (sym) {
+-        var re = new RegExp('(^|[^a-zA-Z\\\\])' + sym + '([^a-zA-Z0-9]|$)');
+-        if (re.test(hay)) want[sym] = 1;
+-      });
+-      var hitTexts = [];
+-      Array.prototype.forEach.call(svg.querySelectorAll('text'), function (t) {
+-        var txt = (t.textContent || '').trim();
+-        var hit = want[txt] || Object.keys(want).some(function (w) { return w.length > 1 && txt.indexOf(w) !== -1; });
+-        if (hit) {
+-          t.classList.add('mf-part-on');
+-          hitTexts.push({ x: parseFloat(t.getAttribute('x')) || 0, y: parseFloat(t.getAttribute('y')) || 0 });
+-        }
+-      });
+-      Array.prototype.forEach.call(svg.querySelectorAll('path.lk, path.hk'), function (p) {
+-        var d = p.getAttribute('d') || '';
+-        if (d.indexOf('A ') === -1) return;
+-        var m = d.match(/M\s*([0-9.]+)\s+([0-9.]+)/);
+-        if (!m) return;
+-        var px = parseFloat(m[1]), py = parseFloat(m[2]);
+-        var near = hitTexts.some(function (pt) { return Math.hypot(pt.x - px, pt.y - py) < 38; });
+-        if (near) p.classList.add('mf-part-on');
+-      });
++      var hay = (f.tex || '') + ' ' + (st.note || '');
++      SM.GGB.step(setupEl, f.si, focusList, hay);
+     }
+ 
+     function setNote(html) {
+@@ -439,14 +403,18 @@
+       if (willFlip) {
+         setTimeout(function () {
+           rebuild();
++          if (SM.GGB) SM.GGB.refresh(setupEl);
+           if (api.i < 0) api.play();
+         }, 60);
+-      } else stopPlay();
++      } else {
++        stopPlay();
++        if (SM.GGB) SM.GGB.refresh(frontFace);
++      }
+     };
+     if (frontFace) {
+       root.addEventListener('click', function (e) {
+         if (root.classList.contains('is-flipped')) return;
+-        if (e.target.closest('button, a, input, textarea, .term-link, summary')) return;
++        if (e.target.closest('button, a, input, textarea, .term-link, summary, .ggb-wrap')) return;
+         api.flip(true);
+       });
+     }
+@@ -491,5 +459,289 @@
+     return '\\[\\begin{aligned}' + lines.join(' \\\\[5pt] ') + '\\end{aligned}\\]';
+   }
+ 
++  /* ==========================================================================
++     SM.GGB: GeoGebra Apps API loader, palette mapper, and step animator
++     ========================================================================== */
++  var ggbQueue = [], ggbLoading = false, ggbState = 0, ggbInstances = [];
++  var GGB_RESERVED = { x: 'ggb_x', y: 'ggb_y', z: 'ggb_z', i: 'ggb_i', e: 'ggb_e', c: 'ggb_c' };
++
++  function ggbId(name) { return GGB_RESERVED[name] || name; }
++
++  function isDark() {
++    var t = document.documentElement.getAttribute('data-theme');
++    if (t === 'dark') return true;
++    if (t === 'light') return false;
++    return !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
++  }
++
++  /* Map CSS variables from 01-tokens.css to RGB triples for GeoGebra setColor */
++  function palette() {
++    return isDark() ? {
++      ink: [236, 234, 251],
++      ink2: [183, 185, 216],
++      muted: [125, 130, 166],
++      violet: [168, 152, 255],
++      lav2: [52, 58, 110],
++      amber: [247, 192, 79],
++      hl: [247, 192, 79]
++    } : {
++      ink: [27, 37, 89],
++      ink2: [74, 84, 128],
++      muted: [140, 146, 176],
++      violet: [106, 85, 216],
++      lav2: [222, 214, 246],
++      amber: [246, 183, 43],
++      hl: [201, 130, 0]
++    };
++  }
++
++  function ggbReady(cb) {
++    if (typeof window.GGBApplet === 'function') { ggbState = 1; cb(true); return; }
++    if (ggbState === -1) { cb(false); return; }
++    ggbQueue.push(cb);
++    if (ggbLoading) return;
++    ggbLoading = true;
++    var finish = function (ok) {
++      if (ggbState !== 0) return;
++      ggbState = ok ? 1 : -1;
++      var q = ggbQueue.slice(); ggbQueue = [];
++      q.forEach(function (fn) { fn(ok); });
++    };
++    var sc = document.querySelector('script[src*="deployggb.js"]');
++    if (!sc) {
++      sc = document.createElement('script');
++      sc.src = 'https://www.geogebra.org/apps/deployggb.js';
++      sc.async = true;
++      document.head.appendChild(sc);
++    }
++    sc.addEventListener('load', function () { finish(typeof window.GGBApplet === 'function'); });
++    sc.addEventListener('error', function () { finish(false); });
++    setTimeout(function () { finish(typeof window.GGBApplet === 'function'); }, 9000);
++  }
++
++  function applyCoordSystem(inst) {
++    var api = inst.api, v = (inst.spec && inst.spec.view) || { xmin: -8, xmax: 8, ymin: -5.5, ymax: 5.5, grid: true };
++    if (!api) return;
++    api.setCoordSystem(v.xmin, v.xmax, v.ymin, v.ymax);
++  }
++
++  function applyState(inst, animatePulse) {
++    var api = inst.api, spec = inst.spec;
++    if (!api || !spec) return;
++    var pal = palette();
++    var hiddenSet = {}, dashedSet = {}, freeSet = {}, focusSet = {}, showSet = null, hideSet = {};
++    (spec.hidden || []).forEach(function (n) { hiddenSet[n] = 1; });
++    (spec.dashed || []).forEach(function (n) { dashedSet[n] = 1; });
++    (spec.free || []).forEach(function (n) { freeSet[n] = 1; });
++    if (inst.stepIdx < 0) {
++      (spec.focus || []).forEach(function (n) { focusSet[n] = 1; });
++    } else {
++      var sm = spec.steps || {};
++      var scfg = (sm['0'] !== undefined ? sm[String(inst.stepIdx)] : (sm[String(inst.stepIdx + 1)] || sm[String(inst.stepIdx)])) || {};
++      if (scfg.show) {
++        showSet = {};
++        scfg.show.forEach(function (n) { showSet[n] = 1; });
++      }
++      (scfg.hide || []).forEach(function (n) { hideSet[n] = 1; });
++      (scfg.focus || []).forEach(function (n) { focusSet[n] = 1; });
++      (inst.focusList || []).forEach(function (n) { focusSet[n] = 1; });
++      var hay = inst.textHay || '';
++      if (hay) {
++        inst.names.forEach(function (n) {
++          if (hiddenSet[n]) return;
++          var escN = n.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, '\\$1');
++          var re = new RegExp('(^|[^A-Za-z0-9\\\\])' + escN + '([^A-Za-z0-9]|$)');
++          if (re.test(hay)) focusSet[n] = 1;
++        });
++      }
++    }
++    var labels = spec.labels || {};
++    api.setRepaintingActive(false);
++    inst.names.forEach(function (name) {
++      var id = ggbId(name);
++      if (!api.exists(id)) return;
++      var otype = api.getObjectType(id);
++      var vis = !hiddenSet[name];
++      if (showSet && showSet[name]) vis = true;
++      if (hideSet[name]) vis = false;
++      if (focusSet[name]) vis = true;
++      api.setVisible(id, vis);
++      if (!vis) return;
++      var isFoc = !!focusSet[name], isDash = !!dashedSet[name];
++      var col = isFoc ? (otype === 'text' ? pal.hl : pal.amber) : (isDash ? pal.ink2 : (otype === 'text' ? pal.ink : pal.violet));
++      api.setColor(id, col[0], col[1], col[2]);
++      if (otype === 'point') {
++        api.setPointSize(id, isFoc ? 6 : (freeSet[name] ? 5 : 4));
++      } else if (otype === 'angle' || otype === 'polygon') {
++        api.setFilling(id, isFoc ? 0.28 : 0.14);
++        api.setLineThickness(id, isFoc ? (animatePulse ? 9 : 7) : 4);
++      } else if (otype !== 'text') {
++        api.setLineThickness(id, isFoc ? (animatePulse ? 11 : 8) : (isDash ? 3 : 5));
++      }
++      if (labels[name] !== undefined) {
++        api.setLabelVisible(id, !!labels[name]);
++      } else if (otype === 'point' || otype === 'angle') {
++        api.setLabelVisible(id, true);
++      } else {
++        api.setLabelVisible(id, isFoc && !!labels[name]);
++      }
++    });
++    api.setRepaintingActive(true);
++    if (animatePulse) {
++      clearTimeout(inst.pulseT);
++      inst.pulseT = setTimeout(function () {
++        if (!inst.api) return;
++        inst.api.setRepaintingActive(false);
++        inst.names.forEach(function (name) {
++          if (!focusSet[name]) return;
++          var id = ggbId(name);
++          if (!inst.api.exists(id)) return;
++          var otype = inst.api.getObjectType(id);
++          if (otype === 'angle' || otype === 'polygon') inst.api.setLineThickness(id, 7);
++          else if (otype !== 'point' && otype !== 'text') inst.api.setLineThickness(id, 8);
++        });
++        inst.api.setRepaintingActive(true);
++      }, 180);
++    }
++  }
++
++  function mountInstance(inst) {
++    if (inst.mounted || inst.mounting) return;
++    var w = inst.box.clientWidth, h = inst.box.clientHeight;
++    if (w < 24 || h < 24) return;
++    inst.mounting = true;
++    ggbReady(function (ok) {
++      var statusEl = inst.box.querySelector('[data-ggb-status]');
++      var fbEl = inst.box.querySelector('[data-ggb-fallback]');
++      if (!ok) {
++        inst.mounting = false;
++        if (statusEl) statusEl.hidden = true;
++        if (fbEl) fbEl.hidden = false;
++        return;
++      }
++      var cw = Math.max(inst.box.clientWidth || w, 200);
++      var ch = Math.max(inst.box.clientHeight || h, 150);
++      inst.w = cw; inst.h = ch;
++      var params = {
++        appName: 'classic',
++        perspective: 'G',
++        width: cw,
++        height: ch,
++        showToolBar: false,
++        showMenuBar: false,
++        showAlgebraInput: false,
++        showResetIcon: false,
++        enableRightClick: false,
++        enableLabelDrags: false,
++        enableShiftDragZoom: true,
++        showZoomButtons: false,
++        showLogging: false,
++        appletOnLoad: function (api) {
++          inst.api = api; inst.mounted = true; inst.mounting = false;
++          if (statusEl) statusEl.hidden = true;
++          var spec = inst.spec, v = spec.view || { xmin: -8, xmax: 8, ymin: -5.5, ymax: 5.5, grid: true };
++          api.setRepaintingActive(false);
++          api.setPerspective('G');
++          api.setAxesVisible(!!v.axes, !!v.axes);
++          api.setGridVisible(v.grid !== false);
++          api.enableShiftDragZoom(true);
++          applyCoordSystem(inst);
++          inst.names = [];
++          var freeSet = {}, dashedSet = {}, labels = spec.labels || {};
++          (spec.free || []).forEach(function (n) { freeSet[n] = 1; });
++          (spec.dashed || []).forEach(function (n) { dashedSet[n] = 1; });
++          (spec.commands || []).forEach(function (cmd) {
++            var m = String(cmd).match(/^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.+)$/);
++            if (!m) return;
++            var name = m[1], rhs = m[2], id = ggbId(name);
++            api.evalCommand(id + ' = ' + rhs);
++            inst.names.push(name);
++          });
++          inst.names.forEach(function (name) {
++            var id = ggbId(name);
++            if (!api.exists(id)) return;
++            var isFree = !!freeSet[name];
++            api.setFixed(id, !isFree, isFree);
++            api.setLineStyle(id, dashedSet[name] ? 1 : 0);
++            var otype = api.getObjectType(id);
++            if (labels[name] !== undefined && labels[name] !== false && labels[name] !== '') {
++              api.setCaption(id, String(labels[name]));
++              api.setLabelStyle(id, 3);
++            } else if (GGB_RESERVED[name]) {
++              api.setCaption(id, name);
++              api.setLabelStyle(id, 3);
++            } else if (otype === 'point' || otype === 'angle') {
++              api.setLabelStyle(id, 0);
++            }
++          });
++          applyState(inst, false);
++        }
++      };
++      var applet = new window.GGBApplet(params, true);
++      applet.inject(inst.host.id);
++    });
++  }
++
++  function resizeInstance(inst) {
++    if (!inst.box) return;
++    var w = inst.box.clientWidth, h = inst.box.clientHeight;
++    if (w < 24 || h < 24) return;
++    if (!inst.mounted) { mountInstance(inst); return; }
++    if (inst.api && (Math.abs(w - inst.w) > 2 || Math.abs(h - inst.h) > 2)) {
++      inst.w = w; inst.h = h;
++      inst.api.setSize(w, h);
++      applyCoordSystem(inst);
++    }
++  }
++
++  var ro = typeof ResizeObserver === 'function' ? new ResizeObserver(function (entries) {
++    entries.forEach(function (en) {
++      var inst = en.target._ggbInst;
++      if (inst) resizeInstance(inst);
++    });
++  }) : null;
++
++  function refreshTheme() {
++    ggbInstances.forEach(function (inst) { if (inst.mounted) applyState(inst, false); });
++  }
++  if (typeof MutationObserver === 'function') {
++    new MutationObserver(refreshTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
++  }
++  if (window.matchMedia) {
++    var mq = window.matchMedia('(prefers-color-scheme: dark)');
++    if (mq.addEventListener) mq.addEventListener('change', refreshTheme);
++  }
++
++  SM.GGB = {
++    palette: palette,
++    ready: ggbReady,
++    register: function (box, spec, card) {
++      var host = box.querySelector('.ggb-host');
++      if (!host) return;
++      var inst = { box: box, host: host, spec: spec, card: card, api: null, names: [], stepIdx: -1, focusList: [], textHay: '', w: 0, h: 0, mounted: false, mounting: false };
++      box._ggbInst = inst;
++      ggbInstances.push(inst);
++      if (ro) ro.observe(box);
++      setTimeout(function () { resizeInstance(inst); }, 50);
++    },
++    step: function (containerEl, stepIdx, focusList, textHay) {
++      if (!containerEl) return;
++      var box = containerEl.querySelector('[data-ggb-box]') || (containerEl.hasAttribute('data-ggb-box') ? containerEl : null);
++      if (!box || !box._ggbInst) return;
++      var inst = box._ggbInst;
++      inst.stepIdx = stepIdx;
++      inst.focusList = focusList || [];
++      inst.textHay = textHay || '';
++      if (inst.mounted) applyState(inst, stepIdx >= 0);
++      else resizeInstance(inst);
++    },
++    refresh: function (rootEl) {
++      var scope = rootEl || document;
++      Array.prototype.forEach.call(scope.querySelectorAll('[data-ggb-box]'), function (box) {
++        if (box._ggbInst) resizeInstance(box._ggbInst);
++      });
++    }
++  };
++
+   SM.MathFlow = { mount: mount, page: page, measure: measure };
+ })();
+--- a/study-match/src/components/03-render.js
++++ b/study-match/src/components/03-render.js
+@@ -55,20 +55,27 @@
+   function chips(list) { return (list || []).map(function (e) { return '<span class="chip">' + SM.mathLabel(e) + '</span>'; }).join(''); }
++  function ggbHTML(id, caption) {
++    return '<div class="ggb-wrap" data-ggb-box="' + esc(id) + '">' +
++      '<div class="ggb-host" id="ggb-' + esc(id) + '"></div>' +
++      '<p class="ggb-status" data-ggb-status>Loading figure\u2026</p>' +
++      '<p class="ggb-fallback" data-ggb-fallback hidden>' + esc(caption || 'Interactive geometry figure') + '</p>' +
++      '</div>';
++  }
+ 
+   function cardHTML(c) {
+     var a = ' data-card="' + c.id + '"', T = SM.tex;
+     switch (c.type) {
+       case 'intuition':
+         return '<article class="card intuition-card"' + a + '><span class="card-index">In plain words</span>' +
+           '<div class="intuition-content scroll-y"><h2 class="card-title">' + esc(c.title) + '</h2>' +
+           '<p class="intuition-meaning">' + esc(c.meaning) + '</p>' +
+           '<h3>Picture it</h3>' +
+-          (c.art ? '<div class="art intuition-art">' + c.art + '</div>' : '') +
++          (c.ggb ? '<div class="art intuition-art">' + ggbHTML(c.id, c.picture || c.title) + '</div>' : '') +
+           '<p class="card-body">' + esc(c.picture) + '</p>' +
+           '<div class="intuition-example"><h3>For example</h3><p class="card-body">' + esc(c.example) + '</p></div>' +
+           '<h3>Connect it to the definition</h3><p class="card-body">' + esc(c.bridge) + '</p></div></article>';
+       case 'info':
+         return '<article class="card"' + a + '><span class="card-index">' + esc(c.label || 'Concept') + '</span>' +
+-          (c.art ? '<div class="art">' + c.art + '</div>' : c.tex ? '<div class="art"><div class="math">\\[' + c.tex + '\\]</div></div>' : '') +
++          (c.ggb ? '<div class="art">' + ggbHTML(c.id, c.body || c.title) + '</div>' : c.tex ? '<div class="art"><div class="math">\\[' + c.tex + '\\]</div></div>' : '') +
+           '<div class="scroll-y"><h2 class="card-title">' + c.title + '</h2><p class="card-body" style="margin-top:6px">' + (c.body || '') + '</p>' +
+           (c.examples && c.examples.length ? '<div class="examples" style="margin-top:9px">' + chips(c.examples) + '</div>' : '') + '</div></article>';
+       case 'math':
+@@ -104,6 +111,6 @@
+       case 'question':
+         return '<article class="card qcard' + (c.textAnswer ? ' has-text-answer' : '') + '"' + a + '><span class="card-index">' + esc(c.label || 'Question') + '</span>' +
+-          (c.art ? '<div class="art">' + c.art + '</div>' : '') +
++          (c.ggb ? '<div class="art">' + ggbHTML(c.id, c.q || c.title) + '</div>' : '') +
+           '<div class="scroll-y"><h2 class="card-title">' + c.title + '</h2><p class="q-text">' + c.q + '</p></div>' +
+           (c.textAnswer ? '<div class="written-answer"><div class="answer-label"><label for="answer-' + c.id + '">Your answer</label><span data-draft-status id="draft-' + c.id + '" role="status">Saves automatically on this device.</span></div>' +
+             '<textarea class="answer-input" id="answer-' + c.id + '" data-written-answer rows="6" placeholder="Write your answer in your own words…" aria-describedby="draft-' + c.id + '"></textarea></div>' : '') +
+@@ -133,21 +140,21 @@
+       case 'derive':
+-        var dst = c.d.steps || [], dph = c.phases || c.d.phases || [], setupSVG = c.d.setup || c.d.art || '';
++        var dst = c.d.steps || [], dph = c.phases || c.d.phases || [], hasGGB = !!(c.d.ggb || c.ggb);
+         return '<article class="card mf-card mf-flip-card"' + a + '><div class="mf-card-inner">' +
+           '<div class="mf-face mf-front">' +
+           '<div class="mf-top"><span class="card-index">' + esc(c.label || 'Derivation') + '</span><button type="button" class="chip mf-flip-btn" data-mf="flip-open">Derive &#9654;</button></div>' +
+           '<h2 class="card-title">' + (c.title || 'Step-by-step derivation') + '</h2>' +
+-          (setupSVG ? '<div class="art mf-front-art">' + setupSVG + '</div>' : '') +
++          (hasGGB ? '<div class="art mf-front-art">' + ggbHTML(c.id + '-front', c.d.legend || c.title) + '</div>' : '') +
+           '<div class="scroll-y mf-front-route">' +
+           '<div class="route-eq"><small>Start</small><div class="math">\\(' + (c.d.start || dst[0].tex) + '\\)</div></div>' +
+           '<div class="route-eq goal"><small>Goal</small><div class="math">\\(' + (c.d.goal || dst[dst.length - 1].tex) + '\\)</div></div>' +
+           (dph.length ? '<ol class="route-list">' + dph.map(function (p) { return '<li><span><b>' + esc(p.name) + '</b>' + (p.why ? ' \u2014 ' + p.why : '') + '</span></li>'; }).join('') + '</ol>' : '') +
+           (c.d.legend ? '<p class="legend">' + c.d.legend + '</p>' : '') +
+           '</div></div>' +
+           '<div class="mf-face mf-back" inert>' +
+           '<div class="mf-top"><span class="card-index">' + esc(c.label || 'Derivation') + '</span>' +
+           '<div class="mf-top-actions"><span class="mf-count"></span><button type="button" class="chip" data-mf="summary">All steps</button><button type="button" class="chip" data-mf="flip-back">Concept</button></div></div>' +
+           '<h2 class="card-title mf-back-title">' + (c.title || 'Step-by-step derivation') + '</h2>' +
+           '<div class="mf-phases"></div>' +
+-          '<div class="mf-work' + (setupSVG ? ' has-setup' : '') + '">' +
+-          (setupSVG ? '<div class="mf-setup art">' + setupSVG + '</div>' : '') +
++          '<div class="mf-work' + (hasGGB ? ' has-setup' : '') + '">' +
++          (hasGGB ? '<div class="mf-setup art">' + ggbHTML(c.id + '-back', c.d.legend || c.title) + '</div>' : '') +
+           '<div class="mf-right">' +
+@@ -180,6 +187,13 @@
+     SM.groups = Array.prototype.slice.call(shelf.querySelectorAll('.group'));
+     SM.sheetEls = Array.prototype.slice.call(shelf.querySelectorAll('.sheet'));
+     SM.SHEETS.forEach(function (sh) { sh.el = shelf.querySelector('[data-sheet="' + sh.id + '"]'); });
+-    SM.CARDS.forEach(function (c) { c.el = shelf.querySelector('[data-card="' + c.id + '"]'); c.el._c = c; });
++    SM.CARDS.forEach(function (c) {
++      c.el = shelf.querySelector('[data-card="' + c.id + '"]');
++      c.el._c = c;
++      var ggbSpec = c.ggb || (c.d && c.d.ggb);
++      if (ggbSpec && SM.GGB) {
++        c.el.querySelectorAll('[data-ggb-box]').forEach(function (box) { SM.GGB.register(box, ggbSpec, c); });
++      }
++    });
+     shelf.querySelectorAll('.card-index, .chip').forEach(function (tag) { tag.innerHTML = SM.mathLabel(tag.innerHTML); });
+   };
+--- a/study-match/src/components/04-shelf.js
++++ b/study-match/src/components/04-shelf.js
+@@ -76,6 +76,7 @@
+       if (!willOpen && !mayLeaveDefinition()) return;
+       sheet.classList.toggle('is-open', willOpen);
+       sheet.querySelector('.cover').setAttribute('aria-expanded', String(willOpen));
++      if (willOpen && SM.GGB) setTimeout(function () { SM.GGB.refresh(sheet); }, 80);
+       if (willOpen) glideTo(sheet.querySelector('.card'));
+       else glideTo(sheet.querySelector('.cover'), 310);
+     }
+@@ -152,6 +153,7 @@
+     // mouse wheel / trackpad: one gesture = one card, however hard it is flicked
+     var locked = false, idleT = null, acc = 0;
+     shelf.addEventListener('wheel', function (e) {
+       if (e.ctrlKey || !SM.$('mc').hidden) return;
++      if (e.target.closest('.ggb-wrap')) return;
+       var vertical = Math.abs(e.deltaY) > Math.abs(e.deltaX);
+       var sc = e.target.closest('.scroll-y, .mf-summary, .omr-content, .eval-content, .mf-ask, textarea, .has-text-answer');
+--- a/study-match/src/styles/05-cards.css
++++ b/study-match/src/styles/05-cards.css
+@@ -21,6 +21,13 @@
+   flex: 1 1 auto; min-height: 0; display: flex; align-items: center; justify-content: center;
+   background: var(--lav); border-radius: 16px; padding: 12px; color: var(--violet);
+ }
++.art:has(.ggb-wrap) { padding: 4px; overflow: hidden; position: relative; }
+ .intuition-art { min-height: 130px; margin: 6px 0; padding: 8px; }
++.intuition-art:has(.ggb-wrap) { height: 196px; min-height: 196px; }
++.ggb-wrap { position: relative; width: 100%; height: 100%; min-height: 160px; border-radius: 12px; overflow: hidden; background: var(--card); touch-action: none; display: flex; align-items: center; justify-content: center; }
++.ggb-host { width: 100%; height: 100%; touch-action: none; }
++.ggb-host .GeoGebraFrame, .ggb-host .applet_scaler { border: 0 !important; background: transparent !important; }
++.ggb-status, .ggb-fallback { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center; padding: 12px; font-size: 12px; font-weight: 600; color: var(--ink-2); background: var(--lav); pointer-events: none; }
++.ggb-status[hidden], .ggb-fallback[hidden] { display: none; }
+ .art > svg { width: 100%; max-height: 100%; height: auto; overflow: visible; }
+ .art .f { fill: var(--violet); }
+--- a/study-match/src/styles/07-mathflow.css
++++ b/study-match/src/styles/07-mathflow.css
+@@ -23,5 +23,6 @@
+   min-height: calc((var(--sheet-h, 620px) - 22px) * 0.45);
+   padding: 4px; border-radius: 12px; background: var(--card);
+ }
++.mf-setup > .ggb-wrap, .mf-front-art > .ggb-wrap { width: 100%; height: 100%; min-height: 0; }
+ .mf-setup > svg { width: 100%; height: 100%; max-height: 100%; }
+ .mf-setup svg text.mf-part-on { fill: var(--hl) !important; font-weight: 800; text-decoration: underline; }
+--- a/study-match/src/sw.js
++++ b/study-match/src/sw.js
+@@ -20,6 +20,6 @@
+         return hit || fetch(e.request).then(function (r) {
+           if (r && (r.ok || r.type === 'opaque')) { var cp = r.clone(); caches.open(CACHE).then(function (c) { c.put(e.request, cp); }); }
+           return r;
+-        });
++        }).catch(function () { return new Response('', { status: 504, statusText: 'Offline' }); });
+       }));
+ });
+--- a/study-match/src/template.html
++++ b/study-match/src/template.html
+@@ -23,5 +23,6 @@
+   };
+ </script>
+ <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
++<script defer src="https://www.geogebra.org/apps/deployggb.js"></script>
+ </head>
+ <body class="is-focused">

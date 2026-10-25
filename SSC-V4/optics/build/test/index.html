@@ -3050,6 +3050,13 @@ const PROJECT = {
   },
   themeColor: { light: '#fbf6ee', dark: '#0b0a10' },
   pyqLabel: 'Question bank',
+  studyMapLabel: 'Stellar Map',
+  studyMaps: [{
+    title: 'Module I: Geometrical Optics',
+    description: "Fermat's principle, spherical surfaces and the thin lens",
+    summary: '14 PYQs · 17 concepts · 3D prerequisite map',
+    href: location.pathname.includes('/build/') ? '../study-map/build/index.html' : 'study-map/build/index.html'
+  }],
   figZoom: true,
   hooks: {}
 };
@@ -13886,7 +13893,7 @@ const ViewStudyMap = (function () {
       ]));
     });
     return el('div', { class: 'stack' }, [
-      UI.title('Study Map', PROJECT.name),
+      UI.title(PROJECT.studyMapLabel || 'Study Map', PROJECT.name),
       el('p', { class: 'lede', text: 'Choose a module to explore its prerequisites and practise the answer one step at a time.' }),
       list
     ]);
@@ -14016,7 +14023,7 @@ const App = (function () {
   ];
 
   if (PROJECT.studyMaps && PROJECT.studyMaps.length) {
-    TABS.push({ name: 'study-map', label: 'Study Map', icon: 'hub', also: [] });
+    TABS.push({ name: 'study-map', label: PROJECT.studyMapLabel || 'Study Map', icon: 'hub', also: [] });
   }
 
   const VIEWS = {

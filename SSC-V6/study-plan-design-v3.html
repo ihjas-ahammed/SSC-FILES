@@ -1,0 +1,4103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>Study Plan</title>
+  <!-- CORS-safe Bunny Fonts (Plus Jakarta Sans) for crisp PNG exports -->
+  <link rel="preconnect" href="https://fonts.bunny.net">
+  <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700,800,900&display=swap" rel="stylesheet" crossorigin="anonymous">
+  <!-- modern-screenshot for pixel-perfect SVG & CSS DOM-to-PNG export -->
+  <script src="https://cdn.jsdelivr.net/npm/modern-screenshot@4.7.0/dist/index.js"></script>
+
+  <style>
+    :root {
+      --navy-900: #06215C;
+      --navy-800: #0A2458;
+      --navy-700: #12357A;
+      --gold-500: #F59E0B;
+      --gold-400: #FBBF24;
+      --cream-bg: #FAF8F2;
+      --app-bg: #F1F5F9;
+      --card-border: #E2E8F0;
+      --primary-btn: #0A2458;
+      --accent-green: #16A34A;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--app-bg);
+      color: var(--navy-800);
+      padding-bottom: 84px; /* Space for mobile bottom nav */
+    }
+
+    /* ================= TOP APP BAR ================= */
+    .app-header {
+      background: linear-gradient(135deg, #06215C 0%, #173F8A 100%);
+      color: #FFFFFF;
+      padding: 14px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 20px rgba(6, 33, 92, 0.18);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .app-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .app-brand h1 {
+      font-size: 18px;
+      font-weight: 800;
+      margin: 0;
+      letter-spacing: 0.3px;
+    }
+
+    .app-brand span {
+      font-size: 12px;
+      background: rgba(251, 191, 36, 0.2);
+      color: #FDE047;
+      border: 1px solid rgba(251, 191, 36, 0.4);
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-weight: 700;
+    }
+
+    .header-quick-stats {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .stat-pill {
+      background: rgba(255, 255, 255, 0.12);
+      padding: 6px 12px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* ================= MAIN WORKSPACE LAYOUT ================= */
+    .app-container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 16px;
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    @media (max-width: 1024px) {
+      .app-container {
+        grid-template-columns: 1fr;
+        padding: 10px;
+      }
+    }
+
+    /* ================= CONTROLS SIDEBAR / DRAWER ================= */
+    .controls-panel {
+      background: #FFFFFF;
+      border-radius: 18px;
+      border: 1px solid var(--card-border);
+      box-shadow: 0 6px 24px rgba(10, 36, 88, 0.05);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .panel-section {
+      border-bottom: 1px solid #F1F5F9;
+      padding-bottom: 14px;
+    }
+
+    .panel-section:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #475569;
+      margin: 0 0 10px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .control-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .control-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--navy-800);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .control-input, .control-select {
+      width: 100%;
+      padding: 9px 12px;
+      border-radius: 10px;
+      border: 1.5px solid #CBD5E1;
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--navy-800);
+      background-color: #F8FAFC;
+      transition: border-color 0.15s;
+    }
+
+    .control-input:focus, .control-select:focus {
+      outline: none;
+      border-color: var(--navy-700);
+      background-color: #FFFFFF;
+    }
+
+    .segmented-control {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+      gap: 6px;
+      background: #F1F5F9;
+      padding: 4px;
+      border-radius: 11px;
+    }
+
+    .seg-btn {
+      border: none;
+      background: transparent;
+      padding: 8px 6px;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #475569;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: center;
+    }
+
+    .seg-btn.active {
+      background: #FFFFFF;
+      color: var(--navy-900);
+      box-shadow: 0 2px 6px rgba(6, 33, 92, 0.1);
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 6px 0;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .toggle-row input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--navy-900);
+      cursor: pointer;
+    }
+
+    .btn-primary, .btn-secondary, .btn-gold {
+      width: 100%;
+      padding: 11px 14px;
+      border-radius: 11px;
+      border: none;
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.1s, opacity 0.15s;
+    }
+
+    .btn-primary:active, .btn-secondary:active, .btn-gold:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary {
+      background: var(--navy-900);
+      color: #FFFFFF;
+      box-shadow: 0 4px 12px rgba(6, 33, 92, 0.2);
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+      color: #FFFFFF;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
+    }
+
+    .btn-secondary {
+      background: #E2E8F0;
+      color: var(--navy-900);
+    }
+
+    /* ================= RIGHT VIEWPORT AREA ================= */
+    .viewport-area {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-width: 0;
+    }
+
+    /* Desktop Tab Switcher */
+    .view-tabs {
+      display: flex;
+      gap: 8px;
+      background: #FFFFFF;
+      padding: 6px;
+      border-radius: 14px;
+      border: 1px solid var(--card-border);
+      overflow-x: auto;
+    }
+
+    .view-tab-btn {
+      flex: 1;
+      min-width: 135px;
+      padding: 10px 14px;
+      border: none;
+      border-radius: 10px;
+      background: transparent;
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #475569;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .view-tab-btn.active {
+      background: var(--navy-900);
+      color: #FFFFFF;
+    }
+
+    /* Action Bar above Canvas */
+    .canvas-toolbar {
+      background: #FFFFFF;
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .toolbar-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .icon-btn {
+      padding: 8px 12px;
+      border-radius: 9px;
+      border: 1.5px solid #CBD5E1;
+      background: #F8FAFC;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--navy-900);
+      cursor: pointer;
+    }
+
+    .icon-btn:hover {
+      background: #E2E8F0;
+    }
+
+    /* Responsive Scaling Stage for Poster & Daily Card */
+    .scale-stage-outer {
+      width: 100%;
+      background: #E2E8F0;
+      border-radius: 18px;
+      padding: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      overflow: hidden;
+      border: 1px solid #CBD5E1;
+    }
+
+    @media (max-width: 640px) {
+      .scale-stage-outer {
+        padding: 8px;
+        border-radius: 12px;
+      }
+    }
+
+    .scale-slot {
+      position: relative;
+      transform-origin: top left;
+    }
+
+    /* ==========================================================================
+       VIEW 1: FULL CALENDAR POSTER (1600px Reference Image 1 Exact Match)
+       ========================================================================== */
+    #calendar-poster-export {
+      width: 1600px;
+      background-color: #F5F8FC;
+      padding: 26px 34px 30px 34px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: #06215C;
+      box-sizing: border-box;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .poster-top-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      position: relative;
+      height: 112px;
+    }
+
+    .poster-header-left {
+      display: flex;
+      align-items: center;
+      width: 390px;
+      height: 112px;
+    }
+
+    .poster-header-center {
+      text-align: center;
+      flex: 1;
+    }
+
+    .poster-main-title {
+      font-size: 62px;
+      font-weight: 900;
+      color: #051F56;
+      margin: 0;
+      letter-spacing: 2px;
+      line-height: 1;
+    }
+
+    .poster-subtitle-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    .poster-gold-line {
+      width: 130px;
+      height: 1.8px;
+      background-color: #D9A05B;
+    }
+
+    .poster-subtitle-text {
+      font-size: 18px;
+      font-weight: 700;
+      color: #0A2458;
+      letter-spacing: 3.5px;
+    }
+
+    .poster-header-right {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      width: 440px;
+      gap: 10px;
+    }
+
+    .poster-legend-box {
+      background-color: #FFFDF8;
+      border: 1.5px solid #D5C5AA;
+      border-radius: 14px;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.03);
+    }
+
+    .poster-legend-text {
+      font-size: 16px;
+      line-height: 1.35;
+      color: #1E293B;
+      font-weight: 500;
+    }
+
+    .poster-legend-text strong {
+      font-weight: 800;
+      color: #06215C;
+    }
+
+    /* Calendar Grid Container */
+    .poster-calendar-frame {
+      background: #FFFFFF;
+      border-radius: 18px;
+      border: 1.5px solid #DCE5F2;
+      overflow: hidden;
+      box-shadow: 0 6px 20px rgba(6, 33, 92, 0.04);
+      margin-bottom: 18px;
+    }
+
+    .month-banner-oct {
+      background: linear-gradient(90deg, #062B68 0%, #2E62A6 100%);
+      color: #FFFFFF;
+      padding: 11px 22px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 25px;
+      font-weight: 800;
+    }
+
+    .calendar-grid-7 {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      border-top: 1px solid #E2E8F0;
+    }
+
+    .cal-day-cell {
+      min-width: 0;
+      min-height: 172px;
+      border-right: 1px solid #E2E8F0;
+      border-bottom: 1px solid #E2E8F0;
+      padding: 10px 10px 12px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      background: #FFFFFF;
+      position: relative;
+      transition: background-color 0.15s;
+    }
+
+    .cal-day-cell:nth-child(7n) {
+      border-right: none;
+    }
+
+    .cal-day-cell.before-start-date {
+      opacity: 0.45;
+      background: #F8FAFC;
+    }
+
+    .cal-day-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      padding: 0 4px;
+      margin-bottom: 2px;
+    }
+
+    .cal-day-left {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .cal-day-num {
+      font-size: 23px;
+      font-weight: 900;
+      color: #06215C;
+    }
+
+    .cal-day-wk {
+      font-size: 15.5px;
+      font-weight: 500;
+      color: #1E293B;
+    }
+
+    .exam-tag-mini {
+      font-size: 10px;
+      font-weight: 800;
+      background: #FEE2E2;
+      color: #B91C1C;
+      padding: 2px 6px;
+      border-radius: 5px;
+      text-transform: uppercase;
+    }
+
+    /* Subject Pill inside Calendar Cell */
+    .cal-session-pill {
+      min-width: 0;
+      flex: 1;
+      border-radius: 10px;
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: default;
+      position: relative;
+      border: 1px solid rgba(6, 33, 92, 0.06);
+      transition: transform 0.1s;
+    }
+
+    /* calendar pills are display-only */
+
+    .cal-pill-icon {
+      width: 42px;
+      height: 42px;
+      flex-shrink: 0;
+    }
+
+    .cal-pill-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .cal-pill-title {
+      font-size: 14.5px;
+      font-weight: 800;
+      color: #06215C;
+      line-height: 1.15;
+    }
+
+    .cal-pill-hours {
+      font-size: 13.5px;
+      font-weight: 500;
+      color: #0F295A;
+    }
+
+    .pill-badge-row {
+      display: flex;
+      gap: 4px;
+      margin-top: 2px;
+    }
+
+    .rev-pill-tag {
+      font-size: 10px;
+      font-weight: 800;
+      background: rgba(245, 158, 11, 0.22);
+      color: #92400E;
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+
+    .done-check-badge {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #16A34A;
+      color: #FFFFFF;
+      font-size: 12px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 5px rgba(22, 163, 74, 0.35);
+    }
+
+    .hide-export-checks .done-check-badge {
+      display: none !important;
+    }
+
+    /* Row 3 Special Layout: Oct 30-31 + November 2026 Banner */
+    .cal-row-3 {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+    }
+
+    .nov-subframe {
+      grid-column: 3 / 8;
+      display: flex;
+      flex-direction: column;
+      background: #FAF3F3;
+      border-left: 2px solid #E2E8F0;
+    }
+
+    .month-banner-nov {
+      background: linear-gradient(90deg, #883945 0%, #AD6970 100%);
+      color: #FFFFFF;
+      padding: 9px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 24px;
+      font-weight: 800;
+      border-top-left-radius: 10px;
+    }
+
+    .nov-cells-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      flex: 1;
+    }
+
+    .nov-cells-grid .cal-day-cell {
+      border-bottom: none;
+      min-height: 132px;
+      background: #FAF3F3;
+    }
+
+    /* Bottom Summary Footer Bar */
+    .poster-bottom-bar {
+      background: #EEF4FA;
+      border: 1.5px solid #DCE5F2;
+      border-radius: 16px;
+      padding: 12px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .bottom-bar-label {
+      font-size: 18px;
+      font-weight: 800;
+      color: #06215C;
+      text-align: center;
+      padding-right: 18px;
+      border-right: 2px solid #94A3B8;
+      line-height: 1.3;
+      min-width: 175px;
+    }
+
+    .bottom-bar-label span {
+      display: block;
+      font-weight: 500;
+      font-size: 16px;
+    }
+
+    .bottom-subjects-row {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex: 1;
+      flex-wrap: wrap;
+    }
+
+    .summary-subject-item {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .summary-icon-box {
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5px;
+    }
+
+    .summary-subject-text {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .summary-sub-name {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #06215C;
+    }
+
+    .summary-sub-hrs {
+      font-size: 20px;
+      font-weight: 900;
+      color: #06215C;
+    }
+
+    .bottom-total-box {
+      border-left: 2px solid #94A3B8;
+      padding-left: 22px;
+      text-align: center;
+      min-width: 235px;
+    }
+
+    .total-box-label {
+      font-size: 14px;
+      font-weight: 800;
+      color: #06215C;
+      letter-spacing: 0.4px;
+    }
+
+    .total-box-value {
+      font-size: 38px;
+      font-weight: 900;
+      color: #06215C;
+      line-height: 1.1;
+      margin-top: 2px;
+    }
+
+    /* ==========================================================================
+       VIEW 2: DAILY STUDY CARD (540x960 Portrait - Reference Images 2 & 3 Match)
+       ========================================================================== */
+    .daily-card-canvas {
+      position: relative;
+      width: 540px;
+      height: auto;
+      background-color: #FAF8F2;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow: hidden;
+      padding: 42px 28px 110px 28px; /* bottom room for the corner decorations */
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    .blob {
+      position: absolute;
+      background-color: #FEF3C7;
+      border-radius: 50%;
+      z-index: 1;
+    }
+    .blob-top-right { width: 280px; height: 220px; top: -40px; right: -40px; }
+    .blob-bottom-left { width: 290px; height: 210px; bottom: -50px; left: -30px; }
+    .blob-bottom-right { width: 180px; height: 180px; bottom: -40px; right: -30px; }
+
+    .daily-inner-card {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      background-color: #FFFFFF;
+      background-image:
+        linear-gradient(to right, rgba(186, 214, 245, 0.25) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(186, 214, 245, 0.25) 1px, transparent 1px);
+      background-size: 24px 24px;
+      border-radius: 28px;
+      box-shadow: 0 10px 30px rgba(10, 36, 88, 0.06);
+      border: 1.5px solid #F1F5F9;
+      padding: 34px 32px 38px 32px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .daily-date-header {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      margin-bottom: 22px;
+      padding-left: 6px;
+    }
+
+    .day-number-wrap {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .day-circle-bg {
+      position: absolute;
+      width: 92px;
+      height: 92px;
+      background-color: #FEF9C3;
+      border-radius: 50%;
+      left: -12px;
+      top: -6px;
+      z-index: 0;
+    }
+
+    .day-number {
+      position: relative;
+      z-index: 1;
+      font-size: 82px;
+      font-weight: 900;
+      color: #06215C;
+      line-height: 1;
+      letter-spacing: -2px;
+    }
+
+    .date-divider {
+      width: 2px;
+      height: 60px;
+      background-color: #94A3B8;
+    }
+
+    .weekday-name {
+      font-size: 35px;
+      font-weight: 600;
+      color: #0A2E6E;
+    }
+
+    .daily-subject-banner {
+      display: flex;
+      align-items: center;
+      border-radius: 22px;
+      padding: 16px 22px;
+      gap: 18px;
+      margin-bottom: 26px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
+      position: relative;
+    }
+
+    .subject-icon-box {
+      width: 108px;
+      height: 108px;
+      flex-shrink: 0;
+    }
+
+    .banner-divider {
+      width: 2px;
+      height: 78px;
+      flex-shrink: 0;
+    }
+
+    .subject-title-box { min-width: 0; flex: 1 1 auto; }
+    .subject-title, .subject-hours { max-width: 100%; }
+    .subject-title {
+      margin: 0 0 6px 0;
+      font-size: 30px;
+      font-weight: 800;
+      color: #06215C;
+      line-height: 1.15;
+    }
+
+    .subject-hours {
+      margin: 0;
+      font-size: 25px;
+      font-weight: 500;
+      color: #0F3778;
+    }
+
+    .daily-done-stamp {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      background: #16A34A;
+      color: #FFFFFF;
+      font-size: 12px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 999px;
+      letter-spacing: 0.5px;
+    }
+
+    .hide-export-checks .daily-done-stamp {
+      display: none !important;
+    }
+
+    .daily-bullets-list {
+      list-style: none;
+      padding: 0 4px;
+      margin: 0 0 auto 0;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      overflow: visible;
+    }
+
+    .daily-bullets-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+    }
+
+    .golden-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background-color: #FBBF24;
+      margin-top: 6px;
+      flex-shrink: 0;
+    }
+
+    .bullet-text {
+      font-size: 19px;
+      font-weight: 500;
+      color: #0A2458;
+      line-height: 1.4;
+    }
+
+    .coverage-card {
+      background-color: #FFFFFF;
+      border: 1.5px solid #E2E8F0;
+      border-radius: 18px;
+      padding: 15px 20px;
+      box-shadow: 0 6px 18px rgba(10, 36, 88, 0.05);
+      margin-top: 20px;
+      margin-bottom: 34px;
+    }
+
+    .coverage-label {
+      font-size: 17.5px;
+      font-weight: 800;
+      color: #06215C;
+      margin-bottom: 10px;
+    }
+
+    .coverage-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .coverage-track {
+      flex: 1;
+      height: 25px;
+      background-color: #E2E8F0;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .coverage-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #FDE047 0%, #F59E0B 100%);
+      border-radius: 999px;
+    }
+
+    .coverage-stats {
+      text-align: right;
+      min-width: 128px;
+    }
+
+    .coverage-percent {
+      font-size: 21px;
+      font-weight: 800;
+      color: #06215C;
+    }
+
+    .coverage-units {
+      font-size: 13px;
+      font-weight: 500;
+      color: #1E3A8A;
+    }
+
+    .decor-top-right { position: absolute; top: -6px; right: -8px; width: 195px; height: 185px; z-index: 3; pointer-events: none; }
+    .decor-bottom-left { position: absolute; bottom: -10px; left: -6px; width: 170px; height: 125px; z-index: 3; pointer-events: none; }
+    .decor-bottom-right { position: absolute; bottom: -10px; right: -6px; width: 110px; height: 110px; z-index: 3; pointer-events: none; }
+
+    /* ==========================================================================
+       VIEW 3: INTERACTIVE CHECKLIST & UNIT TOPIC MANAGER
+       ========================================================================== */
+    .checklist-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .checklist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 14px;
+    }
+
+    .check-day-card {
+      background: #FFFFFF;
+      border-radius: 14px;
+      border: 1.5px solid var(--card-border);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .check-day-card.is-completed {
+      border-color: #86EFAC;
+      background: #F0FDF4;
+    }
+
+    .check-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .check-session-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 14.5px;
+    }
+
+    .check-session-label input {
+      width: 20px;
+      height: 20px;
+      accent-color: #16A34A;
+      cursor: pointer;
+    }
+
+    .unit-list-details {
+      background: #FFFFFF;
+      border-radius: 14px;
+      border: 1px solid var(--card-border);
+      padding: 14px 18px;
+    }
+
+    .unit-list-details summary {
+      font-weight: 800;
+      font-size: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .unit-checkbox-list {
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      border-top: 1px solid #F1F5F9;
+      padding-top: 12px;
+    }
+
+    .unit-check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+      line-height: 1.4;
+      cursor: pointer;
+    }
+
+    .unit-check-item input {
+      margin-top: 2px;
+      width: 16px;
+      height: 16px;
+      accent-color: var(--navy-900);
+    }
+
+    /* ================= MOBILE BOTTOM NAVIGATION ================= */
+    .mobile-bottom-nav {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #FFFFFF;
+      border-top: 1px solid #CBD5E1;
+      box-shadow: 0 -4px 16px rgba(6, 33, 92, 0.08);
+      z-index: 200;
+      padding: 6px 8px;
+      justify-content: space-around;
+    }
+
+    .mob-nav-btn {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 8px 4px;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 11.5px;
+      font-weight: 800;
+      color: #64748B;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    .mob-nav-btn.active {
+      color: var(--navy-900);
+      background: #EFF6FF;
+    }
+
+    @media (max-width: 1024px) {
+      .mobile-bottom-nav {
+        display: flex;
+      }
+      .view-tabs {
+        display: none;
+      }
+      .controls-panel.mobile-hidden {
+        display: none;
+      }
+      .viewport-area.mobile-hidden {
+        display: none;
+      }
+    }
+    .mi { display: inline-block; width: 1em; height: 1em; vertical-align: -0.125em; flex: 0 0 auto; }
+  
+    /* ==========================================================================
+       CUSTOM UI: scrollbars, range sliders, select dropdowns
+       ========================================================================== */
+    * { scrollbar-width: thin; scrollbar-color: #9FB3D6 transparent; }
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #9FB3D6; border-radius: 999px; border: 2px solid transparent; background-clip: padding-box; }
+    ::-webkit-scrollbar-thumb:hover { background: #5B7DB8; border: 2px solid transparent; background-clip: padding-box; }
+    ::-webkit-scrollbar-corner { background: transparent; }
+
+    input[type="range"] {
+      -webkit-appearance: none; appearance: none;
+      width: 100%; height: 22px; margin: 6px 0; background: transparent; cursor: pointer;
+      --p: 50%;
+    }
+    input[type="range"]:focus { outline: none; }
+    input[type="range"]::-webkit-slider-runnable-track {
+      height: 6px; border-radius: 999px;
+      background: linear-gradient(90deg, var(--navy-700) var(--p), #DCE3EF var(--p));
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 20px; height: 20px; margin-top: -7px; border-radius: 50%;
+      background: #FFFFFF; border: 3px solid var(--navy-700);
+      box-shadow: 0 2px 6px rgba(10, 36, 88, .25);
+      transition: transform .12s;
+    }
+    input[type="range"]:hover::-webkit-slider-thumb,
+    input[type="range"]:focus-visible::-webkit-slider-thumb { transform: scale(1.15); }
+    input[type="range"]::-moz-range-track {
+      height: 6px; border-radius: 999px; background: #DCE3EF;
+    }
+    input[type="range"]::-moz-range-progress {
+      height: 6px; border-radius: 999px; background: var(--navy-700);
+    }
+    input[type="range"]::-moz-range-thumb {
+      width: 16px; height: 16px; border-radius: 50%;
+      background: #FFFFFF; border: 3px solid var(--navy-700);
+    }
+
+    .cs { position: relative; width: 100%; min-width: 0; }
+    .cs-trigger {
+      width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      padding: 9px 12px; border-radius: 10px; border: 1.5px solid #CBD5E1;
+      background: #F8FAFC; color: var(--navy-800); font: inherit; font-size: 13.5px; font-weight: 600;
+      text-align: left; cursor: pointer; box-sizing: border-box; transition: border-color .15s, background-color .15s;
+    }
+    .cs-trigger:hover, .cs.is-open .cs-trigger { border-color: var(--navy-700); background: #FFFFFF; }
+    .cs-trigger:focus-visible { outline: 2px solid #5B7DB8; outline-offset: 2px; }
+    .cs-trigger:disabled { opacity: .55; cursor: not-allowed; }
+    .cs-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .cs-caret {
+      flex: 0 0 auto; width: 8px; height: 8px; margin-right: 3px;
+      border-right: 2px solid var(--navy-700); border-bottom: 2px solid var(--navy-700);
+      transform: translateY(-2px) rotate(45deg); transition: transform .15s;
+    }
+    .cs.is-open .cs-caret { transform: translateY(2px) rotate(225deg); }
+    .cs-menu {
+      position: fixed; z-index: 10000; margin: 0; padding: 6px; list-style: none; box-sizing: border-box;
+      max-height: min(320px, 60vh); overflow-y: auto;
+      background: #FFFFFF; border: 1.5px solid #CBD5E1; border-radius: 12px;
+      box-shadow: 0 12px 30px rgba(10, 36, 88, .18);
+    }
+    .cs-menu[hidden] { display: none; }
+    .cs-opt {
+      padding: 8px 10px; border-radius: 8px; cursor: pointer; user-select: none;
+      font-size: 13.5px; font-weight: 600; color: var(--navy-800);
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    }
+    .cs-opt.is-active { background: #EEF3FB; }
+    .cs-opt.is-selected { color: var(--navy-700); background: #E3ECFB; }
+    .cs-opt.is-selected::after { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--navy-700); flex: 0 0 auto; }
+    .cs-opt.is-disabled { opacity: .45; cursor: not-allowed; }
+    .cs-native { display: none !important; }
+    .unit-module-head { margin: 10px 0 4px; font-size: 12px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--navy-700); }
+
+    /* Phone drawer for settings and title fitting */
+    .drawer-close, .drawer-backdrop { display: none; }
+    @media (max-width: 1024px) {
+      .controls-panel {
+        position: fixed; top: 0; left: 0; right: 0; z-index: 300;
+        max-height: 80vh; overflow-y: auto; border-radius: 0 0 18px 18px;
+        transform: translateY(-105%); transition: transform .25s ease;
+        box-shadow: 0 14px 34px rgba(6, 33, 92, .28);
+      }
+      .controls-panel.drawer-open { transform: translateY(0); }
+      .controls-panel.mobile-hidden { display: flex; }
+      .drawer-close {
+        display: flex; align-items: center; justify-content: center; gap: 6px;
+        width: 100%; padding: 8px; border: none; background: #EFF6FF; color: var(--navy-700);
+        font: inherit; font-size: 13px; font-weight: 800; border-radius: 10px; cursor: pointer;
+      }
+      .drawer-backdrop {
+        position: fixed; inset: 0; z-index: 299; background: rgba(6, 33, 92, .35); display: none;
+      }
+      .drawer-backdrop.show { display: block; }
+    }
+
+    /* Schedule tab */
+    .schedule-all { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; background: #fff; border: 1px solid #CBD5E1; border-radius: 14px; padding: 12px 16px; margin: 12px 0; }
+    .schedule-all label { font-size: 14px; font-weight: 700; color: var(--navy-800); }
+    .schedule-all input[type="range"] { flex: 1; min-width: 180px; }
+    .schedule-reset { border: 1.5px solid var(--navy-700); background: #fff; color: var(--navy-700); border-radius: 10px; padding: 8px 12px; font: inherit; font-weight: 700; cursor: pointer; }
+    .schedule-list { display: flex; flex-direction: column; gap: 8px; }
+    .schedule-row { display: grid; grid-template-columns: 110px 1.2fr 1.6fr 150px; gap: 12px; align-items: center; background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; padding: 10px 14px; }
+    .schedule-row.is-exam { border-color: #FCA5A5; background: #FFF7F7; }
+    .schedule-day { font-size: 14px; font-weight: 700; color: var(--navy-800); }
+    .schedule-exam { font-size: 12.5px; font-weight: 700; color: #9A3412; }
+    .schedule-slider input[type="range"] { width: 100%; }
+    .schedule-ticks { display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; color: #94A3B8; padding: 0 8px; }
+    .schedule-ticks span.is-on { color: var(--navy-700); }
+    .schedule-val { font-size: 13px; font-weight: 700; color: var(--navy-800); text-align: right; }
+    @media (max-width: 720px) {
+      .schedule-row { grid-template-columns: 1fr; }
+      .schedule-val { text-align: left; }
+    }
+
+    /* Poster summary bar: all subjects on one row, each item takes an equal share and its text fits. */
+    .bottom-subjects-row { flex-wrap: nowrap !important; min-width: 0; }
+    .summary-subject-item { flex: 1 1 0; min-width: 0; gap: 8px; }
+    .summary-icon-box { width: var(--icon, 46px) !important; height: var(--icon, 46px) !important; flex: 0 0 var(--icon, 46px); }
+    .summary-subject-text { min-width: 0; }
+    .summary-sub-name, .summary-sub-hrs { display: block; white-space: nowrap; }
+    /* Summary bar: label and total on the first line, all subjects on one full-width row below. */
+    .poster-bottom-bar { flex-wrap: wrap !important; row-gap: 12px; }
+    .bottom-bar-label { order: 1; }
+    .bottom-total-box { order: 2; margin-left: auto; }
+    .bottom-subjects-row { order: 3; flex: 0 0 100% !important; flex-wrap: nowrap !important; justify-content: space-between !important; gap: 8px !important; }
+    .summary-sub-name, .summary-sub-hrs { white-space: normal; }
+    .cal-pill-title, .cal-pill-hours { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* Daily card toolbar: arrows, date, subject chips, calendar popup */
+    .day-nav-group { position: relative; display: flex; flex-direction: column; gap: 8px; min-width: 0; flex: 1 1 260px; }
+    .day-nav-row { display: flex; align-items: center; gap: 8px; }
+    .nav-arrow { width: 40px; height: 40px; padding: 0; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 40px; }
+    .day-date-btn { flex: 1; min-width: 0; height: 40px; display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 10px; border: 1.5px solid #CBD5E1; background: #fff; color: var(--navy-800); font: inherit; font-weight: 800; font-size: 15px; cursor: pointer; }
+    .day-subjects { display: flex; flex-wrap: wrap; gap: 6px; }
+    .day-chip { border: 1.5px solid #CBD5E1; background: #F8FAFC; border-radius: 999px; padding: 6px 12px; font: inherit; font-size: 13px; font-weight: 700; color: var(--navy-800); cursor: pointer; }
+    .day-chip.is-active { background: var(--navy-700); color: #fff; border-color: var(--navy-700); }
+    .day-chip.is-done { text-decoration: line-through; opacity: .7; }
+    .day-cal { position: absolute; top: calc(100% + 6px); left: 0; z-index: 500; width: min(300px, 92vw); background: #fff; border: 1px solid #CBD5E1; border-radius: 14px; box-shadow: 0 12px 30px rgba(10, 36, 88, .18); padding: 12px; box-sizing: border-box; }
+    .day-cal[hidden] { display: none; }
+    .day-cal-head { display: flex; align-items: center; justify-content: space-between; font-weight: 800; color: var(--navy-800); margin-bottom: 8px; }
+    .day-cal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; text-align: center; }
+    .day-cal-dow { font-size: 11px; font-weight: 700; color: #64748B; }
+    .day-cal-day { aspect-ratio: 1; border: none; border-radius: 10px; background: transparent; font: inherit; font-size: 13px; font-weight: 700; color: var(--navy-800); cursor: pointer; padding: 0; }
+    .day-cal-day:disabled { color: #CBD5E1; cursor: default; }
+    .day-cal-day.is-today { box-shadow: inset 0 0 0 2px var(--navy-700); }
+    .day-cal-day.is-selected { background: var(--navy-700); color: #fff; }
+
+    /* Daily card: revision tag, and the card grows with its text */
+    .rev-tag { display: inline-block; margin-top: 6px; padding: 3px 12px; border-radius: 999px; background: #FDE68A; color: #92400E; font-size: 13px; font-weight: 800; letter-spacing: .5px; text-transform: uppercase; }
+
+    /* Checklist: subject rows with exam tag and progress bar */
+    #subject-units-accordion .unit-summary { display: block !important; cursor: pointer; }
+    #subject-units-accordion .unit-bar-row { display: flex !important; width: 100%; box-sizing: border-box; }
+    #subject-units-accordion .unit-bar-row .coverage-track { flex: 1 1 auto; width: auto; }
+    .unit-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+    .unit-name { font-size: clamp(15px, 4vw, 18px); font-weight: 800; color: var(--navy-800); min-width: 0; flex: 1 1 180px; overflow-wrap: anywhere; }
+    .exam-tag { background: #FEE2E2; color: #9A3412; border-radius: 999px; padding: 3px 10px; font-size: 12px; font-weight: 800; white-space: nowrap; }
+    .unit-bar-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+    .unit-bar-row .coverage-track { flex: 1; height: 10px; min-width: 0; }
+    .unit-pct { font-size: 13px; font-weight: 800; color: var(--navy-800); min-width: 40px; text-align: right; }
+  </style>
+</head>
+<body>
+
+  <!-- TOP HEADER -->
+  <header class="app-header">
+    <div class="app-brand">
+      <h1><svg class="mi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m19 9 1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/></svg> Study Plan</h1>
+      <span>CU-FYUGP Sem V • 2026</span>
+    </div>
+    <div class="header-quick-stats">
+      <div class="stat-pill" id="stat-progress-pill"><svg class="mi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> 0 / 0 Sessions Done</div>
+      <div class="stat-pill" id="stat-hours-pill"><svg class="mi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 1h6v2H9zm10.03 6.39 1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42A8.962 8.962 0 0 0 12 4a9 9 0 0 0-9 9c0 4.97 4.02 9 9 9a8.994 8.994 0 0 0 7.03-14.61zM13 14h-2V8h2v6z"/></svg> 72 Hours Total</div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <div class="app-container">
+
+    <!-- LEFT SIDEBAR: PERSONALIZATION CONTROLS -->
+    <aside class="controls-panel" id="sidebar-controls">
+      <button class="drawer-close" id="drawer-close" type="button"><svg class="mi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z"/></svg> Close settings</button>
+      
+      <!-- 1. Stream & SEC Selection -->
+      <div class="panel-section">
+        <h3 class="section-title">1. Major Stream & SEC Subject</h3>
+        <div class="control-group">
+          <label class="control-label">Degree Stream</label>
+          <div class="segmented-control" id="stream-control">
+            <button class="seg-btn active" data-val="physics">Physics</button>
+            <button class="seg-btn" data-val="math">Maths</button>
+            <button class="seg-btn" data-val="combined">Both</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label">SEC Subject (Equal Weightage)</label>
+          <select class="control-select" id="sec-subject-select">
+            <option value="SEC_PHY">Python for Data Analysis (19u)</option>
+            <option value="SEC_MAT">LaTeX (19u)</option>
+            <option value="BOTH">Both SECs (equal)</option>
+            <option value="SEC_OTH">Custom SEC (19u)</option>
+          </select>
+        </div>
+
+        <div class="control-group" id="custom-sec-name-group" style="display:none;">
+          <label class="control-label">Custom SEC Name</label>
+          <input type="text" class="control-input" id="custom-sec-name-input" value="Skill Enhancement Course" />
+        </div>
+
+        <div class="control-group">
+          <label class="control-label">SEC Schedule Track</label>
+          <select class="control-select" id="sec-track-select">
+            <option value="poster_3">Poster: 3 sessions (9h)</option>
+            <option value="equal_4">Perfected: 4 sessions (12h)</option>
+            <option value="compact_1">Compact: 1 session (3h)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 2. Start Date & Completed Lock -->
+      <div class="panel-section">
+        <h3 class="section-title">2. Start Date & Completed Progress</h3>
+        <div class="control-group">
+          <label class="control-label">
+            <span>Plan Start Date</span>
+            <span id="start-date-badge" style="color:var(--gold-500);">Oct 16</span>
+          </label>
+          <input type="date" class="control-input" id="start-date-input" min="2026-10-16" max="2026-11-02" value="2026-10-16" />
+        </div>
+
+        <label class="toggle-row">
+          <span id="lock-range-label">Keep history fixed</span>
+          <input type="checkbox" id="lock-monday-toggle" checked />
+        </label>
+
+        <label class="toggle-row">
+          <span>Redistribute Uncompleted Units Automatically</span>
+          <input type="checkbox" id="redistribute-toggle" checked />
+        </label>
+
+        <label class="toggle-row">
+          <span>Show <svg class="mi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Completed Badges on Exported PNG</span>
+          <input type="checkbox" id="show-export-checks-toggle" />
+        </label>
+
+        <div style="display:flex; gap:6px; margin-top:6px;">
+          <button class="btn-secondary" id="btn-mark-upto-mon" style="font-size:12px; padding:8px;"><svg class="mi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Mark history done</button>
+          <button class="btn-secondary" id="btn-clear-completed" style="font-size:12px; padding:8px;">Reset Ticks</button>
+        </div>
+      </div>
+
+      <!-- 3. Plan Mode, Session Hours & Exam-Eve Revision -->
+      <div class="panel-section">
+        <h3 class="section-title">3. Session & Revision Settings</h3>
+        <div class="control-group">
+          <label class="control-label">Schedule Mode</label>
+          <div class="segmented-control" id="plan-mode-control">
+            <button class="seg-btn active" data-val="ideal">Ideal Plan Dates</button>
+            <button class="seg-btn" data-val="custom">Custom Auto-Plan</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label">
+            <span>Hours Per Session Card</span>
+            <span id="session-hours-val">3 hours</span>
+          </label>
+          <input type="range" id="session-hours-Input" min="1" max="6" step="0.5" value="3" />
+        </div>
+
+        <div class="control-group" id="max-sessions-group" style="display:none;">
+          <label class="control-label">
+            <span>Max Sessions Per Day (Custom)</span>
+            <span id="max-sessions-val">2 sessions/day</span>
+          </label>
+          <input type="range" id="max-sessions-input" min="1" max="4" step="1" value="2" />
+        </div>
+
+        <div class="control-group">
+          <label class="control-label">
+            <span>Exam-Night Revision Sessions</span>
+            <span id="revision-sessions-val">1 (Exam Eve)</span>
+          </label>
+          <div class="segmented-control" id="revision-control">
+            <button class="seg-btn" data-val="0">0 (Original)</button>
+            <button class="seg-btn active" data-val="1">1 (Exam Eve)</button>
+            <button class="seg-btn" data-val="2">2 Sessions</button>
+          </div>
+        </div>
+
+        <label class="toggle-row">
+          <span>Merge Same-Subject Same-Day Cards (6h Card)</span>
+          <input type="checkbox" id="merge-same-subject-toggle" checked />
+        </label>
+      </div>
+
+      <!-- 4. Quick Export Buttons -->
+      <div class="panel-section">
+        <h3 class="section-title">4. High-Resolution PNG Export</h3>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <button class="btn-primary" id="btn-export-poster"><svg class="mi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5 20h14v-2H5v2zM19 9h-4V3H9v6H5l7 7 7-7z"/></svg> Download Calendar Poster (PNG)</button>
+          <button class="btn-gold" id="btn-export-daily"><svg class="mi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg> Download Current Day Card (PNG)</button>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- RIGHT MAIN VIEWPORT -->
+    <main class="viewport-area" id="main-viewport">
+
+      <!-- Desktop Navigation Tabs -->
+      <div class="view-tabs">
+        <button class="view-tab-btn active" data-tab="poster"><svg class="mi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8 4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z"/></svg> Calendar Poster View</button>
+        <button class="view-tab-btn" data-tab="daily"><svg class="mi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg> Daily Card View</button>
+        <button class="view-tab-btn" data-tab="schedule"><svg class="mi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg><span> Schedule</span></button>
+        <button class="view-tab-btn" data-tab="checklist"><svg class="mi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> Checklist & Topic Editor</button>
+      </div>
+
+      <!-- TAB 1: FULL CALENDAR POSTER -->
+      <section id="tab-poster" class="tab-pane">
+        <div class="canvas-toolbar">
+          <div class="toolbar-group">
+            <span style="font-size:13.5px; font-weight:700;"><svg class="mi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 21c0 .5.4 1 1 1h4c.6 0 1-.5 1-1v-1H9v1zm3-19C8.1 2 5 5.1 5 9c0 2.4 1.2 4.5 3 5.7V17c0 .5.4 1 1 1h6c.6 0 1-.5 1-1v-2.3c1.8-1.3 3-3.4 3-5.7 0-3.9-3.1-7-7-7z"/></svg> Tip: Tap any session card on the calendar to mark it <svg class="mi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Completed or open its Daily Card!</span>
+          </div>
+          <div class="toolbar-group">
+            <button class="icon-btn" id="btn-export-poster-top"><svg class="mi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5 20h14v-2H5v2zM19 9h-4V3H9v6H5l7 7 7-7z"/></svg> Save HD Poster PNG</button>
+          </div>
+        </div>
+
+        <div class="scale-stage-outer" id="poster-stage-outer" style="margin-top:12px;">
+          <div class="scale-slot" id="poster-scale-slot">
+            <!-- 1600px Calendar Poster DOM -->
+            <div id="calendar-poster-export" class="hide-export-checks">
+              <!-- Poster Header -->
+              <div class="poster-top-header">
+                <div class="poster-header-left" id="poster-books-svg-slot"></div>
+                <div class="poster-header-center">
+                  <h1 class="poster-main-title">STUDY PLAN</h1>
+                  <div class="poster-subtitle-row">
+                    <span class="poster-gold-line"></span>
+                    <span class="poster-subtitle-text">OCTOBER – NOVEMBER 2026</span>
+                    <span class="poster-gold-line"></span>
+                  </div>
+                </div>
+                <div class="poster-header-right">
+                  <div class="poster-legend-box">
+                    <div id="poster-clock-svg-slot" style="width:44px; height:44px; flex-shrink:0;"></div>
+                    <div class="poster-legend-text" id="poster-legend-text">
+                      <strong>Each entry = 3 hours</strong><br/>
+                      Same subject twice = 6 hours<br/>
+                      (on the same day)
+                    </div>
+                  </div>
+                  <div id="poster-right-leaf-slot" style="width:68px; height:90px; flex-shrink:0;"></div>
+                </div>
+              </div>
+
+              <!-- Calendar Frame -->
+              <div class="poster-calendar-frame">
+                <div class="month-banner-oct">
+                  <span id="oct-cal-icon-slot" style="display:flex;"></span>
+                  <span>October 2026</span>
+                </div>
+                <!-- Row 1 & Row 2 (Oct 16 to Oct 29) -->
+                <div class="calendar-grid-7" id="poster-grid-oct-main"></div>
+                <!-- Row 3 (Oct 30, Oct 31 + Nov 1, Nov 2...) -->
+                <div class="cal-row-3" id="poster-grid-row-3"></div>
+              </div>
+
+              <!-- Poster Bottom Summary Bar -->
+              <div class="poster-bottom-bar">
+                <div class="bottom-bar-label">
+                  Total Study Hours
+                  <span>(Per Subject)</span>
+                </div>
+                <div class="bottom-subjects-row" id="poster-summary-subjects"></div>
+                <div class="bottom-total-box">
+                  <div class="total-box-label">TOTAL PLANNED STUDY TIME</div>
+                  <div class="total-box-value" id="poster-total-hours">72 HOURS</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: DAILY STUDY CARD -->
+      <section id="tab-daily" class="tab-pane" style="display:none;">
+        <div class="canvas-toolbar">
+          <div class="toolbar-group">
+            <div class="day-nav-group">
+              <div class="day-nav-row">
+                <button class="icon-btn nav-arrow" id="prev-card-btn" aria-label="Previous card"><svg class="mi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></button>
+                <button class="day-date-btn" id="day-date-btn" type="button" aria-haspopup="dialog" aria-expanded="false"><svg class="mi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8 4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z"/></svg><span id="day-date-label"></span></button>
+                <button class="icon-btn nav-arrow" id="next-card-btn" aria-label="Next card"><svg class="mi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></button>
+              </div>
+              <div class="day-subjects" id="day-subjects"></div>
+              <div class="day-cal" id="day-cal" hidden></div>
+            </div>
+          </div>
+          <div class="toolbar-group">
+            <button class="icon-btn" id="toggle-current-card-done"><svg class="mi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Mark Completed</button>
+            <button class="icon-btn" id="btn-export-daily-top" style="background:var(--navy-900); color:#fff; border-color:var(--navy-900);"><svg class="mi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg> Save HD Card PNG</button>
+          </div>
+        </div>
+
+        <div class="scale-stage-outer" id="daily-stage-outer" style="margin-top:12px;">
+          <div class="scale-slot" id="daily-scale-slot">
+            <!-- 540x960 Daily Card DOM -->
+            <div id="daily-card-export" class="daily-card-canvas hide-export-checks">
+              <div class="blob blob-top-right"></div>
+              <div class="blob blob-bottom-left"></div>
+              <div class="blob blob-bottom-right"></div>
+
+              <div class="daily-inner-card">
+                <div class="daily-date-header">
+                  <div class="day-number-wrap">
+                    <span class="day-circle-bg"></span>
+                    <span class="day-number" id="dc-day-num">17</span>
+                  </div>
+                  <div class="date-divider"></div>
+                  <span class="weekday-name" id="dc-weekday">Saturday</span>
+                </div>
+
+                <div class="daily-subject-banner" id="dc-banner">
+                  <div class="subject-icon-box" id="dc-icon-box"></div>
+                  <div class="banner-divider" id="dc-banner-divider"></div>
+                  <div class="subject-title-box">
+                    <h2 class="subject-title" id="dc-subject-title">Properties of Solids</h2>
+                    <p class="subject-hours" id="dc-subject-hours">6 hours</p>
+                    <span class="rev-tag" id="dc-rev-tag" style="display:none;">Revision</span>
+                  </div>
+                  <div class="daily-done-stamp" id="dc-done-stamp" style="display:none;"><svg class="mi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> COMPLETED</div>
+                </div>
+
+                <ul class="daily-bullets-list" id="dc-bullets-list"></ul>
+
+                <div class="coverage-card">
+                  <div class="coverage-label">Course coverage</div>
+                  <div class="coverage-bar-row">
+                    <div class="coverage-track">
+                      <div class="coverage-fill" id="dc-coverage-fill" style="width: 23%;"></div>
+                    </div>
+                    <div class="coverage-stats">
+                      <div class="coverage-percent" id="dc-coverage-pct">23%</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="decor-top-right" id="dc-decor-tr"></div>
+              <div class="decor-bottom-left" id="dc-decor-bl"></div>
+              <div class="decor-bottom-right" id="dc-decor-br"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: CHECKLIST & UNIT TOPIC MANAGER -->
+      <section id="tab-checklist" class="tab-pane" style="display:none;">
+        <div class="canvas-toolbar">
+          <div class="toolbar-group">
+            <h3 style="margin:0; font-size:16px;"><svg class="mi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> Topic Checklist</h3>
+          </div>
+          <div class="toolbar-group">
+            <span style="font-size:13px; color:#475569;">Expand any subject below to tick off individual topics.</span>
+          </div>
+        </div>
+
+        <div class="checklist-container" style="margin-top:12px;">
+          <h3 style="margin:12px 0 4px 0; font-size:16px;"><svg class="mi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1zm0 13.5c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V8c1.35-.85 3.8-1.5 5.5-1.5 1.2 0 2.4.15 3.5.5v11.5z"/><path d="M17.5 10.5c.88 0 1.73.09 2.5.26V9.24c-.79-.15-1.64-.24-2.5-.24-1.7 0-3.24.29-4.5.83v1.66c1.13-.64 2.7-.99 4.5-.99zM13 12.49v1.66c1.13-.64 2.7-.99 4.5-.99.88 0 1.73.09 2.5.26V11.9c-.79-.15-1.64-.24-2.5-.24-1.7 0-3.24.3-4.5.83zm4.5 1.84c-1.7 0-3.24.29-4.5.83v1.66c1.13-.64 2.7-.99 4.5-.99.88 0 1.73.09 2.5.26v-1.52c-.79-.16-1.64-.24-2.5-.24z"/></svg> Syllabus Units by Subject (Tick Individual Units)</h3>
+          <div id="subject-units-accordion" style="display:flex; flex-direction:column; gap:10px;"></div>
+        </div>
+      </section>
+
+      <!-- TAB: SCHEDULE (sessions per day, capped at {10 study hours}) -->
+      <section id="tab-schedule" class="tab-pane" style="display:none;">
+        <div class="canvas-toolbar">
+          <div class="toolbar-group">
+            <h3 style="margin:0; font-size:16px;">Sessions Per Day</h3>
+          </div>
+          <div class="toolbar-group">
+            <span style="font-size:13px; color:#475569;" id="schedule-hint"></span>
+          </div>
+        </div>
+        <div class="schedule-all">
+          <label for="schedule-all-input">Apply to all days: <strong id="schedule-all-val"></strong></label>
+          <input type="range" id="schedule-all-input" min="0" max="2" step="1" value="2" />
+          <button type="button" id="schedule-reset" class="schedule-reset">Reset days</button>
+        </div>
+        <div class="schedule-list" id="schedule-list"></div>
+      </section>
+
+    </main>
+  </div>
+
+  <div class="drawer-backdrop" id="drawer-backdrop"></div>
+
+  <!-- MOBILE BOTTOM NAVIGATION BAR -->
+  <nav class="mobile-bottom-nav">
+    <button class="mob-nav-btn active" data-mob-tab="poster">
+      <span style="font-size:18px;"><svg class="mi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8 4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z"/></svg></span>
+      <span>Calendar</span>
+    </button>
+    <button class="mob-nav-btn" data-mob-tab="daily">
+      <span style="font-size:18px;"><svg class="mi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg></span>
+      <span>Daily Card</span>
+    </button>
+    <button class="mob-nav-btn" data-mob-tab="checklist">
+      <span style="font-size:18px;"><svg class="mi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></span>
+      <span>Checklist</span>
+    </button>
+    <button class="mob-nav-btn" data-mob-tab="schedule">
+      <span style="font-size:18px;"><svg class="mi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg></span>
+      <span>Schedule</span>
+    </button>
+    <button class="mob-nav-btn" data-mob-tab="settings">
+      <span style="font-size:18px;"><svg class="mi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg></span>
+      <span>Settings</span>
+    </button>
+  </nav>
+
+  <!-- APPLICATION SCRIPT -->
+  <script>
+// Locked history (Oct 16–19) was completed as 3-hour sessions; the session-length slider only affects later days.
+const LOCKED_SESSION_HOURS = 3;
+// Module (I–IV) for each unit, one digit per unit, from the syllabus. Used to group the topic checklist.
+const MODULE_LABEL = { "1": "I", "2": "II", "3": "III", "4": "IV" };
+const openUnitLists = new Set();
+const UNIT_MODULE = {
+  ED: "1111122233333344444444",
+  OPT: "1111222222233333444444",
+  QM: "1111122222233333333334444",
+  SSP: "1111122222233333444444",
+  MS: "1111122223333334444444",
+  SEC_PHY: "1111122222333333444",
+  RA: "1111112222233333334444",
+  AA: "1111112222223333444444",
+  CA: "1111122222333333334444",
+  CO: "1111111122222222233333444",
+  ML: "11111122222233333344444",
+  SEC_MAT: "1111222333344444444",
+  SEC_OTH: "1111122222333333444"
+};
+
+    /* ==========================================================================
+       1. SVG GRAPHICS LIBRARY (All 12 Subjects + 6 Decorative Poster/Card SVGs)
+       ========================================================================== */
+    const SUBJECT_SVGS = {
+      "icon-electrodynamics": `
+        <svg viewBox="0 0 120 120" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="62" cy="62" r="46" fill="#93C5FD" fill-opacity="0.45"/>
+          <path d="M16 28L28 33M25 15L33 26" stroke="#F59E0B" stroke-width="4.5" stroke-linecap="round"/>
+          <g transform="rotate(-32 60 62)">
+            <path d="M36 30V66C36 79.2548 46.7452 90 60 90C73.2548 90 84 79.2548 84 66V30H70V66C70 71.5228 65.5228 76 60 76C54.4772 76 50 71.5228 50 66V30H36Z" fill="#60A5FA" stroke="#06215C" stroke-width="4" stroke-linejoin="round"/>
+            <rect x="36" y="30" width="14" height="12" fill="#E0F2FE" stroke="#06215C" stroke-width="4"/>
+            <rect x="70" y="30" width="14" height="12" fill="#E0F2FE" stroke="#06215C" stroke-width="4"/>
+            <path d="M43 21C50 13 70 13 77 21" stroke="#06215C" stroke-width="2.8" stroke-dasharray="4 4" stroke-linecap="round"/>
+          </g>
+        </svg>`,
+
+      "icon-solid-state": `
+        <svg viewBox="0 0 120 120" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M14 32L27 36M25 15L32 27" stroke="#F59E0B" stroke-width="4.5" stroke-linecap="round"/>
+          <rect x="44" y="28" width="46" height="46" stroke="#06215C" stroke-width="3.6" stroke-linejoin="round"/>
+          <line x1="28" y1="44" x2="44" y2="28" stroke="#06215C" stroke-width="3.6"/>
+          <line x1="74" y1="44" x2="90" y2="28" stroke="#06215C" stroke-width="3.6"/>
+          <line x1="28" y1="90" x2="44" y2="74" stroke="#06215C" stroke-width="3.6"/>
+          <line x1="74" y1="90" x2="90" y2="74" stroke="#06215C" stroke-width="3.6"/>
+          <rect x="28" y="44" width="46" height="46" stroke="#06215C" stroke-width="3.6" stroke-linejoin="round"/>
+          <circle cx="44" cy="28" r="6.2" fill="#1D4ED8" stroke="#06215C" stroke-width="3"/>
+          <circle cx="90" cy="28" r="6.2" fill="#1D4ED8" stroke="#06215C" stroke-width="3"/>
+          <circle cx="44" cy="74" r="6.2" fill="#1D4ED8" stroke="#06215C" stroke-width="3"/>
+          <circle cx="90" cy="74" r="6.2" fill="#1D4ED8" stroke="#06215C" stroke-width="3"/>
+          <circle cx="28" cy="44" r="6.2" fill="#2563EB" stroke="#06215C" stroke-width="3"/>
+          <circle cx="74" cy="44" r="6.2" fill="#2563EB" stroke="#06215C" stroke-width="3"/>
+          <circle cx="28" cy="90" r="6.2" fill="#2563EB" stroke="#06215C" stroke-width="3"/>
+          <circle cx="74" cy="90" r="6.2" fill="#2563EB" stroke="#06215C" stroke-width="3"/>
+        </svg>`,
+
+      "icon-optics": `
+        <svg viewBox="0 0 120 120" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="62" cy="64" r="46" fill="#BBF7D0" fill-opacity="0.55"/>
+          <path d="M14 28L28 33M24 14L32 26" stroke="#F59E0B" stroke-width="4.5" stroke-linecap="round"/>
+          <g stroke="#F59E0B" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="16" y1="48" x2="43" y2="48"/><polyline points="37,43 44,48 37,53"/>
+            <line x1="16" y1="64" x2="43" y2="64"/><polyline points="37,59 44,64 37,69"/>
+            <line x1="16" y1="80" x2="43" y2="80"/><polyline points="37,75 44,80 37,85"/>
+          </g>
+          <line x1="65" y1="48" x2="98" y2="64" stroke="#F59E0B" stroke-width="3.4" stroke-linecap="round"/>
+          <line x1="66" y1="64" x2="98" y2="64" stroke="#F59E0B" stroke-width="3.4" stroke-linecap="round"/>
+          <line x1="65" y1="80" x2="98" y2="64" stroke="#F59E0B" stroke-width="3.4" stroke-linecap="round"/>
+          <path d="M55 24C44 46 44 82 55 104C66 82 66 46 55 24Z" fill="#BAE6FD" stroke="#06215C" stroke-width="3.8" stroke-linejoin="round"/>
+          <path d="M52 34C48 50 48 76 52 92" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="99" cy="64" r="4" fill="#06215C"/>
+        </svg>`,
+
+      "icon-quantum": `
+        <svg viewBox="0 0 120 120" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="62" cy="62" r="46" fill="#E9D5FF" fill-opacity="0.55"/>
+          <path d="M16 28L28 33M26 15L33 26" stroke="#F59E0B" stroke-width="4.5" stroke-linecap="round"/>
+          <ellipse cx="62" cy="62" rx="42" ry="16" stroke="#06215C" stroke-width="3.3"/>
+          <ellipse cx="62" cy="62" rx="42" ry="16" transform="rotate(60 62 62)" stroke="#06215C" stroke-width="3.3"/>
+          <ellipse cx="62" cy="62" rx="42" ry="16" transform="rotate(120 62 62)" stroke="#06215C" stroke-width="3.3"/>
+          <circle cx="62" cy="62" r="7.5" fill="#7C3AED" stroke="#06215C" stroke-width="3"/>
+          <circle cx="20" cy="62" r="4.5" fill="#F59E0B" stroke="#06215C" stroke-width="2.5"/>
+          <circle cx="83" cy="26" r="4.5" fill="#38BDF8" stroke="#06215C" stroke-width="2.5"/>
+          <circle cx="83" cy="98" r="4.5" fill="#38BDF8" stroke="#06215C" stroke-width="2.5"/>
+        </svg>`,
+
+      "icon-materials": `
+        <svg viewBox="0 0 120 120" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="62" cy="62" r="46" fill="#FED7AA" fill-opacity="0.55"/>
+          <path d="M16 28L28 33M26 15L33 26" stroke="#F59E0B" stroke-width="4.5" stroke-linecap="round"/>
+          <line x1="62" y1="62" x2="62" y2="26" stroke="#06215C" stroke-width="3.8"/>
+          <line x1="62" y1="62" x2="31" y2="44" stroke="#06215C" stroke-width="3.8"/>
+          <line x1="62" y1="62" x2="93" y2="44" stroke="#06215C" stroke-width="3.8"/>
+          <line x1="62" y1="62" x2="35" y2="88" stroke="#06215C" stroke-width="3.8"/>
+          <line x1="62" y1="62" x2="89" y2="88" stroke="#06215C" stroke-width="3.8"/>
+          <circle cx="62" cy="62" r="9" fill="#FB923C" stroke="#06215C" stroke-width="3.5"/>
+          <circle cx="62" cy="26" r="6.5" fill="#FDE047" stroke="#06215C" stroke-width="3"/>
+          <circle cx="31" cy="44" r="6.5" fill="#38BDF8" stroke="#06215C" stroke-width="3"/>
+          <circle cx="93" cy="44" r="6.5" fill="#38BDF8" stroke="#06215C" stroke-width="3"/>
+          <circle cx="35" cy="88" r="6.5" fill="#FDE047" stroke="#06215C" stroke-width="3"/>
+          <circle cx="89" cy="88" r="6.5" fill="#FDE047" stroke="#06215C" stroke-width="3"/>
+        </svg>`,
+
+      "icon-sec-python": `
+        <svg viewBox="0 0 120 120" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="62" cy="62" r="46" fill="#FECDD3" fill-opacity="0.55"/>
+          <path d="M16 28L28 33M26 15L33 26" stroke="#F59E0B" stroke-width="4.5" stroke-linecap="round"/>
+          <rect x="34" y="22" width="56" height="76" rx="8" fill="#FFFFFF" stroke="#9F1239" stroke-width="3.8"/>
+          <line x1="45" y1="38" x2="77" y2="38" stroke="#9F1239" stroke-width="3.5" stroke-linecap="round"/>
+          <line x1="45" y1="50" x2="77" y2="50" stroke="#9F1239" stroke-width="3.5" stroke-linecap="round"/>
+          <line x1="45" y1="62" x2="77" y2="62" stroke="#9F1239" stroke-width="3.5" stroke-linecap="round"/>
+          <line x1="45" y1="74" x2="66" y2="74" stroke="#9F1239" stroke-width="3.5" stroke-linecap="round"/>
+        </svg>`,
+
+      "icon-real-analysis": `
+        <svg viewBox="0 0 120 120" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="62" cy="62" r="46" fill="#BAE6FD" fill-opacity="0.55"/>
+          <path d="M16 28L28 33M26 15L33 26" stroke="#F59E0B" stroke-width="4.5" stroke-linecap="round"/>
+          <path d="M38 86V58C48 44 58 68 70 50C76 41 82 38 86 38V86H38Z" fill="#7DD3FC" fill-opacity="0.6"/>
+          <polyline points="28,26 28,86 96,86" stroke="#06215C" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M32 68C44 40 58 72 72 48C79 36 86 34 92 36" stroke="#06215C" stroke-width="4" stroke-linecap="round"/>
+          <circle cx="72" cy="48" r="5" fill="#F59E0B" stroke="#06215C" stroke-width="2.8"/>
+        </svg>`,
+
+      "icon-abstract-algebra": `
+        <svg viewBox="0 0 120 120" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="62" cy="62" r="46" fill="#FEF08A" fill-opacity="0.55"/>
+          <path d="M16 28L28 33M26 15L33 26" stroke="#F59E0B" stroke-width="4.5" stroke-linecap="round"/>
+          <polygon points="62,26 28,86 96,86" fill="#FDE047" fill-opacity="0.4" stroke="#06215C" stroke-width="3.8" stroke-linejoin="round"/>
+          <circle cx="62" cy="66" r="14" stroke="#06215C" stroke-width="3" stroke-dasharray="5 3"/>
+          <circle cx="62" cy="26" r="6.5" fill="#38BDF8" stroke="#06215C" stroke-width="3"/>
+          <circle cx="28" cy="86" r="6.5" fill="#F59E0B" stroke="#06215C" stroke-width="3"/>
+          <circle cx="96" cy="86" r="6.5" fill="#F59E0B" stroke="#06215C" stroke-width="3"/>
+        </svg>`,
+
+      "icon-complex-analysis": `
+        <svg viewBox="0 0 120 120" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="62" cy="62" r="46" fill="#BBF7D0" fill-opacity="0.55"/>
+          <path d="M16 28L28 33M26 15L33 26" stroke="#F59E0B" stroke-width="4.5" stroke-linecap="round"/>
+          <line x1="24" y1="62" x2="98" y2="62" stroke="#06215C" stroke-width="3" stroke-linecap="round"/>
+          <line x1="62" y1="24" x2="62" y2="98" stroke="#06215C" stroke-width="3" stroke-linecap="round"/>
+          <path d="M62 62C66 56 72 60 70 67C67 76 54 76 50 66C44 52 58 38 74 42C90 46 94 68 82 84" stroke="#06215C" stroke-width="3.8" stroke-linecap="round"/>
+          <line x1="62" y1="62" x2="84" y2="38" stroke="#F59E0B" stroke-width="3.5" stroke-linecap="round"/>
+          <circle cx="84" cy="38" r="5" fill="#F59E0B" stroke="#06215C" stroke-width="2.8"/>
+        </svg>`,
+
+      "icon-convex-opt": `
+        <svg viewBox="0 0 120 120" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="62" cy="62" r="46" fill="#FED7AA" fill-opacity="0.55"/>
+          <path d="M16 28L28 33M26 15L33 26" stroke="#F59E0B" stroke-width="4.5" stroke-linecap="round"/>
+          <ellipse cx="62" cy="38" rx="32" ry="9" fill="#FDBA74" fill-opacity="0.5" stroke="#06215C" stroke-width="3"/>
+          <path d="M30 38C34 74 48 86 62 86C76 86 90 74 94 38" stroke="#06215C" stroke-width="4" stroke-linecap="round"/>
+          <line x1="34" y1="86" x2="90" y2="86" stroke="#F59E0B" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="5 4"/>
+          <circle cx="62" cy="86" r="6" fill="#EF4444" stroke="#06215C" stroke-width="3"/>
+        </svg>`,
+
+      "icon-machine-learning": `
+        <svg viewBox="0 0 120 120" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="62" cy="62" r="46" fill="#E9D5FF" fill-opacity="0.55"/>
+          <path d="M16 28L28 33M26 15L33 26" stroke="#F59E0B" stroke-width="4.5" stroke-linecap="round"/>
+          <g stroke="#06215C" stroke-width="2.6">
+            <line x1="34" y1="40" x2="62" y2="32"/><line x1="34" y1="40" x2="62" y2="62"/><line x1="34" y1="40" x2="62" y2="90"/>
+            <line x1="34" y1="82" x2="62" y2="32"/><line x1="34" y1="82" x2="62" y2="62"/><line x1="34" y1="82" x2="62" y2="90"/>
+            <line x1="62" y1="32" x2="90" y2="62"/><line x1="62" y1="62" x2="90" y2="62"/><line x1="62" y1="90" x2="90" y2="62"/>
+          </g>
+          <circle cx="34" cy="40" r="6.5" fill="#38BDF8" stroke="#06215C" stroke-width="3"/>
+          <circle cx="34" cy="82" r="6.5" fill="#38BDF8" stroke="#06215C" stroke-width="3"/>
+          <circle cx="62" cy="32" r="6.5" fill="#C084FC" stroke="#06215C" stroke-width="3"/>
+          <circle cx="62" cy="62" r="6.5" fill="#C084FC" stroke="#06215C" stroke-width="3"/>
+          <circle cx="62" cy="90" r="6.5" fill="#C084FC" stroke="#06215C" stroke-width="3"/>
+          <circle cx="90" cy="62" r="7.5" fill="#F59E0B" stroke="#06215C" stroke-width="3"/>
+        </svg>`,
+
+      "icon-sec-latex": `
+        <svg viewBox="0 0 120 120" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="62" cy="62" r="46" fill="#FECDD3" fill-opacity="0.55"/>
+          <path d="M16 28L28 33M26 15L33 26" stroke="#F59E0B" stroke-width="4.5" stroke-linecap="round"/>
+          <rect x="34" y="22" width="56" height="76" rx="8" fill="#FFFFFF" stroke="#9F1239" stroke-width="3.8"/>
+          <path d="M72 38H50L63 55L50 72H72" stroke="#9F1239" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="46" y1="84" x2="78" y2="84" stroke="#9F1239" stroke-width="3" stroke-linecap="round"/>
+        </svg>`
+    };
+
+    const DECORATIVE_SVGS = {
+      topRightPlant: `
+        <svg viewBox="0 0 220 210" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M110 80 Q65 55 30 62" stroke="#F59E0B" stroke-width="2.5" fill="none"/>
+          <path d="M75 65 C65 52 52 52 46 62 C56 68 68 68 75 65 Z" fill="#FBBF24"/>
+          <path d="M50 61 C40 50 28 52 22 62 C32 67 44 65 50 61 Z" fill="#FBBF24"/>
+          <path d="M90 72 C82 82 70 84 62 76 C70 68 82 68 90 72 Z" fill="#F59E0B"/>
+          <path d="M148 122 C115 95 92 52 105 22 C132 32 152 75 148 122 Z" fill="#2D8A56" stroke="#1E5E3A" stroke-width="2"/>
+          <path d="M152 122 C150 75 172 28 198 14 C212 45 188 92 152 122 Z" fill="#38A169" stroke="#1E5E3A" stroke-width="2"/>
+          <path d="M145 125 C105 118 68 98 58 76 C86 66 122 88 145 125 Z" fill="#48BB78" stroke="#1E5E3A" stroke-width="2"/>
+          <path d="M156 125 C182 98 208 82 218 92 C210 116 182 128 156 125 Z" fill="#2F855A" stroke="#1E5E3A" stroke-width="2"/>
+          <ellipse cx="152" cy="128" rx="34" ry="8" fill="#8B5A2B" stroke="#5C3A1B" stroke-width="2"/>
+          <path d="M118 128 L126 178 C128 188 176 188 178 178 L186 128 Z" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="2.5"/>
+          <path d="M134 134 L138 182 M152 135 L152 184 M170 134 L166 182" stroke="#E2E8F0" stroke-width="2"/>
+        </svg>`,
+
+      bottomLeftBooks: `
+        <svg viewBox="0 0 260 220" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M35 120 Q28 70 42 30" stroke="#2F855A" stroke-width="3" fill="none"/>
+          <path d="M35 85 C15 75 10 55 22 45 C36 55 38 72 35 85 Z" fill="#38A169"/>
+          <path d="M38 60 C55 48 62 32 50 20 C36 30 35 46 38 60 Z" fill="#48BB78"/>
+          <path d="M175 165 Q195 125 188 85" stroke="#2F855A" stroke-width="3" fill="none"/>
+          <path d="M185 135 C168 120 168 98 182 88 C196 102 194 122 185 135 Z" fill="#2F855A"/>
+          <path d="M186 150 C205 140 220 148 214 162 C198 166 188 158 186 150 Z" fill="#48BB78"/>
+          <path d="M10 182 L135 166 L175 178 L50 196 Z" fill="#EF4444" stroke="#991B1B" stroke-width="2"/>
+          <path d="M50 196 L175 178 L175 194 L50 212 Z" fill="#FEF2F2" stroke="#EF4444" stroke-width="2"/>
+          <path d="M10 182 L50 196 L50 212 L10 198 Z" fill="#DC2626" stroke="#991B1B" stroke-width="2"/>
+          <path d="M14 160 L132 146 L168 158 L50 174 Z" fill="#14B8A6" stroke="#0F766E" stroke-width="2"/>
+          <path d="M50 174 L168 158 L168 174 L50 190 Z" fill="#F0FDFA" stroke="#0D9488" stroke-width="2"/>
+          <path d="M14 160 L50 174 L50 190 L14 176 Z" fill="#0D9488" stroke="#0F766E" stroke-width="2"/>
+          <path d="M12 138 L128 124 L164 136 L48 152 Z" fill="#FBBF24" stroke="#B45309" stroke-width="2"/>
+          <path d="M48 152 L164 136 L164 152 L48 168 Z" fill="#FFFBEB" stroke="#D97706" stroke-width="2"/>
+          <path d="M12 138 L48 152 L48 168 L12 154 Z" fill="#F59E0B" stroke="#B45309" stroke-width="2"/>
+          <path d="M16 116 L126 104 L162 116 L52 130 Z" fill="#2563EB" stroke="#1E3A8A" stroke-width="2"/>
+          <path d="M52 130 L162 116 L162 132 L52 146 Z" fill="#EFF6FF" stroke="#1D4ED8" stroke-width="2"/>
+          <path d="M16 116 L52 130 L52 146 L16 132 Z" fill="#1D4ED8" stroke="#1E3A8A" stroke-width="2"/>
+        </svg>`,
+
+      bottomRightLeaves: `
+        <svg viewBox="0 0 180 180" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M145 175 Q115 115 80 65" stroke="#D97706" stroke-width="3" fill="none"/>
+          <path d="M105 105 C88 102 74 88 80 72 C96 76 106 90 105 105 Z" fill="#FBBF24"/>
+          <path d="M118 122 C132 108 148 108 152 122 C140 132 126 130 118 122 Z" fill="#F59E0B"/>
+          <path d="M128 148 C108 142 96 128 104 114 C120 118 128 134 128 148 Z" fill="#38A169"/>
+          <path d="M138 162 C152 148 168 148 172 162 C158 172 144 170 138 162 Z" fill="#2F855A"/>
+        </svg>`,
+
+      posterTopLeftBooks: `
+        <svg viewBox="0 0 380 115" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Left Potted Leafy Plant -->
+          <path d="M48 92 Q42 52 22 25" stroke="#2F855A" stroke-width="3" fill="none"/>
+          <path d="M48 92 Q56 48 75 20" stroke="#2F855A" stroke-width="3" fill="none"/>
+          <path d="M36 55 C16 50 10 34 22 24 C34 32 38 46 36 55 Z" fill="#38A169"/>
+          <path d="M60 52 C76 44 82 28 70 18 C58 26 56 42 60 52 Z" fill="#48BB78"/>
+          <path d="M48 72 C28 70 18 58 28 48 C40 54 46 66 48 72 Z" fill="#2F855A"/>
+          <!-- Stack of 3 Blue/Teal Books -->
+          <path d="M90 82 L210 68 L265 82 L145 98 Z" fill="#0F766E" stroke="#06215C" stroke-width="2"/>
+          <path d="M145 98 L265 82 L265 98 L145 112 Z" fill="#FEFCE8" stroke="#0F766E" stroke-width="2"/>
+          <path d="M90 82 L145 98 L145 112 L90 96 Z" fill="#115E59" stroke="#06215C" stroke-width="2"/>
+
+          <path d="M96 62 L212 48 L262 62 L146 76 Z" fill="#1E40AF" stroke="#06215C" stroke-width="2"/>
+          <path d="M146 76 L262 62 L262 78 L146 92 Z" fill="#F8FAFC" stroke="#1E40AF" stroke-width="2"/>
+          <path d="M96 62 L146 76 L146 92 L96 78 Z" fill="#1E3A8A" stroke="#06215C" stroke-width="2"/>
+
+          <path d="M88 40 L206 26 L258 40 L140 54 Z" fill="#3B82F6" stroke="#06215C" stroke-width="2"/>
+          <path d="M140 54 L258 40 L258 56 L140 70 Z" fill="#EFF6FF" stroke="#2563EB" stroke-width="2"/>
+          <path d="M88 40 L140 54 L140 70 L88 56 Z" fill="#2563EB" stroke="#06215C" stroke-width="2"/>
+          <!-- Right Small Leaf Sprig -->
+          <path d="M292 106 Q306 75 322 54" stroke="#2F855A" stroke-width="2.5" fill="none"/>
+          <path d="M302 84 C290 74 292 58 304 54 C310 66 308 78 302 84 Z" fill="#48BB78"/>
+          <path d="M308 92 C322 86 332 92 326 102 C316 104 310 98 308 92 Z" fill="#38A169"/>
+        </svg>`,
+
+      posterClockIcon: `
+        <svg viewBox="0 0 48 48" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="24" r="20" fill="#FFFFFF" stroke="#06215C" stroke-width="4"/>
+          <polyline points="24,12 24,24 32,28" stroke="#06215C" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>`,
+
+      posterRightLeaf: `
+        <svg viewBox="0 0 75 95" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 90 Q32 52 56 18" stroke="#2F855A" stroke-width="2.8" fill="none"/>
+          <path d="M26 65 C14 52 18 34 32 30 C38 44 34 58 26 65 Z" fill="#48BB78"/>
+          <path d="M34 52 C48 44 62 50 58 64 C46 66 38 58 34 52 Z" fill="#38A169"/>
+          <path d="M42 34 C34 22 40 10 52 10 C56 20 50 30 42 34 Z" fill="#2F855A"/>
+        </svg>`,
+
+      calendarHeaderIcon: `
+        <svg viewBox="0 0 28 28" width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="3" y="5" width="22" height="20" rx="3" stroke="#FFFFFF" stroke-width="2.4"/>
+          <line x1="3" y1="11" x2="25" y2="11" stroke="#FFFFFF" stroke-width="2.4"/>
+          <line x1="9" y1="2" x2="9" y2="7" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round"/>
+          <line x1="19" y1="2" x2="19" y2="7" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round"/>
+          <circle cx="9" cy="16" r="1.5" fill="#FFFFFF"/><circle cx="14" cy="16" r="1.5" fill="#FFFFFF"/><circle cx="19" cy="16" r="1.5" fill="#FFFFFF"/>
+          <circle cx="9" cy="21" r="1.5" fill="#FFFFFF"/><circle cx="14" cy="21" r="1.5" fill="#FFFFFF"/><circle cx="19" cy="21" r="1.5" fill="#FFFFFF"/>
+        </svg>`
+    };
+
+    /* ==========================================================================
+       2. COMPLETE SYLLABUS & SCHEDULE DATA (All 12 Subjects)
+       ========================================================================== */
+    const STUDY_DATA = {
+      exams: {
+        "2026-10-26": { slot: "Major 1", physics: "ED", math: "RA" },
+        "2026-10-27": { slot: "Major 2", physics: "OPT", math: "AA" },
+        "2026-10-29": { slot: "Major 3", physics: "QM", math: "CA" },
+        "2026-10-30": { slot: "Elective 1", physics: "SSP", math: "CO" },
+        "2026-11-02": { slot: "Elective 2", physics: "MS", math: "ML" },
+        "2026-11-03": { slot: "SEC", physics: "SEC_PHY", math: "SEC_MAT" }
+      },
+      subjects: {
+        ED: {
+          id: "ED", stream: "physics", role: "Major 1", name: "Electrodynamics II", shortName: "Electrodynamics",
+          examDate: "2026-10-26", totalUnits: 22, unitLabel: "units",
+          theme: { cardBg: "#BCE0FD", bannerBg: "#D6EEFF", border: "#90C8F8" },
+          iconId: "icon-electrodynamics",
+          units: [
+            { u: 1, text: "Polarisation in dielectrics (1)" },
+            { u: 2, text: "The field of a polarised object and bound charges (2)" },
+            { u: 3, text: "Electric displacement, boundary conditions, susceptibility, permittivity (3)" },
+            { u: 4, text: "Magnetisation in matter (4)" },
+            { u: 5, text: "Field of a magnetised object; bound currents; ferromagnetism (5)" },
+            { u: 6, text: "Ohm's law, EMF and motional EMF (6)" },
+            { u: 7, text: "Faraday's law, induced E field, inductance, energy in magnetic fields (7)" },
+            { u: 8, text: "Maxwell's equations in matter and boundary conditions (8)" },
+            { u: 9, text: "Waves in one dimension, sinusoidal waves, polarisation of waves (9)" },
+            { u: 10, text: "The wave equations for E and B (10)" },
+            { u: 11, text: "Monochromatic plane waves in vacuum (11)" },
+            { u: 12, text: "Poynting's theorem and energy conservation (12)" },
+            { u: 13, text: "Energy and momentum in electromagnetic waves (13)" },
+            { u: 14, text: "Propagation of electromagnetic waves in linear media (14)" },
+            { u: 15, text: "Growth of current in series L-R, C-R and L-C circuits (15)" },
+            { u: 16, text: "Decay of current in L-R, C-R and L-C circuits (16)" },
+            { u: 17, text: "AC: EMF induced in a rotating coil in a magnetic field (17)" },
+            { u: 18, text: "AC circuits containing R only, L only or C only (18)" },
+            { u: 19, text: "Use of j operator in the study of AC circuits (19)" },
+            { u: 20, text: "AC circuits with L and R, C and R, and parallel L and C (20)" },
+            { u: 21, text: "Series LCR resonant circuit, bandwidth and Q-factor (21)" },
+            { u: 22, text: "Power and power factor in AC circuits (22)" }
+          ],
+          revisionBullets: [
+            "Full revision: Polarisation, electric displacement D, magnetisation M and bound currents (1–5)",
+            "Full revision: Faraday's law, inductance, Maxwell's equations and boundary conditions (6–8)",
+            "Full revision: EM wave equations, monochromatic plane waves and Poynting's theorem (9–14)",
+            "Full revision: Transient L-R/C-R/L-C circuits, j-operator analysis and series LCR resonance (15–22)"
+          ]
+        },
+        OPT: {
+          id: "OPT", stream: "physics", role: "Major 2", name: "Optics", shortName: "Optics",
+          examDate: "2026-10-27", totalUnits: 22, unitLabel: "theory units",
+          theme: { cardBg: "#C7F9CC", bannerBg: "#DCFCE7", border: "#86EFAC" },
+          iconId: "icon-optics",
+          units: [
+            { u: 1, text: "Laws of reflection and refraction from Fermat's principle" },
+            { u: 2, text: "Refraction and reflection at a single spherical surface" },
+            { u: 3, text: "The thin lens, principal foci and focal length" },
+            { u: 4, text: "The Newton formula and lateral magnification" },
+            { u: 5, text: "Superposition of two sinusoidal waves" },
+            { u: 6, text: "Interference: division of wavefront" },
+            { u: 7, text: "Interference of light waves" },
+            { u: 8, text: "Fresnel's two-mirror and Fresnel's biprism" },
+            { u: 9, text: "Interference with white light, Lloyd's mirror, phase change on reflection (9)" },
+            { u: 10, text: "Interference by division of amplitude and non-reflecting films (10)" },
+            { u: 11, text: "Colours of thin films, Newton's rings, Michelson interferometer (11)" },
+            { u: 12, text: "Single-slit Fraunhofer diffraction pattern (12)" },
+            { u: 13, text: "Two-slit Fraunhofer diffraction pattern (13)" },
+            { u: 14, text: "N-slit Fraunhofer diffraction pattern and grating (14)" },
+            { u: 15, text: "Fresnel diffraction and zone plate (15)" },
+            { u: 16, text: "Fresnel diffraction by a straight edge (16)" },
+            { u: 17, text: "Polarisation: introduction and transverse wave nature (17)" },
+            { u: 18, text: "Production of linearly polarised light (18)" },
+            { u: 19, text: "Effects of polariser and analyser; Malus's law (19)" },
+            { u: 20, text: "Double refraction and Huygens' explanation (20)" },
+            { u: 21, text: "Quarter-wave and half-wave plates (21)" },
+            { u: 22, text: "Production and analysis of polarised light (22)" }
+          ],
+          revisionBullets: [
+            "Full revision: Fermat's principle, spherical surfaces, thin lens and Newton's formula (1–4)",
+            "Full revision: Wavefront & amplitude interference, biprism, Newton's rings and Michelson (5–11)",
+            "Full revision: Fraunhofer diffraction (1, 2, N slits & grating), zone plate and straight edge (12–16)",
+            "Full revision: Polarisation, double refraction, Huygens' explanation and wave plates (17–22)"
+          ]
+        },
+        QM: {
+          id: "QM", stream: "physics", role: "Major 3", name: "Quantum Mechanics I", shortName: "Quantum Mech",
+          examDate: "2026-10-29", totalUnits: 25, unitLabel: "units",
+          theme: { cardBg: "#E2C2FF", bannerBg: "#F3E8FF", border: "#C084FC" },
+          iconId: "icon-quantum",
+          units: [
+            { u: 1, text: "Schrödinger equation and statistical interpretation (1)" },
+            { u: 2, text: "Probability: discrete and continuous variables (2)" },
+            { u: 3, text: "Normalization of wave functions (3)" },
+            { u: 4, text: "Momentum operator and expectation values (4)" },
+            { u: 5, text: "The Heisenberg uncertainty principle (5)" },
+            { u: 6, text: "Stationary states and time-independent Schrödinger equation (6)" },
+            { u: 7, text: "The infinite square well potential (7)" },
+            { u: 8, text: "Free particle, wave packets, phase and group velocity (8)" },
+            { u: 9, text: "Conservation of probability: probability density and current (9)" },
+            { u: 10, text: "The potential step (Case E > V0 and Case E < V0) (10)" },
+            { u: 11, text: "The potential barrier and quantum tunnelling (11)" },
+            { u: 12, text: "Hilbert space, dimension, basis and square-integrable wave functions (12)" },
+            { u: 13, text: "Dirac notation: kets, bras and bra-kets (13)" },
+            { u: 14, text: "Operators, Hermitian adjoint and Hermitian operators (14)" },
+            { u: 15, text: "Commutator algebra (15)" },
+            { u: 16, text: "Uncertainty relation between two operators (16)" },
+            { u: 17, text: "Functions of operators (17)" },
+            { u: 18, text: "Eigenvalues and eigenvectors of an operator (18)" },
+            { u: 19, text: "Matrix representation of discrete bases; change of basis; unitary transformations (19)" },
+            { u: 20, text: "Representation of continuous basis; position and momentum representations (20)" },
+            { u: 21, text: "Matrix mechanics and wave mechanics (21)" },
+            { u: 22, text: "Harmonic oscillator: energy eigenvalues, eigenstates and ladder operators (22)" },
+            { u: 23, text: "3D problems in Cartesian coordinates: separation of variables (23)" },
+            { u: 24, text: "Box potentials (rectangular and cubic) and degeneracy (24)" },
+            { u: 25, text: "3D harmonic oscillator and degeneracy (25)" }
+          ],
+          revisionBullets: [
+            "Full revision: Wave function, statistical interpretation, momentum and uncertainty principle (1–5)",
+            "Full revision: Stationary states, infinite square well, free particle, potential step and tunnelling (6–11)",
+            "Full revision: Hilbert space, Dirac notation, Hermitian operators, commutators and representations (12–21)",
+            "Full revision: 1D harmonic oscillator ladder operators, 3D box potentials and 3D oscillator degeneracy (22–25)"
+          ]
+        },
+        SSP: {
+          id: "SSP", stream: "physics", role: "Elective 1", name: "Properties of Solids", shortName: "Solid State",
+          examDate: "2026-10-30", totalUnits: 22, unitLabel: "units",
+          theme: { cardBg: "#FDEEB3", bannerBg: "#FEF6C9", border: "#FCD34D" },
+          iconId: "icon-solid-state",
+          units: [
+            { u: 1, text: "Crystal lattice, translation vectors, unit cell and basis (1)" },
+            { u: 2, text: "Symmetry operations, point groups and space groups (2)" },
+            { u: 3, text: "Types of lattices, lattice directions and planes, interplanar spacing (3)" },
+            { u: 4, text: "Simple crystal structures with examples (4)" },
+            { u: 5, text: "X-ray diffraction, reciprocal lattice and Brillouin zones (5)" },
+            { u: 6, text: "Drude–Lorentz classical theory (6)" },
+            { u: 7, text: "Sommerfeld quantum theory: free electron gas in 1D (7)" },
+            { u: 8, text: "Fermi energy, density of states and filling of energy levels (8)" },
+            { u: 9, text: "Application of free electron gas model (9)" },
+            { u: 10, text: "Band theory, Bloch theorem, Kronig–Penney model and effective mass (10)" },
+            { u: 11, text: "Distinction between metal, insulator and semiconductor (11)" },
+            { u: 12, text: "Intrinsic and extrinsic semiconductors (12)" },
+            { u: 13, text: "Drift velocity in semiconductors (13)" },
+            { u: 14, text: "Mobility and conductivity of intrinsic semiconductors (14)" },
+            { u: 15, text: "Carrier concentration and Fermi level (15)" },
+            { u: 16, text: "Conductivity of intrinsic and extrinsic semiconductors (16)" },
+            { u: 17, text: "Types of magnetism and origin of permanent magnetic moment (17)" },
+            { u: 18, text: "Diamagnetism, paramagnetism (classical) and Weiss ferromagnetism (18)" },
+            { u: 19, text: "Antiferromagnetism and ferrimagnetism (19)" },
+            { u: 20, text: "Polarisation, susceptibility and local electric field (20)" },
+            { u: 21, text: "Dielectric constant, polarisability and its sources (21)" },
+            { u: 22, text: "Ferroelectricity and piezoelectricity (22)" }
+          ],
+          revisionBullets: [
+            "Full revision: Crystal lattice, symmetry groups, Miller planes, XRD and Brillouin zones (1–5)",
+            "Full revision: Drude–Lorentz, Sommerfeld Fermi gas, Bloch theorem and Kronig–Penney model (6–11)",
+            "Full revision: Intrinsic & extrinsic semiconductors, drift velocity, Fermi level and conductivity (12–16)",
+            "Full revision: Dia-, para-, ferro- and ferrimagnetism; local field, polarisability, ferro/piezoelectricity (17–22)"
+          ]
+        },
+        MS: {
+          id: "MS", stream: "physics", role: "Elective 2", name: "Materials Science", shortName: "Material Science",
+          examDate: "2026-11-02", totalUnits: 22, unitLabel: "units",
+          theme: { cardBg: "#FFCBA4", bannerBg: "#FFE5D0", border: "#FDBA74" },
+          iconId: "icon-materials",
+          units: [
+            { u: 1, text: "Scope and need of materials science (1)" },
+            { u: 2, text: "Classification of materials: metals, ceramics, polymers, composites (2)" },
+            { u: 3, text: "Bonding forces, energies and primary interatomic bonds (3)" },
+            { u: 4, text: "Ionic, covalent, metallic and van der Waals bonding (4)" },
+            { u: 5, text: "Anomalous volume expansion of water (5)" },
+            { u: 6, text: "Single and polycrystalline materials, anisotropy, nanocrystalline solids (6)" },
+            { u: 7, text: "Imperfections: vacancies and self-interstitials (7)" },
+            { u: 8, text: "Impurities, dislocations: linear, interfacial and volume defects (8)" },
+            { u: 9, text: "Atomic vibrations, microstructure and grain size determination (9)" },
+            { u: 10, text: "Conductors, insulators, dielectrics; thermal conductivity & resistivity (10)" },
+            { u: 11, text: "Origins and manipulation of electrical properties (11)" },
+            { u: 12, text: "Magnetic materials: physics and manipulation of magnetic properties (12)" },
+            { u: 13, text: "Materials selection for magnetic design (13)" },
+            { u: 14, text: "Materials for optical devices and radiation interaction (14)" },
+            { u: 15, text: "Durability of materials: oxidation, corrosion and degradation (15)" },
+            { u: 16, text: "Electrical and electronic measurements (16)" },
+            { u: 17, text: "Hall effect in semiconductors (17)" },
+            { u: 18, text: "Magnetism and magnetic measurements (18)" },
+            { u: 19, text: "Introduction to electrochemical techniques (19)" },
+            { u: 20, text: "Cyclic voltammetry principles (20)" },
+            { u: 21, text: "Optical microscopy and photoluminescence spectroscopy (21)" },
+            { u: 22, text: "Raman spectroscopy of solids (22)" }
+          ],
+          revisionBullets: [
+            "Full revision: Materials classification, bonding types and anomalous expansion of water (1–5)",
+            "Full revision: Single/polycrystalline solids, anisotropy, vacancies, dislocations & grain size (6–9)",
+            "Full revision: Electrical, thermal, magnetic and optical materials; oxidation & corrosion (10–15)",
+            "Full revision: Hall effect, magnetic measurements, cyclic voltammetry, photoluminescence & Raman (16–22)"
+          ]
+        },
+        SEC_PHY: {
+          id: "SEC_PHY", stream: "sec", role: "SEC", name: "Python for Data Analysis", shortName: "SEC",
+          examDate: "2026-11-03", totalUnits: 19, unitLabel: "units",
+          theme: { cardBg: "#FFC6D0", bannerBg: "#FFE4E8", border: "#FDA4AF" },
+          iconId: "icon-sec-python",
+          units: [
+            { u: 1, text: "Python variables, operators, numerical types (int, float, complex) and list operations (1)" },
+            { u: 2, text: "Tuples, sets, dictionaries, input() and file operations open()/close() (2)" },
+            { u: 3, text: "Conditional and control statements: break and continue (3)" },
+            { u: 4, text: "Functions: defining functions, passing arguments and return values (4)" },
+            { u: 5, text: "NumPy arrays: creation, access and 3x3 array arithmetic operations (5)" },
+            { u: 6, text: "Pandas DataFrame: creating DataFrames (6)" },
+            { u: 7, text: "DataFrame attributes, pivoting DataFrames, sorting and sort by labels (7)" },
+            { u: 8, text: "Missing data (fill, drop, replace), combining DataFrames and describe() statistics (8)" },
+            { u: 9, text: "Statistical values: count, mode, covariance, correlation and quantiles (9)" },
+            { u: 10, text: "Aggregation, groupby(), data wrangling, merging, joining and concatenating (10)" },
+            { u: 11, text: "Importance of data visualisation and generating bar charts (11)" },
+            { u: 12, text: "Histogram, frequency polygon, box plot and scatter plot arguments (12)" },
+            { u: 13, text: "Correlation matrix plot and calculating correlation matrices (13)" },
+            { u: 14, text: "Seaborn library features, color palettes and univariate distribution plots (14)" },
+            { u: 15, text: "Seaborn histogram, density plot, bivariate distributions, hexbin and violin plots (15)" },
+            { u: 16, text: "Statistical estimation bar plot, categorical plotting and heatmaps (cmap) (16)" },
+            { u: 17, text: "Series and DataFrames from CSV, XLS, TAB and DAT file formats (17)" },
+            { u: 18, text: "Viewing DataFrames using loc and iloc; DataFrame operations (18)" },
+            { u: 19, text: "Jupyter Notebooks using Anaconda and Google Colab (19)" }
+          ],
+          revisionBullets: [
+            "Full revision: Python lists, tuples, dictionaries, control flow, functions and NumPy arrays (1–5)",
+            "Full revision: Pandas DataFrames, missing data, statistical functions, merge and groupby() (6–10)",
+            "Full revision: Matplotlib & Seaborn visualisations (box, scatter, violin, hexbin, heatmaps) (11–16)",
+            "Full revision: CSV/XLS/TAB/DAT file I/O, loc/iloc slicing and Jupyter/Colab workflows (17–19)"
+          ]
+        },
+        RA: {
+          id: "RA", stream: "math", role: "Major 1", name: "Real Analysis II", shortName: "Real Analysis II",
+          examDate: "2026-10-26", totalUnits: 22, unitLabel: "units",
+          theme: { cardBg: "#BCE0FD", bannerBg: "#D6EEFF", border: "#90C8F8" },
+          iconId: "icon-real-analysis",
+          units: [
+            { u: 1, text: "Continuous functions (5.1)" },
+            { u: 2, text: "Continuous functions on intervals: boundedness and extrema (5.3.1–5.3.5)" },
+            { u: 3, text: "Location of roots and Bolzano's intermediate value theorem (5.3.7–5.3.10)" },
+            { u: 4, text: "Uniform continuity (5.4 to 5.4.3)" },
+            { u: 5, text: "Uniform continuity & Weierstrass approximation (5.4.4–5.4.14)" },
+            { u: 6, text: "Selected problems on continuous and uniformly continuous functions" },
+            { u: 7, text: "The derivative and chain rule (6.1.1–6.1.7)" },
+            { u: 8, text: "Rolle's theorem and Mean Value Theorem (6.2.1–6.2.6)" },
+            { u: 9, text: "Monotone functions and applications of MVT (6.2.7–6.2.9)" },
+            { u: 10, text: "Darboux's theorem and L'Hôpital results (6.2.10–6.2.13)" },
+            { u: 11, text: "Selected problems on differentiation and MVT" },
+            { u: 12, text: "Riemann integral: partitions and Riemann sums (7.1.1–7.1.4a)" },
+            { u: 13, text: "Properties of the Riemann integral (7.1.5–7.1.7)" },
+            { u: 14, text: "Riemann-integrable functions and Cauchy criterion (7.2.1–7.2.5)" },
+            { u: 15, text: "Integrability of continuous/monotone functions and additivity (7.2.7–7.2.13)" },
+            { u: 16, text: "Fundamental theorem of calculus (First Form) (7.3.1–7.3.7)" },
+            { u: 17, text: "Fundamental theorem (Second Form) and substitution (7.3.8–7.3.18)" },
+            { u: 18, text: "Selected problems on Riemann integration" },
+            { u: 19, text: "Pointwise convergence of sequences of functions (8.1.1–8.1.3)" },
+            { u: 20, text: "Uniform convergence and uniform norm (8.1.4–8.1.10)" },
+            { u: 21, text: "Interchange of limits (8.2.1)" },
+            { u: 22, text: "Interchange of limit and continuity (8.2.2)" }
+          ],
+          revisionBullets: [
+            "Full revision: Continuous functions on intervals, Bolzano IVT and uniform continuity (5.1–5.4)",
+            "Full revision: Differentiability, Rolle's theorem, Mean Value Theorem and Darboux's theorem (6.1–6.2)",
+            "Full revision: Riemann integrability criteria, additivity and Fundamental Theorem of Calculus (7.1–7.3)",
+            "Full revision: Pointwise vs uniform convergence, uniform norm and interchange of limits (8.1–8.2)"
+          ]
+        },
+        AA: {
+          id: "AA", stream: "math", role: "Major 2", name: "Abstract Algebra I", shortName: "Abstract Algebra",
+          examDate: "2026-10-27", totalUnits: 22, unitLabel: "units",
+          theme: { cardBg: "#FDEEB3", bannerBg: "#FEF6C9", border: "#FCD34D" },
+          iconId: "icon-abstract-algebra",
+          units: [
+            { u: 1, text: "Binary operations and closure (2.1–2.10)" },
+            { u: 2, text: "Commutative and associative binary operations (2.11–2.25)" },
+            { u: 3, text: "Isomorphic binary structures (3.1–3.11)" },
+            { u: 4, text: "Structural properties under isomorphism (3.12–3.17)" },
+            { u: 5, text: "Groups: axioms and examples (4.1–4.14)" },
+            { u: 6, text: "Elementary properties of groups, finite groups and group tables (4.15+)" },
+            { u: 7, text: "Subgroups and subgroup criteria (5.1–5.16)" },
+            { u: 8, text: "Cyclic subgroups (5.17–5.23)" },
+            { u: 9, text: "Cyclic groups and generators (6.1–6.9)" },
+            { u: 10, text: "Structure and subgroups of cyclic groups (6.10–6.17)" },
+            { u: 11, text: "Groups of permutations (up to 8.6)" },
+            { u: 12, text: "Cayley's theorem and permutation groups (8.7–8.18)" },
+            { u: 13, text: "Orbits and cycles (9.1–9.10)" },
+            { u: 14, text: "Transpositions and the alternating groups (9.11–9.21)" },
+            { u: 15, text: "Cosets of a subgroup (10.1–10.9)" },
+            { u: 16, text: "Lagrange's theorem and consequences (10.10–10.14)" },
+            { u: 17, text: "Group homomorphisms (13.1–13.10)" },
+            { u: 18, text: "Kernel, image and normal subgroups (13.11–13.20)" },
+            { u: 19, text: "Rings and subrings (18.1–18.13)" },
+            { u: 20, text: "Division rings and fields (18.14–18.18)" },
+            { u: 21, text: "Zero divisors and integral domains (19.1–19.8)" },
+            { u: 22, text: "Characteristic of a ring, Fermat's and Euler's theorems (19.9–19.15)" }
+          ],
+          revisionBullets: [
+            "Full revision: Binary operations, isomorphic binary structures, groups and group tables (Secs 2–4)",
+            "Full revision: Subgroups, cyclic groups, groups of permutations and Cayley's theorem (Secs 5, 6, 8)",
+            "Full revision: Orbits, cycles, alternating groups An, cosets and Lagrange's theorem (Secs 9–10)",
+            "Full revision: Homomorphisms, rings, fields and integral domains (Secs 13, 18, 19)"
+          ]
+        },
+        CA: {
+          id: "CA", stream: "math", role: "Major 3", name: "Complex Analysis I", shortName: "Complex Analysis",
+          examDate: "2026-10-29", totalUnits: 22, unitLabel: "units",
+          theme: { cardBg: "#C7F9CC", bannerBg: "#DCFCE7", border: "#86EFAC" },
+          iconId: "icon-complex-analysis",
+          units: [
+            { u: 1, text: "Complex numbers and their properties (1.1)" },
+            { u: 2, text: "Complex plane and modulus (1.2)" },
+            { u: 3, text: "Polar form of complex numbers (1.3)" },
+            { u: 4, text: "Powers and roots; De Moivre's formula (1.4)" },
+            { u: 5, text: "Sets of points in the complex plane (1.5)" },
+            { u: 6, text: "Complex functions (2.1)" },
+            { u: 7, text: "Complex functions as mappings (2.2)" },
+            { u: 8, text: "Special power functions z^n (2.4.1)" },
+            { u: 9, text: "Reciprocal power functions z^(1/n) (2.4.2)" },
+            { u: 10, text: "Principal nth root functions (2.4)" },
+            { u: 11, text: "Limits of complex functions (3.1.1)" },
+            { u: 12, text: "Continuity of complex functions (3.1.2)" },
+            { u: 13, text: "Continuity theorems and bounding property (3.1)" },
+            { u: 14, text: "Differentiability and derivative rules (3.2)" },
+            { u: 15, text: "Analyticity and entire functions (3.2)" },
+            { u: 16, text: "Cauchy–Riemann equations (up to Theorem 3.3.2)" },
+            { u: 17, text: "Sufficient conditions for analyticity and polar C–R equations (3.3)" },
+            { u: 18, text: "Harmonic functions and harmonic conjugates (3.4)" },
+            { u: 19, text: "Complex exponential function and periodicity (4.1.1)" },
+            { u: 20, text: "Complex logarithmic function and principal branch (4.1.2)" },
+            { u: 21, text: "Complex trigonometric functions (4.3.1)" },
+            { u: 22, text: "Complex hyperbolic functions (4.3.2)" }
+          ],
+          revisionBullets: [
+            "Full revision: Complex numbers, polar form, powers/roots, point sets and mappings (1.1–2.4)",
+            "Full revision: Limits, continuity, differentiability and analyticity (3.1–3.2)",
+            "Full revision: Cartesian & polar Cauchy–Riemann equations and harmonic functions (3.3–3.4)",
+            "Full revision: Complex exponential, logarithmic, trigonometric and hyperbolic functions (4.1–4.3)"
+          ]
+        },
+        CO: {
+          id: "CO", stream: "math", role: "Elective 1", name: "Convex Optimization", shortName: "Convex Optimization",
+          examDate: "2026-10-30", totalUnits: 25, unitLabel: "units",
+          theme: { cardBg: "#FFCBA4", bannerBg: "#FFE5D0", border: "#FDBA74" },
+          iconId: "icon-convex-opt",
+          units: [
+            { u: 1, text: "Scalar and vector fields; directional and partial derivatives (1)" },
+            { u: 2, text: "Differentiable functions, total derivative, gradient and Jacobian (2)" },
+            { u: 3, text: "Chain rule for differentiation in matrix form (3)" },
+            { u: 4, text: "Stationary points and conditional stationarity (4)" },
+            { u: 5, text: "Second derivatives and Hessian matrix (5)" },
+            { u: 6, text: "Mean value theorems and second-order Taylor's theorem (6)" },
+            { u: 7, text: "Eigenvalues of the Hessian (7)" },
+            { u: 8, text: "Classification of stationary points (8)" },
+            { u: 9, text: "Affine and convex sets (9)" },
+            { u: 10, text: "Convexity-preserving operations on sets (10)" },
+            { u: 11, text: "Generalised inequalities (11)" },
+            { u: 12, text: "Supporting and separating hyperplanes (12)" },
+            { u: 13, text: "Dual cones and generalised inequalities (13)" },
+            { u: 14, text: "Basic properties and examples of convex functions (14)" },
+            { u: 15, text: "Convexity-preserving operations on functions (15)" },
+            { u: 16, text: "Quasi-convex and log-convex functions (16)" },
+            { u: 17, text: "Convexity and generalised inequalities (17)" },
+            { u: 18, text: "Optimisation problems and convex optimisation (18)" },
+            { u: 19, text: "Linear optimisation problems (LP) (19)" },
+            { u: 20, text: "Quadratic optimisation problems (QP) (20)" },
+            { u: 21, text: "Geometric programming (GP) (21)" },
+            { u: 22, text: "Generalised inequality constraints and vector optimisation (22)" },
+            { u: 23, text: "Lagrange dual function, Lagrangian dual and geometric interpretation (23)" },
+            { u: 24, text: "Saddle-point interpretation and optimality conditions (24)" },
+            { u: 25, text: "Theorems of alternatives and generalised inequalities (25)" }
+          ],
+          revisionBullets: [
+            "Full revision: Gradient, Jacobian, matrix chain rule, Hessian eigenvalues and stationary points (1–8)",
+            "Full revision: Affine/convex sets, hyperplanes, dual cones and convex/quasi-convex functions (9–17)",
+            "Full revision: Convex optimisation problems, LP, QP, geometric programming and vector optimisation (18–22)",
+            "Full revision: Lagrange dual function, geometric/saddle-point meaning, KKT and alternatives (23–25)"
+          ]
+        },
+        ML: {
+          id: "ML", stream: "math", role: "Elective 2", name: "Machine Learning I", shortName: "Machine Learning I",
+          examDate: "2026-11-02", totalUnits: 23, unitLabel: "units",
+          theme: { cardBg: "#E2C2FF", bannerBg: "#F3E8FF", border: "#C084FC" },
+          iconId: "icon-machine-learning",
+          units: [
+            { u: 1, text: "Probability review: density and distribution functions (1)" },
+            { u: 2, text: "Expectation, covariance and Bayesian probabilities (2)" },
+            { u: 3, text: "Gaussian distributions: conditional and marginal (3)" },
+            { u: 4, text: "Maximum likelihood and Bayesian inference for Gaussians (4)" },
+            { u: 5, text: "Decision theory: inference, decision and loss functions (5)" },
+            { u: 6, text: "Entropy, relative entropy and mutual information (6)" },
+            { u: 7, text: "Maximum likelihood and least squares for regression (7)" },
+            { u: 8, text: "Regularised least squares (8)" },
+            { u: 9, text: "Bias–variance decomposition (9)" },
+            { u: 10, text: "Bayesian linear regression (10)" },
+            { u: 11, text: "Parameter and predictive distributions (11)" },
+            { u: 12, text: "Bayesian model comparison (12)" },
+            { u: 13, text: "Discriminant functions for classification (13)" },
+            { u: 14, text: "Least squares, Fisher discriminant and relation between them (14)" },
+            { u: 15, text: "The perceptron algorithm (15)" },
+            { u: 16, text: "Maximum likelihood classifier (16)" },
+            { u: 17, text: "Probabilistic generative models and logistic regression (17)" },
+            { u: 18, text: "Bayesian logistic regression (18)" },
+            { u: 19, text: "Feed-forward neural networks (19)" },
+            { u: 20, text: "Network training and gradient descent optimisation (20)" },
+            { u: 21, text: "Analysis of error backpropagation (21)" },
+            { u: 22, text: "Hessian matrix and diagonal approximation (22)" },
+            { u: 23, text: "Regularisation in neural networks (23)" }
+          ],
+          revisionBullets: [
+            "Full revision: Bayesian probabilities, conditional/marginal Gaussians, decision theory and entropy (1–6)",
+            "Full revision: Least squares, regularisation, bias–variance decomposition and Bayesian regression (7–12)",
+            "Full revision: Fisher discriminant, perceptron, generative models and logistic regression (13–18)",
+            "Full revision: Feed-forward neural networks, backpropagation, Hessian and regularisation (19–23)"
+          ]
+        },
+        SEC_MAT: {
+          id: "SEC_MAT", stream: "sec", role: "SEC", name: "LaTeX", shortName: "SEC (LaTeX)",
+          examDate: "2026-11-03", totalUnits: 19, unitLabel: "units",
+          theme: { cardBg: "#FFC6D0", bannerBg: "#FFE4E8", border: "#FDA4AF" },
+          iconId: "icon-sec-latex",
+          units: [
+            { u: 1, text: "LaTeX basics, commands, environments and preamble (1)" },
+            { u: 2, text: "Document classes, title pages and sectioning (2)" },
+            { u: 3, text: "Bibliographic databases with BibTeX (3)" },
+            { u: 4, text: "Table of contents and index generation (4)" },
+            { u: 5, text: "Displayed text: quotes and list environments (5)" },
+            { u: 6, text: "Rows, columns and multicolumn layouts (6)" },
+            { u: 7, text: "Typesetting tables with tabular (7)" },
+            { u: 8, text: "Basic mathematical equations, fractions and roots (8)" },
+            { u: 9, text: "Groups of equations (align, gather) and numbering (9)" },
+            { u: 10, text: "Matrices, dots and auto-sizing delimiters (10)" },
+            { u: 11, text: "Mathematical operators, symbols and Greek letters (11)" },
+            { u: 12, text: "Theorems, lemmas and proofs (AMS package) (12)" },
+            { u: 13, text: "Boxes, parboxes and minipages (13)" },
+            { u: 14, text: "Floating images and figure environments (14)" },
+            { u: 15, text: "Labels and cross-references (15)" },
+            { u: 16, text: "Footnotes and marginal notes (16)" },
+            { u: 17, text: "Custom commands and environments (17)" },
+            { u: 18, text: "Presentations using the Beamer class (18)" },
+            { u: 19, text: "Complete academic document workflow (19)" }
+          ],
+          revisionBullets: [
+            "Full revision: Basics, document classes, BibTeX bibliographic database, TOC and index (1–4)",
+            "Full revision: Displayed text, lists, rows, columns and tabular tables (5–7)",
+            "Full revision: Mathematical equations, align numbering, matrices, delimiters and Greek letters (8–11)",
+            "Full revision: AMS theorems, boxes, floating images, cross-references, footnotes and Beamer (12–19)"
+          ]
+        },
+        SEC_OTH: {
+          id: "SEC_OTH", stream: "sec", role: "SEC", name: "Skill Enhancement Course", shortName: "SEC",
+          examDate: "2026-11-03", totalUnits: 19, unitLabel: "units",
+          theme: { cardBg: "#FFC6D0", bannerBg: "#FFE4E8", border: "#FDA4AF" },
+          iconId: "icon-sec-latex",
+          units: Array.from({ length: 19 }, (_, i) => ({
+            u: i + 1,
+            text: `Module ${i < 5 ? 'I' : i < 10 ? 'II' : i < 16 ? 'III' : 'IV'} – Core Topic & Practical Application (Unit ${i + 1})`
+          })),
+          revisionBullets: [
+            "Full revision: Module I – Fundamental concepts, core syntax and hands-on exercises (1–5)",
+            "Full revision: Module II – Structured data, formatting, cleaning and grouping operations (6–10)",
+            "Full revision: Module III – Visualisation, notation, matrices and styling (11–16)",
+            "Full revision: Module IV – File formats, cross-references, notebooks and presentations (17–19)"
+          ]
+        }
+      },
+
+      // Original Locked Sessions (Oct 16 Fri to Oct 19 Mon)
+      lockedSessions: [
+        {
+          id: "2026-10-16_ED_1", date: "2026-10-16", subjectId: "ED", stream: "physics",
+          unitRange: [1, 5], coveredUnits: 5, totalUnits: 22, coveragePercent: 23,
+          bullets: [
+            "Polarisation and the field of a polarised object (1–2)",
+            "Electric displacement, boundary conditions, susceptibility, permittivity (3)",
+            "Magnetisation; field of a magnetised object; bound currents; ferromagnetism (4–5)"
+          ]
+        },
+        {
+          id: "2026-10-16_AA_1", date: "2026-10-16", subjectId: "AA", stream: "math",
+          unitRange: [1, 4], coveredUnits: 4, totalUnits: 22, coveragePercent: 18,
+          bullets: [
+            "Binary operations (2.1–2.25)",
+            "Isomorphic binary structures (3.1–3.17)"
+          ]
+        },
+        {
+          id: "2026-10-17_SSP_1", date: "2026-10-17", subjectId: "SSP", stream: "physics",
+          unitRange: [1, 3], coveredUnits: 5, totalUnits: 22, coveragePercent: 23,
+          bullets: [
+            "Crystal lattice, translation vectors, unit cell and basis; symmetry operations, point groups and space groups",
+            "Types of lattices, lattice directions and planes, interplanar spacing; simple crystal structures",
+            "X-ray diffraction, reciprocal lattice and Brillouin zones"
+          ]
+        },
+        {
+          id: "2026-10-17_SSP_2", date: "2026-10-17", subjectId: "SSP", stream: "physics",
+          unitRange: [4, 5], coveredUnits: 5, totalUnits: 22, coveragePercent: 23,
+          bullets: [
+            "Crystal lattice, translation vectors, unit cell and basis; symmetry operations, point groups and space groups",
+            "Types of lattices, lattice directions and planes, interplanar spacing; simple crystal structures",
+            "X-ray diffraction, reciprocal lattice and Brillouin zones"
+          ]
+        },
+        {
+          id: "2026-10-17_RA_1", date: "2026-10-17", subjectId: "RA", stream: "math",
+          unitRange: [1, 3], coveredUnits: 3, totalUnits: 22, coveragePercent: 14,
+          bullets: [
+            "Continuous functions (5.1)",
+            "Continuous functions on intervals (5.3.1–5.3.10)"
+          ]
+        },
+        {
+          id: "2026-10-17_CO_1", date: "2026-10-17", subjectId: "CO", stream: "math",
+          unitRange: [1, 3], coveredUnits: 3, totalUnits: 25, coveragePercent: 12,
+          bullets: [
+            "Scalar and vector fields",
+            "Directional and partial derivatives",
+            "Differentiable functions and total derivative",
+            "Gradient and Jacobian; chain rule (matrix form)"
+          ]
+        },
+        {
+          id: "2026-10-18_OPT_1", date: "2026-10-18", subjectId: "OPT", stream: "physics",
+          unitRange: [1, 4], coveredUnits: 4, totalUnits: 22, coveragePercent: 18,
+          bullets: [
+            "Laws of reflection and refraction from Fermat's principle",
+            "Refraction and reflection at a single spherical surface",
+            "The thin lens, principal foci and focal length",
+            "The Newton formula and lateral magnification"
+          ]
+        },
+        {
+          id: "2026-10-18_ML_1", date: "2026-10-18", subjectId: "ML", stream: "math",
+          unitRange: [1, 4], coveredUnits: 4, totalUnits: 23, coveragePercent: 17,
+          bullets: [
+            "Probability review: density and distribution functions",
+            "Expectation, covariance and Bayesian probabilities",
+            "Gaussian distributions: conditional and marginal",
+            "Maximum likelihood and Bayesian inference for Gaussians"
+          ]
+        },
+        {
+          id: "2026-10-19_OPT_2", date: "2026-10-19", subjectId: "OPT", stream: "physics",
+          unitRange: [5, 8], coveredUnits: 8, totalUnits: 22, coveragePercent: 36,
+          bullets: [
+            "Superposition of two sinusoidal waves",
+            "Interference: division of wavefront",
+            "Interference of light waves",
+            "Fresnel's two-mirror and Fresnel's biprism"
+          ]
+        },
+        {
+          id: "2026-10-19_RA_2", date: "2026-10-19", subjectId: "RA", stream: "math",
+          unitRange: [4, 7], coveredUnits: 7, totalUnits: 22, coveragePercent: 32,
+          bullets: [
+            "Uniform continuity (5.4 to 5.4.3)",
+            "Uniform continuity (5.4.4–5.4.14, Weierstrass proof optional)",
+            "Selected problems",
+            "The derivative (6.1.1–6.1.7)"
+          ]
+        }
+      ],
+
+      // Ideal Schedule Calendar Slots from Oct 16 to Nov 2
+      idealDates: {
+        "2026-10-16": { physics: [], math: [] },
+        "2026-10-17": { physics: [], math: [] },
+        "2026-10-18": { physics: [], math: [] },
+        "2026-10-19": { physics: [], math: [] },
+        "2026-10-20": { physics: ["QM", "ED"], math: ["AA", "CA"] },
+        "2026-10-21": { physics: ["OPT", "QM"], math: ["RA", "AA"] },
+        "2026-10-22": { physics: ["ED", "MS"], math: ["CA", "RA"] },
+        "2026-10-23": { physics: ["OPT", "QM"], math: ["CO", "AA"] },
+        "2026-10-24": { physics: ["ED", "SSP"], math: ["CA", "RA"] },
+        "2026-10-25": { physics: ["ED", "OPT"], math: ["RA", "CO"] },
+        "2026-10-26": { physics: ["OPT"], math: ["AA"] },
+        "2026-10-27": { physics: ["QM"], math: ["CA"] },
+        "2026-10-28": { physics: ["QM", "QM"], math: ["CA", "CA"] },
+        "2026-10-29": { physics: ["SSP"], math: ["CO"] },
+        "2026-10-30": { physics: ["MS"], math: ["ML"] },
+        "2026-10-31": { physics: ["MS", "SEC"], math: ["ML", "SEC"] },
+        "2026-11-01": { physics: ["MS", "MS"], math: ["ML", "ML"] },
+        "2026-11-02": { physics: ["SEC"], math: ["SEC"] }
+      }
+    };
+
+    const ALL_DATES = [
+      { date: "2026-10-16", day: 16, weekday: "Friday", month: "Oct" },
+      { date: "2026-10-17", day: 17, weekday: "Saturday", month: "Oct" },
+      { date: "2026-10-18", day: 18, weekday: "Sunday", month: "Oct" },
+      { date: "2026-10-19", day: 19, weekday: "Monday", month: "Oct" },
+      { date: "2026-10-20", day: 20, weekday: "Tuesday", month: "Oct" },
+      { date: "2026-10-21", day: 21, weekday: "Wednesday", month: "Oct" },
+      { date: "2026-10-22", day: 22, weekday: "Thursday", month: "Oct" },
+      { date: "2026-10-23", day: 23, weekday: "Friday", month: "Oct" },
+      { date: "2026-10-24", day: 24, weekday: "Saturday", month: "Oct" },
+      { date: "2026-10-25", day: 25, weekday: "Sunday", month: "Oct" },
+      { date: "2026-10-26", day: 26, weekday: "Monday", month: "Oct" },
+      { date: "2026-10-27", day: 27, weekday: "Tuesday", month: "Oct" },
+      { date: "2026-10-28", day: 28, weekday: "Wednesday", month: "Oct" },
+      { date: "2026-10-29", day: 29, weekday: "Thursday", month: "Oct" },
+      { date: "2026-10-30", day: 30, weekday: "Friday", month: "Oct" },
+      { date: "2026-10-31", day: 31, weekday: "Saturday", month: "Oct" },
+      { date: "2026-11-01", day: 1, weekday: "Sunday", month: "Nov" },
+      { date: "2026-11-02", day: 2, weekday: "Monday", month: "Nov" }
+    ];
+
+    /* ==========================================================================
+       3. STATE MANAGEMENT & LOCALSTORAGE PERSISTENCE
+       ========================================================================== */
+    const state = {
+      stream: "physics",           // "physics" | "math" | "combined"
+      secChoice: "SEC_PHY",        // "SEC_PHY" | "SEC_MAT" | "BOTH" | "SEC_OTH"
+      secTrack: "poster_3",        // "poster_3" | "equal_4" | "compact_1"
+      customSecName: "Skill Enhancement Course",
+      startDate: "2026-10-16",
+      lockMonday: true,
+      redistributeUnits: true,
+      showExportChecks: false,
+      planMode: "ideal",           // "ideal" | "custom"
+      sessionHours: 3,
+      maxSessionsPerDay: 2,
+      dayCaps: {},                 // Schedule tab: sessions per date (overrides maxSessionsPerDay)
+      revisionSessions: 1,         // 0 | 1 | 2
+      mergeSameDay: true,
+      activeTab: "poster",
+      selectedCardIndex: 1,        // Default to Oct 17 Properties of Solids or Oct 18 Optics
+      completedSessions: {},       // { sessionKey: true }
+      completedUnits: {},          // { "ED_1": true }
+      generatedSessions: [],
+      dailyCards: []
+    };
+
+    // Each stream (Physics, Math, Combined) keeps its own settings and progress.
+    const STREAM_DEFAULTS = {
+      physics: { secChoice: "SEC_PHY" },
+      math: { secChoice: "SEC_MAT" },
+      combined: { secChoice: "BOTH" }
+    };
+    const SAVED_FIELDS = ["secChoice", "secTrack", "customSecName", "startDate", "lockMonday", "redistributeUnits",
+      "showExportChecks", "planMode", "sessionHours", "maxSessionsPerDay", "dayCaps", "revisionSessions",
+      "mergeSameDay", "completedSessions", "completedUnits"];
+    const streamKey = (stream) => `astra_study_state_v3_${stream}`;
+
+    // Loads one stream: its saved data if it exists, otherwise the default plan with Oct 16–19 marked done.
+    function loadStream(stream) {
+      Object.assign(state, {
+        stream,
+        secTrack: "poster_3",
+        customSecName: "Skill Enhancement Course",
+        startDate: "2026-10-16",
+        lockMonday: true,
+        redistributeUnits: true,
+        showExportChecks: false,
+        planMode: "ideal",
+        sessionHours: 3.5,
+        maxSessionsPerDay: 2,
+        dayCaps: {},
+        revisionSessions: 1,
+        mergeSameDay: true,
+        completedSessions: {},
+        completedUnits: {}
+      }, STREAM_DEFAULTS[stream]);
+      let saved = null;
+      try { saved = JSON.parse(localStorage.getItem(streamKey(stream)) || "null"); } catch (e) { saved = null; }
+      if (saved && typeof saved === "object") {
+        SAVED_FIELDS.forEach(k => { if (k in saved) state[k] = saved[k]; });
+      } else {
+        markUpToMondayDone(false);
+      }
+      try { localStorage.setItem("astra_last_stream", stream); } catch (e) {}
+    }
+
+    function saveState() {
+      const obj = {};
+      SAVED_FIELDS.forEach(k => { obj[k] = state[k]; });
+      try {
+        localStorage.setItem(streamKey(state.stream), JSON.stringify(obj));
+      } catch (e) {}
+    }
+
+    // Makes every control show the loaded stream's values.
+    function syncUIFromState() {
+      document.querySelectorAll("#stream-control .seg-btn").forEach(b => b.classList.toggle("active", b.dataset.val === state.stream));
+      document.getElementById("sec-subject-select").value = state.secChoice;
+      document.getElementById("custom-sec-name-group").style.display = state.secChoice === "SEC_OTH" ? "flex" : "none";
+      document.getElementById("custom-sec-name-input").value = state.customSecName;
+      document.getElementById("sec-track-select").value = state.secTrack;
+      document.getElementById("start-date-input").value = state.startDate;
+      document.getElementById("start-date-badge").textContent = shortDate(state.startDate);
+      document.getElementById("lock-monday-toggle").checked = state.lockMonday;
+      document.getElementById("redistribute-toggle").checked = state.redistributeUnits;
+      document.getElementById("show-export-checks-toggle").checked = state.showExportChecks;
+      document.getElementById("session-hours-Input").value = String(state.sessionHours);
+      document.getElementById("session-hours-val").textContent = `${state.sessionHours} hours`;
+      document.getElementById("max-sessions-input").value = String(state.maxSessionsPerDay);
+      document.getElementById("max-sessions-val").textContent = `${state.maxSessionsPerDay} sessions/day`;
+      document.getElementById("max-sessions-group").style.display = state.planMode === "custom" ? "flex" : "none";
+      document.querySelectorAll("#plan-mode-control .seg-btn").forEach(b => b.classList.toggle("active", b.dataset.val === state.planMode));
+      document.querySelectorAll("#revision-control .seg-btn").forEach(b => b.classList.toggle("active", Number(b.dataset.val) === state.revisionSessions));
+      document.getElementById("merge-same-subject-toggle").checked = state.mergeSameDay;
+    }
+
+    function markUpToMondayDone(triggerRender = true) {
+      STUDY_DATA.lockedSessions.forEach(ls => {
+        state.completedSessions[ls.id] = true;
+        for (let u = ls.unitRange[0]; u <= ls.unitRange[1]; u++) {
+          state.completedUnits[`${ls.subjectId}_${u}`] = true;
+        }
+      });
+      if (triggerRender) {
+        saveState();
+        rebuildAndRender();
+      }
+    }
+
+    /* ==========================================================================
+       4. DYNAMIC STUDY PLAN ENGINE & TOPIC REDISTRIBUTION ALGORITHM
+       ========================================================================== */
+    function resolveSecIds() {
+      if (state.secChoice === "BOTH") return ["SEC_PHY", "SEC_MAT"];
+      return [state.secChoice];
+    }
+
+    function getActiveSubjectIds() {
+      const list = [];
+      if (state.stream === "physics" || state.stream === "combined") {
+        list.push("ED", "OPT", "QM", "SSP", "MS");
+      }
+      if (state.stream === "math" || state.stream === "combined") {
+        list.push("RA", "AA", "CA", "CO", "ML");
+      }
+      resolveSecIds().forEach(id => {
+        if (!list.includes(id)) list.push(id);
+      });
+      return list;
+    }
+
+    // Exact unit-by-unit lecture hours from the CU-FYUGP Semester V Syllabus PDFs
+    const SYLLABUS_HOURS_MAP = {
+      // Physics Honours
+      ED:      [2, 2, 3, 2, 3,  3, 4, 5,  2, 1, 1, 2, 1, 1,  2, 2, 2, 2, 1, 2, 1, 1], // Total: 45 hrs
+      OPT:     [2, 2, 2, 2,  1, 1, 3, 2, 3, 3, 3,  2, 2, 2, 2, 2,  1, 2, 1, 2, 2, 3], // Total: 45 hrs
+      QM:      [1, 2, 1, 1, 1,  3, 3, 2, 1, 2, 2,  3, 2, 2, 1, 1, 1, 2, 3, 4, 1,  6, 1, 1, 1], // Total: 48 hrs
+      SSP:     [3, 3, 3, 3, 3,  1, 2, 2, 1, 3, 1,  2, 2, 2, 2, 2,  1, 4, 2, 2, 2, 2], // Total: 48 hrs
+      MS:      [1, 2, 2, 3, 2,  3, 2, 3, 2,  3, 3, 2, 2, 4, 3,  2, 2, 1, 2, 1, 2, 1], // Total: 48 hrs
+      SEC_PHY: [2, 2, 2, 1, 2,  1, 2, 3, 2, 4,  2, 2, 1, 1, 2, 1,  2, 2, 1],          // Total: 35 hrs
+
+      // Mathematics Honours (module hours distributed across module units)
+      RA:      [2, 2.5, 2.5, 2.5, 2.5, 2,  2, 2, 2, 2, 2,  2, 2, 2, 2, 2, 2, 2,  1.75, 1.75, 1.75, 1.75],
+      AA:      [2, 2, 2, 2, 2, 2,  2.3, 2.3, 2.3, 2.3, 2.4, 2.4,  2.5, 2.5, 2.5, 2.5,  2, 2, 2, 2, 2, 2],
+      CA:      [2.6, 2.6, 2.6, 2.6, 2.6,  2.4, 2.4, 2.4, 2.4, 2.4,  1.8, 1.9, 1.9, 1.9, 1.9, 1.9, 1.9, 1.8,  2, 2, 2, 2],
+      CO:      [1.25, 1.25, 1.25, 1.25, 1.25, 1.25, 1.25, 1.25,  1.5, 1.5, 1.5, 1.6, 1.6, 1.6, 1.6, 1.5, 1.6,  2.4, 2.4, 2.4, 2.4, 2.4,  4, 4, 4],
+      ML:      [2, 2, 2, 2, 2, 2,  2, 2, 2, 2, 2, 2,  2, 2, 2, 2, 2, 2,  2.4, 2.4, 2.4, 2.4, 2.4],
+      SEC_MAT: [2, 2, 2, 2,  2, 2, 2,  2, 2, 2, 2,  2, 2, 2, 1.5, 1.5, 1.5, 2, 1.5],
+      SEC_OTH: [2, 2, 2, 2, 2,  2, 2, 2, 2, 2,  2, 2, 2, 2, 2, 2,  1.5, 1.5, 1]
+    };
+
+    // Writes syllabusHrs into every unit and totalSyllabusHrs into every subject. Safe to call repeatedly.
+    function injectSyllabusHours() {
+      Object.keys(STUDY_DATA.subjects).forEach(sId => {
+        const sub = STUDY_DATA.subjects[sId];
+        const hrsArr = SYLLABUS_HOURS_MAP[sId] || [];
+        let totalSylHrs = 0;
+        sub.units.forEach((uObj, idx) => {
+          uObj.syllabusHrs = hrsArr[idx] || 2;
+          totalSylHrs += uObj.syllabusHrs;
+        });
+        sub.totalSyllabusHrs = totalSylHrs;
+      });
+    }
+
+    // Ticking a session ticks the units inside its range; unticking clears them.
+    function setSessionDone(sess, done) {
+      state.completedSessions[sess.id] = done;
+      if (sess.unitRange) {
+        const [from, to] = sess.unitRange;
+        for (let u = from; u <= to; u++) state.completedUnits[`${sess.subjectId}_${u}`] = done;
+      }
+    }
+
+    // Adaptive dates: history stays fixed from the start date through today; the Schedule tab starts tomorrow.
+    function todayISO() { return localISO(new Date()); }
+    function lockEndISO() { return todayISO(); }
+    function tomorrowISO() { const d = new Date(); d.setDate(d.getDate() + 1); return localISO(d); }
+    function shortDate(iso) { return `${new Date(iso + "T00:00:00").toLocaleString("en-US", { month: "short" })} ${Number(iso.slice(8))}`; }
+
+    // Schedule tab: sessions per day. A day can't exceed DAY_HOUR_LIMIT study hours.
+    const DAY_HOUR_LIMIT = 10;
+    const escHtml = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    function dayHoursMaxSessions() {
+      return Math.max(1, Math.floor(DAY_HOUR_LIMIT / state.sessionHours + 1e-9));
+    }
+    function dayCapFor(date) {
+      const v = state.dayCaps[date];
+      const base = v === undefined ? state.maxSessionsPerDay : v;
+      return Math.min(base, dayHoursMaxSessions());
+    }
+
+    // After 12 pm, today's session keeps only the topics already ticked; the rest move on to tomorrow.
+    function isPastNoonToday() { return new Date().getHours() >= 12; }
+
+    // Schedule tab: one stepped slider per remaining day (Oct 20 onward). Exam days are marked.
+    function renderSchedule() {
+      if (scheduleDragging) return;
+      const max = dayHoursMaxSessions();
+      const days = ALL_DATES.filter(d => d.date >= tomorrowISO());
+      const activeIds = getActiveSubjectIds();
+      const hint = document.getElementById("schedule-hint");
+      if (hint) hint.textContent = `Max ${max} session${max === 1 ? "" : "s"} a day at ${state.sessionHours} h (${DAY_HOUR_LIMIT} h limit)`;
+      const all = document.getElementById("schedule-all-input");
+      if (all) {
+        all.max = max;
+        if (Number(all.value) > max) all.value = max;
+        all.style.setProperty("--p", (max ? (Number(all.value) / max) * 100 : 0) + "%");
+        document.getElementById("schedule-all-val").textContent = `${all.value} session${Number(all.value) === 1 ? "" : "s"}`;
+      }
+      const list = document.getElementById("schedule-list");
+      if (!list) return;
+      list.innerHTML = days.map(d => {
+        const cap = dayCapFor(d.date);
+        const exams = Object.values(STUDY_DATA.subjects)
+          .filter(s => s.examDate === d.date && activeIds.includes(s.id))
+          .map(s => s.shortName);
+        const ticks = Array.from({ length: max + 1 }, (_, i) => `<span class="${i === cap ? "is-on" : ""}">${i}</span>`).join("");
+        const pct = max ? (cap / max) * 100 : 0;
+        return `<div class="schedule-row${exams.length ? " is-exam" : ""}">
+          <div class="schedule-day"><b>${d.day}</b> ${d.weekday.slice(0, 3)} ${d.month}</div>
+          <div class="schedule-exam">${exams.length ? "Exam: " + escHtml(exams.join(" · ")) : ""}</div>
+          <div class="schedule-slider">
+            <input type="range" min="0" max="${max}" step="1" value="${cap}" data-day="${d.date}" style="--p:${pct}%" aria-label="Sessions on ${d.weekday} ${d.day} ${d.month}" />
+            <div class="schedule-ticks">${ticks}</div>
+          </div>
+          <div class="schedule-val">${cap} × ${state.sessionHours} h = ${cap * state.sessionHours} h</div>
+        </div>`;
+      }).join("");
+    }
+
+    // A change on the Schedule tab switches to the Custom plan, because only Custom reads per-day caps.
+    // Schedule list is not rebuilt while a slider is being dragged, so the drag keeps going.
+    let scheduleDragging = false;
+
+    function applyScheduleChange() {
+      if (state.planMode !== "custom") {
+        state.planMode = "custom";
+        document.querySelectorAll("#plan-mode-control .seg-btn").forEach(b => b.classList.toggle("active", b.dataset.val === "custom"));
+        document.getElementById("max-sessions-group").style.display = "flex";
+      }
+      saveState();
+      rebuildAndRender();
+    }
+
+    function commitSchedule() {
+      scheduleDragging = false;
+      applyScheduleChange();
+    }
+
+    function setScheduleFill(el) {
+      const max = Number(el.max) || 1;
+      el.style.setProperty("--p", (Number(el.value) / max) * 100 + "%");
+    }
+
+    function bindSchedule() {
+      const list = document.getElementById("schedule-list");
+      list.addEventListener("input", (e) => {
+        const el = e.target;
+        if (!el.dataset.day) return;
+        setScheduleFill(el);
+        const row = el.closest(".schedule-row");
+        const n = Number(el.value);
+        row.querySelector(".schedule-val").textContent = `${n} × ${state.sessionHours} h = ${n * state.sessionHours} h`;
+        row.querySelectorAll(".schedule-ticks span").forEach((s, i) => s.classList.toggle("is-on", i === n));
+        // Live: the calendar and totals update while the slider moves.
+        scheduleDragging = true;
+        state.dayCaps[el.dataset.day] = n;
+        applyScheduleChange();
+      });
+      list.addEventListener("change", (e) => {
+        const el = e.target;
+        if (!el.dataset.day) return;
+        state.dayCaps[el.dataset.day] = Number(el.value);
+        commitSchedule();
+      });
+
+      const all = document.getElementById("schedule-all-input");
+      all.addEventListener("input", () => {
+        setScheduleFill(all);
+        document.getElementById("schedule-all-val").textContent = `${all.value} session${Number(all.value) === 1 ? "" : "s"}`;
+        scheduleDragging = true;
+        ALL_DATES.filter(d => d.date >= tomorrowISO()).forEach(d => { state.dayCaps[d.date] = Number(all.value); });
+        applyScheduleChange();
+      });
+      all.addEventListener("change", () => {
+        ALL_DATES.filter(d => d.date >= tomorrowISO()).forEach(d => { state.dayCaps[d.date] = Number(all.value); });
+        commitSchedule();
+      });
+
+      document.getElementById("schedule-reset").addEventListener("click", () => {
+        state.dayCaps = {};
+        commitSchedule();
+      });
+    }
+
+    function generatePlan() {
+      injectSyllabusHours();
+      STUDY_DATA.subjects.SEC_OTH.name = state.customSecName || "Skill Enhancement Course";
+      const activeSubIds = getActiveSubjectIds();
+      const secIds = resolveSecIds();
+      const sessions = [];
+
+      // Step 1: Build Calendar Slot Skeletons (Date + SubjectId)
+      const rawSlots = [];
+
+      if (state.planMode === "ideal") {
+        ALL_DATES.forEach(dObj => {
+          const d = dObj.date;
+          // If before startDate and not locked, skip scheduling
+          if (d < state.startDate && !(state.lockMonday && d <= lockEndISO())) {
+            return;
+          }
+
+          let daySubs = [];
+          const template = STUDY_DATA.idealDates[d] || { physics: [], math: [] };
+
+          if (state.stream === "physics") {
+            daySubs = [...template.physics];
+          } else if (state.stream === "math") {
+            daySubs = [...template.math];
+          } else {
+            daySubs = [...template.physics, ...template.math.filter(s => s !== "SEC")];
+          }
+          // A generic "SEC" token becomes the chosen SEC subject(s).
+          daySubs = daySubs.flatMap(s => s === "SEC" ? secIds : [s]);
+
+          // Push slots for this day
+          const occCounter = {};
+          daySubs.forEach(sId => {
+            if (!activeSubIds.includes(sId)) return;
+            occCounter[sId] = (occCounter[sId] || 0) + 1;
+            rawSlots.push({
+              id: `${d}_${sId}_${occCounter[sId]}`,
+              date: d,
+              day: dObj.day,
+              weekday: dObj.weekday,
+              subjectId: sId,
+              occ: occCounter[sId]
+            });
+          });
+        });
+      } else {
+        // CUSTOM AUTO-SCHEDULER MODE
+        // 1. Keep history fixed from the start date through today (if lockMonday is ON)
+        const lockEnd = lockEndISO();
+        ALL_DATES.forEach(dObj => {
+          const d = dObj.date;
+          if (!(state.lockMonday && d >= state.startDate && d <= lockEnd)) return;
+          const lockedForDay = STUDY_DATA.lockedSessions.filter(
+            ls => ls.date === d && activeSubIds.includes(ls.subjectId)
+          );
+          if (lockedForDay.length) {
+            lockedForDay.forEach((ls, idx) => {
+              rawSlots.push({
+                id: ls.id,
+                date: d,
+                day: dObj.day,
+                weekday: dObj.weekday,
+                subjectId: ls.subjectId,
+                occ: idx + 1
+              });
+            });
+          } else {
+            // No recorded session for this day: keep its original ideal sessions.
+            const template = STUDY_DATA.idealDates[d] || { physics: [], math: [] };
+            const subs = [...template.physics, ...template.math]
+              .flatMap(s => (s === "SEC" ? secIds : [s]))
+              .filter(s => activeSubIds.includes(s));
+            const occ = {};
+            subs.forEach(sId => {
+              occ[sId] = (occ[sId] || 0) + 1;
+              rawSlots.push({ id: `${d}_${sId}_${occ[sId]}`, date: d, day: dObj.day, weekday: dObj.weekday, subjectId: sId, occ: occ[sId] });
+            });
+          }
+        });
+
+        // 2. For dates after today (or from the start date when nothing is locked), allocate sessions before examDate
+        const customStart = state.lockMonday && state.startDate <= lockEndISO() ? tomorrowISO() : state.startDate;
+        // Live syllabus-time calculator: teaching sessions follow the unticked syllabus hours.
+        const SYLLABUS_TO_STUDY_RATIO = 3.2; // 3.2 syllabus lecture hours = 1 self-study hour
+        const neededBySub = {};
+        activeSubIds.forEach(sId => {
+          const sub = STUDY_DATA.subjects[sId];
+          let lockedMaxU = 0;
+          if (state.lockMonday) {
+            STUDY_DATA.lockedSessions.filter(ls => ls.subjectId === sId).forEach(ls => {
+              lockedMaxU = Math.max(lockedMaxU, ls.coveredUnits);
+            });
+          }
+          const remSylHrs = sub.units
+            .filter(u => u.u > lockedMaxU && !state.completedUnits[`${sId}_${u.u}`])
+            .reduce((sum, u) => sum + u.syllabusHrs, 0);
+          const teachSessions = remSylHrs > 0
+            ? Math.max(1, Math.ceil(remSylHrs / (SYLLABUS_TO_STUDY_RATIO * state.sessionHours)))
+            : 0;
+          neededBySub[sId] = teachSessions + state.revisionSessions;
+        });
+
+        const daysBetween = (a, b) => (new Date(b + "T00:00:00Z") - new Date(a + "T00:00:00Z")) / 86400000;
+        // Exam-night revisions are reserved first; teaching sessions are then filled by urgency.
+        const revLeft = {};
+        const teachLeft = {};
+        activeSubIds.forEach(sId => {
+          revLeft[sId] = Math.min(state.revisionSessions, neededBySub[sId]);
+          teachLeft[sId] = neededBySub[sId] - revLeft[sId];
+        });
+        ALL_DATES.filter(dObj => dObj.date >= customStart).forEach(dObj => {
+          const d = dObj.date;
+          let cap = dayCapFor(d);
+          const occCounter = {};
+          const pushSlot = (sId, revSlot) => {
+            occCounter[sId] = (occCounter[sId] || 0) + 1;
+            rawSlots.push({
+              id: `${d}_${sId}_${occCounter[sId]}`,
+              date: d,
+              day: dObj.day,
+              weekday: dObj.weekday,
+              subjectId: sId,
+              occ: occCounter[sId],
+              revSlot
+            });
+          };
+
+          // Revision sessions go on the night before each exam, even if the day is full.
+          activeSubIds.forEach(sId => {
+            if (revLeft[sId] > 0 && daysBetween(d, STUDY_DATA.subjects[sId].examDate) === 1) {
+              while (revLeft[sId] > 0) {
+                pushSlot(sId, true);
+                revLeft[sId]--;
+                cap--;
+              }
+            }
+          });
+
+          // Teaching: urgency = sessions still needed / days left before the exam.
+          const urgency = (sId) => teachLeft[sId] / Math.max(1, daysBetween(d, STUDY_DATA.subjects[sId].examDate));
+          while (cap > 0) {
+            const candidates = activeSubIds.filter(sId => teachLeft[sId] > 0 && STUDY_DATA.subjects[sId].examDate > d);
+            if (candidates.length === 0) break;
+            const sId = candidates.reduce((best, s) => (urgency(s) > urgency(best) ? s : best));
+            pushSlot(sId, false);
+            teachLeft[sId]--;
+            cap--;
+          }
+        });
+      }
+
+      // Step 2: Populate Topics, Bullets & Cumulative Coverage Per Subject
+      activeSubIds.forEach(sId => {
+        const sub = STUDY_DATA.subjects[sId];
+        const subSlots = rawSlots.filter(s => s.subjectId === sId);
+        if (subSlots.length === 0) return;
+
+        // Separate locked slots (Oct 16–19 when lockMonday is ON) vs dynamic slots
+        const lockedSlotIds = new Set();
+        let lockedMaxUnit = 0;
+
+        if (state.lockMonday) {
+          subSlots.forEach(slot => {
+            const match = STUDY_DATA.lockedSessions.find(ls => ls.id === slot.id);
+            if (match) {
+              lockedSlotIds.add(slot.id);
+              slot.unitRange = [...match.unitRange];
+              slot.coveredUnits = match.coveredUnits;
+              slot.totalUnits = sub.totalUnits;
+              slot.coveragePercent = match.coveragePercent;
+              slot.bullets = [...match.bullets];
+              slot.isRevision = false;
+              slot.hours = LOCKED_SESSION_HOURS; // history keeps its original 3 hours, whatever the slider says
+              lockedMaxUnit = Math.max(lockedMaxUnit, match.coveredUnits);
+            }
+          });
+        }
+
+        const dynamicSlots = subSlots.filter(s => !lockedSlotIds.has(s.id));
+        if (dynamicSlots.length === 0) return;
+
+        // Determine which units need to be taught in dynamicSlots
+        const skipTicked = state.planMode === "custom" || (state.redistributeUnits && !state.lockMonday);
+        let unitsToTeach = sub.units.filter(u =>
+          u.u > lockedMaxUnit && !(skipTicked && state.completedUnits[`${sId}_${u.u}`])
+        );
+        if (unitsToTeach.length === 0 && state.planMode !== "custom") {
+          unitsToTeach = sub.units.slice(lockedMaxUnit);
+        }
+
+        // After noon, today's slot(s) keep only the topics already ticked (in order). Unticked topics roll to tomorrow.
+        if (isPastNoonToday()) {
+          const todayISOValue = todayISO();
+          const ordered = sub.units.filter(u => u.u > lockedMaxUnit);
+          let nextUnit = 0;
+          dynamicSlots.filter(s => s.date === todayISOValue && !s.revSlot).forEach(slot => {
+            const ticked = [];
+            while (nextUnit < ordered.length && state.completedUnits[`${sId}_${ordered[nextUnit].u}`]) {
+              ticked.push(ordered[nextUnit]);
+              nextUnit++;
+            }
+            dynamicSlots.splice(dynamicSlots.indexOf(slot), 1);
+            if (ticked.length === 0) {
+              rawSlots.splice(rawSlots.indexOf(slot), 1);
+              return;
+            }
+            const lastU = ticked[ticked.length - 1].u;
+            const learnedSylHrs = sub.units
+              .filter(u => state.completedUnits[`${sId}_${u.u}`] || u.u <= lastU)
+              .reduce((sum, u) => sum + u.syllabusHrs, 0);
+            slot.hours = state.sessionHours;
+            slot.totalUnits = sub.totalUnits;
+            slot.unitRange = [ticked[0].u, lastU];
+            slot.coveredUnits = lastU;
+            slot.syllabusHrsInSession = Math.round(ticked.reduce((sum, u) => sum + u.syllabusHrs, 0) * 10) / 10;
+            slot.coveragePercent = Math.min(100, Math.round((learnedSylHrs / sub.totalSyllabusHrs) * 100));
+            slot.bullets = compressUnitsToCardBullets(ticked);
+            slot.isRevision = false;
+          });
+          const frozen = new Set(ordered.slice(0, nextUnit).map(u => u.u));
+          unitsToTeach = unitsToTeach.filter(u => !frozen.has(u.u));
+        }
+
+        // Custom mode: revision slots are last on each date. Their count comes from the scheduler.
+        if (state.planMode === "custom") {
+          dynamicSlots.sort((a, b) => a.date.localeCompare(b.date) || Number(!!a.revSlot) - Number(!!b.revSlot));
+        }
+        const N = dynamicSlots.length;
+        const R = state.planMode === "custom"
+          ? dynamicSlots.filter(s => s.revSlot).length
+          : Math.min(state.revisionSessions, Math.max(0, N - 1));
+        // Number of teaching slots. Custom mode keeps exactly N - R, so a subject with only revision left gets no teaching slot.
+        const T = state.planMode === "custom" ? Math.max(0, N - R) : Math.max(1, N - R);
+
+        // Syllabus-hour bin packing: each session takes units until its share of syllabus hours is full.
+        let cursor = 0;
+        for (let i = 0; i < N; i++) {
+          const slot = dynamicSlots[i];
+          slot.hours = state.sessionHours;
+          slot.totalUnits = sub.totalUnits;
+
+          if (i < T && cursor < unitsToTeach.length) {
+            const remSlots = T - i;
+            const remSylHrs = unitsToTeach.slice(cursor).reduce((sum, u) => sum + u.syllabusHrs, 0);
+            const targetSylHrs = remSylHrs / remSlots;
+
+            const slice = [];
+            let accruedHrs = 0;
+            while (cursor < unitsToTeach.length) {
+              const nextUnit = unitsToTeach[cursor];
+              const unitsLeftAfterThis = unitsToTeach.length - (cursor + 1);
+              const slotsLeftAfterThis = remSlots - 1;
+              // Always take at least one unit; stop when this session is full, unless it is the last teaching slot.
+              if (
+                slice.length > 0 &&
+                remSlots > 1 &&
+                (accruedHrs + nextUnit.syllabusHrs * 0.6 > targetSylHrs || unitsLeftAfterThis < slotsLeftAfterThis)
+              ) {
+                break;
+              }
+              slice.push(nextUnit);
+              accruedHrs += nextUnit.syllabusHrs;
+              cursor++;
+            }
+
+            const lastU = slice[slice.length - 1].u;
+            const learnedSylHrs = sub.units
+              .filter(u => state.completedUnits[`${sId}_${u.u}`] || u.u <= lastU)
+              .reduce((sum, u) => sum + u.syllabusHrs, 0);
+
+            slot.unitRange = [slice[0].u, lastU];
+            slot.coveredUnits = lastU;
+            slot.syllabusHrsInSession = Math.round(accruedHrs * 10) / 10;
+            slot.coveragePercent = Math.min(100, Math.round((learnedSylHrs / sub.totalSyllabusHrs) * 100));
+            slot.bullets = compressUnitsToCardBullets(slice);
+            slot.isRevision = false;
+          } else {
+            // Exam-Night Revision Slot
+            slot.unitRange = [1, sub.totalUnits];
+            slot.coveredUnits = sub.totalUnits;
+            slot.coveragePercent = 100;
+            slot.bullets = [...sub.revisionBullets];
+            slot.isRevision = true;
+          }
+        }
+      });
+
+      state.generatedSessions = rawSlots;
+
+      // Step 3: Build Daily Cards List (Optionally merging same-day same-subject cards into 6h card)
+      const cards = [];
+      if (state.mergeSameDay) {
+        ALL_DATES.forEach(dObj => {
+          const daySessions = rawSlots.filter(s => s.date === dObj.date);
+          const grouped = {};
+          daySessions.forEach(s => {
+            if (!grouped[s.subjectId]) {
+              grouped[s.subjectId] = {
+                ...s,
+                sessionIds: [s.id],
+                hours: s.hours,
+                bullets: [...(s.bullets || [])],
+                coveredUnits: s.coveredUnits,
+                coveragePercent: s.coveragePercent,
+                isRevision: s.isRevision
+              };
+            } else {
+              const g = grouped[s.subjectId];
+              g.sessionIds.push(s.id);
+              g.hours += s.hours;
+              g.coveredUnits = Math.max(g.coveredUnits, s.coveredUnits);
+              g.coveragePercent = Math.max(g.coveragePercent, s.coveragePercent);
+              if (s.isRevision && !g.isRevision) {
+                g.bullets = [...g.bullets.slice(0, 2), "Exam-Eve Revision: Full syllabus consolidation & key problems"];
+                g.isRevision = true;
+              } else {
+                s.bullets.forEach(b => {
+                  if (!g.bullets.includes(b)) g.bullets.push(b);
+                });
+                if (g.bullets.length > 5) g.bullets = g.bullets.slice(0, 5);
+              }
+            }
+          });
+          Object.values(grouped).forEach(card => cards.push(card));
+        });
+      } else {
+        rawSlots.forEach(s => {
+          cards.push({ ...s, sessionIds: [s.id] });
+        });
+      }
+
+      state.dailyCards = cards;
+      if (state.selectedCardIndex >= cards.length) {
+        state.selectedCardIndex = Math.max(0, cards.length - 1);
+      }
+    }
+
+    // Helper: one bullet per unit on the Daily Card. The trailing syllabus reference, e.g. "(1.1)", "(5.3.1–5.3.5)" or "(Units 1–5)", is dropped for the card only; the checklist keeps it.
+    const UNIT_REF_RE = /\s*\((?:Units?\s*)?[\d.]+(?:\s*[–-]\s*[\d.]+)?\)\s*$/;
+    function compressUnitsToCardBullets(unitObjs) {
+      return unitObjs.map(u => u.text.replace(UNIT_REF_RE, "").trim());
+    }
+
+    /* ==========================================================================
+       5. RENDER FUNCTIONS (Calendar Poster, Daily Card, Checklist)
+       ========================================================================== */
+    // Adaptive text: shrinks each text box until it fits its width (down to 50%), then lets it wrap.
+    // Hidden elements (other tabs) are skipped, since they measure 0 wide.
+    const FIT_SELECTOR = ".subject-title, .subject-hours, .cal-pill-title, .cal-pill-hours, .summary-sub-name, .summary-sub-hrs, .total-box-label, .total-box-value, .month-banner-oct, .month-banner-nov, .bottom-bar-label";
+    function fitTitles() {
+      document.querySelectorAll(FIT_SELECTOR).forEach(el => {
+        if (!el.clientWidth) return;
+        el.style.fontSize = "";
+        el.style.whiteSpace = "nowrap";
+        const base = parseFloat(getComputedStyle(el).fontSize);
+        let size = base;
+        while (el.scrollWidth > el.clientWidth + 1 && size > base * 0.5) {
+          size -= 0.5;
+          el.style.fontSize = size + "px";
+        }
+        // Calendar names stay on one line (shrunk, then ellipsis); other text may wrap.
+        el.style.whiteSpace = el.matches(".cal-pill-title, .cal-pill-hours") ? "nowrap" : "";
+      });
+      fitSummaryRow();
+    }
+
+    // Poster summary bar: if a subject name still clips at its smallest size, the icons shrink to make room.
+    function fitSummaryRow() {
+      const row = document.getElementById("poster-summary-subjects");
+      if (!row || !row.clientWidth) return;
+      const clipped = () => [...row.querySelectorAll(".summary-sub-name, .summary-sub-hrs")].some(el => el.scrollWidth > el.clientWidth + 1);
+      let icon = 46;
+      row.style.setProperty("--icon", icon + "px");
+      while (clipped() && icon > 22) {
+        icon -= 2;
+        row.style.setProperty("--icon", icon + "px");
+      }
+    }
+
+    // Daily card: bullet text shrinks (down to 11px) until the coverage bar sits inside the card.
+    function fitCardBullets() {
+      document.querySelectorAll(".daily-inner-card").forEach(card => {
+        const cov = card.querySelector(".coverage-card");
+        const texts = [...card.querySelectorAll(".bullet-text")];
+        if (!cov || !texts.length || !card.offsetParent) return;
+        const limit = () => card.getBoundingClientRect().bottom - 12;
+        texts.forEach(el => (el.style.fontSize = ""));
+        let size = parseFloat(getComputedStyle(texts[0]).fontSize);
+        while (cov.getBoundingClientRect().bottom > limit() && size > 11) {
+          size -= 0.5;
+          texts.forEach(el => (el.style.fontSize = size + "px"));
+        }
+      });
+    }
+
+    function renderAll() {
+      renderSchedule();
+      document.getElementById("lock-range-label").textContent = `Keep ${shortDate(state.startDate)} – ${shortDate(lockEndISO())} Fixed as Original`;
+      requestAnimationFrame(fitTitles); // after this render's DOM is in place
+      // Static Decorative SVGs
+      document.getElementById("poster-books-svg-slot").innerHTML = DECORATIVE_SVGS.posterTopLeftBooks;
+      document.getElementById("poster-clock-svg-slot").innerHTML = DECORATIVE_SVGS.posterClockIcon;
+      document.getElementById("poster-right-leaf-slot").innerHTML = DECORATIVE_SVGS.posterRightLeaf;
+      document.getElementById("oct-cal-icon-slot").innerHTML = DECORATIVE_SVGS.calendarHeaderIcon;
+      document.getElementById("dc-decor-tr").innerHTML = DECORATIVE_SVGS.topRightPlant;
+      document.getElementById("dc-decor-bl").innerHTML = DECORATIVE_SVGS.bottomLeftBooks;
+      document.getElementById("dc-decor-br").innerHTML = DECORATIVE_SVGS.bottomRightLeaves;
+
+      // Toggle export check visibility
+      const posterEl = document.getElementById("calendar-poster-export");
+      const dailyEl = document.getElementById("daily-card-export");
+      if (state.showExportChecks) {
+        posterEl.classList.remove("hide-export-checks");
+        dailyEl.classList.remove("hide-export-checks");
+      } else {
+        posterEl.classList.add("hide-export-checks");
+        dailyEl.classList.add("hide-export-checks");
+      }
+
+      renderCalendarPoster();
+      renderDailyCardSelector();
+      renderDailyCard();
+      renderChecklistAndUnits();
+      updateHeaderStats();
+      updateResponsiveScale();
+    }
+
+    function renderCalendarPoster() {
+      // Update top-right hours legend
+      const h = state.sessionHours;
+      document.getElementById("poster-legend-text").innerHTML = `
+        <strong>Each entry = ${h} ${h === 1 ? 'hour' : 'hours'}</strong><br/>
+        Same subject twice = ${h * 2} hours<br/>
+        (on the same day)
+      `;
+
+      // Row 1 & Row 2: Oct 16 to Oct 29 (14 days)
+      const octMainGrid = document.getElementById("poster-grid-oct-main");
+      octMainGrid.innerHTML = "";
+      ALL_DATES.slice(0, 14).forEach(dObj => {
+        octMainGrid.appendChild(createCalendarDayCell(dObj));
+      });
+
+      // Row 3: Oct 30, Oct 31 + November Subframe (Nov 1, Nov 2 + 3 empty cols)
+      const row3Grid = document.getElementById("poster-grid-row-3");
+      row3Grid.innerHTML = "";
+      row3Grid.appendChild(createCalendarDayCell(ALL_DATES[14])); // Oct 30
+      row3Grid.appendChild(createCalendarDayCell(ALL_DATES[15])); // Oct 31
+
+      const novSubframe = document.createElement("div");
+      novSubframe.className = "nov-subframe";
+      novSubframe.innerHTML = `
+        <div class="month-banner-nov">
+          <span style="display:flex;">${DECORATIVE_SVGS.calendarHeaderIcon}</span>
+          <span>November 2026</span>
+        </div>
+        <div class="nov-cells-grid" id="nov-inner-cells"></div>
+      `;
+      row3Grid.appendChild(novSubframe);
+
+      const novInner = novSubframe.querySelector("#nov-inner-cells");
+      novInner.appendChild(createCalendarDayCell(ALL_DATES[16])); // Nov 1
+      if ( state.secTrack !== "poster_3" || state.generatedSessions.some(s => s.date === "2026-11-02") ) {
+        novInner.appendChild(createCalendarDayCell(ALL_DATES[17])); // Nov 2
+      } else {
+        // Match Reference Image 1 empty space on Nov 2 if Poster 3-session track is active
+        const emptyNov2 = document.createElement("div");
+        emptyNov2.className = "cal-day-cell";
+        emptyNov2.style.gridColumn = "2 / 6";
+        novInner.appendChild(emptyNov2);
+      }
+
+      // Summary Footer Per Subject
+      const summaryRow = document.getElementById("poster-summary-subjects");
+      summaryRow.innerHTML = "";
+      const hoursBySub = {};
+      let grandTotal = 0;
+
+      state.generatedSessions.forEach(s => {
+        hoursBySub[s.subjectId] = (hoursBySub[s.subjectId] || 0) + s.hours;
+        grandTotal += s.hours;
+      });
+
+      getActiveSubjectIds().forEach(sId => {
+        const sub = STUDY_DATA.subjects[sId];
+        const subHrs = hoursBySub[sId] || 0;
+        if (subHrs === 0) return;
+        const item = document.createElement("div");
+        item.className = "summary-subject-item";
+        item.innerHTML = `
+          <div class="summary-icon-box" style="background-color:${sub.theme.cardBg};">
+            ${SUBJECT_SVGS[sub.iconId]}
+          </div>
+          <div class="summary-subject-text">
+            <span class="summary-sub-name">${sub.shortName}</span>
+            <span class="summary-sub-hrs">${subHrs} hours</span>
+          </div>
+        `;
+        summaryRow.appendChild(item);
+      });
+
+      document.getElementById("poster-total-hours").textContent = `${grandTotal} HOURS`;
+    }
+
+    function createCalendarDayCell(dObj) {
+      const cell = document.createElement("div");
+      cell.className = "cal-day-cell";
+      if (dObj.date < state.startDate && !(state.lockMonday && dObj.date <= lockEndISO())) {
+        cell.classList.add("before-start-date");
+      }
+
+      const daySessions = state.generatedSessions.filter(s => s.date === dObj.date);
+
+      const header = document.createElement("div");
+      header.className = "cal-day-header";
+      header.innerHTML = `
+        <div class="cal-day-left">
+          <span class="cal-day-num">${dObj.day}</span>
+          <span class="cal-day-wk">${dObj.weekday}</span>
+        </div>
+      `;
+      cell.appendChild(header);
+
+      daySessions.forEach(sess => {
+        const sub = STUDY_DATA.subjects[sess.subjectId];
+        const isDone = !!state.completedSessions[sess.id];
+        const pill = document.createElement("div");
+        pill.className = "cal-session-pill";
+        pill.style.backgroundColor = sub.theme.cardBg;
+
+        pill.innerHTML = `
+          <div class="cal-pill-icon">${SUBJECT_SVGS[sub.iconId]}</div>
+          <div class="cal-pill-info">
+            <div class="cal-pill-title">${sub.shortName}</div>
+            <div class="cal-pill-hours">${sess.hours} ${sess.hours === 1 ? 'hour' : 'hours'}</div>
+            ${sess.isRevision ? `<div class="pill-badge-row"><span class="rev-pill-tag"><svg class="mi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg> Exam-Eve Rev</span></div>` : ''}
+          </div>
+          ${isDone ? `<div class="done-check-badge"><svg class="mi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>` : ''}
+        `;
+
+        cell.appendChild(pill);
+      });
+
+      return cell;
+    }
+
+    // Daily card toolbar: arrows step through cards, the date opens a calendar, and the day's subjects are chips.
+    const WEEK_SHORT = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const CHEV_LEFT = `<svg class="mi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>`;
+    const CHEV_RIGHT = `<svg class="mi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>`;
+    let dayCalMonth = null; // "YYYY-MM" shown in the calendar popup
+
+    function localISO(d) {
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+    }
+
+    // First load: show today's card (clamped to the plan's dates). After 12 pm, show tomorrow's card instead.
+    // Not saved, so every load starts on the right card.
+    function defaultCardISO() {
+      const now = new Date();
+      if (now.getHours() >= 12) now.setDate(now.getDate() + 1);
+      return localISO(now);
+    }
+
+    function applyTodayDefault() {
+      if (state.todayApplied) return;
+      state.todayApplied = true;
+      const cards = state.dailyCards;
+      if (!cards.length) return;
+      let target = defaultCardISO();
+      if (target < cards[0].date) target = cards[0].date;
+      if (target > cards[cards.length - 1].date) target = cards[cards.length - 1].date;
+      let idx = cards.findIndex(c => c.date === target);
+      if (idx === -1) idx = cards.findIndex(c => c.date > target);
+      if (idx !== -1) state.selectedCardIndex = idx;
+    }
+
+    function renderDailyCardSelector() {
+      applyTodayDefault();
+      const cards = state.dailyCards;
+      const cur = cards[state.selectedCardIndex];
+      if (!cur) return;
+
+      const dateObj = new Date(cur.date + "T00:00:00");
+      document.getElementById("day-date-label").textContent =
+        `${WEEK_SHORT[dateObj.getDay()]} ${dateObj.getDate()} ${cur.date.slice(5, 7) === "10" ? "Oct" : "Nov"}`;
+
+      const chips = document.getElementById("day-subjects");
+      chips.innerHTML = "";
+      cards.forEach((c, idx) => {
+        if (c.date !== cur.date) return;
+        const sub = STUDY_DATA.subjects[c.subjectId];
+        const done = c.sessionIds.every(id => state.completedSessions[id]);
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "day-chip" + (idx === state.selectedCardIndex ? " is-active" : "") + (done ? " is-done" : "");
+        b.textContent = `${sub.shortName} · ${c.hours}h`;
+        b.addEventListener("click", () => { state.selectedCardIndex = idx; renderAll(); });
+        chips.appendChild(b);
+      });
+
+      if (!document.getElementById("day-cal").hidden) renderDayCal();
+    }
+
+    function renderDayCal() {
+      const cal = document.getElementById("day-cal");
+      const cur = state.dailyCards[state.selectedCardIndex];
+      if (!dayCalMonth) dayCalMonth = (cur ? cur.date : localISO(new Date())).slice(0, 7);
+      const [y, m] = dayCalMonth.split("-").map(Number);
+      const firstDow = new Date(y, m - 1, 1).getDay();
+      const daysInMonth = new Date(y, m, 0).getDate();
+      const withCards = new Set(state.dailyCards.map(c => c.date));
+      const today = localISO(new Date());
+      const selected = cur ? cur.date : null;
+
+      let cells = WEEK_SHORT.map(w => `<span class="day-cal-dow">${w.slice(0, 2)}</span>`).join("");
+      for (let i = 0; i < firstDow; i++) cells += "<span></span>";
+      for (let dd = 1; dd <= daysInMonth; dd++) {
+        const iso = `${y}-${String(m).padStart(2, "0")}-${String(dd).padStart(2, "0")}`;
+        const cls = ["day-cal-day", iso === today ? "is-today" : "", iso === selected ? "is-selected" : ""].join(" ");
+        cells += `<button type="button" class="${cls}" data-date="${iso}" ${withCards.has(iso) ? "" : "disabled"}>${dd}</button>`;
+      }
+      const monthName = new Date(y, m - 1, 1).toLocaleString("en-US", { month: "long" });
+      cal.innerHTML = `
+        <div class="day-cal-head">
+          <button type="button" class="nav-arrow" data-cal-step="-1" aria-label="Previous month">${CHEV_LEFT}</button>
+          <span>${monthName} ${y}</span>
+          <button type="button" class="nav-arrow" data-cal-step="1" aria-label="Next month">${CHEV_RIGHT}</button>
+        </div>
+        <div class="day-cal-grid">${cells}</div>`;
+    }
+
+    function setDayCal(open) {
+      const cal = document.getElementById("day-cal");
+      cal.hidden = !open;
+      document.getElementById("day-date-btn").setAttribute("aria-expanded", String(open));
+      if (open) { dayCalMonth = null; renderDayCal(); }
+    }
+
+    function renderDailyCard() {
+      const card = state.dailyCards[state.selectedCardIndex];
+      if (!card) return;
+      const sub = STUDY_DATA.subjects[card.subjectId];
+      const allDone = card.sessionIds.every(id => state.completedSessions[id]);
+
+      document.getElementById("dc-day-num").textContent = card.day;
+      document.getElementById("dc-weekday").textContent = card.weekday;
+
+      const banner = document.getElementById("dc-banner");
+      banner.style.backgroundColor = sub.theme.bannerBg;
+      document.getElementById("dc-banner-divider").style.backgroundColor = sub.theme.border;
+      document.getElementById("dc-icon-box").innerHTML = SUBJECT_SVGS[sub.iconId];
+      document.getElementById("dc-subject-title").textContent = sub.name;
+      document.getElementById("dc-subject-hours").textContent = `${card.hours} ${card.hours === 1 ? 'hour' : 'hours'}`;
+      document.getElementById("dc-rev-tag").style.display = card.isRevision ? "inline-block" : "none";
+
+      const doneStamp = document.getElementById("dc-done-stamp");
+      doneStamp.style.display = allDone ? "block" : "none";
+
+      const toggleBtn = document.getElementById("toggle-current-card-done");
+      toggleBtn.innerHTML = allDone ? `<svg class="mi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Completed (Tap to Undo)` : `<svg class="mi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg> Mark Completed`;
+      toggleBtn.style.background = allDone ? "#DCFCE7" : "#F8FAFC";
+      toggleBtn.style.borderColor = allDone ? "#16A34A" : "#CBD5E1";
+
+      const ul = document.getElementById("dc-bullets-list");
+      ul.innerHTML = "";
+      const shortRevision = (b) => b.replace(/^Full revision:\s*/i, "").replace(/\s*\([^()]*\)\s*$/, "");
+      (card.bullets || []).forEach(bText => {
+        if (card.isRevision) bText = shortRevision(bText);
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <span class="golden-dot"></span>
+          <span class="bullet-text">${bText}</span>
+        `;
+        ul.appendChild(li);
+      });
+
+      document.getElementById("dc-coverage-fill").style.width = `${card.coveragePercent}%`;
+      document.getElementById("dc-coverage-pct").textContent = `${card.coveragePercent}%`;
+    }
+
+    function renderChecklistAndUnits() {
+      // Subject unit accordions, grouped by syllabus module. Open panels stay open across re-renders.
+      const acc = document.getElementById("subject-units-accordion");
+      acc.innerHTML = "";
+      getActiveSubjectIds().forEach(sId => {
+        const sub = STUDY_DATA.subjects[sId];
+        const modules = UNIT_MODULE[sId] || "";
+        const doneCount = sub.units.filter(u => state.completedUnits[`${sId}_${u.u}`]).length;
+        const details = document.createElement("details");
+        details.className = "unit-list-details";
+        details.open = openUnitLists.has(sId);
+        details.addEventListener("toggle", () => {
+          if (details.open) openUnitLists.add(sId); else openUnitLists.delete(sId);
+        });
+        const pct = Math.round((doneCount / sub.totalUnits) * 100);
+        const examDay = `${Number(sub.examDate.slice(8))} ${sub.examDate.slice(5, 7) === "10" ? "Oct" : "Nov"}`;
+        details.innerHTML = `
+          <summary class="unit-summary">
+            <div class="unit-head">
+              <span class="unit-name">${sub.name}</span>
+              <span class="exam-tag">Exam ${examDay}</span>
+            </div>
+            <div class="unit-bar-row">
+              <div class="coverage-track"><div class="coverage-fill" style="width: ${pct}%;"></div></div>
+              <span class="unit-pct">${pct}%</span>
+            </div>
+          </summary>
+          <div class="unit-checkbox-list"></div>
+        `;
+        const listWrap = details.querySelector(".unit-checkbox-list");
+        ["1", "2", "3", "4"].forEach(mod => {
+          const units = sub.units.filter(uObj => (modules[uObj.u - 1] || "4") === mod);
+          if (!units.length) return;
+          const head = document.createElement("div");
+          head.className = "unit-module-head";
+          head.textContent = `Module ${MODULE_LABEL[mod]}`;
+          listWrap.appendChild(head);
+          units.forEach(uObj => {
+            const key = `${sId}_${uObj.u}`;
+            const lbl = document.createElement("label");
+            lbl.className = "unit-check-item";
+            lbl.innerHTML = `
+              <input type="checkbox" ${state.completedUnits[key] ? 'checked' : ''} />
+              <span><strong>Unit ${uObj.u}:</strong> ${uObj.text}</span>
+            `;
+            lbl.querySelector("input").addEventListener("change", (e) => {
+              state.completedUnits[key] = e.target.checked;
+              saveState();
+              rebuildAndRender();
+            });
+            listWrap.appendChild(lbl);
+          });
+        });
+        acc.appendChild(details);
+      });
+    }
+
+    function updateHeaderStats() {
+      const totalSess = state.generatedSessions.length;
+      const doneSess = state.generatedSessions.filter(s => state.completedSessions[s.id]).length;
+      const totalHrs = state.generatedSessions.reduce((acc, s) => acc + s.hours, 0);
+      document.getElementById("stat-progress-pill").innerHTML = `<svg class="mi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> ${doneSess} / ${totalSess} Sessions Done`;
+      document.getElementById("stat-hours-pill").innerHTML = `<svg class="mi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 1h6v2H9zm10.03 6.39 1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42A8.962 8.962 0 0 0 12 4a9 9 0 0 0-9 9c0 4.97 4.02 9 9 9a8.994 8.994 0 0 0 7.03-14.61zM13 14h-2V8h2v6z"/></svg> ${totalHrs} Hours Total`;
+    }
+
+    /* ==========================================================================
+       6. MOBILE & DESKTOP RESPONSIVE SCALING ENGINE + HD PNG EXPORT
+       ========================================================================== */
+    function updateResponsiveScale() {
+      // Scale Calendar Poster (1600px native width)
+      const posterOuter = document.getElementById("poster-stage-outer");
+      const posterSlot = document.getElementById("poster-scale-slot");
+      const posterEl = document.getElementById("calendar-poster-export");
+      if (posterOuter && posterEl && posterOuter.offsetParent !== null) {
+        const availW = posterOuter.clientWidth - 20;
+        const scale = Math.min(1, Math.max(0.2, availW / 1600));
+        posterEl.style.transform = `scale(${scale})`;
+        posterEl.style.transformOrigin = "top left";
+        posterSlot.style.width = `${1600 * scale}px`;
+        posterSlot.style.height = `${posterEl.offsetHeight * scale}px`;
+      }
+
+      // Scale Daily Card (540px native width)
+      const dailyOuter = document.getElementById("daily-stage-outer");
+      const dailySlot = document.getElementById("daily-scale-slot");
+      const dailyEl = document.getElementById("daily-card-export");
+      if (dailyOuter && dailyEl && dailyOuter.offsetParent !== null) {
+        const availW = dailyOuter.clientWidth - 16;
+        const scale = Math.min(1, Math.max(0.45, availW / 540));
+        dailyEl.style.transform = `scale(${scale})`;
+        dailyEl.style.transformOrigin = "top left";
+        dailySlot.style.width = `${540 * scale}px`;
+        dailySlot.style.height = `${dailyEl.offsetHeight * scale}px`;
+      }
+    }
+
+    async function exportNodeAsPng(elementId, filename, nativeWidth, scaleFactor = 2) {
+      const el = document.getElementById(elementId);
+      if (!el) return;
+
+      const prevTransform = el.style.transform;
+      el.style.transform = "none";
+
+      try {
+        await document.fonts.ready;
+        const dataUrl = await window.modernScreenshot.domToPng(el, {
+          scale: scaleFactor,
+          width: nativeWidth,
+          height: el.offsetHeight
+        });
+        const link = document.createElement("a");
+        link.download = filename;
+        link.href = dataUrl;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } catch (err) {
+        alert("Export error: " + err.message);
+      } finally {
+        el.style.transform = prevTransform;
+        updateResponsiveScale();
+      }
+    }
+
+    /* ==========================================================================
+       7. UI EVENT LISTENERS & TAB SWITCHING
+       ========================================================================== */
+    function switchTab(tabName) {
+      state.activeTab = tabName;
+      document.querySelectorAll(".view-tab-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.tab === tabName);
+      });
+      document.querySelectorAll(".mob-nav-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.mobTab === tabName);
+      });
+
+      const isMobile = window.innerWidth <= 1024;
+      if (isMobile && tabName === "settings") {
+        // On phones, Settings is a drawer over the current view, not a separate screen.
+        setDrawer(!document.getElementById("sidebar-controls").classList.contains("drawer-open"));
+        return;
+      }
+      setDrawer(false);
+
+      document.getElementById("tab-poster").style.display = tabName === "poster" ? "block" : "none";
+      document.getElementById("tab-daily").style.display = tabName === "daily" ? "block" : "none";
+      document.getElementById("tab-checklist").style.display = tabName === "checklist" ? "block" : "none";
+      document.getElementById("tab-schedule").style.display = tabName === "schedule" ? "block" : "none";
+      requestAnimationFrame(fitTitles);
+      if (tabName === "schedule") renderSchedule();
+
+      setTimeout(updateResponsiveScale, 30);
+    }
+
+    function setDrawer(open) {
+      document.getElementById("sidebar-controls").classList.toggle("drawer-open", open);
+      document.getElementById("drawer-backdrop").classList.toggle("show", open);
+      document.querySelectorAll('[data-mob-tab="settings"]').forEach(b => b.classList.toggle("active", open));
+    }
+    document.getElementById("drawer-backdrop").addEventListener("click", () => setDrawer(false));
+    bindSchedule();
+    document.getElementById("drawer-close").addEventListener("click", () => setDrawer(false));
+
+    function rebuildAndRender() {
+      generatePlan();
+      renderAll();
+    }
+
+    function bindEvents() {
+      // Stream buttons
+      document.querySelectorAll("#stream-control .seg-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          if (btn.dataset.val === state.stream) return;
+          saveState(); // keep the current stream's data
+          loadStream(btn.dataset.val);
+          syncUIFromState();
+          rebuildAndRender();
+        });
+      });
+
+      // SEC Selector
+      document.getElementById("sec-subject-select").addEventListener("change", (e) => {
+        state.secChoice = e.target.value;
+        document.getElementById("custom-sec-name-group").style.display =
+          state.secChoice === "SEC_OTH" ? "flex" : "none";
+        saveState();
+        rebuildAndRender();
+      });
+
+      document.getElementById("custom-sec-name-input").addEventListener("input", (e) => {
+        state.customSecName = e.target.value;
+        saveState();
+        rebuildAndRender();
+      });
+
+      document.getElementById("sec-track-select").addEventListener("change", (e) => {
+        state.secTrack = e.target.value;
+        saveState();
+        rebuildAndRender();
+      });
+
+      // Start Date Picker
+      document.getElementById("start-date-input").addEventListener("change", (e) => {
+        state.startDate = e.target.value || "2026-10-16";
+        document.getElementById("start-date-badge").textContent = state.startDate.slice(5);
+        saveState();
+        rebuildAndRender();
+      });
+
+      // Toggles
+      document.getElementById("lock-monday-toggle").addEventListener("change", (e) => {
+        state.lockMonday = e.target.checked;
+        saveState();
+        rebuildAndRender();
+      });
+
+      document.getElementById("redistribute-toggle").addEventListener("change", (e) => {
+        state.redistributeUnits = e.target.checked;
+        saveState();
+        rebuildAndRender();
+      });
+
+      document.getElementById("show-export-checks-toggle").addEventListener("change", (e) => {
+        state.showExportChecks = e.target.checked;
+        saveState();
+        renderAll();
+      });
+
+      document.getElementById("btn-mark-upto-mon").addEventListener("click", () => {
+        markUpToMondayDone(true);
+      });
+
+      document.getElementById("btn-clear-completed").addEventListener("click", () => {
+        state.completedSessions = {};
+        state.completedUnits = {};
+        saveState();
+        rebuildAndRender();
+      });
+
+      // Plan Mode
+      document.querySelectorAll("#plan-mode-control .seg-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll("#plan-mode-control .seg-btn").forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          state.planMode = btn.dataset.val;
+          document.getElementById("max-sessions-group").style.display =
+            state.planMode === "custom" ? "flex" : "none";
+          saveState();
+          rebuildAndRender();
+        });
+      });
+
+      // Sliders
+      document.getElementById("session-hours-Input").addEventListener("input", (e) => {
+        state.sessionHours = parseFloat(e.target.value);
+        document.getElementById("session-hours-val").textContent = `${state.sessionHours} hours`;
+        saveState();
+        rebuildAndRender();
+      });
+
+      document.getElementById("max-sessions-input").addEventListener("input", (e) => {
+        state.maxSessionsPerDay = parseInt(e.target.value, 10);
+        document.getElementById("max-sessions-val").textContent = `${state.maxSessionsPerDay} sessions/day`;
+        saveState();
+        rebuildAndRender();
+      });
+
+      // Revision Sessions
+      document.querySelectorAll("#revision-control .seg-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll("#revision-control .seg-btn").forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          state.revisionSessions = parseInt(btn.dataset.val, 10);
+          document.getElementById("revision-sessions-val").textContent =
+            state.revisionSessions === 0 ? "0 (Original)" : `${state.revisionSessions} (Exam Eve)`;
+          saveState();
+          rebuildAndRender();
+        });
+      });
+
+      document.getElementById("merge-same-subject-toggle").addEventListener("change", (e) => {
+        state.mergeSameDay = e.target.checked;
+        saveState();
+        rebuildAndRender();
+      });
+
+      // Daily Card Navigation
+      document.getElementById("day-date-btn").addEventListener("click", () => {
+        setDayCal(document.getElementById("day-cal").hidden);
+      });
+      document.getElementById("day-cal").addEventListener("click", (e) => {
+        const step = e.target.closest("[data-cal-step]");
+        if (step) {
+          const [y, m] = dayCalMonth.split("-").map(Number);
+          const d = new Date(y, m - 1 + Number(step.dataset.calStep), 1);
+          dayCalMonth = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+          renderDayCal();
+          return;
+        }
+        const day = e.target.closest("[data-date]");
+        if (day && !day.disabled) {
+          state.selectedCardIndex = state.dailyCards.findIndex(c => c.date === day.dataset.date);
+          setDayCal(false);
+          renderAll();
+        }
+      });
+      document.addEventListener("mousedown", (e) => {
+        if (!e.target.closest("#day-date-btn, #day-cal")) setDayCal(false);
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") setDayCal(false);
+      });
+      document.getElementById("prev-card-btn").addEventListener("click", () => {
+        if (state.selectedCardIndex > 0) {
+          state.selectedCardIndex--;
+          renderDailyCardSelector();
+          renderDailyCard();
+        }
+      });
+
+      document.getElementById("next-card-btn").addEventListener("click", () => {
+        if (state.selectedCardIndex < state.dailyCards.length - 1) {
+          state.selectedCardIndex++;
+          renderDailyCardSelector();
+          renderDailyCard();
+        }
+      });
+
+
+      document.getElementById("toggle-current-card-done").addEventListener("click", () => {
+        const card = state.dailyCards[state.selectedCardIndex];
+        if (!card) return;
+        const allDone = card.sessionIds.every(id => state.completedSessions[id]);
+        state.generatedSessions.filter(s => card.sessionIds.includes(s.id)).forEach(s => setSessionDone(s, !allDone));
+        saveState();
+        renderAll();
+      });
+
+      // Desktop & Mobile Tabs
+      document.querySelectorAll(".view-tab-btn").forEach(btn => {
+        btn.addEventListener("click", () => switchTab(btn.dataset.tab));
+      });
+      document.querySelectorAll(".mob-nav-btn").forEach(btn => {
+        btn.addEventListener("click", () => switchTab(btn.dataset.mobTab));
+      });
+
+      // Export Buttons
+      const triggerPosterExport = () => {
+        switchTab("poster");
+        setTimeout(() => {
+          exportNodeAsPng("calendar-poster-export", `Study-Plan-Poster-${state.stream}-2026.png`, 1600, 2);
+        }, 120);
+      };
+
+      const triggerDailyExport = () => {
+        const card = state.dailyCards[state.selectedCardIndex];
+        const sub = card ? STUDY_DATA.subjects[card.subjectId] : { shortName: "Card" };
+        switchTab("daily");
+        setTimeout(() => {
+          exportNodeAsPng("daily-card-export", `Study-Card-${card.date}-${sub.shortName.replace(/\s+/g, '-')}.png`, 540, 2);
+        }, 120);
+      };
+
+      document.getElementById("btn-export-poster").addEventListener("click", triggerPosterExport);
+      document.getElementById("btn-export-poster-top").addEventListener("click", triggerPosterExport);
+      document.getElementById("btn-export-daily").addEventListener("click", triggerDailyExport);
+      document.getElementById("btn-export-daily-top").addEventListener("click", triggerDailyExport);
+
+      window.addEventListener("resize", () => { updateResponsiveScale(); requestAnimationFrame(fitTitles); });
+    }
+
+    // Initialize Application
+    window.addEventListener("DOMContentLoaded", () => {
+      loadStream(localStorage.getItem("astra_last_stream") || "physics");
+      syncUIFromState();
+      bindEvents();
+      rebuildAndRender();
+      switchTab("poster");
+    });
+  </script>
+
+<script>
+/* Custom select dropdowns: a styled trigger and listbox that mirror each native <select>, which stays in the DOM as the source of truth. */
+(() => {
+  const openList = new Set();
+  const nativeValue = Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype, "value");
+  const nativeIndex = Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype, "selectedIndex");
+
+  function closeAll(except) {
+    openList.forEach(inst => { if (inst !== except) inst.close(); });
+  }
+
+  function enhance(sel) {
+    if (sel.dataset.csReady) return;
+    sel.dataset.csReady = "1";
+
+    const wrap = document.createElement("div");
+    wrap.className = "cs";
+    wrap.style.cssText = sel.style.cssText;
+    sel.style.cssText = "";
+    sel.classList.add("cs-native");
+    sel.parentNode.insertBefore(wrap, sel);
+
+    const trigger = document.createElement("button");
+    trigger.type = "button";
+    trigger.className = "cs-trigger";
+    trigger.setAttribute("aria-haspopup", "listbox");
+    trigger.setAttribute("aria-expanded", "false");
+    trigger.innerHTML = '<span class="cs-label"></span><span class="cs-caret" aria-hidden="true"></span>';
+
+    const menu = document.createElement("ul");
+    menu.className = "cs-menu";
+    menu.setAttribute("role", "listbox");
+    menu.hidden = true;
+
+    wrap.append(trigger, sel);
+    document.body.appendChild(menu);
+
+    let active = -1;
+
+    function build() {
+      menu.innerHTML = "";
+      [...sel.options].forEach((o, i) => {
+        const li = document.createElement("li");
+        li.className = "cs-opt";
+        li.setAttribute("role", "option");
+        li.dataset.index = i;
+        li.textContent = o.textContent;
+        if (o.disabled) li.classList.add("is-disabled");
+        if (i === sel.selectedIndex) li.classList.add("is-selected");
+        menu.appendChild(li);
+      });
+      const cur = sel.options[sel.selectedIndex];
+      trigger.querySelector(".cs-label").textContent = cur ? cur.textContent : "";
+      trigger.disabled = sel.disabled;
+      wrap.classList.toggle("is-disabled", sel.disabled);
+      if (sel.disabled) close();
+    }
+
+    function position() {
+      const r = trigger.getBoundingClientRect();
+      menu.style.left = r.left + "px";
+      menu.style.width = r.width + "px";
+      const spaceBelow = window.innerHeight - r.bottom;
+      if (spaceBelow < 200 && r.top > spaceBelow) {
+        menu.style.top = "auto";
+        menu.style.bottom = window.innerHeight - r.top + 6 + "px";
+      } else {
+        menu.style.bottom = "auto";
+        menu.style.top = r.bottom + 6 + "px";
+      }
+    }
+
+    function highlight(i, scroll = true) {
+      const items = menu.querySelectorAll(".cs-opt");
+      if (!items.length) return;
+      active = Math.max(0, Math.min(items.length - 1, i));
+      items.forEach((el, k) => el.classList.toggle("is-active", k === active));
+      if (scroll) items[active].scrollIntoView({ block: "nearest" });
+    }
+
+    function open() {
+      if (sel.disabled) return;
+      closeAll(inst);
+      menu.hidden = false;
+      position();
+      wrap.classList.add("is-open");
+      trigger.setAttribute("aria-expanded", "true");
+      highlight(sel.selectedIndex, true);
+      openList.add(inst);
+    }
+
+    function close() {
+      if (menu.hidden) return;
+      menu.hidden = true;
+      wrap.classList.remove("is-open");
+      trigger.setAttribute("aria-expanded", "false");
+      openList.delete(inst);
+    }
+
+    function choose(i) {
+      const o = sel.options[i];
+      if (!o || o.disabled) return;
+      nativeIndex.set.call(sel, i);
+      build(); // refresh the visible label and highlight before the app reacts
+      sel.dispatchEvent(new Event("input", { bubbles: true }));
+      sel.dispatchEvent(new Event("change", { bubbles: true }));
+      build();
+      close();
+      trigger.focus();
+    }
+
+    const inst = { close, reposition: () => { if (!menu.hidden) position(); } };
+
+    trigger.addEventListener("click", () => (menu.hidden ? open() : close()));
+    trigger.addEventListener("keydown", (e) => {
+      if (menu.hidden) {
+        if (["ArrowDown", "ArrowUp", "Enter", " "].includes(e.key)) { e.preventDefault(); open(); }
+        return;
+      }
+      if (e.key === "ArrowDown") { e.preventDefault(); highlight(active + 1); }
+      else if (e.key === "ArrowUp") { e.preventDefault(); highlight(active - 1); }
+      else if (e.key === "Enter" || e.key === " ") { e.preventDefault(); choose(active); }
+      else if (e.key === "Escape" || e.key === "Tab") { close(); }
+    });
+    menu.addEventListener("mousedown", (e) => e.preventDefault()); // keep focus on the trigger
+    menu.addEventListener("click", (e) => {
+      const li = e.target.closest(".cs-opt");
+      if (li) choose(Number(li.dataset.index));
+    });
+    menu.addEventListener("mousemove", (e) => {
+      const li = e.target.closest(".cs-opt");
+      if (li) highlight(Number(li.dataset.index), false);
+    });
+
+    // Keep the custom display in step when the app changes the native select.
+    Object.defineProperty(sel, "value", {
+      configurable: true,
+      get() { return nativeValue.get.call(this); },
+      set(v) { nativeValue.set.call(this, v); build(); },
+    });
+    Object.defineProperty(sel, "selectedIndex", {
+      configurable: true,
+      get() { return nativeIndex.get.call(this); },
+      set(v) { nativeIndex.set.call(this, v); build(); },
+    });
+    new MutationObserver(build).observe(sel, { childList: true, attributes: true, attributeFilter: ["disabled"], subtree: false });
+
+    build();
+  }
+
+  document.addEventListener("mousedown", (e) => {
+    if (!e.target.closest(".cs") && !e.target.closest(".cs-menu")) closeAll(null);
+  });
+  window.addEventListener("resize", () => closeAll(null));
+  window.addEventListener("scroll", () => {
+    openList.forEach(inst => inst.reposition && inst.reposition());
+  }, true);
+
+  document.querySelectorAll("select").forEach(enhance);
+  new MutationObserver(() => document.querySelectorAll("select:not([data-cs-ready])").forEach(enhance))
+    .observe(document.body, { childList: true, subtree: true });
+
+  // Range sliders show their filled portion.
+  const fillRange = (el) => {
+    const min = Number(el.min), max = Number(el.max), v = Number(el.value);
+    el.style.setProperty("--p", ((v - min) / (max - min)) * 100 + "%");
+  };
+  document.querySelectorAll('input[type="range"]').forEach(el => {
+    fillRange(el);
+    el.addEventListener("input", () => fillRange(el));
+  });
+})();
+</script>
+</body>
+</html>

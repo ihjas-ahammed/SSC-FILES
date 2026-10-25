@@ -1,0 +1,1238 @@
+{
+  "meta": {
+    "title": "Abstract Algebra I · MAT5CJ302",
+    "subject": "Abstract Algebra I (MAT5CJ302)",
+    "home": "Focus",
+    "opponent": "Time",
+    "version": 1,
+    "inlineChecks": false,
+    "autoRevealQuestions": true,
+    "definitionChecks": true
+  },
+  "glossary": [
+    {
+      "id": "abs-m3-permutation-group",
+      "term": "permutation group",
+      "aliases": ["group of all permutations"],
+      "definition": "For any nonempty set \\(A\\), the collection \\(S_A\\) of all one-to-one maps from \\(A\\) onto \\(A\\) forms a group under function composition.",
+      "example": "In \\(S_A\\), the identity map \\(\\iota(a) = a\\) is the identity element and the inverse function \\(\\sigma^{-1}\\) is the group inverse."
+    },
+    {
+      "id": "abs-m3-symmetric-group",
+      "term": "symmetric group",
+      "aliases": ["symmetric group on n letters"],
+      "definition": "The group \\(S_n\\) of all permutations of the finite set \\(\\{1, 2, \\dots, n\\}\\) under function composition, having order \\(n!\\).",
+      "example": "The group \\(S_3\\) has \\(3! = 6\\) elements and is the smallest nonabelian group."
+    },
+    {
+      "id": "abs-m3-cycle",
+      "term": "cycle",
+      "aliases": ["k-cycle", "cycles"],
+      "definition": "A permutation \\((a_1, a_2, \\dots, a_k)\\) that sends \\(a_1 \\mapsto a_2 \\mapsto \\dots \\mapsto a_k \\mapsto a_1\\) in a loop and leaves all other elements fixed.",
+      "example": "In \\(S_6\\), the 3-cycle \\((1, 3, 6)\\) sends \\(1 \\mapsto 3\\), \\(3 \\mapsto 6\\), \\(6 \\mapsto 1\\), and fixes \\(2, 4, 5\\)."
+    },
+    {
+      "id": "abs-m3-transposition",
+      "term": "transposition",
+      "aliases": ["transpositions", "2-cycle"],
+      "definition": "A 2-cycle \\((a, b)\\) that swaps two distinct elements \\(a\\) and \\(b\\) while leaving every other element fixed.",
+      "example": "In \\(S_n\\) for \\(n \\ge 2\\), the transposition \\((1, 2)\\) is its own inverse since \\((1, 2)(1, 2) = \\iota\\)."
+    },
+    {
+      "id": "abs-m3-disjoint-cycles",
+      "term": "disjoint cycles",
+      "aliases": ["disjoint cycle", "disjoint cycle notation"],
+      "definition": "A collection of cycles in which no element appears in more than one cycle; disjoint cycles always commute with each other.",
+      "example": "In \\(S_6\\), \\((1, 3, 6)\\) and \\((2, 4)\\) are disjoint cycles, so \\((1, 3, 6)(2, 4) = (2, 4)(1, 3, 6)\\)."
+    },
+    {
+      "id": "abs-m3-orbit",
+      "term": "orbit",
+      "aliases": ["orbits", "orbit of a permutation"],
+      "definition": "For a permutation \\(\\sigma \\in S_A\\) and \\(a \\in A\\), the orbit of \\(a\\) is the set \\(\\{\\sigma^k(a) \\mid k \\in \\mathbb{Z}\\}\\) of all elements reached by applying powers of \\(\\sigma\\) to \\(a\\).",
+      "example": "For \\(\\sigma = (1, 2, 6)(3, 5) \\in S_6\\), the orbits are \\(\\{1, 2, 6\\}\\), \\(\\{3, 5\\}\\), and \\(\\{4\\}\\)."
+    },
+    {
+      "id": "abs-m3-even-permutation",
+      "term": "even permutation",
+      "aliases": ["even permutations"],
+      "definition": "A permutation of a finite set that can be expressed as a product of an even number of transpositions.",
+      "example": "The identity \\(\\iota = (1, 2)(1, 2)\\) and any 3-cycle \\((a, b, c) = (a, c)(a, b)\\) are even permutations."
+    },
+    {
+      "id": "abs-m3-odd-permutation",
+      "term": "odd permutation",
+      "aliases": ["odd permutations"],
+      "definition": "A permutation of a finite set that can be expressed as a product of an odd number of transpositions.",
+      "example": "Every single transposition \\((a, b)\\) and every 4-cycle \\((a, b, c, d) = (a, d)(a, c)(a, b)\\) is an odd permutation."
+    },
+    {
+      "id": "abs-m3-sign-homomorphism",
+      "term": "sign of a permutation",
+      "aliases": ["sign homomorphism", "sgn"],
+      "definition": "The group homomorphism \\(\\operatorname{sgn}: S_n \\to \\{1, -1\\}\\) defined by \\(\\operatorname{sgn}(\\sigma) = 1\\) if \\(\\sigma\\) is even and \\(\\operatorname{sgn}(\\sigma) = -1\\) if \\(\\sigma\\) is odd.",
+      "example": "Since \\(1\\) is the multiplicative identity of \\(\\{1, -1\\}\\), the kernel \\(\\operatorname{Ker}(\\operatorname{sgn})\\) is the alternating group \\(A_n\\)."
+    },
+    {
+      "id": "abs-m3-alternating-group",
+      "term": "alternating group",
+      "aliases": ["alternating groups"],
+      "definition": "The subgroup \\(A_n\\) of \\(S_n\\) consisting of all even permutations of \\(\\{1, 2, \\dots, n\\}\\); for \\(n \\ge 2\\), its order is \\(n!/2\\).",
+      "example": "In \\(S_3\\), the alternating group is \\(A_3 = \\{\\iota, (1, 2, 3), (1, 3, 2)\\}\\) of order \\(6/2 = 3\\)."
+    },
+    {
+      "id": "abs-m3-left-congruence",
+      "term": "left congruence modulo H",
+      "aliases": ["equivalence relation ~L"],
+      "definition": "For a subgroup \\(H\\) of a group \\(G\\), the equivalence relation \\(\\sim_L\\) on \\(G\\) defined by \\(a \\sim_L b\\) if and only if \\(a^{-1}b \\in H\\).",
+      "example": "The equivalence classes of \\(\\sim_L\\) partition \\(G\\) into the left cosets \\(aH = \\{ah \\mid h \\in H\\}\\)."
+    },
+    {
+      "id": "abs-m3-left-coset",
+      "term": "left coset",
+      "aliases": ["left cosets"],
+      "definition": "For a subgroup \\(H\\) of a group \\(G\\) and an element \\(a \\in G\\), the subset \\(aH = \\{ah \\mid h \\in H\\}\\) (written \\(a + H\\) in additive notation).",
+      "example": "In \\(\\mathbb{Z}_{12}\\) with \\(H = \\langle 3 \\rangle = \\{0, 3, 6, 9\\}\\), the left coset containing \\(1\\) is \\(1 + H = \\{1, 4, 7, 10\\}\\)."
+    },
+    {
+      "id": "abs-m3-lagrange-theorem",
+      "term": "Theorem of Lagrange",
+      "aliases": ["Lagrange's Theorem", "Lagrange's theorem"],
+      "definition": "If \\(H\\) is a subgroup of a finite group \\(G\\), then the order of \\(H\\) is a divisor of the order of \\(G\\).",
+      "example": "A group of order \\(12\\) can only have subgroups of orders \\(1, 2, 3, 4, 6,\\) or \\(12\\)."
+    },
+    {
+      "id": "abs-m3-index",
+      "term": "index of a subgroup",
+      "aliases": ["index"],
+      "definition": "For a subgroup \\(H\\) of a group \\(G\\), the index \\((G:H)\\) is the number of distinct left cosets of \\(H\\) in \\(G\\).",
+      "example": "When \\(G\\) is finite, \\((G:H) = |G|/|H|\\); for instance, \\((S_n : A_n) = 2\\) for \\(n > 1\\)."
+    },
+    {
+      "id": "abs-m3-right-coset",
+      "term": "right coset",
+      "aliases": ["right cosets"],
+      "definition": "For a subgroup \\(H\\) of a group \\(G\\) and \\(a \\in G\\), the subset \\(Ha = \\{ha \\mid h \\in H\\}\\), which is the equivalence class of \\(a\\) under \\(a \\sim_R b \\iff ab^{-1} \\in H\\).",
+      "example": "In \\(D_4\\) with \\(H = \\{\\iota, \\mu\\}\\), the right coset \\(H\\rho = \\{\\rho, \\mu\\rho\\}\\) differs from the left coset \\(\\rho H = \\{\\rho, \\mu\\rho^3\\}\\)."
+    },
+    {
+      "id": "abs-m3-kernel",
+      "term": "kernel",
+      "aliases": ["kernel of a homomorphism"],
+      "definition": "For a group homomorphism \\(\\phi: G \\to G'\\), the kernel \\(\\operatorname{Ker}(\\phi) = \\{g \\in G \\mid \\phi(g) = e'\\}\\) is the subgroup of elements in \\(G\\) mapped to the identity \\(e'\\) of \\(G'\\).",
+      "example": "For \\(\\det: GL(2, \\mathbb{R}) \\to \\mathbb{R}^*\\), \\(\\operatorname{Ker}(\\det)\\) is the subgroup of \\(2 \\times 2\\) matrices with determinant \\(1\\)."
+    }
+  ],
+  "sections": [
+    {
+      "short": "Module III",
+      "title": "Module III · Orbits, Cycles, Alternating Groups, Cosets, and Lagrange",
+      "sheets": [
+        {
+          "id": "abs-m3-symmetric-groups-cycles",
+          "title": "Symmetric Groups and Disjoint Cycles",
+          "icon": "sigma",
+          "source": "Fraleigh 8th ed. §4 (4.8–4.15) [Syllabus 7th ed. §9: Orbits, Cycles, and the Alternating Groups (up to 9.10)]",
+          "cards": [
+            {
+              "type": "info",
+              "label": "Theorem 4.8",
+              "title": "What is the permutation group \\(S_A\\)?",
+              "defines": ["abs-m3-permutation-group"],
+              "body": "For any nonempty set \\(A\\), the collection \\(S_A\\) of all permutations of \\(A\\) is a group under permutation multiplication \\((\\sigma\\mu)(a) = \\sigma(\\mu(a))\\).",
+              "tex": "\\iota(a) = a, \\qquad (\\sigma\\sigma^{-1})(a) = \\iota(a) = (\\sigma^{-1}\\sigma)(a)",
+              "examples": ["Closure: composition", "G1: associative", "Exercise 34: left-to-right"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "comp",
+                    "objects": [
+                      { "type": "circle", "center": [50, 90], "r": 32, "role": "s ok", "name": "setA1" },
+                      { "type": "circle", "center": [130, 90], "r": 32, "role": "s ok", "name": "setA2" },
+                      { "type": "circle", "center": [210, 90], "r": 32, "role": "s ok", "name": "setA3" },
+                      { "type": "arrow", "p1": [82, 102], "p2": [98, 102], "role": "lk", "width": 2, "name": "mu" },
+                      { "type": "arrow", "p1": [162, 102], "p2": [178, 102], "role": "lk", "width": 2, "name": "sigma" },
+                      { "type": "arrow", "p1": [210, 52], "p2": [50, 52], "role": "ik", "width": 1.8, "name": "inv" },
+                      { "type": "label", "coords": [50, 90], "text": "a", "size": 11, "align": "center", "role": "t", "name": "la" },
+                      { "type": "label", "coords": [90, 118], "text": "μ", "size": 11, "align": "center", "role": "t", "name": "lmu" },
+                      { "type": "label", "coords": [130, 90], "text": "μ(a)", "size": 11, "align": "center", "role": "t", "name": "lmua" },
+                      { "type": "label", "coords": [170, 118], "text": "σ", "size": 11, "align": "center", "role": "t", "name": "lsig" },
+                      { "type": "label", "coords": [210, 90], "text": "σ(μ(a))", "size": 11, "align": "center", "role": "t", "name": "lsigmu" },
+                      { "type": "label", "coords": [130, 34], "text": "(σμ)⁻¹ reverses direction", "size": 11, "align": "center", "role": "t", "name": "linv" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "type": "info",
+              "label": "Definition 4.9",
+              "title": "What is the symmetric group \\(S_n\\)?",
+              "defines": ["abs-m3-symmetric-group"],
+              "body": "Let \\(A = \\{1, 2, \\dots, n\\}\\). The group of all permutations of \\(A\\) is the symmetric group on \\(n\\) letters, denoted \\(S_n\\), and has \\(n!\\) elements.",
+              "tex": "|S_n| = n! = n(n-1)(n-2)\\cdots(3)(2)(1)",
+              "examples": ["|A|=|B| ⇒ S_A ≃ S_B", "|S₃| = 6", "|S₄| = 24"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "sn",
+                    "objects": [
+                      { "type": "polygon", "points": [[28, 135], [232, 135], [232, 55], [28, 55]], "role": "s ok", "name": "box" },
+                      { "type": "label", "coords": [130, 152], "text": "S_n on {1, 2, ..., n}", "size": 11, "align": "center", "role": "t", "name": "hdr" },
+                      { "type": "label", "coords": [65, 112], "text": "1", "size": 11, "align": "center", "role": "t", "name": "t1" },
+                      { "type": "label", "coords": [130, 112], "text": "2", "size": 11, "align": "center", "role": "t", "name": "t2" },
+                      { "type": "label", "coords": [195, 112], "text": "3", "size": 11, "align": "center", "role": "t", "name": "t3" },
+                      { "type": "arrow", "p1": [65, 102], "p2": [195, 80], "role": "lk", "width": 2, "name": "a1" },
+                      { "type": "arrow", "p1": [130, 102], "p2": [130, 80], "role": "ik", "width": 2, "name": "a2" },
+                      { "type": "arrow", "p1": [195, 102], "p2": [65, 80], "role": "lk", "width": 2, "name": "a3" },
+                      { "type": "label", "coords": [65, 68], "text": "1", "size": 11, "align": "center", "role": "t", "name": "b1" },
+                      { "type": "label", "coords": [130, 68], "text": "2", "size": 11, "align": "center", "role": "t", "name": "b2" },
+                      { "type": "label", "coords": [195, 68], "text": "3", "size": 11, "align": "center", "role": "t", "name": "b3" },
+                      { "type": "label", "coords": [130, 32], "text": "Order |S_n| = n!", "size": 11, "align": "center", "role": "t", "name": "ftr" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "type": "math",
+              "label": "Example 4.10",
+              "title": "Nonabelian \\(S_3\\) and Two-Row Inverses (Example 4.10)",
+              "tex": "\\sigma = \\begin{pmatrix} 1 & 2 & 3 & 4 & 5 & 6 \\\\ 3 & 2 & 6 & 1 & 4 & 5 \\end{pmatrix} \\implies \\sigma^{-1} = \\begin{pmatrix} 1 & 2 & 3 & 4 & 5 & 6 \\\\ 4 & 2 & 1 & 5 & 6 & 3 \\end{pmatrix}",
+              "body": "In \\(S_3\\), \\(\\sigma = \\begin{pmatrix} 1 & 2 & 3 \\\\ 2 & 1 & 3 \\end{pmatrix}\\) and \\(\\tau = \\begin{pmatrix} 1 & 2 & 3 \\\\ 1 & 3 & 2 \\end{pmatrix}\\) give \\(\\sigma\\tau(1) = 2 \\neq 3 = \\tau\\sigma(1)\\), so \\(S_3\\) is the smallest nonabelian group. To invert \\(\\sigma\\) in two-row notation, swap the rows and sort the top row."
+            },
+            {
+              "type": "info",
+              "label": "Cycles",
+              "title": "What is a \\(k\\)-cycle and a transposition?",
+              "defines": ["abs-m3-cycle", "abs-m3-transposition"],
+              "body": "A \\(k\\)-cycle \\((a_1, a_2, \\dots, a_k)\\) maps each listed number to the next and \\(a_k\\) back to \\(a_1\\), fixing all unlisted numbers. A 2-cycle \\((a_1, a_2)\\) is called a transposition.",
+              "tex": "(1, 3, 6):\\quad 1 \\mapsto 3 \\mapsto 6 \\mapsto 1",
+              "examples": ["k-cycle has length k", "2-cycle = transposition", "1-cycles are omitted"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "cyc",
+                    "objects": [
+                      { "type": "circle", "center": [85, 95], "r": 42, "role": "s ok", "name": "c3" },
+                      { "type": "point", "coords": [85, 137], "size": 3.5, "role": "f", "name": "p1" },
+                      { "type": "point", "coords": [121, 74], "size": 3.5, "role": "f", "name": "p3" },
+                      { "type": "point", "coords": [49, 74], "size": 3.5, "role": "f", "name": "p6" },
+                      { "type": "label", "coords": [85, 152], "text": "1", "size": 11, "align": "center", "role": "t", "name": "l1" },
+                      { "type": "label", "coords": [134, 70], "text": "3", "size": 11, "align": "center", "role": "t", "name": "l3" },
+                      { "type": "label", "coords": [36, 70], "text": "6", "size": 11, "align": "center", "role": "t", "name": "l6" },
+                      { "type": "label", "coords": [85, 95], "text": "(1, 3, 6)", "size": 11, "align": "center", "role": "t", "name": "lc3" },
+                      { "type": "circle", "center": [198, 95], "r": 28, "role": "s ok", "name": "c2" },
+                      { "type": "point", "coords": [170, 95], "size": 3.5, "role": "f", "name": "p2" },
+                      { "type": "point", "coords": [226, 95], "size": 3.5, "role": "f", "name": "p4" },
+                      { "type": "label", "coords": [158, 95], "text": "2", "size": 11, "align": "center", "role": "t", "name": "l2" },
+                      { "type": "label", "coords": [238, 95], "text": "4", "size": 11, "align": "center", "role": "t", "name": "l4" },
+                      { "type": "label", "coords": [198, 95], "text": "(2, 4)", "size": 11, "align": "center", "role": "t", "name": "lc2" },
+                      { "type": "label", "coords": [130, 26], "text": "3-cycle and 2-cycle (transposition)", "size": 11, "align": "center", "role": "t", "name": "cap" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "type": "info",
+              "label": "Disjoint Cycles",
+              "title": "What are disjoint cycles?",
+              "defines": ["abs-m3-disjoint-cycles"],
+              "body": "Cycles are disjoint if no number appears in more than one cycle. Every permutation in \\(S_n\\) is a product of disjoint cycles, unique up to cycle order and cyclic shifts.",
+              "tex": "\\sigma = (1, 3, 6)(2, 4) = (2, 4)(3, 6, 1)",
+              "examples": ["Disjoint cycles commute", "Unique up to order"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "disj",
+                    "objects": [
+                      { "type": "polygon", "points": [[20, 130], [122, 130], [122, 60], [20, 60]], "role": "s ok", "name": "b1" },
+                      { "type": "polygon", "points": [[138, 130], [240, 130], [240, 60], [138, 60]], "role": "s ok", "name": "b2" },
+                      { "type": "label", "coords": [71, 104], "text": "(1, 3, 6)", "size": 11, "align": "center", "role": "t", "name": "t1" },
+                      { "type": "label", "coords": [71, 80], "text": "moves {1, 3, 6}", "size": 11, "align": "center", "role": "t", "name": "t2" },
+                      { "type": "label", "coords": [189, 104], "text": "(2, 4)", "size": 11, "align": "center", "role": "t", "name": "t3" },
+                      { "type": "label", "coords": [189, 80], "text": "moves {2, 4}", "size": 11, "align": "center", "role": "t", "name": "t4" },
+                      { "type": "label", "coords": [130, 152], "text": "No shared entries ⇒ disjoint", "size": 11, "align": "center", "role": "t", "name": "top" },
+                      { "type": "label", "coords": [130, 32], "text": "5 is fixed: (5) omitted", "size": 11, "align": "center", "role": "t", "name": "bot" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "type": "math",
+              "label": "Examples 4.11–4.13",
+              "title": "Converting and Multiplying Cycles (Examples 4.11–4.13)",
+              "tex": "(1, 5, 3, 2, 6)(1, 2, 4, 3, 6) = (1, 6, 5, 3)(2, 4), \\quad (1, 5)(2, 4)(1, 4, 3)(2, 5)(4, 2, 1) = (1, 3, 5, 4)",
+              "body": "In Example 4.11, \\(\\sigma = (1, 5, 2, 7)(3, 4, 9) \\in S_9\\) fixes \\(6\\) and \\(8\\). In Examples 4.12 and 4.13, multiply cycles from right to left: for \\((1, 5, 3, 2, 6)(1, 2, 4, 3, 6)\\), the right cycle sends \\(1 \\mapsto 2\\) and the left sends \\(2 \\mapsto 6\\), giving \\(1 \\mapsto 6\\)."
+            },
+            {
+              "type": "derivation",
+              "label": "Example 4.14",
+              "title": "Inverse of a Product of Disjoint Cycles (Example 4.14)",
+              "legend": "For \\(\\sigma = (1, 5, 7)(3, 8, 2, 4, 6)\\), use \\((ab)^{-1} = b^{-1}a^{-1}\\) and reverse each cycle.",
+              "setup": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "orig",
+                    "objects": [
+                      { "type": "polygon", "points": [[20, 150], [240, 150], [240, 108], [20, 108]], "role": "s ok", "name": "forward" },
+                      { "type": "label", "coords": [130, 129], "text": "σ = (1, 5, 7)(3, 8, 2, 4, 6)", "size": 11, "align": "center", "role": "t", "name": "forward" }
+                    ]
+                  },
+                  {
+                    "step": 2,
+                    "name": "rev",
+                    "objects": [
+                      { "type": "arrow", "p1": [130, 104], "p2": [130, 74], "role": "lk", "width": 2, "name": "reverse" },
+                      { "type": "polygon", "points": [[20, 70], [240, 70], [240, 24], [20, 24]], "role": "s ok", "name": "backward" },
+                      { "type": "label", "coords": [130, 47], "text": "σ⁻¹ = (1, 7, 5)(2, 8, 3, 6, 4)", "size": 11, "align": "center", "role": "t", "name": "backward" }
+                    ]
+                  }
+                ]
+              },
+              "phases": [
+                { "name": "Group inverse law", "why": "apply (ab)⁻¹ = b⁻¹a⁻¹ to the product" },
+                { "name": "Reverse each cycle", "why": "the inverse of a cycle writes its entries backward" },
+                { "name": "Standard form", "why": "commute disjoint cycles and start with smallest entry" }
+              ],
+              "steps": [
+                {
+                  "phase": "Group inverse law",
+                  "tex": "\\sigma = (1, 5, 7)(3, 8, 2, 4, 6)",
+                  "focus": ["forward"],
+                  "note": "Start with \\(\\sigma\\) written as a product of two disjoint cycles."
+                },
+                {
+                  "move": { "type": "apply", "fn": "\\text{inv}", "label": "Take the inverse of both sides" },
+                  "tex": "\\sigma^{-1} = ((1, 5, 7)(3, 8, 2, 4, 6))^{-1}",
+                  "focus": ["forward"],
+                  "note": "Express the group inverse \\(\\sigma^{-1}\\) of the product.",
+                  "ask": {
+                    "q": "In any group, how does \\((ab)^{-1}\\) expand?",
+                    "options": ["\\(b^{-1}a^{-1}\\)", "\\(a^{-1}b^{-1}\\)", "\\(ab^{-1}\\)", "\\(ba\\)"],
+                    "answer": 0,
+                    "why": "The inverse of a product reverses the order of the factors: \\((ab)^{-1} = b^{-1}a^{-1}\\)."
+                  }
+                },
+                {
+                  "move": { "type": "identity", "by": "(ab)^{-1} = b^{-1}a^{-1}", "label": "Apply (ab)⁻¹ = b⁻¹a⁻¹" },
+                  "tex": "\\sigma^{-1} = (3, 8, 2, 4, 6)^{-1}(1, 5, 7)^{-1}",
+                  "focus": ["forward", "reverse"],
+                  "note": "By the shoe-sock property in a group, reverse the order of the two factors.",
+                  "ask": {
+                    "q": "How do you find the inverse of a single cycle?",
+                    "options": ["Write the cycle backward", "Sort its numbers", "Drop the first entry", "Leave it unchanged"],
+                    "answer": 0,
+                    "why": "Reversing the arrows of a cycle simply lists its entries in backward order."
+                  }
+                },
+                {
+                  "phase": "Reverse each cycle",
+                  "move": { "type": "apply", "fn": "\\text{rev}", "label": "Write each cycle backward" },
+                  "tex": "\\sigma^{-1} = (6, 4, 2, 8, 3)(7, 5, 1)",
+                  "focus": ["backward"],
+                  "note": "The inverse of \\((a_1, \\dots, a_k)\\) is the cycle written backward \\((a_k, \\dots, a_1)\\).",
+                  "ask": {
+                    "q": "Why can we swap the order of \\((6, 4, 2, 8, 3)\\) and \\((7, 5, 1)\\)?",
+                    "options": ["Disjoint cycles commute", "All permutations commute", "They have equal length", "Both are transpositions"],
+                    "answer": 0,
+                    "why": "The sets \\(\\{3, 8, 2, 4, 6\\}\\) and \\(\\{1, 5, 7\\}\\) are disjoint, and disjoint cycles always commute."
+                  }
+                },
+                {
+                  "phase": "Standard form",
+                  "move": { "type": "rearrange", "label": "Commute the disjoint cycles" },
+                  "tex": "\\sigma^{-1} = (7, 5, 1)(6, 4, 2, 8, 3)",
+                  "focus": ["backward"],
+                  "note": "Since the two cycles are disjoint, they commute.",
+                  "ask": {
+                    "q": "Which cycle equals \\((7, 5, 1)\\) starting with \\(1\\)?",
+                    "options": ["\\((1, 7, 5)\\)", "\\((1, 5, 7)\\)", "\\((5, 7, 1)\\)", "\\((7, 1, 5)\\)"],
+                    "answer": 0,
+                    "why": "In \\((7, 5, 1)\\), \\(1 \\mapsto 7 \\mapsto 5 \\mapsto 1\\), which is \\((1, 7, 5)\\)."
+                  }
+                },
+                {
+                  "move": { "type": "simplify", "label": "Start each cycle with its smallest entry" },
+                  "tex": "\\sigma^{-1} = (1, 7, 5)(2, 8, 3, 6, 4)",
+                  "focus": ["backward"],
+                  "note": "Shift each cycle cyclically so it begins with its smallest number."
+                }
+              ]
+            },
+            {
+              "type": "math",
+              "label": "Table 4.15",
+              "title": "Group Table for \\(S_3\\) in Cycle Notation (Table 4.15)",
+              "tex": "(1, 2)(2, 3) = (1, 2, 3) \\neq (1, 3, 2) = (2, 3)(1, 2)",
+              "body": "The six elements of \\(S_3\\) are \\(\\iota, (1, 2, 3), (1, 3, 2), (1, 2), (1, 3), (2, 3)\\). Table 4.15 is not symmetric about the main diagonal: while disjoint cycles commute, overlapping cycles like \\((1, 2)\\) and \\((2, 3)\\) do not."
+            },
+            {
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "In \\(S_5\\), what is the disjoint cycle form of \\((1, 3, 2)(2, 4)\\)?",
+              "options": ["\\((1, 3, 2, 4)\\)", "\\((1, 4, 3, 2)\\)", "\\((1, 2, 3, 4)\\)", "\\((1, 3)(2, 4)\\)"],
+              "answer": 0,
+              "why": "Multiplying right to left: \\(1 \\mapsto 1 \\mapsto 3\\), \\(3 \\mapsto 3 \\mapsto 2\\), \\(2 \\mapsto 4 \\mapsto 4\\), and \\(4 \\mapsto 2 \\mapsto 1\\), giving \\((1, 3, 2, 4)\\)."
+            },
+            {
+              "type": "mcq",
+              "label": "Quiz · True or False",
+              "time": 45,
+              "q": "State whether true or false: Any two cycles in \\(S_n\\) commute with each other.",
+              "options": ["False, only disjoint cycles always commute", "True, all cycles commute", "True for \\(n \\ge 4\\) only", "False, no cycles ever commute"],
+              "answer": 0,
+              "why": "Disjoint cycles always commute, but overlapping cycles need not commute: \\((1, 2)(2, 3) = (1, 2, 3) \\neq (1, 3, 2) = (2, 3)(1, 2)\\)."
+            },
+            {
+              "type": "fill",
+              "label": "Quiz · Fill in",
+              "time": 45,
+              "q": "A 2-cycle \\((a, b)\\) in \\(S_n\\) is also called a ______.",
+              "answer": "transposition|2-cycle",
+              "why": "By definition, a cycle of length 2 that swaps two elements is called a transposition."
+            },
+            {
+              "type": "number",
+              "label": "Quiz · Number",
+              "time": 60,
+              "q": "What is the order (number of elements) of the symmetric group \\(S_5\\)?",
+              "answer": 120,
+              "tolerance": 0,
+              "unit": "elements",
+              "why": "The symmetric group \\(S_n\\) has \\(n!\\) elements, so \\(|S_5| = 5! = 5 \\cdot 4 \\cdot 3 \\cdot 2 \\cdot 1 = 120\\)."
+            }
+          ]
+        },
+        {
+          "id": "abs-m3-orbits-alternating-groups",
+          "title": "Orbits, Parity, and Alternating Groups",
+          "icon": "atom",
+          "source": "Fraleigh 8th ed. §8 (8.17–8.25) [Syllabus 7th ed. §9: Orbits, Cycles, and the Alternating Groups (9.11 to 9.21)]",
+          "cards": [
+            {
+              "type": "info",
+              "label": "Orbits",
+              "title": "What is the orbit of an element under a permutation?",
+              "defines": ["abs-m3-orbit"],
+              "body": "For \\(\\sigma \\in S_A\\) and \\(a \\in A\\), the orbit of \\(a\\) is the set \\(\\{\\sigma^k(a) \\mid k \\in \\mathbb{Z}\\}\\). For \\(\\sigma \\in S_n\\), it consists of the elements in the cycle of \\(\\sigma\\) containing \\(a\\).",
+              "tex": "\\operatorname{orbit}_{\\sigma}(a) = \\{\\sigma^k(a) \\mid k \\in \\mathbb{Z}\\}",
+              "examples": ["Fixed point: orbit {a}", "Cycle entries form 1 orbit"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "orbs",
+                    "objects": [
+                      { "type": "circle", "center": [62, 92], "r": 36, "role": "s ok", "name": "o1" },
+                      { "type": "circle", "center": [154, 92], "r": 28, "role": "s ok", "name": "o2" },
+                      { "type": "circle", "center": [222, 92], "r": 18, "role": "s ok", "name": "o3" },
+                      { "type": "label", "coords": [62, 92], "text": "{1, 2, 6}", "size": 11, "align": "center", "role": "t", "name": "lo1" },
+                      { "type": "label", "coords": [154, 92], "text": "{3, 5}", "size": 11, "align": "center", "role": "t", "name": "lo2" },
+                      { "type": "label", "coords": [222, 92], "text": "{4}", "size": 11, "align": "center", "role": "t", "name": "lo3" },
+                      { "type": "label", "coords": [130, 152], "text": "Orbits of σ = (1, 2, 6)(3, 5) in S₆", "size": 11, "align": "center", "role": "t", "name": "hdr" },
+                      { "type": "label", "coords": [130, 28], "text": "3 disjoint orbits partition {1, 2, 3, 4, 5, 6}", "size": 11, "align": "center", "role": "t", "name": "ftr" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "type": "math",
+              "label": "Examples 8.17–8.18",
+              "title": "Transposition Products and Orbits (Examples 8.17–8.18)",
+              "tex": "(a_1, a_2, \\dots, a_k) = (a_1, a_k)(a_1, a_{k-1})\\cdots(a_1, a_2), \\qquad \\iota = (1, 2)(1, 2)",
+              "body": "Every permutation in \\(S_n\\) (\\(n \\ge 2\\)) is a product of transpositions (Example 8.17). In Example 8.18, \\(\\sigma = (1, 2, 6)(3, 5)(4) \\in S_6\\) has three orbits: \\(\\{1, 2, 6\\}\\), \\(\\{3, 5\\}\\), and \\(\\{4\\}\\), while \\(\\iota \\in S_n\\) has \\(n\\) singleton orbits."
+            },
+            {
+              "type": "info",
+              "label": "Theorem 8.19",
+              "title": "Invariance of Parity (Theorem 8.19)",
+              "body": "Theorem 8.19: No permutation in \\(S_n\\) can be expressed both as a product of an even number of transpositions and as a product of an odd number of transpositions.",
+              "tex": "\\sigma = \\tau_1 \\tau_2 \\cdots \\tau_m \\implies m \\text{ is always even or always odd}",
+              "examples": ["Count of τ_k is not unique", "Parity of m is unique"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "fig820",
+                    "objects": [
+                      { "type": "circle", "center": [62, 102], "r": 32, "role": "s ok", "name": "cL" },
+                      { "type": "circle", "center": [158, 102], "r": 32, "role": "s ok", "name": "cR" },
+                      { "type": "segment", "p1": [88, 120], "p2": [132, 120], "role": "gk", "dash": 2, "width": 1.8, "name": "topBridge" },
+                      { "type": "segment", "p1": [88, 84], "p2": [132, 84], "role": "gk", "dash": 2, "width": 1.8, "name": "botBridge" },
+                      { "type": "label", "coords": [84, 128], "text": "j", "size": 11, "align": "center", "role": "t", "name": "lj" },
+                      { "type": "label", "coords": [136, 128], "text": "a", "size": 11, "align": "center", "role": "t", "name": "la" },
+                      { "type": "label", "coords": [84, 72], "text": "b", "size": 11, "align": "center", "role": "t", "name": "lb" },
+                      { "type": "label", "coords": [136, 72], "text": "i", "size": 11, "align": "center", "role": "t", "name": "li" },
+                      { "type": "label", "coords": [222, 102], "text": "±1 orbit", "size": 11, "align": "center", "role": "t", "name": "pm" },
+                      { "type": "label", "coords": [130, 30], "text": "Fig. 8.20–8.21: τ = (i, j) joins 2 orbits or splits 1", "size": 11, "align": "center", "role": "t", "name": "cap" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "type": "info",
+              "label": "Proof · 8.19",
+              "title": "Orbit-Counting Proof (Theorem 8.19 & Exercise 42)",
+              "body": "1. For \\(\\tau = (i, j)\\), if \\(i, j\\) are in different orbits of \\(\\sigma\\), \\(\\tau\\sigma\\) joins them into one orbit (Case I, Fig. 8.20, Exercise 42). 2. If \\(i, j\\) share an orbit, \\(\\tau\\sigma\\) splits it into two (Case II, Fig. 8.21). 3. Each \\(\\tau_k\\) changes orbit count by \\(\\pm 1\\), fixing parity.",
+              "tex": "\\text{Case I: } (i, j)(b, j, \\dots)(a, i, \\dots) = (a, j, \\dots, b, i, \\dots)",
+              "examples": ["Case I: -1 orbit", "Case II: +1 orbit", "ι has n orbits"]
+            },
+            {
+              "type": "info",
+              "label": "Definition 8.22",
+              "title": "What are even and odd permutations?",
+              "defines": ["abs-m3-even-permutation", "abs-m3-odd-permutation"],
+              "body": "A permutation of a finite set is even or odd according to whether it can be expressed as a product of an even number of transpositions or an odd number of transpositions.",
+              "tex": "k\\text{-cycle} = (k-1)\\text{ transpositions}: \\text{ even iff } k \\text{ is odd}",
+              "examples": ["ι is always even", "Transposition is odd", "3-cycle is even"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "parity",
+                    "objects": [
+                      { "type": "polygon", "points": [[18, 136], [124, 136], [124, 52], [18, 52]], "role": "s ok", "name": "evenBox" },
+                      { "type": "polygon", "points": [[136, 136], [242, 136], [242, 52], [136, 52]], "role": "s ok", "name": "oddBox" },
+                      { "type": "label", "coords": [71, 114], "text": "Even (A_n)", "size": 11, "align": "center", "role": "t", "name": "le1" },
+                      { "type": "label", "coords": [71, 92], "text": "2m transpositions", "size": 11, "align": "center", "role": "t", "name": "le2" },
+                      { "type": "label", "coords": [71, 70], "text": "ι, (1, 2, 3)", "size": 11, "align": "center", "role": "t", "name": "le3" },
+                      { "type": "label", "coords": [189, 114], "text": "Odd (B_n)", "size": 11, "align": "center", "role": "t", "name": "lo1" },
+                      { "type": "label", "coords": [189, 92], "text": "2m+1 transpositions", "size": 11, "align": "center", "role": "t", "name": "lo2" },
+                      { "type": "label", "coords": [189, 70], "text": "(1, 2), (1, 2, 3, 4)", "size": 11, "align": "center", "role": "t", "name": "lo3" },
+                      { "type": "label", "coords": [130, 28], "text": "S_n splits into n!/2 even and n!/2 odd (n ≥ 2)", "size": 11, "align": "center", "role": "t", "name": "ftr" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "type": "derivation",
+              "label": "Example 8.23",
+              "title": "Factoring into Transpositions and Parity (Example 8.23)",
+              "legend": "Factor \\(\\sigma = (1, 4, 5, 6)(2, 1, 5) \\in S_6\\) into transpositions and evaluate \\(\\operatorname{sgn}(\\sigma)\\).",
+              "setup": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "cycles",
+                    "objects": [
+                      { "type": "polygon", "points": [[18, 150], [242, 150], [242, 110], [18, 110]], "role": "s ok", "name": "cprod" },
+                      { "type": "label", "coords": [130, 130], "text": "(1, 4, 5, 6)(2, 1, 5): 4-cycle and 3-cycle", "size": 11, "align": "center", "role": "t", "name": "cprod" }
+                    ]
+                  },
+                  {
+                    "step": 2,
+                    "name": "transp",
+                    "objects": [
+                      { "type": "arrow", "p1": [130, 106], "p2": [130, 76], "role": "lk", "width": 2, "name": "split" },
+                      { "type": "polygon", "points": [[18, 72], [242, 72], [242, 24], [18, 24]], "role": "s ok", "name": "tprod" },
+                      { "type": "label", "coords": [130, 48], "text": "(1, 6)(1, 5)(1, 4)(2, 5)(2, 1) → 5 transpositions (odd)", "size": 11, "align": "center", "role": "t", "name": "tprod" }
+                    ]
+                  }
+                ]
+              },
+              "phases": [
+                { "name": "Factor 4-cycle", "why": "write (1, 4, 5, 6) as 3 transpositions" },
+                { "name": "Factor 3-cycle", "why": "write (2, 1, 5) as 2 transpositions" },
+                { "name": "Determine parity", "why": "count transpositions and evaluate sgn(σ)" }
+              ],
+              "steps": [
+                {
+                  "phase": "Factor 4-cycle",
+                  "tex": "\\sigma = (1, 4, 5, 6)(2, 1, 5)",
+                  "focus": ["cprod"],
+                  "note": "Start with the product of cycles in \\(S_6\\) from Example 8.23.",
+                  "ask": {
+                    "q": "How many transpositions are needed to factor the 4-cycle \\((1, 4, 5, 6)\\)?",
+                    "options": ["3 transpositions", "4 transpositions", "2 transpositions", "1 transposition"],
+                    "answer": 0,
+                    "why": "Every \\(k\\)-cycle factors into \\(k - 1\\) transpositions, so a 4-cycle factors into \\(3\\) transpositions."
+                  }
+                },
+                {
+                  "move": { "type": "substitute", "by": "(1, 4, 5, 6) = (1, 6)(1, 5)(1, 4)", "label": "Expand the 4-cycle into transpositions" },
+                  "tex": "\\sigma = (1, 6)(1, 5)(1, 4)(2, 1, 5)",
+                  "focus": ["cprod", "split"],
+                  "note": "Use \\((a_1, a_2, a_3, a_4) = (a_1, a_4)(a_1, a_3)(a_1, a_2)\\) on \\((1, 4, 5, 6)\\).",
+                  "ask": {
+                    "q": "How does the 3-cycle \\((2, 1, 5)\\) factor into transpositions?",
+                    "options": ["\\((2, 5)(2, 1)\\)", "\\((2, 1)(2, 5)\\)", "\\((1, 5)(2, 1)\\)", "\\((2, 5)\\)"],
+                    "answer": 0,
+                    "why": "Using \\((a_1, a_2, a_3) = (a_1, a_3)(a_1, a_2)\\), we obtain \\((2, 1, 5) = (2, 5)(2, 1)\\)."
+                  }
+                },
+                {
+                  "phase": "Factor 3-cycle",
+                  "move": { "type": "substitute", "by": "(2, 1, 5) = (2, 5)(2, 1)", "label": "Expand the 3-cycle into transpositions" },
+                  "tex": "\\sigma = (1, 6)(1, 5)(1, 4)(2, 5)(2, 1)",
+                  "focus": ["tprod"],
+                  "note": "Now \\(\\sigma\\) is expressed as a product of \\(5\\) transpositions.",
+                  "ask": {
+                    "q": "Since \\(\\sigma\\) is a product of 5 transpositions, what is \\(\\operatorname{sgn}(\\sigma)\\)?",
+                    "options": ["\\((-1)^5\\)", "\\((-1)^4\\)", "\\(5\\)", "\\(0\\)"],
+                    "answer": 0,
+                    "why": "Each transposition has sign \\(-1\\), so the product of 5 transpositions has sign \\((-1)^5\\)."
+                  }
+                },
+                {
+                  "phase": "Determine parity",
+                  "move": { "type": "apply", "fn": "\\operatorname{sgn}", "label": "Apply the sign homomorphism sgn" },
+                  "tex": "\\operatorname{sgn}(\\sigma) = (-1)^5",
+                  "focus": ["tprod"],
+                  "note": "Apply \\(\\operatorname{sgn}: S_6 \\to \\{1, -1\\}\\) to the product of 5 transpositions.",
+                  "ask": {
+                    "q": "Since \\(\\operatorname{sgn}(\\sigma) = -1\\), is \\(\\sigma\\) even or odd?",
+                    "options": ["Odd permutation", "Even permutation", "Both even and odd", "Identity permutation"],
+                    "answer": 0,
+                    "why": "A product of an odd number (5) of transpositions has sign \\(-1\\) and is an odd permutation."
+                  }
+                },
+                {
+                  "move": { "type": "simplify", "label": "Evaluate (-1)⁵ = -1" },
+                  "tex": "\\operatorname{sgn}(\\sigma) = -1",
+                  "focus": ["tprod"],
+                  "note": "Since \\(5\\) is odd, \\(\\operatorname{sgn}(\\sigma) = -1\\), so \\(\\sigma\\) is an odd permutation."
+                }
+              ]
+            },
+            {
+              "type": "info",
+              "label": "Theorem 8.24",
+              "title": "Subgroup of Even Permutations and \\(\\operatorname{sgn}\\) (Theorem 8.24)",
+              "defines": ["abs-m3-sign-homomorphism"],
+              "body": "For \\(n \\ge 2\\), the even permutations in \\(S_n\\) form a subgroup of order \\(n!/2\\). The map \\(\\operatorname{sgn}: S_n \\to \\{1, -1\\}\\) is a homomorphism with kernel \\(A_n\\) (Exercise 52: determinants).",
+              "tex": "\\lambda_{\\tau}: A_n \\to B_n,\\quad \\lambda_{\\tau}(\\sigma) = (1, 2)\\sigma \\implies |A_n| = |B_n| = \\frac{n!}{2}",
+              "examples": ["sgn(σ) = +1 (even)", "sgn(σ) = -1 (odd)", "Ker(sgn) = A_n"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "bij",
+                    "objects": [
+                      { "type": "ellipse", "center": [68, 92], "rx": 44, "ry": 46, "role": "s ok", "name": "An" },
+                      { "type": "ellipse", "center": [192, 92], "rx": 44, "ry": 46, "role": "s ok", "name": "Bn" },
+                      { "type": "arrow", "p1": [112, 106], "p2": [148, 106], "role": "lk", "width": 2, "name": "fwd" },
+                      { "type": "arrow", "p1": [148, 78], "p2": [112, 78], "role": "ik", "width": 2, "name": "bwd" },
+                      { "type": "label", "coords": [68, 102], "text": "A_n (even)", "size": 11, "align": "center", "role": "t", "name": "lan" },
+                      { "type": "label", "coords": [68, 80], "text": "|A_n| = n!/2", "size": 11, "align": "center", "role": "t", "name": "lan2" },
+                      { "type": "label", "coords": [192, 102], "text": "B_n (odd)", "size": 11, "align": "center", "role": "t", "name": "lbn" },
+                      { "type": "label", "coords": [192, 80], "text": "|B_n| = n!/2", "size": 11, "align": "center", "role": "t", "name": "lbn2" },
+                      { "type": "label", "coords": [130, 122], "text": "λ_τ(σ) = τσ", "size": 11, "align": "center", "role": "t", "name": "lt1" },
+                      { "type": "label", "coords": [130, 60], "text": "τ⁻¹ρ = τρ", "size": 11, "align": "center", "role": "t", "name": "lt2" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "type": "info",
+              "label": "Definition 8.25",
+              "title": "What is the alternating group \\(A_n\\)?",
+              "defines": ["abs-m3-alternating-group"],
+              "body": "The subgroup of \\(S_n\\) consisting of the even permutations of \\(n\\) letters is the alternating group \\(A_n\\) on \\(n\\) letters.",
+              "tex": "A_n = \\{\\sigma \\in S_n \\mid \\sigma \\text{ is even}\\}, \\qquad |A_n| = \\frac{n!}{2} \\text{ for } n \\ge 2",
+              "examples": ["A₃ has order 3", "A₄ has order 12", "n ≥ 5: unsolvable by radicals"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "alt",
+                    "objects": [
+                      { "type": "polygon", "points": [[24, 144], [236, 144], [236, 40], [24, 40]], "role": "s ok", "name": "snBox" },
+                      { "type": "polygon", "points": [[36, 132], [130, 132], [130, 52], [36, 52]], "role": "f", "name": "anBox" },
+                      { "type": "label", "coords": [83, 102], "text": "A_n ≤ S_n", "size": 11, "align": "center", "role": "i", "name": "t1" },
+                      { "type": "label", "coords": [83, 80], "text": "Even: n!/2", "size": 11, "align": "center", "role": "i", "name": "t2" },
+                      { "type": "label", "coords": [183, 102], "text": "S_n \\ A_n", "size": 11, "align": "center", "role": "t", "name": "t3" },
+                      { "type": "label", "coords": [183, 80], "text": "Odd: n!/2", "size": 11, "align": "center", "role": "t", "name": "t4" },
+                      { "type": "label", "coords": [130, 22], "text": "Alternating group A_n is half of S_n", "size": 11, "align": "center", "role": "t", "name": "cap" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "Which of the following permutations in \\(S_6\\) is an even permutation?",
+              "options": ["\\((1, 2, 3, 4, 5)\\)", "\\((1, 2, 3, 4)\\)", "\\((1, 5)\\)", "\\((1, 2, 3)(4, 5)\\)"],
+              "answer": 0,
+              "why": "A 5-cycle factors into \\(5 - 1 = 4\\) transpositions, which is an even number."
+            },
+            {
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "For any \\(\\sigma \\in S_n\\) and transposition \\(\\tau = (i, j)\\), how many orbits does \\(\\tau\\sigma\\) have?",
+              "options": ["Orbit count of \\(\\sigma\\) plus or minus 1", "Always the same as \\(\\sigma\\)", "Always \\(n\\) orbits", "Orbit count of \\(\\sigma\\) plus 2"],
+              "answer": 0,
+              "why": "By Theorem 8.19, multiplying by \\(\\tau = (i, j)\\) either joins two orbits (\\(-1\\)) or splits one orbit into two (\\(+1\\))."
+            },
+            {
+              "type": "fill",
+              "label": "Quiz · Fill in",
+              "time": 45,
+              "q": "The subgroup of \\(S_n\\) consisting of all even permutations is called the ______ group \\(A_n\\).",
+              "answer": "alternating|alternating group",
+              "why": "By Definition 8.25, the subgroup of all even permutations of \\(n\\) letters is the alternating group \\(A_n\\)."
+            },
+            {
+              "type": "number",
+              "label": "Quiz · Number",
+              "time": 60,
+              "q": "What is the order of the alternating group \\(A_4\\)?",
+              "answer": 12,
+              "tolerance": 0,
+              "unit": "elements",
+              "why": "By Theorem 8.24, \\(|A_4| = 4!/2 = 24/2 = 12\\)."
+            }
+          ]
+        },
+        {
+          "id": "abs-m3-cosets-lagrange",
+          "title": "Cosets and the Theorem of Lagrange",
+          "icon": "cell",
+          "source": "Fraleigh 8th ed. §10 (10.1–10.9) [Syllabus 7th ed. §10: Cosets and the theorem of Lagrange (up to 10.9)]",
+          "cards": [
+            {
+              "type": "info",
+              "label": "Theorem 10.1",
+              "title": "What is the equivalence relation \\(\\sim_L\\) modulo \\(H\\)?",
+              "defines": ["abs-m3-left-congruence"],
+              "body": "Let \\(H\\) be a subgroup of a group \\(G\\). The relation \\(a \\sim_L b\\) if and only if \\(a^{-1}b \\in H\\) is an equivalence relation on \\(G\\) that partitions \\(G\\) into disjoint cells.",
+              "tex": "a \\sim_L b \\iff a^{-1}b \\in H",
+              "examples": ["Reflexive: a⁻¹a = e ∈ H", "Symmetric: (a⁻¹b)⁻¹ = b⁻¹a ∈ H", "Transitive: (a⁻¹b)(b⁻¹c) = a⁻¹c ∈ H"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "part",
+                    "objects": [
+                      { "type": "polygon", "points": [[22, 142], [92, 142], [92, 48], [22, 48]], "role": "s ok", "name": "c1" },
+                      { "type": "polygon", "points": [[95, 142], [165, 142], [165, 48], [95, 48]], "role": "s ok", "name": "c2" },
+                      { "type": "polygon", "points": [[168, 142], [238, 142], [238, 48], [168, 48]], "role": "s ok", "name": "c3" },
+                      { "type": "label", "coords": [57, 95], "text": "H = eH", "size": 11, "align": "center", "role": "t", "name": "l1" },
+                      { "type": "label", "coords": [130, 95], "text": "aH", "size": 11, "align": "center", "role": "t", "name": "l2" },
+                      { "type": "label", "coords": [203, 95], "text": "bH", "size": 11, "align": "center", "role": "t", "name": "l3" },
+                      { "type": "label", "coords": [130, 158], "text": "Partition of G by a ~_L b ⇔ a⁻¹b ∈ H", "size": 11, "align": "center", "role": "t", "name": "hdr" },
+                      { "type": "label", "coords": [130, 26], "text": "Every element of G lies in exactly one cell", "size": 11, "align": "center", "role": "t", "name": "ftr" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "type": "derivation",
+              "label": "Theorem 10.1",
+              "title": "From Equivalence Relation \\(\\sim_L\\) to the Left Coset \\(aH\\)",
+              "legend": "For \\(a \\sim_L x\\), solve \\(a^{-1}x = h \\in H\\) to show the equivalence class of \\(a\\) is \\(aH = \\{ah \\mid h \\in H\\}\\).",
+              "setup": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "rel",
+                    "objects": [
+                      { "type": "polygon", "points": [[20, 148], [240, 148], [240, 108], [20, 108]], "role": "s ok", "name": "relBox" },
+                      { "type": "label", "coords": [130, 128], "text": "a ~_L x ⇔ a⁻¹x = h for some h ∈ H", "size": 11, "align": "center", "role": "t", "name": "relBox" }
+                    ]
+                  },
+                  {
+                    "step": 2,
+                    "name": "cell",
+                    "objects": [
+                      { "type": "arrow", "p1": [130, 104], "p2": [130, 74], "role": "lk", "width": 2, "name": "solveX" },
+                      { "type": "polygon", "points": [[20, 70], [240, 70], [240, 26], [20, 26]], "role": "s ok", "name": "cosetBox" },
+                      { "type": "label", "coords": [130, 48], "text": "x = ah ⇒ cell of a is aH = {ah | h ∈ H}", "size": 11, "align": "center", "role": "t", "name": "cosetBox" }
+                    ]
+                  }
+                ]
+              },
+              "phases": [
+                { "name": "Equivalence condition", "why": "write a⁻¹x ∈ H as an equation with h ∈ H" },
+                { "name": "Multiply by a", "why": "left-multiply by a and regroup using G₁" },
+                { "name": "Isolate x", "why": "apply inverse G₃ and identity G₂" }
+              ],
+              "steps": [
+                {
+                  "phase": "Equivalence condition",
+                  "tex": "a^{-1}x = h",
+                  "focus": ["relBox"],
+                  "note": "By definition of \\(a \\sim_L x\\), \\(a^{-1}x \\in H\\), so \\(a^{-1}x = h\\) for some \\(h \\in H\\).",
+                  "ask": {
+                    "q": "To solve \\(a^{-1}x = h\\) for \\(x\\), what do we multiply on the left by?",
+                    "options": ["\\(a\\)", "\\(a^{-1}\\)", "\\(h^{-1}\\)", "\\(x\\)"],
+                    "answer": 0,
+                    "why": "Left-multiplying by \\(a\\) places \\(a\\) next to \\(a^{-1}\\) so they cancel to the identity \\(e\\)."
+                  }
+                },
+                {
+                  "phase": "Multiply by a",
+                  "move": { "type": "apply", "fn": "a\\cdot", "label": "Left-multiply both sides by a" },
+                  "tex": "a(a^{-1}x) = ah",
+                  "focus": ["relBox", "solveX"],
+                  "note": "Left-multiply both sides of the equation in \\(G\\) by \\(a\\).",
+                  "ask": {
+                    "q": "Which group axiom lets us rewrite \\(a(a^{-1}x)\\) as \\((aa^{-1})x\\)?",
+                    "options": ["Associativity \\(\\mathscr{G}_1\\)", "Commutativity", "Identity \\(\\mathscr{G}_2\\)", "Inverse \\(\\mathscr{G}_3\\)"],
+                    "answer": 0,
+                    "why": "Associativity \\(\\mathscr{G}_1\\) allows regrouping factors in a product without changing their order."
+                  }
+                },
+                {
+                  "move": { "type": "rearrange", "label": "Apply associativity G₁" },
+                  "tex": "(aa^{-1})x = ah",
+                  "focus": ["solveX", "cosetBox"],
+                  "note": "Regroup the left side using the associative law \\(\\mathscr{G}_1\\) in \\(G\\).",
+                  "ask": {
+                    "q": "By the inverse axiom \\(\\mathscr{G}_3\\), what does \\(aa^{-1}\\) equal?",
+                    "options": ["\\(e\\)", "\\(a^2\\)", "\\(h\\)", "\\(x\\)"],
+                    "answer": 0,
+                    "why": "An element multiplied by its inverse gives the group identity \\(e\\)."
+                  }
+                },
+                {
+                  "phase": "Isolate x",
+                  "move": { "type": "substitute", "by": "aa^{-1} = e", "label": "Use inverse axiom G₃: aa⁻¹ = e" },
+                  "tex": "ex = ah",
+                  "focus": ["cosetBox"],
+                  "note": "Replace \\(aa^{-1}\\) with the identity element \\(e\\).",
+                  "ask": {
+                    "q": "After replacing \\(ex\\) with \\(x\\), what is the equivalence class of \\(a\\)?",
+                    "options": ["\\(\\{ah \\mid h \\in H\\}\\)", "\\(\\{ha \\mid h \\in H\\}\\)", "\\(\\{a^{-1}h \\mid h \\in H\\}\\)", "\\(\\{e\\}\\)"],
+                    "answer": 0,
+                    "why": "Since \\(x = ah\\) for \\(h \\in H\\), the cell containing \\(a\\) is the left coset \\(aH = \\{ah \\mid h \\in H\\}\\)."
+                  }
+                },
+                {
+                  "move": { "type": "simplify", "label": "Use identity axiom G₂: ex = x" },
+                  "tex": "x = ah",
+                  "focus": ["cosetBox"],
+                  "note": "Thus \\(a \\sim_L x\\) if and only if \\(x \\in aH = \\{ah \\mid h \\in H\\}\\)."
+                }
+              ]
+            },
+            {
+              "type": "info",
+              "label": "Definition 10.2",
+              "title": "What is a left coset \\(aH\\)?",
+              "defines": ["abs-m3-left-coset"],
+              "body": "Let \\(H\\) be a subgroup of a group \\(G\\). The subset \\(aH = \\{ah \\mid h \\in H\\}\\) of \\(G\\) is the left coset of \\(H\\) containing \\(a\\) (written \\(a + H\\) in additive notation).",
+              "tex": "aH = \\{ah \\mid h \\in H\\}, \\qquad a + H = \\{a + h \\mid h \\in H\\}",
+              "examples": ["eH = H itself", "a ∈ aH since e ∈ H"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "lcoset",
+                    "objects": [
+                      { "type": "ellipse", "center": [68, 92], "rx": 42, "ry": 44, "role": "s ok", "name": "Hset" },
+                      { "type": "ellipse", "center": [192, 92], "rx": 42, "ry": 44, "role": "s ok", "name": "aHset" },
+                      { "type": "arrow", "p1": [112, 92], "p2": [148, 92], "role": "lk", "width": 2, "name": "multA" },
+                      { "type": "label", "coords": [68, 110], "text": "Subgroup H", "size": 11, "align": "center", "role": "t", "name": "lh1" },
+                      { "type": "label", "coords": [68, 86], "text": "e, h₁, h₂, ...", "size": 11, "align": "center", "role": "t", "name": "lh2" },
+                      { "type": "label", "coords": [192, 110], "text": "Left coset aH", "size": 11, "align": "center", "role": "t", "name": "lah1" },
+                      { "type": "label", "coords": [192, 86], "text": "a, ah₁, ah₂, ...", "size": 11, "align": "center", "role": "t", "name": "lah2" },
+                      { "type": "label", "coords": [130, 110], "text": "h ↦ ah", "size": 11, "align": "center", "role": "t", "name": "lmap" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "type": "math",
+              "label": "Examples 10.3–10.4",
+              "title": "Left Cosets in \\(\\mathbb{Z}\\) and \\(\\mathbb{Z}_{12}\\) (Examples 10.3–10.4)",
+              "tex": "0 + H = \\{0, 3, 6, 9\\}, \\quad 1 + H = \\{1, 4, 7, 10\\}, \\quad 2 + H = \\{2, 5, 8, 11\\}",
+              "body": "In Example 10.3, the subgroup \\(3\\mathbb{Z}\\) partitions \\(\\mathbb{Z}\\) into three cosets: \\(3\\mathbb{Z}\\), \\(1 + 3\\mathbb{Z}\\), and \\(2 + 3\\mathbb{Z}\\). Similarly, in Example 10.4, \\(H = \\langle 3 \\rangle = \\{0, 3, 6, 9\\}\\) partitions \\(\\mathbb{Z}_{12}\\) into three disjoint cosets of size \\(4\\)."
+            },
+            {
+              "type": "math",
+              "label": "Example 10.5",
+              "title": "Left Cosets of \\(H = \\{\\iota, \\mu\\}\\) in \\(D_4\\) (Example 10.5)",
+              "tex": "\\iota H = \\{\\iota, \\mu\\}, \\quad \\rho H = \\{\\rho, \\mu\\rho^3\\}, \\quad \\rho^2 H = \\{\\rho^2, \\mu\\rho^2\\}, \\quad \\rho^3 H = \\{\\rho^3, \\mu\\rho\\}",
+              "body": "For the subgroup \\(H = \\langle \\mu \\rangle = \\{\\iota, \\mu\\}\\) of the nonabelian group \\(D_4 = \\{\\iota, \\rho, \\rho^2, \\rho^3, \\mu, \\mu\\rho, \\mu\\rho^2, \\mu\\rho^3\\}\\), these four left cosets partition \\(D_4\\) into four disjoint 2-element cells."
+            },
+            {
+              "type": "info",
+              "label": "Theorem 10.6",
+              "title": "Equal Cardinality of Cosets (Theorem 10.6)",
+              "body": "Theorem 10.6: Let \\(H\\) be a subgroup of \\(G\\). For any \\(a \\in G\\), the coset \\(aH\\) has the same cardinality as \\(H\\), because \\(f: H \\to aH\\) given by \\(f(h) = ah\\) is one-to-one and onto.",
+              "tex": "f(b) = f(c) \\implies ab = ac \\implies b = c \\text{ (by left cancellation)}",
+              "examples": ["One-to-one: cancellation", "Onto: definition of aH", "|aH| = |H|"]
+            },
+            {
+              "type": "info",
+              "label": "Theorem 10.7",
+              "title": "What is the Theorem of Lagrange?",
+              "defines": ["abs-m3-lagrange-theorem"],
+              "body": "Let \\(H\\) be a subgroup of a finite group \\(G\\). Then the order of \\(H\\) is a divisor of the order of \\(G\\).",
+              "tex": "|G| = n = r m = (\\text{number of left cosets of } H)\\cdot |H|",
+              "examples": ["|H| divides |G|", "Proof: coset counting", "Exercise 27: 1-sentence synopsis"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "lag",
+                    "objects": [
+                      { "type": "polygon", "points": [[20, 136], [75, 136], [75, 54], [20, 54]], "role": "s ok", "name": "cell1" },
+                      { "type": "polygon", "points": [[75, 136], [130, 136], [130, 54], [75, 54]], "role": "s ok", "name": "cell2" },
+                      { "type": "polygon", "points": [[130, 136], [185, 136], [185, 54], [130, 54]], "role": "s ok", "name": "cell3" },
+                      { "type": "polygon", "points": [[185, 136], [240, 136], [240, 54], [185, 54]], "role": "s ok", "name": "cell4" },
+                      { "type": "label", "coords": [47, 95], "text": "m", "size": 11, "align": "center", "role": "t", "name": "m1" },
+                      { "type": "label", "coords": [102, 95], "text": "m", "size": 11, "align": "center", "role": "t", "name": "m2" },
+                      { "type": "label", "coords": [157, 95], "text": "m", "size": 11, "align": "center", "role": "t", "name": "m3" },
+                      { "type": "label", "coords": [212, 95], "text": "m", "size": 11, "align": "center", "role": "t", "name": "m4" },
+                      { "type": "label", "coords": [130, 154], "text": "r cosets × m elements per coset = n", "size": 11, "align": "center", "role": "t", "name": "top" },
+                      { "type": "label", "coords": [130, 30], "text": "|G| = r |H| ⇒ |H| divides |G|", "size": 11, "align": "center", "role": "t", "name": "bot" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "type": "info",
+              "label": "Corollary 10.8",
+              "title": "Groups of Prime Order (Corollary 10.8)",
+              "body": "Corollary 10.8: Every group of prime order \\(p\\) is cyclic (and isomorphic to \\(\\mathbb{Z}_p\\)). For \\(a \\neq e\\), \\(|\\langle a \\rangle| = m \\ge 2\\) divides \\(p\\) by Lagrange's Theorem, so \\(m = p\\) and \\(G = \\langle a \\rangle\\).",
+              "tex": "|G| = p \\text{ (prime)},\\ a \\neq e \\implies |\\langle a \\rangle| = p \\implies G = \\langle a \\rangle \\simeq \\mathbb{Z}_p",
+              "examples": ["Only 1 group of order p", "Every prime-order group is abelian"]
+            },
+            {
+              "type": "info",
+              "label": "Theorem 10.9",
+              "title": "Order of an Element Divides Group Order (Theorem 10.9)",
+              "body": "Theorem 10.9: The order of an element of a finite group divides the order of the group, because the order of \\(a\\) equals the order \\(|\\langle a \\rangle|\\) of the cyclic subgroup generated by \\(a\\).",
+              "tex": "|a| = |\\langle a \\rangle| \\text{ divides } |G| = n \\implies a^n = e \\text{ (Exercise 42)}",
+              "examples": ["|a| divides |G|", "Exercise 39: no nontrivial subgroups", "Exercise 42: a^n = e"]
+            },
+            {
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 45,
+              "q": "By Corollary 10.8, every group of prime order \\(p\\) is:",
+              "options": ["Cyclic and isomorphic to \\(\\mathbb{Z}_p\\)", "Nonabelian", "Isomorphic to \\(S_p\\)", "Infinite"],
+              "answer": 0,
+              "why": "By Lagrange's Theorem, any non-identity element generates the whole group of prime order \\(p\\), so \\(G \\simeq \\mathbb{Z}_p\\)."
+            },
+            {
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "If \\(G\\) is a group of order 18, which number CANNOT be the order of a subgroup of \\(G\\)?",
+              "options": ["\\(4\\)", "\\(3\\)", "\\(6\\)", "\\(9\\)"],
+              "answer": 0,
+              "why": "By Lagrange's Theorem, the order of any subgroup of \\(G\\) must divide \\(18\\), and \\(4\\) does not divide \\(18\\)."
+            },
+            {
+              "type": "fill",
+              "label": "Quiz · Fill in",
+              "time": 45,
+              "q": "According to the Theorem of ______, the order of a subgroup divides the finite group's order.",
+              "answer": "Lagrange|Lagrange's",
+              "why": "Theorem 10.7 (the Theorem of Lagrange) states that \\(|H|\\) divides \\(|G|\\) for any subgroup \\(H\\) of a finite group \\(G\\)."
+            },
+            {
+              "type": "number",
+              "label": "Quiz · Number",
+              "time": 45,
+              "q": "How many elements are in the left coset \\(2 + \\langle 3 \\rangle\\) in \\(\\mathbb{Z}_{12}\\)?",
+              "answer": 4,
+              "tolerance": 0,
+              "unit": "elements",
+              "why": "By Theorem 10.6, every coset \\(a + H\\) has the same size as \\(H = \\langle 3 \\rangle = \\{0, 3, 6, 9\\}\\), which has 4 elements."
+            }
+          ]
+        },
+        {
+          "id": "abs-m3-index-coset-properties",
+          "title": "Index of a Subgroup, Right Cosets, and Kernels",
+          "icon": "book",
+          "source": "Fraleigh 8th ed. §10 (10.10–10.20) [Syllabus 7th ed. §10: Cosets and the theorem of Lagrange (10.10 to 10.14)]",
+          "cards": [
+            {
+              "type": "info",
+              "label": "Definition 10.10",
+              "title": "What is the index \\((G:H)\\) of a subgroup?",
+              "defines": ["abs-m3-index"],
+              "body": "Let \\(H\\) be a subgroup of a group \\(G\\). The number of left cosets of \\(H\\) in \\(G\\) is the index \\((G:H)\\) of \\(H\\) in \\(G\\). When \\(G\\) is finite, \\((G:H) = |G|/|H|\\).",
+              "tex": "(G:H) = \\frac{|G|}{|H|} \\quad (\\text{for finite } G)",
+              "examples": ["(ℤ : 3ℤ) = 3", "(S_n : A_n) = 2 (Exercise 20g)", "Exercise 37: |left| = |right|"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "idx",
+                    "objects": [
+                      { "type": "polygon", "points": [[24, 134], [94, 134], [94, 54], [24, 54]], "role": "s ok", "name": "i1" },
+                      { "type": "polygon", "points": [[95, 134], [165, 134], [165, 54], [95, 54]], "role": "s ok", "name": "i2" },
+                      { "type": "polygon", "points": [[166, 134], [236, 134], [236, 54], [166, 54]], "role": "s ok", "name": "i3" },
+                      { "type": "label", "coords": [59, 94], "text": "Coset 1", "size": 11, "align": "center", "role": "t", "name": "c1" },
+                      { "type": "label", "coords": [130, 94], "text": "Coset 2", "size": 11, "align": "center", "role": "t", "name": "c2" },
+                      { "type": "label", "coords": [201, 94], "text": "Coset 3", "size": 11, "align": "center", "role": "t", "name": "c3" },
+                      { "type": "label", "coords": [130, 152], "text": "Index (G : H) = number of left cosets", "size": 11, "align": "center", "role": "t", "name": "top" },
+                      { "type": "label", "coords": [130, 30], "text": "Finite G: (G : H) = |G| / |H|", "size": 11, "align": "center", "role": "t", "name": "bot" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "type": "info",
+              "label": "Theorem 10.11",
+              "title": "Multiplicativity of Index (Theorem 10.11 & Exercise 40)",
+              "body": "Theorem 10.11: Suppose \\(K \\le H \\le G\\) and \\((H:K)\\) and \\((G:H)\\) are both finite. Then \\((G:K)\\) is finite and \\((G:K) = (G:H)(H:K)\\) (proved in Exercise 40 via cosets \\((a_i b_j)K\\)).",
+              "tex": "K \\le H \\le G \\implies (G:K) = (G:H)(H:K)",
+              "examples": ["Cosets: (a_i b_j)K (Exercise 40)", "Converse of Lagrange fails"]
+            },
+            {
+              "type": "info",
+              "label": "Right Cosets",
+              "title": "What is a right coset \\(Ha\\)?",
+              "defines": ["abs-m3-right-coset"],
+              "body": "The relation \\(a \\sim_R b\\) if and only if \\(ab^{-1} \\in H\\) is an equivalence relation on \\(G\\) whose equivalence classes are the right cosets \\(Ha = \\{ha \\mid h \\in H\\}\\) of \\(H\\).",
+              "tex": "Ha = \\{ha \\mid h \\in H\\}, \\qquad a \\sim_R b \\iff ab^{-1} \\in H",
+              "examples": ["Abelian G: aH = Ha", "Exercises 30–31: g⁻¹hg ∈ H", "Exercise 41: index 2 ⇒ aH = Ha"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "rcoset",
+                    "objects": [
+                      { "type": "polygon", "points": [[20, 134], [122, 134], [122, 54], [20, 54]], "role": "s ok", "name": "lbox" },
+                      { "type": "polygon", "points": [[138, 134], [240, 134], [240, 54], [138, 54]], "role": "s ok", "name": "rbox" },
+                      { "type": "label", "coords": [71, 108], "text": "Left coset aH", "size": 11, "align": "center", "role": "t", "name": "t1" },
+                      { "type": "label", "coords": [71, 80], "text": "{ah | h ∈ H}", "size": 11, "align": "center", "role": "t", "name": "t2" },
+                      { "type": "label", "coords": [189, 108], "text": "Right coset Ha", "size": 11, "align": "center", "role": "t", "name": "t3" },
+                      { "type": "label", "coords": [189, 80], "text": "{ha | h ∈ H}", "size": 11, "align": "center", "role": "t", "name": "t4" },
+                      { "type": "label", "coords": [130, 28], "text": "|aH| = |Ha| = |H|, but aH ≠ Ha in general", "size": 11, "align": "center", "role": "t", "name": "bot" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "type": "math",
+              "label": "Example 10.12",
+              "title": "Left vs. Right Cosets in \\(D_4\\) (Example 10.12)",
+              "tex": "\\rho H = \\{\\rho, \\mu\\rho^3\\} \\neq \\{\\rho, \\mu\\rho\\} = H\\rho",
+              "body": "For \\(H = \\langle \\mu \\rangle = \\{\\iota, \\mu\\} \\le D_4\\), the right cosets are \\(H\\iota = \\{\\iota, \\mu\\}\\), \\(H\\rho = \\{\\rho, \\mu\\rho\\}\\), \\(H\\rho^2 = \\{\\rho^2, \\mu\\rho^2\\}\\), and \\(H\\rho^3 = \\{\\rho^3, \\mu\\rho^3\\}\\). Thus left and right cosets need not coincide in a nonabelian group."
+            },
+            {
+              "type": "math",
+              "label": "Examples 10.13 & 10.16",
+              "title": "Coset Tables in \\(\\mathbb{Z}_6\\) vs. \\(D_3\\) (Tables 10.14–10.15, Example 10.16)",
+              "tex": "\\mathbb{Z}_6 / \\{0, 3\\}:\\ \\text{LT}=\\{0,3\\},\\ \\text{MD}=\\{1,4\\},\\ \\text{DK}=\\{2,5\\} \\simeq \\mathbb{Z}_3",
+              "body": "In Example 10.13 (Tables 10.14–10.15), left and right cosets of \\(H = \\{0, 3\\}\\) in abelian \\(\\mathbb{Z}_6\\) match, and the \\(2\\times 2\\) table blocks form a group isomorphic to \\(\\mathbb{Z}_3\\). In Example 10.16, for \\(H = \\{\\iota, \\mu\\} \\le D_3\\), left and right cosets differ and the blocks fail to form a group."
+            },
+            {
+              "type": "info",
+              "label": "Theorem 10.17",
+              "title": "Cosets of the Kernel of a Homomorphism (Theorem 10.17)",
+              "defines": ["abs-m3-kernel"],
+              "body": "Theorem 10.17: Let \\(\\phi: G \\to G'\\) be a group homomorphism with kernel \\(\\operatorname{Ker}(\\phi) = \\phi^{-1}[\\{e'\\}]\\). Then the left and right cosets of \\(\\operatorname{Ker}(\\phi)\\) are identical, and \\(a, b \\in G\\) lie in the same coset iff \\(\\phi(a) = \\phi(b)\\).",
+              "tex": "a\\operatorname{Ker}(\\phi) = \\operatorname{Ker}(\\phi)a, \\qquad b \\in a\\operatorname{Ker}(\\phi) \\iff \\phi(a) = \\phi(b)",
+              "examples": ["Left = Right for Ker(φ)", "Same coset ⇔ φ(a) = φ(b)"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "ker",
+                    "objects": [
+                      { "type": "polygon", "points": [[20, 140], [116, 140], [116, 102], [20, 102]], "role": "s ok", "name": "k1" },
+                      { "type": "polygon", "points": [[20, 96], [116, 96], [116, 58], [20, 58]], "role": "s ok", "name": "k2" },
+                      { "type": "circle", "center": [204, 99], "r": 36, "role": "s ok", "name": "gp" },
+                      { "type": "arrow", "p1": [120, 121], "p2": [182, 112], "role": "lk", "width": 2, "name": "ar1" },
+                      { "type": "arrow", "p1": [120, 77], "p2": [182, 86], "role": "ik", "width": 2, "name": "ar2" },
+                      { "type": "label", "coords": [68, 121], "text": "Ker(φ)", "size": 11, "align": "center", "role": "t", "name": "lk1" },
+                      { "type": "label", "coords": [68, 77], "text": "a Ker(φ)", "size": 11, "align": "center", "role": "t", "name": "lk2" },
+                      { "type": "label", "coords": [204, 112], "text": "e'", "size": 11, "align": "center", "role": "t", "name": "le" },
+                      { "type": "label", "coords": [204, 84], "text": "φ(a)", "size": 11, "align": "center", "role": "t", "name": "lpa" },
+                      { "type": "label", "coords": [130, 28], "text": "Each coset of Ker(φ) maps to one element in G'", "size": 11, "align": "center", "role": "t", "name": "bot" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "type": "derivation",
+              "label": "Proof · 10.17",
+              "title": "Why Left and Right Cosets of \\(\\operatorname{Ker}(\\phi)\\) Coincide",
+              "legend": "Starting from \\(a^{-1}b \\in \\operatorname{Ker}(\\phi)\\), show \\(\\phi(a) = \\phi(b)\\) and \\(\\phi(ab^{-1}) = e'\\).",
+              "setup": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "lcos",
+                    "objects": [
+                      { "type": "polygon", "points": [[18, 150], [242, 150], [242, 110], [18, 110]], "role": "s ok", "name": "leftK" },
+                      { "type": "label", "coords": [130, 130], "text": "a⁻¹b ∈ Ker(φ) ⇔ φ(a⁻¹b) = e' ⇔ φ(a) = φ(b)", "size": 11, "align": "center", "role": "t", "name": "leftK" }
+                    ]
+                  },
+                  {
+                    "step": 3,
+                    "name": "rcos",
+                    "objects": [
+                      { "type": "arrow", "p1": [130, 106], "p2": [130, 76], "role": "lk", "width": 2, "name": "imp" },
+                      { "type": "polygon", "points": [[18, 72], [242, 72], [242, 26], [18, 26]], "role": "s ok", "name": "rightK" },
+                      { "type": "label", "coords": [130, 49], "text": "φ(ab⁻¹) = φ(a)φ(b)⁻¹ = e' ⇒ ab⁻¹ ∈ Ker(φ)", "size": 11, "align": "center", "role": "t", "name": "rightK" }
+                    ]
+                  }
+                ]
+              },
+              "phases": [
+                { "name": "Left coset condition", "why": "use a⁻¹b ∈ Ker(φ) and homomorphism property" },
+                { "name": "Equal images", "why": "deduce φ(b) = φ(a)" },
+                { "name": "Right coset condition", "why": "evaluate φ(ab⁻¹) to show ab⁻¹ ∈ Ker(φ)" }
+              ],
+              "steps": [
+                {
+                  "phase": "Left coset condition",
+                  "tex": "\\phi(a^{-1}b) = e'",
+                  "focus": ["leftK"],
+                  "note": "Suppose \\(a, b\\) are in the same left coset of \\(\\operatorname{Ker}(\\phi)\\), so \\(a^{-1}b \\in \\operatorname{Ker}(\\phi)\\).",
+                  "ask": {
+                    "q": "Since \\(\\phi\\) is a group homomorphism, how does \\(\\phi(a^{-1}b)\\) expand?",
+                    "options": ["\\(\\phi(a)^{-1}\\phi(b)\\)", "\\(\\phi(a)\\phi(b)\\)", "\\(\\phi(a) + \\phi(b)\\)", "\\(\\phi(b)^{-1}\\phi(a)\\)"],
+                    "answer": 0,
+                    "why": "A group homomorphism preserves products and inverses, so \\(\\phi(a^{-1}b) = \\phi(a)^{-1}\\phi(b)\\)."
+                  }
+                },
+                {
+                  "move": { "type": "identity", "by": "\\phi(a^{-1}b) = \\phi(a)^{-1}\\phi(b)", "label": "Use the homomorphism property of φ" },
+                  "tex": "\\phi(a)^{-1}\\phi(b) = e'",
+                  "focus": ["leftK"],
+                  "note": "Expand \\(\\phi(a^{-1}b)\\) using \\(\\phi(xy) = \\phi(x)\\phi(y)\\) and \\(\\phi(a^{-1}) = \\phi(a)^{-1}\\).",
+                  "ask": {
+                    "q": "Left-multiplying \\(\\phi(a)^{-1}\\phi(b) = e'\\) by \\(\\phi(a)\\) gives:",
+                    "options": ["\\(\\phi(b) = \\phi(a)\\)", "\\(\\phi(b) = e'\\)", "\\(\\phi(a) = e'\\)", "\\(\\phi(ab) = e'\\)"],
+                    "answer": 0,
+                    "why": "Left-multiplying by \\(\\phi(a)\\) cancels \\(\\phi(a)^{-1}\\) on the left and gives \\(\\phi(b) = \\phi(a)e' = \\phi(a)\\)."
+                  }
+                },
+                {
+                  "phase": "Equal images",
+                  "move": { "type": "apply", "fn": "\\phi(a)\\cdot", "label": "Left-multiply by φ(a) and simplify" },
+                  "tex": "\\phi(b) = \\phi(a)",
+                  "focus": ["leftK", "imp"],
+                  "note": "Thus \\(a, b\\) in the same left coset of \\(\\operatorname{Ker}(\\phi)\\) have the same image under \\(\\phi\\).",
+                  "ask": {
+                    "q": "To test if \\(a, b\\) are in the same right coset, what do we evaluate?",
+                    "options": ["\\(\\phi(ab^{-1})\\)", "\\(\\phi(ab)\\)", "\\(\\phi(a^2)\\)", "\\(\\phi(b^2)\\)"],
+                    "answer": 0,
+                    "why": "Elements \\(a, b\\) lie in the same right coset of \\(\\operatorname{Ker}(\\phi)\\) iff \\(ab^{-1} \\in \\operatorname{Ker}(\\phi)\\), i.e., \\(\\phi(ab^{-1}) = e'\\)."
+                  }
+                },
+                {
+                  "phase": "Right coset condition",
+                  "move": { "type": "apply", "fn": "\\cdot\\phi(b)^{-1}", "label": "Apply homomorphism property to φ(ab⁻¹)" },
+                  "tex": "\\phi(ab^{-1}) = \\phi(a)\\phi(b)^{-1}",
+                  "focus": ["rightK"],
+                  "note": "Expand \\(\\phi(ab^{-1})\\) using the homomorphism property.",
+                  "ask": {
+                    "q": "Replacing \\(\\phi(b)\\) by \\(\\phi(a)\\) in \\(\\phi(a)\\phi(b)^{-1}\\) yields:",
+                    "options": ["\\(\\phi(a)\\phi(a)^{-1}\\)", "\\(\\phi(a)^2\\)", "\\(a\\)", "\\(b\\)"],
+                    "answer": 0,
+                    "why": "Since \\(\\phi(b) = \\phi(a)\\), we have \\(\\phi(b)^{-1} = \\phi(a)^{-1}\\), giving \\(\\phi(a)\\phi(a)^{-1}\\)."
+                  }
+                },
+                {
+                  "move": { "type": "substitute", "by": "\\phi(b) = \\phi(a)", "label": "Substitute φ(b) = φ(a)" },
+                  "tex": "\\phi(ab^{-1}) = \\phi(a)\\phi(a)^{-1}",
+                  "focus": ["rightK"],
+                  "note": "Use \\(\\phi(b) = \\phi(a)\\) from the previous phase."
+                },
+                {
+                  "move": { "type": "simplify", "label": "Use inverse axiom in G'" },
+                  "tex": "\\phi(ab^{-1}) = e'",
+                  "focus": ["rightK"],
+                  "note": "Therefore \\(ab^{-1} \\in \\operatorname{Ker}(\\phi)\\), so \\(a\\) and \\(b\\) are in the same right coset."
+                }
+              ]
+            },
+            {
+              "type": "math",
+              "label": "Example 10.18",
+              "title": "Cosets of \\(\\operatorname{Ker}(\\det)\\) in \\(GL(2, \\mathbb{R})\\) (Example 10.18)",
+              "tex": "\\det\\begin{bmatrix} 2 & 0 \\\\ 0 & 1 \\end{bmatrix} = 2 = \\det\\begin{bmatrix} 3 & 2 \\\\ 2 & 2 \\end{bmatrix}",
+              "body": "For the homomorphism \\(\\det: GL(2, \\mathbb{R}) \\to \\mathbb{R}^*\\), \\(\\operatorname{Ker}(\\det)\\) is the subgroup of matrices with determinant \\(1\\). By Theorem 10.17, two matrices lie in the same left (and right) coset of \\(\\operatorname{Ker}(\\det)\\) if and only if they have the same determinant."
+            },
+            {
+              "type": "info",
+              "label": "Corollary 10.19",
+              "title": "One-to-One Homomorphisms via the Kernel (Corollary 10.19 & Example 10.20)",
+              "body": "Corollary 10.19: A group homomorphism \\(\\phi: G \\to G'\\) is one-to-one if and only if \\(\\operatorname{Ker}(\\phi) = \\{e\\}\\) is the trivial subgroup of \\(G\\). In Example 10.20, \\(\\phi(x) = 2^x\\) is one-to-one since \\(2^x = 1 \\implies x = 0\\).",
+              "tex": "\\phi: G \\to G' \\text{ is one-to-one} \\iff \\operatorname{Ker}(\\phi) = \\{e\\}",
+              "examples": ["Check only φ(x) = e'", "Example 10.20: 2^x = 1 ⇒ x = 0"]
+            },
+            {
+              "type": "mcq",
+              "label": "Quiz · True or False",
+              "time": 45,
+              "q": "State whether true or false: Left and right cosets of the kernel of a homomorphism are the same.",
+              "options": ["True, by Theorem 10.17", "False for nonabelian groups", "False unless \\(\\phi\\) is onto", "True only for finite groups"],
+              "answer": 0,
+              "why": "By Theorem 10.17 (and Exercise 20l), the left and right cosets of \\(\\operatorname{Ker}(\\phi)\\) are always identical."
+            },
+            {
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 45,
+              "q": "By Corollary 10.19, a homomorphism \\(\\phi: G \\to G'\\) is one-to-one if and only if:",
+              "options": ["\\(\\operatorname{Ker}(\\phi) = \\{e\\}\\)", "\\(\\operatorname{Ker}(\\phi) = G\\)", "\\(G\\) is cyclic", "\\(\\phi\\) is onto \\(G'\\)"],
+              "answer": 0,
+              "why": "Every coset of \\(\\operatorname{Ker}(\\phi)\\) has size \\(|\\operatorname{Ker}(\\phi)|\\), so \\(\\phi\\) is one-to-one iff \\(\\operatorname{Ker}(\\phi) = \\{e\\}\\)."
+            },
+            {
+              "type": "fill",
+              "label": "Quiz · Fill in",
+              "time": 45,
+              "q": "The number of left cosets of a subgroup \\(H\\) in a group \\(G\\) is called the ______ of \\(H\\) in \\(G\\).",
+              "answer": "index|index (G:H)",
+              "why": "By Definition 10.10, the number of left cosets of \\(H\\) in \\(G\\) is the index \\((G:H)\\) of \\(H\\) in \\(G\\)."
+            },
+            {
+              "type": "number",
+              "label": "Quiz · Number",
+              "time": 60,
+              "q": "If \\(K \\le H \\le G\\) with \\((G:H) = 6\\) and \\((H:K) = 4\\), what is \\((G:K)\\)?",
+              "answer": 24,
+              "tolerance": 0,
+              "unit": "cosets",
+              "why": "By Theorem 10.11, \\((G:K) = (G:H)(H:K) = 6 \\cdot 4 = 24\\)."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

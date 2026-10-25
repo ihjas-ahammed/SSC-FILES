@@ -347,6 +347,25 @@ else
   echo "WARNING: $REPO/SSLC missing — deploying without the SSLC apps." >&2
 fi
 
+# --- SSC-V6 study days (every page of each study-day-* folder) ---
+#   /ssc-v6/<study-day folder>/<same relative path as in the repo>
+# Only the pages and what they load (manifest, icons, sw.js) are shipped. Build
+# inputs (source/, verification/, src/, data/, node_modules/) stay out of the site.
+V6="$REPO/SSC-V6"
+if [ -d "$V6" ]; then
+  for DAY in "$V6"/study-day-*/; do
+    DAY="${DAY%/}"; NAME="$(basename "$DAY")"
+    while IFS= read -r REL; do
+      mkdir -p "$TMP/public/ssc-v6/$NAME/$(dirname "$REL")"
+      cp "$DAY/$REL" "$TMP/public/ssc-v6/$NAME/$REL"
+    done < <(cd "$DAY" && find . -type f \( -name '*.html' -o -name '*.webmanifest' -o -name 'sw.js' -o -name 'icon-*.png' \) \
+      -not -path '*/node_modules/*' -not -path '*/source/*' -not -path '*/verification/*' \
+      -not -path '*/src/*' -not -path '*/data/*' -not -path '*/.*' | sed 's|^\./||')
+  done
+else
+  echo "WARNING: $V6 missing — deploying without the SSC-V6 study days." >&2
+fi
+
 # --- exam trackers and checklists (repo trackers/) ---
 if compgen -G "$REPO/trackers/*.html" > /dev/null; then
   cp "$REPO"/trackers/*.html "$TMP/public/"
@@ -419,3 +438,6 @@ echo "Trackers & checklists:"
 for f in "$REPO"/trackers/*.html; do
   echo "  → $BASE/$(basename "$f")"
 done
+echo ""
+echo "SSC-V6 study days:"
+(cd "$TMP/public/ssc-v6" 2>/dev/null && find . -name '*.html' | sed 's|^\./|  → '"$BASE"'/ssc-v6/|' | sort) || true

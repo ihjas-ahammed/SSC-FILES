@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Study Match · Choose topics</title>
+<meta name="theme-color" content="#FAF8F3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Theme tokens. Calm study palette: paper, navy ink, lavender, one warm amber accent.
+   Green and coral are kept only for right / wrong so they stay meaningful. */
+:root {
+  --paper: #FAF8F3; --grid: rgba(27, 37, 89, 0.055); --card: #FFFFFF;
+  --ink: #1B2559; --ink-2: #4A5480; --muted: #8C92B0; --line: rgba(27, 37, 89, 0.10);
+  --lav: #F1EDFB; --lav-2: #DED6F6; --violet: #6A55D8; --on-violet: #FFFFFF;
+  --amber: #F6B72B; --orange: #F08A3C; --hl: #C98200; --amber-bg: #FFF3D6;
+  --sage: #2F9466; --sage-bg: #DDF2E6; --coral: #D9533F; --coral-bg: #FBE3DE;
+  --shadow: 0 10px 26px rgba(27, 37, 89, 0.08), 0 1px 0 rgba(27, 37, 89, 0.04);
+  --score-bg: #1B2559; --score-ink: #FFFFFF;
+  color-scheme: light;
+
+  --view: min(100vw, 440px);
+  --card-w: clamp(250px, calc(var(--view) * 0.78), 318px);
+  --gap: 12px;
+  --top: 140px;
+  --sheet-h: min(calc(100dvh - var(--top) - 22px), 640px);
+
+  --fs-title: 18px;
+  --fs-body: 13.5px;
+  --fs-small: 12px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #111326; --grid: rgba(255, 255, 255, 0.035); --card: #1A1D36;
+    --ink: #ECEAFB; --ink-2: #B7B9D8; --muted: #7D82A6; --line: rgba(255, 255, 255, 0.09);
+    --lav: #232748; --lav-2: #343A6E; --violet: #A898FF; --on-violet: #15172C;
+    --amber: #F7C04F; --orange: #F59A55; --hl: #F7C04F; --amber-bg: rgba(247, 192, 79, 0.14);
+    --sage: #5BC48E; --sage-bg: rgba(91, 196, 142, 0.16); --coral: #FF7B68; --coral-bg: rgba(255, 123, 104, 0.16);
+    --shadow: 0 10px 26px rgba(0, 0, 0, 0.35);
+    --score-bg: #ECEAFB; --score-ink: #15172C;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #111326; --grid: rgba(255, 255, 255, 0.035); --card: #1A1D36;
+  --ink: #ECEAFB; --ink-2: #B7B9D8; --muted: #7D82A6; --line: rgba(255, 255, 255, 0.09);
+  --lav: #232748; --lav-2: #343A6E; --violet: #A898FF; --on-violet: #15172C;
+  --amber: #F7C04F; --orange: #F59A55; --hl: #F7C04F; --amber-bg: rgba(247, 192, 79, 0.14);
+  --sage: #5BC48E; --sage-bg: rgba(91, 196, 142, 0.16); --coral: #FF7B68; --coral-bg: rgba(255, 123, 104, 0.16);
+  --shadow: 0 10px 26px rgba(0, 0, 0, 0.35);
+  --score-bg: #ECEAFB; --score-ink: #15172C;
+  color-scheme: dark;
+}
+@media (min-width: 700px) {
+  :root { --fs-title: 19px; --fs-body: 14px; }
+}
+
+html, body { margin: 0; background: var(--paper); color: var(--ink); font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
+body { min-height: 100dvh; background-color: var(--paper); }
+.wrap { max-width: 560px; margin: 0 auto; padding: 22px 16px 36px; box-sizing: border-box; }
+h1 { font-size: 22px; margin: 4px 0 4px; }
+.lede { font-size: 13.5px; color: var(--ink-2); margin: 0 0 16px; line-height: 1.45; }
+label.field { display: block; font-size: 12px; font-weight: 700; color: var(--muted); margin-bottom: 6px; }
+select { width: 100%; font: inherit; font-size: 15px; font-weight: 600; color: var(--ink); background: var(--card);
+  border: 1.5px solid var(--line); border-radius: 12px; padding: 11px 12px; box-sizing: border-box; }
+.tools { display: flex; gap: 8px; margin: 14px 0 6px; align-items: center; flex-wrap: wrap; }
+.tools button { font: inherit; font-size: 12.5px; font-weight: 700; border: 0; border-radius: 999px; padding: 7px 12px;
+  background: var(--lav); color: var(--violet); cursor: pointer; }
+.count { margin-left: auto; font-size: 12.5px; font-weight: 700; color: var(--ink-2); }
+.unit-sec { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; margin: 10px 0;
+  box-shadow: var(--shadow); }
+.unit-sec h2 { font-size: 13px; margin: 0 0 6px; color: var(--violet); letter-spacing: 0.02em; }
+label.unit { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; font-size: 14px; font-weight: 600; cursor: pointer; line-height: 1.35; }
+label.unit + label.unit { border-top: 1px solid var(--line); }
+label.unit input { margin-top: 2px; width: 18px; height: 18px; accent-color: var(--violet); flex: 0 0 auto; }
+.start { position: sticky; bottom: 0; margin-top: 18px; }
+.start button { width: 100%; font: inherit; font-size: 16px; font-weight: 800; border: 0; border-radius: 14px; padding: 14px;
+  background: var(--violet); color: var(--on-violet); cursor: pointer; box-shadow: var(--shadow); }
+.start button:disabled { opacity: 0.45; cursor: not-allowed; }
+.note { font-size: 12px; color: var(--muted); margin-top: 10px; line-height: 1.4; }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <h1>Choose your topics</h1>
+  <p class="lede">Pick a module, tick the topics you need, then start the match. You can switch modules and keep your ticks.</p>
+
+  <label class="field" for="module">Module</label>
+  <select id="module"></select>
+
+  <div class="tools">
+    <button type="button" id="all">Tick all in this module</button>
+    <button type="button" id="none">Clear this module</button>
+    <span class="count" id="count"></span>
+  </div>
+
+  <div id="list"></div>
+
+  <div class="start">
+    <button type="button" id="start">Start match</button>
+  </div>
+  <p class="note">Progress is saved on this device per topic, the same as in the match page.</p>
+</main>
+
+<script id="units" type="application/json">{"1":{"label":"Module Module I · Binary operations, groups","sections":[{"title":"Module I","sheets":[{"id":"abs-m1-units-1-2","title":"Binary Operations and Properties","cards":19},{"id":"abs-m1-units-3-4","title":"Operation Tables and Binary Structures","cards":16},{"id":"abs-m1-units-5-6","title":"Groups, Properties, and Group Tables","cards":20}]}]},"2":{"label":"Module Module II · Subgroups, cyclic groups, permutations","sections":[{"title":"Module II","sheets":[{"id":"abs-m2-subgroups-cyclic-subgroups","title":"Subgroups and cyclic subgroups","cards":13},{"id":"abs-m2-cyclic-groups","title":"Cyclic groups","cards":13},{"id":"abs-m2-groups-of-permutations","title":"Groups of permutations","cards":12}]}]},"3":{"label":"Module Module III · Cosets, orbits, Lagrange","sections":[{"title":"Module III","sheets":[{"id":"abs-m3-symmetric-groups-cycles","title":"Symmetric Groups and Disjoint Cycles","cards":12},{"id":"abs-m3-orbits-alternating-groups","title":"Orbits, Parity, and Alternating Groups","cards":12},{"id":"abs-m3-cosets-lagrange","title":"Cosets and the Theorem of Lagrange","cards":13},{"id":"abs-m3-index-coset-properties","title":"Index of a Subgroup, Right Cosets, and Kernels","cards":13}]}]},"4":{"label":"Module Module IV · Homomorphisms, rings, fields","sections":[{"title":"Module IV","sheets":[{"id":"abs-m4-group-homomorphisms","title":"Item 17 · Group Homomorphisms (recap)","cards":12},{"id":"abs-m4-isomorphism-theorems","title":"Units 17–18 · Isomorphism Theorems","cards":13},{"id":"abs-m4-rings-and-homomorphisms","title":"Unit 19 · Rings and Ring Homomorphisms","cards":13},{"id":"abs-m4-unity-units-fields","title":"Unit 20 · Unity, Units, and Fields","cards":11},{"id":"abs-m4-zero-divisors-integral-domains","title":"Unit 21 · Divisors of Zero and Integral Domains","cards":13},{"id":"abs-m4-finite-domains-characteristic","title":"Unit 22 · Finite Integral Domains and Characteristic","cards":11}]}]}}</script>
+<script>
+(function () {
+  var MODS = JSON.parse(document.getElementById('units').textContent);
+  var modSelect = document.getElementById('module');
+  var list = document.getElementById('list');
+  var countEl = document.getElementById('count');
+  var startBtn = document.getElementById('start');
+  var keys = Object.keys(MODS);
+  var chosen = {};
+
+  keys.forEach(function (k) {
+    var o = document.createElement('option');
+    o.value = k; o.textContent = MODS[k].label;
+    modSelect.appendChild(o);
+    MODS[k].sections.forEach(function (sec) {
+      sec.sheets.forEach(function (sh) { chosen[sh.id] = true; });
+    });
+  });
+
+  function sheetsOfCurrent() {
+    var out = [];
+    MODS[modSelect.value].sections.forEach(function (sec) {
+      sec.sheets.forEach(function (sh) { out.push(sh); });
+    });
+    return out;
+  }
+
+  function update() {
+    var ids = allChosen();
+    countEl.textContent = ids.length + (ids.length === 1 ? ' topic' : ' topics') + ' selected';
+    startBtn.disabled = ids.length === 0;
+  }
+
+  function allChosen() {
+    var ids = [];
+    keys.forEach(function (k) {
+      MODS[k].sections.forEach(function (sec) {
+        sec.sheets.forEach(function (sh) { if (chosen[sh.id]) ids.push(sh.id); });
+      });
+    });
+    return ids;
+  }
+
+  function draw() {
+    list.innerHTML = '';
+    MODS[modSelect.value].sections.forEach(function (sec) {
+      var box = document.createElement('section');
+      box.className = 'unit-sec';
+      var h = document.createElement('h2');
+      h.textContent = sec.title;
+      box.appendChild(h);
+      sec.sheets.forEach(function (sh) {
+        var lab = document.createElement('label');
+        lab.className = 'unit';
+        var cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.checked = !!chosen[sh.id];
+        cb.value = sh.id;
+        cb.addEventListener('change', function () { chosen[sh.id] = cb.checked; update(); });
+        var span = document.createElement('span');
+        span.textContent = sh.title + ' · ' + sh.cards + ' cards';
+        lab.appendChild(cb);
+        lab.appendChild(span);
+        box.appendChild(lab);
+      });
+      list.appendChild(box);
+    });
+    update();
+  }
+
+  document.getElementById('all').addEventListener('click', function () {
+    sheetsOfCurrent().forEach(function (sh) { chosen[sh.id] = true; });
+    draw();
+  });
+  document.getElementById('none').addEventListener('click', function () {
+    sheetsOfCurrent().forEach(function (sh) { chosen[sh.id] = false; });
+    draw();
+  });
+  modSelect.addEventListener('change', draw);
+  startBtn.addEventListener('click', function () {
+    var ids = allChosen();
+    if (!ids.length) return;
+    window.location.href = 'study-match.html?sheets=' + encodeURIComponent(ids.join(','));
+  });
+
+  draw();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1076 @@
+--- /dev/null
++++ b/study-match/src/components/02-canvas.js
+@@ -0,0 +1,457 @@
++/* ==========================================================================
++   Canvas2D diagram renderer + lazy Three.js 3D scene for the meridional ray
++   ========================================================================== */
++(function () {
++  var SM = window.SM = window.SM || {};
++  var LOGICAL_W = 260, LOGICAL_H = 180;
++  var THREE_URL = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
++  var threeLoading = null, ro = null, themeBound = false;
++  var activeThree = [];
++
++  function readTokens() {
++    var cs = getComputedStyle(document.documentElement);
++    var get = function (k, fb) { return (cs.getPropertyValue(k) || '').trim() || fb; };
++    return {
++      ink: get('--ink', '#1B2559'),
++      ink2: get('--ink-2', '#4A5480'),
++      lav: get('--lav', '#F1EDFB'),
++      lav2: get('--lav-2', '#DED6F6'),
++      violet: get('--violet', '#6A55D8'),
++      onViolet: get('--on-violet', '#FFFFFF'),
++      amber: get('--amber', '#F6B72B'),
++      hl: get('--hl', '#C98200'),
++      card: get('--card', '#FFFFFF'),
++      font: get('--font', '"Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif')
++    };
++  }
++
++  function hasRole(roleStr, token) {
++    if (!roleStr) return false;
++    return (' ' + roleStr + ' ').indexOf(' ' + token + ' ') !== -1;
++  }
++
++  function applyFill(ctx, role, tok) {
++    if (hasRole(role, 'h')) { ctx.fillStyle = tok.amber; return true; }
++    if (hasRole(role, 'f')) { ctx.fillStyle = tok.violet; return true; }
++    if (hasRole(role, 's')) { ctx.fillStyle = tok.lav2; return true; }
++    return false;
++  }
++
++  function applyStroke(ctx, op, tok, focused) {
++    var role = op.role || 'lk';
++    var w = op.width || (hasRole(role, 'gk') ? 1.6 : 2);
++    ctx.lineCap = 'round';
++    ctx.lineJoin = 'round';
++    ctx.setLineDash(Array.isArray(op.dash) ? op.dash : []);
++    if (focused) {
++      ctx.strokeStyle = tok.hl;
++      ctx.lineWidth = Math.max(w + 0.6, 2.8);
++      ctx.globalAlpha = 1;
++      return true;
++    }
++    if (hasRole(role, 'hk')) { ctx.strokeStyle = tok.amber; ctx.lineWidth = w; ctx.globalAlpha = 1; return true; }
++    if (hasRole(role, 'lk') || hasRole(role, 'ok')) { ctx.strokeStyle = tok.violet; ctx.lineWidth = w; ctx.globalAlpha = 1; return true; }
++    if (hasRole(role, 'gk')) { ctx.strokeStyle = tok.ink2; ctx.lineWidth = w; ctx.globalAlpha = 0.55; return true; }
++    return false;
++  }
++
++  function traceCurve(ctx, pts, closed) {
++    if (!pts || pts.length < 2) return;
++    ctx.beginPath();
++    ctx.moveTo(pts[0][0], pts[0][1]);
++    if (pts.length === 3) {
++      ctx.quadraticCurveTo(pts[1][0], pts[1][1], pts[2][0], pts[2][1]);
++    } else if (pts.length === 4) {
++      ctx.bezierCurveTo(pts[1][0], pts[1][1], pts[2][0], pts[2][1], pts[3][0], pts[3][1]);
++    } else if (pts.length >= 5 && pts.length % 2 === 1) {
++      for (var i = 1; i < pts.length - 1; i += 2) {
++        ctx.quadraticCurveTo(pts[i][0], pts[i][1], pts[i + 1][0], pts[i + 1][1]);
++      }
++    } else {
++      for (var j = 1; j < pts.length; j++) ctx.lineTo(pts[j][0], pts[j][1]);
++    }
++    if (closed) ctx.closePath();
++  }
++
++  function drawOps(container) {
++    var ops = container._ops;
++    if (!ops || !ops.length) return;
++    var canvas = container.querySelector('canvas.sm-canvas');
++    if (!canvas) {
++      canvas = document.createElement('canvas');
++      canvas.className = 'sm-canvas';
++      canvas.setAttribute('aria-hidden', 'true');
++      container.innerHTML = '';
++      container.appendChild(canvas);
++    }
++    var rect = canvas.getBoundingClientRect();
++    var cw = canvas.clientWidth || rect.width || 236;
++    var ch = canvas.clientHeight || rect.height || 136;
++    var dpr = Math.max(window.devicePixelRatio || 1, 1);
++    var pw = Math.max(1, Math.round(cw * dpr));
++    var ph = Math.max(1, Math.round(ch * dpr));
++    if (canvas.width !== pw || canvas.height !== ph) {
++      canvas.width = pw;
++      canvas.height = ph;
++    }
++    var ctx = canvas.getContext('2d');
++    if (!ctx) return;
++    var scale = Math.min(cw / LOGICAL_W, ch / LOGICAL_H);
++    var ox = (cw - LOGICAL_W * scale) / 2;
++    var oy = (ch - LOGICAL_H * scale) / 2;
++    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
++    ctx.clearRect(0, 0, cw, ch);
++    ctx.setTransform(dpr * scale, 0, 0, dpr * scale, dpr * ox, dpr * oy);
++
++    var tok = readTokens();
++    var focusSet = container._focusSet || null;
++
++    ops.forEach(function (op) {
++      var name = op.name || op.part || '';
++      var focused = !!(focusSet && name && focusSet[name]);
++      var role = op.role || '';
++      ctx.save();
++      switch (op.op) {
++        case 'line':
++          ctx.beginPath();
++          ctx.moveTo(op.x1, op.y1);
++          ctx.lineTo(op.x2, op.y2);
++          if (applyStroke(ctx, op, tok, focused)) ctx.stroke();
++          break;
++        case 'arrow':
++          ctx.beginPath();
++          ctx.moveTo(op.x1, op.y1);
++          ctx.lineTo(op.x2, op.y2);
++          if (applyStroke(ctx, op, tok, focused)) ctx.stroke();
++          var ang = Math.atan2(op.y2 - op.y1, op.x2 - op.x1);
++          var head = op.head || 7;
++          ctx.setLineDash([]);
++          ctx.globalAlpha = 1;
++          ctx.fillStyle = focused ? tok.hl : (hasRole(role, 'hk') ? tok.amber : (hasRole(role, 'gk') ? tok.ink2 : tok.violet));
++          ctx.beginPath();
++          ctx.moveTo(op.x2, op.y2);
++          ctx.lineTo(op.x2 - head * Math.cos(ang - 0.42), op.y2 - head * Math.sin(ang - 0.42));
++          ctx.lineTo(op.x2 - head * Math.cos(ang + 0.42), op.y2 - head * Math.sin(ang + 0.42));
++          ctx.closePath();
++          ctx.fill();
++          break;
++        case 'polyline':
++        case 'polygon':
++          var pts = op.points || [];
++          if (pts.length >= 2) {
++            ctx.beginPath();
++            ctx.moveTo(pts[0][0], pts[0][1]);
++            for (var i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
++            if (op.op === 'polygon') ctx.closePath();
++            if (op.op === 'polygon' && applyFill(ctx, role, tok)) ctx.fill();
++            if (applyStroke(ctx, op, tok, focused)) ctx.stroke();
++          }
++          break;
++        case 'rect':
++          var rx = op.rx || 0, x = op.x, y = op.y, w = op.w, h = op.h;
++          ctx.beginPath();
++          if (rx > 0 && ctx.roundRect) ctx.roundRect(x, y, w, h, rx);
++          else ctx.rect(x, y, w, h);
++          if (applyFill(ctx, role, tok)) ctx.fill();
++          if (applyStroke(ctx, op, tok, focused)) ctx.stroke();
++          break;
++        case 'circle':
++          ctx.beginPath();
++          ctx.arc(op.cx, op.cy, op.r, 0, Math.PI * 2);
++          if (applyFill(ctx, role || 'f', tok)) ctx.fill();
++          if (focused || hasRole(role, 'ok') || hasRole(role, 'lk') || hasRole(role, 'hk')) {
++            if (applyStroke(ctx, op, tok, focused)) ctx.stroke();
++          }
++          break;
++        case 'ellipse':
++          ctx.beginPath();
++          ctx.ellipse(op.cx, op.cy, op.rx, op.ry, 0, 0, Math.PI * 2);
++          if (applyFill(ctx, role, tok)) ctx.fill();
++          if (applyStroke(ctx, op, tok, focused)) ctx.stroke();
++          break;
++        case 'curve':
++          traceCurve(ctx, op.points, !!op.closed);
++          if (op.closed && applyFill(ctx, role, tok)) ctx.fill();
++          if (applyStroke(ctx, op, tok, focused)) ctx.stroke();
++          break;
++        case 'arc':
++          ctx.beginPath();
++          ctx.arc(op.cx, op.cy, op.r, (op.start || 0) * Math.PI / 180, (op.end || 0) * Math.PI / 180, !!op.ccw);
++          if (applyStroke(ctx, op, tok, focused)) ctx.stroke();
++          break;
++        case 'text':
++          var sz = op.size || 11;
++          var weight = focused ? '800' : '700';
++          ctx.font = weight + ' ' + sz + 'px ' + tok.font;
++          var align = op.align || 'left';
++          if (align === 'middle') align = 'center';
++          if (align === 'end') align = 'right';
++          ctx.textAlign = align;
++          ctx.textBaseline = 'alphabetic';
++          ctx.fillStyle = focused ? tok.hl : (hasRole(role, 'i') ? tok.onViolet : tok.ink);
++          var txt = String(op.text || '');
++          ctx.fillText(txt, op.x, op.y);
++          if (focused && txt) {
++            var tw = ctx.measureText(txt).width;
++            var ux = op.x;
++            if (align === 'center') ux -= tw / 2;
++            else if (align === 'right') ux -= tw;
++            ctx.strokeStyle = tok.hl;
++            ctx.lineWidth = 1.4;
++            ctx.setLineDash([]);
++            ctx.beginPath();
++            ctx.moveTo(ux, op.y + 2);
++            ctx.lineTo(ux + tw, op.y + 2);
++            ctx.stroke();
++          }
++          break;
++      }
++      ctx.restore();
++    });
++  }
++
++  function loadThreeScript(cb) {
++    if (window.THREE) { cb(true); return; }
++    if (threeLoading) { threeLoading.push(cb); return; }
++    threeLoading = [cb];
++    var s = document.createElement('script');
++    s.src = THREE_URL;
++    s.async = true;
++    s.onload = function () {
++      var list = threeLoading || [];
++      threeLoading = null;
++      list.forEach(function (fn) { fn(!!window.THREE); });
++    };
++    s.onerror = function () {
++      var list = threeLoading || [];
++      threeLoading = null;
++      list.forEach(function (fn) { fn(false); });
++    };
++    document.head.appendChild(s);
++  }
++
++  function makeLabelSprite(THREE, text, colorStr, fontStr) {
++    var c = document.createElement('canvas');
++    c.width = 256; c.height = 64;
++    var ctx = c.getContext('2d');
++    ctx.font = '700 24px ' + fontStr;
++    ctx.textAlign = 'center';
++    ctx.textBaseline = 'middle';
++    ctx.fillStyle = colorStr;
++    ctx.fillText(text, 128, 32);
++    var tex = new THREE.CanvasTexture(c);
++    var mat = new THREE.SpriteMaterial({ map: tex, transparent: true, depthTest: false });
++    var sp = new THREE.Sprite(mat);
++    sp.scale.set(1.35, 0.34, 1);
++    return sp;
++  }
++
++  function mountThreeScene(container, spec) {
++    if (container._threeMounted || container._threeFailed) return;
++    container._threeMounted = true;
++    loadThreeScript(function (ok) {
++      if (!ok || !window.THREE) {
++        container._threeFailed = true;
++        container.hidden = true;
++        return;
++      }
++      var THREE = window.THREE;
++      var renderer;
++      try {
++        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
++      } catch (e) {
++        container._threeFailed = true;
++        container.hidden = true;
++        return;
++      }
++      container.hidden = false;
++      container.innerHTML = '';
++      renderer.domElement.className = 'sm-canvas';
++      container.appendChild(renderer.domElement);
++      var scene = new THREE.Scene();
++      var camera = new THREE.PerspectiveCamera(34, 260 / 180, 0.1, 50);
++      camera.position.set(0, 1.05, 4.7);
++      camera.lookAt(0, 0, 0);
++      var rootGroup = new THREE.Group();
++      rootGroup.rotation.x = 0.24;
++      rootGroup.rotation.y = -0.34;
++      scene.add(rootGroup);
++
++      function buildObjects() {
++        while (rootGroup.children.length) rootGroup.remove(rootGroup.children[0]);
++        var tok = readTokens();
++        var pw = (spec.plane && spec.plane.width) || 4.4;
++        var ph = (spec.plane && spec.plane.height) || 2.1;
++        var pGeo = new THREE.PlaneGeometry(pw, ph);
++        var pMat = new THREE.MeshBasicMaterial({ color: tok.lav2, transparent: true, opacity: 0.55, side: THREE.DoubleSide, depthWrite: false });
++        rootGroup.add(new THREE.Mesh(pGeo, pMat));
++
++        var bPts = [
++          new THREE.Vector3(-pw / 2, -ph / 2, 0), new THREE.Vector3(pw / 2, -ph / 2, 0),
++          new THREE.Vector3(pw / 2, ph / 2, 0), new THREE.Vector3(-pw / 2, ph / 2, 0),
++          new THREE.Vector3(-pw / 2, -ph / 2, 0)
++        ];
++        rootGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(bPts), new THREE.LineBasicMaterial({ color: tok.violet })));
++
++        var ax = spec.axis || { from: [-2.2, 0, 0], to: [2.2, 0, 0] };
++        var axGeo = new THREE.BufferGeometry().setFromPoints([
++          new THREE.Vector3(ax.from[0], ax.from[1], ax.from[2]),
++          new THREE.Vector3(ax.to[0], ax.to[1], ax.to[2])
++        ]);
++        rootGroup.add(new THREE.Line(axGeo, new THREE.LineBasicMaterial({ color: tok.violet })));
++
++        (spec.surfaces || []).forEach(function (sf) {
++          var rPts = [];
++          for (var a = 0; a <= 32; a++) {
++            var th = (a / 32) * Math.PI * 2;
++            rPts.push(new THREE.Vector3(sf.x, Math.cos(th) * sf.r, Math.sin(th) * sf.r));
++          }
++          rootGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(rPts), new THREE.LineBasicMaterial({ color: tok.violet, transparent: true, opacity: 0.4 })));
++        });
++
++        if (spec.meridionalRay && spec.meridionalRay.points) {
++          var mVecs = spec.meridionalRay.points.map(function (p) { return new THREE.Vector3(p[0], p[1], p[2]); });
++          var mCurve = new THREE.CatmullRomCurve3(mVecs, false, 'catmullrom', 0.02);
++          var tube = new THREE.TubeGeometry(mCurve, 32, 0.038, 8, false);
++          rootGroup.add(new THREE.Mesh(tube, new THREE.MeshBasicMaterial({ color: tok.amber })));
++          if (spec.meridionalRay.label) {
++            var mLbl = makeLabelSprite(THREE, spec.meridionalRay.label, tok.hl, tok.font);
++            mLbl.position.set(0, 0.88, 0);
++            rootGroup.add(mLbl);
++          }
++        }
++
++        if (spec.skewRay && spec.skewRay.points) {
++          var sVecs = spec.skewRay.points.map(function (p) { return new THREE.Vector3(p[0], p[1], p[2]); });
++          var sGeo = new THREE.BufferGeometry().setFromPoints(sVecs);
++          var sLine = new THREE.Line(sGeo, new THREE.LineDashedMaterial({ color: tok.ink2, dashSize: 0.14, gapSize: 0.09 }));
++          if (sLine.computeLineDistances) sLine.computeLineDistances();
++          rootGroup.add(sLine);
++          if (spec.skewRay.label) {
++            var sLbl = makeLabelSprite(THREE, spec.skewRay.label, tok.ink2, tok.font);
++            sLbl.position.set(0.15, -0.82, 0.35);
++            rootGroup.add(sLbl);
++          }
++        }
++
++        (spec.points || []).forEach(function (pt) {
++          var spGeo = new THREE.SphereGeometry(0.068, 14, 14);
++          var col = pt.role === 'h' ? tok.amber : tok.violet;
++          var mesh = new THREE.Mesh(spGeo, new THREE.MeshBasicMaterial({ color: col }));
++          mesh.position.set(pt.pos[0], pt.pos[1], pt.pos[2]);
++          rootGroup.add(mesh);
++          if (pt.label) {
++            var lb = makeLabelSprite(THREE, pt.label, tok.ink, tok.font);
++            lb.scale.set(0.65, 0.26, 1);
++            lb.position.set(pt.pos[0], pt.pos[1] + (pt.pos[1] > 0.1 ? 0.22 : -0.22), pt.pos[2]);
++            rootGroup.add(lb);
++          }
++        });
++      }
++
++      function resizeThree() {
++        var cw = container.clientWidth || 236;
++        var ch = container.clientHeight || 136;
++        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
++        renderer.setSize(cw, ch, false);
++        camera.aspect = cw / Math.max(ch, 1);
++        camera.updateProjectionMatrix();
++        renderer.render(scene, camera);
++      }
++
++      buildObjects();
++      resizeThree();
++
++      var dragging = false, lastX = 0, lastY = 0;
++      renderer.domElement.addEventListener('pointerdown', function (e) {
++        dragging = true; lastX = e.clientX; lastY = e.clientY;
++        e.stopPropagation();
++      });
++      window.addEventListener('pointermove', function (e) {
++        if (!dragging) return;
++        rootGroup.rotation.y += (e.clientX - lastX) * 0.01;
++        rootGroup.rotation.x = Math.max(-0.7, Math.min(0.8, rootGroup.rotation.x + (e.clientY - lastY) * 0.01));
++        lastX = e.clientX; lastY = e.clientY;
++        renderer.render(scene, camera);
++      });
++      window.addEventListener('pointerup', function () { dragging = false; });
++
++      activeThree.push({ container: container, rebuild: function () { buildObjects(); resizeThree(); }, resize: resizeThree });
++    });
++  }
++
++  function checkLazyThree() {
++    document.querySelectorAll('[data-three]').forEach(function (el) {
++      if (el._threeMounted || el._threeFailed) return;
++      var cardEl = el.closest('.card');
++      var sheetEl = el.closest('.sheet');
++      if (!cardEl || ! cardEl._c || !cardEl._c.three) return;
++      if (sheetEl && sheetEl.classList.contains('is-open')) {
++        mountThreeScene(el, cardEl._c.three);
++      }
++    });
++  }
++
++  function mountAll() {
++    if (!ro && 'ResizeObserver' in window) {
++      ro = new ResizeObserver(function (entries) {
++        entries.forEach(function (en) {
++          var el = en.target;
++          if (el._ops) drawOps(el);
++          else if (el.hasAttribute('data-three')) {
++            activeThree.forEach(function (item) { if (item.container === el) item.resize(); });
++          }
++        });
++      });
++    }
++    document.querySelectorAll('[data-canvas]').forEach(function (el) {
++      var cardEl = el.closest('.card');
++      var c = cardEl && cardEl._c;
++      if (!c) return;
++      var key = el.getAttribute('data-canvas');
++      var ops = key === 'setup' ? ((c.d && (c.d.setup || c.d.art)) || c.setup) : c.art;
++      if (Array.isArray(ops) && ops.length) {
++        el._ops = ops;
++        drawOps(el);
++        if (ro) ro.observe(el);
++      }
++    });
++    document.querySelectorAll('[data-three]').forEach(function (el) {
++      if (ro) ro.observe(el);
++      var sheetEl = el.closest('.sheet');
++      if (sheetEl && !sheetEl._threeObserved && 'MutationObserver' in window) {
++        sheetEl._threeObserved = true;
++        new MutationObserver(checkLazyThree).observe(sheetEl, { attributes: true, attributeFilter: ['class'] });
++      }
++    });
++    checkLazyThree();
++    if (!themeBound && 'MutationObserver' in window) {
++      themeBound = true;
++      new MutationObserver(function () { SM.Canvas.redraw(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
++      if (window.matchMedia) {
++        var mq = window.matchMedia('(prefers-color-scheme: dark)');
++        if (mq.addEventListener) mq.addEventListener('change', function () { SM.Canvas.redraw(); });
++      }
++      window.addEventListener('resize', function () { SM.Canvas.redraw(); });
++    }
++  }
++
++  SM.Canvas = {
++    mountAll: mountAll,
++    redraw: function (root) {
++      var scope = root || document;
++      scope.querySelectorAll('[data-canvas]').forEach(function (el) { if (el._ops) drawOps(el); });
++      activeThree.forEach(function (item) {
++        if (!root || root.contains(item.container)) item.rebuild();
++      });
++      checkLazyThree();
++    },
++    setFocus: function (setupEl, focusList) {
++      if (!setupEl) return;
++      var set = {};
++      (focusList || []).forEach(function (k) { if (k) set[k] = 1; });
++      setupEl._focusSet = set;
++      if (setupEl._ops) drawOps(setupEl);
++    }
++  };
++})();
+--- a/study-match/src/components/02-mathflow.js
++++ b/study-match/src/components/02-mathflow.js
+@@ -193,6 +193,12 @@
+     /* highlight the part of the setup SVG (labels and angle arcs) used in the current step */
+     function highlightSetup(f) {
+       if (!setupEl) return;
++      if (SM.Canvas && SM.Canvas.setFocus) {
++        var st0 = (f && spec.steps[f.si]) || {};
++        var fl = Array.isArray(st0.focus) ? st0.focus : (st0.focus ? String(st0.focus).split(/[\s,]+/) : []);
++        SM.Canvas.setFocus(setupEl, fl);
++        return;
++      }
+       var svg = setupEl.querySelector('svg');
+       if (!svg) return;
+       Array.prototype.forEach.call(svg.querySelectorAll('.mf-part-on'), function (el) { el.classList.remove('mf-part-on'); });
+@@ -534,6 +540,7 @@
+       if (willFlip) {
+         setTimeout(function () {
+           rebuild();
++          if (SM.Canvas && SM.Canvas.redraw) SM.Canvas.redraw(root);
+           if (api.i < 0) api.play();
+         }, 60);
+       } else stopPlay();
+--- a/study-match/src/components/03-definition-checks.js
++++ b/study-match/src/components/03-definition-checks.js
+@@ -6,7 +6,7 @@
+     return !!SM.meta.definitionChecks && !!status && status !== 'pre' && status !== 'ft';
+   };
+   SM.isDefinition = function (c) {
+-    return !!SM.meta.definitionChecks && c.type === 'info' && !c.art &&
++    return !!SM.meta.definitionChecks && c.type === 'info' &&
+       ((c.defines && c.defines.length) || /^What (?:is|are)\b/i.test(c.title || ''));
+   };
+   SM.cardLocked = function (c) { return !!(c && c.el && c.el.classList.contains('is-sequence-locked')); };
+@@ -60,6 +60,7 @@
+     var front = c.el.querySelector('.definition-front'), rear = c.el.querySelector('.definition-back');
+     front.inert = flipped; rear.inert = !flipped;
+     front.setAttribute('aria-hidden', String(flipped)); rear.setAttribute('aria-hidden', String(!flipped));
++    if (SM.Canvas && SM.Canvas.redraw) SM.Canvas.redraw(c.el);
+     if (c.el.contains(document.activeElement)) document.activeElement.blur();
+   }
+   SM.flipDefinition = flipCard;
+@@ -109,7 +110,8 @@
+       turn.textContent = 'Recall · flip card'; front.appendChild(turn);
+       back.innerHTML = '<div class="def-back-head"><span class="card-index">Your definition</span>' +
+         '<button type="button" class="chip" data-def="front">Read · flip back</button></div>' +
+-        '<h2 class="card-title">' + SM.esc(c.title) + '</h2>';
++        '<h2 class="card-title">' + SM.esc(c.title) + '</h2>' +
++        ((c.art && c.art.length) ? '<div class="art def-art" data-canvas="art" role="img" aria-label="' + SM.esc(c.title) + '"></div>' : '');
+       var panel = document.createElement('div');
+       panel.className = 'definition-check scroll-y';
+       panel.innerHTML = '<label class="def-label" for="def-' + c.id + '">Define it in your own words</label>' +
+@@ -143,6 +145,7 @@
+       });
+     });
+     SM.S.definitionChecksVersion = 1; SM.save();
++    if (SM.Canvas && SM.Canvas.mountAll) SM.Canvas.mountAll();
+     SM.definitionChecksReady = true; SM.refreshDefinitionLocks();
+   };
+ })();
+--- a/study-match/src/components/03-render.js
++++ b/study-match/src/components/03-render.js
+@@ -57,14 +57,14 @@
+         return '<article class="card intuition-card"' + a + '><span class="card-index">In plain words</span>' +
+           '<div class="intuition-content scroll-y"><h2 class="card-title">' + esc(c.title) + '</h2>' +
+           '<p class="intuition-meaning">' + esc(c.meaning) + '</p>' +
+           '<h3>Picture it</h3>' +
+-          (c.art ? '<div class="art intuition-art">' + c.art + '</div>' : '') +
++          (c.three ? '<div class="art intuition-art" data-three="1" role="img" aria-label="' + esc(c.title) + '"></div>' : (c.art && c.art.length) ? '<div class="art intuition-art" data-canvas="art" role="img" aria-label="' + esc(c.title) + '"></div>' : '') +
+           '<p class="card-body">' + esc(c.picture) + '</p>' +
+           '<div class="intuition-example"><h3>For example</h3><p class="card-body">' + esc(c.example) + '</p></div>' +
+           '<h3>Connect it to the definition</h3><p class="card-body">' + esc(c.bridge) + '</p></div></article>';
+       case 'info':
+         return '<article class="card"' + a + '><span class="card-index">' + esc(c.label || 'Concept') + '</span>' +
+-          (c.art ? '<div class="art">' + c.art + '</div>' : c.tex ? '<div class="art"><div class="math">\\[' + c.tex + '\\]</div></div>' : '') +
++          (c.three ? '<div class="art" data-three="1" role="img" aria-label="' + esc(c.title) + '"></div>' : (!SM.isDefinition(c) && c.art && c.art.length) ? '<div class="art" data-canvas="art" role="img" aria-label="' + esc(c.title) + '"></div>' : c.tex ? '<div class="art"><div class="math">\\[' + c.tex + '\\]</div></div>' : '') +
+           '<div class="scroll-y"><h2 class="card-title">' + c.title + '</h2><p class="card-body" style="margin-top:6px">' + (c.body || '') + '</p>' +
+           (c.examples && c.examples.length ? '<div class="examples" style="margin-top:9px">' + chips(c.examples) + '</div>' : '') + '</div></article>';
+       case 'math':
+@@ -95,7 +95,7 @@
+           '<button class="btn" type="button" data-check>Check</button></div>' + (c.type === 'number' ? '<button type="button" class="chip" data-calculator>Calculator =</button>' : '') + '<p class="omr-feedback" hidden></p></div></article>';
+       case 'question':
+         return '<article class="card qcard' + (c.textAnswer ? ' has-text-answer' : '') + '"' + a + '><span class="card-index">' + esc(c.label || 'Question') + '</span>' +
+-          (c.art ? '<div class="art">' + c.art + '</div>' : '') +
++          ((c.art && c.art.length) ? '<div class="art" data-canvas="art" role="img" aria-label="' + esc(c.title) + '"></div>' : '') +
+           '<div class="scroll-y"><h2 class="card-title">' + c.title + '</h2><p class="q-text">' + c.q + '</p></div>' +
+           (c.textAnswer ? '<div class="written-answer"><div class="answer-label"><label for="answer-' + c.id + '">Your answer</label><span data-draft-status id="draft-' + c.id + '" role="status">Saves automatically on this device.</span></div>' +
+             '<textarea class="answer-input" id="answer-' + c.id + '" data-written-answer rows="6" placeholder="Write your answer in your own words…" aria-describedby="draft-' + c.id + '"></textarea></div>' : '') +
+@@ -119,12 +119,12 @@
+           '<ol class="route-list">' + c.phases.map(function (p) { return '<li><span><b>' + esc(p.name) + '</b>' + (p.why ? ' \u2014 ' + p.why : '') + '</span></li>'; }).join('') + '</ol>' +
+           (c.d.legend ? '<p class="legend">' + c.d.legend + '</p>' : '') + '</div></article>';
+       case 'derive':
+-        var dst = c.d.steps || [], dph = c.phases || c.d.phases || [], setupSVG = c.d.setup || c.d.art || '';
++        var dst = c.d.steps || [], dph = c.phases || c.d.phases || [], hasSetup = !!((c.d.setup && c.d.setup.length) || (c.d.art && c.d.art.length));
+         return '<article class="card mf-card mf-flip-card"' + a + '><div class="mf-card-inner">' +
+           '<div class="mf-face mf-front">' +
+           '<div class="mf-top"><span class="card-index">' + esc(c.label || 'Derivation') + '</span><button type="button" class="chip mf-flip-btn" data-mf="flip-open">Derive &#9654;</button></div>' +
+           '<h2 class="card-title">' + (c.title || 'Step-by-step derivation') + '</h2>' +
+-          (setupSVG ? '<div class="art mf-front-art">' + setupSVG + '</div>' : '') +
++          (hasSetup ? '<div class="art mf-front-art" data-canvas="setup" role="img" aria-label="' + esc(c.title || 'Derivation setup') + '"></div>' : '') +
+           '<div class="scroll-y mf-front-route">' +
+           '<div class="route-eq"><small>Start</small><div class="math">\\(' + (c.d.start || dst[0].tex) + '\\)</div></div>' +
+           '<div class="route-eq goal"><small>Goal</small><div class="math">\\(' + (c.d.goal || dst[dst.length - 1].tex) + '\\)</div></div>' +
+@@ -136,8 +136,8 @@
+           '<div class="mf-top-actions"><span class="mf-count"></span><button type="button" class="chip" data-mf="summary">All steps</button><button type="button" class="chip" data-mf="flip-back">Concept</button></div></div>' +
+           '<h2 class="card-title mf-back-title">' + (c.title || 'Step-by-step derivation') + '</h2>' +
+           '<div class="mf-phases"></div>' +
+-          '<div class="mf-work' + (setupSVG ? ' has-setup' : '') + '">' +
+-          (setupSVG ? '<div class="mf-setup art">' + setupSVG + '</div>' : '') +
++          '<div class="mf-work' + (hasSetup ? ' has-setup' : '') + '">' +
++          (hasSetup ? '<div class="mf-setup art" data-canvas="setup" role="img" aria-label="' + esc(c.title || 'Derivation setup') + '"></div>' : '') +
+           '<div class="mf-right">' +
+           '<div class="mf-board"><div class="mf-stage"></div><div class="mf-summary scroll-y" hidden></div></div>' +
+           '<div class="mf-panel"><p class="mf-note">Press play. It stops at each decision so you can call the next move.</p><div class="mf-dots"></div>' +
+@@ -171,6 +171,7 @@
+     SM.SHEETS.forEach(function (sh) { sh.el = shelf.querySelector('[data-sheet="' + sh.id + '"]'); });
+     SM.CARDS.forEach(function (c) { c.el = shelf.querySelector('[data-card="' + c.id + '"]'); c.el._c = c; });
+     shelf.querySelectorAll('.card-index, .chip').forEach(function (tag) { tag.innerHTML = SM.mathLabel(tag.innerHTML); });
++    if (SM.Canvas && SM.Canvas.mountAll) SM.Canvas.mountAll();
+   };
+
+   /* ---------- widgets ---------- */
+--- a/study-match/src/styles/05-cards.css
++++ b/study-match/src/styles/05-cards.css
+@@ -25,6 +25,7 @@
+ }
+ .intuition-art { min-height: 130px; margin: 6px 0; padding: 8px; }
+ .art > svg { width: 100%; max-height: 100%; height: auto; overflow: visible; }
++.art > canvas { width: 100%; height: 100%; max-height: 100%; display: block; }
+ .art .f { fill: var(--violet); }
+ .art .s { fill: var(--lav-2); }
+ .art .ok { stroke: var(--violet); stroke-width: 2; }
+--- a/study-match/src/styles/07-mathflow.css
++++ b/study-match/src/styles/07-mathflow.css
+@@ -25,5 +25,6 @@
+   padding: 4px; border-radius: 12px; background: var(--card);
+ }
+ .mf-setup > svg { width: 100%; height: 100%; max-height: 100%; }
++.mf-setup > canvas { width: 100%; height: 100%; max-height: 100%; display: block; }
+ .mf-setup svg text.mf-part-on { fill: var(--hl) !important; font-weight: 800; text-decoration: underline; }
+ .mf-setup svg path.mf-part-on,
+--- a/study-match/src/styles/15-definition-checks.css
++++ b/study-match/src/styles/15-definition-checks.css
+@@ -11,6 +11,7 @@
+ .definition-front > .scroll-y { flex: 0 1 auto; max-height: 56%; }
+ .definition-back { transform: rotateY(180deg); cursor: default; }
+ .definition-back > .card-title { font-size: var(--fs-body); }
++.definition-back > .def-art { flex: 0 0 112px; height: 112px; min-height: 92px; padding: 6px; }
+ .def-back-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+ .def-back-head .chip { font-size: 11px; }
+ .def-flip { align-self: flex-start; margin-top: auto; }
+--- a/study-match/src/template.html
++++ b/study-match/src/template.html
+@@ -11,6 +11,7 @@
+ <meta name="apple-mobile-web-app-title" content="{{TITLE}}">
+ {{HEAD_APP}}
+ <link rel="preconnect" href="https://fonts.googleapis.com">
++<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+ <style>
+ {{STYLE}}
+--- a/study-match/src/sw.js
++++ b/study-match/src/sw.js
+@@ -10,7 +10,7 @@
+     return Promise.all(keys.filter(function (k) { return k !== CACHE; }).map(function (k) { return caches.delete(k); }));
+   }).then(function () { return self.clients.claim(); }));
+ });
+-/* pages: network first (fresh build wins), everything else (MathJax, fonts): cache first */
++/* pages: network first (fresh build wins), everything else (MathJax, cdnjs.cloudflare.com three.js, fonts): cache first */
+ self.addEventListener('fetch', function (e) {
+   if (e.request.method !== 'GET') return;
+   var isPage = e.request.mode === 'navigate';
+--- a/study-match/build.py
++++ b/study-match/build.py
+@@ -24,6 +24,7 @@
+ Both = BOTH = {'add', 'subtract', 'multiply', 'divide', 'power', 'root', 'reciprocal', 'negate', 'differentiate', 'integrate', 'ln', 'exp', 'apply'}
+ ICONS = {'atom', 'curve', 'motion', 'graph', 'wave', 'lens', 'flask', 'cell', 'sigma', 'book', 'bolt'}
+ SVG_CLASSES = {'f', 's', 'ok', 't', 'i', 'h', 'hk', 'lk', 'gk'}
++CANVAS_OPS = {'line', 'arrow', 'polyline', 'polygon', 'rect', 'circle', 'ellipse', 'curve', 'arc', 'text'}
+
+ # A backslash that was not doubled in JSON turns "\frac" into form-feed + "rac", "\beta" into backspace + "eta", etc.
+ CTRL_FIX = {'\f': '\\f', '\b': '\\b', '\t': '\\t', '\r': '\\r', '\v': '\\v', '\a': '\\a'}
+@@ -100,11 +101,13 @@
+         for k, v in list(obj.items()):
+             w = '%s.%s' % (where, k)
+             if isinstance(v, str):
+                 obj[k] = fix_text(v, w, rep, tex_field=k in tex_keys)
+-                if k not in tex_keys and k not in ('art', 'id', 'type', 'icon'):
++                if k not in tex_keys and k not in ('art', 'setup', 'three', 'id', 'type', 'icon', 'op', 'role', 'name', 'align', 'text'):
+                     check_inline_math(obj[k], w, rep)
++            elif k in ('art', 'setup', 'three'):
++                continue
+             else:
+                 walk_text(v, w, rep, tex_keys)
+     elif isinstance(obj, list):
+         for i, v in enumerate(obj):
+             w = '%s[%d]' % (where, i)
+@@ -129,7 +132,51 @@
+     if not a.get('why'):
+         rep.warn(where, 'ask has no "why"; the learner sees no reason after answering')
+
+
++def check_canvas_ops(ops, where, rep):
++    names = set()
++    if not isinstance(ops, list) or not ops:
++        rep.err(where, 'diagram must be a non-empty list of canvas2d drawing operations')
++        return names
++    for i, item in enumerate(ops):
++        iw = '%s[%d]' % (where, i)
++        if not isinstance(item, dict):
++            rep.err(iw, 'drawing operation must be an object'); continue
++        op = item.get('op')
++        if op not in CANVAS_OPS:
++            rep.err(iw, 'unknown canvas op "%s" (allowed: %s)' % (op, ', '.join(sorted(CANVAS_OPS)))); continue
++        role = item.get('role', '')
++        if role:
++            for r in str(role).split():
++                if r not in SVG_CLASSES:
++                    rep.err(iw, 'unknown role "%s" (allowed: %s)' % (r, ', '.join(sorted(SVG_CLASSES))))
++        if item.get('name'):
++            names.add(item['name'])
++        if op in ('line', 'arrow'):
++            if any(not isinstance(item.get(k), (int, float)) for k in ('x1', 'y1', 'x2', 'y2')):
++                rep.err(iw, '%s needs numeric x1, y1, x2, y2' % op)
++        elif op in ('polyline', 'polygon', 'curve'):
++            pts = item.get('points')
++            if not isinstance(pts, list) or len(pts) < 2 or any(not isinstance(p, list) or len(p) != 2 for p in pts):
++                rep.err(iw, '%s needs a points list of [x, y] pairs' % op)
++        elif op == 'rect':
++            if any(not isinstance(item.get(k), (int, float)) for k in ('x', 'y', 'w', 'h')):
++                rep.err(iw, 'rect needs numeric x, y, w, h')
++        elif op == 'circle':
++            if any(not isinstance(item.get(k), (int, float)) for k in ('cx', 'cy', 'r')):
++                rep.err(iw, 'circle needs numeric cx, cy, r')
++        elif op == 'ellipse':
++            if any(not isinstance(item.get(k), (int, float)) for k in ('cx', 'cy', 'rx', 'ry')):
++                rep.err(iw, 'ellipse needs numeric cx, cy, rx, ry')
++        elif op == 'arc':
++            if any(not isinstance(item.get(k), (int, float)) for k in ('cx', 'cy', 'r', 'start', 'end')):
++                rep.err(iw, 'arc needs numeric cx, cy, r, start, end')
++        elif op == 'text':
++            if any(not isinstance(item.get(k), (int, float)) for k in ('x', 'y')) or not isinstance(item.get('text'), str):
++                rep.err(iw, 'text needs numeric x, y and string text')
++    return names
++
++
+ def validate(data, rep):
+     if not isinstance(data, dict):
+         rep.err('root', 'data must be a JSON object'); return
+@@ -167,6 +212,7 @@
+     if not isinstance(secs, list) or not secs:
+         rep.err('sections', 'need at least one section'); return
+     ids = set()
++    three_cards = 0
+     for si, sec in enumerate(secs):
+         sw = 'sections[%d]' % si
+         if not sec.get('title') and not sec.get('short'):
+@@ -194,6 +240,17 @@
+             extra_ids = set()
+             for ci, c in enumerate(cards):
+                 cw = hw + '.cards[%d]' % ci
++                if 'three' in c:
++                    three_cards += 1
++                    if c.get('term') != 'meridional-ray' and 'meridional-ray' not in (c.get('defines') or []):
++                        rep.err(cw, 'three.js is allowed only on the meridional-ray card')
++                    th = c['three']
++                    if not isinstance(th, dict) or not all(k in th for k in ('axis', 'points', 'meridionalRay')):
++                        rep.err(cw + '.three', 'three must be an object with axis, points and meridionalRay')
++                if meta.get('definitionChecks') and c.get('type') == 'info':
++                    if (c.get('defines') and len(c['defines'])) or re.match(r'^What (?:is|are)\b', c.get('title', ''), re.I):
++                        if not c.get('art'):
++                            rep.err(cw, 'definition recall card needs a canvas2d "art" drawing list on its flip back')
+                 if 'uid' in c:
+                     uid = c['uid']
+                     if not isinstance(uid, str) or not re.fullmatch(r'[a-z][a-z0-9-]*', uid):
+@@ -211,6 +268,8 @@
+                         rep.err(hw + '.cards[%d]' % ci, 'duplicate intuition term in this topic')
+                     intro_terms.add(term)
+                 check_card(c, '%s.cards[%d]' % (hw, ci), rep)
++    if three_cards > 1:
++        rep.err('root', 'at most one card may use "three" (found %d)' % three_cards)
+
+
+ def check_card(c, w, rep):
+@@ -226,25 +285,15 @@
+         for field in ('term', 'meaning', 'picture', 'example', 'bridge'):
+             if not isinstance(c.get(field), str) or not c[field].strip():
+                 rep.err(w, 'intuition needs a non-empty ' + field)
+-    if t in ('info', 'question') and c.get('art'):
+-        a = c['art']
+-        if not a.strip().startswith('<svg') or 'viewBox' not in a:
+-            rep.err(w, 'art must be one <svg viewBox="0 0 260 180" ...> element')
+-        if re.search(r'<script|on\w+=|href=', a, re.I):
+-            rep.err(w, 'art must not contain scripts, event handlers or links')
+-        if re.search(r'fill="#|stroke="#', a):
+-            rep.warn(w, 'art uses hard-coded colours; use the palette classes so dark mode works')
+-        for cl in re.findall(r'class="([^"]+)"', a):
+-            for x in cl.split():
+-                if x not in SVG_CLASSES:
+-                    rep.warn(w, 'art uses unknown class "%s"' % x)
++        if not c.get('art') and not c.get('three'):
++            rep.err(w, 'intuition card needs a canvas2d "art" list (or "three" on the meridional-ray card)')
++    if t in ('info', 'intuition', 'question') and c.get('art') is not None:
++        check_canvas_ops(c['art'], w + '.art', rep)
+     if t == 'question':
+         if 'textAnswer' in c and not isinstance(c['textAnswer'], bool):
+             rep.err(w, 'textAnswer must be true or false')
+         if not c.get('q'):
+             rep.err(w, 'question card needs "q"')
+-        if c.get('art') and not str(c['art']).strip().startswith('<svg'):
+-            rep.err(w, 'art must be one <svg> element')
+     if t == 'eval':
+         opts = c.get('options')
+         if not c.get('q'):
+@@ -289,6 +341,9 @@
+
+
+ def check_derivation(d, w, rep):
++    setup_names = set()
++    if d.get('setup') is not None:
++        setup_names = check_canvas_ops(d['setup'], w + '.setup', rep)
+     steps = d.get('steps')
+     if not isinstance(steps, list) or len(steps) < 2:
+         rep.err(w, 'derivation needs at least 2 steps'); return
+@@ -324,6 +379,14 @@
+                 rep.err(sw, 'unbalanced { } in move.by')
+             if mt in BOTH and i > 0 and top_level_equals(steps[i - 1].get('tex', '')) != 1:
+                 rep.err(sw, 'move "%s" acts on both sides, so the previous line needs exactly one "="' % mt)
++        if 'focus' in st:
++            fc = st['focus']
++            if not isinstance(fc, list) or any(not isinstance(fn, str) for fn in fc):
++                rep.err(sw + '.focus', 'focus must be a list of part names')
++            elif setup_names:
++                for fn in fc:
++                    if fn not in setup_names:
++                        rep.err(sw + '.focus', 'focus name "%s" not found in setup drawing list' % fn)
+         if st.get('ask'):
+             check_ask(st['ask'], sw + '.ask', rep)
+     phases = d.get('phases') or []
+--- a/skills/00-START-HERE.md
++++ b/skills/00-START-HERE.md
+@@ -52,10 +52,10 @@
+ 1. Plan first, privately: list the sections (big subject areas, 2–6), and inside each the topics
+    ("sheets", 2–5 per section). A topic is something I can finish in 10–25 minutes.
+ 2. For each syllabus topic write about 6–14 cards, following `01-schema.md`:
+-   - concepts first (`info` cards, one idea each, with an SVG picture when a picture helps),
++   - concepts first (`info` cards, one idea each, with a canvas2d `art` drawing list when a picture helps, and on every definition-recall card's flip back),
+    - a `derivation` card whenever the topic has a formula that is derived (rules in `02-derivations.md`),
+    - one `math` worked example where numbers help,
+    - then 3–5 questions (`mcq`, `fill`, `number`) at the end of the topic (rules in `04-questions.md`).
+-2b. For physics topics also follow the "Physics subjects: required pictures" rules in `03-svg-art.md`
+-   (circuit diagrams, optics set-up diagrams, true graphs) and give every derivation 4 `ask` checkpoints.
++2b. For physics topics also follow the canvas2d drawing rules in `03-svg-art.md`
++   (and three.js only for the meridional ray) and give every derivation 4 `ask` checkpoints.
+ 2c. For physics model-paper practice, preserve the paper's sections and question order.
+--- a/skills/01-schema.md
++++ b/skills/01-schema.md
+@@ -122,18 +122,22 @@
+ 
+ `points` is a non-empty list. Place the Remember card after the model answer,
+ then append the three word-completion OMR cards described below.
+ 
+-### `intuition` — plain-words introduction with required SVG picture
++### `intuition` — plain-words introduction with required Canvas2D diagram (or `three` for meridional ray)
+ 
+ Place an `intuition` card immediately before a new concept's technical `info` card;
+ see `07-plain-words-and-glossary.md`. Every `intuition` card **must** include an
+-`art` SVG (drawn according to `03-svg-art.md`), followed by `picture` as a short
++`art` Canvas2D drawing list (drawn according to `03-svg-art.md`), or a `three` 3D scene object on the meridional-ray card only, followed by `picture` as a short
+ one-line caption explaining what to look at in the diagram.
+ ```json
+ { "type": "intuition", "term": "paraxial-approximation",
+   "title": "Why only rays close to the axis focus sharply",
+   "meaning": "The paraxial approximation keeps only rays that make very small angles with the axis.",
+-  "art": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"...\">...</svg>",
++  "art": [
++    { "op": "line", "x1": 16, "y1": 105, "x2": 244, "y2": 105, "role": "lk", "width": 2, "name": "axis" },
++    { "op": "polyline", "points": [[28, 105], [118, 56], [226, 105]], "role": "hk", "width": 2.6, "name": "OSI" },
++    { "op": "arc", "cx": 28, "cy": 105, "r": 32, "start": -28, "end": 0, "role": "lk", "width": 1.8, "name": "alpha1" }
++  ],
+   "picture": "Look at the small angle arc α near O where height h over distance x gives the angle.",
+   "example": "At 0.1 rad, sin(0.1) and tan(0.1) are both very close to 0.1.",
+   "bridge": "Under this small-angle rule, all paraxial rays from O meet at one image point I." }
+@@ -148,20 +152,23 @@
+ card's
+ defined terms with a defines array of glossary IDs so those terms remain unlinked
+ on that card; intuition.term automatically supplies its own exclusion. New worked
+ examples use a unique uid so they do not shift existing cards' numeric IDs.
+-With meta.definitionChecks enabled, definition info cards use the same authored
+-body as their correct statement. Art cards and math cards retain their existing
+-presentation. No extra recall question or reference field is required.
+-Keep the authored definition body on the flip card's front; writing belongs on
+-its back. Locked cards remain in the row with their original dimensions.
++With meta.definitionChecks enabled, definition info cards (cards with `defines` or a title starting with “What is/are”) use the same authored
++body as their correct statement and render their `art` Canvas2D drawing list on the flip back. Non-definition info cards render `art` on their front face.
++Keep the authored definition body and existing `tex` formula on the flip card's front; writing and the recall diagram belong on
++its back. Locked cards remain in the row with their original dimensions.
+ ```json
+ { "type": "info", "label": "01", "title": "Ionic bond",
+   "body": "One atom transfers electrons to another, creating oppositely charged ions that attract.",
+   "examples": ["NaCl", "MgO"],
+-  "art": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"...\">...</svg>" }
++  "art": [
++    { "op": "circle", "cx": 80, "cy": 95, "r": 45, "role": "s", "name": "Na" },
++    { "op": "circle", "cx": 180, "cy": 95, "r": 45, "role": "f", "name": "Cl" }
++  ] }
+ ```
+ - `body`: 1–2 sentences, ≤ 220 characters. One idea per card.
+ - `examples`: 0–3 short chips (≤ 24 chars each).
+-- `art`: optional SVG (rules in `03-svg-art.md`). Instead of `art` you may give `"tex": "E = mc^2"` to show one formula large.
++- `art`: Canvas2D drawing list (rules in `03-svg-art.md`). Every definition-recall `info` card has an `art` list shown on its flip back; non-definition `info` cards show `art` or `"tex"` on their front.
++- `three`: 3D scene object (`axis`, `plane`, `surfaces`, `points`, `meridionalRay`, `skewRay`), used **only** on the meridional-ray card.
+ 
+ ### `math` — a formula or worked example shown large
+@@ -173,12 +181,14 @@
+ ```json
+ { "type": "derivation", "title": "Bond energy, step by step",
+   "legend": "\\(k\\) Coulomb constant, \\(r\\) separation.",
+-  "setup": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"...\"><line x1=\"...\" y1=\"...\" x2=\"...\" y2=\"...\" class=\"lk\" data-part=\"sep\"/></svg>",
++  "setup": [
++    { "op": "line", "x1": 40, "y1": 90, "x2": 220, "y2": 90, "role": "lk", "width": 2, "name": "sep" }
++  ],
+   "phases": [ { "name": "Model", "why": "energy = attraction + repulsion" } ],
+   "steps": [ { "tex": "...", "phase": "Model", "focus": ["sep"], "note": "..." },
+              { "tex": "...", "move": { "type": "differentiate", "wrt": "r" }, "focus": ["sep"], "note": "...", "ask": { ... } } ] }
+ ```
+-- Give each highlightable ray, side, angle arc or label in `setup` a `data-part="name"` attribute.
++- Give each highlightable ray, side, angle arc or label in `setup` a `"name": "partName"` field.
+ - Each step lists the parts it uses in `"focus": ["name1", "name2"]` so the diagram highlights them at the same time.
+ - Write parallel steps (such as two surfaces of a lens) one after the other as separate steps with their own phase labels, never side by side.
+ - An **All steps** summary view lists every step in order (step number, equation and move) after the final step and via the top button.
+--- a/skills/02-derivations.md
++++ b/skills/02-derivations.md
+@@ -1,7 +1,7 @@
+ # 02 — Writing derivations
+ 
+ You write **lines of TeX** and name the **move** that produced each line. The app animates
+-everything on a single card after the student flips it: the `setup` SVG sits next to the
++everything on a single card after the student flips it: the `setup` Canvas2D diagram sits next to the
+ equations on the same board, symbols glide to their new place, new symbols write in, and
+ cancelled ones are struck through and vanish.
+ 
+@@ -19,7 +19,7 @@
+    each with its own phase label—never side by side. The first step has no `move`; every later step has one.
+ 6. Every step has a `note`: one short sentence saying *why* or what just cancelled (≤ 120 chars).
+-7. Include a `"setup"` SVG (following `03-svg-art.md`) showing the geometry or circuit used by
+-   the derivation, with `data-part="name"` on each highlightable ray, side, angle arc and label.
++7. Include a `"setup"` Canvas2D drawing list (following `03-svg-art.md`) showing the geometry or circuit used by
++   the derivation, with `"name": "partName"` on each highlightable ray, side, angle arc and label.
+    Each step names the parts it uses in `"focus": ["name1", "name2"]` so the picture highlights
+    those lines at the same time.
+ 8. Mark 3–6 phases with `"phase"` on the step where each phase starts. List the same phases in
+--- a/skills/03-svg-art.md
++++ b/skills/03-svg-art.md
+@@ -1,38 +1,61 @@
+-# 03 — SVG pictures for `info`, `intuition` and `derivation` cards
+-
+-Pictures are simple, flat diagrams. The app colours them, including in dark mode, through
+-**classes**. Never write colours yourself.
++# 03 — Canvas2D diagrams (and Three.js for the meridional ray)
++
++All 2D diagrams (`art` on `intuition`, `info`, and recall cards; `setup` on `derivation` cards)
++are drawn with the HTML Canvas 2D API from a JSON list of drawing operations.
++Never write SVG strings, JavaScript code, or hard-coded hex/RGB colours in `data.json`.
++The runtime (`02-canvas.js`) reads the palette tokens from `01-tokens.css` in light and dark mode
++and scales by `devicePixelRatio` so diagrams stay sharp on phones and desktops.
+ 
+ ## Hard rules
+ 
+-- Exactly one element: `<svg viewBox="0 0 260 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="what it shows">…</svg>`
+-- Draw inside x 0–260, y 0–180. Leave ~8 units of margin.
+-- Allowed elements: `circle, ellipse, rect, line, polyline, polygon, path, text, g`.
+-- **No** `fill="#…"`, `stroke="#…"`, `style=`, `<script>`, `<image>`, `href`, `on…=` attributes, gradients, filters, fonts.
+-- Use only these classes:
+-
+-| class | effect | use for |
++- Coordinate space: logical width `260`, logical height `180` (`0 <= x <= 260`, `0 <= y <= 180`). Leave ~8 units of margin.
++- Every diagram in `art` or `setup` is a non-empty JSON array of operation objects (`{ "op": "...", ... }`).
++- Allowed `op` types:
++  - `line`: `{ "op": "line", "x1": 20, "y1": 90, "x2": 240, "y2": 90, "role": "lk", "width": 2, "dash": [4, 4], "name": "axis" }`
++  - `arrow`: `{ "op": "arrow", "x1": 30, "y1": 90, "x2": 210, "y2": 90, "role": "hk", "width": 2.5, "head": 7, "name": "ray" }`
++  - `polyline`: `{ "op": "polyline", "points": [[30, 90], [120, 48], [210, 90]], "role": "hk", "width": 2.5, "dash": [4, 4], "name": "ray" }`
++  - `polygon`: `{ "op": "polygon", "points": [[32, 90], [215, 34], [215, 146]], "role": "s", "name": "cone" }`
++  - `rect`: `{ "op": "rect", "x": 65, "y": 24, "w": 80, "h": 52, "rx": 6, "role": "s ok", "name": "glass" }`
++  - `circle`: `{ "op": "circle", "cx": 120, "cy": 90, "r": 4, "role": "h", "name": "P" }`
++  - `ellipse`: `{ "op": "ellipse", "cx": 130, "cy": 90, "rx": 60, "ry": 35, "role": "s ok", "name": "mirror" }`
++  - `curve`: quadratic (`3` points), cubic (`4` points), or chained quadratic lens/surface (`5` points with `"closed": true`):
++    `{ "op": "curve", "points": [[120, 22], [108, 90], [120, 158], [132, 90], [120, 22]], "closed": true, "role": "s ok", "name": "lens" }`
++  - `arc`: `{ "op": "arc", "cx": 28, "cy": 105, "r": 28, "start": -28, "end": 0, "role": "lk", "width": 1.8, "name": "alpha1" }` (angles in degrees; stroke only, no fill).
++  - `text`: `{ "op": "text", "x": 130, "y": 152, "text": "Label", "size": 11, "align": "center", "role": "t", "name": "part" }`
++
++## Palette roles (mapped to `01-tokens.css`)
++
++| `role` | token mapping | use for |
+ |---|---|---|
+-| `f` | solid main colour (violet) | main objects, nuclei, arrows heads |
+-| `s` | soft fill (pale lavender) | backgrounds, secondary objects, areas |
+-| `ok` | violet outline (add to a filled shape: `class="s ok"`) | borders |
+-| `lk` | violet line, no fill | lines, paths, angle arcs, axes, orbits |
+-| `gk` | faint grey line | ground lines, guides, dashed helpers |
+-| `h` | amber fill | the ONE thing to look at (electron, ball, key point) |
+-| `hk` | amber line, no fill | the ONE key arrow or path |
+-| `t` | text in ink colour, bold | labels on light backgrounds |
+-| `i` | text in light colour, bold | labels on top of `f` shapes |
++| `f` | fill `var(--violet)` | main points, centres, focal points |
++| `s` | fill `var(--lav-2)` | soft shaded areas, lenses, glass blocks |
++| `ok` | stroke `var(--violet)`, width 2 | outline on filled shapes (`"role": "s ok"`) |
++| `lk` | stroke `var(--violet)`, no fill | rays, surfaces, angle arcs, axes |
++| `gk` | stroke `var(--ink-2)` (0.55 alpha), no fill | normals, dashed construction guides |
++| `h` | fill `var(--amber)` | the ONE key point to look at |
++| `hk` | stroke `var(--amber)`, no fill | the ONE key ray or path |
++| `t` | fill `var(--ink)`, bold | text labels on light/lavender backgrounds |
++| `i` | fill `var(--on-violet)`, bold | text labels on top of `f` shapes |
+ 
+-- Set line thickness with `stroke-width="2"` (allowed). Dashes with `stroke-dasharray="5 5"` (allowed).
+-- **Angle arcs**: whenever an angle (such as θ, φ, α, β, i or r) is shown or used, draw its curved mark as a `<path d="M x1 y1 A r r 0 0 1 x2 y2" class="lk" stroke-width="1.8"/>` (line, no fill), placed **after** the lines/rays it marks so it stays visible on top.
+-- **Highlightable parts (`data-part`)**: give each ray, triangle side, surface, angle arc and matching label a `data-part="name"` attribute so derivation steps can highlight them via `"focus": ["name"]`.
+-- **Palette tokens only**: never hard-code hex/rgb colours in SVGs or maths CSS; use only the allowed classes and the tokens from `01-tokens.css`.
+-- Text: `font-size` 11–26, `text-anchor="middle"` to centre. Max ~4 words per label.
+-- Only **one** amber (`h`/`hk`) highlight per picture: it is where the eye goes.
+-- Inside the JSON string, every `"` in the SVG must be written `\"`.
++- **Angle arcs**: whenever an angle (such as θ, φ, α, β, i or r) is shown or used, draw it with `"op": "arc"` (`"role": "lk"`, stroke only, no fill) placed **after** the lines/rays it marks so it stays visible on top.
++- **Highlightable parts (`name`)**: give each ray, triangle side, surface, angle arc and matching label a `"name": "partName"` field so derivation steps highlight them in `var(--hl)` via `"focus": ["partName"]`.
++- **Text bounds**: keep every `text` operation inside `x: 8..252` and `y: 10..176`, with no overlapping labels.
++
++## Three.js (3D): ONLY for the meridional ray
+ 
+-## Example (as it appears inside data.json)
++- Use Three.js (`three` field) on **one card only**: the meridional-ray card (`term: "meridional-ray"`), showing the optical axis (`C₁–C₂`), the flat meridional plane, the in-plane meridional ray, and the non-planar skew ray in 3D.
++- Every other diagram in the app must use the 2D Canvas operation list (`art` / `setup`).
++- The runtime lazy-loads `three.min.js` (`r128`) from `cdnjs.cloudflare.com` only when that card's sheet is opened. If offline, it hides the 3D box and shows the caption and text without crashing.
+ 
++## Example (as it appears inside `data.json`)
++
+ ```json
+-"art": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Sodium ion giving an electron to a chloride ion\"><circle cx=\"80\" cy=\"95\" r=\"50\" class=\"s\"/><text x=\"80\" y=\"104\" text-anchor=\"middle\" font-size=\"24\" class=\"t\">Na⁺</text><circle cx=\"180\" cy=\"95\" r=\"50\" class=\"f\"/><text x=\"180\" y=\"104\" text-anchor=\"middle\" font-size=\"24\" class=\"i\">Cl⁻</text><path d=\"M 112 62 Q 130 22 148 62\" class=\"hk\" stroke-width=\"2.5\" stroke-dasharray=\"5 5\"/><circle cx=\"130\" cy=\"32\" r=\"6\" class=\"h\"/></svg>"
++"art": [
++  { "op": "circle", "cx": 80, "cy": 95, "r": 50, "role": "s", "name": "Na" },
++  { "op": "text", "x": 80, "y": 102, "text": "Na⁺", "size": 20, "align": "center", "role": "t", "name": "Na" },
++  { "op": "circle", "cx": 180, "cy": 95, "r": 50, "role": "f", "name": "Cl" },
++  { "op": "text", "x": 180, "y": 102, "text": "Cl⁻", "size": 20, "align": "center", "role": "i", "name": "Cl" },
++  { "op": "curve", "points": [[112, 62], [130, 22], [148, 62]], "role": "hk", "width": 2.5, "dash": [5, 5], "name": "transfer" },
++  { "op": "circle", "cx": 130, "cy": 32, "r": 6, "role": "h", "name": "electron" }
++]
+ ```
+--- a/skills/05-checklist.md
++++ b/skills/05-checklist.md
+@@ -12,7 +12,7 @@
+ ## JSON
+ - [ ] Starts with `{` and ends with `}`. Nothing before or after. No code fence.
+ - [ ] Every backslash in every string is doubled (`\\frac`, `\\(`, `\\alpha`).
+-- [ ] Every `"` inside an SVG string is written `\"`.
++- [ ] No SVG strings remain in `art` or `setup`; every diagram is a JSON list of canvas2d operations.
+ - [ ] No trailing commas. No comments.
+ 
+ ## Structure
+@@ -84,9 +84,12 @@
+ - [ ] Every circuit has a circuit diagram card; every optics experiment has a set-up diagram and a graph.
+ - [ ] Keep syllabus topics compact; retain a full model-paper question and rubric in the same sheet even when that exceeds 14 cards.
+ 
+-## SVG
+-- [ ] `viewBox="0 0 260 180"`, only allowed classes, no colours, one amber highlight.
+-- [ ] Highlightable lines, arcs and labels have `data-part="name"`, and derivation steps name them in `focus`.
++## Canvas2D & Three.js diagrams
++- [ ] Every diagram (`art`, `setup`) is a list of canvas2d operations in `260×180` logical coordinates using only allowed roles (`f, s, ok, lk, gk, h, hk, t, i`).
++- [ ] Highlightable lines, arcs and labels have `"name"`, and every name in a derivation step's `focus` exists in that card's `setup` list.
++- [ ] Angle arcs (`"op": "arc"`) are drawn with stroke and no fill after the lines they mark.
++- [ ] Every definition-recall card has a canvas2d `art` drawing list rendered on its flip back.
++- [ ] Exactly one card uses `three` (the meridional-ray card), lazy-loaded from cdnjs when opened.
+ - [ ] Maths and derivation styles use only the colour tokens from `01-tokens.css` (no hard-coded red or rose).
+ 
+ When I run `python build.py`, it prints every problem with its exact location
+--- a/skills/07-plain-words-and-glossary.md
++++ b/skills/07-plain-words-and-glossary.md
+@@ -9,6 +9,6 @@
+ Place an intuition card immediately before the technical introduction. Fields:
+ `type = "intuition"`, `term` = glossary entry ID, `title`, `meaning`, `art`
+-(required: one SVG drawn according to `03-svg-art.md`), `picture` (one short
+-caption line under the SVG saying what to look at), `example` and `bridge`.
++(required: a Canvas2D drawing list following `03-svg-art.md`, or `three` on the meridional-ray card only), `picture` (one short
++caption line under the diagram saying what to look at), `example` and `bridge`.
+ All text fields are non-empty plain text. The app renders `art` followed by the
+ `picture` caption inside the scrollable reading area.
+--- a/skills/08-definition-recall.md
++++ b/skills/08-definition-recall.md
+@@ -7,11 +7,11 @@
+ 
+ Enable it with meta.definitionChecks: true. Eligible cards are info cards with
+-defines metadata or titles beginning “What is” / “What are”, excluding art cards.
++defines metadata or titles beginning “What is” / “What are” (eligibility does not depend on whether the card has an `art` diagram).
+ An info card may retain its existing formula. Do not convert math, graphics,
+ intuition or derivation cards into writing checks. Use authored defines metadata
+ for new definition cards, and preserve all educational content during porting.
+ 
+ Keep the concept, explanation and existing formula on the front. An unlocked
+ definition card flips on a surface tap or explicit Recall button to a back face
+-with a short editable answer box. Read flips it back. Use a 3D card-inner with
++with a Canvas2D diagram (`art`) and a short editable answer box. Read flips it back. Use a 3D card-inner with
+ front/back faces, backface visibility and inert on the inactive face. Inputs,
+--- a/skills/example-minimal.json
++++ b/skills/example-minimal.json
+@@ -23,7 +23,13 @@
+                 "\\(\\lambda\\) = decay constant",
+                 "Unit: s⁻¹"
+               ],
+-              "art": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Falling curve of remaining nuclei\"><line x1=\"30\" y1=\"20\" x2=\"30\" y2=\"155\" class=\"lk\" stroke-width=\"2\"/><line x1=\"30\" y1=\"155\" x2=\"245\" y2=\"155\" class=\"lk\" stroke-width=\"2\"/><path d=\"M 30 30 C 80 110 140 140 240 150\" class=\"hk\" stroke-width=\"3\"/><text x=\"40\" y=\"28\" font-size=\"14\" class=\"t\">N</text><text x=\"238\" y=\"172\" text-anchor=\"end\" font-size=\"14\" class=\"t\">t</text></svg>"
++              "art": [
++                { "op": "line", "x1": 30, "y1": 20, "x2": 30, "y2": 155, "role": "lk", "width": 2, "name": "y-axis" },
++                { "op": "line", "x1": 30, "y1": 155, "x2": 245, "y2": 155, "role": "lk", "width": 2, "name": "x-axis" },
++                { "op": "curve", "points": [[30, 30], [80, 110], [140, 140], [240, 150]], "role": "hk", "width": 3, "name": "decay" },
++                { "op": "text", "x": 40, "y": 28, "text": "N", "size": 14, "role": "t", "name": "y-axis" },
++                { "op": "text", "x": 238, "y": 172, "text": "t", "size": 14, "align": "right", "role": "t", "name": "x-axis" }
++              ]
+             },
+             {
+               "type": "derivation",

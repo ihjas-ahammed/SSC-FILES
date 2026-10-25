@@ -1,0 +1,326 @@
+--- a/skills/02-derivations.md
++++ b/skills/02-derivations.md
+@@ -14,13 +14,18 @@
+ 4. Write the *result* of the move in `tex`, already simplified. Do **not** write the
+    intermediate "both sides" line; the app draws that for you.
+-5. 4–12 steps. The first step has no `move`. Every later step has one.
++5. 4–12 detailed steps: include every algebra move, every approximation, and every sign
++   decision a Year 2 student needs. When two things happen in parallel (e.g. refraction at
++   surface 1 and surface 2 of a thin lens), write them one after the other as separate steps,
++   each with its own phase label—never side by side. The first step has no `move`; every later step has one.
+ 6. Every step has a `note`: one short sentence saying *why* or what just cancelled (≤ 120 chars).
+ 7. Include a `"setup"` SVG (following `03-svg-art.md`) showing the geometry or circuit used by
+-   the derivation. It is drawn on the board beside the equations, and the part used in the
+-   active step is highlighted.
++   the derivation, with `data-part="name"` on each highlightable ray, side, angle arc and label.
++   Each step names the parts it uses in `"focus": ["name1", "name2"]` so the picture highlights
++   those lines at the same time.
+ 8. Mark 3–6 phases with `"phase"` on the step where each phase starts. List the same phases in
+-   `"phases"` with a one-line `why` each. Do not create separate route, step, or full-page cards.
++   `"phases"` with a one-line `why` each. Do not create separate route, step, or full-page cards;
++   the card includes an **All steps** summary stage that opens after the last step or from the top button.
+ 9. Put **4** `ask` checkpoints on steps where the next move is a real decision, an identity
+    or a physical law is used. Ask **only about the next step** (what the next line is, or why
+    the next line is true; never ask about steps far away). Keep the question to one short line
+    (≤ 15 words) and each option to at most 6 words.
+--- a/skills/03-svg-art.md
++++ b/skills/03-svg-art.md
+@@ -26,6 +26,8 @@
+ 
+ - Set line thickness with `stroke-width="2"` (allowed). Dashes with `stroke-dasharray="5 5"` (allowed).
+ - **Angle arcs**: whenever an angle (such as θ, φ, α, β, i or r) is shown or used, draw its curved mark as a `<path d="M x1 y1 A r r 0 0 1 x2 y2" class="lk" stroke-width="1.8"/>` (line, no fill), placed **after** the lines/rays it marks so it stays visible on top.
++- **Highlightable parts (`data-part`)**: give each ray, triangle side, surface, angle arc and matching label a `data-part="name"` attribute so derivation steps can highlight them via `"focus": ["name"]`.
++- **Palette tokens only**: never hard-code hex/rgb colours in SVGs or maths CSS; use only the allowed classes and the tokens from `01-tokens.css`.
+ - Text: `font-size` 11–26, `text-anchor="middle"` to centre. Max ~4 words per label.
+ - Only **one** amber (`h`/`hk`) highlight per picture: it is where the eye goes.
+ - Inside the JSON string, every `"` in the SVG must be written `\"`.
+--- a/skills/04-questions.md
++++ b/skills/04-questions.md
+@@ -28,4 +28,5 @@
+ - For general syllabus topics: 3–5 questions at the end, mixing types: at least one `mcq`, and one `fill` or
+   `number` when the topic has a key word or a calculation.
+ - In a `derivation`, 4 `ask` checkpoints asking **only about the next step** (what the next line is, or why it is true).
++  Each checkpoint question is one line (≤ 15 words) and each option is at most 6 words, matching the detailed step sequence.
+ 
+--- a/skills/05-checklist.md
++++ b/skills/05-checklist.md
+@@ -78,9 +78,12 @@
+ ## Physics content
+ - [ ] Every topic is checked against the syllabus item (and nothing outside the timetable list is added).
++- [ ] Symbols, signs, equations and section names match the textbook (Ghatak, *Optics*), with `source` on every sheet.
+ - [ ] Every circuit has a circuit diagram card; every optics experiment has a set-up diagram and a graph.
+ - [ ] Keep syllabus topics compact; retain a full model-paper question and rubric in the same sheet even when that exceeds 14 cards.
+ 
+ ## SVG
+ - [ ] `viewBox="0 0 260 180"`, only allowed classes, no colours, one amber highlight.
++- [ ] Highlightable lines, arcs and labels have `data-part="name"`, and derivation steps name them in `focus`.
++- [ ] Maths and derivation styles use only the colour tokens from `01-tokens.css` (no hard-coded red or rose).
+ 
+ When I run `python build.py`, it prints every problem with its exact location
+--- a/study-match/src/components/02-mathflow.js
++++ b/study-match/src/components/02-mathflow.js
+@@ -122,6 +122,7 @@
+   function mount(root, spec) {
+     var stage = root.querySelector('.mf-stage'), board = root.querySelector('.mf-board');
+     var setupEl = root.querySelector('.mf-setup');
++    var summaryEl = root.querySelector('.mf-summary'), sumBtn = root.querySelector('[data-mf="summary"]');
+     var noteEl = root.querySelector('.mf-note'), dotsEl = root.querySelector('.mf-dots');
+     var phEl = root.querySelector('.mf-phases'), countEl = root.querySelector('.mf-count');
+     var playBtn = root.querySelector('[data-mf="play"]');
+@@ -152,6 +153,15 @@
+     dotsEl.innerHTML = frames.map(function (f, j) {
+       return '<button type="button" class="mf-dot' + (f.ask ? ' is-ask' : '') + '" aria-label="Step ' + (j + 1) + '" data-j="' + j + '"></button>';
+     }).join('');
++    if (summaryEl) {
++      summaryEl.innerHTML = '<div class="mf-sum-list">' + spec.steps.map(function (st, idx) {
++        var mvText = st.move ? T.label(st.move) : (st.phase || 'Start');
++        return '<div class="mf-sum-row"><span class="mf-sum-num">' + SM.pad2(idx + 1) + '</span>' +
++          '<span class="mf-sum-eq">\\(' + st.tex + '\\)</span>' +
++          '<span class="mf-sum-mv">' + SM.mathLabel(SM.esc(mvText)) + '</span></div>';
++      }).join('') + '</div>';
++      SM.mathReady(function (ok) { if (ok) SM.typeset(summaryEl); });
++    }
+ 
+     function chrome(i) {
+       var cur = frames[i] ? phases.indexOf(frames[i].phase) : -1;
+@@ -169,7 +180,14 @@
+       Array.prototype.forEach.call(svg.querySelectorAll('.mf-part-on'), function (el) { el.classList.remove('mf-part-on'); });
+       if (!f) return;
+       var st = spec.steps[f.si] || {};
+-      var hay = (f.tex || '') + ' ' + (st.note || '') + ' ' + (st.focus || '');
++      var focusList = Array.isArray(st.focus) ? st.focus : (st.focus ? String(st.focus).split(/[\s,]+/) : []);
++      var focusSet = {};
++      focusList.forEach(function (k) { if (k) focusSet[k] = 1; });
++      var hay = (f.tex || '') + ' ' + (st.note || '') + ' ' + focusList.join(' ');
++      Array.prototype.forEach.call(svg.querySelectorAll('[data-part]'), function (el) {
++        var dp = el.getAttribute('data-part') || '';
++        if (focusSet[dp] || (!focusList.length && dp && hay.indexOf(dp) !== -1)) el.classList.add('mf-part-on');
++      });
+       var map = {
+         '\\theta_1': 'θ₁', '\\theta_2': 'θ₂', '\\phi_1': 'φ₁', '\\phi_2': 'φ₂',
+         '\\alpha_1': 'α₁', '\\alpha_2': 'α₂', '\\beta': 'β',
+@@ -198,9 +216,6 @@
+         var near = hitTexts.some(function (pt) { return Math.hypot(pt.x - px, pt.y - py) < 38; });
+         if (near) p.classList.add('mf-part-on');
+       });
+-      Array.prototype.forEach.call(svg.querySelectorAll('[data-part]'), function (el) {
+-        if (hay.indexOf(el.getAttribute('data-part')) !== -1) el.classList.add('mf-part-on');
+-      });
+     }
+ 
+     function setNote(html) {
+@@ -391,7 +406,10 @@
+       setNote(B.note);
+       highlightSetup(B);
+       chrome(i);
+-      if (i === frames.length - 1) complete();
++      if (i === frames.length - 1) {
++        complete();
++        if (summaryEl && !instant) later.push(setTimeout(function () { api.toggleSummary(true); }, 1350));
++      } else if (summaryEl && !summaryEl.hidden) api.toggleSummary(false);
+     }
+ 
+     function complete() {
+@@ -478,10 +497,18 @@
+     };
+     api.isAsking = function () { return asking >= 0; };
++    api.toggleSummary = function (force) {
++      if (!summaryEl) return;
++      var showSum = force === undefined ? summaryEl.hidden : !!force;
++      summaryEl.hidden = !showSum;
++      stage.hidden = showSum;
++      if (sumBtn) sumBtn.classList.toggle('is-on', showSum);
++    };
+     api.practise = function () {
+       if (SM.isPaused && SM.isPaused()) return;
++      api.toggleSummary(false);
+       asking = -1; askEl.hidden = true; panel.hidden = false;
+       Object.keys(answered).forEach(function (k) { delete answered[k]; });
+       stopPlay(); reset(); api.play();
+     };
+     api.isPlaying = function () { return playing; };
+     api.pause = stopPlay;
+@@ -490,11 +518,12 @@
+         e.stopPropagation();
+         var a = b.getAttribute('data-mf');
+         if (a === 'practise') api.practise();
++        else if (a === 'summary') api.toggleSummary();
+         else if (a === 'flip-back') api.flip(false);
+         else if (a === 'flip-open') api.flip(true);
+-        else if (a === 'replay') api.replay();
+-        else if (a === 'next') api.next();
+-        else if (a === 'prev') api.prev();
+-        else if (a === 'play') api.toggle();
++        else if (a === 'replay') { api.toggleSummary(false); api.replay(); }
++        else if (a === 'next') { api.toggleSummary(false); api.next(); }
++        else if (a === 'prev') { api.toggleSummary(false); api.prev(); }
++        else if (a === 'play') { api.toggleSummary(false); api.toggle(); }
+       });
+     });
+@@ -518,6 +547,7 @@
+       var d = e.target.closest('.mf-dot');
+       if (!d) return;
+       e.stopPropagation();
++      api.toggleSummary(false);
+       api.jump(Number(d.dataset.j));
+     });
+ 
+--- a/study-match/src/components/03-render.js
++++ b/study-match/src/components/03-render.js
+@@ -149,19 +149,20 @@
+           '</div></div>' +
+           '<div class="mf-face mf-back" inert>' +
+           '<div class="mf-top"><span class="card-index">' + esc(c.label || 'Derivation') + '</span>' +
+-          '<div class="mf-top-actions"><span class="mf-count"></span><button type="button" class="chip" data-mf="flip-back">Concept</button></div></div>' +
++          '<div class="mf-top-actions"><span class="mf-count"></span><button type="button" class="chip" data-mf="summary">All steps</button><button type="button" class="chip" data-mf="flip-back">Concept</button></div></div>' +
+           '<h2 class="card-title mf-back-title">' + (c.title || 'Step-by-step derivation') + '</h2>' +
+           '<div class="mf-phases"></div>' +
+-          '<div class="mf-board' + (setupSVG ? ' has-setup' : '') + '">' +
++          '<div class="mf-work' + (setupSVG ? ' has-setup' : '') + '">' +
+           (setupSVG ? '<div class="mf-setup art">' + setupSVG + '</div>' : '') +
+-          '<div class="mf-stage"></div></div>' +
++          '<div class="mf-right">' +
++          '<div class="mf-board"><div class="mf-stage"></div><div class="mf-summary scroll-y" hidden></div></div>' +
+           '<div class="mf-panel"><p class="mf-note">Press play. It stops at each decision so you can call the next move.</p><div class="mf-dots"></div>' +
+           '<div class="mf-ctrl"><button type="button" class="chip" data-mf="prev" aria-label="Previous step">&#9664;</button>' +
+           '<button type="button" class="chip mf-play" data-mf="play" aria-label="Play or pause">&#9654;</button>' +
+           '<button type="button" class="chip" data-mf="next" aria-label="Next step">&#9654;&#9654;</button>' +
+           '<button type="button" class="chip" data-mf="replay" aria-label="Replay from start">&#8634;</button>' +
+           '<button type="button" class="chip mf-practise" data-mf="practise">Practise again</button></div></div>' +
+           '<div class="mf-ask" hidden><span class="mf-ask-tag">Your move</span><p class="mf-ask-q"></p><div class="mf-ask-opts"></div>' +
+-          '<p class="mf-ask-why" hidden></p><button type="button" class="btn amber mf-ask-go" hidden>Continue &#9654;</button></div></div></div></article>';
++          '<p class="mf-ask-why" hidden></p><button type="button" class="btn amber mf-ask-go" hidden>Continue &#9654;</button></div></div></div></div></div></article>';
+       case 'page':
+         return '<article class="card"' + a + '><span class="card-index">One page</span><h2 class="card-title">' + c.title + '</h2>' +
+--- a/study-match/src/components/04-shelf.js
++++ b/study-match/src/components/04-shelf.js
+@@ -144,7 +144,7 @@
+     shelf.addEventListener('wheel', function (e) {
+       if (e.ctrlKey || !SM.$('mc').hidden) return;
+       var vertical = Math.abs(e.deltaY) > Math.abs(e.deltaX);
+-      var sc = e.target.closest('.scroll-y, .omr-content, .eval-content, .mf-ask, textarea, .has-text-answer');
++      var sc = e.target.closest('.scroll-y, .mf-summary, .omr-content, .eval-content, .mf-ask, textarea, .has-text-answer');
+       if (sc && vertical && sc.scrollHeight > sc.clientHeight + 2) return;
+       var hsc = e.target.closest('.mf-board');
+       if (hsc && !vertical && hsc.scrollWidth > hsc.clientWidth + 2) return;
+--- a/study-match/src/styles/07-mathflow.css
++++ b/study-match/src/styles/07-mathflow.css
+@@ -1,18 +1,4 @@
+ /* MathFlow player card */
+-:root {
+-  --mf-given: var(--ink);
+-  --mf-step: #b45309;
+-  --mf-cancel: #be123c;
+-  --mf-result: #0369a1;
+-  --mf-result-bg: rgba(3, 105, 161, 0.14);
+-}
+-[data-theme="dark"] {
+-  --mf-given: #f1f5f9;
+-  --mf-step: #fbbf24;
+-  --mf-cancel: #fb7185;
+-  --mf-result: #38bdf8;
+-  --mf-result-bg: rgba(56, 189, 248, 0.18);
+-}
+ .card.mf-card:not(.mf-flip-card) { padding: 14px 12px; gap: 9px; }
+ .mf-top { display: flex; justify-content: space-between; align-items: center; gap: 6px; }
+ .mf-top-actions { display: flex; align-items: center; gap: 6px; }
+@@ -22,37 +7,48 @@
+ .mf-phases { display: flex; gap: 5px; overflow-x: auto; scrollbar-width: none; flex: 0 0 auto; }
+ .mf-phases::-webkit-scrollbar { display: none; }
+ .mf-ph { flex: 0 0 auto; font-size: 10.5px; font-weight: 700; padding: 4px 8px; border-radius: 999px; background: var(--lav); color: var(--muted); transition: background 0.3s, color 0.3s; }
+-.mf-ph.is-past { color: var(--mf-result); box-shadow: inset 0 0 0 1px var(--mf-result); }
++.mf-ph.is-past { color: var(--sage); box-shadow: inset 0 0 0 1px var(--sage); }
+ .mf-ph.is-now { background: var(--violet); color: var(--on-violet); }
++.mf-work { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; gap: 6px; }
++.mf-right { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; gap: 6px; }
+ .mf-board {
+-  flex: 1 1 auto; min-height: 110px; display: flex; flex-direction: column; justify-content: flex-start;
++  flex: 1 1 auto; min-height: 76px; display: flex; flex-direction: column; justify-content: flex-start;
+   border-radius: 16px; background-color: var(--lav);
+   background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+   background-size: 16px 16px; padding: 4px; gap: 4px; position: relative;
+   overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch;
+ }
+-.mf-board.has-setup { min-height: 60%; }
+ .mf-setup {
+-  width: 100%; flex: 1 0 calc((var(--sheet-h, 620px) - 22px) * 0.46);
++  width: 100%; flex: 0 0 calc((var(--sheet-h, 620px) - 22px) * 0.46);
+   min-height: calc((var(--sheet-h, 620px) - 22px) * 0.45);
+   padding: 4px; border-radius: 12px; background: var(--card);
+ }
+ .mf-setup > svg { width: 100%; height: 100%; max-height: 100%; }
+-.mf-setup svg text.mf-part-on { fill: var(--mf-step) !important; font-weight: 800; text-decoration: underline; }
++.mf-setup svg text.mf-part-on { fill: var(--hl) !important; font-weight: 800; text-decoration: underline; }
+ .mf-setup svg path.mf-part-on,
+ .mf-setup svg line.mf-part-on,
+-.mf-setup svg polyline.mf-part-on { stroke: var(--mf-step) !important; stroke-width: 2.8 !important; fill: none !important; }
++.mf-setup svg polyline.mf-part-on { stroke: var(--hl) !important; stroke-width: 2.8 !important; fill: none !important; }
++.mf-setup svg circle.mf-part-on,
++.mf-setup svg polygon.mf-part-on,
++.mf-setup svg rect.mf-part-on { stroke: var(--hl) !important; stroke-width: 2.4 !important; }
+ .mf-stage { position: relative; width: 100%; flex: 0 0 auto; user-select: none; }
+-.mf-sp { position: absolute; left: 0; top: 0; overflow: visible; color: var(--mf-given); transform-origin: 2px 2px; transition: color 0.6s ease; will-change: transform, opacity; }
++.mf-stage[hidden], .mf-summary[hidden] { display: none; }
++.mf-summary { width: 100%; height: 100%; overflow-y: auto; padding: 6px; }
++.mf-sum-list { display: flex; flex-direction: column; gap: 6px; }
++.mf-sum-row { display: grid; grid-template-columns: 24px minmax(0, 1fr) auto; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 10px; background: var(--card); font-size: 12px; }
++.mf-sum-num { font-size: 10px; font-weight: 800; color: var(--violet); background: var(--lav); border-radius: 999px; padding: 2px 6px; text-align: center; }
++.mf-sum-eq { overflow-x: auto; color: var(--ink); font-weight: 600; }
++.mf-sum-mv { font-size: 11px; font-weight: 700; color: var(--hl); text-align: right; }
++.mf-sp { position: absolute; left: 0; top: 0; overflow: visible; color: var(--ink); transform-origin: 2px 2px; transition: color 0.6s ease; will-change: transform, opacity; }
+ .mf-sp path, .mf-sp rect { fill: currentColor; stroke: none; }
+-.mf-sp.is-new, .mf-sp.is-op { color: var(--mf-step); }
+-.mf-sp.is-out { color: var(--mf-cancel); }
++.mf-sp.is-new, .mf-sp.is-op { color: var(--hl); }
++.mf-sp.is-out { color: var(--muted); }
+ .mf-ghost { position: absolute; left: 0; top: 0; color: var(--ink-2); transform-origin: 0 0; white-space: nowrap;
+   transition: transform 0.75s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.75s ease; }
+ .mf-ghost svg { display: block; }
+-.mf-strike { position: absolute; left: 0; top: 0; height: 2.5px; border-radius: 2px; background: var(--mf-cancel); transform-origin: 0 50%; }
++.mf-strike { position: absolute; left: 0; top: 0; height: 2.5px; border-radius: 2px; background: var(--muted); transform-origin: 0 50%; }
+ .mf-box { position: absolute; left: 0; top: 0; overflow: visible; }
+-.mf-box rect { fill: none; stroke: var(--mf-result); stroke-width: 2.4; }
++.mf-box rect { fill: none; stroke: var(--violet); stroke-width: 2.4; }
+ .mf-err { position: absolute; left: 6px; right: 6px; font: 600 11px/1.4 ui-monospace, Menlo, monospace; color: var(--coral); background: var(--coral-bg); border-radius: 8px; padding: 6px 8px; white-space: pre-wrap; word-break: break-all; }
+ .mf-note { font-size: 12px; line-height: 1.32; font-weight: 600; color: var(--ink-2); min-height: 26px; transition: opacity 0.2s ease; }
+ .mf-note b { color: var(--ink); }
+@@ -59,15 +53,15 @@
+ .mf-ctrl { display: flex; gap: 5px; align-items: center; flex-wrap: wrap; }
+ .mf-ctrl .chip { min-width: 34px; text-align: center; padding: 5px 8px; }
+ .mf-ctrl .mf-play { background: var(--violet); color: var(--on-violet); }
+-.mf-practise { display: none; margin-left: auto; background: var(--mf-result-bg); color: var(--mf-result); }
++.mf-practise { display: none; margin-left: auto; background: var(--lav-2); color: var(--violet); }
+ .card.mf-card.is-completed .mf-practise { display: inline-block; }
+ .mf-panel, .mf-ask { display: flex; flex-direction: column; gap: 5px; flex: 0 0 auto; }
+ .mf-ask[hidden], .mf-panel[hidden] { display: none; }
+ .mf-ask-tag { align-self: flex-start; font-size: 10px; font-weight: 800; letter-spacing: 0.07em; text-transform: uppercase; background: var(--amber-bg); color: var(--hl); border-radius: 999px; padding: 3px 8px; }
+ .mf-ask-q { font-size: 12.5px; font-weight: 700; line-height: 1.28; }
+ .mf-ask-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+ .mf-ask-opts button { appearance: none; border: 0; cursor: pointer; background: var(--lav); color: var(--ink); border-radius: 10px; padding: 6px 8px; font-size: 11.5px; font-weight: 600; text-align: left; line-height: 1.22; overflow-wrap: anywhere; }
+-.mf-ask-opts button.is-correct { background: var(--mf-result-bg); box-shadow: inset 0 0 0 2px var(--mf-result); }
+-.mf-ask-opts button.is-wrong { background: var(--coral-bg); box-shadow: inset 0 0 0 2px var(--mf-cancel); text-decoration: line-through; }
++.mf-ask-opts button.is-correct { background: var(--sage-bg); box-shadow: inset 0 0 0 2px var(--sage); }
++.mf-ask-opts button.is-wrong { background: var(--coral-bg); box-shadow: inset 0 0 0 2px var(--coral); text-decoration: line-through; }
+ .mf-ask-why { font-size: 12px; line-height: 1.32; color: var(--ink-2); font-weight: 600; }
+ .mf-ask-why[hidden], .mf-ask-go[hidden] { display: none; }
+--- a/study-match/src/styles/09-desktop.css
++++ b/study-match/src/styles/09-desktop.css
+@@ -34,8 +34,17 @@
+   .omr-option { font-size: 15px; padding: 12px 14px; }
+   .math { font-size: 17px; }
+   .sheet.is-open .card:not(.is-focus) { opacity: 0.38; transform: scale(0.97); }
+-  .card.mf-card { padding: 18px 16px; }
++  .sheet.is-open, .sheet.is-open .pages { width: max-content; }
++  .card.mf-card { flex: 0 0 clamp(680px, 64vw, 860px); width: clamp(680px, 64vw, 860px); }
++  .card.mf-card:not(.mf-flip-card), .card.mf-flip-card .mf-face { padding: 18px 16px; gap: 10px; }
++  .mf-front { display: grid; grid-template-columns: minmax(250px, 44%) minmax(0, 1fr); grid-template-rows: auto auto 1fr; column-gap: 16px; row-gap: 10px; }
++  .mf-front .mf-top, .mf-front .card-title { grid-column: 1 / -1; }
++  .mf-front-art { height: 100%; min-height: 0; flex: initial; }
++  .mf-work.has-setup { display: grid; grid-template-columns: minmax(260px, 44%) minmax(0, 1fr); gap: 16px; align-items: stretch; }
++  .mf-work.has-setup .mf-setup { height: 100%; min-height: 0; flex: initial; }
++  .mf-right { height: 100%; min-width: 0; gap: 10px; }
+   .mf-card { --mf-size: 23px; }
++  .mf-sum-row { font-size: 14px; padding: 8px 10px; }
+   .mf-note { font-size: 14.5px; }
+   .mf-ask-q { font-size: 16px; }
+   .mf-ask-opts button { font-size: 14px; padding: 10px 11px; }

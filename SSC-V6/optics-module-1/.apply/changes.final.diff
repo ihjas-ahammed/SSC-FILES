@@ -1,0 +1,562 @@
+--- a/skills/01-schema.md
++++ b/skills/01-schema.md
+@@ -122,13 +122,14 @@
+   "tex": "v^2 = 0 + 2(2)(25) = 100 \\Rightarrow v = 10\\ \\text{m/s}",
+   "body": "From rest, \\(a = 2\\ \\text{m/s}^2\\) over \\(s = 25\\) m." }
+ ```
+ 
+-### `derivation` — a derived result (expands into 4 cards automatically)
++### `derivation` — a derived result on a single flip card
+ See `02-derivations.md`. Shape:
+ ```json
+ { "type": "derivation", "title": "Bond energy, step by step",
+   "legend": "\\(k\\) Coulomb constant, \\(r\\) separation.",
++  "setup": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"...\">...</svg>",
+   "phases": [ { "name": "Model", "why": "energy = attraction + repulsion" } ],
+   "steps": [ { "tex": "...", "phase": "Model", "note": "..." },
+              { "tex": "...", "move": { "type": "differentiate", "wrt": "r" }, "note": "...", "ask": { ... } } ] }
+ ```
+--- a/skills/02-derivations.md
++++ b/skills/02-derivations.md
+@@ -1,26 +1,31 @@
+ # 02 — Writing derivations
+ 
+ You write **lines of TeX** and name the **move** that produced each line. The app animates
+-everything: symbols that stay glide to their new place (and jump over `=` when they change side),
+-new symbols write in, cancelled ones are struck through and vanish.
++everything on a single card after the student flips it: the `setup` SVG sits next to the
++equations on the same board, symbols glide to their new place, new symbols write in, and
++cancelled ones are struck through and vanish.
+ 
+ ## Rules for every step
+ 
+ 1. `tex` is **one line** with **exactly one `=`** at the top level.
+    - No `\\begin{...}`, no `&`, no `\\\\`, no `\\( \\)`, no `$`.
+ 2. **One move per step.** If you did two things, write two steps.
+ 3. Keep symbols the same from line to line (same letters, same subscripts like `r_0`), so the
+    animation can follow them. Do not rename variables mid-way.
+ 4. Write the *result* of the move in `tex`, already simplified. Do **not** write the
+    intermediate "both sides" line; the app draws that for you.
+ 5. 4–12 steps. The first step has no `move`. Every later step has one.
+ 6. Every step has a `note`: one short sentence saying *why* or what just cancelled (≤ 120 chars).
+-7. Mark 3–6 phases with `"phase"` on the step where each phase starts. List the same phases in
+-   `"phases"` with a one-line `why` each. Phases become the route strip and the recall card.
+-8. Put **4** `ask` checkpoints (the maximum) on steps where the next move is a real decision, an identity
+-   or a physical law is used. The question is asked *before* that step plays. 4 options, one right.
+-   Two checkpoints is too few: every derivation should keep the learner answering.
++7. Include a `"setup"` SVG (following `03-svg-art.md`) showing the geometry or circuit used by
++   the derivation. It is drawn on the board beside the equations, and the part used in the
++   active step is highlighted.
++8. Mark 3–6 phases with `"phase"` on the step where each phase starts. List the same phases in
++   `"phases"` with a one-line `why` each. Do not create separate route, step, or full-page cards.
++9. Put **4** `ask` checkpoints on steps where the next move is a real decision, an identity
++   or a physical law is used. Ask **only about the next step** (what the next line is, or why
++   the next line is true; never ask about steps far away). Keep the question to one short line
++   (≤ 15 words) and each option to at most 6 words.
+-9. **Derive, do not quote.** Circuit results (R, L, C, L-R, C-R, series LCR, parallel LC, resonance, Q,
++10. **Derive, do not quote.** Circuit results (R, L, C, L-R, C-R, series LCR, parallel LC, resonance, Q,
+    bandwidth, power) start from the loop law or the admittance sum and reach the result in small steps.
+    Optics results (single slit, two slit, N slit) start from the aperture integral or the sum of phasors
+    and reach the intensity formula. Do not start from the finished formula.
+--- a/skills/04-questions.md
++++ b/skills/04-questions.md
+@@ -7,8 +7,10 @@
+ 
+ - Ask the concept directly. No stories, no everyday-life wrappers, no pictures in questions.
+   Good: "At the top of a projectile path, which velocity component is zero?"
+   Bad: "Riya throws a cricket ball to her friend at the park…"
++- Keep every question to **one short line, at most about 15 words**.
++- Keep every option to **at most about 6 words** so the player can read and move on fast.
+ - One idea per question. Answerable in under 60 seconds without a calculator unless the numbers are simple.
+ - No trick wording, no double negatives, no "all/none of the above".
+-- `why`: one or two sentences that teach, not just repeat the answer.
++- `why`: one or two short sentences that teach, not just repeat the answer.
+ 
+@@ -26,6 +28,6 @@
+ ## Per topic
+ 
+ - For general syllabus topics: 3–5 questions at the end, mixing types: at least one `mcq`, and one `fill` or
+   `number` when the topic has a key word or a calculation.
+-- In a `derivation`, 2–4 `ask` checkpoints on real decision points ("what next?"), not on trivial algebra.
++- In a `derivation`, 4 `ask` checkpoints asking **only about the next step** (what the next line is, or why it is true).
+ 
+@@ -42,5 +44,5 @@
+ ## mcq
+ 
+-- 4 options, similar length, all plausible. Wrong options are typical mistakes, not jokes.
++- 3 or 4 options (at most about 6 words each), similar length, all plausible. Only one is right.
+ - `answer` = 0-based index of the right option. Vary its position across questions.
+ - Options may contain inline maths: `"\\(5\\ \\text{m/s}^2\\)"`.
+--- a/study-match/src/components/02-mathflow.js
++++ b/study-match/src/components/02-mathflow.js
+@@ -21,6 +21,6 @@
+   var SM = window.SM, T = SM.tex;
+   var NS = 'http://www.w3.org/2000/svg';
+-  var PAD = 2, GHOST = 0.8;
++  var PAD = 2, GHOST = 0.78, MIN_SCALE = 0.74;
+   var SMOOTH = 'cubic-bezier(0.65, 0, 0.35, 1)', OUT = 'cubic-bezier(0.2, 0.8, 0.2, 1)';
+   var REDUCE = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+   var holder = null, holderSize = 0;
+@@ -36,9 +37,41 @@
+     return holder;
+   }
+ 
++  /* split a long TeX expression only at top-level =, + or - (never inside a term or fraction) */
++  function splitLongTex(tex) {
++    var depth = 0, cuts = [], eqIdx = -1;
++    for (var i = 0; i < tex.length; i++) {
++      var ch = tex.charAt(i);
++      if (ch === '\\') {
++        var m = tex.slice(i).match(/^\\[a-zA-Z]+/);
++        if (m) {
++          if (m[0] === '\\left') depth++;
++          else if (m[0] === '\\right' && depth > 0) depth--;
++          i += m[0].length - 1;
++        } else i++;
++        continue;
++      }
++      if (ch === '{' || ch === '(' || ch === '[') depth++;
++      else if ((ch === '}' || ch === ')' || ch === ']') && depth > 0) depth--;
++      else if (depth === 0) {
++        if (ch === '=' && eqIdx < 0) eqIdx = i;
++        else if ((ch === '+' || ch === '-') && i > 2 && i < tex.length - 2) cuts.push(i);
++      }
++    }
++    var mid = tex.length / 2, best = -1, bestDist = Infinity;
++    cuts.forEach(function (idx) {
++      if (idx <= eqIdx + 2) return;
++      var d = Math.abs(idx - mid);
++      if (d < bestDist) { bestDist = d; best = idx; }
++    });
++    if (best > 0) return [tex.slice(0, best).trim(), tex.slice(best).trim()];
++    if (eqIdx > 0 && eqIdx < tex.length - 1) return [tex.slice(0, eqIdx + 1).trim(), tex.slice(eqIdx + 1).trim()];
++    return [tex];
++  }
++
+   /* ---------- typeset one line and pull out its glyphs ---------- */
+   var mcache = {};
+-  function measure(tex, size) {
++  function measureRaw(tex, size) {
+     var key = size + '|' + tex;
+     if (mcache[key]) return mcache[key];
+     var h = getHolder(size), node = null;
+@@ -80,6 +121,34 @@
+     return (mcache[key] = res);
+   }
+ 
++  function measure(tex, size, maxW) {
++    var base = measureRaw(tex, size);
++    if (base.error || !maxW || (base.L + base.R) * MIN_SCALE <= maxW) return base;
++    var wkey = size + '|wrap|' + Math.round(maxW) + '|' + tex;
++    if (mcache[wkey]) return mcache[wkey];
++    var parts = splitLongTex(tex);
++    if (parts.length < 2) return base;
++    var m0 = measureRaw(parts[0], size), m1 = measureRaw(parts[1], size);
++    if (m0.error || m1.error) return base;
++    var rowGap = m0.D + m1.U + 8;
++    var shiftX = m0.ax - (m1.x0 !== undefined ? m1.x0 : (m1.ax - m1.L)) + 8;
++    var glyphs = m0.glyphs.map(function (g) {
++      return { sig: g.sig, node: g.node, m: g.m.slice(), x: g.x, y: g.y, w: g.w, h: g.h };
++    });
++    m1.glyphs.forEach(function (g) {
++      var m = g.m.slice();
++      m[4] += shiftX; m[5] += rowGap;
++      glyphs.push({ sig: g.sig, node: g.node, m: m, x: g.x + shiftX, y: g.y + rowGap, w: g.w, h: g.h });
++    });
++    var x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
++    glyphs.forEach(function (g) { x0 = Math.min(x0, g.x); y0 = Math.min(y0, g.y); x1 = Math.max(x1, g.x + g.w); y1 = Math.max(y1, g.y + g.h); });
++    var ax = (x0 + x1) / 2, ay = (y0 + y1) / 2;
++    return (mcache[wkey] = {
++      tex: tex, glyphs: glyphs, ax: ax, ay: ay, L: ax - x0, R: x1 - ax, U: ay - y0, D: y1 - ay,
++      svgHTML: m0.svgHTML, sx: m0.sx, sy: m0.sy, hasEq: m0.hasEq, wrapped: true
++    });
++  }
++
+   /* ---------- automatic glyph matching ---------- */
+   function match(A, B, kA, kB) {
+     var a = A.glyphs, b = B.glyphs, n = a.length, m = b.length, i, j;
+@@ -126,5 +203,6 @@
+   function mount(root, spec) {
+     var stage = root.querySelector('.mf-stage'), board = root.querySelector('.mf-board');
++    var setupEl = root.querySelector('.mf-setup');
+     var noteEl = root.querySelector('.mf-note'), dotsEl = root.querySelector('.mf-dots');
+     var phEl = root.querySelector('.mf-phases'), countEl = root.querySelector('.mf-count');
+     var playBtn = root.querySelector('[data-mf="play"]');
+@@ -165,6 +243,39 @@
+       if (countEl) countEl.textContent = (Math.max(i, 0) + 1) + ' / ' + frames.length;
+       if (playBtn) playBtn.innerHTML = playing ? '&#10073;&#10073;' : '&#9654;';
+     }
++
++    /* highlight the part of the setup SVG used in the current step */
++    function highlightSetup(f) {
++      if (!setupEl) return;
++      var svg = setupEl.querySelector('svg');
++      if (!svg) return;
++      Array.prototype.forEach.call(svg.querySelectorAll('.mf-part-on'), function (el) { el.classList.remove('mf-part-on'); });
++      if (!f) return;
++      var st = spec.steps[f.si] || {};
++      var hay = (f.tex || '') + ' ' + (st.note || '') + ' ' + (st.focus || '');
++      var map = {
++        '\\theta_1': 'θ₁', '\\theta_2': 'θ₂', '\\phi_1': 'φ₁', '\\phi_2': 'φ₂',
++        '\\alpha_1': 'α₁', '\\alpha_2': 'α₂', '\\beta': 'β',
++        'h_1': 'h₁', 'h_2': 'h₂', 'R_1': 'R₁', 'R_2': 'R₂',
++        'F_1': 'F₁', 'F_2': 'F₂', 'f_1': 'f₁', 'f_2': 'f₂',
++        'x_1': 'x₁', 'x_2': 'x₂', 'n_1': 'n₁', 'n_2': 'n₂'
++      };
++      var want = {};
++      Object.keys(map).forEach(function (k) { if (hay.indexOf(k) !== -1) want[map[k]] = 1; });
++      ['h', 'x', 'y', 'r', 'R', 'u', 'v', 'f', 'O', 'I', 'P', 'C', 'S', 'A', 'B', 'Q'].forEach(function (sym) {
++        var re = new RegExp('(^|[^a-zA-Z\\\\])' + sym + '([^a-zA-Z0-9]|$)');
++        if (re.test(hay)) want[sym] = 1;
++      });
++      Array.prototype.forEach.call(svg.querySelectorAll('text'), function (t) {
++        var txt = (t.textContent || '').trim();
++        var hit = want[txt] || Object.keys(want).some(function (w) { return w.length > 1 && txt.indexOf(w) !== -1; });
++        if (hit) t.classList.add('mf-part-on');
++      });
++      Array.prototype.forEach.call(svg.querySelectorAll('[data-part]'), function (el) {
++        if (hay.indexOf(el.getAttribute('data-part')) !== -1) el.classList.add('mf-part-on');
++      });
++    }
++
+     function setNote(html) {
+       noteEl.style.opacity = '0';
+       later.push(setTimeout(function () { noteEl.innerHTML = html; SM.typeset(noteEl); noteEl.style.opacity = '1'; }, 150));
+@@ -173,26 +284,27 @@
+     /* ---------- layout: one scale, one "=" column, room for the trail ---------- */
+     function build() {
+       var size = parseFloat(getComputedStyle(root).getPropertyValue('--mf-size')) || 18;
+-      frames.forEach(function (f) { f.M = measure(f.tex, size); });
+-      var availW = stage.clientWidth || 260;
++      var availW = stage.clientWidth || (board.clientWidth ? board.clientWidth - 16 : 248);
+       builtW = availW;
++      var maxLineW = Math.max(150, availW - 14);
++      frames.forEach(function (f) { f.M = measure(f.tex, size, maxLineW); });
+       var Lm = 10, Rm = 10;
+       frames.forEach(function (f) { if (!f.op && !f.M.error) { Lm = Math.max(Lm, f.M.L); Rm = Math.max(Rm, f.M.R); } });
+-      var kMain = Math.min(1, (availW - 16) / (Lm + Rm));
+-      var eqX = (availW - (Lm + Rm) * kMain) / 2 + Lm * kMain;
++      var kMain = Math.max(MIN_SCALE, Math.min(1, maxLineW / Math.max(Lm + Rm, 1)));
++      var eqX = availW / 2;
+       var Up = 10, Dn = 10, gU = 6, gD = 6;
+       frames.forEach(function (f) {
+         if (f.M.error) { f.k = kMain; return; }
+-        f.k = Math.min(kMain, (eqX - 8) / Math.max(f.M.L, 1), (availW - eqX - 8) / Math.max(f.M.R, 1));
++        var fitK = maxLineW / Math.max(f.M.L + f.M.R, 1);
++        f.k = Math.max(MIN_SCALE, Math.min(kMain, fitK));
+         Up = Math.max(Up, f.M.U * f.k); Dn = Math.max(Dn, f.M.D * f.k);
+         if (!f.op) { gU = Math.max(gU, f.M.U * kMain * GHOST); gD = Math.max(gD, f.M.D * kMain * GHOST); }
+       });
+-      var slotH = gU + gD + 8;
+-      var boardH = board.clientHeight || 300;
+-      var nG = Math.max(0, Math.min(3, Math.floor((boardH - 24 - (Up + Dn + 16)) / slotH)));
+-      var top = nG * slotH;
++      var slotH = Math.min(28, gU + gD + 6);
++      var nG = setupEl ? 1 : 2;
++      var top = nG * slotH + 4;
+       L = { availW: availW, eqX: eqX, eqY: top + Up + 8, kMain: kMain, slotH: slotH, nG: nG, top: top, Up: Up, gD: gD };
+-      stage.style.height = (top + Up + Dn + 16) + 'px';
++      stage.style.height = Math.max(76, top + Up + Dn + 14) + 'px';
+       stage.innerHTML = '';
+       overlays = [];
+       frames.forEach(function (f) { f.sp = null; f.pos = null; f.ghost = null; });
+@@ -220,7 +331,8 @@
+       }
+       var k = f.k, M = f.M;
+       M.glyphs.forEach(function (g, j) {
+-        var x = L.eqX + (g.x - M.ax) * k, y = L.eqY + (g.y - M.ay) * k, w = g.w * k, h = g.h * k;
++        var lineShift = ((M.R - M.L) * k) / 2;
++        var x = L.eqX - lineShift + (g.x - M.ax) * k, y = L.eqY + (g.y - M.ay) * k, w = g.w * k, h = g.h * k;
+         var svg = document.createElementNS(NS, 'svg');
+         svg.setAttribute('class', 'mf-sp' + (f.opSet && f.opSet[j] ? ' is-op' : ''));
+         svg.setAttribute('width', (w + 2 * PAD).toFixed(2));
+@@ -399,6 +511,7 @@
+       api.i = i;
+       placeTrail(i, instant);
+       setNote(B.note);
++      highlightSetup(B);
+       chrome(i);
+       if (i === frames.length - 1) complete();
+     }
+@@ -406,6 +519,7 @@
+     function complete() {
+       if (completed) return;
+       completed = true;
++      root.classList.add('is-completed');
+       if (spec.onComplete) spec.onComplete();
+     }
+     function needsAsk(j) { var f = frames[j]; return f && f.ask && answered[f.si] === undefined; }
+@@ -512,6 +626,12 @@
+       return false;
+     };
+     api.isAsking = function () { return asking >= 0; };
++    api.practise = function () {
++      if (SM.isPaused && SM.isPaused()) return;
++      asking = -1; askEl.hidden = true; panel.hidden = false;
++      Object.keys(answered).forEach(function (k) { delete answered[k]; });
++      stopPlay(); reset(); api.play();
++    };
+     api.isPlaying = function () { return playing; };
+     api.pause = stopPlay;
+ 
+@@ -519,9 +639,37 @@
+       b.addEventListener('click', function (e) {
+         e.stopPropagation();
+         var a = b.getAttribute('data-mf');
+-        if (a === 'replay') api.replay(); else if (a === 'next') api.next(); else if (a === 'prev') api.prev(); else if (a === 'play') api.toggle();
++        if (a === 'practise') api.practise();
++        else if (a === 'flip-back') api.flip(false);
++        else if (a === 'flip-open') api.flip(true);
++        else if (a === 'replay') api.replay();
++        else if (a === 'next') api.next();
++        else if (a === 'prev') api.prev();
++        else if (a === 'play') api.toggle();
+       });
+     });
++
++    var frontFace = root.querySelector('.mf-front'), backFace = root.querySelector('.mf-back');
++    api.flip = function (open) {
++      if (SM.cardLocked && root._c && SM.cardLocked(root._c)) return;
++      var willFlip = open === undefined ? !root.classList.contains('is-flipped') : !!open;
++      root.classList.toggle('is-flipped', willFlip);
++      if (frontFace) frontFace.inert = willFlip;
++      if (backFace) backFace.inert = !willFlip;
++      if (willFlip) {
++        setTimeout(function () {
++          rebuild();
++          if (api.i < 0) api.play();
++        }, 60);
++      } else stopPlay();
++    };
++    if (frontFace) {
++      root.addEventListener('click', function (e) {
++        if (root.classList.contains('is-flipped')) return;
++        if (e.target.closest('button, a, input, textarea, .term-link, summary')) return;
++        api.flip(true);
++      });
++    }
+     dotsEl.addEventListener('click', function (e) {
+       var d = e.target.closest('.mf-dot');
+       if (!d) return;
+@@ -539,7 +685,10 @@
+     SM.mathReady(function (ok) {
+       if (!ok) { noteEl.textContent = 'MathJax did not load. Check the internet connection and reload.'; return; }
+       build();
+-      if (completed) go(frames.length - 1, true);
++      if (completed) {
++        root.classList.add('is-completed');
++        go(frames.length - 1, true);
++      }
+       else chrome(-1);
+     });
+     return api;
+--- a/study-match/src/components/03-render.js
++++ b/study-match/src/components/03-render.js
+@@ -20,7 +20,7 @@
+   };
+   SM.ICONS = ICONS;
+   var EYE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+-  SM.QUIZ = { mcq: 1, fill: 1, number: 1, order: 1, derive: 1, eval: 1 };
++  SM.QUIZ = { mcq: 1, fill: 1, number: 1, order: 1, derive: 1, derivation: 1, eval: 1 };
+ 
+   /* ---------- index + expand ---------- */
+   SM.SECTIONS = SM.data.sections || [];
+@@ -33,11 +33,9 @@
+       (sh.cards || []).forEach(function (c) {
+         if (c.type === 'derivation') {
+           var d = c, ph = d.phases || [];
+           if (!ph.length) { var seen = {}; d.steps.forEach(function (s) { if (s.phase && !seen[s.phase]) { seen[s.phase] = 1; ph.push({ name: s.phase }); } }); }
+-          out.push({ type: 'route', title: d.title || 'Where we are going', d: d, phases: ph });
+-          out.push({ type: 'derive', title: d.title, d: d });
+-          out.push({ type: 'page', title: 'The whole derivation', d: d });
+-          if (ph.length >= 3) out.push({ type: 'order', title: 'Rebuild the route', items: ph.map(function (p) { return p.why ? p.name + ' \u2014 ' + p.why : p.name; }) });
++          c.type = 'derive'; c.d = d; c.phases = ph;
++          out.push(c);
+         } else out.push(c);
+       });
+       sh.cards = out;
+@@ -44,7 +41,7 @@
+       var legacyIndex = 0;
+       sh.cards.forEach(function (c) { c.id = sh.id + '-' + (c.uid ? 'extra-' + c.uid : c.type === 'intuition' ? 'intro-' + c.term : legacyIndex++); c.sheet = sh; SM.CARDS.push(c); });
+       sh.outline = sh.outline || sh.cards.filter(function (c) { return c.type !== 'page' && c.type !== 'order'; }).map(function (c) {
+-        return c.type === 'route' ? 'Goal and route' : c.type === 'derive' ? 'Step-by-step derivation' : c.type === 'question' ? 'The question' : c.type === 'eval' ? 'Mark your answer' : c.type === 'score' ? 'Your score' : c.type === 'key' ? 'Key points' : (SM.QUIZ[c.type] ? 'Quiz' : c.title);
++        return c.type === 'route' ? 'Goal and route' : c.type === 'derive' ? (c.title || 'Step-by-step derivation') : c.type === 'question' ? 'The question' : c.type === 'eval' ? 'Mark your answer' : c.type === 'score' ? 'Your score' : c.type === 'key' ? 'Key points' : (SM.QUIZ[c.type] ? 'Quiz' : c.title);
+       }).filter(function (t, k, a) { return t && a.indexOf(t) === k; }).slice(0, 7);
+       SM.SHEETS.push(sh);
+     });
+@@ -137,15 +134,34 @@
+           '<ol class="route-list">' + c.phases.map(function (p) { return '<li><span><b>' + esc(p.name) + '</b>' + (p.why ? ' \u2014 ' + p.why : '') + '</span></li>'; }).join('') + '</ol>' +
+           (c.d.legend ? '<p class="legend">' + c.d.legend + '</p>' : '') + '</div></article>';
+       case 'derive':
+-        return '<article class="card mf-card"' + a + '><div class="mf-top"><span class="card-index">Derivation</span><span class="mf-count"></span></div><div class="mf-phases"></div>' +
+-          '<div class="mf-board"><div class="mf-stage"></div></div>' +
+-          '<div class="mf-panel"><p class="mf-note">Press play. It stops at each decision so you can call the next move.</p><div class="mf-dots"></div>' +
++        var dst = c.d.steps || [], dph = c.phases || c.d.phases || [], setupSVG = c.d.setup || c.d.art || '';
++        return '<article class="card mf-card mf-flip-card"' + a + '><div class="mf-card-inner">' +
++          '<div class="mf-face mf-front">' +
++          '<div class="mf-top"><span class="card-index">' + esc(c.label || 'Derivation') + '</span><button type="button" class="chip mf-flip-btn" data-mf="flip-open">Derive &#9654;</button></div>' +
++          '<h2 class="card-title">' + (c.title || 'Step-by-step derivation') + '</h2>' +
++          (setupSVG ? '<div class="art mf-front-art">' + setupSVG + '</div>' : '') +
++          '<div class="scroll-y mf-front-route">' +
++          '<div class="route-eq"><small>Start</small><div class="math">\\(' + (c.d.start || dst[0].tex) + '\\)</div></div>' +
++          '<div class="route-eq goal"><small>Goal</small><div class="math">\\(' + (c.d.goal || dst[dst.length - 1].tex) + '\\)</div></div>' +
++          (dph.length ? '<ol class="route-list">' + dph.map(function (p) { return '<li><span><b>' + esc(p.name) + '</b>' + (p.why ? ' \u2014 ' + p.why : '') + '</span></li>'; }).join('') + '</ol>' : '') +
++          (c.d.legend ? '<p class="legend">' + c.d.legend + '</p>' : '') +
++          '</div></div>' +
++          '<div class="mf-face mf-back" inert>' +
++          '<div class="mf-top"><span class="card-index">' + esc(c.label || 'Derivation') + '</span>' +
++          '<div class="mf-top-actions"><span class="mf-count"></span><button type="button" class="chip" data-mf="flip-back">Concept</button></div></div>' +
++          '<h2 class="card-title mf-back-title">' + (c.title || 'Step-by-step derivation') + '</h2>' +
++          '<div class="mf-phases"></div>' +
++          '<div class="mf-board' + (setupSVG ? ' has-setup' : '') + '">' +
++          (setupSVG ? '<div class="mf-setup art">' + setupSVG + '</div>' : '') +
++          '<div class="mf-stage"></div></div>' +
++          '<div class="mf-panel"><p class="mf-note">Press play. It stops at each decision so you can call the next move.</p><div class="mf-dots"></div>' +
+           '<div class="mf-ctrl"><button type="button" class="chip" data-mf="prev" aria-label="Previous step">&#9664;</button>' +
+           '<button type="button" class="chip mf-play" data-mf="play" aria-label="Play or pause">&#9654;</button>' +
+           '<button type="button" class="chip" data-mf="next" aria-label="Next step">&#9654;&#9654;</button>' +
+-          '<button type="button" class="chip" data-mf="replay" aria-label="Replay from start">&#8634;</button></div></div>' +
++          '<button type="button" class="chip" data-mf="replay" aria-label="Replay from start">&#8634;</button>' +
++          '<button type="button" class="chip mf-practise" data-mf="practise">Practise again</button></div></div>' +
+           '<div class="mf-ask" hidden><span class="mf-ask-tag">Your move</span><p class="mf-ask-q"></p><div class="mf-ask-opts"></div>' +
+-          '<p class="mf-ask-why" hidden></p><button type="button" class="btn amber mf-ask-go" hidden>Continue &#9654;</button></div></article>';
++          '<p class="mf-ask-why" hidden></p><button type="button" class="btn amber mf-ask-go" hidden>Continue &#9654;</button></div></div></div></article>';
+       case 'page':
+         return '<article class="card"' + a + '><span class="card-index">One page</span><h2 class="card-title">' + c.title + '</h2>' +
+           '<p class="card-body">Every line, aligned on the equals sign. The amber note is the move that produced it.</p>' +
+--- a/study-match/src/components/04-shelf.js
++++ b/study-match/src/components/04-shelf.js
+@@ -126,7 +126,10 @@
+         SM.CARDS.forEach(function (c) {
+           if (!c.el.classList.contains('is-flipped')) return;
+           var r = c.el.getBoundingClientRect();
+-          if (Math.abs(r.left + r.width / 2 - mid) > 40) SM.flipDefinition(c, false);
++          if (Math.abs(r.left + r.width / 2 - mid) > 40) {
++            if (c.type === 'derive' && c.player && c.player.flip) c.player.flip(false);
++            else if (SM.flipDefinition) SM.flipDefinition(c, false);
++          }
+         });
+       }, 160);
+     });
+@@ -186,6 +189,9 @@
+       }
+       var num = /^[1-6]$/.test(k) ? Number(k) - 1 : -1;
+       if (c.type === 'derive' && c.player) {
++        if (!c.el.classList.contains('is-flipped') && (k === 'Enter' || k === ' ')) {
++          e.preventDefault(); if (c.player.flip) c.player.flip(true); return;
++        }
+         if (num >= 0 || k === 'Enter') { e.preventDefault(); c.player.pick(num >= 0 ? num : 99); return; }
+         if (k === ' ') { e.preventDefault(); c.player.toggle(); return; }
+         if (k === '.' || k === 'n') { c.player.next(); return; }
+--- a/study-match/src/styles/05-cards.css
++++ b/study-match/src/styles/05-cards.css
+@@ -52,6 +52,18 @@
+ .route-list b { color: var(--ink); }
+ .legend { font-size: 12px; line-height: 1.45; color: var(--muted); }
+ .page-math .mf-ann { fill: var(--hl); color: var(--hl); }
++.card.mf-flip-card { perspective: 1200px; padding: 0; background: transparent; border: 0; box-shadow: none; overflow: visible; }
++.mf-card-inner { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 0.65s cubic-bezier(0.2, 0.8, 0.2, 1); }
++.card.mf-flip-card.is-flipped .mf-card-inner { transform: rotateY(180deg); }
++.mf-face {
++  position: absolute; inset: 0; border-radius: 22px; border: 1px solid var(--line);
++  background: var(--card); color: var(--ink); box-shadow: var(--shadow);
++  padding: 14px 12px; display: flex; flex-direction: column; gap: 8px; overflow: hidden;
++  backface-visibility: hidden; -webkit-backface-visibility: hidden;
++}
++.mf-back { transform: rotateY(180deg); }
++.mf-front-art { max-height: 120px; padding: 8px; }
++.mf-front-route { display: flex; flex-direction: column; gap: 7px; }
+ 
+ /* Order card */
+ .order-list { display: flex; flex-direction: column; gap: 7px; }
+--- a/study-match/src/styles/07-mathflow.css
++++ b/study-match/src/styles/07-mathflow.css
+@@ -1,47 +1,68 @@
+ /* MathFlow player card */
+-.card.mf-card { padding: 14px 12px; gap: 9px; }
++:root {
++  --mf-given: var(--ink);
++  --mf-step: #b45309;
++  --mf-cancel: #be123c;
++  --mf-result: #0369a1;
++  --mf-result-bg: rgba(3, 105, 161, 0.14);
++}
++[data-theme="dark"] {
++  --mf-given: #f1f5f9;
++  --mf-step: #fbbf24;
++  --mf-cancel: #fb7185;
++  --mf-result: #38bdf8;
++  --mf-result-bg: rgba(56, 189, 248, 0.18);
++}
++.card.mf-card:not(.mf-flip-card) { padding: 14px 12px; gap: 9px; }
+-.mf-top { display: flex; justify-content: space-between; align-items: center; }
++.mf-top { display: flex; justify-content: space-between; align-items: center; gap: 6px; }
++.mf-top-actions { display: flex; align-items: center; gap: 6px; }
++.mf-back-title { font-size: 14px; font-weight: 800; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
++.mf-flip-btn { background: var(--violet); color: var(--on-violet); }
+ .mf-count { font-size: 11px; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
+-.mf-phases { display: flex; gap: 5px; overflow-x: auto; scrollbar-width: none; }
++.mf-phases { display: flex; gap: 5px; overflow-x: auto; scrollbar-width: none; flex: 0 0 auto; }
+ .mf-phases::-webkit-scrollbar { display: none; }
+ .mf-ph { flex: 0 0 auto; font-size: 10.5px; font-weight: 700; padding: 4px 8px; border-radius: 999px; background: var(--lav); color: var(--muted); transition: background 0.3s, color 0.3s; }
+-.mf-ph.is-past { color: var(--sage); }
++.mf-ph.is-past { color: var(--mf-result); box-shadow: inset 0 0 0 1px var(--mf-result); }
+ .mf-ph.is-now { background: var(--violet); color: var(--on-violet); }
+ .mf-board {
+-  flex: 1 1 auto; min-height: 110px; display: flex; flex-direction: column; justify-content: center;
++  flex: 1 1 auto; min-height: 104px; display: flex; flex-direction: column; justify-content: flex-start;
+   border-radius: 16px; background-color: var(--lav);
+   background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+-  background-size: 16px 16px; padding: 8px 0; position: relative; overflow: hidden;
++  background-size: 16px 16px; padding: 6px 6px; gap: 4px; position: relative; overflow: hidden;
+ }
+-.mf-stage { position: relative; width: 100%; pointer-events: none; user-select: none; }
+-.mf-sp { position: absolute; left: 0; top: 0; overflow: visible; color: var(--ink); transform-origin: 2px 2px; transition: color 0.6s ease; will-change: transform, opacity; }
++.mf-setup { flex: 0 0 auto; height: 96px; max-height: 36%; padding: 4px 8px; border-radius: 12px; background: var(--card); }
++.mf-setup svg .mf-part-on { fill: var(--mf-step) !important; font-weight: 800; text-decoration: underline; }
++.mf-stage { position: relative; width: 100%; flex: 1 1 auto; pointer-events: none; user-select: none; }
++.mf-sp { position: absolute; left: 0; top: 0; overflow: visible; color: var(--mf-given); transform-origin: 2px 2px; transition: color 0.6s ease; will-change: transform, opacity; }
+ .mf-sp path, .mf-sp rect { fill: currentColor; stroke: none; }
+-.mf-sp.is-new, .mf-sp.is-op { color: var(--hl); }
+-.mf-sp.is-out { color: var(--coral); }
++.mf-sp.is-new, .mf-sp.is-op { color: var(--mf-step); }
++.mf-sp.is-out { color: var(--mf-cancel); }
+ .mf-ghost { position: absolute; left: 0; top: 0; color: var(--ink-2); transform-origin: 0 0; white-space: nowrap;
+   transition: transform 0.75s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.75s ease; }
+ .mf-ghost svg { display: block; }
+-.mf-strike { position: absolute; left: 0; top: 0; height: 2.5px; border-radius: 2px; background: var(--coral); transform-origin: 0 50%; }
++.mf-strike { position: absolute; left: 0; top: 0; height: 2.5px; border-radius: 2px; background: var(--mf-cancel); transform-origin: 0 50%; }
+ .mf-box { position: absolute; left: 0; top: 0; overflow: visible; }
+-.mf-box rect { fill: none; stroke: var(--amber); stroke-width: 2.2; }
++.mf-box rect { fill: none; stroke: var(--mf-result); stroke-width: 2.4; }
+ .mf-err { position: absolute; left: 6px; right: 6px; font: 600 11px/1.4 ui-monospace, Menlo, monospace; color: var(--coral); background: var(--coral-bg); border-radius: 8px; padding: 6px 8px; white-space: pre-wrap; word-break: break-all; }
+-.mf-note { font-size: 13px; line-height: 1.45; font-weight: 600; color: var(--ink-2); min-height: 38px; transition: opacity 0.2s ease; }
++.mf-note { font-size: 12.5px; line-height: 1.38; font-weight: 600; color: var(--ink-2); min-height: 32px; transition: opacity 0.2s ease; }
+ .mf-note b { color: var(--ink); }
+ .mf-dots { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; }
+ .mf-dot { appearance: none; border: 0; cursor: pointer; height: 7px; width: 7px; border-radius: 999px; background: var(--lav-2); padding: 0; transition: width 0.3s ease, background 0.3s; }
+ .mf-dot.is-ask { box-shadow: 0 0 0 2px var(--amber-bg), 0 0 0 3px var(--amber); }
+ .mf-dot.is-done { background: var(--violet); opacity: 0.45; }
+ .mf-dot.is-now { width: 18px; background: var(--violet); opacity: 1; }
+-.mf-ctrl { display: flex; gap: 6px; align-items: center; }
+-.mf-ctrl .chip { min-width: 38px; text-align: center; padding: 7px 8px; }
++.mf-ctrl { display: flex; gap: 5px; align-items: center; flex-wrap: wrap; }
++.mf-ctrl .chip { min-width: 34px; text-align: center; padding: 6px 8px; }
+ .mf-ctrl .mf-play { background: var(--violet); color: var(--on-violet); }
+-.mf-panel, .mf-ask { display: flex; flex-direction: column; gap: 8px; }
++.mf-practise { display: none; margin-left: auto; background: var(--mf-result-bg); color: var(--mf-result); }
++.card.mf-card.is-completed .mf-practise { display: inline-block; }
++.mf-panel, .mf-ask { display: flex; flex-direction: column; gap: 6px; flex: 0 0 auto; }
+ .mf-ask[hidden], .mf-panel[hidden] { display: none; }
+ .mf-ask-tag { align-self: flex-start; font-size: 10px; font-weight: 800; letter-spacing: 0.07em; text-transform: uppercase; background: var(--amber-bg); color: var(--hl); border-radius: 999px; padding: 4px 9px; }
+-.mf-ask-q { font-size: 14px; font-weight: 700; line-height: 1.35; }
++.mf-ask-q { font-size: 13px; font-weight: 700; line-height: 1.3; }
+ .mf-ask-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+-.mf-ask-opts button { appearance: none; border: 0; cursor: pointer; background: var(--lav); color: var(--ink); border-radius: 11px; padding: 8px 9px; font-size: 12.5px; font-weight: 600; text-align: left; line-height: 1.3; overflow-wrap: anywhere; }
+-.mf-ask-opts button.is-correct { background: var(--sage-bg); box-shadow: inset 0 0 0 2px var(--sage); }
+-.mf-ask-opts button.is-wrong { background: var(--coral-bg); box-shadow: inset 0 0 0 2px var(--coral); }
++.mf-ask-opts button { appearance: none; border: 0; cursor: pointer; background: var(--lav); color: var(--ink); border-radius: 11px; padding: 7px 8px; font-size: 12px; font-weight: 600; text-align: left; line-height: 1.25; overflow-wrap: anywhere; }
++.mf-ask-opts button.is-correct { background: var(--mf-result-bg); box-shadow: inset 0 0 0 2px var(--mf-result); }
++.mf-ask-opts button.is-wrong { background: var(--coral-bg); box-shadow: inset 0 0 0 2px var(--mf-cancel); text-decoration: line-through; }
+ .mf-ask-why { font-size: 12.5px; line-height: 1.4; color: var(--ink-2); font-weight: 600; }
+ .mf-ask-why[hidden], .mf-ask-go[hidden] { display: none; }
