@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build LATEX_1.html (online) and LATEX_12_OFFLINE.html (self-contained) from src/ + vendor/.
+"""Build LATEX_1234.html (online) and LATEX_1234_OFFLINE.html (self-contained) from src/ + vendor/.
 
 online : latex.js + its preview CSS/fonts from jsDelivr, Google Fonts, TeX Live PDF tab, Firebase sync
 offline: every library, stylesheet and font inlined; no network needed; the PDF tab points online
@@ -9,7 +9,7 @@ import io, os, re, json, base64, datetime, urllib.request
 HERE = os.path.dirname(os.path.abspath(__file__))
 SRC, VEN = os.path.join(HERE, 'src'), os.path.join(HERE, 'vendor')
 OUT = os.path.abspath(os.path.join(HERE, '..', '..'))
-ONLINE_URL = 'https://ssc-data-science-qm.web.app/LATEX_1.html'
+ONLINE_URL = 'https://ssc-data-science-qm.web.app/LATEX_1234.html'
 LATEXJS_CDN = 'https://cdn.jsdelivr.net/npm/latex.js@0.12.6/dist/'
 GF = ('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600'
       '&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600'
@@ -41,7 +41,7 @@ def ui_fonts_inline():
 
 
 def content():
-    order = ['data.head.js', 'data.start.js', 'data.m1.js', 'data.m2.js', 'data.omr.js', 'data.tests.js', 'data.tail.js']
+    order = ['data.head.js', 'data.start.js', 'data.m1.js', 'data.m2.js', 'data.m3.js', 'data.m4.js', 'data.omr.js', 'data.tests.js', 'data.tail.js']
     return '\n'.join(rd(os.path.join(SRC, f)) for f in order if os.path.exists(os.path.join(SRC, f)))
 
 
@@ -60,7 +60,8 @@ def build(online):
         prev = {k: rd(os.path.join(VEN, f'latexjs-{k}.css')) for k in ('fonts', 'base', 'article', 'book')}
         scripts.append('<script>window.LX_PREVIEW=' + json.dumps(prev).replace('</', '<\\/') + ';</script>')
     scripts.append('<script>' + js(rd(os.path.join(VEN, 'lxshiki.js'))) + '</script>')
-    scripts.append('<script>' + js(rd(os.path.join(SRC, 'tex.js'))) + '</script>')
+    tex = rd(os.path.join(SRC, 'tex.js')).replace('//@@EMU@@', rd(os.path.join(SRC, 'emu.js')))
+    scripts.append('<script>' + js(tex) + '</script>')
     scripts.append('<script>' + js(content()) + '</script>')
     scripts.append('<script>' + js(rd(os.path.join(SRC, 'ui.js'))) + '</script>')
     foot = (f'Built {stamp} · live preview by latex.js · highlighting by VS Code’s LaTeX grammar via Shiki'
@@ -69,7 +70,7 @@ def build(online):
     html = (shell.replace('<!--LX:FONTS-->', head_fonts)
                  .replace('<!--LX:SCRIPTS-->', '\n'.join(scripts))
                  .replace('<!--LX:FOOT-->', foot))
-    name = 'LATEX_1.html' if online else 'LATEX_12_OFFLINE.html'
+    name = 'LATEX_1234.html' if online else 'LATEX_1234_OFFLINE.html'
     io.open(os.path.join(OUT, name), 'w', encoding='utf-8').write(html)
     print(f'built {name}: {len(html.encode()):,} bytes')
 

@@ -1,0 +1,29 @@
+<!-- id: m4-kkt | mod: Module IV | modName: Duality | modClass: m4 | title: Optimality conditions: complementary slackness and KKT | short: Optimality conditions, KKT (5.5) | est: ~45 min -->
+<gist>With zero duality gap, optimal primal and dual points must satisfy four conditions: primal feasibility, dual feasibility, complementary slackness $\lambda_i^\star f_i(\mathbf x^\star)=0$, and stationarity of the Lagrangian. For convex problems these KKT conditions are also sufficient, so solving them solves the problem.</gist>
+
+<tp>Certificates of suboptimality (§5.5.1)</tp>
+<must><p>A dual feasible $(\boldsymbol\lambda,\boldsymbol\nu)$ certifies $p^\star\ge g(\boldsymbol\lambda,\boldsymbol\nu)$. For a primal feasible $\mathbf x$: $f_0(\mathbf x)-p^\star\le f_0(\mathbf x)-g(\boldsymbol\lambda,\boldsymbol\nu)$, the <b>duality gap</b> of the pair. If it is zero, both are optimal. Stopping rule: stop when $f_0(\mathbf x^{(k)})-g(\boldsymbol\lambda^{(k)},\boldsymbol\nu^{(k)})\le\epsilon_{\text{abs}}$.</p></must>
+
+<tp>Complementary slackness (§5.5.2)</tp>
+<p>Suppose $\mathbf x^\star$, $(\boldsymbol\lambda^\star,\boldsymbol\nu^\star)$ are optimal with zero gap. Then</p>
+$$f_0(\mathbf x^\star)=g(\boldsymbol\lambda^\star,\boldsymbol\nu^\star)=\inf_{\mathbf x}\Big(f_0(\mathbf x)+\sum\lambda_i^\star f_i(\mathbf x)+\sum\nu_i^\star h_i(\mathbf x)\Big)\le f_0(\mathbf x^\star)+\sum\lambda_i^\star f_i(\mathbf x^\star)+\sum\nu_i^\star h_i(\mathbf x^\star)\le f_0(\mathbf x^\star).$$
+<p>So both inequalities are equalities: $\mathbf x^\star$ minimises $L(\cdot,\boldsymbol\lambda^\star,\boldsymbol\nu^\star)$, and $\sum\lambda_i^\star f_i(\mathbf x^\star)=0$. Each term is $\le0$, hence</p>
+<must><p><b>Complementary slackness:</b> $\lambda_i^\star f_i(\mathbf x^\star)=0$, $i=1,\dots,m$. Equivalently $\lambda_i^\star\gt0\Rightarrow f_i(\mathbf x^\star)=0$ and $f_i(\mathbf x^\star)\lt0\Rightarrow\lambda_i^\star=0$: a multiplier is zero unless its constraint is active.</p></must>
+
+<tp>KKT conditions (§5.5.3)</tp>
+<must><p>For differentiable $f_i,h_i$: $$\begin{aligned}&f_i(\mathbf x^\star)\le0,\quad h_i(\mathbf x^\star)=0&&\text{(primal feasibility)}\\&\lambda_i^\star\ge0&&\text{(dual feasibility)}\\&\lambda_i^\star f_i(\mathbf x^\star)=0&&\text{(complementary slackness)}\\&\nabla f_0(\mathbf x^\star)+\sum\lambda_i^\star\nabla f_i(\mathbf x^\star)+\sum\nu_i^\star\nabla h_i(\mathbf x^\star)=\mathbf 0&&\text{(stationarity)}\end{aligned}$$ <b>Non-convex problems:</b> any optimal pair with zero gap satisfies KKT (necessary). <b>Convex problems:</b> any point satisfying KKT is optimal with zero gap (sufficient). <b>Convex + Slater:</b> $\mathbf x$ is optimal iff there are $(\boldsymbol\lambda,\boldsymbol\nu)$ that together satisfy KKT.</p></must>
+<p><b>Why sufficient for convex problems.</b> $\tilde{\boldsymbol\lambda}\succeq0$ makes $L(\cdot,\tilde{\boldsymbol\lambda},\tilde{\boldsymbol\nu})$ convex in $\mathbf x$; stationarity says $\tilde{\mathbf x}$ minimises it, so $g(\tilde{\boldsymbol\lambda},\tilde{\boldsymbol\nu})=L(\tilde{\mathbf x},\tilde{\boldsymbol\lambda},\tilde{\boldsymbol\nu})=f_0(\tilde{\mathbf x})$ by complementary slackness and $h_i(\tilde{\mathbf x})=0$. Zero gap ⇒ both optimal.</p>
+<fig name="kktfig"><cap>One active inequality: stationarity says $-\nabla f_0(\mathbf x^\star)=\lambda^\star\nabla f_1(\mathbf x^\star)$ with $\lambda^\star\ge0$: the descent direction points straight out of the feasible set.</cap></fig>
+<der id="d-eqqp"/>
+<der id="d-water"/>
+<sim name="water"/>
+<fig name="waterfill"><cap>Six patches; the dashed line is the level $1/\nu^\star$ for a fixed total.</cap></fig>
+
+<tp>Mechanics interpretation and solving via the dual (§5.5.4–5.5.5)</tp>
+<p><b>Mechanics.</b> Two blocks between walls joined by springs: $f_0$ is the potential energy, the constraints keep the blocks apart. The multipliers are the contact forces: $\lambda_i\gt0$ only if contact $i$ is touching (complementary slackness), and stationarity is force balance.</p>
+<p><b>Solving the primal through the dual.</b> If strong duality holds and $(\boldsymbol\lambda^\star,\boldsymbol\nu^\star)$ is dual optimal, any primal optimum minimises $L(\mathbf x,\boldsymbol\lambda^\star,\boldsymbol\nu^\star)$. If that minimiser is unique (e.g. $L$ strictly convex) and feasible, it is the primal optimum.</p>
+<p><b>Example 5.3 (entropy maximisation).</b> Minimise $\sum x_i\log x_i$ s.t. $A\mathbf x\preceq\mathbf b$, $\mathbf 1^T\mathbf x=1$. Given dual optimal $(\boldsymbol\lambda^\star,\nu^\star)$, $L$ is strictly convex and its minimiser is $x_i^\star=1/\exp(\mathbf a_i^T\boldsymbol\lambda^\star+\nu^\star+1)$; if feasible, it is optimal.</p>
+<p><b>Example 5.4 (separable function with one equality).</b> Minimise $\sum f_i(x_i)$ s.t. $\mathbf a^T\mathbf x=b$: $g(\nu)=-b\nu-\sum f_i^*(-\nu a_i)$, a one-dimensional concave maximisation; then each $x_i^\star$ minimises $f_i(x_i)+\nu^\star a_ix_i$ separately.</p>
+<trap><p>KKT sufficiency needs convexity; KKT necessity needs zero duality gap (e.g. Slater). Always state which you use. And write complementary slackness as a product $\lambda_if_i(\mathbf x)=0$, not just "$\lambda_i=0$".</p></trap>
+<chk><q>Write the KKT conditions for minimise $x_1^2+x_2^2$ subject to $x_1+x_2\ge1$ and solve them.</q><a><p>$f_1=1-x_1-x_2\le0$. Stationarity $2x_1-\lambda=0$, $2x_2-\lambda=0$; $\lambda\ge0$; $\lambda(1-x_1-x_2)=0$. If $\lambda=0$, $\mathbf x=0$ is infeasible; so $x_1+x_2=1$, $x_1=x_2=\tfrac12$, $\lambda=1\ge0$. Convex, so $\mathbf x^\star=(\tfrac12,\tfrac12)$, $p^\star=\tfrac12$.</p></a></chk>
+<chk><q>State complementary slackness and explain what it says about inactive constraints.</q><a><p>$\lambda_i^\star f_i(\mathbf x^\star)=0$. If $f_i(\mathbf x^\star)\lt0$ (inactive) then $\lambda_i^\star=0$: inactive constraints have zero multipliers (zero price).</p></a></chk>

@@ -1,0 +1,611 @@
+# Module I derivations. Format: see build.py (=== id, head lines, then --- steps).
+
+
+=== rot
+title: Only 1, 2, 3, 4 and 6-fold rotation axes are allowed
+marks: 5 marks
+src: Puri & Babbar §1.5, Eqs. (1.3)–(1.4), Fig. 1.6
+legend: \(A, B, C, D\): lattice points on one row, \(T\) apart. An \(n\)-fold axis turns the lattice into itself by \(\theta=2\pi/n\). \(B'\), \(C'\): where \(A\) and \(D\) land after turning about \(B\) and \(C\). \(m\): a whole number.
+figure: rot
+result: n = 1, 2, 3, 4, 6
+use: A,B,C,D,\ T | lattice points on a row and their spacing: [[go:m1-basics__t1|lattice and translation vector]]
+use: n\text{-fold axis} | a turn by \(2\pi/n\) that carries the lattice into itself: [[go:m1-symmetry__t0|the symmetry operations]]
+use: \cos\theta=\tfrac{\text{adjacent}}{\text{hypotenuse}} | school trigonometry: the right triangle is drawn in the steps
+--- Set-up
+tex: \theta = \frac{2\pi}{n}
+note: An \(n\)-fold axis means a turn by \(\theta=2\pi/n\) leaves the lattice looking the same ([[go:m1-symmetry__t0|symmetry operations]]). Suppose such axes pass through the lattice points \(B\) and \(C\), which are one step \(T\) apart ([[go:m1-basics__t1|translation vector]]).
+fig: focus BC | keep row A B C D | cap A row of lattice points, spacing $T$
+--- Turn about B and C
+tex: B'C' \parallel BC
+move: define | label=Turn about \(B\) clockwise and about \(C\) anticlockwise
+note: Turning \(A\) about \(B\) by \(\theta\) gives \(B'\); turning \(D\) about \(C\) by \(\theta\) the other way gives \(C'\). Both are at the same height, so \(B'C'\) is parallel to the row. They must be lattice points, because the turn is a symmetry.
+fig: focus BAp CDp thB thC ApDp | keep row A B C D | cap $B'C'$ is parallel to the row
+---
+tex: B'C' = mT
+move: define | label=Points on a lattice row are a whole number of steps apart
+note: \(B'\) and \(C'\) are lattice points on a row parallel to \(BC\). Moving the whole lattice by \(T\) along that row leaves it unchanged, so the points of the row are spaced \(T\) apart, and the distance \(B'C'\) is a whole number \(m\) of steps.
+--- Right triangle at B
+tex: \cos\theta = \frac{BF}{BB'}
+move: identity | label=Cosine in the right triangle \(BFB'\)
+note: Drop \(B'F\) perpendicular to the row. In triangle \(BFB'\) the right angle is at \(F\), the angle at \(B\) is \(\theta\), \(BF\) is the side next to \(\theta\) and \(BB'=T\) is the hypotenuse.
+ask: In the right triangle \(BFB'\), what is \(\cos\theta\)?
+opt*: \(BF/BB'\)
+opt: \(B'F/BB'\)
+opt: \(BF/B'F\)
+opt: \(BB'/BF\)
+why: Cosine is adjacent over hypotenuse: the adjacent side is \(BF\), the hypotenuse is \(BB'\).
+fig: focus triB rtF thB BAp BF | keep row B Ap | cap $\cos θ = \text{adjacent}/\text{hypotenuse} = BF/BB'$
+---
+tex: BF = T\cos\theta
+move: multiply | BB' = T
+note: The hypotenuse \(BB'\) is \(T\): turning does not change a length.
+--- The same at C
+tex: CG = T\cos\theta
+move: identity | label=Same triangle on the other side
+note: Triangle \(CGC'\) is the mirror image, so \(CG=T\cos\theta\) too.
+fig: focus triC rtG thC CDp CG | keep row C Dp | cap $CG = T\cos θ$
+--- Add the pieces
+tex: B'C' = T\cos\theta + T + T\cos\theta
+move: substitute | label=Read \(B'C'\) off the row: \(FB + BC + CG\)
+note: Along the row, \(B'C' = FB+BC+CG\). The \(\cos\theta\) pieces lie outside \(BC\) when \(\theta<90^\circ\); for larger \(\theta\) the cosine is negative and the same formula still holds.
+fig: focus BF BC CG ApDp | keep row A B C D Ap Dp | cap $B'C' = FB + BC + CG$
+---
+tex: T + 2T\cos\theta = mT
+move: substitute | by=B'C' = mT
+note: Put \(B'C'=mT\) on the left and tidy.
+---
+tex: 1 + 2\cos\theta = m
+move: divide | T
+note: \(T\) cancels: the result does not depend on the lattice spacing.
+---
+tex: \cos\theta = \frac{m-1}{2}
+move: rearrange
+note: This is the standard form.
+fig: none
+--- Which m are possible
+tex: -1 \le \frac{m-1}{2} \le 1
+move: identity | label=A cosine lies between \(-1\) and \(1\)
+note: So \(m-1\) can only be \(-2,-1,0,1,2\).
+ask: Which whole numbers \(m\) are allowed?
+opt*: \(m=-1,0,1,2,3\)
+opt: \(m=0,1,2,3,4,5\)
+opt: any whole number
+opt: \(m=1,2,3,4,6\)
+why: \(-1\le(m-1)/2\le1\) gives \(-1\le m\le3\).
+---
+tex: \theta = 180^\circ,\ 120^\circ,\ 90^\circ,\ 60^\circ,\ 0^\circ
+move: evaluate | by=m=-1,0,1,2,3
+note: \(\cos\theta=-1,-\tfrac12,0,\tfrac12,1\) for \(m=-1,0,1,2,3\).
+---
+tex: n = 2,\ 3,\ 4,\ 6,\ 1
+move: substitute | by=n = 2\pi/\theta
+note: No 5: a 5-fold turn is \(72^\circ\), and \(\cos72^\circ=0.309\) would need \(m=1.618\), not a whole number. That is why pentagons cannot tile a plane.
+fig: focus ApDp | keep row A B C D Ap Dp BAp CDp thB thC | cap $θ = 72^\circ$ (drawn): $B'C' = 1.62\,T$, not a lattice step
+
+=== dhkl
+title: Interplanar spacing \(d_{hkl}\)
+marks: 5 marks
+src: Puri & Babbar §1.9, Eq. (1.7)
+legend: The plane \((hkl)\) nearest the origin cuts the axes at \(OA=a/h\), \(OB=b/k\), \(OC=c/l\). \(ON=d\) is the perpendicular from the origin to the plane; \(\alpha,\beta,\gamma\) are its angles with the axes. The axes are at right angles.
+figure: dhkl3
+result: d_{hkl} = \frac{a}{\sqrt{h^2+k^2+l^2}}
+use: (hkl) | Miller indices, the reciprocals of the intercepts: [[go:m1-planes__t1|naming a plane]]
+use: a,\ b,\ c | lattice constants along the three axes (equal for a cube): [[go:m1-bravais__t0|crystal systems]]
+use: d | distance between neighbouring planes of the family \((hkl)\): [[go:m1-dspacing__t0|interplanar spacing]]
+use: \cos\alpha,\ \cos\beta,\ \cos\gamma | direction cosines: proved in the "Direction cosines" steps below
+use: \text{right triangle} | trigonometry only: each triangle is built and labelled in the steps
+--- Intercepts
+tex: OA = \frac{a}{h},\quad OB = \frac{b}{k},\quad OC = \frac{c}{l}
+note: Miller indices are reciprocals of the intercepts in units of \(a, b, c\) ([[go:m1-planes__t1|naming a plane]]). So the plane next to the origin cuts the axes at \(a/h\), \(b/k\), \(c/l\).
+fig: focus OA OB OC plane | keep ax ay az | view yaw=-38 pitch=22 | cap Intercepts $a/h$, $b/k$, $c/l$
+---
+tex: ON = d
+move: define | label=The spacing is the perpendicular from \(O\) to the plane
+note: The plane through \(O\) is the next one of the family, so the distance between neighbouring planes is \(ON\).
+fig: focus ON | keep plane NA ax ay az | view face O N A nozoom | cap Turned so the plane is seen edge-on: $ON\perp$ plane
+--- Right triangle ONA
+tex: \cos\alpha = \frac{ON}{OA}
+move: identity | label=Cosine in the right triangle \(ONA\)
+note: \(ON\) is perpendicular to the plane, so it is perpendicular to \(NA\), which lies in the plane. The right angle is at \(N\), the angle at \(O\) is \(\alpha\), and \(OA\) is the hypotenuse.
+ask: In the right triangle \(ONA\) (right angle at \(N\)), what is \(\cos\alpha\)?
+opt*: \(ON/OA\)
+opt: \(NA/OA\)
+opt: \(OA/ON\)
+opt: \(ON/NA\)
+why: Adjacent over hypotenuse: next to \(\alpha\) is \(ON\); opposite the right angle is \(OA\).
+fig: focus triA rtA alpha ON OA NA | keep plane | view face O N A | cap Triangle $ONA$ flat on the screen: $\cos α = ON/OA$
+---
+tex: \cos\alpha = \frac{d}{a/h}
+move: substitute | by=ON = d,\ OA = a/h
+---
+tex: \cos\alpha = \frac{dh}{a}
+move: simplify
+--- The other two axes
+tex: \cos\beta = \frac{ON}{OB} = \frac{dk}{b}
+move: identity | label=Same steps in the right triangle \(ONB\)
+note: Turn the view until triangle \(ONB\) is flat: right angle at \(N\), angle \(\beta\) at \(O\), hypotenuse \(OB=b/k\).
+fig: focus triB rtB beta OB NB ON | keep plane | view face O N B | cap Triangle $ONB$ flat on the screen: $\cos β = ON/OB$
+---
+tex: \cos\gamma = \frac{ON}{OC} = \frac{dl}{c}
+move: identity | label=And in the right triangle \(ONC\)
+note: Hypotenuse \(OC=c/l\), angle \(\gamma\) at \(O\).
+fig: focus triC rtC gamma OC NC ON | keep plane | view face O N C | cap Triangle $ONC$ flat on the screen: $\cos γ = ON/OC$
+--- Direction cosines
+tex: \hat{\mathbf n} = (\cos\alpha,\ \cos\beta,\ \cos\gamma)
+move: define | label=Components of a unit vector along the three perpendicular axes
+note: The component of a unit vector \(\hat{\mathbf n}\) along an axis is the cosine of the angle between them, so a unit vector along \(ON\) has the components \(\cos\alpha,\cos\beta,\cos\gamma\).
+fig: focus ON alpha beta gamma | keep plane ax ay az | view yaw=-38 pitch=22 | cap Back to 3-D: one line, three angles
+---
+tex: \cos^2\alpha + \cos^2\beta + \cos^2\gamma = 1
+move: identity | label=Length of the vector from its components
+note: Pythagoras in the plane gives \(n_x^2+n_y^2\); once more with \(n_z\) gives the length squared, which is 1. This needs perpendicular axes.
+---
+tex: d^2\left(\frac{h^2}{a^2} + \frac{k^2}{b^2} + \frac{l^2}{c^2}\right) = 1
+move: substitute | label=Put in the three cosines and take out \(d^2\)
+---
+tex: d^2 = \frac{1}{\dfrac{h^2}{a^2} + \dfrac{k^2}{b^2} + \dfrac{l^2}{c^2}}
+move: divide | \left(\frac{h^2}{a^2} + \frac{k^2}{b^2} + \frac{l^2}{c^2}\right)
+---
+tex: d = \frac{1}{\sqrt{\dfrac{h^2}{a^2} + \dfrac{k^2}{b^2} + \dfrac{l^2}{c^2}}}
+move: root
+note: The general result for orthogonal axes (cubic, tetragonal, orthorhombic).
+--- Cubic crystal
+tex: d_{hkl} = \frac{a}{\sqrt{h^2+k^2+l^2}}
+move: substitute | by=a = b = c
+note: For a cube put \(a=b=c\). Learn this line: most numericals use it.
+ask: For a cubic crystal, what is \(d_{110}\)?
+opt*: \(a/\sqrt2\)
+opt: \(a\sqrt2\)
+opt: \(a/2\)
+opt: \(a/\sqrt3\)
+why: \(h^2+k^2+l^2=1+1+0=2\), so \(d=a/\sqrt2\).
+fig: none
+
+=== pf_fcc
+title: Packing fraction of FCC = 0.74
+marks: 4 marks
+src: Puri & Babbar §1.10.1
+legend: Cube side \(a\), atomic radius \(r\). Packing fraction = volume filled by atoms in one cell ÷ volume of the cell.
+figure: pf_fcc
+result: \text{PF} = \frac{\pi}{3\sqrt2} \approx 0.74
+use: n | atoms per cell: corners shared by 8 cells, faces by 2: [[go:m1-basics__t2|counting atoms in a cell]]
+use: a,\ r | cube edge and atomic radius (atoms taken as touching hard spheres)
+use: \text{PF} | packing fraction, volume of atoms over volume of the cell: [[go:m1-packing__t0|the two numbers of a packing]]
+use: \tfrac43\pi r^3 | volume of a sphere: derived in the step "Volume of one atom" below
+use: \text{FCC} | face-centred cubic lattice: [[go:m1-bravais__t0|Bravais lattices]]
+--- Atoms per cell
+tex: n = 8\times\tfrac18 + 6\times\tfrac12
+note: Each corner atom is shared by 8 cells, each face-centre atom by 2 cells ([[go:m1-basics__t2|counting the atoms inside one cell]]).
+fig: focus c1 c2 c3 c4 c0 | keep face | cap Corners count $1/8$, face centres $1/2$
+---
+tex: n = 4
+move: evaluate | by=1 + 3
+--- Where they touch
+tex: (4r)^2 = a^2 + a^2
+move: identity | label=Pythagoras on half the face
+note: Along the face diagonal the corner atom, the face-centre atom and the next corner atom touch: the diagonal is \(r+2r+r=4r\). The two cube edges are the other sides of the right triangle.
+ask: Which right triangle gives the face diagonal?
+opt*: legs \(a\) and \(a\), hypotenuse \(4r\)
+opt: legs \(a\) and \(4r\), hypotenuse \(a\sqrt2\)
+opt: legs \(2r\) and \(2r\), hypotenuse \(a\)
+opt: legs \(a\) and \(2r\), hypotenuse \(4r\)
+why: The diagonal \(4r\) is opposite the right angle at the cube corner; the legs are two edges of length \(a\).
+fig: focus tri rt diag ea eb | keep face c1 c3 c0 | cap $(\text{face diagonal})^2 = a^2 + a^2$
+---
+tex: 4r = \sqrt2\,a
+move: root
+---
+tex: r = \frac{a}{2\sqrt2}
+move: divide | 4
+fig: focus diag | keep face c1 c2 c3 c4 c0 | cap $r = a/2\sqrt2$
+--- Volume of one atom
+tex: V_{\text{atom}} = \int_{-r}^{r}\pi\left(r^2-z^2\right)dz
+move: integrate | label=Slice the sphere into thin discs
+note: At height \(z\) the slice is a disc of radius \(\sqrt{r^2-z^2}\) (Pythagoras), area \(\pi(r^2-z^2)\), thickness \(dz\).
+---
+tex: V_{\text{atom}} = \pi\left[r^2z-\frac{z^3}{3}\right]_{-r}^{r} = \tfrac43\pi r^3
+move: evaluate
+note: \(\pi\left(2r^3-\tfrac23r^3\right)=\tfrac43\pi r^3\).
+--- Fill the cell
+tex: \text{PF} = \frac{n\cdot\frac43\pi r^3}{a^3}
+move: define | label=Volume of atoms ÷ volume of cell
+fig: focus c1 c2 c3 c4 c0 face | cap atoms' volume $/\,a^3$
+---
+tex: \text{PF} = \frac{4\cdot\frac43\pi}{a^3}\left(\frac{a}{2\sqrt2}\right)^3
+move: substitute | by=n=4,\ r=a/2\sqrt2
+---
+tex: \text{PF} = \frac{16\pi}{3}\cdot\frac{1}{16\sqrt2}
+move: simplify
+note: \((2\sqrt2)^3 = 16\sqrt2\), and \(a^3\) cancels.
+---
+tex: \text{PF} = \frac{\pi}{3\sqrt2} \approx 0.74
+move: simplify
+note: 74% of the space is filled: FCC (and HCP) is the closest packing of equal spheres. Coordination number 12.
+
+=== pf_bcc
+title: Packing fraction of BCC = 0.68
+marks: 4 marks
+src: Puri & Babbar §1.10.2
+legend: Cube side \(a\), atomic radius \(r\). In BCC the atoms touch along the body diagonal.
+figure: pf_bcc
+result: \text{PF} = \frac{\sqrt3\,\pi}{8} \approx 0.68
+use: n | atoms per cell: [[go:m1-basics__t2|counting atoms in a cell]]
+use: a,\ r | cube edge and atomic radius; atoms touch along the body diagonal
+use: \text{PF} | packing fraction: [[go:m1-packing__t0|the two numbers of a packing]]
+use: \tfrac43\pi r^3 | sphere volume: derived in [[go:der:pf_fcc|the FCC derivation]]
+use: \text{BCC} | body-centred cubic lattice: [[go:m1-bravais__t0|Bravais lattices]]
+--- Atoms per cell
+tex: n = 8\times\tfrac18 + 1
+note: Eight corners shared by 8 cells each, and one atom wholly inside.
+fig: keep Cb | cap $8\times 1/8 + 1$
+---
+tex: n = 2
+move: evaluate | by=1 + 1
+--- Face diagonal first
+tex: (\text{face diagonal})^2 = a^2 + a^2
+move: identity | label=Pythagoras on the bottom face
+note: The bottom face is a square of side \(a\): the face diagonal is the hypotenuse of a right triangle with legs \(a\), \(a\).
+fig: focus triF fd ex ey | cap Bottom face: legs $a$ and $a$
+---
+tex: \text{face diagonal} = \sqrt2\,a
+move: root
+--- Then the body diagonal
+tex: (4r)^2 = (\sqrt2\,a)^2 + a^2
+move: identity | label=Pythagoras in the upright triangle
+note: The body diagonal, the face diagonal and one vertical edge form a right triangle (right angle at the corner under the top). Corner atom, body-centre atom and opposite corner atom touch along it, so it is \(4r\).
+ask: The body diagonal is the hypotenuse of which right triangle?
+opt*: face diagonal \(\sqrt2a\) and edge \(a\)
+opt: two edges \(a\) and \(a\)
+opt: face diagonal \(\sqrt2a\) and \(4r\)
+opt: edge \(a\) and \(2r\)
+why: The vertical edge stands at right angles to the bottom face, so it is at right angles to the face diagonal.
+fig: focus triB bd fd up | keep Cb | cap $(4r)^2 = (\sqrt2\,a)^2 + a^2$
+---
+tex: 4r = \sqrt3\,a
+move: root
+note: \(2a^2+a^2=3a^2\).
+---
+tex: r = \frac{\sqrt3}{4}a
+move: divide | 4
+--- Fill the cell
+tex: \text{PF} = \frac{2\cdot\frac43\pi}{a^3}\left(\frac{\sqrt3\,a}{4}\right)^3
+move: substitute | label=Volume of 2 atoms ÷ \(a^3\)
+fig: keep Cb bd | cap $2$ atoms in $a^3$
+---
+tex: \text{PF} = \frac{8\pi}{3}\cdot\frac{3\sqrt3}{64}
+move: simplify
+---
+tex: \text{PF} = \frac{\sqrt3\,\pi}{8} \approx 0.68
+move: simplify
+note: Compare: SC \(\pi/6=0.52\) (atoms touch along an edge, \(a=2r\)), BCC 0.68, FCC and HCP 0.74. Coordination numbers 6, 8, 12.
+
+=== hcp
+title: Ideal HCP: \(c/a = \sqrt{8/3} = 1.633\)
+marks: 5 marks
+src: Puri & Babbar §1.10.1(i)
+legend: \(P, Q, R\): three touching atoms of layer A, side \(a\). \(T\): the layer-B atom resting in their hollow. \(G\): centre of triangle \(PQR\), right below \(T\). \(M\): midpoint of \(PQ\). Layers A and B are \(c/2\) apart.
+figure: hcp
+result: \frac{c}{a} = \sqrt{\frac83} \approx 1.633
+use: P,Q,R,T | three touching atoms of layer A and the layer-B atom in their hollow: [[go:m1-packing__t1|close packing and c/a]]
+use: a=2r | centre-to-centre distance of touching atoms
+use: c | height of the HCP cell, two layers: [[go:m1-packing__t1|close packing and c/a]]
+use: \sin 60^\circ | not assumed: its value comes out of the first steps
+--- The median of the triangle
+tex: PM = \frac a2
+move: identity | label=The median \(RM\) meets \(PQ\) at its midpoint, at a right angle
+note: \(PQR\) is equilateral, so the line from \(R\) to the midpoint \(M\) of \(PQ\) is also perpendicular to \(PQ\). It cuts the triangle into two equal right triangles.
+fig: focus triM a60 RM | keep base P Q R | cap $RM$ is the median of the triangle
+---
+tex: RM^2 = PR^2 - PM^2
+move: identity | label=Pythagoras in the right triangle \(PMR\)
+note: The right angle is at \(M\); the hypotenuse is \(PR\).
+ask: In the right triangle \(PMR\) (right angle at \(M\)), which side is the hypotenuse?
+opt*: \(PR\)
+opt: \(RM\)
+opt: \(PM\)
+opt: \(PQ\)
+why: The hypotenuse is opposite the right angle at \(M\): that is \(PR\).
+---
+tex: RM^2 = a^2 - \frac{a^2}{4} = \frac{3a^2}{4}
+move: substitute | by=PR = a,\ PM = a/2
+---
+tex: RM = \frac{\sqrt3}{2}a
+move: root
+note: This is \(a\sin60^\circ\): the value \(\sin60^\circ=\sqrt3/2\) comes from this triangle.
+--- Centre of the triangle
+tex: PG = RG
+move: identity | label=\(T\) touches \(P\), \(Q\) and \(R\) equally
+note: The layer-B atom \(T\) sits right above a point \(G\) of layer A and touches all three atoms, so \(TP=TQ=TR\). \(T\) is vertically above \(G\), so \(G\) is the same distance from the three corners (Pythagoras in each right triangle). By symmetry it lies on the median \(RM\).
+fig: focus PG G | keep base P Q R | cap $G$ is equally far from $P$, $Q$, $R$
+---
+tex: GM = RM - PG
+move: identity | label=\(G\) lies on the median
+note: \(RM = RG + GM\) and \(RG = PG\).
+---
+tex: PG^2 = PM^2 + GM^2
+move: identity | label=Pythagoras in the right triangle \(PMG\)
+note: The right angle is at \(M\).
+---
+tex: PG^2 = \frac{a^2}{4} + \left(\frac{\sqrt3}{2}a - PG\right)^2
+move: substitute | by=PM = a/2,\ GM = \tfrac{\sqrt3}{2}a - PG
+---
+tex: 0 = a^2 - \sqrt3\,a\,PG
+move: expand | label=Expand the bracket: \(PG^2\) cancels from both sides
+note: \(\frac{a^2}{4}+\frac{3a^2}{4}=a^2\), and the cross term is \(-\sqrt3\,a\,PG\).
+---
+tex: PG = \frac{a}{\sqrt3}
+move: rearrange
+note: The familiar "two-thirds of the median", \(\tfrac23\cdot\tfrac{\sqrt3}{2}a\), now proved.
+--- Right triangle PGT
+tex: PT^2 = PG^2 + GT^2
+move: identity | label=Pythagoras in triangle \(PGT\)
+note: \(T\) is straight above \(G\), so \(GT\) is vertical and \(PG\) horizontal: right angle at \(G\). \(PT\) is the hypotenuse.
+ask: Which side is the hypotenuse of triangle \(PGT\)?
+opt*: \(PT\), joining the touching atoms
+opt: \(GT\), the height
+opt: \(PG\)
+opt: \(PQ\)
+why: The right angle is at \(G\); the side opposite it is \(PT\).
+fig: focus triT rtG PG GT TP | keep base P Q R G T | cap $PT^2 = PG^2 + GT^2$
+---
+tex: a^2 = \frac{a^2}{3} + \frac{c^2}{4}
+move: substitute | by=PT = a,\ PG = a/\sqrt3,\ GT = c/2
+note: \(T\) touches \(P\), so \(PT=2r=a\). The layer spacing is half the cell height, \(GT=c/2\).
+---
+tex: \frac{c^2}{4} = \frac{2a^2}{3}
+move: subtract | \frac{a^2}{3}
+---
+tex: \frac{c^2}{a^2} = \frac83
+move: multiply | \frac{4}{a^2}
+---
+tex: \frac{c}{a} = \sqrt{\frac83} \approx 1.633
+move: root
+note: Real HCP metals are close: Mg 1.62, Co 1.62; Zn (1.86) and Cd (1.89) are far from ideal.
+fig: none
+
+=== bragg
+title: Bragg's law, $2d\sin θ = nλ$
+marks: 4–5 marks
+src: Puri & Babbar §2.2.1, Eq. (2.1)
+legend: Planes \((hkl)\) are a distance \(d\) apart. \(\theta\) is the glancing angle, measured from the plane. \(\Delta\) is the path difference between the two reflected rays, \(n\) the order, \(\lambda\) the wavelength.
+figure: bragg
+result: 2d\sin\theta = n\lambda
+use: d_{hkl} | distance between neighbouring planes: [[go:m1-dspacing__t0|interplanar spacing]], [[go:m1-planes__t1|Miller indices]]
+use: \lambda | X-ray wavelength, comparable with atomic spacings (about 0.1 nm): [[go:m1-xrd__t2|diffraction methods]]
+use: \theta | glancing angle, measured from the plane (not the normal)
+use: \Delta | path difference of the two reflected rays; its link to phase is derived in the "Phase difference" steps
+--- Extra path
+tex: \Delta = PB + BQ
+note: Before \(AP\) the two rays are level, and after \(AQ\) they are level again (both lines are wavefronts). So ray 2 travels the extra distance \(PB+BQ\) and nothing else.
+fig: focus PB BQ AP AQ | keep in2 out2 in1 out1 plane1 plane2 | cap Ray 2 goes further by $PB + BQ$
+--- Right triangle APB
+tex: \sin\theta = \frac{PB}{AB}
+move: identity | label=Sine in the right triangle \(APB\)
+note: In triangle \(APB\) the right angle is at \(P\). The angle at \(A\) is \(\theta\): \(AB\) is normal to the planes, \(AP\) is normal to the ray, and the angle between two lines equals the angle between their normals. \(PB\) is opposite \(\theta\) and \(AB\) is the hypotenuse.
+ask: In the right triangle \(APB\), what is \(\sin\theta\)?
+opt*: \(PB/AB\)
+opt: \(AP/AB\)
+opt: \(PB/AP\)
+opt: \(AB/PB\)
+why: Sine is opposite over hypotenuse. Opposite \(\theta\) is \(PB\); the hypotenuse is \(AB\).
+fig: focus triAPB rtP thA PB AB | cap $\sin θ = \text{opposite}/\text{hypotenuse} = PB/AB$
+---
+tex: AB\sin\theta = PB
+move: multiply | AB
+note: Clear the fraction.
+---
+tex: PB = d\sin\theta
+move: substitute | by=AB = d | label=Put \(AB=d\), the spacing
+note: \(A\) and \(B\) are on neighbouring planes along the normal, so \(AB=d\).
+fig: focus PB AB | keep triAPB rtP thA | cap $PB = d\sin θ$
+--- Triangle AQB
+tex: BQ = d\sin\theta
+move: identity | label=Same steps in triangle \(AQB\)
+note: Triangle \(AQB\) is the mirror image of \(APB\): right angle at \(Q\), angle \(\theta\) at \(A\), hypotenuse \(AB=d\). So \(BQ=d\sin\theta\) as well.
+fig: focus triAQB rtQ thA2 BQ AB | cap $BQ = d\sin θ$, the mirror image
+--- Path difference
+tex: \Delta = d\sin\theta + d\sin\theta
+move: substitute | by=PB,\ BQ
+note: Put both pieces into \(\Delta=PB+BQ\).
+fig: focus PB BQ | keep in2 out2 in1 out1 plane1 plane2 AB | cap $Δ = PB + BQ$
+---
+tex: \Delta = 2d\sin\theta
+move: combine
+note: Two equal pieces.
+--- Phase difference
+tex: \varphi = \frac{2\pi}{\lambda}\,\Delta
+move: define | label=A path difference \(\Delta\) delays the wave by \(\Delta/\lambda\) cycles
+note: One wavelength of extra path is one full cycle, which is \(2\pi\) of phase. So an extra path \(\Delta\) is \(2\pi\Delta/\lambda\) of phase.
+---
+tex: \varphi = 2\pi n
+move: define | label=Two waves add to a maximum when their crests coincide
+note: The reflected waves are added. The sum is largest when they are in step, that is when \(\varphi=0,2\pi,4\pi,\dots\), a whole number \(n\) of cycles apart.
+--- Bright reflection
+tex: 2d\sin\theta = n\lambda
+move: identity | label=Put \(\Delta=2d\sin\theta\) into \(\varphi=2\pi n\): bright when the path difference is a whole number of wavelengths
+note: The reflected rays reinforce only when they arrive in step, that is when \(\Delta\) is a whole number of wavelengths, \(n=1,2,3,\dots\) This is Bragg's law. Remember \(\theta\) is from the plane, not from the normal.
+ask: When do the two reflected rays reinforce each other?
+opt*: \(\Delta=n\lambda\)
+opt: \(\Delta=(n+\tfrac12)\lambda\)
+opt: \(\Delta=\lambda/2\)
+opt: \(\Delta=d\)
+why: Constructive interference needs the waves in phase: a path difference of a whole number of wavelengths.
+fig: none
+
+=== laue
+title: Laue's equations, and Bragg's law from them
+marks: 5–8 marks
+src: Puri & Babbar §2.2.2, Eqs. (2.2)–(2.5)
+legend: \(A, B\): identical scattering atoms, \(\mathbf r=\overrightarrow{AB}\). \(\hat{\mathbf n}_1\), \(\hat{\mathbf n}_2\): unit vectors along the incident and scattered beams; the angle between them is \(2\theta\). \(\mathbf N=\hat{\mathbf n}_1-\hat{\mathbf n}_2\). \(\alpha,\beta,\gamma\): angles of \(\mathbf N\) with the axes \(\mathbf a,\mathbf b,\mathbf c\).
+figure: laue
+result: 2d\sin\theta = n\lambda
+use: \mathbf a,\ \mathbf b,\ \mathbf c | primitive vectors of the lattice: [[go:m1-basics__t1|translation vectors]]
+use: h,\ k,\ l | whole numbers, the Miller indices of the reflecting planes: [[go:m1-planes__t1|naming a plane]]
+use: \cos\alpha:\cos\beta:\cos\gamma | direction cosines of the plane normal: [[go:der:dhkl|proved in the \(d_{hkl}\) derivation]]
+use: \tfrac{2\pi}{\lambda}\Delta | phase difference: [[go:der:bragg|derived in Bragg's law]]
+use: \mathbf r\cdot\hat{\mathbf n} | length of the shadow of \(\mathbf r\) on the beam direction: shown in step 2
+--- Path difference
+tex: \Delta = AM - AL
+note: Projecting \(B\) onto the two beams through \(A\): the ray through \(B\) is ahead by \(AM\) on the way in and behind by \(AL\) on the way out.
+fig: focus AM AL BM BL rtM rtL | keep inA inB outA outB A B rv | cap $Δ = AM - AL$
+---
+tex: \Delta = \mathbf r\cdot\hat{\mathbf n}_1 - \mathbf r\cdot\hat{\mathbf n}_2
+move: identity | label=A projection is a dot product with a unit vector
+note: If \(\varphi\) is the angle between \(\mathbf r\) and the unit vector \(\hat{\mathbf n}\), the shadow of \(\mathbf r\) on that line has length \(|\mathbf r|\cos\varphi\). The dot product is \(\mathbf r\cdot\hat{\mathbf n}=|\mathbf r|\,|\hat{\mathbf n}|\cos\varphi=|\mathbf r|\cos\varphi\), since \(|\hat{\mathbf n}|=1\).
+---
+tex: \Delta = \mathbf r\cdot\mathbf N
+move: factor
+note: with \(\mathbf N=\hat{\mathbf n}_1-\hat{\mathbf n}_2\).
+fig: focus vN v1 v2 | keep A B rv | cap $\mathbf N = \hat n_1 - \hat n_2$
+--- Size of N
+tex: \sin\theta = \frac{|\mathbf N|/2}{1}
+move: identity | label=Sine in half of the isosceles triangle
+note: \(\hat{\mathbf n}_1\) and \(\hat{\mathbf n}_2\) both have length 1 and meet at \(2\theta\). The bisector cuts the triangle into two right triangles, each with hypotenuse 1, angle \(\theta\) and opposite side \(|\mathbf N|/2\).
+ask: In the half triangle (hypotenuse 1, angle \(\theta\)), what is the side opposite \(\theta\)?
+opt*: \(|\mathbf N|/2\)
+opt: \(|\mathbf N|\)
+opt: \(\cos\theta\)
+opt: \(1/2\)
+why: The bisector meets \(\mathbf N\) at its midpoint, so the opposite side is half of \(|\mathbf N|\).
+fig: focus triH rtH th bis vN | keep v1 v2 | cap $\sin θ = (|\mathbf N|/2)/1$
+---
+tex: |\mathbf N| = 2\sin\theta
+move: multiply | 2
+--- Phase condition along each axis
+tex: \frac{2\pi}{\lambda}\,\mathbf a\cdot\mathbf N = 2\pi nh
+move: define | label=Bright only if the phase difference is a whole multiple of \(2\pi\)
+note: Phase difference \(=\frac{2\pi}{\lambda}\Delta\) ([[go:der:bragg|Bragg's law derivation]]). Taking \(\mathbf r\) along the axis \(\mathbf a\) to the next atom, it must be \(2\pi\) times a whole number, written \(nh\) (the integers \(h,k,l\) have no common factor; \(n\) is that factor).
+fig: none
+---
+tex: \mathbf a\cdot\mathbf N = nh\lambda
+move: multiply | \frac{\lambda}{2\pi}
+note: and in the same way \(\mathbf b\cdot\mathbf N=nk\lambda\), \(\mathbf c\cdot\mathbf N=nl\lambda\): all three at once.
+---
+tex: 2a\sin\theta\cos\alpha = nh\lambda
+move: substitute | by=\mathbf a\cdot\mathbf N = a\,|\mathbf N|\cos\alpha
+note: These three, with \(b\cos\beta\) and \(c\cos\gamma\), are Laue's equations (2.4). With \(\cos^2\alpha+\cos^2\beta+\cos^2\gamma=1\) they fix the directions of the diffracted beams.
+--- Back to Bragg
+tex: \cos\alpha = \frac{nh\lambda}{2a\sin\theta}
+move: divide | 2a\sin\theta
+note: For fixed \(\theta\), \(\cos\alpha:\cos\beta:\cos\gamma = h/a:k/b:l/c\): the direction cosines of the normal to the plane \((hkl)\). So \(\mathbf N\) is normal to \((hkl)\): that plane is the reflecting plane.
+---
+tex: \frac{dh}{a} = \frac{nh\lambda}{2a\sin\theta}
+move: substitute | by=\cos\alpha = dh/a
+note: From [[go:der:dhkl|the \(d_{hkl}\) derivation]], the normal to \((hkl)\) has \(\cos\alpha = dh/a\).
+---
+tex: 2d\sin\theta = n\lambda
+move: simplify
+note: \(h/a\) cancels: Bragg's law. Laue's atom-by-atom picture and Bragg's mirror picture give the same answer.
+
+=== brecip
+title: Bragg's law in the reciprocal lattice
+marks: 5 marks
+src: Puri & Babbar §2.6
+legend: \(\mathbf k\), \(\mathbf k'\): incident and diffracted wave vectors, \(|\mathbf k|=|\mathbf k'|=2\pi/\lambda\). \(\mathbf G\): a reciprocal lattice vector, normal to the planes \((hkl)\), \(|\mathbf G|=2\pi n/d\). \(\theta\): glancing angle.
+figure: brecip
+result: 2d\sin\theta = n\lambda
+use: \mathbf k,\ \mathbf k' | wave vectors of the incident and the diffracted beam; \(|\mathbf k|=2\pi/\lambda\) (a wave gains \(2\pi\) of phase per wavelength)
+use: \mathbf G | reciprocal lattice vector, normal to the planes \((hkl)\): [[go:m1-xrd__t3|the reciprocal lattice]]
+use: |\mathbf G|=2\pi n/d | length of \(\mathbf G\): [[go:m1-xrd__t3|the reciprocal lattice]]
+use: \mathbf k'=\mathbf k+\mathbf G | derived from Laue's equations in the first steps below: [[go:der:laue|Laue's equations]]
+--- Where the condition comes from
+tex: \mathbf a\cdot(\mathbf k'-\mathbf k) = -2\pi nh
+move: substitute | by=\mathbf k = \tfrac{2\pi}{\lambda}\hat{\mathbf n}_1,\ \mathbf k' = \tfrac{2\pi}{\lambda}\hat{\mathbf n}_2
+note: Take Laue's first equation \(\mathbf a\cdot\mathbf N=nh\lambda\) with \(\mathbf N=\hat{\mathbf n}_1-\hat{\mathbf n}_2\) ([[go:der:laue|Laue's equations]]). A wave of wavelength \(\lambda\) has \(|\mathbf k|=2\pi/\lambda\), so \(\mathbf k=\frac{2\pi}{\lambda}\hat{\mathbf n}_1\) and \(\mathbf k'=\frac{2\pi}{\lambda}\hat{\mathbf n}_2\). Then \(\mathbf a\cdot(\mathbf k'-\mathbf k)=-\frac{2\pi}{\lambda}\mathbf a\cdot\mathbf N=-2\pi nh\).
+---
+tex: (\mathbf k'-\mathbf k)\cdot\mathbf T = 2\pi\times\text{whole number}
+move: combine | label=The same for \(\mathbf b\) and \(\mathbf c\); then for every lattice vector \(\mathbf T=n_1\mathbf a+n_2\mathbf b+n_3\mathbf c\)
+note: Add the three conditions with the whole-number weights \(n_1,n_2,n_3\).
+---
+tex: \mathbf k' = \mathbf k + \mathbf G
+move: define | label=A vector whose dot product with every \(\mathbf T\) is \(2\pi\times\)whole number is, by definition, a reciprocal lattice vector
+note: Those are exactly the vectors \(\mathbf G=h\mathbf a^*+k\mathbf b^*+l\mathbf c^*\) of [[go:m1-xrd__t3|the reciprocal lattice]]. So a crystal can change the wave vector of an X-ray only by a reciprocal lattice vector (the sign does not matter: \(-\mathbf G\) is one too).
+fig: focus G kin kout | keep plane | cap $\mathbf k' = \mathbf k + \mathbf G$
+---
+tex: k'^2 = k^2
+move: identity | label=Elastic scattering: the wavelength does not change
+---
+tex: (\mathbf k + \mathbf G)^2 = k^2
+move: substitute | by=\mathbf k' = \mathbf k + \mathbf G
+---
+tex: k^2 + 2\mathbf k\cdot\mathbf G + G^2 = k^2
+move: expand
+---
+tex: 2\mathbf k\cdot\mathbf G + G^2 = 0
+move: subtract | k^2
+note: This is the diffraction condition in reciprocal space: the tip of \(\mathbf k\) sits on the plane that bisects \(\mathbf G\) at right angles (a Brillouin zone boundary).
+--- Read the triangle
+tex: \sin\theta = \frac{G/2}{k}
+move: identity | label=Sine in half of the isosceles triangle \(OKK'\)
+note: \(\mathbf k\) and \(\mathbf k'\) have equal length, so \(OKK'\) is isosceles and the plane trace \(OH\) cuts \(\mathbf G\) in half at right angles. In triangle \(OHK\): right angle at \(H\), angle \(\theta\) at \(O\), opposite side \(G/2\), hypotenuse \(k\).
+ask: In the right triangle \(OHK\), what is \(\sin\theta\)?
+opt*: \((G/2)/k\)
+opt: \(G/k\)
+opt: \(k/(G/2)\)
+opt: \(OH/k\)
+why: Opposite \(\theta\) is \(KH=G/2\); the hypotenuse is \(OK=k\).
+fig: focus tri rt th KH kin OH | keep plane G kout | cap $\sin θ = (G/2)/k$
+---
+tex: G = 2k\sin\theta
+move: multiply | 2k
+---
+tex: \frac{2\pi n}{d} = 2\cdot\frac{2\pi}{\lambda}\sin\theta
+move: substitute | by=G = 2\pi n/d,\ k = 2\pi/\lambda
+note: The shortest \(\mathbf G\) normal to \((hkl)\) has length \(2\pi/d\) ([[go:m1-xrd__t3|reciprocal lattice]]); \(n\) times it gives the \(n\)th order.
+---
+tex: 2d\sin\theta = n\lambda
+move: rearrange
+note: Bragg's law again: the reciprocal lattice is a compact way of writing it.
+fig: none
+
+=== recip_bcc
+title: The reciprocal of a BCC lattice is FCC
+marks: 5 marks
+src: Puri & Babbar §2.4.3, Eq. (2.22)
+legend: \(a\): cube edge. \(\hat i,\hat j,\hat k\): unit vectors along the cube edges. \(\mathbf a',\mathbf b',\mathbf c'\): primitive vectors of BCC. Reciprocal vectors: \(\mathbf a^*=2\pi\,\dfrac{\mathbf b'\times\mathbf c'}{\mathbf a'\cdot(\mathbf b'\times\mathbf c')}\) and cyclically.
+result: \mathbf a^* = \frac{2\pi}{a}(\hat i+\hat j)
+use: \mathbf a^*,\ \mathbf b^*,\ \mathbf c^* | reciprocal primitive vectors, defined by the formula in the legend: [[go:m1-xrd__t3|the reciprocal lattice]]
+use: \mathbf a',\ \mathbf b',\ \mathbf c' | primitive vectors of BCC: [[go:m1-bravais__t0|Bravais lattices]]
+use: V=\mathbf a'\cdot(\mathbf b'\times\mathbf c') | volume of the primitive cell: base area times height (note in the volume step)
+use: \times | cross product, expanded as a determinant in the steps
+use: \text{FCC} | primitive vectors \(\tfrac A2(\hat i+\hat j)\), \(\dots\): [[go:m1-bravais__t0|Bravais lattices]]
+--- Primitive vectors of BCC
+tex: \mathbf a' = \tfrac a2(\hat i+\hat j-\hat k)
+note: From a corner to three of the neighbouring body centres.
+---
+tex: \mathbf b' = \tfrac a2(-\hat i+\hat j+\hat k),\quad \mathbf c' = \tfrac a2(\hat i-\hat j+\hat k)
+move: define
+--- Cross product
+tex: \mathbf b'\times\mathbf c' = \tfrac{a^2}{4}(-\hat i+\hat j+\hat k)\times(\hat i-\hat j+\hat k)
+move: substitute
+---
+tex: \mathbf b'\times\mathbf c' = \tfrac{a^2}{4}(2\hat i+2\hat j)
+move: evaluate | label=Expand the determinant
+note: \(\hat i\): \(1\cdot1-1\cdot(-1)=2\); \(\hat j\): \(1\cdot1-(-1)\cdot1=2\); \(\hat k\): \((-1)(-1)-1\cdot1=0\).
+---
+tex: \mathbf b'\times\mathbf c' = \tfrac{a^2}{2}(\hat i+\hat j)
+move: simplify
+--- Volume of the primitive cell
+tex: V = \mathbf a'\cdot(\mathbf b'\times\mathbf c') = \tfrac a2\cdot\tfrac{a^2}{2}(1+1)
+move: substitute
+note: \(|\mathbf b'\times\mathbf c'|\) is the area of the parallelogram on \(\mathbf b'\) and \(\mathbf c'\) and \(\mathbf a'\) dotted with the unit normal is the height, so \(\mathbf a'\cdot(\mathbf b'\times\mathbf c')\) is the volume of the parallelepiped, which is one primitive cell.
+ask: What is the volume of the BCC primitive cell?
+opt*: \(a^3/2\)
+opt: \(a^3\)
+opt: \(a^3/4\)
+opt: \(2a^3\)
+why: The cube holds 2 lattice points, so each primitive cell is half the cube.
+---
+tex: V = \frac{a^3}{2}
+move: simplify
+--- Reciprocal vectors
+tex: \mathbf a^* = 2\pi\,\frac{(a^2/2)(\hat i+\hat j)}{a^3/2}
+move: substitute | label=Put both into the definition of \(\mathbf a^*\)
+---
+tex: \mathbf a^* = \frac{2\pi}{a}(\hat i+\hat j)
+move: simplify
+note: In the same way \(\mathbf b^*=\dfrac{2\pi}{a}(\hat j+\hat k)\) and \(\mathbf c^*=\dfrac{2\pi}{a}(\hat k+\hat i)\).
+---
+tex: \text{BCC (cube } a) \;\longrightarrow\; \text{FCC (cube } 4\pi/a)
+move: identity | label=Compare with the FCC primitive vectors \(\tfrac{A}{2}(\hat i+\hat j)\), …
+note: These are exactly the primitive vectors of an FCC lattice with cube edge \(A=4\pi/a\). The same working the other way gives FCC → BCC, and SC → SC with edge \(2\pi/a\).

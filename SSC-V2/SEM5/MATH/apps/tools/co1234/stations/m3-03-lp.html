@@ -1,0 +1,23 @@
+<!-- id: m3-lp | mod: Module III | modName: Convex optimization problems | modClass: m3 | title: Linear optimization problems | short: Linear programs (4.3) | est: ~35 min -->
+<gist>An LP minimises a linear function over a polyhedron. Many problems that do not look linear (Chebyshev centre, piecewise-linear minimisation, $\ell_1$ and $\ell_\infty$ fitting, linear-fractional objectives) become LPs after a change of variables or an epigraph trick.</gist>
+
+<tp>Forms of an LP (§4.3)</tp>
+<must><p><b>General form:</b> minimise $\mathbf c^T\mathbf x+d$ s.t. $G\mathbf x\preceq\mathbf h$, $A\mathbf x=\mathbf b$. <b>Standard form:</b> minimise $\mathbf c^T\mathbf x$ s.t. $A\mathbf x=\mathbf b$, $\mathbf x\succeq0$. <b>Inequality form:</b> minimise $\mathbf c^T\mathbf x$ s.t. $A\mathbf x\preceq\mathbf b$.</p></must>
+<p><b>General → standard.</b> Add slacks $\mathbf s\succeq0$: $G\mathbf x+\mathbf s=\mathbf h$; split $\mathbf x=\mathbf x^+-\mathbf x^-$ with $\mathbf x^\pm\succeq0$. Result: minimise $\mathbf c^T\mathbf x^+-\mathbf c^T\mathbf x^-+d$ s.t. $G\mathbf x^+-G\mathbf x^-+\mathbf s=\mathbf h$, $A\mathbf x^+-A\mathbf x^-=\mathbf b$, $\mathbf x^+,\mathbf x^-,\mathbf s\succeq0$.</p>
+<fig name="lpgeo"><cap>The objective is constant on hyperplanes orthogonal to $\mathbf c$; the optimum is the vertex furthest in the direction $-\mathbf c$.</cap></fig>
+<sim name="lp"/>
+
+<tp>Examples (§4.3.1)</tp>
+<p><b>Diet problem.</b> $n$ foods, $m$ nutrients; $x_j$ = quantity of food $j$ at cost $c_j$, $a_{ij}$ = nutrient $i$ per unit of food $j$, requirement $b_i$: minimise $\mathbf c^T\mathbf x$ s.t. $A\mathbf x\succeq\mathbf b$, $\mathbf x\succeq0$.</p>
+<p><b>Chebyshev centre of a polyhedron</b> (largest inscribed ball):</p>
+<fig name="cheb"><cap>The robust constraint for a ball inside a halfspace adds the term $r\|\mathbf a_i\|_2$.</cap></fig>
+<der id="d-cheb"/>
+<p><b>Dynamic activity planning</b>, <b>Chebyshev inequalities</b> (bounds on $\mathbf E f(x)$ over distributions with given moments: an LP in $\mathbf p$), <b>piecewise-linear minimisation</b>: minimise $\max_i(\mathbf a_i^T\mathbf x+b_i)$ ⇔ minimise $t$ s.t. $\mathbf a_i^T\mathbf x+b_i\le t$ (epigraph form).</p>
+<p><b>$\ell_\infty$ and $\ell_1$ approximation</b> (exercise 4.11): minimise $\|A\mathbf x-\mathbf b\|_\infty$ ⇔ minimise $t$ s.t. $-t\mathbf 1\preceq A\mathbf x-\mathbf b\preceq t\mathbf 1$; minimise $\|A\mathbf x-\mathbf b\|_1$ ⇔ minimise $\mathbf 1^T\mathbf s$ s.t. $-\mathbf s\preceq A\mathbf x-\mathbf b\preceq\mathbf s$.</p>
+
+<tp>Linear-fractional programming (§4.3.2)</tp>
+<p>Minimise $f_0(\mathbf x)=\dfrac{\mathbf c^T\mathbf x+d}{\mathbf e^T\mathbf x+f}$ over a polyhedron, $\dom f_0=\{\mathbf e^T\mathbf x+f\gt0\}$. The objective is quasiconvex (quasilinear), so this is a quasiconvex problem; it can also be turned into an LP.</p>
+<der id="d-linfrac"/>
+<p><b>Generalised linear-fractional</b>: minimise $\max_i\dfrac{\mathbf c_i^T\mathbf x+d_i}{\mathbf e_i^T\mathbf x+f_i}$, quasiconvex, solved by bisection (each step an LP feasibility problem). <b>Example 4.7 (von Neumann growth).</b> Maximise the slowest growth rate $\min_ix_i^+/x_i$ of an economy with activity levels $\mathbf x\succ0$, $\mathbf x^+\succeq0$, $B\mathbf x^+\preceq A\mathbf x$: a generalised linear-fractional problem.</p>
+<chk><q>Write minimise $\|\mathbf x\|_1$ subject to $A\mathbf x=\mathbf b$ as an LP.</q><a><p>Minimise $\mathbf 1^T\mathbf t$ s.t. $-\mathbf t\preceq\mathbf x\preceq\mathbf t$, $A\mathbf x=\mathbf b$, variables $(\mathbf x,\mathbf t)$.</p></a></chk>
+<chk><q>Why does the optimum of a bounded LP (with a vertex) occur at a vertex?</q><a><p>The level sets of $\mathbf c^T\mathbf x$ are parallel hyperplanes; slide them in the direction $-\mathbf c$ until the last contact with the polyhedron. The last contact set is a face, and every face of a pointed polyhedron contains a vertex.</p></a></chk>

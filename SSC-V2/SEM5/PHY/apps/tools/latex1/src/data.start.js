@@ -1,7 +1,7 @@
 /* ═══════════════════ ORIENTATION ═══════════════════ */
 STATIONS.push({id:'start',title:'Start here',short:'How this app works',est:'~8 min',body:H`
 ${gist('Read a little, run the example, change one thing, predict what happens, then prove it on a quiz. That loop is the whole method.')}
-<p class="mini" style="margin-top:-.2rem">Written from the syllabus (MAT5FS112, Text 1: <i>LaTeX Tutorial — A Primer</i>, Indian TeX Users Group). It will be re-aligned to your class notes when you upload them.</p>
+<p class="mini" style="margin-top:-.2rem">Written from the syllabus (MAT5FS112). Text 1: <i>LaTeX Tutorial — A Primer</i>, Indian TeX Users Group (Modules I–IV). Text 2: Grätzer, <i>More Math into LaTeX</i>, Chapter 12 (beamer, Module IV). The module text follows the book cuts in simple technical English (ASD-STE100).</p>
 
 ${tp('The IDE, in one minute')}
 <p>Every example in this app can be run. <b>▶ run</b> shows its output right under the code; <b>full code</b> opens the whole file in a code window; and <b>Edit in IDE</b> carries it to the <b>IDE</b> tab — in the left rail on a laptop, the bottom bar on a phone — where you can change it and watch the result.</p>

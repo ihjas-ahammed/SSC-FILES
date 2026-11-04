@@ -1,0 +1,192 @@
+# Module II derivations (Boyd ch. 2–3)
+
+=== d-sep
+title: Separating hyperplane theorem: the proof for the closest pair
+marks: 10 marks
+src: Boyd §2.5.1
+legend: \(C\), \(D\) disjoint convex sets with \(\mathbf{dist}(C,D)=\|\mathbf c-\mathbf d\|_2\gt0\) attained at \(\mathbf c\in C\), \(\mathbf d\in D\). \(\mathbf a=\mathbf d-\mathbf c\), \(b=\tfrac12(\|\mathbf d\|_2^2-\|\mathbf c\|_2^2)\).
+result: \mathbf a^T\mathbf x\ge b\ \text{on}\ D,\qquad\mathbf a^T\mathbf x\le b\ \text{on}\ C
+--- The affine function
+tex: f(\mathbf x) = \mathbf a^T\mathbf x-b = (\mathbf d-\mathbf c)^T\left(\mathbf x-\tfrac12(\mathbf d+\mathbf c)\right)
+move: rearrange | label=\((\mathbf d-\mathbf c)^T(\mathbf d+\mathbf c)=\|\mathbf d\|^2-\|\mathbf c\|^2\)
+note: The hyperplane \(f=0\) is the perpendicular bisector of the segment from \(\mathbf c\) to \(\mathbf d\). We show \(f\ge0\) on \(D\); \(f\le0\) on \(C\) is the same argument.
+--- Suppose not
+tex: f(\mathbf u) = (\mathbf d-\mathbf c)^T(\mathbf u-\mathbf d)+\tfrac12\|\mathbf d-\mathbf c\|_2^2 \lt 0
+move: substitute | label=Suppose some \(\mathbf u\in D\) has \(f(\mathbf u)\lt0\); write \(\mathbf u-\tfrac12(\mathbf d+\mathbf c)=(\mathbf u-\mathbf d)+\tfrac12(\mathbf d-\mathbf c)\)
+---
+tex: (\mathbf d-\mathbf c)^T(\mathbf u-\mathbf d) \lt 0
+move: identity | label=The square term is \(\ge0\), so the first term must be negative
+--- Move from d towards u
+tex: \frac{d}{dt}\|\mathbf d+t(\mathbf u-\mathbf d)-\mathbf c\|_2^2\Big|_{t=0} = 2(\mathbf d-\mathbf c)^T(\mathbf u-\mathbf d) \lt 0
+move: differentiate | wrt=t
+note: So for small \(t\gt0\) the point \(\mathbf p=\mathbf d+t(\mathbf u-\mathbf d)\) is strictly closer to \(\mathbf c\) than \(\mathbf d\) is.
+---
+tex: \|\mathbf p-\mathbf c\|_2 \lt \|\mathbf d-\mathbf c\|_2,\qquad\mathbf p\in D
+move: identity | label=\(\mathbf p\) is on the segment \([\mathbf d,\mathbf u]\subseteq D\) because \(D\) is convex
+ask: Which hypothesis puts \(\mathbf p\) in \(D\)?
+opt*: convexity of \(D\)
+opt: \(C\cap D=\emptyset\)
+opt: \(D\) is closed
+why: \(\mathbf d,\mathbf u\in D\) and the segment between them stays in a convex set.
+--- Contradiction
+tex: \mathbf a^T\mathbf x\ge b\ \text{on}\ D,\qquad\mathbf a^T\mathbf x\le b\ \text{on}\ C
+move: identity | label=\(\mathbf d\) was the closest point of \(D\) to \(C\): impossible
+note: The general theorem (no attained distance needed): two disjoint convex sets always have \(\mathbf a\ne\mathbf 0\), \(b\) with \(\mathbf a^T\mathbf x\le b\) on \(C\), \(\ge b\) on \(D\). The converse fails, and strict separation needs more (e.g. \(C\) closed, \(D\) compact).
+
+=== d-normdual
+title: The dual of a norm cone is the dual-norm cone
+marks: 6 marks
+src: Boyd §2.6.1, example 2.25
+legend: \(K=\{(\mathbf x,t)\mid\|\mathbf x\|\le t\}\); dual norm \(\|\mathbf u\|_*=\sup\{\mathbf u^T\mathbf x\mid\|\mathbf x\|\le1\}\).
+result: K^* = \{(\mathbf u,v)\mid\|\mathbf u\|_*\le v\}
+--- What must be shown
+tex: \mathbf x^T\mathbf u+tv\ge0\ \ \forall\,\|\mathbf x\|\le t\iff\|\mathbf u\|_*\le v
+move: define | label=\((\mathbf u,v)\in K^*\) means a non-negative inner product with every \((\mathbf x,t)\in K\)
+--- If: ‖u‖* ≤ v
+tex: \mathbf x^T\mathbf u\ge-\|\mathbf x\|\,\|\mathbf u\|_*\ge-tv
+move: identity | label=\(|\mathbf x^T\mathbf u|\le\|\mathbf x\|\|\mathbf u\|_*\) and \(\|\mathbf x\|\le t\), \(\|\mathbf u\|_*\le v\)
+---
+tex: \mathbf x^T\mathbf u+tv\ge0
+move: add | by=tv
+--- Only if: suppose ‖u‖* > v
+tex: \exists\,\mathbf x:\ \|\mathbf x\|\le1,\ \mathbf x^T\mathbf u\gt v
+move: define | label=Definition of the dual norm as a supremum
+---
+tex: (-\mathbf x)^T\mathbf u+1\cdot v\lt0,\qquad(-\mathbf x,1)\in K
+move: substitute | label=Take the point \((-\mathbf x,1)\) of \(K\)
+note: So \((\mathbf u,v)\notin K^*\). Hence \(K^*=\{(\mathbf u,v)\mid\|\mathbf u\|_*\le v\}\). For the Euclidean norm \(\|\cdot\|_*=\|\cdot\|_2\): the second-order cone is self-dual.
+
+=== d-foc
+title: First-order condition for convexity (\(n=1\) case)
+marks: 6–10 marks
+src: Boyd §3.1.3, eq. (3.2)
+legend: \(f:\mathbf R\to\mathbf R\) differentiable, \(\dom f\) convex. Claim: \(f\) convex \(\iff f(y)\ge f(x)+f'(x)(y-x)\) for all \(x,y\in\dom f\).
+result: f\ \text{convex}\iff f(y)\ge f(x)+f'(x)(y-x)
+--- (⇒) Convexity on the segment
+tex: f(x+t(y-x))\le(1-t)f(x)+tf(y),\quad0\lt t\le1
+move: define | label=Definition with \(\theta=1-t\)
+---
+tex: f(y)\ge f(x)+\frac{f(x+t(y-x))-f(x)}{t}
+move: rearrange | label=Subtract \(f(x)\), divide by \(t\gt0\)
+---
+tex: f(y)\ge f(x)+f'(x)(y-x)
+move: evaluate | label=Let \(t\to0^+\): the quotient tends to \(f'(x)(y-x)\)
+--- (⇐) Apply the inequality twice
+tex: f(x)\ge f(z)+f'(z)(x-z),\qquad f(y)\ge f(z)+f'(z)(y-z)
+move: substitute | by=z=\theta x+(1-\theta)y | label=Use the tangent at \(z\)
+---
+tex: \theta f(x)+(1-\theta)f(y)\ge f(z)+f'(z)\big(\theta x+(1-\theta)y-z\big)
+move: combine | label=\(\theta\times\)first \(+(1-\theta)\times\)second
+---
+tex: \theta f(x)+(1-\theta)f(y)\ge f(\theta x+(1-\theta)y)
+move: simplify | label=The bracket is \(z-z=0\)
+note: For \(f:\mathbf R^n\to\mathbf R\) restrict to lines: \(g(t)=f(t\mathbf y+(1-t)\mathbf x)\), \(g'(t)=\nabla f(\cdot)^T(\mathbf y-\mathbf x)\). Result: \(f(\mathbf y)\ge f(\mathbf x)+\nabla f(\mathbf x)^T(\mathbf y-\mathbf x)\). Local information (the gradient) gives a global under-estimator.
+
+=== d-lse
+title: Log-sum-exp is convex: its Hessian is positive semidefinite
+marks: 6–10 marks
+src: Boyd §3.1.5, p. 74
+legend: \(f(\mathbf x)=\log(e^{x_1}+\dots+e^{x_n})\); \(\mathbf z=(e^{x_1},\dots,e^{x_n})\), so \(\mathbf 1^T\mathbf z=\sum z_k\).
+result: \mathbf v^T\nabla^2f\,\mathbf v\ge0\ \text{for all}\ \mathbf v
+--- Gradient
+tex: \frac{\partial f}{\partial x_i} = \frac{z_i}{\mathbf 1^T\mathbf z}
+move: differentiate | wrt=x_i
+--- Hessian
+tex: \frac{\partial^2f}{\partial x_i\partial x_j} = \frac{\delta_{ij}z_i}{\mathbf 1^T\mathbf z}-\frac{z_iz_j}{(\mathbf 1^T\mathbf z)^2}
+move: differentiate | wrt=x_j | label=Quotient rule
+---
+tex: \nabla^2f = \frac{1}{(\mathbf 1^T\mathbf z)^2}\left((\mathbf 1^T\mathbf z)\diag(\mathbf z)-\mathbf z\mathbf z^T\right)
+move: combine | label=In matrix form
+--- Test with any v
+tex: \mathbf v^T\nabla^2f\,\mathbf v = \tfrac{1}{(\mathbf 1^T\mathbf z)^2}\left(\Big(\sum_kz_k\Big)\Big(\sum_kv_k^2z_k\Big)-\Big(\sum_kv_kz_k\Big)^2\right)
+move: multiply | label=\(\mathbf v^T\diag(\mathbf z)\mathbf v=\sum v_k^2z_k\), \(\mathbf v^T\mathbf z\mathbf z^T\mathbf v=(\sum v_kz_k)^2\)
+---
+tex: \begin{gathered}\Big(\sum_kv_kz_k\Big)^2 = \Big(\sum_k(v_k\sqrt{z_k})\sqrt{z_k}\Big)^2\\\le\Big(\sum_kv_k^2z_k\Big)\Big(\sum_kz_k\Big)\end{gathered}
+move: identity | label=Cauchy–Schwarz with \(a_k=v_k\sqrt{z_k}\), \(b_k=\sqrt{z_k}\)
+ask: What makes \(\sqrt{z_k}\) legitimate?
+opt*: \(z_k=e^{x_k}\gt0\)
+opt: \(\mathbf v\succeq0\)
+opt: \(n\ge2\)
+why: Exponentials are positive.
+---
+tex: \mathbf v^T\nabla^2f\,\mathbf v\ge0
+move: identity
+note: So \(\nabla^2f\succeq0\) and \(f\) is convex (second-order condition, \(\dom f=\mathbf R^n\) convex). Log-sum-exp is a smooth approximation of \(\max_ix_i\): \(\max x_i\le f\le\max x_i+\log n\).
+
+=== d-qol
+title: Quadratic-over-linear \(x^2/y\) is convex for \(y\gt0\)
+marks: 5 marks
+src: Boyd §3.1.5, fig. 3.3
+legend: \(f(x,y)=x^2/y\), \(\dom f=\{(x,y)\mid y\gt0\}\).
+result: \nabla^2f = \frac{2}{y^3}\begin{pmatrix}y\\-x\end{pmatrix}\begin{pmatrix}y\\-x\end{pmatrix}^T\succeq0
+--- Second derivatives
+tex: f_{xx}=\frac2y,\quad f_{xy}=-\frac{2x}{y^2},\quad f_{yy}=\frac{2x^2}{y^3}
+move: differentiate | label=From \(f_x=2x/y\), \(f_y=-x^2/y^2\)
+---
+tex: \nabla^2f = \frac{2}{y^3}\begin{pmatrix}y^2&-xy\\-xy&x^2\end{pmatrix}
+move: factor | by=2/y^3
+---
+tex: \nabla^2f = \frac{2}{y^3}\begin{pmatrix}y\\-x\end{pmatrix}\begin{pmatrix}y&-x\end{pmatrix}
+move: factor | label=An outer product \(\mathbf w\mathbf w^T\)
+note: \(\mathbf v^T\mathbf w\mathbf w^T\mathbf v=(\mathbf w^T\mathbf v)^2\ge0\) and \(2/y^3\gt0\): positive semidefinite on the convex domain, so \(f\) is convex.
+
+=== d-schur
+title: Minimising over some variables: the Schur complement
+marks: 6 marks
+src: Boyd §3.2.5, example 3.15
+legend: \(f(\mathbf x,\mathbf y)=\mathbf x^TA\mathbf x+2\mathbf x^TB\mathbf y+\mathbf y^TC\mathbf y\) with \(\begin{pmatrix}A&B\\B^T&C\end{pmatrix}\succeq0\), \(C\succ0\). \(g(\mathbf x)=\inf_{\mathbf y}f(\mathbf x,\mathbf y)\).
+result: g(\mathbf x) = \mathbf x^T(A-BC^{-1}B^T)\mathbf x
+--- Minimise in y
+tex: \nabla_{\mathbf y}f = 2B^T\mathbf x+2C\mathbf y = \mathbf 0
+move: differentiate | wrt=\mathbf y
+note: \(f\) is a convex quadratic in \(\mathbf y\) (\(C\succ0\)), so the stationary point is the minimum.
+---
+tex: \mathbf y = -C^{-1}B^T\mathbf x
+move: multiply | by=C^{-1}
+---
+tex: g(\mathbf x) = \mathbf x^TA\mathbf x-2\mathbf x^TBC^{-1}B^T\mathbf x+\mathbf x^TBC^{-1}CC^{-1}B^T\mathbf x
+move: substitute | by=\mathbf y=-C^{-1}B^T\mathbf x
+---
+tex: g(\mathbf x) = \mathbf x^T(A-BC^{-1}B^T)\mathbf x
+move: simplify
+note: \(g\) is convex because the partial minimum of a jointly convex function over a convex set is convex. Hence the Schur complement \(A-BC^{-1}B^T\succeq0\): a classic consequence.
+
+=== d-conjq
+title: Conjugate of a strictly convex quadratic
+marks: 5 marks
+src: Boyd §3.3.1, example 3.22
+legend: \(f(\mathbf x)=\tfrac12\mathbf x^TQ\mathbf x\), \(Q\succ0\). \(f^*(\mathbf y)=\sup_{\mathbf x}(\mathbf y^T\mathbf x-f(\mathbf x))\).
+result: f^*(\mathbf y) = \tfrac12\mathbf y^TQ^{-1}\mathbf y
+--- The function to maximise
+tex: \mathbf y^T\mathbf x-\tfrac12\mathbf x^TQ\mathbf x
+note: Strictly concave in \(\mathbf x\) and bounded above, so the supremum is at the stationary point.
+---
+tex: \mathbf y-Q\mathbf x = \mathbf 0
+move: differentiate | wrt=\mathbf x
+---
+tex: \mathbf x = Q^{-1}\mathbf y
+move: multiply | by=Q^{-1}
+---
+tex: f^*(\mathbf y) = \mathbf y^TQ^{-1}\mathbf y-\tfrac12\mathbf y^TQ^{-1}QQ^{-1}\mathbf y = \tfrac12\mathbf y^TQ^{-1}\mathbf y
+move: substitute | by=\mathbf x=Q^{-1}\mathbf y
+note: Fenchel's inequality here: \(\mathbf x^T\mathbf y\le\tfrac12\mathbf x^TQ\mathbf x+\tfrac12\mathbf y^TQ^{-1}\mathbf y\).
+
+=== d-conjnorm
+title: Conjugate of a norm: the indicator of the dual unit ball
+marks: 6 marks
+src: Boyd §3.3.1, example 3.26
+legend: \(f(\mathbf x)=\|\mathbf x\|\), dual norm \(\|\cdot\|_*\).
+result: f^*(\mathbf y) = \begin{cases}0&\|\mathbf y\|_*\le1\\\infty&\text{otherwise}\end{cases}
+--- Case ‖y‖* > 1
+tex: \exists\,\mathbf z:\ \|\mathbf z\|\le1,\ \mathbf y^T\mathbf z\gt1
+move: define | label=Definition of \(\|\mathbf y\|_*\)
+---
+tex: \mathbf y^T(t\mathbf z)-\|t\mathbf z\| = t(\mathbf y^T\mathbf z-\|\mathbf z\|)\to\infty\ (t\to\infty)
+move: substitute | by=\mathbf x=t\mathbf z | label=and \(\mathbf y^T\mathbf z-\|\mathbf z\|\gt0\)
+note: So \(f^*(\mathbf y)=\infty\).
+--- Case ‖y‖* ≤ 1
+tex: \mathbf y^T\mathbf x\le\|\mathbf x\|\,\|\mathbf y\|_*\le\|\mathbf x\|
+move: identity | label=For every \(\mathbf x\)
+---
+tex: f^*(\mathbf y) = \sup_{\mathbf x}(\mathbf y^T\mathbf x-\|\mathbf x\|) = 0
+move: evaluate | label=Each term \(\le0\), and \(\mathbf x=\mathbf 0\) gives \(0\)

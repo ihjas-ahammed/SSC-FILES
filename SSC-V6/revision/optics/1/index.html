@@ -1,0 +1,976 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Optics revision · Module 1</title><style>
+*{box-sizing:border-box}body{margin:0;font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#0f1220;color:#e8eaf3}
+header{position:sticky;top:0;z-index:5;background:#151a2e;border-bottom:1px solid #2a3150;padding:10px 14px}
+header h1{font-size:17px;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}header .sub{font-size:12px;color:#9aa3c7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+nav{display:flex;gap:6px;overflow-x:auto;padding:8px 14px;background:#121628;border-bottom:1px solid #222944;position:sticky;top:52px;z-index:4}
+nav a{flex:none;color:#c9cff0;text-decoration:none;font-size:12px;padding:4px 9px;border:1px solid #2f3760;border-radius:14px}
+main{max-width:760px;margin:0 auto;padding:12px}
+.unit{margin:18px 0 26px}.unit>h2{font-size:15px;color:#ffd37a;margin:0 0 8px;letter-spacing:.2px}
+.card{background:#181d33;border:1px solid #2b3358;border-radius:14px;padding:14px 14px 10px;margin:0 0 12px;box-shadow:0 2px 10px #0006}
+.card h3{margin:0 0 8px;font-size:14px;text-transform:uppercase;letter-spacing:.8px}
+.th h3{color:#7fd3ff}.dv h3{color:#b7a2ff}
+.card .t{font-size:16px;font-weight:600;margin-bottom:8px;color:#fff}
+ul{margin:0;padding-left:18px}li{margin:0 0 6px}li b{color:#ffe7a8}
+.key{margin-top:10px;padding:8px 10px;border-radius:10px;background:#20284a;border-left:3px solid #ffd37a}
+.key .k{font-size:11px;color:#ffd37a;text-transform:uppercase;letter-spacing:.8px}
+.legend{font-size:13px;color:#b9c0e0;margin-bottom:8px}
+.phase{margin:10px 0 4px;font-size:12.5px;color:#cbbcff}.phase b{color:#e2d8ff}
+.st{border-left:2px solid #3b4478;padding:2px 0 4px 10px;margin:0 0 4px}
+.st.final{border-left-color:#ffd37a;background:#252b4f;border-radius:0 8px 8px 0}
+.tex{overflow-x:auto;overflow-y:hidden}.tex mjx-container{margin:4px 0!important}
+.mv{font-size:11.5px;color:#9ad6a6}.nt{font-size:12px;color:#99a0c4}
+details.dv summary{cursor:pointer;list-style:none}details.dv summary::-webkit-details-marker{display:none}
+details.dv summary h3:after{content:" ▸ tap to open";font-size:11px;color:#8088b8;text-transform:none;letter-spacing:0}
+details.dv[open] summary h3:after{content:" ▾"}
+.figwrap{position:sticky;top:var(--stick,92px);z-index:3;background:#181d33;padding:4px 0 6px;margin:0 -4px 8px}
+.fgbox{width:100%;max-height:300px;border-radius:12px}
+.figctl{display:flex;gap:6px;align-items:center;margin-top:6px}.figctl button{background:#2b3360;color:#fff;border:0;border-radius:8px;padding:5px 10px;font-size:13px}
+.figctl .play{background:#6a55d8}.fighint{font-size:11px;color:#8088b8}
+.st{cursor:pointer}.st.on{background:#2c2a55;border-left-color:#f7c04f;border-radius:0 8px 8px 0}
+footer{text-align:center;font-size:11px;color:#6d75a0;padding:20px}
+</style>
+<script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},chtml:{scale:0.95}};</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script><style>:root{--paper:#111326;--card:#181d33;--ink:#ECEAFB;--ink-2:#B7B9D8;--muted:#7D82A6;--line:rgba(255,255,255,.09);--lav:#232748;--lav-2:#343A6E;--violet:#A898FF;--on-violet:#15172C;--amber:#F7C04F;--orange:#F59A55;--hl:#F7C04F;--sage:#5BC48E;--coral:#FF7B68}
+/* =====================================================================
+   Focused derivation card (.mf-v2) and animated figure (.fg-*)
+   A derivation card gets .mf-v2 when its setup has a "figure" (see 02-figure.js).
+   The back keeps three things on screen together: the figure, the equation
+   board and the instruction for the current move. Nothing here touches other cards.
+   ===================================================================== */
+
+/* ---------- Figure ---------- */
+.fg-host {
+  position: relative; display: block; padding: 0; overflow: hidden;
+  --fg-pad: 10px; --fg-pad-top: 34px;
+  background: color-mix(in srgb, var(--lav) 62%, var(--card));
+}
+.fg-host > .fg-svg {
+  position: absolute; inset: 0; width: 100%; height: 100%; max-height: none; overflow: visible;
+  font-size: var(--fg-fs, 14px); pointer-events: none;
+}
+.fg-svg path, .fg-svg circle { vector-effect: non-scaling-stroke; }
+
+/* every part fades between off, on, dim and focus; draw-in is done in JS */
+.fg-part { transition: opacity 0.45s ease; }
+.fg-part.is-off { opacity: 0; }
+.fg-part.is-dim { opacity: 0.22; }
+.fg-instant .fg-part, .fg-instant .fg-part * { transition: none !important; }
+
+.fg-stroke { fill: none; stroke: var(--violet); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: stroke 0.4s ease, stroke-width 0.4s ease; }
+.fg-head { fill: var(--violet); stroke: none; transition: fill 0.4s ease; }
+.fg-fill { fill: var(--violet); fill-opacity: 0.1; stroke: none; transition: fill 0.4s ease, fill-opacity 0.4s ease; }
+.fg-dot { fill: var(--violet); stroke: var(--card); stroke-width: 1.6; transition: fill 0.4s ease; }
+.fg-hatch { fill: none; stroke: var(--ink-2); stroke-width: 1.1; stroke-linecap: round; opacity: 0.55; }
+.fg-ext { fill: none; stroke: var(--ink-2); stroke-width: 1.3; stroke-linecap: round; }
+
+.fg-axis .fg-stroke { stroke: var(--ink-2); stroke-width: 1.3; }
+.fg-axis .fg-head { fill: var(--ink-2); }
+.fg-mirror .fg-stroke { stroke: var(--ink); stroke-width: 2.8; }
+.fg-ray .fg-stroke { stroke-width: 2.2; }
+.fg-normal .fg-stroke { stroke: var(--ink-2); stroke-width: 1.4; stroke-dasharray: 5 4; }
+.fg-guide .fg-stroke { stroke: var(--ink-2); stroke-width: 1.4; stroke-dasharray: 3 3; }
+.fg-dim .fg-stroke { stroke: var(--ink-2); stroke-width: 1.3; }
+.fg-dim .fg-head { fill: var(--ink-2); }
+.fg-angle .fg-stroke { stroke-width: 1.7; }
+.fg-angle .fg-fill { fill-opacity: 0.14; }
+.fg-polygon .fg-stroke { stroke: var(--hl); stroke-width: 2.2; }
+.fg-polygon .fg-fill { fill: var(--amber); fill-opacity: 0.2; }
+
+/* focus: the accent colour, a little heavier */
+.fg-part.is-focus .fg-stroke { stroke: var(--hl); }
+.fg-part.is-focus.fg-line .fg-stroke, .fg-part.is-focus.fg-dim .fg-stroke { stroke-width: 2.4; }
+.fg-part.is-focus .fg-head, .fg-part.is-focus .fg-dot { fill: var(--hl); }
+.fg-part.is-focus .fg-ext { stroke: var(--hl); }
+.fg-part.is-focus.fg-angle .fg-stroke { stroke-width: 2.2; }
+.fg-part.is-focus.fg-angle .fg-fill { fill: var(--amber); fill-opacity: 0.32; }
+
+/* labels: fixed pixel size, italic like the symbols on the board, with a halo so lines never cut them */
+.fg-label {
+  font-family: "STIX Two Text", "Cambria Math", "Times New Roman", "Noto Serif", "DejaVu Serif", serif;
+  font-style: italic; font-weight: 600; fill: var(--ink);
+  paint-order: stroke; stroke: color-mix(in srgb, var(--lav) 62%, var(--card)); stroke-width: 4px; stroke-linejoin: round;
+  transition: fill 0.4s ease;
+}
+.fg-label .fg-sub, .fg-label .fg-sup { font-size: 70%; }
+.fg-plate { fill: color-mix(in srgb, var(--lav) 62%, var(--card)); stroke: none; }
+.fg-point .fg-label { font-style: normal; font-weight: 700; }
+.fg-dim .fg-label { font-size: 92%; }
+.fg-part.is-focus .fg-label { fill: var(--hl); font-weight: 800; }
+
+/* caption: one line in the top-left corner, says what the figure is showing now */
+.fg-cap {
+  position: absolute; left: 8px; top: 7px; max-width: calc(100% - 16px); z-index: 1;
+  font-size: 12.5px; line-height: 1.3; font-weight: 700; color: var(--ink);
+  padding: 4px 10px; border-radius: 999px; background: var(--card); box-shadow: inset 0 0 0 1px var(--line);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  opacity: 0; transform: translateY(-4px); transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.fg-cap.is-on { opacity: 1; transform: none; }
+.fg-cap.is-on.is-swap { opacity: 0; transform: translateY(-3px); }
+.fg-cap sub, .fg-cap sup { font-size: 72%; line-height: 0; }
+
+/* the old phone rule forces 15px on every setup label; the figure sizes its own labels */
+.mf-v2 .mf-setup .fg-svg text, .mf-v2 .mf-front-art .fg-svg text { font-size: inherit !important; font-weight: 600; }
+.mf-v2 .mf-setup .fg-svg .fg-point text { font-weight: 700; }
+
+/* ---------- Card: front ---------- */
+.mf-v2 .mf-front-art.fg-host { flex: 0 0 auto; height: clamp(170px, calc(var(--sheet-h, 620px) * 0.36), 250px); padding: 0; border-radius: 16px; }
+.mf-v2 .mf-route-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.mf-v2 .mf-route-pair .route-eq { min-width: 0; overflow-x: auto; }
+.mf-v2 .mf-front-route .math { font-size: 16px; }
+
+/* ---------- Card: back ---------- */
+.mf-v2 { --mf-size: 17px; --mf-ghosts: 1; --fg-fs: 14px; }
+.mf-v2 .mf-back { gap: 8px; padding: 10px 12px; }
+.mf-v2 .mf-back .mf-top { min-height: 36px; }
+.mf-v2 .mf-back-title { flex: 1 1 auto; min-width: 0; margin: 0; font-size: 15px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mf-v2 .mf-count { font-size: 12.5px; }
+.mf-v2 button.chip.mf-icon { width: 36px; height: 36px; min-width: 36px; min-height: 36px; padding: 0; border-radius: 50%; font-size: 17px; }
+
+/* phases: a segmented progress line; the current phase shows its name */
+.mf-v2 .mf-back .mf-phases { display: flex; flex-wrap: nowrap; gap: 4px; align-items: center; overflow: hidden; min-height: 22px; }
+.mf-v2 .mf-ph { flex: 1 1 0; min-width: 8px; height: 5px; padding: 0; font-size: 0; border-radius: 3px; background: var(--lav-2); box-shadow: none; overflow: hidden; white-space: nowrap; }
+.mf-v2 .mf-ph::before { content: none; }
+.mf-v2 .mf-ph.is-past { background: var(--violet); opacity: 0.45; box-shadow: none; }
+.mf-v2 .mf-ph.is-now { flex: 0 0 auto; max-width: 62%; height: auto; padding: 3px 10px; font-size: 12px; line-height: 16px; background: var(--violet); color: var(--on-violet); text-overflow: ellipsis; }
+
+/* work area: figure on top (takes the spare height), then board, then instruction and controls */
+.mf-v2 .mf-work, .mf-v2 .mf-work.has-setup { display: flex; flex-direction: column; gap: 8px; flex: 1 1 auto; min-height: 0; overflow: hidden; }
+.mf-v2 .mf-back .mf-setup, .mf-v2 .mf-work.has-setup .mf-setup {
+  display: block; flex: 1 1 auto; height: auto; min-height: 150px; padding: 0; border-radius: 16px;
+}
+.mf-v2 .mf-right { flex: 0 0 auto; min-height: 0; gap: 8px; }
+.mf-v2 .mf-board { flex: 0 0 auto; min-height: 0; padding: 4px 6px; border-radius: 14px; overflow-x: auto; overflow-y: hidden; }
+
+/* instruction: the move on its own line, the reason under it; fixed height so nothing above it jumps */
+.mf-v2 .mf-panel { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto auto; align-items: center; gap: 8px; }
+.mf-v2 .mf-panel[hidden], .mf-v2 .mf-ask[hidden] { display: none; }
+.mf-v2 .mf-note {
+  grid-column: 1 / -1; margin: 0; min-height: calc(1.4em * 4 + 16px); max-height: calc(1.4em * 4 + 16px); overflow-y: auto;
+  font-size: 14px; line-height: 1.4; font-weight: 600; color: var(--ink-2);
+  padding: 8px 10px 8px 12px; border-radius: 12px; background: var(--lav); box-shadow: inset 3px 0 0 var(--violet);
+}
+.mf-v2 .mf-note > b:first-child { display: block; color: var(--violet); font-weight: 800; }
+.mf-v2 .mf-ctrl { display: contents; }
+.mf-v2 .mf-dots { justify-content: center; flex-wrap: nowrap; gap: 4px; min-width: 0; overflow: hidden; min-height: 0; padding: 4px 2px; }
+.mf-v2 .mf-dot { flex: 0 0 6px; width: 6px; height: 6px; }
+.mf-v2 .mf-dot.is-now { flex: 0 0 16px; width: 16px; }
+.mf-v2 .mf-dot.is-ask { box-shadow: none; background: transparent; outline: 1.5px solid var(--violet); outline-offset: 0; }
+.mf-v2 .mf-dot.is-ask.is-done, .mf-v2 .mf-dot.is-ask.is-now { background: var(--violet); }
+.mf-v2 .mf-ctrl .chip { min-height: 44px; min-width: 44px; padding: 0 12px; }
+.mf-v2 .mf-ctrl .chip.mf-next { background: var(--violet); color: var(--on-violet); padding: 0 16px; font-weight: 800; }
+
+/* a checkpoint question replaces the instruction; the figure and the current line stay in view */
+.mf-v2 .mf-ask { padding: 9px 10px; gap: 7px; }
+.mf-v2 .mf-ask-q { font-size: 14.5px; margin: 0; }
+.mf-v2 .mf-ask-opts { grid-template-columns: 1fr 1fr; gap: 6px; }
+.mf-v2 .mf-ask-opts button { min-height: 44px; padding: 6px 9px; font-size: 14px; }
+.mf-v2 .mf-ask-why { margin: 0; font-size: 13.5px; }
+.mf-v2 .mf-work:has(.mf-ask:not([hidden])) .mf-setup { min-height: 120px; }
+.mf-v2 .mf-right:has(.mf-ask:not([hidden])) .mf-board { height: 66px; min-height: 0; justify-content: flex-end; overflow: hidden; }
+/* once answered, only the right option (and a wrong pick) stay, so the reason and Continue fit */
+.mf-v2 .mf-ask-opts:has(button:disabled) button:not(.is-correct):not(.is-wrong) { display: none; }
+
+/* all steps open: the list replaces the board, the figure shrinks to make room */
+.mf-v2 .mf-work:has(.mf-summary:not([hidden])) { overflow-y: auto; }
+.mf-v2 .mf-work:has(.mf-summary:not([hidden])) .mf-setup { flex: 0 0 auto; height: 160px; min-height: 0; }
+
+/* phone: the old rules hid the figure on the back; here it stays */
+@media (max-width: 899px) {
+  .mf-v2 .mf-back .mf-setup { display: block; }
+  .mf-v2 .mf-back .mf-phases { display: flex; }
+}
+
+/* very short phones: a little less of everything */
+@media (max-width: 899px) and (max-height: 700px) {
+  .mf-v2 { --mf-size: 16px; --fg-fs: 13px; }
+  .mf-v2 .mf-back .mf-setup { min-height: 120px; }
+  .mf-v2 .mf-note { font-size: 13.5px; }
+}
+
+/* ---------- Desktop: figure left, board, instruction and controls right ---------- */
+@media (min-width: 900px) {
+  .mf-v2 { --mf-size: 21px; --mf-ghosts: 2; --fg-fs: 16px; }
+  .mf-v2 .fg-host { --fg-pad: 14px; --fg-pad-top: 40px; }
+  .mf-v2 .fg-cap { font-size: 13.5px; top: 9px; left: 10px; }
+  .mf-v2 .mf-back { gap: 10px; padding: 16px 18px; }
+  .mf-v2 .mf-back-title { font-size: 17px; }
+  .mf-v2 .mf-back .mf-phases { gap: 6px; }
+  .mf-v2 .mf-ph { flex: 0 1 auto; height: auto; padding: 4px 10px; font-size: 12px; line-height: 16px; background: var(--lav); color: var(--ink-2); text-overflow: ellipsis; }
+  .mf-v2 .mf-ph.is-past { opacity: 1; background: var(--lav); color: var(--ink-2); box-shadow: inset 0 0 0 1.5px var(--sage); }
+  .mf-v2 .mf-ph.is-past::before { content: "\2713\00a0"; }
+  .mf-v2 .mf-ph.is-now { max-width: none; }
+  .mf-v2 .mf-work.has-setup { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 16px; align-items: stretch; }
+  .mf-v2 .mf-work.has-setup .mf-setup { height: 100%; min-height: 0; }
+  .mf-v2 .mf-right { height: 100%; display: flex; flex-direction: column; gap: 10px; }
+  .mf-v2 .mf-board { flex: 1 1 auto; justify-content: flex-end; padding: 10px; overflow-y: auto; }
+  .mf-v2 .mf-note { font-size: 15px; }
+  .mf-v2 .mf-front { grid-template-columns: minmax(300px, 52%) minmax(0, 1fr); }
+  .mf-v2 .mf-front-art.fg-host { height: 100%; }
+  .mf-v2 .mf-route-pair { grid-template-columns: 1fr; }
+  .mf-v2 .mf-right:has(.mf-ask:not([hidden])) .mf-board { height: auto; flex: 0 0 auto; }
+  .mf-v2 .mf-work:has(.mf-ask:not([hidden])) .mf-setup { min-height: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fg-part, .fg-cap, .fg-stroke, .fg-label { transition: none; }
+}
+
+/* phone: the focused card is almost full width (07-mathflow.css means to do this for every derivation,
+   but a comment nested inside its header comment swallows that @media rule) */
+@media (max-width: 699px) {
+  .sheet:has(.mf-v2), .card.mf-v2 { --card-w: min(calc(var(--view) - 24px), 560px); }
+}
+
+/* light: the tip of a ray glows while the ray is being drawn */
+.fg-glow { fill: var(--amber); stroke: none; filter: drop-shadow(0 0 3px var(--amber)) drop-shadow(0 0 6px var(--orange)); pointer-events: none; }
+
+/* record: plays the derivation by itself and saves it as a video */
+.mf-v2 button.chip.mf-rec i { display: block; width: 12px; height: 12px; border-radius: 50%; background: var(--coral); transition: border-radius 0.2s ease; }
+.mf-v2.is-recording button.chip.mf-rec i { border-radius: 2px; animation: mf-rec-pulse 1.2s ease-in-out infinite; }
+@keyframes mf-rec-pulse { 50% { opacity: 0.35; } }
+.mf-v2.is-presenting .mf-ask-opts button { cursor: default; }
+@media (prefers-reduced-motion: reduce) { .mf-v2.is-recording button.chip.mf-rec i { animation: none; } }
+
+/* glass: prisms, lenses, plates drawn as apparatus (a polygon with "style": "glass") */
+.fg-glass .fg-fill { fill: var(--violet); fill-opacity: 0.13; }
+.fg-glass .fg-stroke { stroke: var(--ink-2); stroke-width: 1.6; }
+.fg-part.is-focus.fg-glass .fg-fill { fill: var(--amber); fill-opacity: 0.3; }
+</style></head><body>
+<header><h1>Optics · Module 1 revision cards</h1><div class="sub">Geometrical optics: Fermat, spherical surfaces, thin lenses · two cards per unit: theory points + key derivation</div></header>
+<nav><a href="#u1">U1</a><a href="#u2">U2</a><a href="#u3">U3</a><a href="#u4">U4</a><a href="../2/">M2</a><a href="../3/">M3</a><a href="../4/">M4</a></nav><main><section class="unit" id="u1"><h2>Unit 1 · Fermat&#x27;s principle; laws of reflection and refraction</h2>
+<div class="card th"><h3>① Theory — points</h3><ul><li><b>Geometrical optics</b>: light treated as rays; valid when apertures ≫ wavelength (λ → 0 limit); ignores diffraction.</li><li><b>Refractive index</b> \(n = c/v\): ratio of speed in vacuum to speed in the medium.</li><li><b>Optical path length</b> = \(n \times\) geometric length; for varying \(n\): \(\int n\,ds\). It equals the distance light would cover in vacuum in the same time.</li><li><b>Fermat's principle</b>: the actual ray path between two points is the one for which the optical path is <b>stationary</b> (\(\delta \int n\,ds = 0\)) — minimum, maximum or constant.</li><li><b>Minimum</b>: plane mirror, refraction at a plane surface. <b>Maximum</b>: some concave reflectors. <b>Stationary/constant</b>: ellipsoidal mirror (all paths from one focus to the other equal).</li><li><b>Reflection</b>: angle of incidence = angle of reflection, incident ray, reflected ray and normal lie in one plane.</li><li><b>Refraction (Snell)</b>: \(n_1\sin\theta_1 = n_2\sin\theta_2\); incident, refracted ray and normal coplanar.</li><li>Paraboloidal mirror focuses parallel rays exactly at its focus (all optical paths equal); ellipsoid images one focus onto the other.</li><li>Ray goes <b>towards the normal</b> on entering a denser medium (\(n_2 > n_1\)).</li></ul><div class="key"><div class="k">Must remember</div><div>\(\delta\int n\,ds = 0\)</div><div>\(\theta_i = \theta_r\)</div><div>\(n_1\sin\theta_1 = n_2\sin\theta_2\)</div></div></div>
+<details class="card dv" open><summary><h3>② Key derivation</h3></summary><div class="t">Laws of refraction from Fermat&#x27;s principle</div><div class="legend">Light goes from fixed A in index n₁ to fixed B in index n₂, crossing the flat boundary PQ at R. M and N are the perpendicular feet of A and B on PQ. Keep AM = h₁, BN = h₂ and MN = L fixed; vary MR = x. Both angles θ₁ and θ₂ are measured from the normal at R. L_op denotes optical path, not the fixed distance L. The ray and normal lie in the plane through A, B and their perpendiculars to the boundary.</div>
+<div class="figwrap"><div class="fgbox" data-fig="0" style="aspect-ratio:256/192"></div><div class="figctl"><button class="play">▶ Play</button><button class="prev">◀</button><button class="next">▶|</button><span class="fighint">tap any step to show it on the figure</span></div></div>
+<div class="phase"><b>Optical path</b> — sum optical paths n₁ AR and n₂ RB</div>
+<div class="st" data-i="0"><div class="tex">\[L_{op} = n_1 AR + n_2 RB\]</div><div class="nt">Write total optical path length from \(A\) to \(B\) via point \(R\) on \(PQ\). Fermat: the actual \(R\) makes \(L_{op}\) stationary as \(R\) slides along \(PQ\).</div></div>
+<div class="phase"><b>First medium</b> — write AR from right triangle AMR</div>
+<div class="st" data-i="1"><div class="tex">\[AR = \sqrt{x^2 + h_1^2}\]</div><div class="mv">Pythagoras in right triangle \(AMR\)</div><div class="nt">\(M\) is the foot of the perpendicular from \(A\). Legs \(AM = h_1\) and \(MR = x\); hypotenuse \(AR\).</div></div>
+<div class="st" data-i="2"><div class="tex">\[L_{op} = n_1\sqrt{x^2 + h_1^2} + n_2 RB\]</div><div class="mv">substitute by \(AR = \sqrt{x^2 + h_1^2}\)</div><div class="nt">Put it into the optical path.</div></div>
+<div class="phase"><b>Second medium</b> — write RB from right triangle RBN</div>
+<div class="st" data-i="3"><div class="tex">\[RB = \sqrt{(L - x)^2 + h_2^2}\]</div><div class="mv">Pythagoras in right triangle \(RNB\)</div><div class="nt">\(N\) is the foot of the perpendicular from \(B\), with \(MN = L\). Legs \(RN = L - x\) and \(NB = h_2\); hypotenuse \(RB\).</div></div>
+<div class="st" data-i="4"><div class="tex">\[L_{op} = n_1\sqrt{x^2 + h_1^2} + n_2\sqrt{(L - x)^2 + h_2^2}\]</div><div class="mv">substitute by \(RB = \sqrt{(L - x)^2 + h_2^2}\)</div><div class="nt">Put it in too (Eq. 3.4). Only \(x\) changes as \(R\) moves.</div></div>
+<div class="phase"><b>Stationary path</b> — differentiate L_op with respect to x and set to zero</div>
+<div class="st" data-i="5"><div class="tex">\[\frac{dL_{op}}{dx} = \frac{n_1 x}{\sqrt{x^2 + h_1^2}} - \frac{n_2(L - x)}{\sqrt{(L - x)^2 + h_2^2}}\]</div><div class="mv">differentiate</div><div class="nt">Differentiate \(L_{op}\) with respect to \(x\); the chain rule on \((L - x)^2\) gives a minus sign.</div></div>
+<div class="st" data-i="6"><div class="tex">\[0 = \frac{n_1 x}{\sqrt{x^2 + h_1^2}} - \frac{n_2(L - x)}{\sqrt{(L - x)^2 + h_2^2}}\]</div><div class="mv">evaluate by \(\frac{dL_{op}}{dx} = 0\)</div><div class="nt">Set \(dL_{op}/dx = 0\) for an extremum optical path (Eq. 3.5).</div></div>
+<div class="phase"><b>Incidence angle</b> — substitute sin θ₁ in medium n₁</div>
+<div class="st" data-i="7"><div class="tex">\[\sin\theta_1 = \frac{x}{\sqrt{x^2 + h_1^2}}\]</div><div class="mv">Sine in right triangle \(AMR\)</div><div class="nt">\(AM\) is parallel to the normal at \(R\), so \(\angle MAR = \theta_1\). The side opposite it is \(MR = x\); the hypotenuse is \(AR\).</div></div>
+<div class="st" data-i="8"><div class="tex">\[0 = n_1\sin\theta_1 - \frac{n_2(L - x)}{\sqrt{(L - x)^2 + h_2^2}}\]</div><div class="mv">substitute by \(\frac{x}{\sqrt{x^2 + h_1^2}} = \sin\theta_1\)</div><div class="nt">Replace the first fraction by \(\sin\theta_1\).</div></div>
+<div class="phase"><b>Refraction angle</b> — substitute sin θ₂ in medium n₂ to reach Snell&#x27;s law</div>
+<div class="st" data-i="9"><div class="tex">\[\sin\theta_2 = \frac{L - x}{\sqrt{(L - x)^2 + h_2^2}}\]</div><div class="mv">Sine in right triangle \(RNB\)</div><div class="nt">\(NB\) is parallel to the normal, so \(\angle NBR = \theta_2\). Opposite it: \(RN = L - x\); hypotenuse: \(RB\).</div></div>
+<div class="st" data-i="10"><div class="tex">\[0 = n_1\sin\theta_1 - n_2\sin\theta_2\]</div><div class="mv">substitute by \(\frac{L - x}{\sqrt{(L - x)^2 + h_2^2}} = \sin\theta_2\)</div><div class="nt">Replace the second fraction by \(\sin\theta_2\).</div></div>
+<div class="st" data-i="11"><div class="tex">\[n_2\sin\theta_2 = n_1\sin\theta_1\]</div><div class="mv">add by \(n_2\sin\theta_2\)</div><div class="nt">Add \(n_2\sin\theta_2\) to both sides.</div></div>
+<div class="st final" data-i="12"><div class="tex">\[n_1\sin\theta_1 = n_2\sin\theta_2\]</div><div class="mv">swap</div><div class="nt">Swap sides to obtain Snell's law of refraction (Eq. 3.6).</div></div></details></section>
+<section class="unit" id="u2"><h2>Unit 2 · Refraction and reflection at a single spherical surface</h2>
+<div class="card th"><h3>① Theory — points</h3><ul><li><b>Paraxial rays</b>: rays close to the axis making small angles, so \(\sin\theta \approx \tan\theta \approx \theta\).</li><li><b>Sign convention</b> (Cartesian): distances measured from the pole; positive to the right (direction of light), negative to the left; heights up positive.</li><li>Object distance \(u\) is negative for a real object on the left; radius \(R\) positive if the centre of curvature is to the right.</li><li><b>Gaussian formula</b> for one refracting surface: \(\frac{n_2}{v} - \frac{n_1}{u} = \frac{n_2 - n_1}{R}\).</li><li><b>Power</b> of the surface \(P = (n_2 - n_1)/R\).</li><li>Derived from Fermat (optical path stationary) or from Snell's law with small angles.</li><li><b>Focal lengths</b>: \(f_1 = -\frac{n_1 R}{n_2 - n_1}\) (object focus), \(f_2 = \frac{n_2 R}{n_2 - n_1}\) (image focus); \(\frac{f_2}{f_1} = -\frac{n_2}{n_1}\).</li><li><b>Spherical mirror</b> (reflection = refraction with \(n_2 = -n_1\)): \(\frac{1}{u} + \frac{1}{v} = \frac{2}{R} = \frac{1}{f}\), so \(f = R/2\).</li><li>Concave mirror: centre of curvature on the left, \(R < 0\), so \(f < 0\) (real focus in front of the mirror).</li></ul><div class="key"><div class="k">Must remember</div><div>\(\frac{n_2}{v} - \frac{n_1}{u} = \frac{n_2 - n_1}{R}\)</div><div>\(\frac{1}{u} + \frac{1}{v} = \frac{2}{R}\)</div></div></div>
+<details class="card dv" open><summary><h3>② Key derivation</h3></summary><div class="t">The Gaussian formula for a single spherical surface</div><div class="legend">Light travels O → S → I from index n₁ into n₂. P is the surface pole, C its centre, and SC the normal at S. The positive lengths are OP = x, PI = y, PC = r and ray height SD = h. In this drawing O is left of P; C and I are right. Thus u = -x, v = y and R = r. Small angles α₁, α₂ are made with the axis; β is the tilt of SC. The surface sag PD is neglected in the paraxial approximation.</div>
+<div class="figwrap"><div class="fgbox" data-fig="1" style="aspect-ratio:290/166"></div><div class="figctl"><button class="play">▶ Play</button><button class="prev">◀</button><button class="next">▶|</button><span class="fighint">tap any step to show it on the figure</span></div></div>
+<div class="phase"><b>Snell&#x27;s law</b> — start from Snell&#x27;s law and apply the paraxial approximation</div>
+<div class="st" data-i="0"><div class="tex">\[n_1\sin\phi_1 = n_2\sin\phi_2\]</div><div class="nt">Start from Snell's law at point \(S\) on spherical surface \(SPM\) (Eq. 4.1). \(\phi_1\) is between the incident ray and the normal \(CS\); \(\phi_2\) is between the refracted ray and the normal.</div></div>
+<div class="st" data-i="1"><div class="tex">\[n_1\phi_1 = n_2\phi_2\]</div><div class="mv">substitute by \(\sin\phi_1 \approx \phi_1,\,\sin\phi_2 \approx \phi_2\)</div><div class="nt">Use the paraxial approximation \(\sin\phi \approx \phi\) for small angles in radians.</div></div>
+<div class="phase"><b>Incident angle</b> — express φ₁ from exterior angle of triangle OSC</div>
+<div class="st" data-i="2"><div class="tex">\[n_1(\beta + \alpha_1) = n_2\phi_2\]</div><div class="mv">substitute by \(\phi_1 = \beta + \alpha_1\)</div><div class="nt">In triangle \(OSC\), exterior angle \(\phi_1\) equals \(\beta + \alpha_1\).</div></div>
+<div class="st" data-i="3"><div class="tex">\[\tan\alpha_1 = \frac{h}{x}\]</div><div class="mv">Tangent in right triangle \(SDO\)</div><div class="nt">\(D\) is the foot of the perpendicular from \(S\). Opposite \(\alpha_1\): \(SD = h\). Adjacent: \(OD \approx OP = x\) (the sag \(PD\) is neglected for paraxial rays).</div></div>
+<div class="st" data-i="4"><div class="tex">\[\tan\beta = \frac{h}{r}\]</div><div class="mv">Tangent in right triangle \(SDC\)</div><div class="nt">Opposite \(\beta\): \(SD = h\). Adjacent: \(DC \approx PC = r\).</div></div>
+<div class="st" data-i="5"><div class="tex">\[n_1\left(\frac{h}{r} + \frac{h}{x}\right) = n_2\phi_2\]</div><div class="mv">substitute by \(\alpha_1 \approx \tan\alpha_1 = \frac{h}{x},\; \beta \approx \tan\beta = \frac{h}{r}\)</div><div class="nt">Small angles: each angle equals its tangent (Eq. 4.2).</div></div>
+<div class="phase"><b>Refracted angle</b> — express φ₂ from exterior angle of triangle ISC</div>
+<div class="st" data-i="6"><div class="tex">\[n_1\left(\frac{h}{r} + \frac{h}{x}\right) = n_2(\beta - \alpha_2)\]</div><div class="mv">substitute by \(\phi_2 = \beta - \alpha_2\)</div><div class="nt">In triangle \(ISC\), exterior angle \(\beta = \phi_2 + \alpha_2\), so \(\phi_2 = \beta - \alpha_2\).</div></div>
+<div class="st" data-i="7"><div class="tex">\[\tan\alpha_2 = \frac{h}{y}\]</div><div class="mv">Tangent in right triangle \(SDI\)</div><div class="nt">Opposite \(\alpha_2\): \(SD = h\). Adjacent: \(DI \approx PI = y\).</div></div>
+<div class="st" data-i="8"><div class="tex">\[n_1\left(\frac{h}{r} + \frac{h}{x}\right) = n_2\left(\frac{h}{r} - \frac{h}{y}\right)\]</div><div class="mv">substitute by \(\beta \approx \frac{h}{r},\; \alpha_2 \approx \tan\alpha_2 = \frac{h}{y}\)</div><div class="nt">Substitute \(\beta \approx h/r\) and \(\alpha_2 \approx \tan\alpha_2 = h/y\) (Eq. 4.3).</div></div>
+<div class="phase"><b>Cancel height</b> — divide by h and collect distance terms</div>
+<div class="st" data-i="9"><div class="tex">\[\frac{n_1}{r} + \frac{n_1}{x} = \frac{n_2}{r} - \frac{n_2}{y}\]</div><div class="mv">divide by \(h\)</div><div class="nt">Divide both sides by \(h\) so the ray height cancels out.</div></div>
+<div class="st" data-i="10"><div class="tex">\[\frac{n_2}{y} + \frac{n_1}{x} = \frac{n_2 - n_1}{r}\]</div><div class="mv">rearrange</div><div class="nt">Collect \(x, y\) terms on the left and \(r\) terms on the right (Eq. 4.4).</div></div>
+<div class="phase"><b>Sign convention</b> — apply u = -x, v = y, and R = r</div>
+<div class="st final" data-i="11"><div class="tex">\[\frac{n_2}{v} - \frac{n_1}{u} = \frac{n_2 - n_1}{R}\]</div><div class="mv">substitute by \(x = -u,\,y = v,\,r = R\)</div><div class="nt">Apply the sign convention \(u = -x, v = y, R = r\) to get the Gaussian formula (Eq. 4.5).</div></div></details></section>
+<section class="unit" id="u3"><h2>Unit 3 · Thin lens: foci, focal length, lensmaker&#x27;s formula</h2>
+<div class="card th"><h3>① Theory — points</h3><ul><li><b>Thin lens</b>: thickness negligible compared with radii and object/image distances; both surfaces treated at the same point.</li><li>Apply the single-surface formula twice: image of surface 1 becomes the object for surface 2.</li><li><b>Lens formula</b>: \(\frac{1}{v} - \frac{1}{u} = \frac{1}{f}\).</li><li><b>Lensmaker's formula</b>: \(\frac{1}{f} = \left(\frac{n_2}{n_1} - 1\right)\left(\frac{1}{R_1} - \frac{1}{R_2}\right)\); in air \(\frac1f = (n-1)\left(\frac{1}{R_1} - \frac{1}{R_2}\right)\).</li><li><b>First (object) focus</b> \(F_1\): object point whose image is at infinity. <b>Second (image) focus</b> \(F_2\): image of an object at infinity.</li><li>Same medium on both sides: the two focal lengths are equal in magnitude, \(f_1 = -f_2\).</li><li>Different media \(n_1\) (left) and \(n_3\) (right): \(\frac{f_2}{f_1} = -\frac{n_3}{n_1}\).</li><li><b>Converging</b> lens (f > 0) thicker at centre; <b>diverging</b> (f < 0) thinner at centre.</li><li><b>Power</b> \(P = 1/f\) (in dioptres when f in metres); thin lenses in contact: \(P = P_1 + P_2\).</li></ul><div class="key"><div class="k">Must remember</div><div>\(\frac1v - \frac1u = \frac1f\)</div><div>\(\frac1f = (n-1)\left(\frac1{R_1} - \frac1{R_2}\right)\)</div></div></div>
+<details class="card dv" open><summary><h3>② Key derivation</h3></summary><div class="t">The thin lens and Lensmaker&#x27;s formula</div><div class="legend">Lens of index \(n_2\) in medium \(n_1\) with radii \(R_1, R_2\), intermediate image \(Q\) at \(v'\), final image \(I\) at \(v\), and \(n = n_2 / n_1\) (Fig. 4.5).</div>
+<div class="figwrap"><div class="fgbox" data-fig="2" style="aspect-ratio:306/130"></div><div class="figctl"><button class="play">▶ Play</button><button class="prev">◀</button><button class="next">▶|</button><span class="fighint">tap any step to show it on the figure</span></div></div>
+<div class="phase"><b>First surface</b> — refraction at R₁ from n₁ into n₂ forms image Q at v&#x27;</div>
+<div class="st" data-i="0"><div class="tex">\[\frac{n_2}{v'} - \frac{n_1}{u} = \frac{n_2 - n_1}{R_1}\]</div><div class="nt">First surface \(R_1\) refracts light from \(n_1\) into \(n_2\), forming \(Q\) at \(v'\) (Eq. 4.8). Alone, the first surface would bring the ray to \(Q\).</div></div>
+<div class="phase"><b>Second surface</b> — refraction at R₂ from n₂ into n₁ takes Q at v&#x27; to I at v</div>
+<div class="st" data-i="1"><div class="tex">\[\frac{n_1}{v} - \frac{n_2}{v'} = \frac{n_1 - n_2}{R_2}\]</div><div class="mv">Refraction at the second surface (Eq. 4.9)</div><div class="nt">Point \(Q\) at \(v'\) acts as object for second surface \(R_2\) from \(n_2\) into \(n_1\) (Eq. 4.9).</div></div>
+<div class="phase"><b>Combine surfaces</b> — add the two surface equations to eliminate v&#x27;</div>
+<div class="st" data-i="2"><div class="tex">\[\frac{n_1}{v} - \frac{n_1}{u} = \frac{n_2 - n_1}{R_1} + \frac{n_1 - n_2}{R_2}\]</div><div class="mv">Add the two surface equations</div><div class="nt">Add Eqs. (4.8) and (4.9) so \(+n_2/v'\) and \(-n_2/v'\) cancel out.</div></div>
+<div class="st" data-i="3"><div class="tex">\[\frac{n_1}{v} - \frac{n_1}{u} = (n_2 - n_1)\left(\frac{1}{R_1} - \frac{1}{R_2}\right)\]</div><div class="mv">factor</div><div class="nt">Factor \((n_2 - n_1)\) on the right, flipping the sign on \(1/R_2\).</div></div>
+<div class="phase"><b>Relative index</b> — divide by n₁ and define n = n₂ / n₁</div>
+<div class="st" data-i="4"><div class="tex">\[\frac{1}{v} - \frac{1}{u} = \left(\frac{n_2}{n_1} - 1\right)\left(\frac{1}{R_1} - \frac{1}{R_2}\right)\]</div><div class="mv">divide by \(n_1\)</div><div class="nt">Divide both sides by surrounding refractive index \(n_1\).</div></div>
+<div class="st" data-i="5"><div class="tex">\[\frac{1}{v} - \frac{1}{u} = (n - 1)\left(\frac{1}{R_1} - \frac{1}{R_2}\right)\]</div><div class="mv">substitute by \(n = \frac{n_2}{n_1}\)</div><div class="nt">Write \(n = n_2 / n_1\) to obtain the thin lens formula (Eq. 4.10).</div></div>
+<div class="phase"><b>Focal length</b> — define focal length f by Lensmaker&#x27;s formula</div>
+<div class="st final" data-i="6"><div class="tex">\[\frac{1}{v} - \frac{1}{u} = \frac{1}{f}\]</div><div class="mv">define by \(\frac{1}{f} = (n - 1)\left(\frac{1}{R_1} - \frac{1}{R_2}\right)\)</div><div class="nt">Define focal length \(f\) by Eq. (4.12) to get Eq. (4.11).</div></div></details></section>
+<section class="unit" id="u4"><h2>Unit 4 · Newton&#x27;s formula and lateral magnification</h2>
+<div class="card th"><h3>① Theory — points</h3><ul><li><b>Newton's formula</b>: distances measured from the foci: \(x_1 x_2 = f_1 f_2\); for a lens in air \(x_1 x_2 = -f^2\) (sign convention).</li><li>\(x_1\) = distance of object from first focus, \(x_2\) = distance of image from second focus.</li><li>Obtained by putting \(u = -(f + x_1)\), \(v = f + x_2\) in the lens formula (or from similar triangles).</li><li><b>Lateral magnification</b> \(m = \frac{h_2}{h_1}\) (image height / object height).</li><li>Single spherical surface: \(m = \frac{n_1 v}{n_2 u}\). Thin lens in air: \(m = \frac{v}{u}\). Mirror: \(m = -\frac{v}{u}\).</li><li>In Newtonian form: \(m = -\frac{f}{x_1} = -\frac{x_2}{f}\).</li><li>\(m\) negative → image inverted; \(|m| > 1\) → magnified.</li><li>Derivation of \(m\): Snell's law at the pole with small angles, \(n_1 \frac{h_1}{u} = n_2 \frac{h_2}{v}\) (Lagrange-type relation).</li></ul><div class="key"><div class="k">Must remember</div><div>\(x_1 x_2 = f_1 f_2\)</div><div>\(m = \frac{h_2}{h_1} = \frac{n_1 v}{n_2 u}\)</div></div></div>
+<details class="card dv" open><summary><h3>② Key derivation</h3></summary><div class="t">The Newton formula</div><div class="legend">A converging thin lens at P forms an inverted image B of object tip A. O and I are their feet on the axis. The signed heights are OA = y > 0 and IB = y′ < 0. K and L are the upper and lower ray crossings at the lens. F₁ and F₂ are the foci, at signed distances f₁ and f₂ from P. Measure x₁ from F₁ to O and x₂ from F₂ to I, positive rightward. In this drawing x₁ and f₁ are negative, x₂ and f₂ positive.</div>
+<div class="figwrap"><div class="fgbox" data-fig="3" style="aspect-ratio:236/132"></div><div class="figctl"><button class="play">▶ Play</button><button class="prev">◀</button><button class="next">▶|</button><span class="fighint">tap any step to show it on the figure</span></div></div>
+<div class="phase"><b>First focus</b> — use similar triangles AOF₁ and LPF₁ at F₁</div>
+<div class="st" data-i="0"><div class="tex">\[\tan\psi_1 = \frac{y}{-x_1}\]</div><div class="nt"><b>Tangent in right triangle \(AOF_1\).</b> Opposite \(\psi_1\) at \(F_1\): \(OA = y\). Adjacent: \(F_1O\), of length \(-x_1\) (\(x_1\) is negative here).</div></div>
+<div class="st" data-i="1"><div class="tex">\[\tan\psi_1 = \frac{-y'}{-f_1}\]</div><div class="mv">The same angle in right triangle \(LPF_1\)</div><div class="nt">\(AL\) is one straight line through \(F_1\), so the angle at \(F_1\) in triangle \(LPF_1\) is the same \(\psi_1\) (vertically opposite). Opposite: \(PL\), of length \(-y'\); adjacent: \(F_1P\), of length \(-f_1\).</div></div>
+<div class="st" data-i="2"><div class="tex">\[\frac{-y'}{y} = \frac{-f_1}{-x_1}\]</div><div class="mv">Equate the two tangents of \(\psi_1\)</div><div class="nt">Similar right triangles \(AOF_1\) and \(LPF_1\) share the angle at \(F_1\) (Eq. 4.17).</div></div>
+<div class="st" data-i="3"><div class="tex">\[\frac{-y'}{y} = \frac{f_1}{x_1}\]</div><div class="mv">simplify</div><div class="nt">Cancel the minus signs in the numerator and denominator on the right.</div></div>
+<div class="phase"><b>Second focus</b> — use similar triangles KPF₂ and BIF₂ at F₂</div>
+<div class="st" data-i="4"><div class="tex">\[\tan\psi_2 = \frac{y}{f_2}\]</div><div class="mv">Tangent in right triangle \(KPF_2\)</div><div class="nt">The parallel ray meets the lens at \(K\), a height \(PK = y\). Adjacent to \(\psi_2\) at \(F_2\): \(PF_2 = f_2\).</div></div>
+<div class="st" data-i="5"><div class="tex">\[\tan\psi_2 = \frac{-y'}{x_2}\]</div><div class="mv">The same angle in right triangle \(BIF_2\)</div><div class="nt">\(KB\) passes straight through \(F_2\), so the angle at \(F_2\) in triangle \(BIF_2\) is also \(\psi_2\). Opposite: \(IB = -y'\); adjacent: \(F_2I = x_2\).</div></div>
+<div class="st" data-i="6"><div class="tex">\[\frac{-y'}{y} = \frac{x_2}{f_2}\]</div><div class="mv">Equate the two tangents of \(\psi_2\)</div><div class="nt">In similar triangles \(KPF_2\) and \(BIF_2\) around \(F_2\), \(-y'/y = x_2/f_2\) (Eq. 4.18).</div></div>
+<div class="phase"><b>Equate ratios</b> — equate the two height ratios and cross-multiply</div>
+<div class="st" data-i="7"><div class="tex">\[\frac{f_1}{x_1} = \frac{x_2}{f_2}\]</div><div class="mv">substitute by \(\frac{-y'}{y} = \frac{f_1}{x_1}\)</div><div class="nt">Equate the two expressions for \(-y'/y\) from Eqs. (4.17) and (4.18).</div></div>
+<div class="st" data-i="8"><div class="tex">\[f_1 f_2 = x_1 x_2\]</div><div class="mv">multiply by \(x_1 f_2\)</div><div class="nt">Multiply both sides by \(x_1 f_2\) to get the Newtonian lens formula (Eq. 4.19).</div></div>
+<div class="phase"><b>Same medium</b> — set f₁ = -f and f₂ = f for the same surrounding medium</div>
+<div class="st" data-i="9"><div class="tex">\[-f^2 = x_1 x_2\]</div><div class="mv">substitute by \(f_1 = -f,\,f_2 = f\)</div><div class="nt">When both sides have the same medium, Eq. (4.13) gives \(f_1 = -f\) and \(f_2 = f\).</div></div>
+<div class="st final" data-i="10"><div class="tex">\[x_1 x_2 = -f^2\]</div><div class="mv">swap</div><div class="nt">Thus \(x_1\) and \(x_2\) must always have opposite signs (Eq. 4.20).</div></div></details></section></main><footer>PHY5B08 Optics · revision · built from the study-match deck</footer>
+<script>/* ==========================================================================
+   Figure: animated SVG diagram for derivation cards (setup.figure)
+   --------------------------------------------------------------------------
+   A derivation card opts in by giving its setup a "figure". The JSXGraph
+   "steps" stay in the data as the fallback; they are not drawn when a figure exists.
+
+     "setup": { ..., "figure": {
+       "box":    [left, bottom, right, top],             figure units, y up
+       "points": { "O": { "at": [-230, 0], "label": "O", "side": "s" }, ... },
+       "parts":  { "OS": { "type": "line", "from": "O", "to": "S", "style": "ray", "arrow": true }, ... },
+       "draw":   [ { "parts": ["axis"], "caption": "Principal axis" }, ... ]
+     } }
+
+   and on any derivation step:
+
+     "figure": { "focus": ["triOSC", "alpha1"], "keep": ["OS"], "caption": "..." }
+
+   draw     the order in which the figure is drawn when the card starts. Its parts are the base figure.
+   focus    parts drawn in the accent colour for that step. Parts outside the base draw in.
+   keep     base parts left at full strength. While a step has focus or keep, the other base parts dim.
+            The points a focused part is built on are kept automatically.
+   caption  one line shown in the corner of the figure ("α_1" gives a subscript).
+
+   Part types: line (from, to, style, arrow), arc (center, r, from, to in degrees, hatch),
+   polygon (points), angle (at, from, to, r in px), dim (from, to, offset in px, arrow), text (at).
+   Styles: axis, mirror, ray, normal, guide.
+
+   Labels are placed once per layout, in screen pixels, at a fixed font size. Two labels that can be on
+   screen at the same time never overlap, labels keep clear of lines and points, and a label keeps its
+   place from step to step.
+   ========================================================================== */
+(function () {
+  var SM = window.SM = window.SM || {};
+  var NS = 'http://www.w3.org/2000/svg';
+  var REDUCE = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var DIRS = { e: [1, 0], ne: [1, -1], n: [0, -1], nw: [-1, -1], w: [-1, 0], sw: [-1, 1], s: [0, 1], se: [1, 1] };
+  var RING = ['e', 'ne', 'n', 'nw', 'w', 'sw', 's', 'se'];
+  var DRAW_MS = { line: 620, arc: 820, polygon: 900, angle: 560, dim: 620, point: 280, text: 300 };
+  var RANK = { point: 0, angle: 1, line: 2, dim: 3, arc: 4, polygon: 5, text: 6 };
+
+  function mk(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    if (attrs) Object.keys(attrs).forEach(function (k) { if (attrs[k] != null) e.setAttribute(k, attrs[k]); });
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function ease(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+  function clamp01(t) { return t < 0 ? 0 : t > 1 ? 1 : t; }
+  function f2(v) { return (Math.round(v * 100) / 100).toString(); }
+  function xy(p) { return f2(p[0]) + ' ' + f2(p[1]); }
+  function lerp(a, b, t) { return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]; }
+  function unit(a, b) { var dx = b[0] - a[0], dy = b[1] - a[1], l = Math.sqrt(dx * dx + dy * dy) || 1; return [dx / l, dy / l]; }
+
+  /* "α_1" -> α with a subscript 1, "x^2" -> superscript; "_{ab}" takes several characters */
+  var MARK = /([_^])(\{[^}]*\}|[^\s])/g;
+  function pieces(s) {
+    var out = [], last = 0, m;
+    s = String(s);
+    MARK.lastIndex = 0;
+    while ((m = MARK.exec(s))) {
+      if (m.index > last) out.push({ t: s.slice(last, m.index) });
+      out.push({ t: m[2].replace(/^\{|\}$/g, ''), k: m[1] === '_' ? 'sub' : 'sup' });
+      last = MARK.lastIndex;
+    }
+    if (last < s.length) out.push({ t: s.slice(last) });
+    return out;
+  }
+  function svgText(el, s) {
+    el.textContent = '';
+    var shift = 0;
+    pieces(s).forEach(function (p) {
+      var ts = mk('tspan', null, el);
+      var want = p.k === 'sub' ? 0.32 : p.k === 'sup' ? -0.42 : 0;
+      if (want !== shift) ts.setAttribute('dy', (want - shift) + 'em');
+      shift = want;
+      if (p.k) ts.setAttribute('class', 'fg-' + p.k);
+      ts.textContent = p.t;
+    });
+  }
+  function htmlText(s) {
+    return pieces(s).map(function (p) {
+      var t = SM.esc ? SM.esc(p.t) : p.t;
+      return p.k ? '<' + p.k + '>' + t + '</' + p.k + '>' : t;
+    }).join('');
+  }
+
+  /* ---------- box and segment tests for label placement ---------- */
+  function overlap(a, b) {
+    var w = Math.min(a.x1, b.x1) - Math.max(a.x0, b.x0), h = Math.min(a.y1, b.y1) - Math.max(a.y0, b.y0);
+    return w > 0 && h > 0 ? w * h : 0;
+  }
+  function segHitsBox(a, b, r) {
+    // Liang-Barsky clip of segment ab against box r
+    var x0 = a[0], y0 = a[1], dx = b[0] - x0, dy = b[1] - y0, t0 = 0, t1 = 1;
+    var p = [-dx, dx, -dy, dy], q = [x0 - r.x0, r.x1 - x0, y0 - r.y0, r.y1 - y0];
+    for (var i = 0; i < 4; i++) {
+      if (p[i] === 0) { if (q[i] < 0) return false; continue; }
+      var t = q[i] / p[i];
+      if (p[i] < 0) { if (t > t1) return false; if (t > t0) t0 = t; }
+      else { if (t < t0) return false; if (t < t1) t1 = t; }
+    }
+    return t0 <= t1;
+  }
+  function dotHitsBox(c, rad, r) {
+    var nx = Math.max(r.x0, Math.min(c[0], r.x1)), ny = Math.max(r.y0, Math.min(c[1], r.y1));
+    return (nx - c[0]) * (nx - c[0]) + (ny - c[1]) * (ny - c[1]) < rad * rad;
+  }
+
+  /* ======================================================================== */
+  function mount(host, spec, steps, opts) {
+    opts = opts || {};
+    host.innerHTML = '';
+    host.classList.add('fg-host');
+    if (opts.player) host.classList.add('fg-player');
+    var svg = mk('svg', { class: 'fg-svg', 'aria-hidden': 'true', focusable: 'false' }, host);
+    var layers = {
+      fill: mk('g', { class: 'fg-l-fill' }, svg), line: mk('g', { class: 'fg-l-line' }, svg),
+      dot: mk('g', { class: 'fg-l-dot' }, svg), text: mk('g', { class: 'fg-l-text' }, svg)
+    };
+    var cap = document.createElement('div');
+    cap.className = 'fg-cap';
+    cap.setAttribute('aria-live', 'polite');
+    cap.setAttribute('data-no-glossary', '');   // the glossary must not turn caption words into links
+    host.appendChild(cap);
+
+    var pts = {};
+    Object.keys(spec.points || {}).forEach(function (k) {
+      var p = spec.points[k];
+      pts[k] = Array.isArray(p) ? { at: p } : p;
+    });
+    function P(ref) { return Array.isArray(ref) ? ref : (pts[ref] ? pts[ref].at : [0, 0]); }
+
+    /* parts: one per point, then the named shapes */
+    var parts = {}, names = [];
+    function addPart(name, type, def) { parts[name] = { name: name, type: type, def: def, p: 0, mode: 'off', w: {} }; names.push(name); }
+    Object.keys(pts).forEach(function (k) { addPart(k, 'point', pts[k]); });
+    Object.keys(spec.parts || {}).forEach(function (k) { if (!parts[k]) addPart(k, spec.parts[k].type, spec.parts[k]); });
+
+    function wrap(pr, layer) {
+      if (!pr.w[layer]) pr.w[layer] = mk('g', { class: 'fg-part fg-' + pr.type + (pr.def.style ? ' fg-' + pr.def.style : '') + ' is-off' }, layers[layer]);
+      return pr.w[layer];
+    }
+    names.forEach(function (n) {
+      var pr = parts[n], d = pr.def, e = pr.el = {};
+      switch (pr.type) {
+        case 'point':
+          if (d.dot !== false) e.dot = mk('circle', { class: 'fg-dot', r: 0 }, wrap(pr, 'dot'));
+          break;
+        case 'line':
+          e.path = mk('path', { class: 'fg-stroke' }, wrap(pr, 'line'));
+          if (d.arrow) e.arrow = mk('path', { class: 'fg-head' }, wrap(pr, 'line'));
+          if (d.style === 'ray') e.glow = mk('circle', { class: 'fg-glow', r: 4.5 }, wrap(pr, 'line'));   // light: a bright tip travels along the ray as it draws
+          break;
+        case 'arc':
+          e.path = mk('path', { class: 'fg-stroke' }, wrap(pr, 'line'));
+          if (d.hatch) e.hatch = mk('path', { class: 'fg-hatch' }, wrap(pr, 'line'));
+          break;
+        case 'polygon':
+          e.fill = mk('path', { class: 'fg-fill' }, wrap(pr, 'fill'));
+          e.path = mk('path', { class: 'fg-stroke' }, wrap(pr, 'line'));
+          break;
+        case 'angle':
+          e.fill = mk('path', { class: 'fg-fill' }, wrap(pr, 'fill'));
+          e.path = mk('path', { class: 'fg-stroke' }, wrap(pr, 'line'));
+          break;
+        case 'dim':
+          e.ext = mk('path', { class: 'fg-ext' }, wrap(pr, 'line'));
+          e.path = mk('path', { class: 'fg-stroke' }, wrap(pr, 'line'));
+          e.arrow = mk('path', { class: 'fg-head' }, wrap(pr, 'line'));
+          break;
+      }
+      var text = pr.type === 'point' ? (d.label === false ? '' : (d.label || n)) : (d.label || d.text || '');
+      if (text) {
+        // a length's label sits on its line: a plate behind it hides the line in the gaps between words
+        if (pr.type === 'dim') e.plate = mk('rect', { class: 'fg-plate', rx: 4 }, wrap(pr, 'text'));
+        e.label = mk('text', { class: 'fg-label' + (d.labelClass ? ' ' + d.labelClass : ''), 'text-anchor': 'middle', 'dominant-baseline': 'central' }, wrap(pr, 'text'));
+        svgText(e.label, text);
+      }
+    });
+
+    /* base figure = everything the draw list draws; one state per step */
+    var base = {};
+    (spec.draw || []).forEach(function (st) { (st.parts || []).forEach(function (n) { if (parts[n]) base[n] = 1; }); });
+    function refsOf(pr) {
+      var d = pr.def, out = [];
+      ['from', 'to', 'at', 'center'].forEach(function (k) { if (typeof d[k] === 'string') out.push(d[k]); });
+      (d.points || []).forEach(function (r) { if (typeof r === 'string') out.push(r); });
+      return out;
+    }
+    function stateFor(si) {
+      var f = (si != null && steps[si] && steps[si].figure) || null;
+      var focus = (f && f.focus) || [], keep = ((f && f.keep) || []).slice();
+      focus.forEach(function (n) { if (parts[n]) refsOf(parts[n]).forEach(function (r) { if (base[r] && keep.indexOf(r) < 0) keep.push(r); }); });
+      var dimOthers = focus.length > 0 || keep.length > 0, mode = {};
+      names.forEach(function (n) {
+        mode[n] = focus.indexOf(n) >= 0 ? 'focus' : keep.indexOf(n) >= 0 ? 'on' : base[n] ? (dimOthers ? 'dim' : 'on') : 'off';
+      });
+      return { mode: mode, order: focus, caption: (f && f.caption) || '' };
+    }
+    // which parts can be on screen together: labels only have to avoid what they can be seen with
+    var states = [stateFor(null)];
+    steps.forEach(function (st, i) { if (st && st.figure) states.push(stateFor(i)); });
+    names.forEach(function (n) { parts[n].seen = states.map(function (s) { return s.mode[n] !== 'off'; }); });
+    function together(a, b) {
+      for (var i = 0; i < a.seen.length; i++) if (a.seen[i] && b.seen[i]) return true;
+      return false;
+    }
+
+    /* ---------- layout: figure units -> screen pixels ---------- */
+    var T = null, W = 0, H = 0;
+    // captions sit in the top-left corner: the figure keeps clear of that strip
+    var hasCaptions = (spec.draw || []).some(function (s) { return s.caption; }) ||
+      steps.some(function (s) { return s && s.figure && s.figure.caption; });
+    function geometry(pr) {
+      var d = pr.def, g = pr.g = {}, segs = pr.segs = [];
+      switch (pr.type) {
+        case 'point': g.c = T(P(n0(pr))); break;
+        case 'text': g.c = T(P(d.at)); break;
+        case 'line': g.a = T(P(d.from)); g.b = T(P(d.to)); segs.push([g.a, g.b]); break;
+        case 'arc': {
+          var c = T(P(d.center)), R = d.r * T.s, a0 = d.from * Math.PI / 180, a1 = d.to * Math.PI / 180, list = [];
+          for (var i = 0; i <= 48; i++) { var t = a0 + (a1 - a0) * i / 48; list.push([c[0] + R * Math.cos(t), c[1] - R * Math.sin(t)]); }
+          g.list = list; g.c = c; g.R = R;
+          for (var j = 0; j < list.length - 1; j++) segs.push([list[j], list[j + 1]]);
+          if (d.hatch) {   // the hatching behind the mirror is in the way of labels as well
+            var hs = d.hatch === 'in' ? -1 : 1, outer = list.map(function (q) { var u = unit(c, q); return [q[0] + hs * u[0] * 8, q[1] + hs * u[1] * 8]; });
+            for (var j2 = 0; j2 < outer.length - 1; j2 += 2) segs.push([outer[j2], outer[Math.min(j2 + 2, outer.length - 1)]]);
+          }
+          break;
+        }
+        case 'polygon': {
+          g.list = (d.points || []).map(function (r) { return T(P(r)); });
+          var cx = 0, cy = 0;
+          g.list.forEach(function (q) { cx += q[0]; cy += q[1]; });
+          g.c = [cx / g.list.length, cy / g.list.length];
+          for (var k = 0; k < g.list.length; k++) segs.push([g.list[k], g.list[(k + 1) % g.list.length]]);
+          break;
+        }
+        case 'angle': {
+          var v = T(P(d.at)), ua = unit(v, T(P(d.from))), ub = unit(v, T(P(d.to)));
+          var ta = Math.atan2(ua[1], ua[0]), span = Math.atan2(ub[1], ub[0]) - ta;
+          while (span > Math.PI) span -= 2 * Math.PI;
+          while (span <= -Math.PI) span += 2 * Math.PI;
+          g.v = v; g.ta = ta; g.span = span; g.r = d.r || 22;
+          var steps2 = 16, prev = null;
+          for (var s2 = 0; s2 <= steps2; s2++) {
+            var tt = ta + span * s2 / steps2, q2 = [v[0] + g.r * Math.cos(tt), v[1] + g.r * Math.sin(tt)];
+            if (prev) segs.push([prev, q2]);
+            prev = q2;
+          }
+          break;
+        }
+        case 'dim': {
+          var off = Array.isArray(d.offset) ? d.offset : [0, d.offset || 0];
+          g.a0 = T(P(d.from)); g.b0 = T(P(d.to));
+          g.a = [g.a0[0] + off[0], g.a0[1] + off[1]]; g.b = [g.b0[0] + off[0], g.b0[1] + off[1]];
+          segs.push([g.a, g.b]);
+          break;
+        }
+      }
+    }
+    function n0(pr) { return pr.name; }
+
+    function measure(el, fs) {
+      var bb = null;
+      try { bb = el.getBBox(); } catch (e) { bb = null; }
+      var txt = el.textContent || '';
+      if (!bb || bb.width < 0.5) bb = { width: txt.length * fs * 0.62, height: fs * 1.15 };
+      return { w: bb.width + 3, h: Math.max(bb.height, fs) + 1 };
+    }
+
+    function candidates(pr, w, h) {
+      var d = pr.def, g = pr.g, out = [];
+      function push(c) { out.push(c); }
+      if (pr.type === 'point') {
+        var first = RING.indexOf(d.side || 's'), gap = 6;
+        if (first < 0) first = 6;
+        [0, 1, 2].forEach(function (lvl) {
+          var order = [first];
+          for (var k = 1; k <= 4; k++) { order.push((first + k) % 8); order.push((first - k + 8) % 8); }
+          order.forEach(function (ix) {
+            var dv = DIRS[RING[ix]], gg = gap + lvl * 5;
+            push([g.c[0] + dv[0] * (w / 2 + gg), g.c[1] + dv[1] * (h / 2 + gg)]);
+          });
+        });
+      } else if (pr.type === 'angle') {
+        var mid = g.ta + g.span / 2, ux = Math.cos(mid), uy = Math.sin(mid), ext = Math.abs(ux) * w / 2 + Math.abs(uy) * h / 2;
+        // along the bisector, just outside the arc first; every step further out costs more (see placeLabels)
+        [0, -0.2, 0.2].forEach(function (tilt) {
+          for (var k2 = 0; k2 < 9; k2++) {
+            var m2 = mid + tilt * g.span, dd = g.r + 3 + ext + k2 * 4;
+            out.push({ c: [g.v[0] + Math.cos(m2) * dd, g.v[1] + Math.sin(m2) * dd], pen: k2 * k2 * 7 + (tilt ? 40 : 0) });
+          }
+        });
+      } else if (pr.type === 'line' || pr.type === 'dim') {
+        var u = unit(g.a, g.b), nx = -u[1], ny = u[0], e2 = Math.abs(nx) * w / 2 + Math.abs(ny) * h / 2 + 4;
+        var side = d.labelSide === 'left' ? -1 : 1;
+        [0.5, 0.4, 0.6, 0.3, 0.7, 0.2, 0.8].forEach(function (t) {
+          var q = lerp(g.a, g.b, t);
+          if (pr.type === 'dim') push(q);
+          push([q[0] + side * nx * e2, q[1] + side * ny * e2]);
+          push([q[0] - side * nx * e2, q[1] - side * ny * e2]);
+        });
+      } else if (pr.type === 'polygon' || pr.type === 'text' || pr.type === 'arc') {
+        var c = pr.type === 'arc' ? g.list[0] : (g.c || [0, 0]);
+        if (d.labelAt) c = T(d.labelAt);
+        push(c);
+        [6, 12, 18].forEach(function (r) { RING.forEach(function (k) { var dv = DIRS[k]; push([c[0] + dv[0] * r, c[1] + dv[1] * r]); }); });
+      }
+      return out;
+    }
+
+    function placeLabels() {
+      var fs = parseFloat(getComputedStyle(svg).fontSize) || 14;
+      var list = names.map(function (n) { return parts[n]; }).filter(function (pr) { return pr.el.label; });
+      list.forEach(function (pr) { var m = measure(pr.el.label, fs); pr.lw = m.w; pr.lh = m.h; });
+      list.sort(function (a, b) { return (RANK[a.type] - RANK[b.type]) || (names.indexOf(a.name) - names.indexOf(b.name)); });
+      var placed = [];
+      list.forEach(function (pr) {
+        var w = pr.lw, h = pr.lh, best = null, bc = Infinity;
+        if (pr.def.labelOffset) {
+          var anc = pr.g.c || pr.g.v || lerp(pr.g.a, pr.g.b, 0.5);
+          best = [anc[0] + pr.def.labelOffset[0], anc[1] + pr.def.labelOffset[1]];
+        } else candidates(pr, w, h).forEach(function (c, i) {
+          var pen = i * 4;
+          if (!Array.isArray(c)) { pen = c.pen; c = c.c; }
+          var box = { x0: c[0] - w / 2, y0: c[1] - h / 2, x1: c[0] + w / 2, y1: c[1] + h / 2 };
+          var cost = pen;
+          if (box.x0 < 2 || box.y0 < 2 || box.x1 > W - 2 || box.y1 > H - 2) cost += 6000;
+          if (opts.avoidTop && box.y0 < opts.avoidTop - 2) cost += 3000;   // the caption strip
+          placed.forEach(function (q) {
+            if (!together(pr, q)) return;
+            var ov = overlap(box, q.box);
+            if (ov > 0) cost += 4000 + ov * 30;
+          });
+          names.forEach(function (qn) {
+            var q = parts[qn];
+            if (!together(pr, q)) return;
+            if (q.type === 'point') {
+              if (q.el.dot && dotHitsBox(q.g.c, (q.def.size || 3.6) + 1.5, box)) cost += 2500;
+              return;
+            }
+            if (q === pr && pr.type === 'dim') return;   // a length's label sits on its own line, which breaks round it
+            var hits = 0, grown = { x0: box.x0 - 1.5, y0: box.y0 - 1.5, x1: box.x1 + 1.5, y1: box.y1 + 1.5 };
+            (q.segs || []).forEach(function (sg) { if (segHitsBox(sg[0], sg[1], grown)) hits++; });
+            if (hits) cost += (q.type === 'polygon' ? 150 : 500) + hits * 20;
+          });
+          if (cost < bc) { bc = cost; best = c; }
+        });
+        pr.box = { x0: best[0] - w / 2, y0: best[1] - h / 2, x1: best[0] + w / 2, y1: best[1] + h / 2 };
+        pr.el.label.setAttribute('x', f2(best[0]));
+        pr.el.label.setAttribute('y', f2(best[1]));
+        if (pr.el.plate) {
+          pr.el.plate.setAttribute('x', f2(pr.box.x0 - 2)); pr.el.plate.setAttribute('y', f2(pr.box.y0));
+          pr.el.plate.setAttribute('width', f2(w + 4)); pr.el.plate.setAttribute('height', f2(h));
+        }
+        placed.push(pr);
+      });
+    }
+
+    function layout() {
+      W = host.clientWidth; H = host.clientHeight;
+      if (W < 40 || H < 40) return false;
+      svg.setAttribute('width', W); svg.setAttribute('height', H); svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+      var cs = getComputedStyle(host), pad = parseFloat(cs.getPropertyValue('--fg-pad')) || 10;
+      var padTop = hasCaptions ? (parseFloat(cs.getPropertyValue('--fg-pad-top')) || pad) : pad;
+      var b = spec.box || [0, 0, 100, 100], bw = b[2] - b[0], bh = b[3] - b[1];
+      var s = Math.min((W - 2 * pad) / bw, (H - pad - padTop) / bh);
+      var ox = (W - s * bw) / 2 - s * b[0], oy = padTop + ((H - pad - padTop) - s * bh) / 2 + s * b[3];
+      T = function (p) { return [ox + s * p[0], oy - s * p[1]]; };
+      T.s = s;
+      opts.avoidTop = hasCaptions ? padTop : 0;
+      names.forEach(function (n) { geometry(parts[n]); });
+      placeLabels();
+      names.forEach(function (n) { render(parts[n]); });
+      return true;
+    }
+
+    /* ---------- draw one part at progress p (0 = not drawn, 1 = complete) ---------- */
+    function head(tip, u, size) {
+      var nx = -u[1], ny = u[0], bx = tip[0] - u[0] * size, by = tip[1] - u[1] * size;
+      return 'M' + xy(tip) + 'L' + xy([bx + nx * size * 0.5, by + ny * size * 0.5]) + 'L' + xy([bx - nx * size * 0.5, by - ny * size * 0.5]) + 'Z';
+    }
+    function polyD(list, p, closed) {
+      if (!list.length || p <= 0) return '';
+      var seg = [], total = 0, i;
+      var L = closed ? list.concat([list[0]]) : list;
+      for (i = 0; i < L.length - 1; i++) { var l = Math.hypot(L[i + 1][0] - L[i][0], L[i + 1][1] - L[i][1]); seg.push(l); total += l; }
+      var left = total * p, d = 'M' + xy(L[0]);
+      for (i = 0; i < seg.length; i++) {
+        if (left >= seg[i]) { d += 'L' + xy(L[i + 1]); left -= seg[i]; }
+        else { d += 'L' + xy(lerp(L[i], L[i + 1], seg[i] ? left / seg[i] : 0)); break; }
+      }
+      if (closed && p >= 1) d += 'Z';
+      return d;
+    }
+    function render(pr) {
+      if (!pr.g) return;
+      var e = pr.el, g = pr.g, d = pr.def, p = pr.p, labelIn = clamp01((p - 0.62) / 0.38);
+      switch (pr.type) {
+        case 'point':
+          if (e.dot) { e.dot.setAttribute('cx', f2(g.c[0])); e.dot.setAttribute('cy', f2(g.c[1])); var k = clamp01(p * 1.4); e.dot.setAttribute('r', f2((d.size || 3.6) * (k < 1 ? k * (1.25 - 0.25 * k) : 1))); }
+          labelIn = clamp01((p - 0.3) / 0.7);
+          break;
+        case 'line': {
+          var end = lerp(g.a, g.b, p);
+          e.path.setAttribute('d', p > 0 ? 'M' + xy(g.a) + 'L' + xy(end) : '');
+          if (e.glow) {
+            e.glow.setAttribute('cx', f2(end[0])); e.glow.setAttribute('cy', f2(end[1]));
+            e.glow.style.opacity = p > 0 && p < 1 ? Math.min(1, p / 0.05, (1 - p) / 0.06) : 0;
+          }
+          if (e.arrow) {
+            var at = typeof d.arrow === 'number' ? d.arrow : 0.56;
+            e.arrow.setAttribute('d', head(lerp(g.a, g.b, at), unit(g.a, g.b), 8));
+            e.arrow.style.opacity = clamp01((p - at) / 0.08 + 1);   // shows once the line has reached it
+          }
+          break;
+        }
+        case 'arc':
+          e.path.setAttribute('d', polyD(g.list, p, false));
+          if (e.hatch) {
+            var hd = '', n = 13, dir = d.hatch === 'in' ? -1 : 1;
+            for (var i = 1; i < n; i++) {
+              var q = g.list[Math.round(i * (g.list.length - 1) / n)], u = unit(g.c, q);
+              var tip = [q[0] + dir * u[0] * 7, q[1] + dir * u[1] * 7];
+              hd += 'M' + xy(q) + 'L' + xy([tip[0] + u[1] * 3, tip[1] - u[0] * 3]);
+            }
+            e.hatch.setAttribute('d', hd);
+            e.hatch.style.opacity = clamp01((p - 0.5) / 0.5);
+          }
+          break;
+        case 'polygon':
+          e.path.setAttribute('d', polyD(g.list, clamp01(p / 0.78), true));
+          e.fill.setAttribute('d', 'M' + g.list.map(xy).join('L') + 'Z');
+          e.fill.style.opacity = clamp01((p - 0.55) / 0.45);
+          labelIn = clamp01((p - 0.7) / 0.3);
+          break;
+        case 'angle': {
+          var sw = g.span * p, a0 = [g.v[0] + g.r * Math.cos(g.ta), g.v[1] + g.r * Math.sin(g.ta)];
+          var a1 = [g.v[0] + g.r * Math.cos(g.ta + sw), g.v[1] + g.r * Math.sin(g.ta + sw)];
+          var flag = Math.abs(sw) > Math.PI ? 1 : 0, sweep = sw > 0 ? 1 : 0;
+          var arcD = 'M' + xy(a0) + 'A' + f2(g.r) + ' ' + f2(g.r) + ' 0 ' + flag + ' ' + sweep + ' ' + xy(a1);
+          e.path.setAttribute('d', p > 0 ? arcD : '');
+          e.fill.setAttribute('d', p > 0 ? 'M' + xy(g.v) + 'L' + xy(a0) + arcD.replace(/^M[^A]*/, '') + 'Z' : '');
+          break;
+        }
+        case 'dim': {
+          var tipD = lerp(g.a, g.b, p);
+          e.path.setAttribute('d', p > 0 ? 'M' + xy(g.a) + 'L' + xy(tipD) : '');
+          // short end ticks across the length line (long extension lines would cut through the point labels)
+          var ud = unit(g.a, g.b), tx = -ud[1] * 5, ty = ud[0] * 5, extD = '';
+          [g.a, g.b].forEach(function (q, idx) {
+            if (idx === 1 && p < 0.98) return;
+            extD += 'M' + xy([q[0] - tx, q[1] - ty]) + 'L' + xy([q[0] + tx, q[1] + ty]);
+          });
+          e.ext.setAttribute('d', p > 0 ? extD : '');
+          e.arrow.setAttribute('d', p > 0.05 ? head(tipD, unit(g.a, g.b), 7) : '');
+          if (d.arrow === 'both' && p >= 1) e.arrow.setAttribute('d', head(g.b, unit(g.a, g.b), 7) + head(g.a, unit(g.b, g.a), 7));
+          break;
+        }
+      }
+      if (e.label) e.label.style.opacity = labelIn;
+      if (e.plate) e.plate.style.opacity = labelIn;
+    }
+
+    /* ---------- smooth progress tweens ---------- */
+    var tw = [], raf = 0;
+    function frame(now) {
+      raf = 0;
+      tw = tw.filter(function (t) {
+        if (now < t.t0) return true;
+        var k = clamp01((now - t.t0) / t.dur);
+        t.pr.p = t.from + (t.to - t.from) * ease(k);
+        render(t.pr);
+        return k < 1;
+      });
+      if (tw.length) raf = requestAnimationFrame(frame);
+    }
+    function tween(pr, to, dur, delay) {
+      tw = tw.filter(function (t) { return t.pr !== pr; });
+      if (REDUCE || !dur) { pr.p = to; render(pr); return; }
+      tw.push({ pr: pr, from: pr.p, to: to, t0: performance.now() + (delay || 0), dur: dur });
+      if (!raf) raf = requestAnimationFrame(frame);
+    }
+    function stopTweens(finish) {
+      tw.forEach(function (t) { if (finish) { t.pr.p = t.to; render(t.pr); } });
+      tw = [];
+      if (raf) { cancelAnimationFrame(raf); raf = 0; }
+    }
+
+    function setMode(pr, m) {
+      pr.mode = m;
+      Object.keys(pr.w).forEach(function (k) {
+        var c = pr.w[k].classList;
+        c.toggle('is-off', m === 'off'); c.toggle('is-on', m === 'on'); c.toggle('is-dim', m === 'dim'); c.toggle('is-focus', m === 'focus');
+      });
+    }
+    function instantly(fn) {
+      host.classList.add('fg-instant');
+      fn();
+      void host.offsetWidth;
+      host.classList.remove('fg-instant');
+    }
+    var capT = null;
+    function setCaption(text, instant) {
+      clearTimeout(capT);
+      if (!text) { cap.classList.remove('is-on'); return; }
+      var html = htmlText(text);
+      if (cap.classList.contains('is-on') && cap._html === html) return;
+      cap._html = html;
+      if (instant || REDUCE || !cap.classList.contains('is-on')) { cap.innerHTML = html; cap.classList.add('is-on'); return; }
+      cap.classList.add('is-swap');
+      capT = setTimeout(function () { cap.innerHTML = html; cap.classList.remove('is-swap'); }, 180);
+    }
+
+    /* ---------- apply a step: highlight, draw in what is new, dim the rest ---------- */
+    var cur = null, introOn = false, introTimers = [], pending = null, introEnd = 0;
+    function apply(si, animate) {
+      var st = stateFor(si);
+      cur = si;
+      var n = 0;
+      var run = function () {
+        names.forEach(function (name) {
+          var pr = parts[name], m = st.mode[name], was = pr.mode;
+          if (m === was) return;
+          if (was === 'off') {
+            var k = st.order.indexOf(name);
+            if (animate) { pr.p = 0; render(pr); tween(pr, 1, DRAW_MS[pr.type], 120 + (k >= 0 ? k : n++) * 240); }
+            else { stopTweensFor(pr); pr.p = 1; render(pr); }
+          }
+          setMode(pr, m);
+        });
+      };
+      if (animate) run(); else instantly(run);
+      setCaption(st.caption, !animate);
+    }
+    function stopTweensFor(pr) { tw = tw.filter(function (t) { return t.pr !== pr; }); }
+
+    function clearIntro() { introTimers.forEach(clearTimeout); introTimers = []; }
+    function intro() {
+      if (!T && !layout()) { pending = cur; return; }
+      clearIntro(); stopTweens(false);
+      introOn = true; pending = null;
+      instantly(function () { names.forEach(function (n) { setMode(parts[n], 'off'); parts[n].p = 0; render(parts[n]); }); });
+      setCaption('', true);
+      if (REDUCE) { finishIntro(); return; }
+      var t = 200;
+      (spec.draw || []).forEach(function (stage) {
+        var list = (stage.parts || []).filter(function (n) { return parts[n]; }), longest = 0;
+        introTimers.push(setTimeout(function () {
+          list.forEach(function (n, j) {
+            var pr = parts[n];
+            setMode(pr, 'on'); pr.p = 0; render(pr);
+            tween(pr, 1, DRAW_MS[pr.type], j * 140);
+          });
+          if (stage.caption) setCaption(stage.caption);
+        }, t));
+        list.forEach(function (n, j) { longest = Math.max(longest, DRAW_MS[parts[n].type] + j * 140); });
+        t += Math.max(560, longest * 0.8) + (stage.caption ? 240 : 0);
+      });
+      introTimers.push(setTimeout(function () { finishIntro(); }, t + 380));
+      introEnd = performance.now() + t + 380;
+    }
+    function finishIntro(fast) {
+      clearIntro();
+      var was = introOn;
+      introOn = false;
+      names.forEach(function (n) {
+        var pr = parts[n];
+        if (!base[n]) return;
+        if (pr.mode === 'off') setMode(pr, 'on');
+        if (pr.p < 1) tween(pr, 1, fast ? 220 : DRAW_MS[pr.type]);
+      });
+      if (!was) return;
+      if (pending != null) { var s = pending; pending = null; apply(s, true); }
+      else if (opts.player) apply(cur, true);
+      else setCaption('');
+    }
+
+    /* the derivation moves to step si. The first call after the intro waits for the intro to end;
+       a later call (Next pressed during the intro) finishes the intro at once. */
+    var firstWait = false;
+    function step(si, instant) {
+      if (!T && !layout()) { cur = si; pending = si; return; }
+      if (instant) { clearIntro(); introOn = false; stopTweens(true); apply(si, false); return; }
+      if (introOn) {
+        if (!firstWait || pending === si) { firstWait = true; pending = si; return; }
+        pending = si;
+        finishIntro(true);
+        return;
+      }
+      if (si === cur) return;
+      apply(si, true);
+    }
+
+    var api = {
+      layout: function () {
+        var was = !!T;
+        if (!layout()) return;
+        if (!was) {
+          if (pending != null) { var s = pending; pending = null; apply(s, false); }
+          else if (!opts.player) { if (opts.autoIntro) watchIntro(); else apply(null, false); }
+        }
+      },
+      intro: function () { firstWait = false; intro(); },
+      introLeft: function () { return introOn ? Math.max(0, introEnd - performance.now()) : 0; },   // ms of the drawing intro still to run
+      step: step,
+      isFigure: true
+    };
+
+    /* the front figure draws itself the first time it comes into view */
+    var watched = false;
+    function watchIntro() {
+      if (watched) return;
+      watched = true;
+      if (!('IntersectionObserver' in window)) { apply(null, false); return; }
+      var io = new IntersectionObserver(function (en) {
+        en.forEach(function (x) {
+          if (!x.isIntersecting || x.intersectionRatio < 0.55) return;
+          io.disconnect();
+          intro();
+        });
+      }, { threshold: [0, 0.55, 0.8] });
+      io.observe(host);
+    }
+
+    api.layout();
+    return api;
+  }
+
+  SM.Figure = { mount: mount, has: function (diag) { return !!(diag && diag.figure && diag.figure.parts); } };
+})();
+</script><script>var FIGS = [{"figure": {"box": [-128, -84, 128, 78], "points": {"A": {"at": [-70, 60], "side": "nw"}, "B": {"at": [70, -70], "side": "se"}, "R": {"at": [22.72, 0], "side": "ne", "size": 3.4}, "M": {"at": [-70, 0], "side": "s", "size": 2.6}, "N": {"at": [70, 0], "side": "n", "size": 2.6}, "Pb": {"at": [-124, 0], "label": "P", "side": "n", "dot": false}, "Qb": {"at": [124, 0], "label": "Q", "side": "n", "dot": false}, "Nu": {"at": [22.72, 70], "label": false, "dot": false}, "Nd": {"at": [22.72, -80], "label": false, "dot": false}}, "parts": {"medium2": {"type": "polygon", "points": [[-124, 0], [124, 0], [124, -82], [-124, -82]], "style": "glass"}, "boundary": {"type": "line", "from": "Pb", "to": "Qb", "style": "mirror"}, "n1": {"type": "text", "at": [95, 45], "text": "n_1"}, "n2": {"type": "text", "at": [-100, -45], "text": "n_2"}, "AR": {"type": "line", "from": "A", "to": "R", "style": "ray", "arrow": true}, "RB": {"type": "line", "from": "R", "to": "B", "style": "ray", "arrow": true}, "normal": {"type": "line", "from": "Nu", "to": "Nd", "style": "normal"}, "th1": {"type": "angle", "at": "R", "from": "Nu", "to": "A", "r": 26, "label": "θ_1"}, "th2": {"type": "angle", "at": "R", "from": "Nd", "to": "B", "r": 26, "label": "θ_2"}, "AM": {"type": "line", "from": "A", "to": "M", "style": "guide"}, "BN": {"type": "line", "from": "B", "to": "N", "style": "guide"}, "triA": {"type": "polygon", "points": ["A", "M", "R"]}, "triB": {"type": "polygon", "points": ["R", "N", "B"]}, "rightM": {"type": "polygon", "points": [[-70, 0], [-70, 5], [-65, 5], [-65, 0]]}, "rightN": {"type": "polygon", "points": [[70, 0], [70, -5], [65, -5], [65, 0]]}, "thA": {"type": "angle", "at": "A", "from": "M", "to": "R", "r": 20, "label": "θ_1"}, "thB": {"type": "angle", "at": "B", "from": "N", "to": "R", "r": 20, "label": "θ_2"}, "xdim": {"type": "dim", "from": "M", "to": "R", "offset": [0, -12], "arrow": "both", "label": "x"}, "Lxdim": {"type": "dim", "from": "R", "to": "N", "offset": [0, 12], "arrow": "both", "label": "L − x"}, "h1dim": {"type": "dim", "from": "M", "to": "A", "offset": [-14, 0], "arrow": "both", "label": "h_1"}, "h2dim": {"type": "dim", "from": "B", "to": "N", "offset": [14, 0], "arrow": "both", "label": "h_2"}}, "draw": [{"parts": ["boundary", "Pb", "Qb", "medium2", "n1", "n2"], "caption": "Plane boundary PQ between media n_1 and n_2"}, {"parts": ["A", "B"], "caption": "Fixed points A (in n_1) and B (in n_2)"}, {"parts": ["AR", "R"], "caption": "Light from A crosses the boundary at R"}, {"parts": ["RB"], "caption": "and goes on to B"}, {"parts": ["normal", "th1", "th2"], "caption": "Normal at R: angles θ_1 and θ_2"}]}, "steps": [{"figure": {"focus": ["AR", "RB"], "keep": ["A", "B", "R"], "caption": "Optical path L_{op} = n_1 AR + n_2 RB"}}, {"figure": {"focus": ["triA", "rightM", "xdim", "h1dim", "AR"], "keep": ["A", "M", "R", "AM"], "caption": "△AMR: legs x and h_1"}}, {"figure": {"focus": ["AR"], "keep": ["A", "R", "xdim", "h1dim"], "caption": "L_{op} in terms of x"}}, {"figure": {"focus": ["triB", "rightN", "Lxdim", "h2dim", "RB"], "keep": ["B", "N", "R", "BN"], "caption": "△RNB: legs L − x and h_2"}}, {"figure": {"focus": ["RB"], "keep": ["R", "B", "Lxdim", "h2dim"], "caption": "L_{op} as a function of x alone"}}, {"figure": {"focus": ["R", "xdim"], "keep": ["AR", "RB"], "caption": "How L_{op} changes as R slides"}}, {"figure": {"focus": ["R"], "keep": ["AR", "RB"], "caption": "Fermat: dL_{op}/dx = 0 at the actual R"}}, {"figure": {"focus": ["triA", "thA", "th1", "xdim", "AR"], "keep": ["A", "M", "R", "normal", "rightM"], "caption": "△AMR: θ_1 at A; x opposite, AR hypotenuse"}}, {"figure": {"focus": ["th1"], "keep": ["AR", "normal"], "caption": "First term: n_1 sin θ_1"}}, {"figure": {"focus": ["triB", "thB", "th2", "Lxdim", "RB"], "keep": ["B", "N", "R", "normal", "rightN"], "caption": "△RNB: θ_2 at B; L − x opposite, RB hypotenuse"}}, {"figure": {"focus": ["th2"], "keep": ["RB", "normal"], "caption": "Second term: n_2 sin θ_2"}}, {"figure": {"focus": ["th1", "th2"], "keep": ["AR", "RB", "normal"], "caption": "n_2 sin θ_2 = n_1 sin θ_1"}}, {"figure": {"focus": ["th1", "th2", "normal"], "keep": ["AR", "RB"], "caption": "Snell's law: n_1 sin θ_1 = n_2 sin θ_2"}}]}, {"figure": {"box": [-118, -74, 172, 62], "points": {"O": {"at": [-110, 0], "side": "s"}, "S": {"at": [7.23, 22.94], "side": "n"}, "C": {"at": [40, 0], "side": "s"}, "I": {"at": [99.99, 0], "side": "s"}, "P": {"at": [0, 0], "side": "sw", "size": 3}, "D": {"at": [7.23, 0], "side": "s", "size": 2.6}, "Nn": {"at": [-14.06, 37.86], "label": false, "dot": false}}, "parts": {"axis": {"type": "line", "from": [-118, 0], "to": [172, 0], "style": "axis"}, "glass": {"type": "polygon", "points": [[15.37, 31.52], [13.06, 29.57], [10.91, 27.45], [8.91, 25.17], [7.1, 22.75], [5.48, 20.2], [4.05, 17.53], [2.83, 14.77], [1.82, 11.92], [1.03, 9.0], [0.46, 6.03], [0.11, 3.02], [0.0, 0.0], [0.11, -3.02], [0.46, -6.03], [1.03, -9.0], [1.82, -11.92], [2.83, -14.77], [4.05, -17.53], [5.48, -20.2], [7.1, -22.75], [8.91, -25.17], [10.91, -27.45], [13.06, -29.57], [15.37, -31.52], [170, -31.52], [170, 31.52]], "style": "glass"}, "surface": {"type": "arc", "center": "C", "r": 40, "from": 128, "to": 232, "style": "mirror"}, "n1": {"type": "text", "at": [-95, 40], "text": "n_1"}, "n2": {"type": "text", "at": [150, 40], "text": "n_2"}, "OS": {"type": "line", "from": "O", "to": "S", "style": "ray", "arrow": true}, "SI": {"type": "line", "from": "S", "to": "I", "style": "ray", "arrow": true}, "normal": {"type": "line", "from": "Nn", "to": "C", "style": "normal"}, "phi1": {"type": "angle", "at": "S", "from": "O", "to": "Nn", "r": 20, "label": "φ_1"}, "phi2": {"type": "angle", "at": "S", "from": "C", "to": "I", "r": 26, "label": "φ_2"}, "alpha1": {"type": "angle", "at": "O", "from": "P", "to": "S", "r": 40, "label": "α_1"}, "beta": {"type": "angle", "at": "C", "from": "P", "to": "S", "r": 10, "label": "β"}, "alpha2": {"type": "angle", "at": "I", "from": "P", "to": "S", "r": 30, "label": "α_2"}, "h": {"type": "line", "from": "S", "to": "D", "style": "guide", "label": "h"}, "triOSC": {"type": "polygon", "points": ["O", "S", "C"]}, "triISC": {"type": "polygon", "points": ["I", "S", "C"]}, "triSDO": {"type": "polygon", "points": ["S", "D", "O"]}, "triSDC": {"type": "polygon", "points": ["S", "D", "C"]}, "triSDI": {"type": "polygon", "points": ["S", "D", "I"]}, "rightD": {"type": "polygon", "points": [[7.23, 0], [3.23, 0], [3.23, 4], [7.23, 4]]}, "xdim": {"type": "dim", "from": "P", "to": "O", "offset": [0, 22], "arrow": true, "label": "x"}, "rdim": {"type": "dim", "from": "P", "to": "C", "offset": [0, 22], "arrow": true, "label": "r"}, "ydim": {"type": "dim", "from": "P", "to": "I", "offset": [0, 40], "arrow": true, "label": "y"}}, "draw": [{"parts": ["axis"], "caption": "Principal axis"}, {"parts": ["glass", "surface", "P", "n1", "n2"], "caption": "Spherical surface SPM from n_1 into n_2, pole P"}, {"parts": ["C"], "caption": "Centre of curvature C"}, {"parts": ["O"], "caption": "Object O on the axis"}, {"parts": ["OS", "S"], "caption": "Light from O meets the surface at S"}, {"parts": ["SI", "I"], "caption": "It refracts and crosses the axis at the image I"}, {"parts": ["normal"], "caption": "CS is the normal at S"}, {"parts": ["h", "D"], "caption": "Height of S: h = SD"}]}, "steps": [{"figure": {"focus": ["phi1", "phi2", "normal", "OS", "SI"], "keep": ["S", "n1", "n2"], "caption": "Snell's law at S: n_1 sin φ_1 = n_2 sin φ_2"}}, {"figure": {"focus": ["phi1", "phi2"], "keep": ["S", "normal"], "caption": "Paraxial rays: sin φ ≈ φ"}}, {"figure": {"focus": ["triOSC", "phi1", "alpha1", "beta"], "keep": ["O", "S", "C"], "caption": "△OSC: exterior angle φ_1 = α_1 + β"}}, {"figure": {"focus": ["triSDO", "alpha1", "h", "xdim", "rightD"], "keep": ["S", "D", "O"], "caption": "△SDO: tan α_1 = h/x"}}, {"figure": {"focus": ["triSDC", "beta", "h", "rdim", "rightD"], "keep": ["S", "D", "C"], "caption": "△SDC: tan β = h/r"}}, {"figure": {"focus": ["alpha1", "beta", "h"], "keep": ["xdim", "rdim"], "caption": "Small angles: α_1 ≈ h/x, β ≈ h/r"}}, {"figure": {"focus": ["triISC", "beta", "phi2", "alpha2"], "keep": ["I", "S", "C"], "caption": "△ISC: exterior angle β = φ_2 + α_2"}}, {"figure": {"focus": ["triSDI", "alpha2", "h", "ydim", "rightD"], "keep": ["S", "D", "I"], "caption": "△SDI: tan α_2 = h/y"}}, {"figure": {"focus": ["alpha2", "beta", "h"], "keep": ["ydim", "rdim"], "caption": "Small angles: α_2 ≈ h/y"}}, {"figure": {"focus": ["h"], "keep": ["OS", "SI", "normal"], "caption": "h cancels: every paraxial ray meets at I"}}, {"figure": {"focus": ["xdim", "ydim", "rdim"], "keep": ["O", "I", "C", "P"], "caption": "Only x, y, r remain"}}, {"figure": {"focus": ["xdim", "ydim", "rdim"], "keep": ["O", "I", "C", "P"], "caption": "O left of P: u = −x; I, C right: v = y, R = r"}}]}, {"figure": {"box": [-128, -50, 178, 50], "points": {"O": {"at": [-120, 0], "side": "s"}, "Q": {"at": [170, 0], "side": "s"}, "I": {"at": [105, 0], "side": "s"}, "S₁": {"at": [-3.45, 22], "label": false, "size": 2.6}, "S₂": {"at": [3.75, 21.09], "label": false, "size": 2.6}, "P": {"at": [0, 0], "label": false, "dot": false}}, "parts": {"axis": {"type": "line", "from": [-128, 0], "to": [178, 0], "style": "axis"}, "lens": {"type": "polygon", "points": [[0.0, 30.51], [-1.1, 28.12], [-2.11, 25.69], [-3.03, 23.23], [-3.86, 20.73], [-4.59, 18.21], [-5.23, 15.65], [-5.77, 13.08], [-6.21, 10.48], [-6.56, 7.88], [-6.8, 5.26], [-6.95, 2.63], [-7.0, 0.0], [-6.95, -2.63], [-6.8, -5.26], [-6.56, -7.88], [-6.21, -10.48], [-5.77, -13.08], [-5.23, -15.65], [-4.59, -18.21], [-3.86, -20.73], [-3.03, -23.23], [-2.11, -25.69], [-1.1, -28.12], [0.0, -30.51], [-0.0, -30.51], [1.1, -28.12], [2.11, -25.69], [3.03, -23.23], [3.86, -20.73], [4.59, -18.21], [5.23, -15.65], [5.77, -13.08], [6.21, -10.48], [6.56, -7.88], [6.8, -5.26], [6.95, -2.63], [7.0, 0.0], [6.95, 2.63], [6.8, 5.26], [6.56, 7.88], [6.21, 10.48], [5.77, 13.08], [5.23, 15.65], [4.59, 18.21], [3.86, 20.73], [3.03, 23.23], [2.11, 25.69], [1.1, 28.12], [-0.0, 30.51]], "style": "glass"}, "surf1": {"type": "arc", "center": [63, 0], "r": 70, "from": 154.15806723683286, "to": 205.84193276316714, "style": "mirror", "label": "R_1"}, "surf2": {"type": "arc", "center": [-63, 0], "r": 70, "from": -25.841932763167136, "to": 25.841932763167136, "style": "mirror", "label": "R_2"}, "n1": {"type": "text", "at": [-100, 36], "text": "n_1"}, "n2": {"type": "text", "at": [0, -44], "text": "n_2"}, "n1b": {"type": "text", "at": [150, 36], "text": "n_1"}, "OS1": {"type": "line", "from": "O", "to": "S₁", "style": "ray", "arrow": true}, "S1S2": {"type": "line", "from": "S₁", "to": "S₂", "style": "ray"}, "S2Q": {"type": "line", "from": "S₂", "to": "Q", "style": "guide"}, "S2I": {"type": "line", "from": "S₂", "to": "I", "style": "ray", "arrow": true}, "udim": {"type": "dim", "from": "P", "to": "O", "offset": [0, 16], "arrow": true, "label": "u"}, "vpdim": {"type": "dim", "from": "P", "to": "Q", "offset": [0, 30], "arrow": true, "label": "v′"}, "vdim": {"type": "dim", "from": "P", "to": "I", "offset": [0, 16], "arrow": true, "label": "v"}}, "draw": [{"parts": ["axis"], "caption": "Principal axis"}, {"parts": ["lens", "surf1", "surf2", "n1", "n2", "n1b"], "caption": "Thin lens of index n_2 in a medium n_1"}, {"parts": ["O"], "caption": "Object O"}, {"parts": ["OS1", "S₁", "S1S2"], "caption": "Light from O refracts at the first surface"}, {"parts": ["S2I", "S₂", "I"], "caption": "and again at the second, forming the image I"}]}, "steps": [{"figure": {"focus": ["surf1", "OS1", "S1S2", "S2Q", "Q", "udim", "vpdim"], "keep": ["O"], "caption": "Surface R_1 alone: image Q at v′"}}, {"figure": {"focus": ["surf2", "S2I", "S2Q", "Q", "I", "vdim", "vpdim"], "keep": ["S₂"], "caption": "Surface R_2: Q is its object, I its image"}}, {"figure": {"focus": ["surf1", "surf2", "Q"], "keep": ["OS1", "S2I"], "caption": "Add: the n_2/v′ terms cancel"}}, {"figure": {"focus": ["surf1", "surf2"], "keep": ["lens"], "caption": "Factor (n_2 − n_1)"}}, {"figure": {"focus": ["n1", "n2", "n1b"], "keep": ["lens"], "caption": "Divide by the surrounding index n_1"}}, {"figure": {"focus": ["lens", "udim", "vdim"], "keep": ["O", "I"], "caption": "Thin lens formula"}}, {"figure": {"focus": ["udim", "vdim"], "keep": ["O", "I", "lens"], "caption": "1/v − 1/u = 1/f"}}]}, {"figure": {"box": [-106, -56, 130, 46], "points": {"O": {"at": [-90, 0], "side": "s"}, "A": {"at": [-90, 24], "side": "n"}, "I": {"at": [112.5, 0], "side": "n"}, "B": {"at": [112.5, -30], "side": "s"}, "F₁": {"at": [-50, 0], "side": "s"}, "F₂": {"at": [50, 0], "side": "n"}, "P": {"at": [0, 0], "side": "se", "size": 3}, "K": {"at": [0, 24], "side": "ne", "size": 2.8}, "L": {"at": [0, -30], "side": "sw", "size": 2.8}}, "parts": {"axis": {"type": "line", "from": [-106, 0], "to": [130, 0], "style": "axis"}, "lens": {"type": "polygon", "points": [[5.0, 0.0], [4.87, 8.9], [4.5, 17.36], [3.91, 24.94], [3.12, 31.27], [2.17, 36.04], [1.11, 39.0], [0.0, 40.0], [-1.11, 39.0], [-2.17, 36.04], [-3.12, 31.27], [-3.91, 24.94], [-4.5, 17.36], [-4.87, 8.9], [-5.0, 0.0], [-4.87, -8.9], [-4.5, -17.36], [-3.91, -24.94], [-3.12, -31.27], [-2.17, -36.04], [-1.11, -39.0], [-0.0, -40.0], [1.11, -39.0], [2.17, -36.04], [3.12, -31.27], [3.91, -24.94], [4.5, -17.36], [4.87, -8.9]], "style": "glass"}, "obj": {"type": "line", "from": "O", "to": "A", "style": "ray"}, "img": {"type": "line", "from": "I", "to": "B", "style": "guide"}, "AK": {"type": "line", "from": "A", "to": "K", "style": "ray", "arrow": true}, "KB": {"type": "line", "from": "K", "to": "B", "style": "ray", "arrow": 0.3}, "AL": {"type": "line", "from": "A", "to": "L", "style": "ray", "arrow": 0.3}, "LB": {"type": "line", "from": "L", "to": "B", "style": "ray", "arrow": true}, "tri1": {"type": "polygon", "points": ["A", "O", "F₁"]}, "tri2": {"type": "polygon", "points": ["L", "P", "F₁"]}, "tri3": {"type": "polygon", "points": ["K", "P", "F₂"]}, "tri4": {"type": "polygon", "points": ["B", "I", "F₂"]}, "ang1": {"type": "angle", "at": "F₁", "from": "O", "to": "A", "r": 14, "label": "ψ_1"}, "ang1b": {"type": "angle", "at": "F₁", "from": "P", "to": "L", "r": 14, "label": "ψ_1"}, "ang2": {"type": "angle", "at": "F₂", "from": "P", "to": "K", "r": 14, "label": "ψ_2"}, "ang2b": {"type": "angle", "at": "F₂", "from": "I", "to": "B", "r": 14, "label": "ψ_2"}, "x1dim": {"type": "dim", "from": "F₁", "to": "O", "offset": [0, -40], "arrow": true, "label": "x_1"}, "f1dim": {"type": "dim", "from": "P", "to": "F₁", "offset": [0, -50], "arrow": true, "label": "f_1"}, "x2dim": {"type": "dim", "from": "F₂", "to": "I", "offset": [0, 16], "arrow": true, "label": "x_2"}, "f2dim": {"type": "dim", "from": "P", "to": "F₂", "offset": [0, 16], "arrow": true, "label": "f_2"}, "ydim": {"type": "dim", "from": "O", "to": "A", "offset": [-12, 0], "arrow": "both", "label": "y"}, "ypdim": {"type": "dim", "from": "B", "to": "I", "offset": [12, 0], "arrow": "both", "label": "−y′"}}, "draw": [{"parts": ["axis"], "caption": "Principal axis"}, {"parts": ["lens", "P", "F₁", "F₂"], "caption": "Converging thin lens at P with foci F_1 and F_2"}, {"parts": ["obj", "O", "A"], "caption": "Object OA"}, {"parts": ["AK", "K", "KB"], "caption": "A ray parallel to the axis bends through F_2"}, {"parts": ["AL", "L", "LB"], "caption": "A ray through F_1 leaves parallel to the axis"}, {"parts": ["img", "I", "B"], "caption": "They meet at B: inverted image IB"}]}, "steps": [{"figure": {"focus": ["tri1", "ang1", "ydim", "x1dim"], "keep": ["A", "O", "F₁", "AL"], "caption": "△AOF_1: tan ψ_1 = y/(−x_1)"}}, {"figure": {"focus": ["tri2", "ang1b", "ypdim", "f1dim"], "keep": ["L", "P", "F₁", "AL", "LB"], "caption": "△LPF_1: same angle ψ_1 at F_1"}}, {"figure": {"focus": ["tri1", "tri2"], "keep": ["F₁"], "caption": "Similar triangles at F_1 (Eq. 4.17)"}}, {"figure": {"focus": ["x1dim", "f1dim"], "keep": ["F₁"], "caption": "−y′/y = f_1/x_1"}}, {"figure": {"focus": ["tri3", "ang2", "f2dim"], "keep": ["K", "P", "F₂", "KB", "AK"], "caption": "△KPF_2: tan ψ_2 = y/f_2"}}, {"figure": {"focus": ["tri4", "ang2b", "ypdim", "x2dim"], "keep": ["B", "I", "F₂", "KB"], "caption": "△BIF_2: same angle ψ_2 at F_2"}}, {"figure": {"focus": ["tri3", "tri4"], "keep": ["F₂"], "caption": "Similar triangles at F_2 (Eq. 4.18)"}}, {"figure": {"focus": ["x1dim", "f1dim", "x2dim", "f2dim"], "caption": "Both equal −y′/y"}}, {"figure": {"focus": ["x1dim", "x2dim", "f1dim", "f2dim"], "caption": "Newton: x_1 x_2 = f_1 f_2"}}, {"figure": {"focus": ["f1dim", "f2dim"], "keep": ["F₁", "F₂"], "caption": "Same medium: f_1 = −f, f_2 = f"}}, {"figure": {"focus": ["x1dim", "x2dim"], "keep": ["O", "I"], "caption": "x_1 x_2 = −f²: O and I on opposite sides of their foci"}}]}];
+(function(){var h=document.querySelector('header').offsetHeight+document.querySelector('nav').offsetHeight;document.documentElement.style.setProperty('--stick',h+'px');})();
+document.querySelectorAll('.fgbox').forEach(function (host) {
+  var d = FIGS[+host.dataset.fig], card = host.closest('.card'), rows = [].slice.call(card.querySelectorAll('.st'));
+  var api = SM.Figure.mount(host, d.figure, d.steps, { autoIntro: true }), cur = -1, timer = null;
+  function show(i, scroll) {
+    cur = Math.max(-1, Math.min(rows.length - 1, i));
+    rows.forEach(function (r, k) { r.classList.toggle('on', k === cur); });
+    if (cur >= 0) { api.step(cur); if (scroll) rows[cur].scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+  }
+  function stop() { clearInterval(timer); timer = null; btn.textContent = '\u25B6 Play'; }
+  var btn = card.querySelector('.play');
+  btn.onclick = function () {
+    if (timer) return stop();
+    btn.textContent = '\u275A\u275A Pause';
+    if (cur >= rows.length - 1 || cur < 0) { api.intro(); cur = -1; setTimeout(function () { show(0, true); }, (api.introLeft ? api.introLeft() : 0) + 300); }
+    timer = setInterval(function () { if (cur >= rows.length - 1) return stop(); show(cur + 1, true); }, 3200);
+  };
+  card.querySelector('.next').onclick = function () { stop(); show(cur + 1, true); };
+  card.querySelector('.prev').onclick = function () { stop(); show(cur - 1, true); };
+  rows.forEach(function (r, k) { r.onclick = function () { stop(); show(k, false); }; });
+  window.addEventListener('resize', function () { api.layout(); });
+});
+</script></body></html>

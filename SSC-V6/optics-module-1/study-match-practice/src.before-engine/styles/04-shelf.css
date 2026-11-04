@@ -1,0 +1,69 @@
+/* Shelf: one horizontal scroller. Sections are piles, sheets open to the right, cards snap one at a time. */
+.shelf {
+  width: var(--view); height: 100vh; height: 100dvh;
+  padding: var(--top) 12px 14px;
+  display: flex; flex-direction: row; align-items: center; gap: 20px;
+  overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch; scroll-snap-type: x mandatory; scrollbar-width: none;
+}
+.shelf::-webkit-scrollbar { display: none; }
+.group { flex: 0 0 auto; display: flex; flex-direction: row; align-items: center; gap: var(--gap); }
+.group.is-stacked .sheet + .sheet { margin-left: calc(5px - var(--card-w)); }
+.group.is-stacked .sheet { cursor: pointer; }
+
+.sheet {
+  position: relative; isolation: isolate;
+  flex: 0 0 auto; width: var(--card-w); height: var(--sheet-h);
+  display: flex; flex-direction: row; border-radius: 24px;
+  background: var(--lav); box-shadow: 5px 5px 0 var(--lav-2);
+  transition: width 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), margin-left 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
+}
+.sheet.is-open {
+  width: calc(var(--card-w) + var(--n) * (var(--card-w) + var(--gap)) + (var(--view) - var(--card-w)) / 2);
+  box-shadow: none;
+  transition: width 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), margin-left 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
+}
+
+/* Cover, modelled on a day-planner card */
+.cover {
+  appearance: none; border: 1px solid var(--line); text-align: left; cursor: pointer;
+  flex: 0 0 var(--card-w); width: var(--card-w); height: 100%;
+  scroll-snap-align: center; scroll-snap-stop: always; -webkit-tap-highlight-color: transparent;
+  border-radius: 22px; padding: 18px 16px 14px; display: flex; flex-direction: column; gap: 12px;
+  background-color: var(--card);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 18px 18px; box-shadow: var(--shadow); overflow: hidden; position: relative;
+}
+.cv-head { display: flex; align-items: center; gap: 12px; }
+.cv-num { font-size: 42px; font-weight: 800; line-height: 0.9; letter-spacing: -0.03em; position: relative; z-index: 0; }
+.cv-num::before { content: ''; position: absolute; left: -7px; top: -5px; width: 38px; height: 38px; border-radius: 50%; background: var(--amber-bg); z-index: -1; }
+.cv-meta { border-left: 2px solid var(--line); padding-left: 12px; display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.cv-meta b { font-size: 16px; font-weight: 800; }
+.cv-meta span { font-size: 11px; font-weight: 600; color: var(--muted); }
+.cv-panel { display: flex; align-items: center; gap: 10px; background: var(--lav); border-radius: 16px; padding: 10px 12px; }
+.cv-icon { flex: 0 0 38px; width: 38px; height: 38px; color: var(--violet); }
+.cv-icon svg { width: 100%; height: 100%; display: block; }
+.cv-pt { border-left: 2px solid var(--lav-2); padding-left: 10px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.cv-pt b { font-size: 14.5px; font-weight: 800; line-height: 1.2; }
+.cv-sub { font-size: 11px; font-weight: 600; color: var(--ink-2); }
+.cv-list { display: flex; flex-direction: column; gap: 6px; flex: 1 1 auto; min-height: 0; overflow: hidden; }
+.cv-list span { font-size: 12.5px; font-weight: 500; color: var(--ink-2); display: flex; gap: 9px; align-items: baseline; line-height: 1.35; }
+.cv-list span::before { content: ''; flex: 0 0 8px; width: 8px; height: 8px; border-radius: 50%; background: var(--amber); position: relative; top: -1px; }
+.cv-cov { border: 1px solid var(--line); border-radius: 14px; padding: 9px 11px; background: var(--card); }
+.cv-cov-l { font-size: 11px; font-weight: 700; display: flex; justify-content: space-between; }
+.cv-due { font-weight: 700; color: var(--muted); }
+.cv-due.is-ok { color: var(--sage); }
+.cv-due.is-bad { color: var(--coral); }
+.cv-cov-row { display: flex; align-items: center; gap: 9px; margin-top: 5px; }
+.cv-track { flex: 1 1 auto; height: 8px; border-radius: 999px; background: var(--lav); overflow: hidden; }
+.cv-track i { display: block; height: 100%; width: 0; border-radius: 999px; background: linear-gradient(90deg, var(--amber), var(--orange)); transition: width 0.5s ease; }
+.cv-pct { font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums; }
+
+.pages { width: 0; flex: 0 0 auto; display: flex; flex-direction: row; align-items: center;
+  transition: width 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.15s ease, visibility 0s linear 0.3s; }
+.sheet:not(.is-open) .pages { opacity: 0; visibility: hidden; }
+.sheet.is-open .pages {
+  width: calc(var(--n) * (var(--card-w) + var(--gap)) + (var(--view) - var(--card-w)) / 2);
+  opacity: 1; visibility: visible;
+  transition: width 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s ease 0.2s, visibility 0s;
+}

@@ -1,0 +1,1979 @@
+{
+  "meta": {
+    "title": "Complex Analysis I — Module I: Complex Numbers, the Complex Plane and Polar Form",
+    "subject": "Complex Analysis I (MAT5CJ303, Sem 5)",
+    "home": "Focus",
+    "opponent": "Time",
+    "version": 1,
+    "inlineChecks": false,
+    "autoRevealQuestions": true,
+    "definitionChecks": true,
+    "date": "",
+    "sessions": []
+  },
+  "match": {
+    "periodEnds": [25, 45, 70, 90],
+    "breaks": [5, 10, 5]
+  },
+  "glossary": [
+    {
+      "id": "ca-m1-imaginary-unit",
+      "term": "imaginary unit",
+      "definition": "The imaginary unit is the number \\(i\\) defined by the property that its square is negative one, \\(i^2 = -1\\).",
+      "example": "Using \\(i^2 = -1\\), we have \\((6i)^2 = 36i^2 = -36\\)."
+    },
+    {
+      "id": "ca-m1-complex-number",
+      "term": "complex number",
+      "aliases": ["complex numbers"],
+      "definition": "A complex number is any number of the form \\(z = a + ib\\) where \\(a\\) and \\(b\\) are real numbers and \\(i\\) is the imaginary unit.",
+      "example": "In Definition 1.1.1, \\(z = 4 - 9i\\) is a complex number with \\(a = 4\\) and \\(b = -9\\)."
+    },
+    {
+      "id": "ca-m1-real-and-imaginary-parts",
+      "term": "real and imaginary parts",
+      "aliases": ["real part", "imaginary part", "pure imaginary number"],
+      "definition": "In \\(z = a + ib\\), the real number \\(a = \\text{Re}(z)\\) is the real part, the real number \\(b = \\text{Im}(z)\\) is the imaginary part, and \\(ib\\) (when \\(a = 0\\)) is a pure imaginary number.",
+      "example": "For \\(z = 4 - 9i\\), \\(\\text{Re}(z) = 4\\) and \\(\\text{Im}(z) = -9\\) (not \\(-9i\\)); \\(z = 6i\\) is pure imaginary."
+    },
+    {
+      "id": "ca-m1-equality",
+      "term": "equality of complex numbers",
+      "definition": "Two complex numbers \\(z_1 = a_1 + ib_1\\) and \\(z_2 = a_2 + ib_2\\) are equal, \\(z_1 = z_2\\), if and only if \\(a_1 = a_2\\) and \\(b_1 = b_2\\).",
+      "example": "By Definition 1.1.2, \\(z_1 = z_2\\) means \\(\\text{Re}(z_1) = \\text{Re}(z_2)\\) and \\(\\text{Im}(z_1) = \\text{Im}(z_2)\\)."
+    },
+    {
+      "id": "ca-m1-complex-conjugate",
+      "term": "complex conjugate",
+      "aliases": ["conjugate"],
+      "definition": "The complex conjugate of \\(z = a + ib\\), written \\(\\bar{z}\\), is the complex number \\(\\bar{z} = a - ib\\) obtained by changing the sign of the imaginary part.",
+      "example": "If \\(z = 6 + 3i\\), then \\(\\bar{z} = 6 - 3i\\) and \\(z\\bar{z} = 6^2 + 3^2 = 45\\)."
+    },
+    {
+      "id": "ca-m1-multiplicative-inverse",
+      "term": "multiplicative inverse",
+      "aliases": ["reciprocal", "additive inverse"],
+      "definition": "For a nonzero complex number \\(z\\), the multiplicative inverse (or reciprocal) is the unique number \\(z^{-1} = 1/z\\) such that \\(zz^{-1} = 1\\), while \\(-z = -a - ib\\) is the additive inverse.",
+      "example": "In Example 3 of §1.1, the reciprocal of \\(z = 2 - 3i\\) is \\(z^{-1} = \\frac{2}{13} + \\frac{3}{13}i\\)."
+    },
+    {
+      "id": "ca-m1-complex-plane",
+      "term": "complex plane",
+      "aliases": ["z-plane", "real axis", "imaginary axis"],
+      "definition": "The complex plane (or \\(z\\)-plane) is the coordinate plane in which \\(z = x + iy\\) is plotted as the point \\((x, y)\\), with the horizontal real axis and vertical imaginary axis.",
+      "example": "The number \\(z = 2 - 3i\\) corresponds to the point \\((2, -3)\\) in the \\(z\\)-plane."
+    },
+    {
+      "id": "ca-m1-modulus",
+      "term": "modulus",
+      "aliases": ["absolute value"],
+      "definition": "The modulus (or absolute value) of a complex number \\(z = x + iy\\) is the nonnegative real number \\(|z| = \\sqrt{x^2 + y^2}\\), equal to the distance from the origin to \\((x, y)\\).",
+      "example": "In Example 1 of §1.2, \\(|2 - 3i| = \\sqrt{2^2 + (-3)^2} = \\sqrt{13}\\) and \\(|-9i| = 9\\)."
+    },
+    {
+      "id": "ca-m1-distance",
+      "term": "distance between two points",
+      "definition": "The distance between two points \\(z_1 = x_1 + iy_1\\) and \\(z_2 = x_2 + iy_2\\) in the complex plane is \\(|z_2 - z_1| = \\sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}\\).",
+      "example": "In Example 2 of §1.2, \\(|z| = |z - i|\\) means \\(z\\) is equidistant from \\(0\\) and \\(i\\)."
+    },
+    {
+      "id": "ca-m1-triangle-inequality",
+      "term": "triangle inequality",
+      "definition": "The triangle inequality states that for any two complex numbers \\(z_1\\) and \\(z_2\\), \\(|z_1 + z_2| \\le |z_1| + |z_2|\\), with lower bound \\(\\big||z_1| - |z_2|\\big| \\le |z_1 + z_2|\\).",
+      "example": "Geometrically, the side \\(z_1 + z_2\\) of a vector triangle cannot exceed the sum of the other two sides."
+    },
+    {
+      "id": "ca-m1-polar-form",
+      "term": "polar form",
+      "aliases": ["polar representation"],
+      "definition": "The polar form of a nonzero complex number \\(z = x + iy\\) is \\(z = r(\\cos\\theta + i\\sin\\theta)\\), where \\(r = |z|\\) is the modulus and \\(\\theta = \\arg(z)\\) is an argument of \\(z\\).",
+      "example": "In Example 1 of §1.3, \\(-\\sqrt{3} - i = 2\\left(\\cos\\frac{7\\pi}{6} + i\\sin\\frac{7\\pi}{6}\\right)\\)."
+    },
+    {
+      "id": "ca-m1-argument",
+      "term": "argument",
+      "definition": "An argument of a nonzero complex number \\(z = x + iy\\), denoted \\(\\theta = \\arg(z)\\), is any radian angle of inclination from the positive real axis satisfying \\(\\cos\\theta = x/r\\) and \\(\\sin\\theta = y/r\\).",
+      "example": "Because sine and cosine have period \\(2\\pi\\), if \\(\\theta_0\\) is an argument of \\(z\\), then \\(\\theta_0 \\pm 2n\\pi\\) are also arguments."
+    },
+    {
+      "id": "ca-m1-principal-argument",
+      "term": "principal argument",
+      "aliases": ["principal value of arg(z)"],
+      "definition": "The principal argument of a nonzero complex number \\(z\\), denoted \\(\\text{Arg}(z)\\), is the unique argument \\(\\theta\\) of \\(z\\) that lies in the interval \\(-\\pi < \\theta \\le \\pi\\).",
+      "example": "For \\(z = -\\sqrt{3} - i\\), \\(\\text{Arg}(z) = -5\\pi/6\\), whereas \\(7\\pi/6\\) is a non-principal argument."
+    },
+    {
+      "id": "ca-m1-de-moivres-formula",
+      "term": "de Moivre's formula",
+      "aliases": ["De Moivre's formula"],
+      "definition": "De Moivre's formula states that for any angle \\(\\theta\\) and any integer \\(n\\), \\((\\cos\\theta + i\\sin\\theta)^n = \\cos n\\theta + i\\sin n\\theta\\).",
+      "example": "In Example 4 of §1.3, \\(\\left(\\frac{\\sqrt{3}}{2} + \\frac{1}{2}i\\right)^3 = \\cos\\frac{3\\pi}{6} + i\\sin\\frac{3\\pi}{6} = i\\)."
+    },
+    {
+      "id": "ca-m1-nth-root",
+      "term": "nth root",
+      "aliases": ["nth roots"],
+      "definition": "An \\(n\\)th root of a nonzero complex number \\(z\\) is any complex number \\(w\\) satisfying \\(w^n = z\\), given for \\(k = 0, 1, \\dots, n - 1\\) by Equation (4) of §1.4.",
+      "example": "Every nonzero complex number \\(z\\) has exactly \\(n\\) distinct \\(n\\)th roots \\(w_0, w_1, \\dots, w_{n-1}\\)."
+    },
+    {
+      "id": "ca-m1-principal-nth-root",
+      "term": "principal nth root",
+      "definition": "The principal \\(n\\)th root of a nonzero complex number \\(z\\) is the unique root \\(w_0\\) obtained from the \\(n\\)th-root formula by taking \\(\\theta = \\text{Arg}(z)\\) and \\(k = 0\\).",
+      "example": "In Example 1 of §1.4, since \\(\\text{Arg}(i) = \\pi/2\\), the principal cube root of \\(i\\) is \\(w_0 = \\frac{\\sqrt{3}}{2} + \\frac{1}{2}i\\)."
+    },
+    {
+      "id": "ca-m1-neighborhood",
+      "term": "neighborhood",
+      "aliases": ["open disk", "closed disk", "deleted neighborhood"],
+      "definition": "A neighborhood (or open disk) of \\(z_0\\) is the set of points satisfying \\(|z - z_0| < \\rho\\), whereas \\(|z - z_0| \\le \\rho\\) is a closed disk and \\(0 < |z - z_0| < \\rho\\) is a deleted neighborhood.",
+      "example": "The inequality \\(|z| < 1\\) defines a neighborhood of the origin, and \\(0 < |z| < 1\\) defines a deleted neighborhood."
+    },
+    {
+      "id": "ca-m1-open-set",
+      "term": "open set",
+      "aliases": ["interior point"],
+      "definition": "A point \\(z_0\\) is an interior point of \\(S\\) if some neighborhood of \\(z_0\\) lies entirely within \\(S\\); \\(S\\) is an open set if every point of \\(S\\) is an interior point.",
+      "example": "The right half-plane \\(\\text{Re}(z) > 1\\) is an open set, whereas \\(\\text{Re}(z) \\ge 1\\) is not open."
+    },
+    {
+      "id": "ca-m1-boundary",
+      "term": "boundary",
+      "aliases": ["boundary point", "exterior point"],
+      "definition": "A point \\(z_0\\) is a boundary point of \\(S\\) if every neighborhood of \\(z_0\\) contains a point in \\(S\\) and a point not in \\(S\\); the set of all boundary points is the boundary of \\(S\\).",
+      "example": "The circle \\(|z - i| = 2\\) is the boundary of both \\(|z - i| \\le 2\\) and \\(|z - i| < 2\\)."
+    },
+    {
+      "id": "ca-m1-annulus",
+      "term": "open circular annulus",
+      "aliases": ["annulus"],
+      "definition": "An open circular annulus centered at \\(z_0\\) is the open circular ring of points satisfying \\(\\rho_1 < |z - z_0| < \\rho_2\\) for \\(0 < \\rho_1 < \\rho_2\\).",
+      "example": "In Figure 1.5.5(d), \\(1 < |z| < 2\\) is an open circular annulus centered at the origin."
+    },
+    {
+      "id": "ca-m1-connected-set",
+      "term": "connected set",
+      "definition": "A set \\(S\\) is connected if any pair of points \\(z_1\\) and \\(z_2\\) in \\(S\\) can be joined by a polygonal line of finitely many line segments lying entirely inside \\(S\\).",
+      "example": "The set \\(\\text{Re}(z) \\neq 4\\) is open but not connected because no polygonal line in the set can cross \\(x = 4\\)."
+    },
+    {
+      "id": "ca-m1-domain",
+      "term": "domain",
+      "definition": "A domain in the complex plane is a set \\(S\\) that is both an open set and a connected set.",
+      "example": "The open lower half-plane \\(\\text{Im}(z) < 0\\) and the open ring \\(1 < |z| < 2\\) are both domains."
+    },
+    {
+      "id": "ca-m1-closed-set",
+      "term": "closed set",
+      "aliases": ["region"],
+      "definition": "A closed set is a set that contains all of its boundary points, while a region is a domain together with all, some, or none of its boundary points.",
+      "example": "The closed disk \\(|z - z_0| \\le \\rho\\) is closed, whereas \\(1 \\le |z - 5| < 3\\) is a region that is neither open nor closed."
+    },
+    {
+      "id": "ca-m1-bounded-set",
+      "term": "bounded set",
+      "aliases": ["unbounded set"],
+      "definition": "A set \\(S\\) is bounded if there exists a real number \\(R > 0\\) such that \\(|z| < R\\) for every \\(z\\) in \\(S\\); otherwise \\(S\\) is unbounded.",
+      "example": "The annulus \\(1 < |z| < 2\\) is bounded, whereas the half-plane \\(\\text{Im}(z) < 0\\) is unbounded."
+    },
+    {
+      "id": "ca-m1-riemann-sphere",
+      "term": "Riemann sphere",
+      "aliases": ["stereographic projection", "point at infinity", "extended complex-number system"],
+      "definition": "The Riemann sphere is the unit sphere \\(x^2 + y^2 + u^2 = 1\\) onto which the complex plane is mapped by stereographic projection from the north pole \\((0, 0, 1)\\), which represents \\(\\infty\\).",
+      "example": "Adjoining the ideal point at infinity \\(\\infty\\) to \\(\\mathbf{C}\\) gives the extended complex-number system."
+    }
+  ],
+  "sections": [
+    {
+      "id": "ca-m1-section-1",
+      "short": "Module I",
+      "title": "Module I",
+      "sheets": [
+        {
+          "id": "ca-m1-unit-1",
+          "title": "Complex Numbers and Their Properties",
+          "icon": "sigma",
+          "source": "Unit 1 · Zill & Shanahan §1.1",
+          "cards": [
+            {
+              "id": "ca-m1-u1-c1",
+              "type": "intuition",
+              "term": "ca-m1-complex-number",
+              "title": "Extending real numbers with the imaginary unit i",
+              "meaning": "A complex number combines a real part a and an imaginary part b using the imaginary unit i, whose square is -1.",
+              "art": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"22\" y=\"48\" width=\"94\" height=\"64\" class=\"s ok\"/><rect x=\"144\" y=\"48\" width=\"94\" height=\"64\" class=\"s ok\"/><circle cx=\"130\" cy=\"80\" r=\"10\" class=\"f\"/><text x=\"130\" y=\"84\" text-anchor=\"middle\" class=\"i\">+</text><text x=\"69\" y=\"74\" text-anchor=\"middle\" class=\"t\">Real part</text><text x=\"69\" y=\"96\" text-anchor=\"middle\" class=\"t\">a = Re(z)</text><text x=\"191\" y=\"74\" text-anchor=\"middle\" class=\"t\">Imaginary part</text><text x=\"191\" y=\"96\" text-anchor=\"middle\" class=\"t\">b = Im(z) (× i)</text><text x=\"130\" y=\"146\" text-anchor=\"middle\" class=\"t\">z = a + ib, where i² = -1</text></svg>",
+              "picture": "Each complex number z = a + ib pairs two real numbers a and b, with i² = -1.",
+              "example": "In z = 4 - 9i, the real part is 4 and the imaginary part is the real number -9, not -9i.",
+              "bridge": "Definition 1.1.1 and Definition 1.1.2 formalize complex numbers and when two of them are equal."
+            },
+            {
+              "id": "ca-m1-u1-c2",
+              "type": "info",
+              "label": "01 · §1.1",
+              "title": "What is a complex number?",
+              "defines": ["ca-m1-imaginary-unit", "ca-m1-complex-number", "ca-m1-real-and-imaginary-parts"],
+              "body": "A complex number is any number \\(z = a + ib\\) where \\(a = \\text{Re}(z)\\) and \\(b = \\text{Im}(z)\\) are real numbers and the imaginary unit \\(i\\) satisfies \\(i^2 = -1\\).",
+              "tex": "z = a + ib, \\quad i^2 = -1, \\quad a = \\text{Re}(z), \\quad b = \\text{Im}(z)",
+              "examples": ["Def. 1.1.1", "z = 4 - 9i: Im(z) = -9", "Pure imaginary: 6i"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "parts",
+                    "objects": [
+                      { "type": "polygon", "points": [[24, 62], [24, 128], [118, 128], [118, 62]], "role": "s ok", "name": "realbox" },
+                      { "type": "polygon", "points": [[142, 62], [142, 128], [236, 128], [236, 62]], "role": "s ok", "name": "imagbox" },
+                      { "type": "label", "coords": [71, 102], "text": "a = Re(z)", "size": 11, "align": "center", "role": "t", "name": "realbox" },
+                      { "type": "label", "coords": [71, 78], "text": "Re(4 - 9i) = 4", "size": 11, "align": "center", "role": "t", "name": "realbox" },
+                      { "type": "label", "coords": [189, 102], "text": "b = Im(z)", "size": 11, "align": "center", "role": "t", "name": "imagbox" },
+                      { "type": "label", "coords": [189, 78], "text": "Im(4 - 9i) = -9", "size": 11, "align": "center", "role": "t", "name": "imagbox" },
+                      { "type": "label", "coords": [130, 32], "text": "Def. 1.1.1: z = a + ib with i² = -1", "size": 11, "align": "center", "role": "t", "name": "realbox" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "ca-m1-u1-c3",
+              "type": "info",
+              "label": "02 · §1.1",
+              "title": "What is equality of complex numbers?",
+              "defines": ["ca-m1-equality"],
+              "body": "Two complex numbers are equal if and only if their real parts are equal and their imaginary parts are equal: \\(a_1 = a_2\\) and \\(b_1 = b_2\\).",
+              "tex": "z_1 + z_2 = (a_1 + a_2) + i(b_1 + b_2), \\qquad z_1 z_2 = (a_1 a_2 - b_1 b_2) + i(b_1 a_2 + a_1 b_2)",
+              "examples": ["Def. 1.1.2: Equality", "Example 1: z₁ + z₂, z₁z₂", "0 = 0 + 0i, 1 = 1 + 0i"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "arith",
+                    "objects": [
+                      { "type": "polygon", "points": [[20, 98], [20, 148], [240, 148], [240, 98]], "role": "s ok", "name": "sum" },
+                      { "type": "polygon", "points": [[20, 30], [20, 80], [240, 80], [240, 30]], "role": "s ok", "name": "prod" },
+                      { "type": "label", "coords": [130, 123], "text": "Ex. 1(a): (2+4i) + (-3+8i) = -1 + 12i", "size": 11, "align": "center", "role": "t", "name": "sum" },
+                      { "type": "label", "coords": [130, 55], "text": "Ex. 1(b): (2+4i)(-3+8i) = -38 + 4i", "size": 11, "align": "center", "role": "t", "name": "prod" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "ca-m1-u1-c4",
+              "type": "intuition",
+              "term": "ca-m1-complex-conjugate",
+              "title": "Why changing +ib to -ib turns multiplication into a real sum of squares",
+              "meaning": "The complex conjugate z̄ = a - ib reverses the sign of the imaginary part so that z and z̄ multiply to the real number a² + b².",
+              "art": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"20\" y=\"34\" width=\"96\" height=\"46\" class=\"s ok\"/><rect x=\"144\" y=\"34\" width=\"96\" height=\"46\" class=\"s ok\"/><line x1=\"68\" y1=\"80\" x2=\"122\" y2=\"120\" class=\"lk\"/><line x1=\"192\" y1=\"80\" x2=\"138\" y2=\"120\" class=\"lk\"/><rect x=\"58\" y=\"120\" width=\"144\" height=\"40\" class=\"f\"/><text x=\"68\" y=\"62\" text-anchor=\"middle\" class=\"t\">z = a + ib</text><text x=\"192\" y=\"62\" text-anchor=\"middle\" class=\"t\">z̄ = a - ib</text><text x=\"130\" y=\"144\" text-anchor=\"middle\" class=\"i\">z z̄ = a² + b² (real)</text></svg>",
+              "picture": "Multiplying z = a + ib by its conjugate z̄ = a - ib cancels the cross terms and leaves a² + b².",
+              "example": "For z = 4 + 6i, the conjugate is z̄ = 4 - 6i and their product is 4² + 6² = 52.",
+              "bridge": "Equation (4) z z̄ = a² + b² allows us to divide complex numbers in Equation (7) by clearing i from the denominator."
+            },
+            {
+              "id": "ca-m1-u1-c5",
+              "type": "info",
+              "label": "03 · §1.1",
+              "title": "What is the complex conjugate?",
+              "defines": ["ca-m1-complex-conjugate"],
+              "body": "The complex conjugate of \\(z = a + ib\\) is \\(\\bar{z} = a - ib\\), formed by changing the sign of the imaginary part so that \\(z\\bar{z} = a^2 + b^2\\).",
+              "tex": "\\overline{z_1 \\pm z_2} = \\bar{z}_1 \\pm \\bar{z}_2, \\quad \\overline{z_1 z_2} = \\bar{z}_1\\bar{z}_2, \\quad \\overline{\\left(\\frac{z_1}{z_2}\\right)} = \\frac{\\bar{z}_1}{\\bar{z}_2}, \\quad \\text{Re}(z) = \\frac{z + \\bar{z}}{2}, \\quad \\text{Im}(z) = \\frac{z - \\bar{z}}{2i}",
+              "examples": ["Equations (1)–(6)", "z + z̄ = 2a", "z z̄ = a² + b²"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "conj",
+                    "objects": [
+                      { "type": "polygon", "points": [[22, 102], [22, 150], [122, 150], [122, 102]], "role": "s ok", "name": "sumz" },
+                      { "type": "polygon", "points": [[138, 102], [138, 150], [238, 150], [238, 102]], "role": "s ok", "name": "diffz" },
+                      { "type": "polygon", "points": [[46, 30], [46, 78], [214, 78], [214, 30]], "role": "f", "name": "prodz" },
+                      { "type": "label", "coords": [72, 126], "text": "Eq. (3): z + z̄ = 2a", "size": 11, "align": "center", "role": "t", "name": "sumz" },
+                      { "type": "label", "coords": [188, 126], "text": "Eq. (5): z - z̄ = 2ib", "size": 11, "align": "center", "role": "t", "name": "diffz" },
+                      { "type": "label", "coords": [130, 54], "text": "Eq. (4): z z̄ = a² + b²", "size": 11, "align": "center", "role": "i", "name": "prodz" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "ca-m1-u1-c6",
+              "type": "info",
+              "label": "04 · §1.1",
+              "title": "What are inverses, and why is C not ordered?",
+              "defines": ["ca-m1-multiplicative-inverse"],
+              "body": "Every \\(z\\) has additive inverse \\(-z\\), every nonzero \\(z\\) has reciprocal \\(z^{-1} = 1/z\\), and \\(\\mathbf{C}\\) has no order relation since \\(i^2 = (-i)^2 = -1\\).",
+              "tex": "z^{-1} = \\frac{1}{z} = \\frac{\\bar{z}}{z\\bar{z}}, \\qquad (2 - 3i)^{-1} = \\frac{2}{13} + \\frac{3}{13}i",
+              "examples": ["Ex. 3: (2-3i)⁻¹", "Remark (i) & Prob. 55", "z₁ < z₂ meaningless"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "invorder",
+                    "objects": [
+                      { "type": "polygon", "points": [[20, 96], [20, 148], [240, 148], [240, 96]], "role": "s ok", "name": "inv" },
+                      { "type": "polygon", "points": [[20, 28], [20, 80], [240, 80], [240, 28]], "role": "s ok", "name": "order" },
+                      { "type": "label", "coords": [130, 122], "text": "Ex. 3: 1/(2 - 3i) = 2/13 + (3/13)i", "size": 11, "align": "center", "role": "t", "name": "inv" },
+                      { "type": "label", "coords": [130, 54], "text": "Prob. 55: no positive set P in C (i² = -1)", "size": 11, "align": "center", "role": "t", "name": "order" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "ca-m1-u1-c7",
+              "type": "derivation",
+              "label": "Example 2 · §1.1",
+              "title": "Example 2: Division using the conjugate (Equation (7))",
+              "legend": "\\(z_1 = 2 - 3i\\) numerator, \\(z_2 = 4 + 6i\\) denominator, \\(\\bar{z}_2 = 4 - 6i\\) conjugate of \\(z_2\\).",
+              "setup": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "frac",
+                    "objects": [
+                      { "type": "polygon", "points": [[22, 110], [22, 154], [122, 154], [122, 110]], "role": "s ok", "name": "frac" },
+                      { "type": "polygon", "points": [[138, 110], [138, 154], [238, 154], [238, 110]], "role": "s ok", "name": "conj" },
+                      { "type": "label", "coords": [72, 132], "text": "z₁/z₂ = (2-3i)/(4+6i)", "size": 11, "align": "center", "role": "t", "name": "frac" },
+                      { "type": "label", "coords": [188, 132], "text": "Multiply by z̄₂ = 4-6i", "size": 11, "align": "center", "role": "t", "name": "conj" }
+                    ]
+                  },
+                  {
+                    "step": 3,
+                    "name": "realden",
+                    "objects": [
+                      { "type": "polygon", "points": [[36, 32], [36, 82], [224, 82], [224, 32]], "role": "f", "name": "realden" },
+                      { "type": "label", "coords": [130, 57], "text": "z₁/z₂ = -5/26 - (6/13)i", "size": 11, "align": "center", "role": "i", "name": "realden" }
+                    ]
+                  }
+                ]
+              },
+              "phases": [
+                { "name": "Conjugate rule", "why": "multiply numerator and denominator by z̄₂ = 4 - 6i" },
+                { "name": "Expand", "why": "use distributive law on top and z₂z̄₂ = a₂² + b₂² on bottom" },
+                { "name": "Simplify i²", "why": "replace i² by -1 and combine real and imaginary terms" },
+                { "name": "Standard form", "why": "split into a + bi and reduce fractions to lowest terms" }
+              ],
+              "steps": [
+                {
+                  "phase": "Conjugate rule",
+                  "tex": "\\frac{z_1}{z_2} = \\frac{2 - 3i}{4 + 6i}",
+                  "focus": ["frac"],
+                  "note": "Start with \\(z_1 = 2 - 3i\\) and \\(z_2 = 4 + 6i\\) from Example 2.",
+                  "ask": {
+                    "q": "By Equation (7), what do we multiply top and bottom by?",
+                    "options": [
+                      "The conjugate \\(\\bar{z}_2 = 4 - 6i\\)",
+                      "The numerator \\(2 - 3i\\)",
+                      "The conjugate \\(2 + 3i\\)",
+                      "The imaginary unit \\(i\\)"
+                    ],
+                    "answer": 0,
+                    "why": "Equation (7) multiplies numerator and denominator by the conjugate z̄₂ = 4 - 6i of the denominator."
+                  }
+                },
+                {
+                  "move": { "type": "substitute", "by": "\\frac{z_1}{z_2} = \\frac{z_1\\bar{z}_2}{z_2\\bar{z}_2}" },
+                  "tex": "\\frac{z_1}{z_2} = \\frac{(2 - 3i)(4 - 6i)}{(4 + 6i)(4 - 6i)}",
+                  "focus": ["frac", "conj"],
+                  "note": "Multiply numerator and denominator by \\(\\bar{z}_2 = 4 - 6i\\).",
+                  "ask": {
+                    "q": "By Equation (4), what does the denominator \\((4 + 6i)(4 - 6i)\\) equal?",
+                    "options": [
+                      "\\(4^2 - 6^2\\)",
+                      "\\(4^2 + 6^2\\)",
+                      "\\(16 - 36i\\)",
+                      "\\(4 + 6\\)"
+                    ],
+                    "answer": 1,
+                    "why": "By Equation (4), z₂z̄₂ = a₂² + b₂² = 4² + 6²."
+                  }
+                },
+                {
+                  "phase": "Expand",
+                  "move": { "type": "expand" },
+                  "tex": "\\frac{z_1}{z_2} = \\frac{8 - 12i - 12i + 18i^2}{4^2 + 6^2}",
+                  "focus": ["conj"],
+                  "note": "Expand the numerator by the distributive law and write the denominator as \\(4^2 + 6^2\\).",
+                  "ask": {
+                    "q": "Since \\(i^2 = -1\\), what does \\(8 - 12i - 12i + 18i^2\\) simplify to?",
+                    "options": [
+                      "\\(26 - 24i\\)",
+                      "\\(-10 + 24i\\)",
+                      "\\(-10 - 24i\\)",
+                      "\\(8 - 6i\\)"
+                    ],
+                    "answer": 2,
+                    "why": "Replacing 18i² with -18 gives (8 - 18) + (-12 - 12)i = -10 - 24i."
+                  }
+                },
+                {
+                  "phase": "Simplify i²",
+                  "move": { "type": "simplify" },
+                  "tex": "\\frac{z_1}{z_2} = \\frac{-10 - 24i}{52}",
+                  "focus": ["conj", "realden"],
+                  "note": "Combine \\(8 - 18 = -10\\), \\(-12i - 12i = -24i\\), and \\(16 + 36 = 52\\).",
+                  "ask": {
+                    "q": "How do we write \\(\\frac{-10 - 24i}{52}\\) in reduced \\(a + bi\\) form?",
+                    "options": [
+                      "\\(-\\frac{5}{26} + \\frac{6}{13}i\\)",
+                      "\\(\\frac{5}{26} - \\frac{6}{13}i\\)",
+                      "\\(-\\frac{10}{26} - \\frac{24}{13}i\\)",
+                      "\\(-\\frac{5}{26} - \\frac{6}{13}i\\)"
+                    ],
+                    "answer": 3,
+                    "why": "Dividing both terms by 52 gives -10/52 - (24/52)i = -5/26 - (6/13)i."
+                  }
+                },
+                {
+                  "phase": "Standard form",
+                  "move": { "type": "simplify" },
+                  "tex": "\\frac{z_1}{z_2} = -\\frac{5}{26} - \\frac{6}{13}i",
+                  "focus": ["realden"],
+                  "note": "Divide the real and imaginary parts by \\(52\\) and reduce to lowest terms."
+                }
+              ]
+            },
+            {
+              "id": "ca-m1-u1-c8",
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "For the complex number \\(z = 4 - 9i\\), what is the imaginary part \\(\\text{Im}(z)\\)?",
+              "options": [
+                "\\(-9i\\)",
+                "\\(-9\\)",
+                "\\(9\\)",
+                "\\(4\\)"
+              ],
+              "answer": 1,
+              "why": "In z = a + ib, the imaginary part Im(z) is the real number b = -9, not -9i."
+            },
+            {
+              "id": "ca-m1-u1-c9",
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "In Example 1 of §1.1, what is the product \\((2 + 4i)(-3 + 8i)\\)?",
+              "options": [
+                "\\(-6 + 32i\\)",
+                "\\(26 + 4i\\)",
+                "\\(-38 + 4i\\)",
+                "\\(-1 + 12i\\)"
+              ],
+              "answer": 2,
+              "why": "Using the distributive law and i² = -1 gives -6 + 16i - 12i + 32i² = -38 + 4i."
+            },
+            {
+              "id": "ca-m1-u1-c10",
+              "type": "fill",
+              "label": "Quiz · Fill in",
+              "time": 60,
+              "q": "The number \\(\\bar{z} = a - ib\\) obtained by changing the sign of \\(\\text{Im}(z)\\) is the complex ______ of \\(z\\).",
+              "answer": "conjugate|complex conjugate",
+              "why": "Changing the sign of the imaginary part of z = a + ib gives its complex conjugate z̄ = a - ib."
+            },
+            {
+              "id": "ca-m1-u1-c11",
+              "type": "number",
+              "label": "Quiz · Number",
+              "time": 60,
+              "q": "By Equation (4) of §1.1, what is the value of \\(z\\bar{z}\\) when \\(z = 2 - 3i\\)?",
+              "answer": 13,
+              "tolerance": 0,
+              "unit": "",
+              "why": "By Equation (4), z z̄ = a² + b² = 2² + (-3)² = 4 + 9 = 13."
+            }
+          ]
+        },
+        {
+          "id": "ca-m1-unit-2",
+          "title": "Complex Plane",
+          "icon": "graph",
+          "source": "Unit 2 · Zill & Shanahan §1.2",
+          "cards": [
+            {
+              "id": "ca-m1-u2-c1",
+              "type": "intuition",
+              "term": "ca-m1-modulus",
+              "title": "Viewing a complex number as a point and a position vector",
+              "meaning": "Every complex number z = x + iy sits at (x, y) in the complex plane at distance |z| = √(x² + y²) from the origin.",
+              "art": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"24\" y1=\"138\" x2=\"236\" y2=\"138\" class=\"ik\"/><line x1=\"64\" y1=\"162\" x2=\"64\" y2=\"20\" class=\"ik\"/><line x1=\"64\" y1=\"138\" x2=\"184\" y2=\"54\" class=\"lk\"/><line x1=\"184\" y1=\"138\" x2=\"184\" y2=\"54\" class=\"gk\"/><circle cx=\"184\" cy=\"54\" r=\"4\" class=\"f\"/><text x=\"188\" y=\"44\" class=\"t\">z = x + iy (x, y)</text><text x=\"112\" y=\"84\" class=\"t\">|z| = √(x²+y²)</text><text x=\"124\" y=\"154\" text-anchor=\"middle\" class=\"t\">x</text><text x=\"198\" y=\"98\" class=\"t\">y</text><text x=\"222\" y=\"154\" class=\"t\">Real</text><text x=\"88\" y=\"30\" class=\"t\">Imaginary</text></svg>",
+              "picture": "Look at Figure 1.2.2: the right triangle with legs x and y has hypotenuse |z| = √(x² + y²).",
+              "example": "For z = 2 - 3i at (2, -3), the distance from the origin is |z| = √(2² + (-3)²) = √13.",
+              "bridge": "Definition 1.2.1 calls this distance the modulus (or absolute value) of z."
+            },
+            {
+              "id": "ca-m1-u2-c2",
+              "type": "info",
+              "label": "01 · §1.2",
+              "title": "What are the complex plane and the modulus of z?",
+              "defines": ["ca-m1-complex-plane", "ca-m1-modulus"],
+              "body": "The complex plane plots \\(z = x + iy\\) at \\((x, y)\\), and the modulus \\(|z| = \\sqrt{x^2 + y^2}\\) is the distance from the origin to \\((x, y)\\).",
+              "tex": "|z| = \\sqrt{x^2 + y^2}, \\quad |z|^2 = z\\bar{z}, \\quad |z_1 z_2| = |z_1||z_2|, \\quad \\left|\\frac{z_1}{z_2}\\right| = \\frac{|z_1|}{|z_2|}, \\quad |z^2| = |z|^2",
+              "examples": ["Def. 1.2.1: Modulus", "Ex. 1: |2 - 3i| = √13", "Equations (1)–(4)"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "zplane",
+                    "objects": [
+                      { "type": "segment", "p1": [22, 42], "p2": [238, 42], "role": "ik", "width": 2, "name": "realax" },
+                      { "type": "segment", "p1": [64, 18], "p2": [64, 162], "role": "ik", "width": 2, "name": "imagax" },
+                      { "type": "arrow", "p1": [64, 42], "p2": [182, 134], "role": "lk", "width": 2.2, "name": "vecz" },
+                      { "type": "segment", "p1": [182, 42], "p2": [182, 134], "role": "gk", "dash": 2, "width": 1.6, "name": "drop" },
+                      { "type": "point", "coords": [182, 134], "size": 4, "role": "f", "name": "ptz" },
+                      { "type": "label", "coords": [182, 148], "text": "z = x + iy", "size": 11, "align": "center", "role": "t", "name": "ptz" },
+                      { "type": "label", "coords": [112, 102], "text": "|z| = √(x²+y²)", "size": 11, "align": "center", "role": "t", "name": "vecz" },
+                      { "type": "label", "coords": [224, 26], "text": "Real", "size": 11, "align": "center", "role": "t", "name": "realax" },
+                      { "type": "label", "coords": [92, 156], "text": "Imag", "size": 11, "align": "center", "role": "t", "name": "imagax" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "ca-m1-u2-c3",
+              "type": "info",
+              "label": "02 · §1.2",
+              "title": "What is the distance between two points in the complex plane?",
+              "defines": ["ca-m1-distance"],
+              "body": "The distance between two points \\(z_1 = x_1 + iy_1\\) and \\(z_2 = x_2 + iy_2\\) in the complex plane is the modulus of their difference, \\(|z_2 - z_1|\\).",
+              "tex": "|z_2 - z_1| = \\sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}",
+              "examples": ["Equation (5)", "Vector z₂ - z₁", "Ex. 2: |z| = |z - i|"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "distvec",
+                    "objects": [
+                      { "type": "segment", "p1": [22, 34], "p2": [238, 34], "role": "ik", "width": 2, "name": "xax" },
+                      { "type": "segment", "p1": [48, 18], "p2": [48, 162], "role": "ik", "width": 2, "name": "yax" },
+                      { "type": "arrow", "p1": [48, 34], "p2": [196, 68], "role": "ik", "width": 2, "name": "z1" },
+                      { "type": "arrow", "p1": [48, 34], "p2": [114, 138], "role": "ik", "width": 2, "name": "z2" },
+                      { "type": "arrow", "p1": [196, 68], "p2": [114, 138], "role": "lk", "width": 2.4, "name": "diff" },
+                      { "type": "label", "coords": [212, 68], "text": "z₁", "size": 11, "align": "center", "role": "t", "name": "z1" },
+                      { "type": "label", "coords": [114, 152], "text": "z₂", "size": 11, "align": "center", "role": "t", "name": "z2" },
+                      { "type": "label", "coords": [174, 116], "text": "|z₂ - z₁|", "size": 11, "align": "center", "role": "t", "name": "diff" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "ca-m1-u2-c4",
+              "type": "info",
+              "label": "03 · §1.2",
+              "title": "What is the triangle inequality?",
+              "defines": ["ca-m1-triangle-inequality"],
+              "body": "The triangle inequality states that the modulus of a sum \\(|z_1 + z_2|\\) is at most \\(|z_1| + |z_2|\\) and at least \\(\\big||z_1| - |z_2|\\big|\\).",
+              "tex": "\\big||z_1| - |z_2|\\big| \\le |z_1 \\pm z_2| \\le |z_1| + |z_2|",
+              "examples": ["Eq. (6): |z₁+z₂| ≤ |z₁|+|z₂|", "Eq. (8): ||z₁|-|z₂|| ≤ |z₁+z₂|", "Eq. (10): ||z₁|-|z₂|| ≤ |z₁-z₂|"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "tri",
+                    "objects": [
+                      { "type": "polygon", "points": [[42, 38], [154, 62], [196, 142]], "role": "s", "name": "tri" },
+                      { "type": "arrow", "p1": [42, 38], "p2": [154, 62], "role": "ik", "width": 2, "name": "v1" },
+                      { "type": "arrow", "p1": [154, 62], "p2": [196, 142], "role": "ik", "width": 2, "name": "v2" },
+                      { "type": "arrow", "p1": [42, 38], "p2": [196, 142], "role": "lk", "width": 2.4, "name": "vsum" },
+                      { "type": "label", "coords": [104, 38], "text": "|z₁|", "size": 11, "align": "center", "role": "t", "name": "v1" },
+                      { "type": "label", "coords": [194, 96], "text": "|z₂|", "size": 11, "align": "center", "role": "t", "name": "v2" },
+                      { "type": "label", "coords": [102, 108], "text": "|z₁ + z₂| ≤ |z₁| + |z₂|", "size": 11, "align": "center", "role": "t", "name": "vsum" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "ca-m1-u2-c5",
+              "type": "derivation",
+              "label": "Example 2 · §1.2",
+              "title": "Example 2: Set of points satisfying |z| = |z - i|",
+              "legend": "\\(z = x + iy\\) point in the plane, \\(|z|\\) distance to \\(0\\), \\(|z - i|\\) distance to \\(i\\).",
+              "setup": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "pts",
+                    "objects": [
+                      { "type": "segment", "p1": [24, 44], "p2": [236, 44], "role": "ik", "width": 2, "name": "pts" },
+                      { "type": "segment", "p1": [84, 20], "p2": [84, 160], "role": "ik", "width": 2, "name": "pts" },
+                      { "type": "point", "coords": [84, 44], "size": 4, "role": "f", "name": "pts" },
+                      { "type": "point", "coords": [84, 132], "size": 4, "role": "f", "name": "pts" },
+                      { "type": "point", "coords": [168, 88], "size": 4, "role": "f", "name": "zpt" },
+                      { "type": "segment", "p1": [84, 44], "p2": [168, 88], "role": "gk", "dash": 2, "width": 1.6, "name": "zpt" },
+                      { "type": "segment", "p1": [84, 132], "p2": [168, 88], "role": "gk", "dash": 2, "width": 1.6, "name": "zpt" },
+                      { "type": "label", "coords": [70, 132], "text": "i", "size": 11, "align": "center", "role": "t", "name": "pts" },
+                      { "type": "label", "coords": [182, 102], "text": "z", "size": 11, "align": "center", "role": "t", "name": "zpt" },
+                      { "type": "label", "coords": [134, 58], "text": "|z|", "size": 11, "align": "center", "role": "t", "name": "zpt" },
+                      { "type": "label", "coords": [134, 122], "text": "|z - i|", "size": 11, "align": "center", "role": "t", "name": "zpt" }
+                    ]
+                  },
+                  {
+                    "step": 4,
+                    "name": "line",
+                    "objects": [
+                      { "type": "segment", "p1": [24, 88], "p2": [236, 88], "role": "lk", "width": 2.4, "name": "line" },
+                      { "type": "label", "coords": [202, 72], "text": "y = 1/2", "size": 11, "align": "center", "role": "t", "name": "line" }
+                    ]
+                  }
+                ]
+              },
+              "phases": [
+                { "name": "Distance formula", "why": "write |z| and |z - i| in terms of x and y" },
+                { "name": "Square both sides", "why": "remove the square roots and expand (y - 1)²" },
+                { "name": "Cancel squares", "why": "subtract x² + y² from both sides" },
+                { "name": "Solve for y", "why": "isolate y to identify the horizontal line" }
+              ],
+              "steps": [
+                {
+                  "phase": "Distance formula",
+                  "tex": "|z| = |z - i|",
+                  "focus": ["pts", "zpt"],
+                  "note": "Start from the given condition that \\(z\\) is equidistant from \\(0\\) and \\(i\\).",
+                  "ask": {
+                    "q": "Using \\(z = x + iy\\) and Equations (1) and (5), how is \\(|z| = |z - i|\\) written?",
+                    "options": [
+                      "\\(\\sqrt{x^2 + y^2} = \\sqrt{x^2 + (y - 1)^2}\\)",
+                      "\\(\\sqrt{x^2 + y^2} = \\sqrt{(x - 1)^2 + y^2}\\)",
+                      "\\(x + y = x + y - 1\\)",
+                      "\\(\\sqrt{x^2 - y^2} = \\sqrt{x^2 + (y + 1)^2}\\)"
+                    ],
+                    "answer": 0,
+                    "why": "Since z - i = x + i(y - 1), Equations (1) and (5) give √(x² + y²) = √(x² + (y - 1)²)."
+                  }
+                },
+                {
+                  "move": { "type": "substitute", "by": "z = x + iy" },
+                  "tex": "\\sqrt{x^2 + y^2} = \\sqrt{x^2 + (y - 1)^2}",
+                  "focus": ["zpt"],
+                  "note": "Express both moduli in terms of the real coordinates \\(x\\) and \\(y\\).",
+                  "ask": {
+                    "q": "What is the first algebra move to remove the square roots?",
+                    "options": [
+                      "Divide both sides by \\(x\\)",
+                      "Square both sides",
+                      "Set \\(x = 0\\)",
+                      "Differentiate with respect to \\(y\\)"
+                    ],
+                    "answer": 1,
+                    "why": "Squaring both non-negative sides removes the radical signs cleanly."
+                  }
+                },
+                {
+                  "phase": "Square both sides",
+                  "move": { "type": "power", "by": "2" },
+                  "tex": "x^2 + y^2 = x^2 + (y - 1)^2",
+                  "focus": ["zpt"],
+                  "note": "Square both sides of the equation.",
+                  "ask": {
+                    "q": "What do we get when we expand \\((y - 1)^2\\) on the right-hand side?",
+                    "options": [
+                      "\\(y^2 - 1\\)",
+                      "\\(y^2 + 2y + 1\\)",
+                      "\\(y^2 - 2y + 1\\)",
+                      "\\(y^2 - 2y - 1\\)"
+                    ],
+                    "answer": 2,
+                    "why": "Expanding the binomial square gives (y - 1)² = y² - 2y + 1."
+                  }
+                },
+                {
+                  "move": { "type": "expand" },
+                  "tex": "x^2 + y^2 = x^2 + y^2 - 2y + 1",
+                  "focus": ["zpt"],
+                  "note": "Expand \\((y - 1)^2 = y^2 - 2y + 1\\) on the right.",
+                  "ask": {
+                    "q": "After subtracting \\(x^2 + y^2\\) and solving for \\(y\\), what line do we obtain?",
+                    "options": [
+                      "\\(y = 1\\)",
+                      "\\(y = -\\frac{1}{2}\\)",
+                      "\\(x = \\frac{1}{2}\\)",
+                      "\\(y = \\frac{1}{2}\\)"
+                    ],
+                    "answer": 3,
+                    "why": "Canceling x² + y² leaves 0 = -2y + 1, so 2y = 1 and y = 1/2."
+                  }
+                },
+                {
+                  "phase": "Cancel squares",
+                  "move": { "type": "subtract", "by": "x^2 + y^2" },
+                  "tex": "0 = -2y + 1",
+                  "focus": ["line"],
+                  "note": "Subtract \\(x^2 + y^2\\) from both sides."
+                },
+                {
+                  "phase": "Solve for y",
+                  "move": { "type": "rearrange" },
+                  "tex": "y = \\frac{1}{2}",
+                  "focus": ["line"],
+                  "note": "The locus is the horizontal line \\(y = \\frac{1}{2}\\), or \\(z = x + \\frac{1}{2}i\\) (Figure 1.2.4)."
+                }
+              ]
+            },
+            {
+              "id": "ca-m1-u2-c6",
+              "type": "derivation",
+              "label": "Example 3 · §1.2",
+              "title": "Example 3: Upper bound for |-1 / (z⁴ + 3z² + 2)| when |z| = 2",
+              "legend": "\\(|z| = 2\\) circle of radius 2, \\(M\\) upper bound on the modulus of the fraction.",
+              "setup": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "circ",
+                    "objects": [
+                      { "type": "segment", "p1": [24, 90], "p2": [236, 90], "role": "ik", "width": 2, "name": "circ" },
+                      { "type": "segment", "p1": [100, 18], "p2": [100, 162], "role": "ik", "width": 2, "name": "circ" },
+                      { "type": "circle", "center": [100, 90], "r": 52, "role": "s ok", "name": "circ" },
+                      { "type": "label", "coords": [100, 152], "text": "|z| = 2", "size": 11, "align": "center", "role": "t", "name": "circ" }
+                    ]
+                  },
+                  {
+                    "step": 3,
+                    "name": "bound",
+                    "objects": [
+                      { "type": "polygon", "points": [[162, 56], [162, 124], [244, 124], [244, 56]], "role": "f", "name": "bound" },
+                      { "type": "label", "coords": [203, 98], "text": "Denom ≥ 6", "size": 11, "align": "center", "role": "i", "name": "bound" },
+                      { "type": "label", "coords": [203, 76], "text": "Bound ≤ 1/6", "size": 11, "align": "center", "role": "i", "name": "bound" }
+                    ]
+                  }
+                ]
+              },
+              "phases": [
+                { "name": "Factor denominator", "why": "write z⁴ + 3z² + 2 as (z² + 1)(z² + 2)" },
+                { "name": "Reverse triangle inequality", "why": "apply Equation (8) to each factor in Equation (12)" },
+                { "name": "Evaluate at |z| = 2", "why": "use |z²| = |z|² = 4 to find the minimum denominator" },
+                { "name": "Reciprocal bound", "why": "take the reciprocal to get the upper bound 1/6" }
+              ],
+              "steps": [
+                {
+                  "phase": "Factor denominator",
+                  "tex": "\\left|z^4 + 3z^2 + 2\\right| = \\left|(z^2 + 1)(z^2 + 2)\\right|",
+                  "focus": ["circ"],
+                  "note": "Factor the quadratic in \\(z^2\\) inside the denominator modulus.",
+                  "ask": {
+                    "q": "By the product property in Equation (3), how does \\(|(z^2 + 1)(z^2 + 2)|\\) split?",
+                    "options": [
+                      "\\(|z^2 + 1| \\cdot |z^2 + 2|\\)",
+                      "\\(|z^2 + 1| + |z^2 + 2|\\)",
+                      "\\(|z^2| + 3\\)",
+                      "\\(|z^4| + 3|z^2| + 2\\)"
+                    ],
+                    "answer": 0,
+                    "why": "By Equation (3), the modulus of a product equals the product of the moduli: |z₁z₂| = |z₁||z₂|."
+                  }
+                },
+                {
+                  "move": { "type": "identity", "by": "|z_1 z_2| = |z_1||z_2|" },
+                  "tex": "\\left|z^4 + 3z^2 + 2\\right| = \\left|z^2 + 1\\right| \\cdot \\left|z^2 + 2\\right|",
+                  "focus": ["circ"],
+                  "note": "Use Equation (3) to write the product of two moduli.",
+                  "ask": {
+                    "q": "By Equation (8), what is the lower bound for each factor \\(|z^2 + c|\\)?",
+                    "options": [
+                      "\\(|z^2| + c\\)",
+                      "\\(\\big||z^2| - c\\big|\\)",
+                      "\\(|z| - c\\)",
+                      "\\(|z|^4 - c\\)"
+                    ],
+                    "answer": 1,
+                    "why": "Equation (8) states that |z₁ + z₂| ≥ ||z₁| - |z₂||, giving Equation (12)."
+                  }
+                },
+                {
+                  "phase": "Reverse triangle inequality",
+                  "move": { "type": "define", "by": "L = \\big||z^2| - 1\\big| \\cdot \\big||z^2| - 2\\big|" },
+                  "tex": "L = \\big||z|^2 - 1\\big| \\cdot \\big||z|^2 - 2\\big|",
+                  "focus": ["circ", "bound"],
+                  "note": "By Equation (12) and \\(|z^2| = |z|^2\\), the denominator is at least \\(L\\).",
+                  "ask": {
+                    "q": "When \\(|z| = 2\\), what is the value of \\(L = \\big||z|^2 - 1\\big| \\cdot \\big||z|^2 - 2\\big|\\)?",
+                    "options": [
+                      "\\(2\\)",
+                      "\\(3\\)",
+                      "\\(6\\)",
+                      "\\(12\\)"
+                    ],
+                    "answer": 2,
+                    "why": "Substituting |z| = 2 gives |4 - 1| · |4 - 2| = 3 · 2 = 6."
+                  }
+                },
+                {
+                  "phase": "Evaluate at |z| = 2",
+                  "move": { "type": "evaluate", "by": "|z| = 2" },
+                  "tex": "L = |4 - 1| \\cdot |4 - 2|",
+                  "focus": ["bound"],
+                  "note": "Substitute \\(|z|^2 = 2^2 = 4\\) into both factors."
+                },
+                {
+                  "move": { "type": "simplify" },
+                  "tex": "L = 6",
+                  "focus": ["bound"],
+                  "note": "Since \\(|z^4 + 3z^2 + 2| \\ge L = 6\\), the denominator is at least \\(6\\).",
+                  "ask": {
+                    "q": "Since \\(|z^4 + 3z^2 + 2| \\ge 6\\) and \\(|-1| = 1\\), what is the upper bound \\(M\\)?",
+                    "options": [
+                      "\\(6\\)",
+                      "\\(\\frac{1}{3}\\)",
+                      "\\(\\frac{1}{2}\\)",
+                      "\\(\\frac{1}{6}\\)"
+                    ],
+                    "answer": 3,
+                    "why": "Taking the reciprocal reverses the inequality: 1 / |z⁴ + 3z² + 2| ≤ 1/6."
+                  }
+                },
+                {
+                  "phase": "Reciprocal bound",
+                  "move": { "type": "reciprocal" },
+                  "tex": "\\frac{1}{L} = \\frac{1}{6}",
+                  "focus": ["bound"],
+                  "note": "Thus \\(\\left|\\frac{-1}{z^4 + 3z^2 + 2}\\right| = \\frac{1}{|z^4 + 3z^2 + 2|} \\le \\frac{1}{6}\\)."
+                }
+              ]
+            },
+            {
+              "id": "ca-m1-u2-c7",
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "In Example 2 of §1.2, what set of points satisfies \\(|z| = |z - i|\\)?",
+              "options": [
+                "Horizontal line \\(y = \\frac{1}{2}\\)",
+                "Vertical line \\(x = \\frac{1}{2}\\)",
+                "Unit circle centered at \\(0\\)",
+                "Circle centered at \\(i\\)"
+              ],
+              "answer": 0,
+              "why": "Points equidistant from 0 and i lie on the perpendicular bisector, the horizontal line y = 1/2."
+            },
+            {
+              "id": "ca-m1-u2-c8",
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "Which inequality is given in Equation (8) of §1.2 for any \\(z_1, z_2\\)?",
+              "options": [
+                "\\(|z_1 + z_2| \\le |z_1| - |z_2|\\)",
+                "\\(\\big||z_1| - |z_2|\\big| \\le |z_1 + z_2|\\)",
+                "\\(|z_1 + z_2| = |z_1| + |z_2|\\)",
+                "\\(|z_1 z_2| \\le |z_1| + |z_2|\\)"
+              ],
+              "answer": 1,
+              "why": "Equation (8) states the reverse triangle inequality ||z₁| - |z₂|| ≤ |z₁ + z₂|."
+            },
+            {
+              "id": "ca-m1-u2-c9",
+              "type": "number",
+              "label": "Quiz · Number",
+              "time": 60,
+              "q": "By Definition 1.2.1, what is the modulus \\(|z|\\) of \\(z = 3 + 4i\\)?",
+              "answer": 5,
+              "tolerance": 0,
+              "unit": "",
+              "why": "By Equation (1), |3 + 4i| = √(3² + 4²) = √25 = 5."
+            },
+            {
+              "id": "ca-m1-u2-c10",
+              "type": "fill",
+              "label": "Quiz · Fill in",
+              "time": 60,
+              "q": "The inequality \\(|z_1 + z_2| \\le |z_1| + |z_2|\\) in Equation (6) is called the ______ inequality.",
+              "answer": "triangle|triangle inequality",
+              "why": "Equation (6) is the triangle inequality, expressing that one side of a triangle cannot exceed the sum of the other two sides."
+            }
+          ]
+        },
+        {
+          "id": "ca-m1-unit-3",
+          "title": "Polar Form of Complex Numbers",
+          "icon": "wave",
+          "source": "Unit 3 · Zill & Shanahan §1.3",
+          "cards": [
+            {
+              "id": "ca-m1-u3-c1",
+              "type": "intuition",
+              "term": "ca-m1-polar-form",
+              "title": "Locating z by its distance r and angle θ from the positive real axis",
+              "meaning": "Instead of rectangular coordinates (x, y), polar form uses the modulus r = |z| and the radian angle θ = arg(z).",
+              "art": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"24\" y1=\"140\" x2=\"236\" y2=\"140\" class=\"ik\"/><line x1=\"56\" y1=\"162\" x2=\"56\" y2=\"20\" class=\"ik\"/><line x1=\"56\" y1=\"140\" x2=\"186\" y2=\"52\" class=\"lk\"/><line x1=\"186\" y1=\"140\" x2=\"186\" y2=\"52\" class=\"gk\"/><path d=\"M 96 140 A 40 40 0 0 0 89 118\" class=\"lk\"/><circle cx=\"186\" cy=\"52\" r=\"4\" class=\"f\"/><text x=\"176\" y=\"40\" text-anchor=\"middle\" class=\"t\">z = r(cos θ + i sin θ)</text><text x=\"110\" y=\"86\" class=\"t\">r = |z|</text><text x=\"106\" y=\"128\" class=\"t\">θ</text><text x=\"122\" y=\"156\" text-anchor=\"middle\" class=\"t\">x = r cos θ</text><text x=\"216\" y=\"98\" text-anchor=\"middle\" class=\"t\">y = r sin θ</text></svg>",
+              "picture": "Look at Figure 1.3.2: substituting x = r cos θ and y = r sin θ into x + iy gives r(cos θ + i sin θ).",
+              "example": "For z = -√3 - i in Quadrant III, r = 2 and θ = 7π/6 (or principal argument Arg(z) = -5π/6).",
+              "bridge": "Polar form turns complex multiplication, division, and integer powers into simple angle addition and scaling."
+            },
+            {
+              "id": "ca-m1-u3-c2",
+              "type": "info",
+              "label": "01 · §1.3",
+              "title": "What are the polar form and argument of a complex number?",
+              "defines": ["ca-m1-polar-form", "ca-m1-argument"],
+              "body": "The polar form of a nonzero complex number \\(z = x + iy\\) is \\(z = r(\\cos\\theta + i\\sin\\theta)\\), where \\(r = |z|\\) and \\(\\theta = \\arg(z)\\) is the angle in radians.",
+              "tex": "z = r(\\cos\\theta + i\\sin\\theta), \\qquad x = r\\cos\\theta, \\qquad y = r\\sin\\theta, \\qquad r = |z|",
+              "examples": ["Equation (1)", "θ = arg(z) in radians", "Ex. 1: -√3 - i"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "polarfig",
+                    "objects": [
+                      { "type": "segment", "p1": [22, 42], "p2": [238, 42], "role": "ik", "width": 2, "name": "xax" },
+                      { "type": "segment", "p1": [56, 20], "p2": [56, 160], "role": "ik", "width": 2, "name": "yax" },
+                      { "type": "arrow", "p1": [56, 42], "p2": [188, 134], "role": "lk", "width": 2.2, "name": "rad" },
+                      { "type": "segment", "p1": [188, 42], "p2": [188, 134], "role": "gk", "dash": 2, "width": 1.6, "name": "sin" },
+                      { "type": "arc", "center": [56, 42], "r": 36, "start": 0, "end": 35, "role": "lk", "width": 1.8, "name": "ang" },
+                      { "type": "point", "coords": [188, 134], "size": 4, "role": "f", "name": "pt" },
+                      { "type": "label", "coords": [180, 150], "text": "z = r(cos θ + i sin θ)", "size": 11, "align": "center", "role": "t", "name": "pt" },
+                      { "type": "label", "coords": [104, 60], "text": "θ = arg(z)", "size": 11, "align": "center", "role": "t", "name": "ang" },
+                      { "type": "label", "coords": [122, 24], "text": "x = r cos θ", "size": 11, "align": "center", "role": "t", "name": "xax" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "ca-m1-u3-c3",
+              "type": "info",
+              "label": "02 · §1.3",
+              "title": "What is the principal argument Arg(z)?",
+              "defines": ["ca-m1-principal-argument"],
+              "body": "The principal argument \\(\\text{Arg}(z)\\) is the unique value of \\(\\arg(z)\\) that lies in the interval \\(-\\pi < \\text{Arg}(z) \\le \\pi\\).",
+              "tex": "-\\pi < \\text{Arg}(z) \\le \\pi, \\qquad \\arg(z) = \\text{Arg}(z) + 2n\\pi \\quad (n = 0, \\pm 1, \\pm 2, \\dots)",
+              "examples": ["Equation (3)", "Arg(i) = π/2", "Arg(-√3 - i) = -5π/6"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "prinarg",
+                    "objects": [
+                      { "type": "segment", "p1": [24, 108], "p2": [236, 108], "role": "ik", "width": 2, "name": "xax" },
+                      { "type": "segment", "p1": [146, 22], "p2": [146, 160], "role": "ik", "width": 2, "name": "yax" },
+                      { "type": "arrow", "p1": [146, 108], "p2": [58, 52], "role": "lk", "width": 2.2, "name": "vec" },
+                      { "type": "point", "coords": [58, 52], "size": 4, "role": "f", "name": "pt" },
+                      { "type": "label", "coords": [66, 34], "text": "z = -√3 - i", "size": 11, "align": "center", "role": "t", "name": "pt" },
+                      { "type": "label", "coords": [194, 72], "text": "Arg(z) = -5π/6", "size": 11, "align": "center", "role": "t", "name": "vec" },
+                      { "type": "label", "coords": [130, 148], "text": "Fig. 1.3.5: -π < Arg(z) ≤ π", "size": 11, "align": "center", "role": "t", "name": "yax" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "ca-m1-u3-c4",
+              "type": "info",
+              "label": "03 · §1.3",
+              "title": "What is de Moivre's formula, and how do polar products work?",
+              "defines": ["ca-m1-de-moivres-formula"],
+              "body": "Polar multiplication multiplies moduli and adds arguments, yielding integer powers \\(z^n = r^n(\\cos n\\theta + i\\sin n\\theta)\\) and de Moivre's formula for \\(r = 1\\).",
+              "tex": "z_1 z_2 = r_1 r_2[\\cos(\\theta_1 + \\theta_2) + i\\sin(\\theta_1 + \\theta_2)], \\quad (\\cos\\theta + i\\sin\\theta)^n = \\cos n\\theta + i\\sin n\\theta",
+              "examples": ["Equations (6)–(10)", "arg(z₁z₂) = arg(z₁)+arg(z₂)", "Ex. 4: (√3/2 + i/2)³ = i"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "polarmult",
+                    "objects": [
+                      { "type": "segment", "p1": [24, 34], "p2": [236, 34], "role": "ik", "width": 2, "name": "xax" },
+                      { "type": "segment", "p1": [48, 20], "p2": [48, 160], "role": "ik", "width": 2, "name": "yax" },
+                      { "type": "arrow", "p1": [48, 34], "p2": [146, 66], "role": "ik", "width": 2, "name": "v1" },
+                      { "type": "arrow", "p1": [48, 34], "p2": [118, 108], "role": "ik", "width": 2, "name": "v2" },
+                      { "type": "arrow", "p1": [48, 34], "p2": [76, 152], "role": "lk", "width": 2.4, "name": "vprod" },
+                      { "type": "label", "coords": [164, 66], "text": "z₁ (θ₁)", "size": 11, "align": "center", "role": "t", "name": "v1" },
+                      { "type": "label", "coords": [140, 112], "text": "z₂ (θ₂)", "size": 11, "align": "center", "role": "t", "name": "v2" },
+                      { "type": "label", "coords": [132, 152], "text": "z₁z₂ (θ₁ + θ₂)", "size": 11, "align": "center", "role": "t", "name": "vprod" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "ca-m1-u3-c5",
+              "type": "derivation",
+              "label": "Derivation · §1.3",
+              "title": "Polar multiplication, integer powers, and de Moivre's formula",
+              "legend": "\\(z_1 = r_1(\\cos\\theta_1 + i\\sin\\theta_1)\\), \\(z_2 = r_2(\\cos\\theta_2 + i\\sin\\theta_2)\\), \\(n\\) integer.",
+              "setup": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "vecs",
+                    "objects": [
+                      { "type": "segment", "p1": [24, 34], "p2": [236, 34], "role": "ik", "width": 2, "name": "vecs" },
+                      { "type": "segment", "p1": [46, 20], "p2": [46, 160], "role": "ik", "width": 2, "name": "vecs" },
+                      { "type": "arrow", "p1": [46, 34], "p2": [152, 68], "role": "ik", "width": 2, "name": "vecs" },
+                      { "type": "arrow", "p1": [46, 34], "p2": [122, 112], "role": "ik", "width": 2, "name": "vecs" },
+                      { "type": "label", "coords": [172, 68], "text": "z₁ (r₁, θ₁)", "size": 11, "align": "center", "role": "t", "name": "vecs" },
+                      { "type": "label", "coords": [150, 112], "text": "z₂ (r₂, θ₂)", "size": 11, "align": "center", "role": "t", "name": "vecs" }
+                    ]
+                  },
+                  {
+                    "step": 2,
+                    "name": "prod",
+                    "objects": [
+                      { "type": "arrow", "p1": [46, 34], "p2": [82, 152], "role": "lk", "width": 2.4, "name": "prod" },
+                      { "type": "label", "coords": [146, 150], "text": "z₁z₂: r₁r₂, θ₁+θ₂", "size": 11, "align": "center", "role": "t", "name": "prod" }
+                    ]
+                  }
+                ]
+              },
+              "phases": [
+                { "name": "Multiply polar forms", "why": "expand z₁z₂ using the distributive law and i² = -1" },
+                { "name": "Addition formulas", "why": "apply cosine and sine addition identities to get Equation (6)" },
+                { "name": "Integer powers", "why": "repeat multiplication n times for z = r(cos θ + i sin θ)" },
+                { "name": "de Moivre's formula", "why": "set r = 1 on the unit circle to obtain Equation (10)" }
+              ],
+              "steps": [
+                {
+                  "phase": "Multiply polar forms",
+                  "tex": "z_1 z_2 = r_1(\\cos\\theta_1 + i\\sin\\theta_1)r_2(\\cos\\theta_2 + i\\sin\\theta_2)",
+                  "focus": ["vecs"],
+                  "note": "Write both complex numbers in polar form and multiply them.",
+                  "ask": {
+                    "q": "When we expand the product and use \\(i^2 = -1\\), what is the real part inside the bracket?",
+                    "options": [
+                      "\\(\\cos\\theta_1\\cos\\theta_2 - \\sin\\theta_1\\sin\\theta_2\\)",
+                      "\\(\\cos\\theta_1\\cos\\theta_2 + \\sin\\theta_1\\sin\\theta_2\\)",
+                      "\\(\\sin\\theta_1\\cos\\theta_2 + \\cos\\theta_1\\sin\\theta_2\\)",
+                      "\\(\\cos\\theta_1 - \\cos\\theta_2\\)"
+                    ],
+                    "answer": 0,
+                    "why": "Since (i sin θ₁)(i sin θ₂) = -sin θ₁ sin θ₂, the real part in Equation (4) is cos θ₁ cos θ₂ - sin θ₁ sin θ₂."
+                  }
+                },
+                {
+                  "move": { "type": "expand" },
+                  "tex": "z_1 z_2 = r_1 r_2[(\\cos\\theta_1\\cos\\theta_2 - \\sin\\theta_1\\sin\\theta_2) + i(\\sin\\theta_1\\cos\\theta_2 + \\cos\\theta_1\\sin\\theta_2)]",
+                  "focus": ["vecs"],
+                  "note": "Equation (4): group the real terms and the imaginary terms.",
+                  "ask": {
+                    "q": "By the trigonometric addition formulas, how does Equation (4) simplify?",
+                    "options": [
+                      "\\(r_1 r_2[\\cos(\\theta_1 - \\theta_2) + i\\sin(\\theta_1 - \\theta_2)]\\)",
+                      "\\(r_1 r_2[\\cos(\\theta_1 + \\theta_2) + i\\sin(\\theta_1 + \\theta_2)]\\)",
+                      "\\((r_1 + r_2)[\\cos(\\theta_1 + \\theta_2) + i\\sin(\\theta_1 + \\theta_2)]\\)",
+                      "\\(r_1 r_2[\\cos(\\theta_1\\theta_2) + i\\sin(\\theta_1\\theta_2)]\\)"
+                    ],
+                    "answer": 1,
+                    "why": "The cosine and sine addition formulas turn Equation (4) into Equation (6) with angle θ₁ + θ₂."
+                  }
+                },
+                {
+                  "phase": "Addition formulas",
+                  "move": { "type": "identity", "by": "\\cos(\\theta_1+\\theta_2),\\ \\sin(\\theta_1+\\theta_2)" },
+                  "tex": "z_1 z_2 = r_1 r_2[\\cos(\\theta_1 + \\theta_2) + i\\sin(\\theta_1 + \\theta_2)]",
+                  "focus": ["vecs", "prod"],
+                  "note": "Equation (6): lengths multiply (\\(r_1 r_2\\)) and arguments add (\\(\\theta_1 + \\theta_2\\)).",
+                  "ask": {
+                    "q": "Setting \\(z_1 = z_2 = z\\) and repeating \\(n\\) times gives which formula in Equation (9)?",
+                    "options": [
+                      "\\(z^n = n r(\\cos n\\theta + i\\sin n\\theta)\\)",
+                      "\\(z^n = r^n(\\cos^n\\theta + i\\sin^n\\theta)\\)",
+                      "\\(z^n = r^n(\\cos n\\theta + i\\sin n\\theta)\\)",
+                      "\\(z^n = r(\\cos\\theta^n + i\\sin\\theta^n)\\)"
+                    ],
+                    "answer": 2,
+                    "why": "Multiplying z by itself n times raises r to the nth power and adds θ to itself n times, giving Equation (9)."
+                  }
+                },
+                {
+                  "phase": "Integer powers",
+                  "move": { "type": "evaluate", "by": "z_1 = z_2 = \\dots = z" },
+                  "tex": "z^n = r^n(\\cos n\\theta + i\\sin n\\theta)",
+                  "focus": ["prod"],
+                  "note": "Equation (9) holds for any integer \\(n\\) (including negative integers via Equation (7)).",
+                  "ask": {
+                    "q": "When \\(z = \\cos\\theta + i\\sin\\theta\\) so that \\(r = 1\\), what does Equation (9) yield?",
+                    "options": [
+                      "\\(\\cos\\theta + i\\sin\\theta = 1\\)",
+                      "\\((\\cos\\theta + i\\sin\\theta)^n = n\\cos\\theta + in\\sin\\theta\\)",
+                      "\\((\\cos\\theta + i\\sin\\theta)^n = \\cos\\theta^n + i\\sin\\theta^n\\)",
+                      "\\((\\cos\\theta + i\\sin\\theta)^n = \\cos n\\theta + i\\sin n\\theta\\)"
+                    ],
+                    "answer": 3,
+                    "why": "Setting r = 1 in Equation (9) gives de Moivre's formula in Equation (10)."
+                  }
+                },
+                {
+                  "phase": "de Moivre's formula",
+                  "move": { "type": "evaluate", "by": "r = 1" },
+                  "tex": "(\\cos\\theta + i\\sin\\theta)^n = \\cos n\\theta + i\\sin n\\theta",
+                  "focus": ["prod"],
+                  "note": "Equation (10): de Moivre's formula for any integer \\(n\\)."
+                }
+              ]
+            },
+            {
+              "id": "ca-m1-u3-c6",
+              "type": "derivation",
+              "label": "Example 3 · §1.3",
+              "title": "Examples 1 & 3: Polar form and cube of z = -√3 - i",
+              "legend": "\\(z = -\\sqrt{3} - i\\), \\(r = |z| = 2\\), \\(\\theta = 7\\pi/6\\) argument in Quadrant III.",
+              "setup": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "q3",
+                    "objects": [
+                      { "type": "segment", "p1": [24, 100], "p2": [236, 100], "role": "ik", "width": 2, "name": "q3" },
+                      { "type": "segment", "p1": [130, 18], "p2": [130, 162], "role": "ik", "width": 2, "name": "q3" },
+                      { "type": "arrow", "p1": [130, 100], "p2": [58, 58], "role": "lk", "width": 2.2, "name": "q3" },
+                      { "type": "point", "coords": [58, 58], "size": 4, "role": "f", "name": "q3" },
+                      { "type": "label", "coords": [64, 42], "text": "z = -√3 - i (r = 2)", "size": 11, "align": "center", "role": "t", "name": "q3" }
+                    ]
+                  },
+                  {
+                    "step": 3,
+                    "name": "cube",
+                    "objects": [
+                      { "type": "arrow", "p1": [130, 100], "p2": [130, 24], "role": "ik", "width": 2.4, "name": "cube" },
+                      { "type": "point", "coords": [130, 24], "size": 4, "role": "f", "name": "cube" },
+                      { "type": "label", "coords": [182, 28], "text": "z³ = -8i", "size": 11, "align": "center", "role": "t", "name": "cube" }
+                    ]
+                  }
+                ]
+              },
+              "phases": [
+                { "name": "Modulus & angle", "why": "find r = 2 and θ = 7π/6 in the third quadrant" },
+                { "name": "Apply Equation (9)", "why": "raise r to power 3 and multiply θ by 3" },
+                { "name": "Simplify angle", "why": "reduce 3(7π/6) = 7π/2" },
+                { "name": "Rectangular form", "why": "evaluate cos(7π/2) = 0 and sin(7π/2) = -1" }
+              ],
+              "steps": [
+                {
+                  "phase": "Modulus & angle",
+                  "tex": "z = 2\\left(\\cos\\frac{7\\pi}{6} + i\\sin\\frac{7\\pi}{6}\\right)",
+                  "focus": ["q3"],
+                  "note": "From Example 1 (Equation (2)), \\(z = -\\sqrt{3} - i\\) has \\(r = 2\\) and \\(\\theta = 7\\pi/6\\).",
+                  "ask": {
+                    "q": "In Example 1, why did we add \\(\\pi\\) to \\(\\tan^{-1}(1/\\sqrt{3}) = \\pi/6\\)?",
+                    "options": [
+                      "Because \\(-\\sqrt{3} - i\\) is in Quadrant III",
+                      "Because \\(r\\) is negative",
+                      "Because \\(-\\sqrt{3} - i\\) is in Quadrant II",
+                      "Because \\(\\tan\\theta\\) has period \\(2\\pi\\)"
+                    ],
+                    "answer": 0,
+                    "why": "Since x = -√3 < 0 and y = -1 < 0, the point lies in the third quadrant, so θ = π/6 + π = 7π/6."
+                  }
+                },
+                {
+                  "phase": "Apply Equation (9)",
+                  "move": { "type": "power", "by": "3" },
+                  "tex": "z^3 = 2^3\\left[\\cos\\left(3\\cdot\\frac{7\\pi}{6}\\right) + i\\sin\\left(3\\cdot\\frac{7\\pi}{6}\\right)\\right]",
+                  "focus": ["q3"],
+                  "note": "Apply Equation (9) with \\(r = 2\\), \\(\\theta = 7\\pi/6\\), and \\(n = 3\\).",
+                  "ask": {
+                    "q": "What do \\(2^3\\) and \\(3 \\cdot \\frac{7\\pi}{6}\\) simplify to?",
+                    "options": [
+                      "\\(6\\) and \\(\\frac{7\\pi}{2}\\)",
+                      "\\(8\\) and \\(\\frac{7\\pi}{2}\\)",
+                      "\\(8\\) and \\(\\frac{7\\pi}{18}\\)",
+                      "\\(9\\) and \\(\\frac{21\\pi}{6}\\)"
+                    ],
+                    "answer": 1,
+                    "why": "We have 2³ = 8 and 3 · (7π/6) = 7π/2."
+                  }
+                },
+                {
+                  "phase": "Simplify angle",
+                  "move": { "type": "simplify" },
+                  "tex": "z^3 = 8\\left(\\cos\\frac{7\\pi}{2} + i\\sin\\frac{7\\pi}{2}\\right)",
+                  "focus": ["q3", "cube"],
+                  "note": "Simplify \\(2^3 = 8\\) and \\(3(7\\pi/6) = 7\\pi/2\\).",
+                  "ask": {
+                    "q": "What are the values of \\(\\cos(7\\pi/2)\\) and \\(\\sin(7\\pi/2)\\)?",
+                    "options": [
+                      "\\(0\\) and \\(1\\)",
+                      "\\(-1\\) and \\(0\\)",
+                      "\\(0\\) and \\(-1\\)",
+                      "\\(1\\) and \\(0\\)"
+                    ],
+                    "answer": 2,
+                    "why": "Since 7π/2 = 2π + 3π/2, cos(7π/2) = cos(3π/2) = 0 and sin(7π/2) = sin(3π/2) = -1."
+                  }
+                },
+                {
+                  "phase": "Rectangular form",
+                  "move": { "type": "evaluate", "by": "\\cos(7\\pi/2)=0,\\ \\sin(7\\pi/2)=-1" },
+                  "tex": "z^3 = 8(0 - i)",
+                  "focus": ["cube"],
+                  "note": "Substitute \\(\\cos(7\\pi/2) = 0\\) and \\(\\sin(7\\pi/2) = -1\\).",
+                  "ask": {
+                    "q": "What is the final value of \\((-\\sqrt{3} - i)^3\\) in Example 3?",
+                    "options": [
+                      "\\(8i\\)",
+                      "\\(-8\\)",
+                      "\\(8\\)",
+                      "\\(-8i\\)"
+                    ],
+                    "answer": 3,
+                    "why": "Multiplying 8 by -i gives z³ = -8i."
+                  }
+                },
+                {
+                  "move": { "type": "simplify" },
+                  "tex": "z^3 = -8i",
+                  "focus": ["cube"],
+                  "note": "Example 3 complete: \\((-\\sqrt{3} - i)^3 = -8i\\)."
+                }
+              ]
+            },
+            {
+              "id": "ca-m1-u3-c7",
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "Which interval defines the principal argument \\(\\text{Arg}(z)\\) in §1.3?",
+              "options": [
+                "\\(-\\pi < \\text{Arg}(z) \\le \\pi\\)",
+                "\\(0 \\le \\text{Arg}(z) < 2\\pi\\)",
+                "\\(-\\pi \\le \\text{Arg}(z) < \\pi\\)",
+                "\\(-\\frac{\\pi}{2} < \\text{Arg}(z) < \\frac{\\pi}{2}\\)"
+              ],
+              "answer": 0,
+              "why": "In §1.3, the principal argument Arg(z) is the unique argument in the interval -π < Arg(z) ≤ π."
+            },
+            {
+              "id": "ca-m1-u3-c8",
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "What is the principal argument \\(\\text{Arg}(z)\\) of \\(z = -\\sqrt{3} - i\\)?",
+              "options": [
+                "\\(\\frac{7\\pi}{6}\\)",
+                "\\(-\\frac{5\\pi}{6}\\)",
+                "\\(\\frac{\\pi}{6}\\)",
+                "\\(-\\frac{\\pi}{6}\\)"
+              ],
+              "answer": 1,
+              "why": "As shown in Figure 1.3.5, the unique angle of -√3 - i in (-π, π] is π/6 - π = -5π/6."
+            },
+            {
+              "id": "ca-m1-u3-c9",
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "By Example 4 of §1.3, what is \\(\\left(\\frac{\\sqrt{3}}{2} + \\frac{1}{2}i\\right)^3\\)?",
+              "options": [
+                "\\(1\\)",
+                "\\(-i\\)",
+                "\\(i\\)",
+                "\\(-1\\)"
+              ],
+              "answer": 2,
+              "why": "With θ = π/6, de Moivre's formula gives cos(3π/6) + i sin(3π/6) = cos(π/2) + i sin(π/2) = i."
+            },
+            {
+              "id": "ca-m1-u3-c10",
+              "type": "fill",
+              "label": "Quiz · Fill in",
+              "time": 60,
+              "q": "Equation (10), \\((\\cos\\theta + i\\sin\\theta)^n = \\cos n\\theta + i\\sin n\\theta\\), is known as ______ formula.",
+              "answer": "de Moivre's|de Moivre|De Moivre's|de Moivre's formula",
+              "why": "Setting r = 1 in Equation (9) gives de Moivre's formula, Equation (10)."
+            }
+          ]
+        },
+        {
+          "id": "ca-m1-unit-4",
+          "title": "Powers and Roots",
+          "icon": "atom",
+          "source": "Unit 4 · Zill & Shanahan §1.4",
+          "cards": [
+            {
+              "id": "ca-m1-u4-c1",
+              "type": "intuition",
+              "term": "ca-m1-nth-root",
+              "title": "Why every nonzero complex number has n equally spaced nth roots",
+              "meaning": "Solving wⁿ = z takes the positive nth root of the modulus r and divides the angles θ + 2kπ by n, placing n roots evenly around a circle.",
+              "art": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"24\" y1=\"90\" x2=\"236\" y2=\"90\" class=\"ik\"/><line x1=\"130\" y1=\"168\" x2=\"130\" y2=\"12\" class=\"ik\"/><circle cx=\"130\" cy=\"90\" r=\"56\" class=\"s ok\"/><line x1=\"130\" y1=\"90\" x2=\"178\" y2=\"62\" class=\"lk\"/><line x1=\"130\" y1=\"90\" x2=\"82\" y2=\"62\" class=\"lk\"/><line x1=\"130\" y1=\"90\" x2=\"130\" y2=\"146\" class=\"lk\"/><circle cx=\"178\" cy=\"62\" r=\"4\" class=\"f\"/><circle cx=\"82\" cy=\"62\" r=\"4\" class=\"f\"/><circle cx=\"130\" cy=\"146\" r=\"4\" class=\"f\"/><text x=\"204\" y=\"58\" text-anchor=\"middle\" class=\"t\">w₀ (π/6)</text><text x=\"56\" y=\"58\" text-anchor=\"middle\" class=\"t\">w₁ (5π/6)</text><text x=\"162\" y=\"154\" text-anchor=\"middle\" class=\"t\">w₂ = -i</text><text x=\"130\" y=\"24\" text-anchor=\"middle\" class=\"t\">Fig. 1.4.1: Cube roots of i</text></svg>",
+              "picture": "Look at Figure 1.4.1: the three cube roots of i sit on the unit circle separated by 2π/3 radians.",
+              "example": "For z = i, the three cube roots are w₀ = √3/2 + i/2, w₁ = -√3/2 + i/2, and w₂ = -i.",
+              "bridge": "Equation (4) of §1.4 gives all n distinct nth roots w_k for k = 0, 1, ..., n - 1."
+            },
+            {
+              "id": "ca-m1-u4-c2",
+              "type": "info",
+              "label": "01 · §1.4",
+              "title": "What are the nth roots of a nonzero complex number?",
+              "defines": ["ca-m1-nth-root"],
+              "body": "A complex number \\(w\\) is an \\(n\\)th root of a nonzero complex number \\(z\\) if \\(w^n = z\\), which has \\(n\\) distinct solutions \\(w_0, w_1, \\dots, w_{n-1}\\).",
+              "tex": "w_k = \\sqrt[n]{r}\\left[\\cos\\left(\\frac{\\theta + 2k\\pi}{n}\\right) + i\\sin\\left(\\frac{\\theta + 2k\\pi}{n}\\right)\\right], \\quad k = 0, 1, 2, \\dots, n - 1",
+              "examples": ["Equation (4)", "Modulus ρ = ⁿ√r", "k = 0, 1, ..., n - 1"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "roots3",
+                    "objects": [
+                      { "type": "segment", "p1": [24, 90], "p2": [236, 90], "role": "ik", "width": 2, "name": "xax" },
+                      { "type": "segment", "p1": [130, 14], "p2": [130, 166], "role": "ik", "width": 2, "name": "yax" },
+                      { "type": "circle", "center": [130, 90], "r": 54, "role": "s ok", "name": "c1" },
+                      { "type": "arrow", "p1": [130, 90], "p2": [177, 117], "role": "lk", "width": 2.2, "name": "w0" },
+                      { "type": "arrow", "p1": [130, 90], "p2": [83, 117], "role": "lk", "width": 2.2, "name": "w1" },
+                      { "type": "arrow", "p1": [130, 90], "p2": [130, 36], "role": "lk", "width": 2.2, "name": "w2" },
+                      { "type": "label", "coords": [202, 124], "text": "w₀", "size": 11, "align": "center", "role": "t", "name": "w0" },
+                      { "type": "label", "coords": [58, 124], "text": "w₁", "size": 11, "align": "center", "role": "t", "name": "w1" },
+                      { "type": "label", "coords": [152, 32], "text": "w₂ = -i", "size": 11, "align": "center", "role": "t", "name": "w2" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "ca-m1-u4-c3",
+              "type": "info",
+              "label": "02 · §1.4",
+              "title": "What is the principal nth root, and how are roots spaced?",
+              "defines": ["ca-m1-principal-nth-root"],
+              "body": "The principal \\(n\\)th root \\(w_0\\) uses \\(\\theta = \\text{Arg}(z)\\) and \\(k = 0\\), while all \\(n\\) roots sit spaced by \\(2\\pi/n\\) on the circle of radius \\(\\sqrt[n]{r}\\).",
+              "tex": "w_0 = \\sqrt[n]{r}\\left[\\cos\\left(\\frac{\\text{Arg}(z)}{n}\\right) + i\\sin\\left(\\frac{\\text{Arg}(z)}{n}\\right)\\right], \\qquad \\Delta\\phi = \\frac{2\\pi}{n}",
+              "examples": ["Principal root: k = 0", "Ex. 2: 4th roots of 1 + i", "Vertices of regular n-gon"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "roots4",
+                    "objects": [
+                      { "type": "segment", "p1": [24, 90], "p2": [236, 90], "role": "ik", "width": 2, "name": "xax" },
+                      { "type": "segment", "p1": [130, 14], "p2": [130, 166], "role": "ik", "width": 2, "name": "yax" },
+                      { "type": "circle", "center": [130, 90], "r": 54, "role": "s ok", "name": "c2" },
+                      { "type": "arrow", "p1": [130, 90], "p2": [183, 101], "role": "lk", "width": 2.2, "name": "r0" },
+                      { "type": "arrow", "p1": [130, 90], "p2": [119, 143], "role": "ik", "width": 2, "name": "r1" },
+                      { "type": "arrow", "p1": [130, 90], "p2": [77, 79], "role": "ik", "width": 2, "name": "r2" },
+                      { "type": "arrow", "p1": [130, 90], "p2": [141, 37], "role": "ik", "width": 2, "name": "r3" },
+                      { "type": "label", "coords": [208, 106], "text": "w₀ (π/16)", "size": 11, "align": "center", "role": "t", "name": "r0" },
+                      { "type": "label", "coords": [96, 152], "text": "w₁", "size": 11, "align": "center", "role": "t", "name": "r1" },
+                      { "type": "label", "coords": [56, 74], "text": "w₂", "size": 11, "align": "center", "role": "t", "name": "r2" },
+                      { "type": "label", "coords": [162, 28], "text": "w₃", "size": 11, "align": "center", "role": "t", "name": "r3" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "ca-m1-u4-c4",
+              "type": "derivation",
+              "label": "Derivation · §1.4",
+              "title": "Formula for the n nth roots of z (Equations (1)–(4))",
+              "legend": "\\(z = r(\\cos\\theta + i\\sin\\theta)\\) given nonzero number, \\(w = \\rho(\\cos\\phi + i\\sin\\phi)\\) unknown \\(n\\)th root.",
+              "setup": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "rootcircle",
+                    "objects": [
+                      { "type": "segment", "p1": [24, 90], "p2": [236, 90], "role": "ik", "width": 2, "name": "rootcircle" },
+                      { "type": "segment", "p1": [130, 16], "p2": [130, 164], "role": "ik", "width": 2, "name": "rootcircle" },
+                      { "type": "circle", "center": [130, 90], "r": 52, "role": "s ok", "name": "rootcircle" },
+                      { "type": "label", "coords": [194, 148], "text": "ρ = ⁿ√r", "size": 11, "align": "center", "role": "t", "name": "rootcircle" }
+                    ]
+                  },
+                  {
+                    "step": 3,
+                    "name": "angles",
+                    "objects": [
+                      { "type": "arrow", "p1": [130, 90], "p2": [175, 116], "role": "lk", "width": 2.2, "name": "angles" },
+                      { "type": "label", "coords": [206, 120], "text": "φ = (θ+2kπ)/n", "size": 11, "align": "center", "role": "t", "name": "angles" }
+                    ]
+                  }
+                ]
+              },
+              "phases": [
+                { "name": "Polar equation", "why": "write wⁿ = z in polar form using Equation (9) of §1.3" },
+                { "name": "Match moduli", "why": "equate the positive moduli ρⁿ = r to find ρ" },
+                { "name": "Match arguments", "why": "equate cos nφ = cos θ and sin nφ = sin θ" },
+                { "name": "Distinct roots", "why": "substitute ρ and φ for k = 0, 1, ..., n - 1 into w" }
+              ],
+              "steps": [
+                {
+                  "phase": "Polar equation",
+                  "tex": "\\rho^n(\\cos n\\phi + i\\sin n\\phi) = r(\\cos\\theta + i\\sin\\theta)",
+                  "focus": ["rootcircle"],
+                  "note": "Equation (1): express \\(w^n = z\\) using polar forms \\(w = \\rho(\\cos\\phi + i\\sin\\phi)\\) and \\(z = r(\\cos\\theta + i\\sin\\theta)\\).",
+                  "ask": {
+                    "q": "Comparing the moduli of both sides of Equation (1) gives which equation?",
+                    "options": [
+                      "\\(\\rho^n = r\\)",
+                      "\\(n\\rho = r\\)",
+                      "\\(\\rho = r^n\\)",
+                      "\\(\\rho^n = n r\\)"
+                    ],
+                    "answer": 0,
+                    "why": "Since both cos nφ + i sin nφ and cos θ + i sin θ have modulus 1, equating moduli gives ρⁿ = r (Equation (2))."
+                  }
+                },
+                {
+                  "phase": "Match moduli",
+                  "move": { "type": "evaluate", "by": "|w^n| = |z|" },
+                  "tex": "\\rho^n = r",
+                  "focus": ["rootcircle"],
+                  "note": "Equation (2): the positive modulus \\(\\rho\\) of \\(w\\) satisfies \\(\\rho^n = r\\).",
+                  "ask": {
+                    "q": "Since \\(\\rho\\) and \\(r\\) are positive real numbers, what is \\(\\rho\\)?",
+                    "options": [
+                      "\\(r / n\\)",
+                      "\\(\\sqrt[n]{r}\\)",
+                      "\\(r^n\\)",
+                      "\\(\\pm\\sqrt[n]{r}\\)"
+                    ],
+                    "answer": 1,
+                    "why": "We define ρ = ⁿ√r to be the unique positive nth root of the positive real number r."
+                  }
+                },
+                {
+                  "move": { "type": "root", "by": "n" },
+                  "tex": "\\rho = \\sqrt[n]{r}",
+                  "focus": ["rootcircle"],
+                  "note": "All \\(n\\) roots lie on the circle of radius \\(\\rho = \\sqrt[n]{r}\\) centered at the origin.",
+                  "ask": {
+                    "q": "From \\(\\cos n\\phi = \\cos\\theta\\) and \\(\\sin n\\phi = \\sin\\theta\\), how are \\(n\\phi\\) and \\(\\theta\\) related?",
+                    "options": [
+                      "\\(n\\phi = \\theta\\) only",
+                      "\\(n\\phi = \\theta + k\\pi\\)",
+                      "\\(n\\phi = \\theta + 2k\\pi\\)",
+                      "\\(\\phi = n\\theta + 2k\\pi\\)"
+                    ],
+                    "answer": 2,
+                    "why": "Because cosine and sine have period 2π, nφ and θ can differ by any integer multiple 2kπ."
+                  }
+                },
+                {
+                  "phase": "Match arguments",
+                  "move": { "type": "evaluate", "by": "\\cos n\\phi = \\cos\\theta,\\ \\sin n\\phi = \\sin\\theta" },
+                  "tex": "n\\phi = \\theta + 2k\\pi",
+                  "focus": ["angles"],
+                  "note": "Equating real and imaginary parts in Equation (3) relates \\(n\\phi\\) and \\(\\theta\\) up to \\(2k\\pi\\)."
+                },
+                {
+                  "move": { "type": "divide", "by": "n" },
+                  "tex": "\\phi = \\frac{\\theta + 2k\\pi}{n}",
+                  "focus": ["angles"],
+                  "note": "Divide both sides by \\(n\\) to find the argument \\(\\phi\\) of each root.",
+                  "ask": {
+                    "q": "Which integer values of \\(k\\) produce all \\(n\\) distinct \\(n\\)th roots of \\(z\\)?",
+                    "options": [
+                      "\\(k = 1, 2, \\dots, n + 1\\)",
+                      "\\(k = 0, 2, 4, \\dots, 2n\\)",
+                      "Only \\(k = 0\\)",
+                      "\\(k = 0, 1, 2, \\dots, n - 1\\)"
+                    ],
+                    "answer": 3,
+                    "why": "As k runs through 0, 1, 2, ..., n - 1 we get n distinct roots; for k ≥ n the angles repeat modulo 2π."
+                  }
+                },
+                {
+                  "phase": "Distinct roots",
+                  "move": { "type": "substitute", "by": "\\rho = \\sqrt[n]{r},\\ \\phi = \\frac{\\theta+2k\\pi}{n}" },
+                  "tex": "w_k = \\sqrt[n]{r}\\left[\\cos\\left(\\frac{\\theta + 2k\\pi}{n}\\right) + i\\sin\\left(\\frac{\\theta + 2k\\pi}{n}\\right)\\right]",
+                  "focus": ["rootcircle", "angles"],
+                  "note": "Equation (4): for \\(k = 0, 1, 2, \\dots, n - 1\\), this gives the \\(n\\) distinct \\(n\\)th roots of \\(z\\)."
+                }
+              ]
+            },
+            {
+              "id": "ca-m1-u4-c5",
+              "type": "derivation",
+              "label": "Example 1 · §1.4",
+              "title": "Example 1: Finding the three cube roots of z = i",
+              "legend": "\\(z = i\\) with \\(r = 1\\) and \\(\\theta = \\text{Arg}(i) = \\pi/2\\), \\(n = 3\\), \\(w_0, w_1, w_2\\) cube roots.",
+              "setup": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "u1",
+                    "objects": [
+                      { "type": "segment", "p1": [24, 90], "p2": [236, 90], "role": "ik", "width": 2, "name": "u1" },
+                      { "type": "segment", "p1": [130, 14], "p2": [130, 166], "role": "ik", "width": 2, "name": "u1" },
+                      { "type": "circle", "center": [130, 90], "r": 54, "role": "s ok", "name": "u1" },
+                      { "type": "point", "coords": [130, 144], "size": 4, "role": "f", "name": "u1" },
+                      { "type": "label", "coords": [146, 152], "text": "z = i", "size": 11, "align": "center", "role": "t", "name": "u1" }
+                    ]
+                  },
+                  {
+                    "step": 2,
+                    "name": "w012",
+                    "objects": [
+                      { "type": "arrow", "p1": [130, 90], "p2": [177, 117], "role": "lk", "width": 2.2, "name": "w012" },
+                      { "type": "arrow", "p1": [130, 90], "p2": [83, 117], "role": "lk", "width": 2.2, "name": "w012" },
+                      { "type": "arrow", "p1": [130, 90], "p2": [130, 36], "role": "lk", "width": 2.2, "name": "w012" },
+                      { "type": "label", "coords": [204, 122], "text": "w₀ (π/6)", "size": 11, "align": "center", "role": "t", "name": "w012" },
+                      { "type": "label", "coords": [56, 122], "text": "w₁ (5π/6)", "size": 11, "align": "center", "role": "t", "name": "w012" },
+                      { "type": "label", "coords": [156, 32], "text": "w₂ = -i", "size": 11, "align": "center", "role": "t", "name": "w012" }
+                    ]
+                  }
+                ]
+              },
+              "phases": [
+                { "name": "Polar setup", "why": "write z = i with r = 1, θ = π/2, and n = 3 in Equation (4)" },
+                { "name": "k = 0 (principal)", "why": "evaluate w₀ at angle (π/2)/3 = π/6" },
+                { "name": "k = 1", "why": "evaluate w₁ at angle (π/2 + 2π)/3 = 5π/6" },
+                { "name": "k = 2", "why": "evaluate w₂ at angle (π/2 + 4π)/3 = 3π/2" }
+              ],
+              "steps": [
+                {
+                  "phase": "Polar setup",
+                  "tex": "w_k = \\sqrt[3]{1}\\left[\\cos\\left(\\frac{\\pi/2 + 2k\\pi}{3}\\right) + i\\sin\\left(\\frac{\\pi/2 + 2k\\pi}{3}\\right)\\right]",
+                  "focus": ["u1"],
+                  "note": "Substitute \\(r = 1\\), \\(\\theta = \\pi/2\\), and \\(n = 3\\) into Equation (4) for \\(k = 0, 1, 2\\).",
+                  "ask": {
+                    "q": "For \\(k = 0\\), what is the angle \\(\\frac{\\pi/2 + 0}{3}\\) of the principal cube root \\(w_0\\)?",
+                    "options": [
+                      "\\(\\frac{\\pi}{6}\\)",
+                      "\\(\\frac{\\pi}{3}\\)",
+                      "\\(\\frac{3\\pi}{2}\\)",
+                      "\\(\\frac{\\pi}{2}\\)"
+                    ],
+                    "answer": 0,
+                    "why": "Dividing π/2 by 3 gives the principal root angle π/6."
+                  }
+                },
+                {
+                  "phase": "k = 0 (principal)",
+                  "move": { "type": "evaluate", "by": "k = 0" },
+                  "tex": "w_0 = \\cos\\frac{\\pi}{6} + i\\sin\\frac{\\pi}{6}",
+                  "focus": ["w012"],
+                  "note": "Set \\(k = 0\\) to obtain the principal cube root \\(w_0\\).",
+                  "ask": {
+                    "q": "What is \\(w_0 = \\cos(\\pi/6) + i\\sin(\\pi/6)\\) in \\(a + bi\\) form?",
+                    "options": [
+                      "\\(\\frac{1}{2} + \\frac{\\sqrt{3}}{2}i\\)",
+                      "\\(\\frac{\\sqrt{3}}{2} + \\frac{1}{2}i\\)",
+                      "\\(-\\frac{\\sqrt{3}}{2} + \\frac{1}{2}i\\)",
+                      "\\(\\frac{\\sqrt{2}}{2} + \\frac{\\sqrt{2}}{2}i\\)"
+                    ],
+                    "answer": 1,
+                    "why": "Since cos(π/6) = √3/2 and sin(π/6) = 1/2, we get w₀ = √3/2 + (1/2)i."
+                  }
+                },
+                {
+                  "move": { "type": "simplify" },
+                  "tex": "w_0 = \\frac{\\sqrt{3}}{2} + \\frac{1}{2}i",
+                  "focus": ["w012"],
+                  "note": "This is the principal cube root of \\(i\\).",
+                  "ask": {
+                    "q": "For \\(k = 1\\), the angle is \\(\\frac{\\pi/2 + 2\\pi}{3} = \\frac{5\\pi}{6}\\). What is \\(w_1\\)?",
+                    "options": [
+                      "\\(\\frac{\\sqrt{3}}{2} - \\frac{1}{2}i\\)",
+                      "\\(-\\frac{1}{2} + \\frac{\\sqrt{3}}{2}i\\)",
+                      "\\(-\\frac{\\sqrt{3}}{2} + \\frac{1}{2}i\\)",
+                      "\\(-\\frac{\\sqrt{3}}{2} - \\frac{1}{2}i\\)"
+                    ],
+                    "answer": 2,
+                    "why": "At 5π/6 in Quadrant II, cos(5π/6) = -√3/2 and sin(5π/6) = 1/2."
+                  }
+                },
+                {
+                  "phase": "k = 1",
+                  "move": { "type": "evaluate", "by": "k = 1" },
+                  "tex": "w_1 = -\\frac{\\sqrt{3}}{2} + \\frac{1}{2}i",
+                  "focus": ["w012"],
+                  "note": "At \\(k = 1\\), \\(\\cos(5\\pi/6) + i\\sin(5\\pi/6) = -\\frac{\\sqrt{3}}{2} + \\frac{1}{2}i\\).",
+                  "ask": {
+                    "q": "For \\(k = 2\\), the angle is \\(\\frac{\\pi/2 + 4\\pi}{3} = \\frac{3\\pi}{2}\\). What is \\(w_2\\)?",
+                    "options": [
+                      "\\(i\\)",
+                      "\\(-1\\)",
+                      "\\(1\\)",
+                      "\\(-i\\)"
+                    ],
+                    "answer": 3,
+                    "why": "Since cos(3π/2) = 0 and sin(3π/2) = -1, the third cube root is w₂ = -i."
+                  }
+                },
+                {
+                  "phase": "k = 2",
+                  "move": { "type": "evaluate", "by": "k = 2" },
+                  "tex": "w_2 = -i",
+                  "focus": ["w012"],
+                  "note": "At \\(k = 2\\), \\(\\cos(3\\pi/2) + i\\sin(3\\pi/2) = -i\\) (Figure 1.4.1)."
+                }
+              ]
+            },
+            {
+              "id": "ca-m1-u4-c6",
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "In Example 1 of §1.4, which number is the principal cube root of \\(z = i\\)?",
+              "options": [
+                "\\(-i\\)",
+                "\\(-\\frac{\\sqrt{3}}{2} + \\frac{1}{2}i\\)",
+                "\\(\\frac{1}{2} + \\frac{\\sqrt{3}}{2}i\\)",
+                "\\(\\frac{\\sqrt{3}}{2} + \\frac{1}{2}i\\)"
+              ],
+              "answer": 3,
+              "why": "Using Arg(i) = π/2 and k = 0 gives the principal cube root w₀ = cos(π/6) + i sin(π/6) = √3/2 + (1/2)i."
+            },
+            {
+              "id": "ca-m1-u4-c7",
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "What is the radian angle between any two successive \\(n\\)th roots \\(w_k\\) and \\(w_{k+1}\\)?",
+              "options": [
+                "\\(\\frac{2\\pi}{n}\\)",
+                "\\(\\frac{\\pi}{n}\\)",
+                "\\(2n\\pi\\)",
+                "\\(\\frac{\\theta}{n}\\)"
+              ],
+              "answer": 0,
+              "why": "The arguments of w_k and w_{k+1} differ by [(θ + 2(k+1)π) - (θ + 2kπ)] / n = 2π/n."
+            },
+            {
+              "id": "ca-m1-u4-c8",
+              "type": "number",
+              "label": "Quiz · Number",
+              "time": 60,
+              "q": "How many distinct fourth roots does the complex number \\(z = 1 + i\\) have?",
+              "answer": 4,
+              "tolerance": 0,
+              "unit": "",
+              "why": "Every nonzero complex number has exactly n distinct nth roots, so 1 + i has 4 distinct fourth roots."
+            },
+            {
+              "id": "ca-m1-u4-c9",
+              "type": "fill",
+              "label": "Quiz · Fill in",
+              "time": 60,
+              "q": "The unique root \\(w_0\\) found using \\(\\theta = \\text{Arg}(z)\\) and \\(k = 0\\) is the ______ \\(n\\)th root of \\(z\\).",
+              "answer": "principal|principal nth root",
+              "why": "In §1.4, choosing θ = Arg(z) and k = 0 in Equation (4) defines the principal nth root of z."
+            }
+          ]
+        },
+        {
+          "id": "ca-m1-unit-5",
+          "title": "Sets of Points in the Complex Plane",
+          "icon": "lens",
+          "source": "Unit 5 · Zill & Shanahan §1.5",
+          "cards": [
+            {
+              "id": "ca-m1-u5-c1",
+              "type": "intuition",
+              "term": "ca-m1-neighborhood",
+              "title": "From a circle of radius ρ to open neighborhoods and rings",
+              "meaning": "Because |z - z₀| is the distance from z₀ to z, |z - z₀| = ρ is a circle and |z - z₀| < ρ is the open disk (neighborhood) inside it.",
+              "art": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"74\" cy=\"92\" r=\"44\" class=\"s ok\"/><circle cx=\"74\" cy=\"92\" r=\"3.5\" class=\"f\"/><line x1=\"74\" y1=\"92\" x2=\"112\" y2=\"70\" class=\"lk\"/><circle cx=\"190\" cy=\"92\" r=\"44\" class=\"s\"/><circle cx=\"190\" cy=\"92\" r=\"44\" class=\"gk\"/><circle cx=\"190\" cy=\"92\" r=\"3.5\" class=\"f\"/><text x=\"74\" y=\"108\" text-anchor=\"middle\" class=\"t\">z₀</text><text x=\"98\" y=\"76\" class=\"t\">ρ</text><text x=\"74\" y=\"154\" text-anchor=\"middle\" class=\"t\">Disk |z - z₀| ≤ ρ</text><text x=\"190\" y=\"108\" text-anchor=\"middle\" class=\"t\">z₀</text><text x=\"190\" y=\"154\" text-anchor=\"middle\" class=\"t\">Neighborhood |z - z₀| &lt; ρ</text><text x=\"130\" y=\"26\" text-anchor=\"middle\" class=\"t\">Solid boundary (included) vs. dashed boundary (excluded)</text></svg>",
+              "picture": "Including the circle |z - z₀| = ρ gives a closed disk; excluding the circle gives an open neighborhood of z₀.",
+              "example": "The inequality |z| < 1 is a neighborhood of the origin, and 0 < |z| < 1 is a deleted neighborhood that also removes 0.",
+              "bridge": "Neighborhoods let us test whether every point of a set S has breathing room inside S, defining open sets and domains."
+            },
+            {
+              "id": "ca-m1-u5-c2",
+              "type": "info",
+              "label": "01 · §1.5",
+              "title": "What are circles, disks, neighborhoods, and annuli?",
+              "defines": ["ca-m1-neighborhood", "ca-m1-annulus"],
+              "body": "For \\(\\rho > 0\\), \\(|z - z_0| = \\rho\\) is a circle, \\(|z - z_0| \\le \\rho\\) is a closed disk, \\(|z - z_0| < \\rho\\) is a neighborhood, and \\(\\rho_1 < |z - z_0| < \\rho_2\\) is an annulus.",
+              "tex": "|z - z_0| = \\rho, \\qquad 0 < |z - z_0| < \\rho, \\qquad \\rho_1 < |z - z_0| < \\rho_2",
+              "examples": ["Eq. (1): Circle", "Deleted nbhd: 0<|z-z₀|<ρ", "Eq. (2): Open annulus"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "annulusfig",
+                    "objects": [
+                      { "type": "circle", "center": [72, 90], "r": 42, "role": "s ok", "name": "circ1" },
+                      { "type": "point", "coords": [72, 90], "size": 4, "role": "f", "name": "z0a" },
+                      { "type": "segment", "p1": [72, 90], "p2": [108, 112], "role": "lk", "width": 2, "name": "rad1" },
+                      { "type": "circle", "center": [192, 90], "r": 46, "role": "s", "name": "outer" },
+                      { "type": "circle", "center": [192, 90], "r": 46, "role": "gk", "dash": 2, "width": 1.8, "name": "outerb" },
+                      { "type": "circle", "center": [192, 90], "r": 22, "role": "gk", "dash": 2, "width": 1.8, "name": "innerb" },
+                      { "type": "point", "coords": [192, 90], "size": 3.5, "role": "f", "name": "z0b" },
+                      { "type": "label", "coords": [72, 74], "text": "z₀", "size": 11, "align": "center", "role": "t", "name": "z0a" },
+                      { "type": "label", "coords": [72, 24], "text": "|z - z₀| = ρ", "size": 11, "align": "center", "role": "t", "name": "circ1" },
+                      { "type": "label", "coords": [192, 24], "text": "ρ₁ < |z - z₀| < ρ₂", "size": 11, "align": "center", "role": "t", "name": "outer" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "ca-m1-u5-c3",
+              "type": "info",
+              "label": "02 · §1.5",
+              "title": "What are interior points, open sets, and boundary points?",
+              "defines": ["ca-m1-open-set", "ca-m1-boundary"],
+              "body": "A set \\(S\\) is open if every point of \\(S\\) has a neighborhood entirely inside \\(S\\), while boundary points have every neighborhood meeting both \\(S\\) and its complement.",
+              "tex": "\\text{Re}(z) > 1 \\text{ (open set)}, \\qquad \\text{boundary of } |z - i| \\le 2 \\text{ and } |z - i| < 2 \\text{ is } |z - i| = 2",
+              "examples": ["Fig. 1.5.3: Re(z) > 1 open", "Fig. 1.5.4: Re(z) ≥ 1 not open", "Exterior: nbhd outside S"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "intbdry",
+                    "objects": [
+                      { "type": "ellipse", "center": [130, 92], "rx": 78, "ry": 46, "role": "s ok", "name": "setS" },
+                      { "type": "circle", "center": [104, 92], "r": 18, "role": "gk", "dash": 2, "width": 1.6, "name": "intnbhd" },
+                      { "type": "point", "coords": [104, 92], "size": 3.5, "role": "f", "name": "intpt" },
+                      { "type": "circle", "center": [208, 92], "r": 18, "role": "gk", "dash": 2, "width": 1.6, "name": "bdrynbhd" },
+                      { "type": "point", "coords": [208, 92], "size": 3.5, "role": "f", "name": "bdrypt" },
+                      { "type": "label", "coords": [104, 64], "text": "Interior", "size": 11, "align": "center", "role": "t", "name": "intpt" },
+                      { "type": "label", "coords": [208, 64], "text": "Boundary", "size": 11, "align": "center", "role": "t", "name": "bdrypt" },
+                      { "type": "label", "coords": [42, 148], "text": "Exterior", "size": 11, "align": "center", "role": "t", "name": "setS" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "ca-m1-u5-c4",
+              "type": "info",
+              "label": "03 · §1.5",
+              "title": "What are connected sets, domains, closed sets, and bounded sets?",
+              "defines": ["ca-m1-connected-set", "ca-m1-domain", "ca-m1-closed-set", "ca-m1-bounded-set"],
+              "body": "A set is connected if polygonal lines inside it join any two points, a domain is an open connected set, a closed set holds all its boundary, and a bounded set fits in \\(|z| < R\\).",
+              "tex": "\\text{Domain} = \\text{open} + \\text{connected}, \\qquad S \\text{ bounded} \\iff |z| < R \\text{ for all } z \\in S",
+              "examples": ["Fig. 1.5.7: Connected set", "1 ≤ |z - 5| < 3: neither", "Fig. 1.5.9: Bounded |z|<R"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "dombound",
+                    "objects": [
+                      { "type": "circle", "center": [130, 90], "r": 64, "role": "gk", "dash": 2, "width": 1.8, "name": "bigR" },
+                      { "type": "polygon", "points": [[86, 62], [118, 128], [174, 114], [158, 54]], "role": "s ok", "name": "setS" },
+                      { "type": "polyline", "points": [[98, 76], [122, 112], [156, 98], [146, 68]], "role": "lk", "width": 2.2, "dash": 0, "name": "poly" },
+                      { "type": "point", "coords": [98, 76], "size": 3.5, "role": "f", "name": "z1" },
+                      { "type": "point", "coords": [146, 68], "size": 3.5, "role": "f", "name": "z2" },
+                      { "type": "label", "coords": [130, 164], "text": "Bounded: enclosed in |z| < R", "size": 11, "align": "center", "role": "t", "name": "bigR" },
+                      { "type": "label", "coords": [130, 16], "text": "Connected: polygonal line in S", "size": 11, "align": "center", "role": "t", "name": "poly" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "ca-m1-u5-c5",
+              "type": "info",
+              "label": "04 · §1.5",
+              "title": "What are the Riemann sphere and the point at infinity?",
+              "defines": ["ca-m1-riemann-sphere"],
+              "body": "Stereographic projection maps each \\(z\\) in the plane onto the unit Riemann sphere and identifies the north pole \\((0, 0, 1)\\) with the point at infinity \\(\\infty\\).",
+              "tex": "x^2 + y^2 + u^2 = 1, \\qquad z + \\infty = \\infty, \\qquad \\frac{z}{0} = \\infty \\ (z \\neq 0), \\qquad \\frac{z}{\\infty} = 0 \\ (z \\neq \\infty)",
+              "examples": ["Fig. 1.5.10: Riemann sphere", "North pole (0, 0, 1) ↔ ∞", "Indeterminate: ∞-∞, ∞/∞"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "riemann",
+                    "objects": [
+                      { "type": "polygon", "points": [[18, 42], [68, 92], [242, 92], [192, 42]], "role": "s ok", "name": "plane" },
+                      { "type": "circle", "center": [126, 96], "r": 46, "role": "s ok", "name": "sphere" },
+                      { "type": "ellipse", "center": [126, 96], "rx": 46, "ry": 14, "role": "gk", "dash": 2, "width": 1.6, "name": "eq" },
+                      { "type": "segment", "p1": [126, 142], "p2": [204, 58], "role": "lk", "width": 2, "name": "proj" },
+                      { "type": "point", "coords": [126, 142], "size": 4, "role": "f", "name": "npole" },
+                      { "type": "point", "coords": [162, 103], "size": 3.5, "role": "f", "name": "sphpt" },
+                      { "type": "point", "coords": [204, 58], "size": 4, "role": "f", "name": "zpt" },
+                      { "type": "label", "coords": [126, 158], "text": "(0, 0, 1) ↔ ∞", "size": 11, "align": "center", "role": "t", "name": "npole" },
+                      { "type": "label", "coords": [208, 46], "text": "(a, b, 0)", "size": 11, "align": "center", "role": "t", "name": "zpt" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "ca-m1-u5-c6",
+              "type": "derivation",
+              "label": "Example 1 · §1.5",
+              "title": "Example 1(b) & Open Half-Plane: Circle center and interior neighborhood",
+              "legend": "\\(z = x + iy\\), \\(z_0 = 1 - 3i\\) circle center, \\(\\rho = 5\\) circle radius, \\(\\varepsilon\\) neighborhood radius.",
+              "setup": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "cfig",
+                    "objects": [
+                      { "type": "circle", "center": [68, 90], "r": 42, "role": "s ok", "name": "cfig" },
+                      { "type": "point", "coords": [68, 90], "size": 4, "role": "f", "name": "cfig" },
+                      { "type": "label", "coords": [68, 72], "text": "z₀ = 1 - 3i", "size": 11, "align": "center", "role": "t", "name": "cfig" },
+                      { "type": "label", "coords": [68, 26], "text": "|z - (1-3i)| = 5", "size": 11, "align": "center", "role": "t", "name": "cfig" }
+                    ]
+                  },
+                  {
+                    "step": 3,
+                    "name": "hpfig",
+                    "objects": [
+                      { "type": "polygon", "points": [[162, 24], [162, 156], [242, 156], [242, 24]], "role": "s", "name": "hpfig" },
+                      { "type": "segment", "p1": [162, 24], "p2": [162, 156], "role": "gk", "dash": 2, "width": 1.8, "name": "hpfig" },
+                      { "type": "circle", "center": [192, 96], "r": 18, "role": "s ok", "name": "hpfig" },
+                      { "type": "point", "coords": [192, 96], "size": 3.5, "role": "f", "name": "hpfig" },
+                      { "type": "label", "coords": [162, 166], "text": "x = 1", "size": 11, "align": "center", "role": "t", "name": "hpfig" },
+                      { "type": "label", "coords": [202, 62], "text": "1.1 + 2i", "size": 11, "align": "center", "role": "t", "name": "hpfig" }
+                    ]
+                  }
+                ]
+              },
+              "phases": [
+                { "name": "Group center z₀", "why": "rewrite |z - 1 + 3i| = 5 in standard form |z - z₀| = ρ" },
+                { "name": "Read center & radius", "why": "match with Equation (1) to identify z₀ and ρ" },
+                { "name": "Half-plane point", "why": "check distance from z₁ = 1.1 + 2i to boundary x = 1" },
+                { "name": "Interior neighborhood", "why": "choose radius ε = 0.05 < 0.1 so the neighborhood stays in Re(z) > 1" }
+              ],
+              "steps": [
+                {
+                  "phase": "Group center z₀",
+                  "tex": "|z - 1 + 3i| = 5",
+                  "focus": ["cfig"],
+                  "note": "Start with the circle equation in Example 1(b) of §1.5.",
+                  "ask": {
+                    "q": "To match Equation (1), \\(|z - z_0| = \\rho\\), how do we rewrite \\(|z - 1 + 3i|\\)?",
+                    "options": [
+                      "\\(|z - (1 - 3i)|\\)",
+                      "\\(|z - (1 + 3i)|\\)",
+                      "\\(|z - (-1 + 3i)|\\)",
+                      "\\(|z - (-1 - 3i)|\\)"
+                    ],
+                    "answer": 0,
+                    "why": "Factoring a minus sign out of -1 + 3i gives -(1 - 3i), so |z - 1 + 3i| = |z - (1 - 3i)|."
+                  }
+                },
+                {
+                  "move": { "type": "factor" },
+                  "tex": "|z - (1 - 3i)| = 5",
+                  "focus": ["cfig"],
+                  "note": "Write \\(z - 1 + 3i\\) in the standard form \\(z - z_0\\).",
+                  "ask": {
+                    "q": "From \\(|z - (1 - 3i)| = 5\\), what is the center \\(z_0\\) of the circle?",
+                    "options": [
+                      "\\(-1 + 3i\\)",
+                      "\\(1 - 3i\\)",
+                      "\\(1 + 3i\\)",
+                      "\\(5\\)"
+                    ],
+                    "answer": 1,
+                    "why": "Comparing |z - (1 - 3i)| = 5 with Equation (1) |z - z₀| = ρ gives center z₀ = 1 - 3i and radius ρ = 5."
+                  }
+                },
+                {
+                  "phase": "Read center & radius",
+                  "move": { "type": "define", "by": "z_0 = 1 - 3i,\\ \\rho = 5" },
+                  "tex": "z_0 = 1 - 3i",
+                  "focus": ["cfig"],
+                  "note": "Example 1(b): the equation describes a circle of radius \\(\\rho = 5\\) centered at \\(z_0 = 1 - 3i\\).",
+                  "ask": {
+                    "q": "In Figure 1.5.3, how far is \\(z_1 = 1.1 + 2i\\) from the boundary line \\(x = 1\\) of \\(\\text{Re}(z) > 1\\)?",
+                    "options": [
+                      "\\(1.1\\)",
+                      "\\(2\\)",
+                      "\\(0.1\\)",
+                      "\\(0.05\\)"
+                    ],
+                    "answer": 2,
+                    "why": "Since Re(1.1 + 2i) = 1.1, the horizontal distance to the vertical line x = 1 is 1.1 - 1 = 0.1."
+                  }
+                },
+                {
+                  "phase": "Half-plane point",
+                  "move": { "type": "evaluate", "by": "d = \\text{Re}(1.1 + 2i) - 1" },
+                  "tex": "d = 1.1 - 1",
+                  "focus": ["hpfig"],
+                  "note": "Measure the distance \\(d = 0.1\\) from \\(z_1 = 1.1 + 2i\\) to the boundary line \\(x = 1\\).",
+                  "ask": {
+                    "q": "Which neighborhood radius \\(\\varepsilon\\) in Figure 1.5.3 lies entirely inside \\(\\text{Re}(z) > 1\\)?",
+                    "options": [
+                      "\\(\\varepsilon = 0.2\\)",
+                      "\\(\\varepsilon = 0.5\\)",
+                      "\\(\\varepsilon = 1\\)",
+                      "\\(\\varepsilon = 0.05\\)"
+                    ],
+                    "answer": 3,
+                    "why": "Any radius smaller than 0.1 works; Figure 1.5.3 chooses ε = 0.05 so |z - (1.1 + 2i)| < 0.05 lies entirely in Re(z) > 1."
+                  }
+                },
+                {
+                  "phase": "Interior neighborhood",
+                  "move": { "type": "define", "by": "\\varepsilon = 0.05 < d" },
+                  "tex": "\\varepsilon = 0.05",
+                  "focus": ["hpfig"],
+                  "note": "Thus \\(|z - (1.1 + 2i)| < 0.05\\) lies entirely in \\(\\text{Re}(z) > 1\\), showing \\(1.1 + 2i\\) is an interior point."
+                }
+              ]
+            },
+            {
+              "id": "ca-m1-u5-c7",
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "In Example 1(b) of §1.5, what are the center and radius of \\(|z - 1 + 3i| = 5\\)?",
+              "options": [
+                "Center \\(1 - 3i\\), radius \\(5\\)",
+                "Center \\(-1 + 3i\\), radius \\(5\\)",
+                "Center \\(1 - 3i\\), radius \\(\\sqrt{5}\\)",
+                "Center \\(1 + 3i\\), radius \\(5\\)"
+              ],
+              "answer": 0,
+              "why": "Rewriting |z - 1 + 3i| = 5 as |z - (1 - 3i)| = 5 shows the center is z₀ = 1 - 3i and the radius is 5."
+            },
+            {
+              "id": "ca-m1-u5-c8",
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "Which two properties define a domain \\(S\\) in the complex plane?",
+              "options": [
+                "Closed and bounded",
+                "Open and connected",
+                "Open and bounded",
+                "Connected and closed"
+              ],
+              "answer": 1,
+              "why": "In §1.5, an open connected set in the complex plane is called a domain."
+            },
+            {
+              "id": "ca-m1-u5-c9",
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "How is the annular region \\(1 \\le |z - 5| < 3\\) classified in §1.5?",
+              "options": [
+                "Open set",
+                "Closed set",
+                "Neither open nor closed",
+                "Unbounded set"
+              ],
+              "answer": 2,
+              "why": "Because 1 ≤ |z - 5| < 3 contains its inner boundary circle |z - 5| = 1 but not its outer boundary circle |z - 5| = 3, it is neither open nor closed."
+            },
+            {
+              "id": "ca-m1-u5-c10",
+              "type": "fill",
+              "label": "Quiz · Fill in",
+              "time": 60,
+              "q": "In §1.5, an open connected set in the complex plane is called a ______.",
+              "answer": "domain",
+              "why": "By definition in §1.5, a set that is both open and connected is called a domain."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+

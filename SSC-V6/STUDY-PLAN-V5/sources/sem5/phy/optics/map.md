@@ -3,7 +3,7 @@
 Textbook (Book 1): Ajoy Ghatak, *Optics*, 6th ed. (McGraw Hill).
 File: `SSC-V2/SEM5/PHY/books/Optics by Ghatak.pdf` (611 PDF pages).
 
-Book 2 (Subrahmanyam, Lal & Avadhanulu) is not on disk. Not cut.
+Book 2 (Subrahmanyam, Brij Lal & Avadhanulu) is used for Module 4 only (see Module 4 below). Its chapter 20 is `SSC-V6/module4.pdf`.
 
 ## Page offsets (PDF page = printed page + offset, per chapter)
 
@@ -59,20 +59,31 @@ Unit 13 starts at PDF 294, where §18.6 begins on the right-hand column. Its end
 
 ## Module 4 — Polarisation (items 17–22)
 
-**Substitution.** The syllabus cites Book 2 (Subrahmanyam, Brij Lal & Avadhanulu) for this module: "Sections 20.1–20.4, 20.5, 20.6.2–20.6.3, 20.8.3, 20.9.1, 20.17–20.20 of Book 2". Book 2 is not on disk, so these units are cut from Ghatak chapter 22, which covers the same topics. They do not follow the Book 2 section numbers. Upload Book 2 and these units need recutting from its sections.
+**Source.** The syllabus cites Book 2 (Subrahmanyam, Brij Lal & Avadhanulu, *A Text Book of Optics*) for this module: "Sections 20.1–20.4, 20.5, 20.6.2–20.6.3, 20.8.3, 20.9.1, 20.17–20.20 of Book 2". These units are cut from the real Book 2 chapter 20 (`module4.pdf`, 45 pp, printed page = PDF page + 479). Replaces the earlier Ghatak ch. 22 stand-ins.
 
-| Unit | Syllabus content | Book section | PDF pp | File |
-|---|---|---|---|---|
-| 17 | Polarisation, introduction | 22.1 | 355–357 | module-4/unit-17-introduction-polarization.pdf |
-| 18 | Production of linearly polarised light | 22.3 | 358–360 | module-4/unit-18-production-linearly-polarized-light.pdf |
-| 19 | Effects of polariser and analyser (Malus's law) | 22.2 | 358–360 | module-4/unit-19-malus-law-polariser-analyser.pdf |
-| 20 | Double refraction, Huygens' explanation | 22.5 | 365–368 | module-4/unit-20-double-refraction-huygens.pdf |
-| 21 | Wave plates | 22.6 | 369–371 | module-4/unit-21-wave-plates.pdf |
-| 22 | Production and analysis of different polarised light | 22.7–22.8 | 372–375 | module-4/unit-22-analysis-polarized-light-optical-activity.pdf |
+The syllabus section numbers (20.8.3, 20.9.1) do not exist in this edition, so units are mapped **by content**. Each cut is whole pages; the start and stop points inside a page are listed so the reader knows where the unit begins and ends.
 
-Units 18 and 19 are on the same pages in the book (§22.2 and §22.3 both start on PDF 358). Both files are cut with those pages.
+| Unit | Syllabus content | Book section | PDF pp | Start and stop inside pages | File |
+|---|---|---|---|---|---|
+| 17 | Polarisation, introduction | 20.1–20.5 | 1–9 | Stop before §20.6 (heading halfway down p. 9) | module-4/unit-17-introduction-polarization.pdf |
+| 18 | Production of linearly polarised light | 20.6.2–20.6.3 only | 11–12 | Start at §20.6.2 (bottom of p. 11). Stop before §20.6.4 (lower part of p. 12) | module-4/unit-18-production-linearly-polarized-light.pdf |
+| 19 | Effects of polariser and analyser; Malus's law | 20.8, 20.9, 20.13 | 14–17, then 24–25 | Start at §20.8 (about a fifth down p. 14). Stop before §20.10 (halfway down p. 17). Second part: start at §20.13 (halfway down p. 24), stop before §20.14 (about a fifth down p. 25) | module-4/unit-19-malus-law-polariser-analyser.pdf |
+| 20 | Double refraction; Huygens' explanation | 20.10, 20.11, 20.14 | 17–22, then 25–28 | Start at §20.10 (halfway down p. 17). Skip pp. 23–24 (§20.12 Nicol prism, not in syllabus). Second part: start at §20.14 (about a fifth down p. 25), stop before §20.15 (halfway down p. 28) | module-4/unit-20-double-refraction-huygens.pdf |
+| 21 | Wave plates | 20.17–20.19 | 32–38 | Start at §20.17 (about a quarter down p. 32). Skip pp. 29–31 (§20.16 electromagnetic theory). Stop before §20.20 (about 40% down p. 38) | module-4/unit-21-wave-plates.pdf |
+| 22 | Production and analysis of polarised light | 20.20–20.22 | 38–42 | Start at §20.20 (about 40% down p. 38). Stop before §20.23 Babinet compensator (about 80% down p. 42) | module-4/unit-22-analysis-polarized-light-optical-activity.pdf |
+
+Pages shared between units: p. 17 (units 19 and 20), p. 25 (units 19 and 20), p. 38 (units 21 and 22). Unit 19 and unit 20 files each hold two ranges, joined in one PDF. The file name of unit 22 keeps its old suffix; the chapter has no optical-activity section.
 
 ## Notes
 - Section starts and ends were read from the page images and the text layer. Each unit's end is the page before the next section's first page (checked for units 11, 13, 14, 15, 16). Units 1 and 5 include the first line of the next section, and unit 11 excludes the chapter 15 problem list.
 - Items 1–22 map to the book sections listed in the syllabus. Section 14.3 (coherence) and §14.10 (displacement of fringes) fall inside units 7–9.
 - Syllabus: `syllabus.pdf` (copied from `SEM5-PYQ/OPTICS/`).
+
+## Extra pages (added 2026-10-27, from the Nov 2026 paper trace)
+
+Cut as separate files; the unit cuts are unchanged.
+
+| File | Ghatak PDF pp | Printed | What | Why |
+|---|---|---|---|---|
+| module-2/gap-14.3-coherence.pdf | 206 | 14.5 | Start of §14.3 Coherence (between units 6 and 7) | Nov 2026 Q1 (sustained interference conditions); p. 206 was in no cut |
+| module-3/exercises-20-problems.pdf | 341–342 | 20.16–20.17 | Chapter 20 problem list (zone plate 20.5–20.6, straight edge 20.8–20.10) | Nov 2026 Q16 (straight-edge maxima) is this type |

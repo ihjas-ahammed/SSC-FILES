@@ -1,0 +1,25 @@
+<!-- id: m2-affine | mod: Module II | modName: Convex sets and functions | modClass: m2 | title: Affine and convex sets, cones | short: Affine and convex sets (2.1) | est: ~30 min -->
+<gist>Three kinds of combination define three kinds of set. Affine: $\theta_1x_1+\theta_2x_2$ with $\theta_1+\theta_2=1$ (the whole line). Convex: also $\theta_i\ge0$ (the segment). Conic: $\theta_i\ge0$ with no sum condition (a wedge from $\mathbf 0$). A set is affine, convex or a convex cone when it contains all such combinations of its points.</gist>
+
+<tp>Lines, segments and affine sets (§2.1.1–2.1.2)</tp>
+<p>For $\mathbf x_1\ne\mathbf x_2$, the points $\mathbf y=\theta\mathbf x_1+(1-\theta)\mathbf x_2=\mathbf x_2+\theta(\mathbf x_1-\mathbf x_2)$, $\theta\in\mathbf R$, form the <strong>line</strong> through them; $0\le\theta\le1$ gives the <strong>segment</strong>.</p>
+<must><p>$C\subseteq\mathbf R^n$ is <b>affine</b> if the line through any two distinct points of $C$ lies in $C$: $\mathbf x_1,\mathbf x_2\in C$, $\theta\in\mathbf R$ ⇒ $\theta\mathbf x_1+(1-\theta)\mathbf x_2\in C$. Then $C$ contains every <b>affine combination</b> $\theta_1\mathbf x_1+\dots+\theta_k\mathbf x_k$ with $\theta_1+\dots+\theta_k=1$.</p></must>
+<p>If $C$ is affine and $\mathbf x_0\in C$, then $V=C-\mathbf x_0=\{\mathbf x-\mathbf x_0\mid\mathbf x\in C\}$ is a <strong>subspace</strong> (closed under sums and scalar multiples): for $\mathbf v_1,\mathbf v_2\in V$, $\alpha\mathbf v_1+\beta\mathbf v_2+\mathbf x_0=\alpha(\mathbf v_1+\mathbf x_0)+\beta(\mathbf v_2+\mathbf x_0)+(1-\alpha-\beta)\mathbf x_0\in C$. So an affine set is a subspace plus an offset, $C=V+\mathbf x_0$, and its dimension is $\dim V$.</p>
+<p><b>Example 2.1.</b> The solution set $C=\{\mathbf x\mid A\mathbf x=\mathbf b\}$ is affine: if $A\mathbf x_1=A\mathbf x_2=\mathbf b$ then $A(\theta\mathbf x_1+(1-\theta)\mathbf x_2)=\theta\mathbf b+(1-\theta)\mathbf b=\mathbf b$. Its subspace is the nullspace of $A$. Conversely every affine set is such a solution set.</p>
+<p>The <strong>affine hull</strong> $\aff C$ is the set of all affine combinations of points of $C$: the smallest affine set containing $C$.</p>
+
+<tp>Affine dimension and relative interior (§2.1.3)</tp>
+<p>The <strong>affine dimension</strong> of $C$ is the dimension of $\aff C$. The <strong>relative interior</strong> is the interior relative to $\aff C$: $\relint C=\{\mathbf x\in C\mid B(\mathbf x,r)\cap\aff C\subseteq C\text{ for some }r\gt0\}$; the <strong>relative boundary</strong> is $\cl C\setminus\relint C$.</p>
+<p><b>Example 2.2.</b> The square $C=\{\mathbf x\in\mathbf R^3\mid-1\le x_1,x_2\le1,\ x_3=0\}$ in the $(x_1,x_2)$-plane: $\aff C$ is that plane, the interior of $C$ in $\mathbf R^3$ is empty, but $\relint C=\{-1\lt x_1,x_2\lt1,x_3=0\}$. Its boundary in $\mathbf R^3$ is all of $C$; its relative boundary is the square's frame.</p>
+
+<tp>Convex sets and the convex hull (§2.1.4)</tp>
+<must><p>$C$ is <b>convex</b> if $\mathbf x_1,\mathbf x_2\in C$, $0\le\theta\le1$ ⇒ $\theta\mathbf x_1+(1-\theta)\mathbf x_2\in C$. Every affine set is convex. A convex set contains every <b>convex combination</b> $\theta_1\mathbf x_1+\dots+\theta_k\mathbf x_k$, $\theta_i\ge0$, $\sum\theta_i=1$.</p></must>
+<fig name="convsets"><cap>The segment test.</cap></fig>
+<p>The <strong>convex hull</strong> $\conv C=\{\theta_1\mathbf x_1+\dots+\theta_k\mathbf x_k\mid\mathbf x_i\in C,\ \theta_i\ge0,\ \sum\theta_i=1\}$ is the smallest convex set containing $C$: it is convex, and any convex $B\supseteq C$ contains it. Convex combinations extend to infinite sums and integrals (mixtures, expectations): if $C$ is convex and $\mathbf x$ is a random vector in $C$ with probability one, then $\mathbf E\,\mathbf x\in C$.</p>
+
+<tp>Cones (§2.1.5)</tp>
+<must><p>$C$ is a <b>cone</b> if $\mathbf x\in C$, $\theta\ge0$ ⇒ $\theta\mathbf x\in C$. A <b>convex cone</b> also contains every <b>conic combination</b> $\theta_1\mathbf x_1+\theta_2\mathbf x_2$, $\theta_i\ge0$. The <b>conic hull</b> of $C$ is the set of all conic combinations of its points, the smallest convex cone containing $C$.</p></must>
+<fig name="hulls"><cap>Convex hull of a finite set and of a non-convex set, then a conic hull.</cap></fig>
+<trap><p>A cone need not be convex (two rays from the origin) and a convex set need not be a cone. "Convex cone" needs both. Every subspace is a convex cone and an affine set; a halfspace through $\mathbf 0$ is a convex cone, not affine.</p></trap>
+<chk><q>Show that the intersection of two convex sets is convex.</q><a><p>Take $\mathbf x_1,\mathbf x_2\in C\cap D$ and $0\le\theta\le1$. Then $\theta\mathbf x_1+(1-\theta)\mathbf x_2$ is in $C$ (as $C$ is convex) and in $D$, so in $C\cap D$.</p></a></chk>
+<chk><q>Is the set $\{(x_1,x_2)\mid x_1x_2\ge1,\ x_1\gt0\}$ convex? Is it a cone?</q><a><p>Convex (it is the region above the convex function $1/x_1$ on $x_1\gt0$; exercise 2.11 proves it directly). Not a cone: $(1,1)$ is in it but $\tfrac12(1,1)$ is not.</p></a></chk>

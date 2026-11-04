@@ -1,0 +1,192 @@
+# Module IV derivations (Boyd ch. 5)
+
+=== d-lb
+title: The dual function is a lower bound on \(p^\star\)
+marks: 5 marks
+src: Boyd §5.1.3, eq. (5.2)
+legend: \(L(\mathbf x,\boldsymbol\lambda,\boldsymbol\nu)=f_0(\mathbf x)+\sum\lambda_if_i(\mathbf x)+\sum\nu_ih_i(\mathbf x)\), \(g(\boldsymbol\lambda,\boldsymbol\nu)=\inf_{\mathbf x\in\mathcal D}L(\mathbf x,\boldsymbol\lambda,\boldsymbol\nu)\). Take \(\boldsymbol\lambda\succeq0\) and a feasible \(\tilde{\mathbf x}\).
+result: g(\boldsymbol\lambda,\boldsymbol\nu)\le p^\star\quad(\boldsymbol\lambda\succeq0)
+--- The penalty terms at a feasible point
+tex: \sum_i\lambda_if_i(\tilde{\mathbf x})+\sum_i\nu_ih_i(\tilde{\mathbf x})\le0
+move: identity | label=\(\lambda_i\ge0\), \(f_i(\tilde{\mathbf x})\le0\), \(h_i(\tilde{\mathbf x})=0\)
+---
+tex: L(\tilde{\mathbf x},\boldsymbol\lambda,\boldsymbol\nu)\le f_0(\tilde{\mathbf x})
+move: add | by=f_0(\tilde{\mathbf x})
+---
+tex: \begin{gathered}g(\boldsymbol\lambda,\boldsymbol\nu) = \inf_{\mathbf x\in\mathcal D}L(\mathbf x,\boldsymbol\lambda,\boldsymbol\nu)\\\le L(\tilde{\mathbf x},\boldsymbol\lambda,\boldsymbol\nu)\le f_0(\tilde{\mathbf x})\end{gathered}
+move: identity | label=An infimum is at most any value
+---
+tex: g(\boldsymbol\lambda,\boldsymbol\nu)\le p^\star
+move: evaluate | label=Minimise the right side over feasible \(\tilde{\mathbf x}\)
+note: No convexity needed. \(g\) is concave (pointwise infimum of affine functions of \((\boldsymbol\lambda,\boldsymbol\nu)\)) even for non-convex problems. The bound is useful only when \(g\gt-\infty\): \((\boldsymbol\lambda,\boldsymbol\nu)\) is then dual feasible.
+
+=== d-lnorm
+title: Dual of the least-norm problem
+marks: 6 marks
+src: Boyd §5.1.5, eq. (5.4)
+legend: Minimise \(\mathbf x^T\mathbf x\) s.t. \(A\mathbf x=\mathbf b\).
+result: g(\boldsymbol\nu) = -\tfrac14\boldsymbol\nu^TAA^T\boldsymbol\nu-\mathbf b^T\boldsymbol\nu
+--- Lagrangian
+tex: L(\mathbf x,\boldsymbol\nu) = \mathbf x^T\mathbf x+\boldsymbol\nu^T(A\mathbf x-\mathbf b)
+move: define
+note: Convex quadratic in \(\mathbf x\): minimise by setting the gradient to zero.
+---
+tex: 2\mathbf x+A^T\boldsymbol\nu = \mathbf 0
+move: differentiate | wrt=\mathbf x
+---
+tex: \mathbf x = -\tfrac12A^T\boldsymbol\nu
+move: rearrange
+---
+tex: g(\boldsymbol\nu) = \tfrac14\boldsymbol\nu^TAA^T\boldsymbol\nu-\tfrac12\boldsymbol\nu^TAA^T\boldsymbol\nu-\boldsymbol\nu^T\mathbf b
+move: substitute | by=\mathbf x=-\tfrac12A^T\boldsymbol\nu
+---
+tex: g(\boldsymbol\nu) = -\tfrac14\boldsymbol\nu^TAA^T\boldsymbol\nu-\mathbf b^T\boldsymbol\nu
+move: simplify
+note: A concave quadratic. Lower bound: \(-\tfrac14\boldsymbol\nu^TAA^T\boldsymbol\nu-\mathbf b^T\boldsymbol\nu\le\inf\{\mathbf x^T\mathbf x\mid A\mathbf x=\mathbf b\}\) for every \(\boldsymbol\nu\).
+
+=== d-lpdual
+title: Dual of a standard form LP
+marks: 6–10 marks
+src: Boyd §5.1.5, §5.2.1
+legend: Minimise \(\mathbf c^T\mathbf x\) s.t. \(A\mathbf x=\mathbf b\), \(\mathbf x\succeq0\) (constraints \(-x_i\le0\), multipliers \(\lambda_i\)).
+result: \text{maximize}\ -\mathbf b^T\boldsymbol\nu\ \ \text{s.t.}\ A^T\boldsymbol\nu+\mathbf c\succeq0
+--- Lagrangian
+tex: L = \mathbf c^T\mathbf x-\sum_i\lambda_ix_i+\boldsymbol\nu^T(A\mathbf x-\mathbf b)
+move: define
+---
+tex: L = -\mathbf b^T\boldsymbol\nu+(\mathbf c+A^T\boldsymbol\nu-\boldsymbol\lambda)^T\mathbf x
+move: rearrange | label=Affine in \(\mathbf x\)
+--- Infimum of an affine function
+tex: g(\boldsymbol\lambda,\boldsymbol\nu) = \begin{cases}-\mathbf b^T\boldsymbol\nu&A^T\boldsymbol\nu-\boldsymbol\lambda+\mathbf c=\mathbf 0\\-\infty&\text{otherwise}\end{cases}
+move: evaluate | label=A linear function is bounded below only if it is zero
+ask: Why is \(g=-\infty\) when the coefficient vector is nonzero?
+opt*: \(\mathbf x\) can go to infinity along a direction where the linear term decreases
+opt: because \(\mathbf x\succeq0\)
+opt: because \(\boldsymbol\lambda\succeq0\)
+why: \(\mathbf x\) is unconstrained in the infimum (only \(\mathcal D=\mathbf R^n\)).
+--- Dual problem, constraints made explicit
+tex: \text{maximize}\ -\mathbf b^T\boldsymbol\nu\ \ \text{s.t.}\ A^T\boldsymbol\nu-\boldsymbol\lambda+\mathbf c=\mathbf 0,\ \boldsymbol\lambda\succeq0
+move: identity | label=Maximise \(g\) over \(\boldsymbol\lambda\succeq0\)
+---
+tex: \text{maximize}\ -\mathbf b^T\boldsymbol\nu\ \ \text{s.t.}\ A^T\boldsymbol\nu+\mathbf c\succeq0
+move: substitute | label=Eliminate the slack \(\boldsymbol\lambda=A^T\boldsymbol\nu+\mathbf c\)
+note: An inequality form LP. Dual of the inequality form LP (min \(\mathbf c^T\mathbf x\) s.t. \(A\mathbf x\preceq\mathbf b\)): maximise \(-\mathbf b^T\boldsymbol\lambda\) s.t. \(A^T\boldsymbol\lambda+\mathbf c=\mathbf 0\), \(\boldsymbol\lambda\succeq0\). For LPs strong duality holds whenever either problem is feasible.
+
+=== d-ex51
+title: Exercise 5.1: a one-variable problem, dual and strong duality
+marks: 10 marks
+src: Boyd exercise 5.1
+legend: Minimise \(x^2+1\) s.t. \((x-2)(x-4)\le0\).
+result: p^\star = d^\star = 5,\quad x^\star=2,\ \lambda^\star=2
+--- Primal
+tex: (x-2)(x-4)\le0\iff2\le x\le4
+move: factor
+---
+tex: x^\star = 2,\quad p^\star = 5
+move: evaluate | label=\(x^2+1\) is increasing on \([2,4]\)
+--- Lagrangian
+tex: L(x,\lambda) = (1+\lambda)x^2-6\lambda x+(1+8\lambda)
+move: expand | label=\(x^2+1+\lambda(x^2-6x+8)\)
+---
+tex: x = \frac{3\lambda}{1+\lambda}
+move: differentiate | wrt=x | label=\(2(1+\lambda)x-6\lambda=0\), a minimum since \(1+\lambda\gt0\)
+---
+tex: g(\lambda) = -\frac{9\lambda^2}{1+\lambda}+1+8\lambda,\quad\lambda\ge0
+move: substitute
+note: For \(\lambda\gt-1\) the Lagrangian is bounded below; we need only \(\lambda\ge0\).
+--- Dual problem
+tex: g'(\lambda) = 8-\frac{9\lambda(2+\lambda)}{(1+\lambda)^2} = 0
+move: differentiate | wrt=\lambda | label=Quotient rule on \(9\lambda^2/(1+\lambda)\)
+---
+tex: 8(1+\lambda)^2 = 9\lambda^2+18\lambda\iff\lambda^2+2\lambda-8=0
+move: rearrange
+---
+tex: \lambda^\star = 2,\qquad d^\star = g(2) = -12+1+16 = 5
+move: evaluate | label=Roots \(2\) and \(-4\); keep \(\lambda\ge0\)
+note: \(d^\star=p^\star=5\): strong duality, as Slater predicts (\(x=3\) is strictly feasible). KKT check: \(2x^\star+\lambda^\star(2x^\star-6)=4-4=0\) ✓, complementary slackness \(\lambda^\star f_1(x^\star)=2\cdot0=0\) ✓.
+
+=== d-eqqp
+title: KKT for equality-constrained convex quadratic minimisation (example 5.1)
+marks: 6 marks
+src: Boyd §5.5.3, example 5.1
+legend: Minimise \(\tfrac12\mathbf x^TP\mathbf x+\mathbf q^T\mathbf x+r\) s.t. \(A\mathbf x=\mathbf b\), \(P\in\mathbf S^n_+\).
+start: \min\ \tfrac12\mathbf x^TP\mathbf x+\mathbf q^T\mathbf x+r,\ \ A\mathbf x=\mathbf b
+result: \begin{gathered}P\mathbf x^\star+A^T\boldsymbol\nu^\star=-\mathbf q\\ A\mathbf x^\star=\mathbf b\end{gathered}
+--- KKT conditions
+tex: A\mathbf x^\star=\mathbf b,\qquad\nabla_{\mathbf x}\big(\tfrac12\mathbf x^TP\mathbf x+\mathbf q^T\mathbf x+r+\boldsymbol\nu^T(A\mathbf x-\mathbf b)\big)=\mathbf 0
+move: define | label=Primal feasibility and stationarity (no inequalities)
+---
+tex: P\mathbf x^\star+\mathbf q+A^T\boldsymbol\nu^\star=\mathbf 0
+move: differentiate | wrt=\mathbf x
+---
+tex: \begin{pmatrix}P&A^T\\A&0\end{pmatrix}\begin{pmatrix}\mathbf x^\star\\\boldsymbol\nu^\star\end{pmatrix}=\begin{pmatrix}-\mathbf q\\\mathbf b\end{pmatrix}
+move: combine | label=Stack the two conditions
+note: \(n+p\) linear equations (the KKT system). For a convex problem the KKT conditions are sufficient, so solving this system solves the problem.
+
+=== d-water
+title: Water-filling (example 5.2)
+marks: 10 marks
+src: Boyd §5.5.3, example 5.2
+legend: Minimise \(-\sum_i\log(\alpha_i+x_i)\) s.t. \(\mathbf x\succeq0\), \(\mathbf 1^T\mathbf x=1\), \(\alpha_i\gt0\). Multipliers \(\boldsymbol\lambda\) for \(-\mathbf x\preceq0\), \(\nu\) for the equality.
+start: \min\ -\textstyle\sum_i\log(\alpha_i+x_i),\ \ \mathbf x\succeq0,\ \mathbf 1^T\mathbf x=1
+result: \begin{gathered}x_i^\star = \max\{0,\ 1/\nu^\star-\alpha_i\}\\ \textstyle\sum_i\max\{0,1/\nu^\star-\alpha_i\}=1\end{gathered}
+--- KKT conditions
+tex: \begin{gathered}\mathbf x^\star\succeq0,\ \mathbf 1^T\mathbf x^\star=1,\ \boldsymbol\lambda^\star\succeq0,\ \lambda_i^\star x_i^\star=0\\-\frac{1}{\alpha_i+x_i^\star}-\lambda_i^\star+\nu^\star=0\end{gathered}
+move: define
+--- Eliminate \(\lambda\)
+tex: \nu^\star\ge\frac{1}{\alpha_i+x_i^\star},\qquad x_i^\star\left(\nu^\star-\frac{1}{\alpha_i+x_i^\star}\right)=0
+move: substitute | by=\lambda_i^\star=\nu^\star-1/(\alpha_i+x_i^\star)
+--- Two cases
+tex: \nu^\star\lt\frac1{\alpha_i}\ \Rightarrow\ x_i^\star\gt0\ \Rightarrow\ x_i^\star = \frac1{\nu^\star}-\alpha_i
+move: identity | label=If \(x_i^\star=0\) we would need \(\nu^\star\ge1/\alpha_i\); so \(x_i^\star\gt0\) and the bracket vanishes
+---
+tex: \nu^\star\ge\frac1{\alpha_i}\ \Rightarrow\ x_i^\star = 0
+move: identity | label=\(x_i^\star\gt0\) would give \(\nu^\star=1/(\alpha_i+x_i^\star)\lt1/\alpha_i\)
+---
+tex: x_i^\star = \max\{0,\ 1/\nu^\star-\alpha_i\}
+move: combine
+---
+tex: \sum_i\max\{0,\ 1/\nu^\star-\alpha_i\}=1
+move: substitute | label=Into \(\mathbf 1^T\mathbf x^\star=1\)
+note: The left side is increasing and piecewise linear in \(1/\nu^\star\), so this determines \(\nu^\star\) uniquely. Picture: water poured to level \(1/\nu^\star\) over patches of height \(\alpha_i\).
+
+=== d-farkas
+title: Farkas lemma from LP duality
+marks: 6–10 marks
+src: Boyd §5.8.3, eqs. (5.80)–(5.81)
+legend: Systems: (I) \(A\mathbf x\preceq0\), \(\mathbf c^T\mathbf x\lt0\); (II) \(A^T\mathbf y+\mathbf c=\mathbf 0\), \(\mathbf y\succeq0\).
+result: \text{exactly one of (I), (II) is feasible}
+--- A homogeneous LP
+tex: \text{minimize}\ \mathbf c^T\mathbf x\ \ \text{s.t.}\ A\mathbf x\preceq0
+note: \(\mathbf x=\mathbf 0\) is feasible, so \(p^\star\le0\). If (I) is feasible, scaling its solution gives \(p^\star=-\infty\); if not, \(p^\star=0\).
+---
+tex: \text{maximize}\ 0\ \ \text{s.t.}\ A^T\mathbf y+\mathbf c=\mathbf 0,\ \mathbf y\succeq0
+move: identity | label=Its dual (inequality form LP with \(\mathbf b=\mathbf 0\))
+note: \(d^\star=0\) if (II) is feasible, \(-\infty\) if not.
+--- Strong duality for LPs
+tex: p^\star = d^\star
+move: identity | label=The primal is feasible, so LP strong duality holds
+---
+tex: (\text{I})\ \text{infeasible}\iff p^\star=0\iff d^\star=0\iff(\text{II})\ \text{feasible}
+move: combine
+note: Equivalent geometric form: \(\mathbf b\) is in the cone generated by the columns of \(A\) (\(A\mathbf x=\mathbf b\), \(\mathbf x\succeq0\) solvable) or there is a hyperplane through the origin separating \(\mathbf b\) from that cone, never both.
+
+=== d-sdpdual
+title: Lagrange dual of an inequality form SDP (example 5.11)
+marks: 6 marks
+src: Boyd §5.9.1, example 5.11
+legend: Minimise \(\mathbf c^T\mathbf x\) s.t. \(x_1F_1+\dots+x_nF_n+G\preceq0\), \(F_i,G\in\mathbf S^k\). Multiplier \(Z\in\mathbf S^k\), \(Z\succeq0\); inner product \(\tr\).
+result: \text{maximize}\ \tr(GZ)\ \ \text{s.t.}\ \tr(F_iZ)+c_i=0,\ Z\succeq0
+--- Lagrangian
+tex: L(\mathbf x,Z) = \mathbf c^T\mathbf x+\tr\big((x_1F_1+\dots+x_nF_n+G)Z\big)
+move: define | label=\(\langle Z,F(\mathbf x)\rangle=\tr(ZF(\mathbf x))\)
+---
+tex: L(\mathbf x,Z) = \sum_ix_i\big(\tr(F_iZ)+c_i\big)+\tr(GZ)
+move: rearrange
+---
+tex: g(Z) = \begin{cases}\tr(GZ)&\tr(F_iZ)+c_i=0,\ i=1,\dots,n\\-\infty&\text{otherwise}\end{cases}
+move: evaluate | label=Affine in \(\mathbf x\)
+---
+tex: \text{maximize}\ \tr(GZ)\ \ \text{s.t.}\ \tr(F_iZ)+c_i=0,\ Z\succeq0
+move: identity | label=Dual: maximise \(g\) over \(Z\succeq_{K^*}0\), and \((\mathbf S^k_+)^*=\mathbf S^k_+\)
+note: Weak duality holds; strong duality holds if the primal LMI is strictly feasible (Slater: \(F(\mathbf x)\prec0\) for some \(\mathbf x\)).

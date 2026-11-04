@@ -47,3 +47,7 @@ The inherited Abstract Algebra files in `books/prepare/module-*` and `pyq/` desc
 
 ## Lesson from section 1.1 (2026-10-16)
 - The first Example 1 display ran to the column edge and left a stray full stop on its own line. The step was split into a text line and one display. Check every display's width and trailing punctuation before mailing.
+
+## Model papers
+- Model Paper 4 (2026-10-27): `model-papers/COMPLEX-ANALYSIS-I-MODEL-PAPER-4.{html,pdf}`, 2 pages, mailed. Scope: §3.3 after Thm 3.3.2 (item 17), §3.4 (18), §4.1.1 to periodicity (19), §4.1.2 to Example 4 (20), §4.3.1 to (not incl.) trigonometric mapping (21), §4.3.2 (22). Made with `/create-model-paper`.
+- All past questions by module (2026-10-28): `pyq-papers/complex-analysis-all-pyq.{html,pdf}`, 6 pages, mailed. Four module papers (88 questions: I 5, II 0, III 57, IV 26), banded A 1–3, B 4–7, C 10+ marks, with a grey month-and-year label. Built from the 8 descriptive papers (March 2020 to April 2026); the 2020 paper is only in `PYQ/Mathematics/Sem-6/2020/`. MCQ papers, the duplicate scan, and questions on integration, series, residues, complex powers and inverse trig (not in Modules I–IV) are left out. Module II has no past question.

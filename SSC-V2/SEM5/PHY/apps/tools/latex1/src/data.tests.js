@@ -1,520 +1,517 @@
-/* ═══════════════════ MODEL TESTS ═══════════════════ */
+/* ═══════════════════ MODEL TESTS — four papers, each covering Modules I–IV ═══════════════════
+   Pattern: Section A (answer any 4 of 6, 3 marks), Section B (any 3 of 5, 6 marks), Section C (any 1 of 2, 10 marks).
+   Answers are written in ASD-STE100 style from the book cuts. */
+const PAPER_TITLE=n=>`MATHEMATICAL TYPE SETTING SYSTEM — LaTeX · Model Paper ${n} (Modules I–IV)`;
+const SEC_A=secband('A','Answer any 4 questions. Each carries 3 marks. Ceiling: 12 marks.');
+const SEC_B=secband('B','Answer any 3 questions. Each carries 6 marks. Ceiling: 18 marks.');
+const SEC_C=secband('C','Answer any 1 question. Each carries 10 marks.');
+const TIP='Sit it closed-book against the clock first. Write the code by hand. Then open the answers and press ▶ run on any code to check it.';
+
+/* ───────────── Model paper 1 ───────────── */
 STATIONS.push({id:'test-1',title:'Model paper 1',short:'Model paper 1',est:'~75 min',body:H`
-${gist('Sit it closed-book against the clock first, writing the code by hand. Only then open the answers — and press ▶ run on any code to check it.')}
-${paper('MATHEMATICAL TYPE SETTING SYSTEM — LaTeX · Model Paper I (Modules I–II)','75 minutes','40')}
-${secband('A','Answer any 4 questions. Each carries 3 marks. Ceiling: 12 marks.')}
-
-${qa('3 m','1. What is LaTeX? How does it differ from a word processor?',H`
-<p><b>LaTeX</b> is a document preparation system: a set of macros, written by Leslie Lamport, on top of Donald Knuth’s typesetting program <b>TeX</b>. The author writes a plain-text source file containing the text together with <i>markup commands</i>, and a TeX engine (<code>pdflatex</code>) compiles it into a finished PDF.</p>
-<div class="scroll-x"><table class="ref"><tr><th></th><th>Word processor</th><th>LaTeX</th></tr>
-<tr><td>Approach</td><td>WYSIWYG — format as you type</td><td>markup, WYSIWYM — describe structure, then compile</td></tr>
-<tr><td>Formatting</td><td>chosen by hand, piece by piece</td><td>decided by the document class and packages</td></tr>
-<tr><td>Numbering, contents, references</td><td>largely manual</td><td>automatic (sections, citations, index, contents)</td></tr>
-<tr><td>Mathematics</td><td>awkward</td><td>excellent — the reason scientists use it</td></tr>
-<tr><td>Source file</td><td>binary, program-specific</td><td>plain text, portable, works with version control</td></tr></table></div>
-<p>The trade-off: LaTeX has a learning curve and needs a compile step, but gives consistent, professional typesetting, especially for long or mathematical documents.</p>`)}
-
-${qa('3 m','2. List the special characters of LaTeX and state how each is printed.',H`
-<p>These characters have a special meaning, so they cannot be typed directly as text:</p>
-<div class="scroll-x"><table class="ref"><tr><th>Char</th><th>Meaning</th><th>Printed with</th></tr>
-<tr><td><code>#</code></td><td>macro parameter</td><td><code>\#</code></td></tr>
-<tr><td><code>$</code></td><td>math mode</td><td><code>\$</code></td></tr>
-<tr><td><code>%</code></td><td>comment</td><td><code>\%</code></td></tr>
-<tr><td><code>&amp;</code></td><td>table column separator</td><td><code>\&amp;</code></td></tr>
-<tr><td><code>_</code></td><td>subscript</td><td><code>\_</code></td></tr>
-<tr><td><code>{ }</code></td><td>grouping</td><td><code>\{ \}</code></td></tr>
-<tr><td><code>~</code></td><td>unbreakable space</td><td><code>\textasciitilde</code></td></tr>
-<tr><td><code>^</code></td><td>superscript</td><td><code>\textasciicircum</code></td></tr>
-<tr><td><code>\</code></td><td>starts a command</td><td><code>\textbackslash</code></td></tr></table></div>
-${ex(L`\# \$ \% \& \_ \{ \} \textasciitilde{} \textasciicircum{} \textbackslash`,{title:'all of them'})}
-<p>Note that <code>\\</code> is a line break, not a backslash.</p>`)}
-
-${qa('3 m','3. Explain \\documentclass and its options with an example.',H`
-<p><code>\documentclass[options]{class}</code> must be the first command of every LaTeX file. The <b>class</b> selects the overall design — <code>article</code>, <code>report</code>, <code>book</code>, <code>letter</code>. The <b>options</b>, in square brackets and separated by commas, adjust it:</p>
-<ul><li>font size: <code>10pt</code> (default), <code>11pt</code>, <code>12pt</code></li>
-<li>paper: <code>a4paper</code>, <code>letterpaper</code>, <code>a5paper</code></li>
-<li>sides and columns: <code>oneside</code>/<code>twoside</code>, <code>onecolumn</code>/<code>twocolumn</code>; <code>landscape</code></li>
-<li>title page: <code>titlepage</code>/<code>notitlepage</code>; chapters: <code>openright</code>/<code>openany</code>; <code>draft</code>/<code>final</code></li></ul>
-${ex(L`\documentclass[12pt,a4paper,twoside]{report}
+${gist(TIP)}
+${paper(PAPER_TITLE('I'),'75 minutes','40')}
+${SEC_A}
+${qa('3 m','1. Name the ten special characters of TeX. State how to print each one.',H`
+<p>The ten characters are <code>~ # $ % ^ &amp; _ \ { }</code>. TeX uses them for its own work.</p>
+<div class="scroll-x"><table class="ref"><tr><th>Print</th><th>Type</th></tr>
+<tr><td>~</td><td><code>\textasciitilde</code></td></tr><tr><td>#</td><td><code>\#</code></td></tr><tr><td>$</td><td><code>\$</code></td></tr>
+<tr><td>%</td><td><code>\%</code></td></tr><tr><td>^</td><td><code>\textasciicircum</code></td></tr><tr><td>&amp;</td><td><code>\&amp;</code></td></tr>
+<tr><td>_</td><td><code>\_</code></td></tr><tr><td>\</td><td><code>\textbackslash</code></td></tr><tr><td>{ }</td><td><code>\{ \}</code></td></tr></table></div>
+${ex(L`\# \$ \% \& \_ \{ \} \textbackslash`,{title:'print the characters'})}`)}
+${qa('3 m','2. Write the syntax of \\documentclass. Give the options for font size and paper size.',H`
+<p>The syntax is <code>\documentclass[options]{class}</code>. Options are in square brackets. The class is in braces.</p>
+<ul><li>Font size: <code>10pt</code> (default), <code>11pt</code>, <code>12pt</code>.</li>
+<li>Paper size: <code>letterpaper</code> (default), <code>legalpaper</code>, <code>executivepaper</code>, <code>a4paper</code>, <code>a5paper</code>, <code>b5paper</code>.</li></ul>
+${ex(L`\documentclass[12pt,a4paper]{article}
 \begin{document}
-\chapter{Introduction}
-A report in 12 pt on A4 paper, set up for two-sided printing.
+Text.
 \end{document}`,{title:'class with options'})}`)}
-
-${qa('3 m','4. Differentiate between the quote, quotation and verse environments.',H`
-<p>All three display borrowed text indented from both margins; they differ in what they are for and how paragraphs and lines are treated.</p>
-<ul><li><b>quote</b> — short quotations. Paragraphs are not indented; extra space separates them.</li>
-<li><b>quotation</b> — long quotations of several paragraphs. The first line of each paragraph is indented, like running text.</li>
-<li><b>verse</b> — poetry. Each line ends with <code>\\</code>, stanzas are separated by a blank line, and lines too long for the width hang with an indent.</li></ul>
-${ex(L`\begin{quote}Short and to the point.\end{quote}
-\begin{quotation}A long passage, first paragraph.
-
-Second paragraph, indented.\end{quotation}
-\begin{verse}Line one of the poem,\\ line two.\end{verse}`,{title:'the three side by side'})}`)}
-
-${qa('3 m','5. What is the use of \\kill in the tabbing environment? Illustrate.',H`
-<p>In <code>tabbing</code>, tab stops are set with <code>\=</code> at the position where it is typed. It is convenient to set all the stops on a <b>template line</b> containing the widest entries — but that line should not be printed. Ending a line with <code>\kill</code> instead of <code>\\</code> keeps the stops it sets and <b>discards the line itself</b>.</p>
-${ex(L`\begin{tabbing}
-Name of student\= Marks\= Grade\kill   % sets the stops, not printed
-Anu            \> 88   \> A\\
-Balu           \> 72   \> B
-\end{tabbing}`,{title:'a template line with \\kill'})}`)}
-
-${qa('3 m','6. Write the commands for a hyphen, an en dash and an em dash, and say when each is used.',H`
-<ul><li><code>-</code> (one hyphen) — the <b>hyphen</b>, inside compound words: <i>well-known</i>, <i>X-ray</i>.</li>
-<li><code>--</code> (two) — the <b>en dash</b>, for ranges: <i>pages 10–20</i>, <i>1978–1985</i>.</li>
-<li><code>---</code> (three) — the <b>em dash</b>, for a break in thought — like this.</li></ul>
-${ex(L`A well-known result, see pages 10--20 --- it is short.`,{title:'the three dashes'})}
-<p>A minus sign is different again: it only exists in math, <code>$-1$</code>.</p>`)}
-
-${secband('B','Answer any 3 questions. Each carries 6 marks. Ceiling: 18 marks.')}
-
-${qa('6 m','7. Explain the sectioning commands in LaTeX with their levels. How do the starred forms and \\appendix behave? Write the skeleton of a report.',H`
-<p>Sectioning commands divide a document, number the headings automatically, set them in the right size and send them to the table of contents.</p>
-<div class="scroll-x"><table class="ref"><tr><th>Command</th><th>Level</th><th>Note</th></tr>
-<tr><td><code>\part</code></td><td>−1</td><td>does not affect chapter numbering</td></tr>
-<tr><td><code>\chapter</code></td><td>0</td><td>report and book only</td></tr>
-<tr><td><code>\section</code></td><td>1</td><td></td></tr>
-<tr><td><code>\subsection</code></td><td>2</td><td></td></tr>
-<tr><td><code>\subsubsection</code></td><td>3</td><td></td></tr>
-<tr><td><code>\paragraph</code>, <code>\subparagraph</code></td><td>4, 5</td><td>run-in headings, unnumbered by default</td></tr></table></div>
-<p><b>Starred forms</b> such as <code>\section*{…}</code> print the heading without a number and leave it out of the table of contents (add it back with <code>\addcontentsline</code> if needed). <b><code>\appendix</code></b> resets the counter and switches numbering to letters: later chapters (report/book) or sections (article) become A, B, C. The depth of numbering is controlled by the counter <code>secnumdepth</code>, and the depth of the contents by <code>tocdepth</code>.</p>
-${ex(L`\documentclass{report}
-\title{Survey of Student Reading Habits}
-\author{A. Nair}
-\begin{document}
-\maketitle
-\tableofcontents
-\chapter{Introduction}
-\section{Aim}
-\section{Scope}
-\chapter{Method}
-\section{Sampling}
-\subsection{Urban colleges}
-\chapter*{Acknowledgements}
-\appendix
-\chapter{Questionnaire}
-\end{document}`,{title:'report skeleton'})}`)}
-
-${qa('6 m','8. Explain the thebibliography environment and \\cite with an example. How does this differ from using BibTeX?',H`
-<p>The <code>thebibliography</code> environment produces the reference list; its argument is the <i>widest label</i> (e.g. <code>9</code> for up to nine entries) and sets the indentation. Each entry begins with <code>\bibitem{key}</code> — or <code>\bibitem[label]{key}</code> for a custom label. In the text, <code>\cite{key}</code> prints the label; <code>\cite{a,b}</code> cites several; <code>\cite[p.~5]{key}</code> adds a note. The heading is “References” in article and “Bibliography” in report/book.</p>
-${ex(L`\TeX{} was designed by Knuth~\cite{knuth}; see also \cite[ch.~2]{lamport}.
-
-\begin{thebibliography}{9}
-\bibitem{knuth} D.~E. Knuth, \emph{The \TeX book}, Addison-Wesley, 1984.
-\bibitem{lamport} L.~Lamport, \emph{\LaTeX: A Document Preparation System},
-  Addison-Wesley, 1994.
-\end{thebibliography}`,{title:'manual bibliography'})}
-<p>Citations need two compiler runs: the first records them in the <code>.aux</code> file, the second prints the labels.</p>
-<p><b>Difference from BibTeX.</b> With <code>thebibliography</code> you type every entry yourself, in the order and format you want, and uncited entries still appear. With <b>BibTeX</b> the references live in a separate <code>.bib</code> database; you write only <code>\bibliographystyle{…}</code> and <code>\bibliography{file}</code>, and BibTeX selects just the cited entries, sorts them, and formats them according to the style. One database serves every document, and changing the style reformats the whole list at once.</p>`)}
-
-${qa('6 m','9. How is an index prepared in LaTeX? Explain the package, the commands, sub-entries, cross-references and the compilation sequence.',H`
-<p><b>Setting up.</b> Load the <code>makeidx</code> package and give <code>\makeindex</code> in the preamble — without it, entries are silently discarded. Mark each term in the text with <code>\index{term}</code>, and put <code>\printindex</code> where the index should appear (usually the end).</p>
-<p><b>Forms of entry:</b></p>
-<ul><li><code>\index{fonts}</code> — a main entry.</li>
-<li><code>\index{fonts!serif}</code> — a sub-entry (up to three levels with <code>!</code>).</li>
-<li><code>\index{Knuth@\textsc{Knuth}}</code> — sort by the part before <code>@</code>, print the part after.</li>
-<li><code>\index{TeX|see{LaTeX}}</code> — a cross-reference instead of a page number; <code>|seealso{…}</code> adds one.</li>
-<li><code>\index{tables|textbf}</code> — this page number in bold; <code>|(</code> and <code>|)</code> mark a page range.</li></ul>
+${qa('3 m','3. State the difference between the quote, quotation and verse environments.',H`
+<ul><li><code>quote</code>: a quotation of one paragraph.</li>
+<li><code>quotation</code>: a quotation of several paragraphs. Blank lines separate the paragraphs.</li>
+<li><code>verse</code>: poetry. <code>\\</code> breaks a line. A blank line separates two stanzas.</li></ul>`)}
+${qa('3 m','4. Show how to number corollaries in the same sequence as theorems.',H`
+<p>Define the theorem first. Then give its name as the optional argument of the corollary definition.</p>
 ${ex(L`\documentclass{article}
-\usepackage{makeidx}
-\makeindex
+\newtheorem{thm}{Theorem}
+\newtheorem{cor}[thm]{Corollary}
 \begin{document}
-\TeX\index{TeX} uses fonts\index{fonts!serif} and more
-fonts\index{fonts!sans serif}. See Knuth\index{Knuth@\textsc{Knuth}}.
-\LaTeX\index{LaTeX}\index{TeX|see{LaTeX}}
-\printindex
-\end{document}`,{title:'an index'})}
-<p><b>Compilation.</b> (1) <code>pdflatex</code> writes every entry, with its page, to the <code>.idx</code> file. (2) The <b>MakeIndex</b> program sorts and merges the entries and writes <code>theindex</code> to the <code>.ind</code> file. (3) <code>pdflatex</code> again reads the <code>.ind</code> file and prints the index at <code>\printindex</code>.</p>`)}
+\begin{thm}A theorem.\end{thm}
+\begin{cor}A corollary.\end{cor}
+\end{document}`,{title:'a shared counter',run:true})}`)}
+${qa('3 m','5. Explain the commands \\fbox and \\makebox with the position letters.',H`
+<p><code>\fbox{text}</code> puts the text in a frame. <code>\makebox[width][pos]{text}</code> makes a box of the given width with no frame. The position letter is <code>c</code> (default, center), <code>l</code> (left), <code>r</code> (right) or <code>s</code> (stretch between the edges). <code>\framebox[width][pos]{text}</code> is the framed form.</p>
+${ex(L`\fbox{a box}\ \makebox[4cm][r]{right}|\ \framebox[4cm][s]{a few words of advice}`,{title:'boxes'})}`)}
+${qa('3 m','6. Explain the overlay specifications &lt;1-2,4-&gt; and &lt;-3&gt; in beamer.',H`
+<p>&lt;1-2,4-&gt; means overlays 1 and 2, and all overlays from 4 onwards. &lt;-3&gt; means all overlays up to 3. &lt;2,4,6&gt; means overlays 2, 4 and 6. <code>\pause</code> accepts only a single number.</p>`)}
 
-${qa('6 m','10. Write LaTeX code for a numbered list whose second level is labelled (a), (b), and explain how the labels of lists are changed.',H`
-<p><code>enumerate</code> numbers items automatically; nested lists change style by level — <b>1.</b>, <b>(a)</b>, <b>i.</b>, <b>A.</b> — so the required labels are the defaults:</p>
-${ex(L`\begin{enumerate}
-  \item Document structure
-  \begin{enumerate}
-    \item document class
-    \item preamble
-  \end{enumerate}
-  \item Typesetting text
-\end{enumerate}`,{title:'1. with (a) (b) nested'})}
-<p><b>Changing labels.</b> One item: <code>\item[text]</code>. All bullets of <code>itemize</code>: redefine <code>\labelitemi</code> … <code>\labelitemiv</code>. For <code>enumerate</code>, <code>\theenumi</code> controls how the counter <code>enumi</code> prints (<code>\arabic</code>, <code>\roman</code>, <code>\Roman</code>, <code>\alph</code>, <code>\Alph</code>) and <code>\labelenumi</code> is the complete label built from it.</p>
-${ex(L`\renewcommand{\labelitemi}{--}
-\renewcommand{\theenumi}{\Roman{enumi}}
-\renewcommand{\labelenumi}{\theenumi.}
-\begin{itemize}\item a dash bullet\end{itemize}
-\begin{enumerate}\item Roman I.\item Roman II.\end{enumerate}`,{title:'redefining labels'})}`)}
-
-${qa('6 m','Given the output below, write the complete LaTeX code to produce it: a ruled mark sheet with proper alignments and horizontal rules.',H`
-<p><b>Target Output to produce:</b></p>
-<div class="target-card">
-  <div style="font-family:var(--f-m);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:.5rem">Target Output</div>
-  <table style="margin:0 auto;border-collapse:collapse;border:1px solid #111;text-align:center;font-family:var(--f-serif,'Newsreader',serif);font-size:.9rem">
-    <thead>
-      <tr style="border-bottom:2px solid #111;background:#f8f6f2">
-        <th style="padding:4px 14px;border-right:1px solid #111">Roll No</th>
-        <th style="padding:4px 14px;border-right:1px solid #111;text-align:left">Name</th>
-        <th style="padding:4px 14px;border-right:1px solid #111">Marks</th>
-        <th style="padding:4px 14px">Grade</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr style="border-bottom:1px solid #111"><td style="padding:4px 14px;border-right:1px solid #111">101</td><td style="padding:4px 14px;border-right:1px solid #111;text-align:left">Arya M.</td><td style="padding:4px 14px;border-right:1px solid #111">92</td><td style="padding:4px 14px">A+</td></tr>
-      <tr style="border-bottom:1px solid #111"><td style="padding:4px 14px;border-right:1px solid #111">102</td><td style="padding:4px 14px;border-right:1px solid #111;text-align:left">Deepak K.</td><td style="padding:4px 14px;border-right:1px solid #111">78</td><td style="padding:4px 14px">B</td></tr>
-      <tr><td style="padding:4px 14px;border-right:1px solid #111">103</td><td style="padding:4px 14px;border-right:1px solid #111;text-align:left">Fathima S.</td><td style="padding:4px 14px;border-right:1px solid #111">85</td><td style="padding:4px 14px">A</td></tr>
-    </tbody>
-  </table>
-</div>
-<p><b>Write the code:</b> Write the LaTeX code in the interactive editor below to match this target table. The live preview renders below as you type, and the checklist ticks itself:</p>
-${build('Given output: Student Marks Table',L`\documentclass{article}
-\begin{document}
-% Write your tabular environment here to reproduce the table:
-
-\end{document}`,{brief:'Create a tabular matching the target output: column specification |c|l|c|c|, \\hline between all rows, header row (Roll No, Name, Marks, Grade), and the three data rows.',
-checks:[{re:'\\\\begin\\{tabular\\}\\{\\|c\\|l\\|c\\|c\\|\\}',msg:'tabular with |c|l|c|c| spec'},
-{re:'Roll No.*Name.*Marks.*Grade',msg:'header row columns'},
-{re:'Arya M\\..*Deepak K\\..*Fathima S\\.',flags:'s',msg:'all three student data rows'},
-{re:'\\\\hline',msg:'horizontal rules (\\hline)'}]})}
-<p><b>Model Solution:</b></p>
+${SEC_B}
+${qa('6 m','7. Explain the commands for the title, the abstract and the sectioning levels. Give an example.',H`
+<ul><li>Title: <code>\title</code>, <code>\author</code>, <code>\date</code>, then <code>\maketitle</code>. <code>\and</code> puts authors side by side. <code>\thanks</code> adds a footnote.</li>
+<li>Abstract: the <code>abstract</code> environment, in article and report. The book class has none.</li>
+<li>Sectioning: <code>\chapter</code> (book, report), <code>\section</code>, <code>\subsection</code>, <code>\subsubsection</code>, <code>\paragraph</code>, <code>\subparagraph</code>. The starred form has no number.</li></ul>
 ${ex(L`\documentclass{article}
-\begin{document}
-\begin{center}
-\begin{tabular}{|c|l|c|c|}
-\hline
-\textbf{Roll No} & \textbf{Name} & \textbf{Marks} & \textbf{Grade} \\ \hline\hline
-101 & Arya M.    & 92 & A+ \\ \hline
-102 & Deepak K.  & 78 & B  \\ \hline
-103 & Fathima S. & 85 & A  \\ \hline
-\end{tabular}
-\end{center}
-\end{document}`,{title:'Solution — Marks Table'})}`)}
-
-${secband('C','Answer any 1 question. Each carries 10 marks.')}
-
-${qa('10 m','11. (a) Explain the tabular environment: column specification, rules, \\multicolumn, \\cline and p-columns. (6) (b) Write the code for a ruled mark sheet with a heading spanning all columns. (4)',H`
-<p><b>(a)</b> <code>\begin{tabular}{spec} … \end{tabular}</code> sets material in rows and columns. The <b>spec</b> has one entry per column: <code>l</code>, <code>c</code>, <code>r</code> for left, centred and right alignment (these never wrap), and <code>p{width}</code> for a fixed-width column in which text wraps like a paragraph. A <code>|</code> in the spec draws a vertical rule; <code>@{text}</code> replaces the inter-column space with <i>text</i>; <code>*{n}{spec}</code> repeats a spec.</p>
-<p>In the body, <code>&amp;</code> separates cells and <code>\\</code> ends a row. <code>\hline</code> draws a horizontal rule across the whole table; <code>\cline{i-j}</code> draws one under columns <i>i</i> to <i>j</i> only. <code>\multicolumn{n}{spec}{text}</code> makes one cell span <i>n</i> columns with its own alignment and rules, and is also used to change the alignment of a single cell. Each row may have no more cells than the spec has columns. Row spacing is scaled with <code>\renewcommand{\arraystretch}{…}</code> and column spacing with <code>\setlength{\tabcolsep}{…}</code>.</p>
-${ex(L`\begin{tabular}{|l|p{3cm}|r|}
-\hline
-Code & Description & Qty \\ \hline
-A1 & A long description that wraps inside the p column & 4 \\ \cline{2-3}
-A2 & Short & 12 \\ \hline
-\end{tabular}`,{title:'rules, \\cline and a p column'})}
-<p><b>(b)</b></p>
-${ex(L`\begin{table}[h]
-\centering
-\caption{Semester V marks}
-\begin{tabular}{|l|c|c|c|}
-\hline
-\multicolumn{4}{|c|}{\textbf{Mark Sheet --- B.Sc.\ Mathematics}} \\ \hline
-Name & Paper I & Paper II & Total \\ \hline\hline
-Anu  & 45      & 42       & 87    \\ \hline
-Balu & 38      & 44       & 82    \\ \hline
-\end{tabular}
-\end{table}`,{title:'the mark sheet'})}`)}
-
-${qa('10 m','12. (a) Explain BibTeX: the structure of a .bib file, common entry types with their required fields, bibliography styles and the compilation sequence. (6) (b) Write .bib entries for a book and a journal article and cite both. (4)',H`
-<p><b>(a)</b> BibTeX keeps references in a plain-text database file with the extension <code>.bib</code>. Each entry has the form <code>@type{key, field = {value}, …}</code>: the <i>type</i> says what kind of work it is, the <i>key</i> is the name used in <code>\cite</code>, and the fields hold the data. Fields are separated by commas; several authors are joined with <code>and</code>; capitals to be preserved are protected with braces.</p>
-<div class="scroll-x"><table class="ref"><tr><th>Type</th><th>Required fields</th></tr>
-<tr><td><code>@article</code></td><td>author, title, journal, year</td></tr>
-<tr><td><code>@book</code></td><td>author/editor, title, publisher, year</td></tr>
-<tr><td><code>@inproceedings</code></td><td>author, title, booktitle, year</td></tr>
-<tr><td><code>@phdthesis</code> / <code>@mastersthesis</code></td><td>author, title, school, year</td></tr>
-<tr><td><code>@techreport</code></td><td>author, title, institution, year</td></tr>
-<tr><td><code>@misc</code></td><td>none</td></tr></table></div>
-<p><b>Styles</b> (<code>\bibliographystyle</code>): <code>plain</code> — numbered, sorted by author; <code>unsrt</code> — numbered in order of citation; <code>alpha</code> — labels such as [Knu84], sorted; <code>abbrv</code> — like plain but with initials. In the document, <code>\bibliography{refs}</code> names the database (without <code>.bib</code>) and marks where the list goes; <code>\nocite{*}</code> includes every entry.</p>
-<p><b>Sequence:</b> <code>pdflatex</code> (writes citations to <code>.aux</code>) → <code>bibtex</code> (reads <code>.aux</code> and <code>.bib</code>, writes the list to <code>.bbl</code>) → <code>pdflatex</code> (reads <code>.bbl</code>) → <code>pdflatex</code> (resolves the citation labels).</p>
-<p><b>(b)</b></p>
-${ex(L`\documentclass{article}
-\begin{document}
-Knuth designed \TeX~\cite{knuth84}; Lamport described \LaTeX~\cite{lamport86}.
-\bibliographystyle{plain}
-\bibliography{refs}
-\end{document}`,{title:'citing from refs.bib',bib:L`@book{knuth84,
-  author    = {Donald E. Knuth},
-  title     = {The {\TeX}book},
-  publisher = {Addison-Wesley},
-  address   = {Reading, Massachusetts},
-  year      = {1984}
-}
-@article{lamport86,
-  author  = {Leslie Lamport},
-  title   = {{\LaTeX}: A Document Preparation System},
-  journal = {TUGboat},
-  volume  = {7},
-  number  = {1},
-  pages   = {10--20},
-  year    = {1986}
-}`,note:'Run it and open the <b>refs.bib</b> tab — those are the two entries the question asks for.'})}`)}
-`});
-
-STATIONS.push({id:'test-2',title:'Model paper 2',short:'Model paper 2',est:'~75 min',body:H`
-${gist('Same pattern, different questions — together the two papers cover every unit of Modules I and II.')}
-${paper('MATHEMATICAL TYPE SETTING SYSTEM — LaTeX · Model Paper II (Modules I–II)','75 minutes','40')}
-${secband('A','Answer any 4 questions. Each carries 3 marks. Ceiling: 12 marks.')}
-
-${qa('3 m','1. What is the preamble of a LaTeX document? What does it contain?',H`
-<p>The <b>preamble</b> is everything between <code>\documentclass</code> and <code>\begin{document}</code>. Nothing in it is printed; it holds settings for the whole document:</p>
-<ul><li>packages: <code>\usepackage[options]{name}</code></li>
-<li>title information: <code>\title</code>, <code>\author</code>, <code>\date</code></li>
-<li>definitions: <code>\newcommand</code>, <code>\renewcommand</code></li>
-<li>global settings: <code>\pagestyle</code>, <code>\makeindex</code>, lengths.</li></ul>
-${ex(L`\documentclass[12pt]{article}
-\usepackage{makeidx}          % a package
-\makeindex                    % a setting
-\newcommand{\college}{St.~Thomas College}   % a definition
-\title{Report} \author{A. Nair}
-\begin{document}
-\maketitle
-Submitted to \college.
-\end{document}`,{title:'a typical preamble'})}
-<p>Text placed in the preamble is an error: “Missing \begin{document}”.</p>`)}
-
-${qa('3 m','2. Explain \\pagestyle and \\pagenumbering with their options.',H`
-<p><code>\pagestyle{style}</code> sets the running head and foot of every page from that point:</p>
-<ul><li><code>plain</code> — page number centred in the footer (default in article and report)</li>
-<li><code>empty</code> — no header or footer at all</li>
-<li><code>headings</code> — the header shows the current chapter/section title and the page number</li>
-<li><code>myheadings</code> — like headings, but the header text is set by the author with <code>\markboth{left}{right}</code> or <code>\markright{right}</code>.</li></ul>
-<p><code>\thispagestyle{style}</code> changes only the current page. <code>\pagenumbering{style}</code> sets the numerals and restarts at 1: <code>arabic</code> (1, 2), <code>roman</code> (i, ii), <code>Roman</code> (I, II), <code>alph</code> (a, b), <code>Alph</code> (A, B).</p>
-${ex(L`\pagestyle{headings}
-\pagenumbering{roman}
-\section{Preface}
-Front matter numbered i, ii, …`,{title:'page style and numbering',note:'Only real pages show this — use the Real PDF tab.'})}`)}
-
-${qa('3 m','3. List the font-size commands of LaTeX in increasing order.',H`
-<p>The size declarations are relative to the base size chosen by the class option (10, 11 or 12 pt):</p>
-<p><code>\tiny</code> &lt; <code>\scriptsize</code> &lt; <code>\footnotesize</code> &lt; <code>\small</code> &lt; <code>\normalsize</code> &lt; <code>\large</code> &lt; <code>\Large</code> &lt; <code>\LARGE</code> &lt; <code>\huge</code> &lt; <code>\Huge</code></p>
-${ex(L`{\tiny tiny} {\small small} {\normalsize normal} {\large large}
-{\Large Large} {\LARGE LARGE} {\huge huge} {\Huge Huge}`,{title:'sizes'})}
-<p>They are declarations, so they are used inside a group: <code>{\Large text}</code>.</p>`)}
-
-${qa('3 m','4. How is a table of contents produced? Why must the file be compiled twice?',H`
-<p>The command <code>\tableofcontents</code> prints the contents where it is placed. LaTeX builds it automatically from the numbered sectioning commands (<code>\chapter</code>, <code>\section</code>, …) up to the depth set by <code>tocdepth</code>; starred sections are excluded unless added with <code>\addcontentsline</code>.</p>
-<p><b>Two runs:</b> during the first compilation LaTeX writes each heading and its page number into an auxiliary <code>.toc</code> file; the contents cannot be printed yet because the headings come later in the document. On the second compilation LaTeX reads the <code>.toc</code> file and prints the list. <code>\listoftables</code> and <code>\listoffigures</code> work the same way with <code>.lot</code> and <code>.lof</code> files.</p>
-<div class="callout warning" style="margin:.6rem 0;padding:.6rem .8rem;border-left:4px solid var(--amber);background:rgba(var(--amber-rgb),.08);border-radius:.4rem;font-size:.84rem">
-  <b>In-browser preview note:</b> <code>\tableofcontents</code> needs multi-pass <code>.toc</code> generation. Open in the <b>IDE</b> and compile with <b>⎙ Real PDF</b> to see the live table of contents.
-</div>
-<div class="target-card" style="margin:.7rem 0;max-width:30rem">
-  <div style="font-family:var(--f-serif,'Newsreader',serif);font-size:1.15rem;font-weight:700;margin-bottom:.6rem;text-align:center;color:#111">Contents</div>
-  <div style="font-family:var(--f-serif,'Newsreader',serif);font-size:.88rem;color:#111;line-height:1.8">
-    <div style="display:flex;align-items:baseline"><span style="font-weight:600;width:1.5rem">1</span><span style="font-weight:600">Introduction</span><span style="flex:1;border-bottom:1px dotted #888;margin:0 .4rem 3px"></span><span style="font-weight:600">1</span></div>
-    <div style="display:flex;align-items:baseline"><span style="font-weight:600;width:1.5rem">2</span><span style="font-weight:600">Theory</span><span style="flex:1;border-bottom:1px dotted #888;margin:0 .4rem 3px"></span><span style="font-weight:600">1</span></div>
-    <div style="display:flex;align-items:baseline;padding-left:1.3rem"><span style="width:2rem">2.1</span><span>History</span><span style="flex:1;border-bottom:1px dotted #888;margin:0 .4rem 3px"></span><span>2</span></div>
-  </div>
-</div>
-${ex(L`\tableofcontents
-\section{Introduction}
-\section{Theory}
-\subsection{History}`,{title:'\\tableofcontents',note:'Open in the <b>IDE</b> and compile with <b>⎙ PDF</b> for the genuine multi-pass table of contents.'})}`)}
-
-${qa('3 m','5. Write the code for a description list of three document classes.',H`
-${ex(L`\begin{description}
-  \item[article] Short documents: papers, assignments; no chapters.
-  \item[report] Longer documents such as project reports; has chapters.
-  \item[book] Books; chapters, two-sided printing by default.
-\end{description}`,{title:'description list'})}
-<p>In a <code>description</code> list the optional argument of <code>\item[…]</code> is the term, printed in bold, followed by its description.</p>`)}
-
-${qa('3 m','6. How is text typeset verbatim? Mention \\verb and its restriction.',H`
-<p>The <code>verbatim</code> environment prints its contents exactly as typed, in a typewriter font: commands, special characters, spaces and line breaks are all reproduced. <code>verbatim*</code> shows spaces as ␣. For short pieces within a line, <code>\verb</code> is followed by any delimiter character, the text, and the same delimiter: <code>\verb|\section{x}|</code>.</p>
-${ex(L`\begin{verbatim}
-\section{Intro}   % shown, not obeyed
-\end{verbatim}
-Inline: \verb|\textbf{x}| and \verb+100%+.`,{title:'verbatim and \\verb'})}
-<p><b>Restriction:</b> <code>\verb</code> may not appear in the argument of another command (e.g. inside <code>\section{…}</code> or <code>\textbf{…}</code>) — it gives “\verb illegal in command argument” — and the delimiter must not occur in the text.</p>`)}
-
-${secband('B','Answer any 3 questions. Each carries 6 marks. Ceiling: 18 marks.')}
-
-${qa('6 m','7. Describe how the title of a document is produced: \\title, \\author, \\and, \\thanks, \\date, \\maketitle and the abstract. Give an example.',H`
-<ul><li><code>\title{…}</code> — the title; <code>\\</code> breaks it into lines.</li>
-<li><code>\author{…}</code> — the author(s); several are separated by <code>\and</code>, and <code>\\</code> adds lines such as an affiliation.</li>
-<li><code>\thanks{…}</code> — inside <code>\title</code> or <code>\author</code>, a footnote marked with a symbol, for acknowledgements or addresses.</li>
-<li><code>\date{…}</code> — the date; the default is <code>\today</code>; <code>\date{}</code> prints none.</li>
-<li><code>\maketitle</code> — actually prints the title block. The previous commands only store information; without <code>\maketitle</code> nothing appears.</li>
-<li><code>abstract</code> environment — a short summary, set in smaller type with the heading “Abstract”. In article it follows the title on the first page; with the <code>titlepage</code> option (or in report) the title goes on a separate page.</li></ul>
-${ex(L`\title{Reading Habits of College Students\thanks{Funded by the college research cell.}}
-\author{Anu Mathew\\ Dept.\ of Mathematics \and Balu Das\\ Dept.\ of Physics}
+\title{Field Report}
+\author{R. Nair}
 \date{\today}
+\begin{document}
 \maketitle
 \begin{abstract}
-We surveyed 200 students on their reading habits.
+A short abstract.
 \end{abstract}
-\section{Introduction}`,{title:'a complete title block'})}
-<p>For complete control a <code>titlepage</code> environment can be used to design the title page by hand.</p>`)}
-
-${qa('6 m','8. Explain the tabbing environment and its commands. Compare it with tabular.',H`
-<p><code>tabbing</code> aligns text in columns the way the tab key of a typewriter does. Tab stops are set where <code>\=</code> is typed; <code>\></code> moves to the next stop; <code>\\</code> ends a line; <code>\kill</code> ends a line that only sets stops and is not printed. <code>\+</code> indents all following lines by one tab stop and <code>\-</code> undoes it; <code>\&lt;</code> moves back to the previous stop at the start of a line.</p>
-${ex(L`\begin{tabbing}
-Programme\hspace{1cm}\= Semester\hspace{.5cm}\= Credits\kill
-B.Sc.   \> V       \> 3\\
-M.Sc.   \> III     \> 4
-\end{tabbing}`,{title:'tabbing'})}
-<div class="scroll-x"><table class="ref"><tr><th></th><th>tabbing</th><th>tabular</th></tr>
-<tr><td>Column width</td><td>fixed by the stops</td><td>automatic, from the widest entry</td></tr>
-<tr><td>Alignment</td><td>left only</td><td>l, c, r, p{…}</td></tr>
-<tr><td>Rules</td><td>none</td><td>| , \hline, \cline</td></tr>
-<tr><td>Page breaks</td><td>may break across pages</td><td>one unbreakable box</td></tr>
-<tr><td>Nesting</td><td>cannot be nested</td><td>can be nested, used inside text</td></tr></table></div>`)}
-
-${qa('6 m','9. Explain the font commands of LaTeX — families, series and shapes — distinguishing commands from declarations, and the use of \\emph.',H`
-<p>A font is described by independent attributes, each changed by a <b>command</b> that takes the text as argument or by a <b>declaration</b> that acts until the end of the current group:</p>
-<div class="scroll-x"><table class="ref"><tr><th>Attribute</th><th>Command</th><th>Declaration</th></tr>
-<tr><td>Family: roman, sans serif, typewriter</td><td><code>\textrm \textsf \texttt</code></td><td><code>\rmfamily \sffamily \ttfamily</code></td></tr>
-<tr><td>Series: medium, bold</td><td><code>\textmd \textbf</code></td><td><code>\mdseries \bfseries</code></td></tr>
-<tr><td>Shape: upright, italic, slanted, small caps</td><td><code>\textup \textit \textsl \textsc</code></td><td><code>\upshape \itshape \slshape \scshape</code></td></tr></table></div>
-<p>Attributes combine: <code>\textbf{\textit{…}}</code> is bold italic. Commands suit short pieces; declarations suit longer passages or definitions: <code>{\sffamily …}</code>. <b><code>\emph</code></b> marks emphasis logically: it italicises in upright text and switches back to upright inside italic text, so emphasis is always visible. Sizes are set separately with <code>\small</code>, <code>\large</code>, etc.</p>
-${ex(L`\textsf{Sans} \texttt{Typewriter} \textbf{Bold} \textit{Italic} \textsc{Small Caps}
-{\sffamily\bfseries a declaration in a group}
-\textit{Italic with \emph{emphasis} inside.}`,{title:'fonts'})}`)}
-
-${qa('6 m','10. Explain the standard bibliography styles plain, unsrt, alpha and abbrv, with the kind of output each gives.',H`
-<p>The style, chosen with <code>\bibliographystyle{…}</code> before <code>\bibliography{…}</code>, decides the labels, the order and the format of the list. For the same two references by Knuth (1984) and Lamport (1994), cited Lamport first:</p>
-<div class="scroll-x"><table class="ref"><tr><th>Style</th><th>Order</th><th>Labels and names</th></tr>
-<tr><td><code>plain</code></td><td>alphabetical by author</td><td>[1] Donald E. Knuth…, [2] Leslie Lamport…</td></tr>
-<tr><td><code>unsrt</code></td><td>order of first citation</td><td>[1] Leslie Lamport…, [2] Donald E. Knuth…</td></tr>
-<tr><td><code>alpha</code></td><td>alphabetical</td><td>[Knu84] Donald E. Knuth…, [Lam94] Leslie Lamport…</td></tr>
-<tr><td><code>abbrv</code></td><td>alphabetical</td><td>[1] D. E. Knuth…, [2] L. Lamport… (initials, shortened months and journal names)</td></tr></table></div>
-${ex(L`Cited first: \cite{lamport}, then \cite{knuth}.
-\bibliographystyle{alpha}   % change to plain, unsrt, abbrv
-\bibliography{refs}`,{title:'compare the styles yourself',bib:L`@book{knuth, author={Donald E. Knuth}, title={The {\TeX}book}, publisher={Addison-Wesley}, year={1984}}
-@book{lamport, author={Leslie Lamport}, title={{\LaTeX}: A Document Preparation System}, publisher={Addison-Wesley}, year={1994}}`})}`)}
-
-${qa('6 m','Given the output below, write the complete LaTeX code to produce it: a nested outline structure using enumerate and itemize.',H`
-<p><b>Target Output to produce:</b></p>
-<div class="target-card">
-  <div style="font-family:var(--f-m);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:.5rem">Target Output</div>
-  <div style="font-family:var(--f-serif,'Newsreader',serif);font-size:.95rem;line-height:1.6;padding:0 .5rem">
-    <div style="font-weight:700;font-size:1.15rem;margin-bottom:.5rem">Course Syllabus</div>
-    <ol style="margin:0;padding-left:1.4rem">
-      <li><b>Core Modules</b>
-        <ul style="list-style-type:disc;margin:.25rem 0;padding-left:1.2rem">
-          <li>Mechanics &amp; Relativity</li>
-          <li>Electromagnetism</li>
-        </ul>
-      </li>
-      <li><b>Lab Practicals</b>
-        <ul style="list-style-type:disc;margin:.25rem 0;padding-left:1.2rem">
-          <li>Optics Experiment</li>
-          <li>Spectroscopy</li>
-        </ul>
-      </li>
-    </ol>
-  </div>
-</div>
-<p><b>Write the code:</b> Write the LaTeX code in the interactive editor below using <code>enumerate</code> and <code>itemize</code> environments to match this target output. Live preview updates as you type, and verification ticks in real time:</p>
-${build('Given output: Course Syllabus Hierarchy',L`\documentclass{article}
-\begin{document}
-% Write your nested enumerate and itemize code here:
-
-\end{document}`,{brief:'Create a nested list structure: outer enumerate with 2 numbered items ("Core Modules" and "Lab Practicals" in bold), and nested itemize lists under each containing the corresponding subtopics.',
-checks:[{re:'\\\\begin\\{enumerate\\}',msg:'outer \\begin{enumerate}'},
-{re:'\\\\begin\\{itemize\\}',msg:'nested \\begin{itemize}'},
-{re:'Mechanics.*Electromagnetism',flags:'s',msg:'Core Modules subitems'},
-{re:'Optics.*Spectroscopy',flags:'s',msg:'Lab Practicals subitems'},
-{re:'\\\\end\\{enumerate\\}',msg:'outer \\end{enumerate}'}]})}
-<p><b>Model Solution:</b></p>
-${ex(L`\documentclass{article}
-\begin{document}
-\section*{Course Syllabus}
-\begin{enumerate}
-  \item \textbf{Core Modules}
-    \begin{itemize}
-      \item Mechanics \& Relativity
-      \item Electromagnetism
-    \end{itemize}
-  \item \textbf{Lab Practicals}
-    \begin{itemize}
-      \item Optics Experiment
-      \item Spectroscopy
-    \end{itemize}
-\end{enumerate}
-\end{document}`,{title:'Solution — Course Syllabus Hierarchy'})}`)}
-
-${secband('C','Answer any 1 question. Each carries 10 marks.')}
-
-${qa('10 m','11. (a) Explain the table float: placement specifiers, \\caption, \\label and cross-referencing, and the list of tables. (6) (b) Write the code for a timetable with a title row spanning all columns and a partial rule made with \\cline. (4)',H`
-<p><b>(a)</b> A <code>tabular</code> is only the grid of rows and columns. The <code>table</code> environment is a <b>float</b>: a box that LaTeX may move to a good position on the page, and which can have a numbered caption. The optional <b>placement specifier</b> lists the allowed positions: <code>h</code> — here, near the source position; <code>t</code> — top of a page; <code>b</code> — bottom of a page; <code>p</code> — a separate page of floats; <code>!</code> — override LaTeX’s usual restrictions. <code>[htbp]</code> allows all four.</p>
-<p><code>\caption{…}</code> prints “Table <i>n</i>: …”, numbering the tables automatically; by convention the caption of a table is placed above it. <code>\label{key}</code> placed <i>after</i> the caption records the number, and <code>\ref{key}</code> anywhere in the document prints it (<code>\pageref{key}</code> the page). Captions also feed <code>\listoftables</code>, which prints the list of tables — built, like the table of contents, over two runs. <code>\centering</code> inside the float centres the tabular.</p>
-${ex(L`As Table~\ref{tab:fees} shows, fees are low.
-\begin{table}[htbp]
-\centering
-\caption{Fee structure}\label{tab:fees}
-\begin{tabular}{|l|r|}
-\hline Course & Fee \\ \hline
-B.Sc. & 12000 \\ \hline
-\end{tabular}
-\end{table}
-\listoftables`,{title:'caption, label, ref, list of tables'})}
-<p><b>(b)</b></p>
-${ex(L`\begin{table}[h]
-\centering
-\caption{Monday timetable}
-\begin{tabular}{|c|c|c|c|}
+\section{Method}
+\subsection{Data}
+\section*{Unnumbered}
+\end{document}`,{title:'title, abstract and sections',run:true})}`)}
+${qa('6 m','8. Make a table with a heading over two columns, lines, and a line under the heading.',H`
+<p>Use <code>\multicolumn{2}{c|}{…}</code> for the heading and <code>\cline{2-3}</code> for the line. Write <code>c|</code> to keep the last vertical line.</p>
+${ex(L`\begin{tabular}{|l|r|r|}
 \hline
-\multicolumn{4}{|c|}{\textbf{B.Sc.\ Mathematics --- Semester V}} \\ \hline
-Time & 9--10 & 10--11 & 11--12 \\ \hline
-Mon  & LaTeX & Algebra & Analysis \\ \cline{2-4}
-     & Lab   & Lab     & Tutorial \\ \hline
-\end{tabular}
-\end{table}`,{title:'the timetable'})}`)}
+Planet & \multicolumn{2}{c|}{Distance from sun (km)}\\
+\cline{2-3}
+& Maximum & Minimum\\
+\hline
+Mercury & 69400000 & 46800000\\
+\hline
+\end{tabular}`,{title:'multicolumn and cline'})}`)}
+${qa('6 m','9. Typeset two aligned equations with a text line between them, and a definition by cases.',H`
+${ex(L`\begin{align*}
+x+y-z & = 1\\
+x-y+z & = 1\\
+\intertext{and by hypothesis}
+x+y+z & = 1
+\end{align*}
+\begin{equation*}
+|x| = \begin{cases} x & \text{if $x\ge 0$}\\ -x & \text{if $x\le 0$}\end{cases}
+\end{equation*}`,{title:'align* and cases',pre:AM})}
+<p><code>&amp;</code> marks the alignment point. <code>\intertext</code> keeps the alignment. <code>cases</code> makes the left brace.</p>`)}
+${qa('6 m','10. Explain the placement options of a figure and the options of \\includegraphics.',H`
+<p><code>h</code> here, <code>t</code> top, <code>b</code> bottom, <code>p</code> a page of floats. The default is <code>[tbp]</code>. <code>\clearpage</code> processes the unprocessed floats and starts a new page. <code>\FloatBarrier</code> (placeins) processes them with no new page.</p>
+<p>Options of <code>\includegraphics</code>: <code>width</code>, <code>height</code>, <code>totalheight</code>, <code>scale</code> and <code>angle</code> (counter-clockwise).</p>`)}
+${qa('6 m','11. How do you customize footnote marks? Give the commands.',H`
+<ul><li><code>\renewcommand{\thefootnote}{\fnsymbol{footnote}}</code> gives symbols for 1 to 9.</li>
+<li>Other styles: <code>\arabic</code>, <code>\roman</code>, <code>\Roman</code>, <code>\alph</code>, <code>\Alph</code>.</li>
+<li><code>\footnote[num]{text}</code> uses num as the mark and does not increase the counter.</li>
+<li>Restore with <code>\renewcommand{\thefootnote}{\arabic{footnote}}</code>.</li>
+<li><code>\setcounter{footnote}{0}</code> restarts the numbers.</li></ul>`)}
 
-${qa('10 m','12. (a) Explain commands, environments, arguments, groups and declarations in LaTeX with examples. (6) (b) Explain why special characters must be escaped, and write a line that prints “50% of R&D costs $5 — item #1” correctly. (4)',H`
-<p><b>(a)</b> A <b>command</b> begins with a backslash followed either by letters (<code>\today</code>, <code>\section</code>) or by a single non-letter (<code>\%</code>, <code>\\</code>); a command made of letters ends at the first non-letter, and spaces after it are ignored. Commands may take <b>mandatory arguments</b> in braces, <code>\textbf{text}</code>, and <b>optional arguments</b> in square brackets, <code>\documentclass[12pt]{article}</code>. Many have a <b>starred</b> variant: <code>\section*</code>.</p>
-<p>An <b>environment</b> applies to a block of text between <code>\begin{name}</code> and <code>\end{name}</code> — <code>center</code>, <code>itemize</code>, <code>tabular</code>. Environments may be nested, but must be closed in reverse order.</p>
-<p>A <b>group</b> is text within braces <code>{ }</code> (an environment is also a group). A <b>declaration</b> is a command with no argument that changes a setting until the end of the current group: <code>{\bfseries bold}</code> or <code>{\large larger}</code>. Commands with arguments such as <code>\textbf{…}</code> are the argument-form of the same changes.</p>
-${ex(L`\section*{Commands}                        % starred command
-\textbf{argument form} and {\bfseries declaration in a group} again normal.
-\begin{center}                               % environment
-  \begin{itemize} \item nested environments \end{itemize}
-\end{center}`,{title:'the pieces'})}
-<p><b>(b)</b> Ten characters — <code>#</code> <code>$</code> <code>%</code> <code>&amp;</code> <code>_</code> <code>{</code> <code>}</code> <code>~</code> <code>^</code> <code>\</code> — are instructions to LaTeX (comment, math, table column, subscript, grouping…). Typed plainly they are obeyed rather than printed: <code>%</code> would hide the rest of the line, <code>&amp;</code> outside a table and <code>#</code> in text are errors, and <code>$</code> would start math. They are printed by escaping them:</p>
-${ex(L`50\% of R\&D costs \$5 --- item \#1`,{title:'the escaped line'})}`)}
+${SEC_C}
+${qa('10 m','12. Explain how to make a bibliography with BibTeX. Give the commands, the entry syntax, the run order and the styles.',H`
+<ol><li>Make a database <code>refs.bib</code> with entries such as the one below.</li>
+<li>In the document, cite with <code>\cite{key}</code>. Put <code>\bibliographystyle{plain}</code> and <code>\bibliography{refs}</code> where the list must appear.</li>
+<li>Run LaTeX, BibTeX, LaTeX, LaTeX.</li></ol>
+<pre class="lx-verb">@BOOK{knuth:86a,
+  AUTHOR = "Donald E. Knuth",
+  TITLE = {The \TeX{}book},
+  PUBLISHER = "Addison-Wesley",
+  YEAR = 1986 }</pre>
+<p>Styles: <code>plain</code> (sorted, numbers), <code>unsrt</code> (order of citation), <code>alpha</code> (name and year labels), <code>abbrv</code> (compact), <code>acm</code>, <code>apalike</code>. <code>\nocite{key}</code> adds an entry that is not cited. The .aux file holds the citations. The .bbl file holds the formatted list.</p>`)}
+${qa('10 m','13. Write a beamer presentation with a title page, an outline, a block, two columns and items that appear one at a time.',H`
+${ex(L`\documentclass{beamer}
+\usetheme{Berkeley}
+\title[Short title]{A long title}
+\author{A. Author}
+\institute{My College}
+\date{\today}
+\begin{document}
+\begin{frame}
+\titlepage
+\end{frame}
+\begin{frame}
+\frametitle{Outline}
+\tableofcontents[pausesections]
+\end{frame}
+\section{Ideas}
+\begin{frame}
+\frametitle{Ideas}
+\begin{block}{Claim}
+LaTeX is exact.
+\end{block}
+\begin{columns}[t]
+\begin{column}{2in}
+Left text.
+\end{column}
+\begin{column}{2in}
+Right text.
+\end{column}
+\end{columns}
+\begin{itemize}[<+->]
+\item First
+\item Second
+\end{itemize}
+\end{frame}
+\section{End}
+\begin{frame}
+\frametitle{End}
+Thank you.
+\end{frame}
+\end{document}`,{title:'a short presentation',run:true})}`)}
+`});
+
+/* ───────────── Model paper 2 ───────────── */
+STATIONS.push({id:'test-2',title:'Model paper 2',short:'Model paper 2',est:'~75 min',body:H`
+${gist(TIP)}
+${paper(PAPER_TITLE('II'),'75 minutes','40')}
+${SEC_A}
+${qa('3 m','1. Name the four page styles. State what each one puts in the head and the foot.',H`
+<ul><li><code>plain</code>: empty head. The foot has the page number at the center. It is the default for article.</li>
+<li><code>empty</code>: empty head and foot.</li>
+<li><code>headings</code>: empty foot. The head has the page number and the chapter, section or subsection name. It is the default for book.</li>
+<li><code>myheadings</code>: as headings, but you give the text with <code>\markboth</code> or <code>\markright</code>.</li></ul>
+<p><code>\thispagestyle{style}</code> changes the current page only.</p>`)}
+${qa('3 m','2. How do you change the label of an itemize list for one list only?',H`
+<p>Redefine <code>\labelitemi</code> inside braces. The braces make the change local.</p>
+${ex(L`{\renewcommand{\labelitemi}{$\triangleright$}
+\begin{itemize}
+\item First item
+\item Second item
+\end{itemize}}`,{title:'a local label'})}`)}
+${qa('3 m','3. Explain \\label and \\ref. How many runs does LaTeX need?',H`
+<p>Put <code>\label{key}</code> at the object (a section, an item, a theorem, an equation, or after the caption of a float). Write <code>~\ref{key}</code> where you refer to it. The first run writes the data to the .aux file. The second run gives the correct numbers. LaTeX shows a warning "Rerun to get cross-references right" after the first run.</p>`)}
+${qa('3 m','4. What do \\mathbin and \\mathrel do? Give one use for each.',H`
+<p>TeX puts space around binary operators and relations. <code>\mathbin</code> makes TeX treat a symbol as a binary operator. <code>\mathrel</code> makes it a relation.</p>
+<p>Example: <code>$x\mathbin\Box y$</code> and <code>$x\mathrel\rho y$</code>.</p>`)}
+${qa('3 m','5. Write the command for a green text, a green box and a box with a red frame.',H`
+<p><code>\textcolor{green}{text}</code>, <code>\colorbox{green}{text}</code> and <code>\fcolorbox{red}{green}{text}</code>. They need the package xcolor. Beamer loads it. <code>green!40!yellow</code> mixes 40% green with yellow.</p>`)}
+${qa('3 m','6. State the differences between the tabbing and tabular environments (any three).',H`
+<ul><li>tabbing is only a separate paragraph. tabular can be anywhere, also in mathematics.</li>
+<li>tabbing can go over many pages. tabular cannot.</li>
+<li>tabbing cannot be nested. tabular can be nested to any level.</li></ul>`)}
+
+${SEC_B}
+${qa('6 m','7. Name the natbib citation commands and show their output in author-year mode.',H`
+<div class="scroll-x"><table class="ref"><tr><th>Input</th><th>Output</th></tr>
+<tr><td><code>\citet{ale91}</code></td><td>Alex et al. (1991)</td></tr>
+<tr><td><code>\citep{ale91}</code></td><td>(Alex et al., 1991)</td></tr>
+<tr><td><code>\citep[see][chap.~4]{ale91}</code></td><td>(see Alex et al., 1991, chap. 4)</td></tr>
+<tr><td><code>\citet*{ale91}</code></td><td>Alex, Mathew, and Ravi (1991)</td></tr>
+<tr><td><code>\citeauthor{ale91}</code></td><td>Alex et al.</td></tr>
+<tr><td><code>\citeyear{ale91}</code></td><td>1991</td></tr></table></div>
+<p>Load it with <code>\usepackage[options]{natbib}</code>. Options: <code>round</code>, <code>square</code>, <code>numbers</code>, <code>super</code>, <code>sort&amp;compress</code>. Each <code>\bibitem</code> needs the optional label with the year, for example <code>\bibitem[Alex(1991)]{ale91}</code>.</p>`)}
+${qa('6 m','8. Show how to make a list with the labels Step 1, Step 2 and an inner list with i, ii. Add a description list.',H`
+${ex(L`\documentclass{article}
+\usepackage{enumerate}
+\begin{document}
+\begin{enumerate}[\hspace{0.5cm}Step 1.]
+\item Prepare a source file
+\item Compile it
+\begin{enumerate}[i.]
+\item Use a previewer
+\item Edit the source
+\end{enumerate}
+\end{enumerate}
+\begin{description}
+\item[\TeX] A typesetting program
+\item[Emacs] A text editor
+\end{description}
+\end{document}`,{title:'enumerate package and description',run:true})}`)}
+${qa('6 m','9. List the matrix environments of amsmath. Typeset a general m × n matrix.',H`
+<p><code>matrix</code> (no delimiters), <code>pmatrix</code> ( ), <code>bmatrix</code> [ ], <code>Bmatrix</code> { }, <code>vmatrix</code> | |, <code>Vmatrix</code> ‖ ‖, <code>smallmatrix</code> (for text).</p>
+${ex(L`\begin{equation*}
+\begin{pmatrix}
+a_{11} & a_{12} & \dots & a_{1n}\\
+a_{21} & a_{22} & \dots & a_{2n}\\
+\hdotsfor{4}\\
+a_{m1} & a_{m2} & \dots & a_{mn}
+\end{pmatrix}
+\end{equation*}`,{title:'a general matrix',pre:AM})}`)}
+${qa('6 m','10. Describe the three styles of amsthm. Show a proof with the end mark.',H`
+<p><code>plain</code>: bold name, italic body (default). <code>definition</code>: bold name, roman body. <code>remark</code>: italic name, roman body. <code>\theoremstyle{…}</code> selects the style for the next <code>\newtheorem</code> commands.</p>
+${ex(L`\documentclass{article}
+\usepackage{amsmath,amsthm}
+\newtheorem{thm}{Theorem}
+\begin{document}
+\begin{thm}
+The square of the sum of two numbers is equal to the sum of their squares and twice their product.
+\end{thm}
+\begin{proof}
+This follows from $(x+y)^2=x^2+y^2+2xy$.
+\end{proof}
+\end{document}`,{title:'theorem and proof',run:true})}`)}
+${qa('6 m','11. How do you add an entry for a starred heading to the table of contents? What does minitoc do?',H`
+<pre class="lx-verb">\chapter*{Forward}
+\addcontentsline{toc}{chapter}{\numberline{}Forward}</pre>
+<p>The starred form makes no entry by itself. <code>\addcontentsline{file}{type}{text}</code> adds one. <code>\numberline{}</code> keeps the space for the number. The package <code>minitoc</code> makes a small table of contents at the start of each chapter. Use <code>\dominitoc</code> before <code>\tableofcontents</code> and <code>\minitoc</code> after each <code>\chapter</code>.</p>`)}
+
+${SEC_C}
+${qa('10 m','12. Explain the tabbing environment. Show \\kill, \\pushtabs and \\poptabs with an example.',H`
+<p><code>\=</code> sets a tab stop. <code>\&gt;</code> goes to the next stop. <code>\kill</code> sets the stops of a line and does not print it. <code>\pushtabs</code> stores the stops. <code>\poptabs</code> restores them. <code>\+</code> and <code>\-</code> change the left edge. <code>\｀</code> sets text flush right.</p>
+${ex(L`\begin{tabbing}
+Program\quad \= : \= \TeX\\[5pt]
+Author  \> : \> Donald Knuth\\[5pt]
+Manuals  \> :\\
+\pushtabs
+\quad\= The Advanced \TeX\ Book\quad\= David Salomon\kill\\
+\>\textsf{Title}  \>\textsf{Author}\\[8pt]
+\>The \TeX Book  \>Donald Knuth\\
+\poptabs
+Tutorial  \> :  \> tug.org.in
+\end{tabbing}`,{title:'tabbing'})}`)}
+${qa('10 m','13. Typeset: a sum with limits, large delimiters, a fraction, and an extensible arrow. State the commands used.',H`
+${ex(L`\begin{equation*}
+\biggl(\sum_{k=1}^n|x_ky_k|\biggr)^2\le
+\biggl(\sum_{k=1}^{n}|x_k|\biggr)\biggl(\sum_{k=1}^{n}|y_k|\biggr)
+\end{equation*}
+\begin{equation*}
+\frac{4}{\pi}=1+\cfrac{1^2}{2+\cfrac{3^2}{2+\dotsb}}
+\qquad 0\xrightarrow{} A\xrightarrow[\text{monic}]{f} B
+\end{equation*}`,{title:'delimiters, fractions, arrows',pre:AM})}
+<p><code>\sum_{k=1}^n</code> gives limits. <code>\left … \right</code> and <code>\bigl … \bigr</code> set the size of delimiters. <code>\frac</code>, <code>\cfrac</code> and <code>\binom</code> put one expression over another. <code>\xrightarrow[below]{above}</code> is an arrow that grows to fit its text.</p>`)}
+`});
+
+/* ───────────── Model paper 3 ───────────── */
+STATIONS.push({id:'test-3',title:'Model paper 3',short:'Model paper 3',est:'~75 min',body:H`
+${gist(TIP)}
+${paper(PAPER_TITLE('III'),'75 minutes','40')}
+${SEC_A}
+${qa('3 m','1. Explain family, series and shape of a type style. Give the command for each value.',H`
+<div class="scroll-x"><table class="ref"><tr><th>Part</th><th>Values (command / declaration)</th></tr>
+<tr><td>Family</td><td>roman <code>\textrm</code> / <code>\rmfamily</code>; sans serif <code>\textsf</code> / <code>\sffamily</code>; typewriter <code>\texttt</code> / <code>\ttfamily</code></td></tr>
+<tr><td>Series</td><td>medium <code>\textmd</code> / <code>\mdseries</code>; bold <code>\textbf</code> / <code>\bfseries</code></td></tr>
+<tr><td>Shape</td><td>upright <code>\textup</code>; italic <code>\textit</code>; slanted <code>\textsl</code>; small cap <code>\textsc</code></td></tr></table></div>`)}
+${qa('3 m','2. How do you number the pages of the preface with Roman numerals and the rest with Arabic numerals?',H`
+<p>Write <code>\pagenumbering{roman}</code> at the start of the preface. Write <code>\pagenumbering{arabic}</code> after the first <code>\chapter</code>. The command resets the page counter. <code>\setcounter{page}{n}</code> starts at the number n.</p>`)}
+${qa('3 m','3. How do you add a note to a citation? What does \\nocite do?',H`
+<p>Use the optional argument: <code>\cite[page~25]{key}</code> prints [1, page 25]. <code>\nocite{key}</code> puts the entry in the list and prints nothing in the text. <code>\nocite{*}</code> adds every entry of the database.</p>`)}
+${qa('3 m','4. Explain \\tag, \\tag* and \\notag.',H`
+<p><code>\tag{L}</code> replaces the number of an equation with (L). <code>\tag*{L}</code> prints L without parentheses. <code>\notag</code> removes the number of one line. Put them before the line end <code>\\</code>.</p>`)}
+${qa('3 m','5. State the difference between \\parbox and the minipage environment.',H`
+<p>Both make a paragraph box of a given width: <code>\parbox[pos]{width}{text}</code> and <code>\begin{minipage}[pos]{width} … \end{minipage}</code>. The position is <code>c</code>, <code>t</code> or <code>b</code>. A minipage can have lists, tables and footnotes. Footnotes in a minipage use the counter mpfootnote and letters.</p>`)}
+${qa('3 m','6. What does the block environment of beamer need? Give the syntax.',H`
+<pre class="lx-verb">\begin{block}&lt;overlay spec&gt;{title}
+  source
+\end{block}</pre>
+<p>The overlay specification is optional. If there is no title, the braces are still required.</p>`)}
+
+${SEC_B}
+${qa('6 m','7. Explain how to make an index. Give the forms of the \\index command.',H`
+<ol><li>Tag the words with <code>\index{…}</code>.</li><li>Load <code>makeidx</code> and put <code>\makeindex</code> in the preamble.</li><li>Put <code>\printindex</code> where the index must appear.</li><li>Run LaTeX, then <code>makeindex file</code>, then LaTeX.</li></ol>
+<ul><li>Sub entry: <code>\index{animal!mammal!cat}</code> (up to three levels).</li><li>Range: <code>\index{table|(}</code> and <code>\index{table|)}</code>.</li><li>Cross-reference: <code>\index{animalism|see{animal}}</code>.</li><li>Sort key: <code>\index{animal@\emph{animal}}</code>.</li><li>Format of the page number: <code>\index{mammal|textbf}</code>.</li></ul>`)}
+${qa('6 m','8. Explain the column specifiers l, r, c, p, @ and | with an example.',H`
+${ex(L`\begin{tabular}{|c|r@{--}l|p{3cm}|}
+\hline
+Height & \multicolumn{2}{c|}{Ideal weight} & Note\\
+\hline
+155 & 53.5 & 64 & A long note that wraps in a narrow column.\\
+160 & 56 & 67 & Short note.\\
+\hline
+\end{tabular}`,{title:'the specifiers'})}
+<p><code>l</code> left, <code>r</code> right, <code>c</code> center, <code>p{w}</code> a paragraph box, <code>|</code> a vertical line, <code>@{text}</code> text between the columns with no column space.</p>`)}
+${qa('6 m','9. Compare multline and split. Give an example of each.',H`
+<p><code>multline*</code>: the first line is flush left, the last line is flush right, the lines between are centered. It is poor for more than two lines. <code>split</code> aligns the lines at <code>&amp;</code>. It is used inside <code>equation</code> or another equation environment.</p>
+${ex(L`\begin{multline*}
+(a+b+c+d+e)^2=a^2+b^2+c^2+d^2+e^2\\
++2ab+2ac+2ad+2ae+2bc+2bd+2be+2cd+2ce+2de
+\end{multline*}
+\begin{equation*}
+\begin{split}
+(a+b)^2 & = (a+b)(a+b)\\
+& = a^2+2ab+b^2
+\end{split}
+\end{equation*}`,{title:'multline and split',pre:AM})}`)}
+${qa('6 m','10. Show how to define your own theorem style with \\newtheoremstyle. Explain the nine parameters.',H`
+<p>The nine parameters are: name, abovespace, belowspace, bodyfont, indent, headfont, headpunct, headspace, custom-head-spec.</p>
+${ex(L`\documentclass{article}
+\usepackage{amsthm}
+\newtheoremstyle{mystyle}{}{}{\slshape}{}{\scshape}{.}{ }{}
+\theoremstyle{mystyle}
+\newtheorem{mythm}{Theorem}[section]
+\begin{document}
+\section{Triangles}
+\begin{mythm}
+The sum of the angles of a triangle is $180^\circ$.
+\end{mythm}
+\end{document}`,{title:'a custom style',run:true})}
+<p>Fonts are declarations such as <code>\scshape</code>. <code>{ }</code> in headspace is a normal space. <code>\newline</code> puts the body on a new line. In the last parameter, <code>#1</code> is the name, <code>#2</code> the number and <code>#3</code> the note.</p>`)}
+${qa('6 m','11. Describe the steps to change an article to a beamer presentation.',H`
+<ol><li>Change the class to <code>beamer</code>.</li><li>Delete the <code>\usepackage</code> and <code>\newtheorem</code> lines.</li><li>Change <code>\address</code> to <code>\institute</code>. Delete the abstract.</li><li>Cut the text into <code>frame</code> environments. Give each a <code>\frametitle</code>.</li><li>Add <code>\usetheme{…}</code>. Replace <code>\maketitle</code> with a frame that has <code>\titlepage</code>.</li><li>Add an Outline frame with <code>\tableofcontents[pausesections]</code>.</li><li>Use <code>equation*</code> and delete the labels.</li></ol>`)}
+
+${SEC_C}
+${qa('10 m','12. Make a long table with a repeating heading. Explain longtable, array and multirow.',H`
+<p>The package <code>longtable</code> allows a table over many pages. <code>\endfirsthead</code>, <code>\endhead</code>, <code>\endfoot</code> and <code>\endlastfoot</code> set the rows at the top and bottom of the pages. <code>array</code> gives <code>m{w}</code> (middle), <code>&gt;{decl}</code> and <code>!{text}</code>. <code>multirow</code> gives <code>\multirow{n}{w}{text}</code>; <code>\multirowsetup</code> sets the alignment.</p>
+${ex(L`\documentclass{article}
+\usepackage{longtable}
+\begin{document}
+\begin{longtable}{|c|l|}
+\hline Year & Event\\ \hline
+\endfirsthead
+\hline Year & Event (continued)\\ \hline
+\endhead
+\hline
+\endfoot
+1900 & Max Planck proposes quantum theory\\
+1905 & Einstein presents special relativity\\
+1928 & Fleming discovers penicillin\\
+\end{longtable}
+\end{document}`,{title:'longtable'})}`)}
+${qa('10 m','13. Explain \\left, \\right, \\bigl, \\frac, \\dfrac, \\tfrac, \\genfrac and the limits of large operators.',H`
+<ul><li><code>\left</code> … <code>\right</code> make a delimiter as large as the content. <code>\left.</code> gives no delimiter.</li>
+<li><code>\bigl</code>, <code>\Bigl</code>, <code>\biggl</code>, <code>\Biggl</code> (and the r forms) give fixed larger sizes.</li>
+<li><code>\frac</code> is smaller in text. <code>\dfrac</code> is display size. <code>\tfrac</code> is text size.</li>
+<li><code>\genfrac{left}{right}{thickness}{style}{top}{bottom}</code> makes a custom fraction.</li>
+<li>Limits: in text at the side; in a display above and below. <code>\limits</code> and <code>\nolimits</code> change the place. <code>\displaystyle</code> changes the size too. For integrals the limits stay at the side.</li></ul>
+${ex(L`$\sum_{n=1}^\infty\frac{1}{n^2}$ and $\displaystyle\sum_{n=1}^\infty\tfrac{1}{n^2}$
+\begin{equation*}
+\left(\frac{x-t_i}{t_k-t_i}\right)\qquad \genfrac{(}{)}{0pt}{}{n}{r}\qquad \int\limits_0^\infty\frac{\sin x}{x}\,\mathrm{d}x
+\end{equation*}`,{title:'limits and delimiters',pre:AM})}`)}
+`});
+
+/* ───────────── Model paper 4 ───────────── */
+STATIONS.push({id:'test-4',title:'Model paper 4',short:'Model paper 4',est:'~75 min',body:H`
+${gist(TIP)}
+${paper(PAPER_TITLE('IV'),'75 minutes','40')}
+${SEC_A}
+${qa('3 m','1. How do you control the space after a period? Give two cases.',H`
+<p>TeX adds extra space after a period that follows a lower case letter. When a sentence ends with an upper case letter, type <code>\@</code> before the period: <code>Vitamin A\@.</code> When a period after a lower case letter is not the end of a sentence, type <code>\ </code> after it: <code>etc.\ are</code>.</p>`)}
+${qa('3 m','2. Give the commands of the quotes and dashes. What do - , -- and --- make?',H`
+<p><code>｀｀text''</code> makes double quotes. <code>｀text'</code> makes single quotes. <code>\lq</code> and <code>\rq</code> make the left and right single quotes. <code>-</code> is a hyphen. <code>--</code> is a short dash for ranges (221–225). <code>---</code> is a long dash for a comment in a sentence.</p>`)}
+${qa('3 m','3. State the use of \\DeclareMathOperator and its starred form.',H`
+<p>It defines a new operator name in the preamble. The name is upright, like <code>\sin</code>. <code>\DeclareMathOperator{\cl}{cl}</code> puts the limits at the side. <code>\DeclareMathOperator*{\esup}{ess\,sup}</code> puts the limits below and above.</p>`)}
+${qa('3 m','4. State the float counters and their default values.',H`
+<p><code>topnumber</code> 2, <code>bottomnumber</code> 1, <code>totalnumber</code> 3. Fractions: <code>\textfraction</code> 0.2, <code>\topfraction</code> 0.7, <code>\bottomfraction</code> 0.3, <code>\floatpagefraction</code> 0.5. Set counters with <code>\setcounter</code> and fractions with <code>\renewcommand</code>. The character ! in the placement ignores the first group.</p>`)}
+${qa('3 m','5. What is the difference between \\footnotemark and \\footnotetext?',H`
+<p><code>\footnotemark</code> prints the mark only. <code>\footnotetext{text}</code> prints the text at the bottom of the page. They are used together for a note that starts in a minipage or a table.</p>`)}
+${qa('3 m','6. Write the beamer commands for two columns with top alignment.',H`
+${ex(L`\documentclass{beamer}
+\begin{document}
+\begin{frame}
+\begin{columns}[t]
+\begin{column}{2in}Left text.\end{column}
+\begin{column}{2in}Right text.\end{column}
+\end{columns}
+\end{frame}
+\end{document}`,{title:'columns[t]',run:true})}`)}
+
+${SEC_B}
+${qa('6 m','7. Compare the four commands for lists of contents: \\tableofcontents, \\listoffigures, \\listoftables, \\addtocontents.',H`
+<p>LaTeX writes headings to the .toc file, figure captions to .lof, table captions to .lot. The commands print them where they are. Two runs are needed. <code>\addtocontents{toc}{\protect\vspace{2ex}}</code> adds formatting. <code>\caption[List text]{Caption text}</code> gives a short text for the list.</p>`)}
+${qa('6 m','8. Explain the three kinds of lists with one example each. How do you change a label?',H`
+${ex(L`\begin{itemize}\item Bullet\end{itemize}
+\begin{enumerate}\item Number\end{enumerate}
+\begin{description}\item[Term] Meaning\end{description}
+\begin{enumerate}\item[(1)] Own label\end{enumerate}`,{title:'three lists and a label'})}
+<p>All three lists have four levels. A text in square brackets after <code>\item</code> replaces the label. <code>\renewcommand{\labelitemi}{…}</code> changes the label of level 1.</p>`)}
+${qa('6 m','9. Explain two ways to typeset footnotes in a table.',H`
+<p>Standard <code>tabular</code> does not typeset footnotes. (1) Put the table in a <code>minipage</code> and use <code>\renewcommand{\thefootnote}{\thempfootnote}</code> with <code>\footnotemark[\value{mpfootnote}]</code>. (2) Use the package <code>threeparttable</code> with <code>\tnote{a}</code> and the <code>tablenotes</code> environment. <code>tabularx</code> and <code>longtable</code> also handle footnotes, but the notes go to the bottom of the page.</p>`)}
+${qa('6 m','10. Explain \\only, \\onslide and \\pause with the overlays that they make.',H`
+${ex(L`\documentclass{beamer}
+\begin{document}
+\begin{frame}
+\frametitle{Some background}
+\onslide<1,2>{We start with some concepts.}
+\only<2>{The first concept is old.}
+\pause
+Last point.
+\end{frame}
+\end{document}`,{title:'overlays',run:true})}
+<p><code>\only&lt;spec&gt;{x}</code> typesets x on the given overlays. On the others it is ignored, so the text can move. <code>\onslide&lt;spec&gt;{x}</code> typesets x on the given overlays and makes it invisible on the others, so the text stays. <code>\pause</code> shows the text after it on the next overlay.</p>`)}
+${qa('6 m','11. Explain how to make cross references to a theorem, an equation and a table.',H`
+${ex(L`\documentclass{article}
+\usepackage{amsmath}
+\newtheorem{theorem}{Theorem}
+\begin{document}
+\begin{theorem}\label{diffcon}
+Every differentiable function is continuous.
+\end{theorem}
+\begin{equation}\label{sumsq}
+(x+y)^2=x^2+2xy+y^2
+\end{equation}
+The converse of Theorem~\ref{diffcon} is false. See Equation~(\ref{sumsq}) or \eqref{sumsq}.
+\end{document}`,{title:'references',run:true})}
+<p>For a table or a figure, put <code>\label</code> after <code>\caption</code>.</p>`)}
+
+${SEC_C}
+${qa('10 m','12. Write a complete short article with a title, an abstract, a section, a theorem with a proof, an equation, a table with a caption, a footnote and a citation.',H`
+${ex(L`\documentclass[11pt,a4paper]{article}
+\usepackage{amsmath,amsthm}
+\newtheorem{thm}{Theorem}[section]
+\title{A Short Note}
+\author{A. Student}
+\date{\today}
+\begin{document}
+\maketitle
+\begin{abstract}
+We state one result.
+\end{abstract}
+\section{Result}
+\begin{thm}\label{t1}
+The sum of the angles of a triangle is $180^\circ$.
+\end{thm}
+\begin{proof}
+See Lamport~\cite{les85}.
+\end{proof}
+By Theorem~\ref{t1} and Table~\ref{tab1}\footnote{A footnote.},
+\begin{equation}
+a+b+c=\pi.
+\end{equation}
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|c|}
+\hline Shape & Angles\\ \hline Triangle & 3\\ \hline
+\end{tabular}
+\caption{Angles}\label{tab1}
+\end{table}
+\begin{thebibliography}{9}
+\bibitem{les85} L. Lamport, \emph{\LaTeX}, Addison-Wesley, 1985.
+\end{thebibliography}
+\end{document}`,{title:'a complete article',run:true})}`)}
+${qa('10 m','13. Explain the navigation of a beamer presentation: themes, sections, short forms and the outline.',H`
+<p>The theme (<code>\usetheme{Berkeley}</code>) sets the layout. In Berkeley, the sidebar lists the sections and marks the current one. A click on a section title jumps to it. Sections are navigation tools.</p>
+<ul><li>A long title does not fit in the sidebar. Use <code>\title[short]{long}</code>.</li><li>Use <code>\section[short]{long}</code> for a long section title.</li><li>Use <code>\author[]{Name}</code> for no author in the sidebar.</li><li>Put a frame after the last section, or the section is not in the table of contents.</li><li><code>\tableofcontents[pausesections]</code> shows the section titles one at a time. Each step is an overlay, so it is a page in the PDF.</li></ul>
+${ex(L`\documentclass{beamer}
+\usetheme{Warsaw}
+\title[Short]{A very long title for a presentation}
+\author[]{George~A. Menuhin}
+\begin{document}
+\begin{frame}\titlepage\end{frame}
+\section[Intro]{The introduction}
+\begin{frame}\frametitle{Intro}Text.\end{frame}
+\section{Proof}
+\begin{frame}\frametitle{Proof}Text.\end{frame}
+\end{document}`,{title:'short forms and a theme',run:true})}`)}
 `});
 
 /* ═══════════════════ LAST PASS ═══════════════════ */
 STATIONS.push({id:'lastpass',title:'Last pass before the exam',short:'Last pass',est:'~15 min',body:H`
-${gist('One mixed quiz across every unit — mixing topics is itself the practice — then the must-know list.')}
-${omr('Mixed: Modules I and II',[
- {q:'LaTeX was built on top of',o:['PostScript','TeX','HTML','troff'],a:1},
- {q:'Which prints a percent sign?',o:['%','\\%','%%','\\percent'],a:1},
- {q:L`<code>--</code> produces`,o:['a hyphen','an en dash','an em dash','a minus sign'],a:1},
- {q:'Which class has no \\chapter?',o:['book','report','article','—'],a:2},
- {q:L`<code>\section*{X}</code> is`,o:['numbered','unnumbered and not in the contents','bold','a chapter'],a:1},
- {q:'The contents list appears after',o:['one run','two runs','BibTeX','MakeIndex'],a:1},
- {q:'BibTeX writes the formatted list to',o:['.aux','.bib','.bbl','.idx'],a:2},
- {q:'Which style labels entries like [Knu84]?',o:['plain','unsrt','alpha','abbrv'],a:2},
- {q:'An index needs which package?',o:['index','makeidx','idx','glossaries'],a:1},
- {q:L`<code>\index{a!b}</code> makes b`,o:['bold','a sub-entry of a','a cross-reference','sorted first'],a:1},
- {q:'Poetry is set in',o:['quote','quotation','verse','poem'],a:2},
- {q:'The second-level enumerate label is',o:['2.','(b)','ii.','B.'],a:1},
- {q:L`In tabbing, <code>\kill</code>`,o:['deletes a column','ends a line without printing it','kills the table','starts a new stop'],a:1},
- {q:'Which column type wraps text?',o:['l','c','r','p{…}'],a:3},
- {q:L`<code>\label</code> in a table float goes`,o:['before \\caption','after \\caption','in the preamble','inside tabular'],a:1}
+${gist('One mixed quiz across all four modules. Mixing the topics is part of the practice. Then read the must-know list.')}
+${omr('Mixed: Modules I to IV',[
+ {q:'Which command prints a percent sign?',o:['%','\\%','%%','\\percent'],a:1},
+ {q:'Which option puts the title on a page of its own?',o:['notitlepage','titlepage','twoside','openany'],a:1},
+ {q:'Which file does BibTeX write for LaTeX?',o:['.aux','.bib','.bbl','.idx'],a:2},
+ {q:'Which package makes the index?',o:['index','makeidx','idx','natbib'],a:1},
+ {q:'Which environment is for poetry?',o:['quote','quotation','verse','poem'],a:2},
+ {q:'Which command sets a tab stop in tabbing?',o:['\\>','\\=','\\kill','\\+'],a:1},
+ {q:'Which specifier gives a paragraph column?',o:['l','c','r','p{…}'],a:3},
+ {q:'Which package gives align and split?',o:['amsmath','array','enumerate','multirow'],a:0},
+ {q:'Which environment makes a left brace in a display?',o:['cases','gather','split','array'],a:0},
+ {q:'Which command makes a bold italic vector?',o:['\\mathbf','\\boldsymbol','\\textbf','\\mathbold'],a:1},
+ {q:'Which command defines a theorem environment?',o:['\\newtheorem','\\theorem','\\proof','\\newenvironment'],a:0},
+ {q:'Which command puts a number before the theorem name?',o:['\\swapnumbers','\\numberfirst','\\newtheorem*','\\tag'],a:0},
+ {q:'What is the default float placement?',o:['[h]','[tbp]','[p]','[b]'],a:1},
+ {q:'Where does \\label go in a table?',o:['After \\caption','Before \\caption','In the preamble','After \\end{table}'],a:0},
+ {q:'Which command makes a footnote mark only?',o:['\\footnote','\\footnotemark','\\footnotetext','\\thanks'],a:1},
+ {q:'Which beamer command keeps the room of text that is not yet visible?',o:['\\only','\\onslide','\\pause only','\\hide'],a:1},
+ {q:'Which beamer class option sets the color package options?',o:['xcolor=…','color=…','palette=…','theme=…'],a:0}
 ])}
-${cards('Every syntax you must be able to write',[
+${cards('Syntax you must be able to write',[
  {f:'Smallest document',b:{code:'\\documentclass{article}\n\\begin{document}\nText\n\\end{document}'}},
- {f:'Print # $ % & _',b:{code:'\\# \\$ \\% \\& \\_'}},
  {f:'Title block',b:{code:'\\title{…}\\author{…}\\date{\\today}\n\\maketitle'}},
- {f:'Unnumbered section',b:{code:'\\section*{…}'}},
- {f:'Cite and list, by hand',b:{code:'\\cite{k}\n\\begin{thebibliography}{9}\n\\bibitem{k} …\n\\end{thebibliography}'}},
- {f:'Cite from a .bib',b:{code:'\\bibliographystyle{plain}\n\\bibliography{refs}'}},
- {f:'Index set-up',b:{code:'\\usepackage{makeidx}\n\\makeindex\n… \\index{term} …\n\\printindex'}},
- {f:'Roman-numbered list',b:{code:'\\renewcommand{\\theenumi}{\\roman{enumi}}'}},
+ {f:'Cite from a .bib',b:{code:'\\cite{k}\n\\bibliographystyle{plain}\n\\bibliography{refs}'}},
+ {f:'Index set-up',b:{code:'\\usepackage{makeidx}\n\\makeindex\n\\index{term}\n\\printindex'}},
  {f:'Tab stops',b:{code:'\\begin{tabbing}\nA \\= B \\kill\nx \\> y\n\\end{tabbing}'}},
- {f:'A ruled 2-column table',b:{code:'\\begin{tabular}{|l|r|}\\hline\na & 1\\\\ \\hline\n\\end{tabular}'}},
- {f:'Heading across 3 columns',b:{code:'\\multicolumn{3}{|c|}{…}'}},
- {f:'Numbered table with caption',b:{code:'\\begin{table}[h]\\centering\n\\caption{…}\\label{t}\n…\n\\end{table}'}}
+ {f:'A ruled table',b:{code:'\\begin{tabular}{|l|r|}\\hline\na & 1\\\\ \\hline\n\\end{tabular}'}},
+ {f:'Aligned equations',b:{code:'\\begin{align*}\nx+y & = 1\\\\\nx-y & = 0\n\\end{align*}'}},
+ {f:'A matrix',b:{code:'\\begin{pmatrix}\na & b\\\\\nc & d\n\\end{pmatrix}'}},
+ {f:'A theorem',b:{code:'\\newtheorem{thm}{Theorem}\n\\begin{thm}[Note]\n…\n\\end{thm}'}},
+ {f:'A figure',b:{code:'\\begin{figure}[htbp]\n\\centering\n\\includegraphics[width=5cm]{f}\n\\caption{…}\\label{k}\n\\end{figure}'}},
+ {f:'A frame',b:{code:'\\begin{frame}\n\\frametitle{…}\n…\n\\pause\n…\n\\end{frame}'}},
+ {f:'Two columns',b:{code:'\\begin{columns}[t]\n\\begin{column}{2in}…\\end{column}\n\\begin{column}{2in}…\\end{column}\n\\end{columns}'}}
 ])}
 ${must(H`<ol>
-<li>Structure: <code>\documentclass</code> → preamble → <code>\begin{document}</code> … <code>\end{document}</code>.</li>
-<li>The ten special characters and how to print them.</li>
-<li>Quotes <code>｀｀ ''</code>, dashes <code>- -- ---</code>, <code>\ldots</code>, accents.</li>
-<li>Classes and options; <code>\pagestyle</code>, <code>\pagenumbering</code>.</li>
-<li>Title block and abstract; sectioning levels, starred forms, <code>\appendix</code>.</li>
-<li><code>thebibliography</code> vs BibTeX; entry types and required fields; the four styles; the four-step run.</li>
-<li><code>\tableofcontents</code> (two runs), <code>\addcontentsline</code>; index: makeidx, <code>\makeindex</code>, <code>\index</code> forms, MakeIndex run.</li>
-<li>quote / quotation / verse; center, flushleft, flushright.</li>
-<li>itemize / enumerate / description; nesting; changing labels.</li>
-<li>verbatim and <code>\verb</code>; tabbing commands; tabular spec, rules, <code>\multicolumn</code>, <code>\cline</code>, <code>p{}</code>, table float.</li>
+<li>Module I: structure, ten special characters, spaces, quotes, dashes, fonts, classes, page styles, title, sections, bibliography, BibTeX, contents, index.</li>
+<li>Module II: quote, quotation, verse, lists, tabbing, tabular, multicolumn, cline, array, multirow, longtable.</li>
+<li>Module III: math mode, superscripts, roots, symbols classes, custom commands, amsmath environments, numbering, matrices, dots, delimiters, fractions, limits, operators, fonts.</li>
+<li>Module IV: theorems, amsthm, boxes, floats, cross references, footnotes, beamer frames, overlays, blocks, columns, color.</li>
 </ol>`)}
 `});

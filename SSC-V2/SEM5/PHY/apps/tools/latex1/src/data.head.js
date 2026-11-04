@@ -33,6 +33,8 @@ const predict=(title,code,options,answer,why)=>W('predict',{title,code,options,a
 const fix=(title,start,o)=>W('challenge',Object.assign({kind:'fix',title,start},o||{}));
 const build=(title,start,o)=>W('challenge',Object.assign({kind:'build',title,start},o||{}));
 const editor=(code,o)=>W('editor',Object.assign({code},o||{}));
+/* one conceptual question about a piece of code (the answer options are words, not TeX) */
+const think=(title,code,options,answer,why)=>W('omr',{title:'Think: '+title,qs:[{q:'<pre class="lx-verb">'+escH(code)+'</pre>Which answer is correct?',o:options,a:answer,why}]});
 const tp=t=>`<div class="topic"><h3>${t}</h3></div>`;
 const gist=t=>`<div class="gist"><span class="k">in one line</span>${t}</div>`;
 const must=h=>`<div class="note"><div class="nh">learn this by heart</div>${h}</div>`;

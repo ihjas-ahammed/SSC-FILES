@@ -1,0 +1,247 @@
+# Module I derivations (Binmore ch. 19)
+
+=== d-dir
+title: Directional derivative from the limit (example 19.2)
+marks: 3–5 marks
+src: Binmore §19.1–19.2
+legend: \(f(x_1,x_2)=x_1x_2\), point \(\boldsymbol\xi=(1,2)\), direction \((3,4)\).
+result: D_{\mathbf u}f(1,2) = 2
+--- Make the direction a unit vector
+tex: \mathbf u = \frac{(3,4)}{\|(3,4)\|} = \left(\tfrac35,\tfrac45\right)
+move: divide | by=\|(3,4)\| = 5
+note: The slope interpretation needs \(\|\mathbf u\|=1\). Forgetting this multiplies the answer by 5.
+--- The definition
+tex: D_{\mathbf u}f(\boldsymbol\xi) = \lim_{t\to0}\frac{f(\boldsymbol\xi+t\mathbf u)-f(\boldsymbol\xi)}{t}
+move: define | label=Slope of the slice \(F(t)=f(\boldsymbol\xi+t\mathbf u)\) at \(t=0\)
+---
+tex: D_{\mathbf u}f(\boldsymbol\xi) = \lim_{t\to0}\frac{(1+\tfrac{3t}{5})(2+\tfrac{4t}{5})-2}{t}
+move: substitute | by=\boldsymbol\xi+t\mathbf u = (1+\tfrac{3t}5,\,2+\tfrac{4t}5)
+---
+tex: D_{\mathbf u}f(\boldsymbol\xi) = \lim_{t\to0}\frac{2t+\tfrac{12}{25}t^2}{t}
+move: expand | label=\(2+\tfrac45t+\tfrac65t+\tfrac{12}{25}t^2-2\)
+ask: What is \(\tfrac45 t+\tfrac65 t\)?
+opt*: \(2t\)
+opt: \(\tfrac{24}{25}t\)
+opt: \(t\)
+why: \(\tfrac45+\tfrac65=\tfrac{10}5=2\).
+---
+tex: D_{\mathbf u}f(\boldsymbol\xi) = \lim_{t\to0}\left(2+\tfrac{12}{25}t\right) = 2
+move: cancel | by=t
+note: Check with theorem 19.15: \(f'(1,2)=(x_2,x_1)=(2,1)\) and \((2,1)\cdot(\tfrac35,\tfrac45)=\tfrac65+\tfrac45=2\). Along \((1,-2)\): \((2,1)\cdot(1,-2)=0\), the contour direction.
+
+=== d-tfr
+title: \(D_{\mathbf u}f(\boldsymbol\xi)=f'(\boldsymbol\xi)\mathbf u\) (theorem 19.15)
+marks: 5 marks
+src: Binmore §19.14–19.15
+legend: \(f:A\to\mathbf R^m\) differentiable at \(\boldsymbol\xi\), so \(\|f(\mathbf x)-f(\boldsymbol\xi)-f'(\boldsymbol\xi)(\mathbf x-\boldsymbol\xi)\|/\|\mathbf x-\boldsymbol\xi\|\to0\).
+result: D_{\mathbf u}f(\boldsymbol\xi) = f'(\boldsymbol\xi)\mathbf u
+--- Use the definition of the derivative
+tex: \frac{\|f(\mathbf x)-f(\boldsymbol\xi)-f'(\boldsymbol\xi)(\mathbf x-\boldsymbol\xi)\|}{\|\mathbf x-\boldsymbol\xi\|}\to0
+note: This holds however \(\mathbf x\) approaches \(\boldsymbol\xi\), in particular along the line through \(\boldsymbol\xi\) in the direction \(\mathbf u\).
+--- Approach along the line
+tex: \frac{\|f(\boldsymbol\xi+t\mathbf u)-f(\boldsymbol\xi)-tf'(\boldsymbol\xi)\mathbf u\|}{|t|}\to0
+move: substitute | by=\mathbf x=\boldsymbol\xi+t\mathbf u,\ \|\mathbf x-\boldsymbol\xi\|=|t|
+---
+tex: \lim_{t\to0}\left\|\frac{f(\boldsymbol\xi+t\mathbf u)-f(\boldsymbol\xi)}{t}-f'(\boldsymbol\xi)\mathbf u\right\| = 0
+move: divide | label=Take \(|t|\) inside the norm
+---
+tex: D_{\mathbf u}f(\boldsymbol\xi) = f'(\boldsymbol\xi)\mathbf u
+move: identity | label=The quotient tends to \(f'(\boldsymbol\xi)\mathbf u\); its limit is \(D_{\mathbf u}f(\boldsymbol\xi)\) by definition
+note: Taking \(\mathbf u=\mathbf e_j\) gives column \(j\) of \(f'(\boldsymbol\xi)\) as the partial derivatives \(f^i_j(\boldsymbol\xi)\): theorem 19.16, the Jacobian matrix.
+
+=== d-quad
+title: Derivative of a quadratic form, \(\dfrac{d}{d\mathbf x}(\mathbf x^TA\mathbf x)\) (example 19.22)
+marks: 3–5 marks
+src: Binmore §19.21–19.22, formulas (I), (IV)′
+legend: \(A\) an \(n\times n\) matrix, \(\mathbf x\) a column vector. Formula (IV)′: \(\dfrac{d}{d\mathbf x}(\mathbf y^T\mathbf z)=\mathbf z^T\dfrac{d\mathbf y}{d\mathbf x}+\mathbf y^T\dfrac{d\mathbf z}{d\mathbf x}\).
+result: \frac{d}{d\mathbf x}(\mathbf x^TA\mathbf x) = \mathbf x^T(A^T+A)
+--- Split into a product
+tex: \frac{d}{d\mathbf x}\mathbf x^TA\mathbf x = \frac{d}{d\mathbf x}\mathbf x^T(A\mathbf x)
+move: define | label=\(\mathbf y=\mathbf x\), \(\mathbf z=A\mathbf x\)
+---
+tex: \frac{d}{d\mathbf x}\mathbf x^TA\mathbf x = (A\mathbf x)^T\frac{d\mathbf x}{d\mathbf x}+\mathbf x^T\frac{d}{d\mathbf x}(A\mathbf x)
+move: identity | label=Product rule (IV)′
+---
+tex: \frac{d}{d\mathbf x}\mathbf x^TA\mathbf x = \mathbf x^TA^TI+\mathbf x^TA
+move: substitute | label=\(d\mathbf x/d\mathbf x=I\); by (I), \(d(A\mathbf x)/d\mathbf x=A\)
+ask: What is \((A\mathbf x)^T\)?
+opt*: \(\mathbf x^TA^T\)
+opt: \(A^T\mathbf x^T\)
+opt: \(A\mathbf x^T\)
+why: Transpose reverses the order of a product.
+---
+tex: \frac{d}{d\mathbf x}\mathbf x^TA\mathbf x = \mathbf x^T(A^T+A)
+move: factor | by=\mathbf x^T
+note: A row vector, as every derivative of a real function is. If \(A\) is symmetric this is \(2\mathbf x^TA\), whose transpose (the gradient as a column) is \(2A\mathbf x\).
+
+=== d-chain
+title: Chain rule in matrix form (example 19.25(i))
+marks: 5 marks
+src: Binmore §19.23–19.25
+legend: \(z=f(y_1,y_2)=y_1^2y_2+y_2^3y_1\), \(\mathbf y=\mathbf g(x)=(x^2,x^3)^T\).
+result: \frac{dz}{dx} = 7x^6+11x^{10}
+--- Formula (V)
+tex: \frac{dz}{dx} = \frac{dz}{d\mathbf y}\frac{d\mathbf y}{dx}
+note: A \(1\times2\) row times a \(2\times1\) column: a \(1\times1\) matrix.
+---
+tex: \frac{dz}{dx} = (2y_1y_2+y_2^3,\ y_1^2+3y_2^2y_1)\begin{pmatrix}2x\\3x^2\end{pmatrix}
+move: substitute | label=Partial derivatives of \(f\); derivative of \(\mathbf g\)
+---
+tex: \frac{dz}{dx} = (2x^5+x^9,\ x^4+3x^8)\begin{pmatrix}2x\\3x^2\end{pmatrix}
+move: substitute | by=y_1=x^2,\ y_2=x^3
+note: The book prints the column as \((x^2,x^3)^T\) here; it must be \((2x,3x^2)^T\). Its final answer is the correct one.
+---
+tex: \frac{dz}{dx} = 4x^6+2x^{10}+3x^6+9x^{10}
+move: multiply | label=Row times column
+---
+tex: \frac{dz}{dx} = 7x^6+11x^{10}
+move: combine | label=Collect like powers
+note: Check directly: \(f\circ\mathbf g(x)=x^4x^3+x^9x^2=x^7+x^{11}\), derivative \(7x^6+11x^{10}\).
+
+=== d-lsq
+title: Least squares: the normal equations (example 19.30)
+marks: 5–6 marks
+src: Binmore §19.30
+legend: \(A\) an \(m\times n\) matrix, \(\mathbf b\in\mathbf R^m\); minimise \(\|A\mathbf x-\mathbf b\|\).
+result: \mathbf x = (A^TA)^{-1}A^T\mathbf b
+--- Square the norm
+tex: y = \|A\mathbf x-\mathbf b\|^2 = (A\mathbf x-\mathbf b)^T(A\mathbf x-\mathbf b) = \mathbf u^T\mathbf u
+move: define | by=\mathbf u = A\mathbf x-\mathbf b
+note: Minimising \(\|\cdot\|\) and \(\|\cdot\|^2\) give the same \(\mathbf x\), and the square is differentiable.
+--- Chain rule
+tex: \frac{dy}{d\mathbf x} = \frac{dy}{d\mathbf u}\frac{d\mathbf u}{d\mathbf x}
+move: identity
+---
+tex: \frac{dy}{d\mathbf x} = (2\mathbf u^TI)A = 2(A\mathbf x-\mathbf b)^TA
+move: substitute | label=\(\dfrac{d}{d\mathbf u}\mathbf u^T\mathbf u=2\mathbf u^T\) by (II)′ with \(A=I\); \(\dfrac{d\mathbf u}{d\mathbf x}=A\)
+--- Stationary point
+tex: 2(A\mathbf x-\mathbf b)^TA = \mathbf 0
+move: identity | label=At a minimum the derivative is zero (theorem 19.28)
+---
+tex: A^T(A\mathbf x-\mathbf b) = \mathbf 0
+move: identity | label=Transpose and divide by 2
+---
+tex: A^TA\mathbf x = A^T\mathbf b
+move: rearrange
+note: These are the normal equations. Geometrically: the residual is perpendicular to every column of \(A\).
+---
+tex: \mathbf x = (A^TA)^{-1}A^T\mathbf b
+move: multiply | by=(A^TA)^{-1} | label=If \(A^TA\) is non-singular (columns independent)
+note: The only candidate. It is a minimum because \(y''=2A^TA\) is positive definite when the columns of \(A\) are independent.
+
+=== d-taylor
+title: Taylor's theorem of order 2 (theorem 19.36)
+marks: 6–10 marks
+src: Binmore §19.35–19.36
+legend: \(f\) twice differentiable on \(\|\mathbf x-\boldsymbol\xi\|\lt\Delta\). Slice: \(F(t)=f((1-t)\boldsymbol\xi+t\mathbf x)\), \(0\le t\le1\).
+result: \begin{gathered}f(\mathbf x) = f(\boldsymbol\xi)+f'(\boldsymbol\xi)(\mathbf x-\boldsymbol\xi)\\+\tfrac12(\mathbf x-\boldsymbol\xi)^Tf''(\boldsymbol\eta)(\mathbf x-\boldsymbol\xi)\end{gathered}
+--- One-variable Taylor on the slice
+tex: F(1) = F(0)+F'(0)+\tfrac12F''(\tau)
+move: identity | label=Theorem 11.10 for \(F\), some \(0\lt\tau\lt1\)
+note: \(F(1)=f(\mathbf x)\), \(F(0)=f(\boldsymbol\xi)\).
+--- First derivative of the slice
+tex: F'(t) = f'((1-t)\boldsymbol\xi+t\mathbf x)(\mathbf x-\boldsymbol\xi)
+move: differentiate | wrt=t | label=Chain rule; \(d\mathbf x(t)/dt=\mathbf x-\boldsymbol\xi\)
+---
+tex: F'(0) = f'(\boldsymbol\xi)(\mathbf x-\boldsymbol\xi)
+move: substitute | by=t=0
+--- Second derivative: transpose first
+tex: \begin{gathered}F''(t)^T =\\\frac{d}{dt}\{(\mathbf x-\boldsymbol\xi)^Tf'((1-t)\boldsymbol\xi+t\mathbf x)^T\}\end{gathered}
+move: identity | label=\(F'\) is \(1\times1\); write it with the column \(f'(\cdot)^T\)
+---
+tex: \begin{gathered}F''(t)^T =\\(\mathbf x-\boldsymbol\xi)^Tf''((1-t)\boldsymbol\xi+t\mathbf x)^T(\mathbf x-\boldsymbol\xi)\end{gathered}
+move: differentiate | wrt=t | label=Chain rule again; \(d(f'^T)/d\mathbf x=f''^T\)
+---
+tex: F''(\tau) = (\mathbf x-\boldsymbol\xi)^Tf''(\boldsymbol\eta)(\mathbf x-\boldsymbol\xi)
+move: substitute | by=\boldsymbol\eta=(1-\tau)\boldsymbol\xi+\tau\mathbf x | label=and transpose a \(1\times1\) matrix
+note: The book prints \(\boldsymbol\eta=(1-\tau)\boldsymbol\xi+t\mathbf x\); the \(t\) should be \(\tau\).
+--- Put it together
+tex: \begin{gathered}f(\mathbf x) = f(\boldsymbol\xi)+f'(\boldsymbol\xi)(\mathbf x-\boldsymbol\xi)\\+\tfrac12(\mathbf x-\boldsymbol\xi)^Tf''(\boldsymbol\eta)(\mathbf x-\boldsymbol\xi)\end{gathered}
+move: substitute | label=Into the first line
+note: At a stationary point the middle term vanishes: \(f(\boldsymbol\xi+\mathbf h)-f(\boldsymbol\xi)=\tfrac12\mathbf h^Tf''(\boldsymbol\eta)\mathbf h\). The sign of this quadratic form decides the type of the point.
+
+=== d-eig
+title: A quadratic form in eigen-coordinates (§19.37)
+marks: 5 marks
+src: Binmore §19.37
+legend: \(M\) symmetric \(n\times n\), \(H\) orthogonal (\(H^TH=I\)) with \(H^TMH=D=\diag(\lambda_1,\dots,\lambda_n)\), \(\lambda_1\) smallest, \(\lambda_n\) largest.
+result: \lambda_1\|\mathbf x\|^2\le\mathbf x^TM\mathbf x\le\lambda_n\|\mathbf x\|^2
+--- Change variables
+tex: \mathbf x^TM\mathbf x = \mathbf y^TH^TMH\mathbf y
+move: substitute | by=\mathbf x=H\mathbf y,\ \mathbf x^T=\mathbf y^TH^T
+---
+tex: \mathbf x^TM\mathbf x = \mathbf y^TD\mathbf y = \lambda_1y_1^2+\dots+\lambda_ny_n^2
+move: substitute | by=H^TMH=D
+--- Lengths are kept
+tex: \|\mathbf x\|^2 = \mathbf y^TH^TH\mathbf y = \mathbf y^T\mathbf y = \|\mathbf y\|^2
+move: identity | by=H^TH=I
+note: So \(\mathbf x=\mathbf 0\) exactly when \(\mathbf y=\mathbf 0\). Hence: \(M\) positive definite ⇔ all \(\lambda_i\gt0\); negative definite ⇔ all \(\lambda_i\lt0\).
+--- Bound each term
+tex: \lambda_1\sum y_i^2\le\sum\lambda_iy_i^2\le\lambda_n\sum y_i^2
+move: identity | label=\(\lambda_1\le\lambda_i\le\lambda_n\) and \(y_i^2\ge0\)
+---
+tex: \lambda_1\|\mathbf x\|^2\le\mathbf x^TM\mathbf x\le\lambda_n\|\mathbf x\|^2
+move: substitute | by=\sum y_i^2=\|\mathbf x\|^2
+note: Inequality (1) of §19.37, used in the proof of theorem 19.42. Along an eigenvector \(\mathbf x=t\mathbf u^j\): \(\mathbf x^TM\mathbf x=\lambda_jt^2\) (2).
+
+=== d-class
+title: Positive definite Hessian ⇒ local minimum (theorem 19.42)
+marks: 10 marks
+src: Binmore §19.40–19.42
+legend: Second partials continuous near \(\boldsymbol\xi\); \(f'(\boldsymbol\xi)=\mathbf 0\); write \(\Delta f=f(\boldsymbol\xi+\mathbf h)-f(\boldsymbol\xi)\); \(f''(\boldsymbol\xi)\) positive definite with smallest eigenvalue \(\lambda_1\gt0\).
+result: f(\boldsymbol\xi+\mathbf h)-f(\boldsymbol\xi)\gt\tfrac14\lambda_1\|\mathbf h\|^2\quad(0\lt\|\mathbf h\|\lt\delta)
+--- Taylor at a stationary point
+tex: f(\boldsymbol\xi+\mathbf h)-f(\boldsymbol\xi) = \tfrac12\mathbf h^Tf''(\boldsymbol\eta)\mathbf h
+move: substitute | by=f'(\boldsymbol\xi)=\mathbf 0 | label=Theorem 19.36
+---
+tex: \Delta f = \tfrac12\mathbf h^Tf''(\boldsymbol\xi)\mathbf h+\tfrac12\mathbf h^T(f''(\boldsymbol\eta)-f''(\boldsymbol\xi))\mathbf h
+move: add | label=Add and subtract \(\tfrac12\mathbf h^Tf''(\boldsymbol\xi)\mathbf h\)
+note: The first term we control by eigenvalues, the second by continuity.
+--- Bound the first term
+tex: \tfrac12\mathbf h^Tf''(\boldsymbol\xi)\mathbf h\ge\tfrac12\lambda_1\|\mathbf h\|^2
+move: identity | label=Inequality (1) of §19.37
+--- Bound the second term (lemma 19.41)
+tex: |\mathbf h^T(f''(\boldsymbol\eta)-f''(\boldsymbol\xi))\mathbf h|\lt\epsilon\|\mathbf h\|^2
+move: identity | label=Continuity of the \(f_{ij}\) and \(|\mathbf h^TL\mathbf h|\le(\sum l_{ij}^2)^{1/2}\|\mathbf h\|^2\), for \(0\lt\|\mathbf h\|\lt\delta\)
+---
+tex: \Delta f\gt\tfrac12\lambda_1\|\mathbf h\|^2-\tfrac12\epsilon\|\mathbf h\|^2
+move: combine
+ask: Which \(\epsilon\) makes the right side a positive multiple of \(\|\mathbf h\|^2\)?
+opt*: \(\epsilon=\tfrac12\lambda_1\)
+opt: \(\epsilon=2\lambda_1\)
+opt: \(\epsilon=\lambda_n\)
+why: Any \(\epsilon\lt\lambda_1\) works; the book takes \(\tfrac12\lambda_1\).
+---
+tex: f(\boldsymbol\xi+\mathbf h)-f(\boldsymbol\xi)\gt\tfrac14\lambda_1\|\mathbf h\|^2\gt0
+move: substitute | by=\epsilon=\tfrac12\lambda_1
+note: So \(f(\boldsymbol\xi+\mathbf h)\gt f(\boldsymbol\xi)\) for all small \(\mathbf h\ne\mathbf 0\): a (strict) local minimum. The maximum case is the same with signs reversed; the saddle case (theorem 19.43) runs the argument along \(\mathbf u^1\) and \(\mathbf u^n\).
+
+=== d-1945
+title: Classify the stationary points of \(x_1^3-3x_1x_2^2+x_2^4\) (example 19.45)
+marks: 6–10 marks
+src: Binmore §19.45
+legend: \(f(x_1,x_2)=x_1^3-3x_1x_2^2+x_2^4\).
+result: (\tfrac32,\pm\tfrac32)\ \text{local minima};\ (0,0)\ \text{not an extremum}
+--- Stationary points
+tex: f_1 = 3x_1^2-3x_2^2 = 0,\qquad f_2 = -6x_1x_2+4x_2^3 = 0
+move: differentiate | label=Partial derivatives
+---
+tex: x_1=\pm x_2,\qquad x_2=0\ \text{or}\ 2x_2^2=3x_1
+move: factor | label=\(3(x_1-x_2)(x_1+x_2)=0\); \(2x_2(2x_2^2-3x_1)=0\)
+---
+tex: (0,0),\quad(\tfrac32,\tfrac32),\quad(\tfrac32,-\tfrac32)
+move: evaluate | label=\(x_1=x_2\): \(2x_2^2=3x_2\); \(x_1=-x_2\): \(2x_2^2=-3x_2\)
+--- Hessian
+tex: f''(x_1,x_2) = \begin{pmatrix}6x_1&-6x_2\\-6x_2&-6x_1+12x_2^2\end{pmatrix}
+move: differentiate | label=Second partials
+---
+tex: \det f'' = 36(-x_1^2+2x_1x_2^2-x_2^2),\qquad f_{11}=6x_1
+move: evaluate
+--- Test each point
+tex: \det f''(\tfrac32,\pm\tfrac32) = 36\cdot\tfrac94 = 81\gt0,\quad f_{11}=9\gt0
+move: substitute | label=\(-\tfrac94+\tfrac{27}4-\tfrac94=\tfrac94\)
+note: Positive definite: both are local minima, \(f=\tfrac{27}8-\tfrac{81}8+\tfrac{81}{16}=-\tfrac{27}{16}\).
+---
+tex: \det f''(0,0) = 0
+move: substitute
+note: The test is useless here. Directly: \(f(0,x_2)=x_2^4\ge0\) but \(f(x_1,0)=x_1^3\) changes sign, so \((0,0)\) is neither a maximum nor a minimum.

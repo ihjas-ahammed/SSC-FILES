@@ -28,3 +28,24 @@ Notes
 - Units 11–13 and 14–15 are cut as one file per pair or triple (same section).
 - §4.2 (complex powers) is not in the syllabus list and is not cut.
 - Syllabus: `syllabus.pdf` (copied from `SEM5-PYQ/COMPLEX-ANALYSIS-I/`).
+
+## Exercise pages (added 2026-10-27)
+
+Each section's exercise set ends on the page where the next section begins, so every unit cut above stopped one page short of the end of its exercises. Full exercise sets are now separate files (PDF pages; the last page also opens the next section). The unit files are unchanged.
+
+| Section | Exercises PDF pp | File |
+|---|---|---|
+| 1.1 | 21–24 | module-1/exercises-1-1.pdf |
+| 1.2 | 27–30 | module-1/exercises-1-2.pdf |
+| 1.3 | 34–36 | module-1/exercises-1-3.pdf |
+| 1.4 | 39–41 | module-1/exercises-1-4.pdf |
+| 1.5 | 45–48 | module-1/exercises-1-5.pdf |
+| 2.1 | 66–68 | module-2/exercises-2-1.pdf |
+| 2.2 | 74–76 | module-2/exercises-2-2.pdf |
+| 2.4 | 99–101 | module-2/exercises-2-4.pdf |
+| 3.1 | 132–135 | module-3/exercises-3-1.pdf |
+| 3.2 | 142–144 | module-3/exercises-3-2.pdf |
+| 3.3 | 149–151 | module-3/exercises-3-3.pdf |
+| 3.4 | 154–155 | module-3/exercises-3-4.pdf |
+| 4.1 | 178–180 | module-4/exercises-4-1.pdf |
+| 4.3 | 196–197 | module-4/exercises-4-3.pdf |

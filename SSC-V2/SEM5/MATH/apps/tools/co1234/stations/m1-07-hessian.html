@@ -1,0 +1,21 @@
+<!-- id: m1-hessian | mod: Module I | modName: Multivariable calculus | modClass: m1 | title: Second derivatives, the Hessian, mean value and Taylor theorems | short: Hessian, mean value, Taylor (19.31–19.36) | est: ~30 min -->
+<gist>Differentiate the gradient once more and you get the $n\times n$ matrix of second partials, the Hessian $f''(\mathbf x)$. It is symmetric when the second partials are continuous. Restricting $f$ to a segment turns the one-variable mean value and Taylor theorems into vector versions; Taylor of order 2 shows that, at a stationary point, the Hessian's quadratic form decides what happens.</gist>
+
+<tp>The second derivative (§19.31)</tp>
+<p>$f'(\mathbf x)$ is a row, and §19.14 differentiates columns, so define $\boldsymbol\phi'(\mathbf x)^T=\dfrac{d}{d\mathbf x}\{\boldsymbol\phi(\mathbf x)^T\}$ for a row $\boldsymbol\phi$, and then $f''(\mathbf x)^T=\dfrac{d}{d\mathbf x}f'(\mathbf x)^T$. Since $f'(\mathbf x)^T=(f_1,\dots,f_n)^T$, theorem 19.16 gives</p>
+<must><p>$$f''(\mathbf x)=\frac{d^2y}{d\mathbf x^2}=\begin{pmatrix}f_{11}&f_{12}&\cdots&f_{1n}\\f_{21}&f_{22}&\cdots&f_{2n}\\\vdots&&&\vdots\\f_{n1}&f_{n2}&\cdots&f_{nn}\end{pmatrix},\qquad f_{ij}=\frac{\partial}{\partial x_i}\frac{\partial f}{\partial x_j}=\frac{\partial^2f}{\partial x_i\partial x_j}.$$ This is the <b>Hessian matrix</b>. If all second partials exist and are continuous at $\boldsymbol\xi$, $f$ is twice differentiable there (19.17), and $f''(\boldsymbol\xi)$ is symmetric, $f_{ij}=f_{ji}$ (proposition 19.33).</p></must>
+<p><b>Example 19.32.</b> $f=x_1^2x_2+x_2^3x_1$: $f_1=2x_1x_2+x_2^3$, $f_2=x_1^2+3x_2^2x_1$, so</p>
+$$f''(x_1,x_2)=\begin{pmatrix}2x_2&2x_1+3x_2^2\\2x_1+3x_2^2&6x_1x_2\end{pmatrix},$$
+<p>symmetric, as 19.33 predicts. Exercise 19.47(3) shows symmetry can fail when the second partials are not continuous.</p>
+
+<tp>Mean value theorem (§19.34–19.35)</tp>
+<must><p>Let $L$ be the segment from $\mathbf a$ to $\mathbf b$ and $L^0$ the segment without its ends. If real-valued $f$ is continuous on $L$ and differentiable on $L^0$, then $$f(\mathbf b)-f(\mathbf a)=f'(\boldsymbol\xi)(\mathbf b-\mathbf a)\quad\text{for some }\boldsymbol\xi\in L^0.$$</p></must>
+<p><b>Proof.</b> $F(t)=f((1-t)\mathbf a+t\mathbf b)$ is continuous on $[0,1]$ and differentiable on $(0,1)$. The one-variable theorem gives $F(1)-F(0)=F'(\tau)$ with $0\lt\tau\lt1$. By the chain rule $F'(t)=\dfrac{dy}{d\mathbf x}\dfrac{d\mathbf x}{dt}=f'(\mathbf x)(\mathbf b-\mathbf a)$. Put $\boldsymbol\xi=(1-\tau)\mathbf a+\tau\mathbf b$.</p>
+<trap><p>The theorem is for real-valued $f$ only. For vector-valued $f$ it fails: exercise 19.47(5), $f(t)=(t^2,t^3)$ on $[0,1]$, needs $2\xi=1$ and $3\xi^2=1$ at once, impossible.</p></trap>
+
+<tp>Taylor's theorem of order 2 (§19.36)</tp>
+<fig name="taylor"><cap>The proof slices along the segment from $\boldsymbol\xi$ to $\mathbf x$ and uses one-variable Taylor on $F$.</cap></fig>
+<der id="d-taylor"/>
+<must><p>At a stationary point: $f(\boldsymbol\xi+\mathbf h)-f(\boldsymbol\xi)=\tfrac12\mathbf h^Tf''(\boldsymbol\eta)\mathbf h$ with $\boldsymbol\eta$ on the segment. If $\mathbf h^Tf''(\boldsymbol\eta)\mathbf h\lt0$ for all small $\mathbf h\ne\mathbf 0$ we have a local maximum; if $\gt0$, a local minimum.</p></must>
+<chk><q>Find the Hessian of $f=e^{x_1}\sin x_2$.</q><a><p>$f_1=e^{x_1}\sin x_2$, $f_2=e^{x_1}\cos x_2$; $f''=\begin{pmatrix}e^{x_1}\sin x_2&e^{x_1}\cos x_2\\e^{x_1}\cos x_2&-e^{x_1}\sin x_2\end{pmatrix}$.</p></a></chk>
+<chk><q>State the mean value theorem for $f:\mathbf R^n\to\mathbf R$ and say which one-variable theorem the proof uses.</q><a><p>$f(\mathbf b)-f(\mathbf a)=f'(\boldsymbol\xi)(\mathbf b-\mathbf a)$ for some $\boldsymbol\xi$ strictly between $\mathbf a$ and $\mathbf b$ on the segment. The proof applies the one-variable mean value theorem to $F(t)=f((1-t)\mathbf a+t\mathbf b)$.</p></a></chk>

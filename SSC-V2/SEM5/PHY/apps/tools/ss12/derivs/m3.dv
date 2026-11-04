@@ -1,0 +1,326 @@
+# Module III derivations (Properties of Solids)
+
+=== sigma
+title: Conductivity of a semiconductor: \(\sigma = e(n\mu_n + p\mu_p)\)
+marks: 4 marks
+src: Puri & Babbar §7.4, Eqs. (7.3)–(7.9)
+legend: \(v_d\): drift velocity. \(\mu\): mobility, the drift velocity per unit field. \(n\), \(p\): electron and hole concentrations; \(\mu_n\), \(\mu_p\) their mobilities. \(\mathcal E\): applied field.
+result: \sigma_i = en_i(\mu_n + \mu_p)
+use: v_d | drift velocity, the average velocity gained from the field: [[go:der:drude|Drude derivation]]
+use: \mu | mobility, drift velocity per unit field: [[go:m3-drift__t0|drift velocity and mobility]]
+use: n,\ p | electrons in the conduction band and holes in the valence band: [[go:m3-types__t1|intrinsic semiconductors]]
+use: J=\sigma\mathcal E | Ohm's law in local form: the conductivity \(\sigma\) is defined by it
+use: e | magnitude of the electron charge; holes carry \(+e\): [[go:m2-dynamics__t2|holes]]
+--- Drift
+tex: v_d = \mu\mathcal E
+note: Carriers are accelerated by the field but keep colliding with the lattice (phonons, impurities). On average they gain only a small extra velocity, proportional to the field: \(v_d=e\tau\mathcal E/m\) with the relaxation time \(\tau\), as in [[go:der:drude|the Drude derivation]]. The constant \(e\tau/m\) is the mobility \(\mu\).
+--- Electron current
+tex: \text{charge through area }A\text{ in }dt = n\,e\,(A\,v_{dn}\,dt)
+move: define | label=Every carrier within \(v_{dn}\,dt\) of the area gets through in time \(dt\)
+note: They fill a box of base \(A\) and length \(v_{dn}\,dt\), which holds \(nAv_{dn}\,dt\) carriers of charge \(e\) each.
+---
+tex: J_n = nev_{dn}
+move: divide | label=Current per unit area: divide the charge by \(A\,dt\)
+note: \(n\) electrons per unit volume, each carrying charge \(e\) at the drift velocity.
+---
+tex: J_n = ne\mu_n\mathcal E
+move: substitute | by=v_{dn} = \mu_n\mathcal E
+---
+tex: \sigma_n = ne\mu_n
+move: identity | label=Compare with Ohm's law \(J=\sigma\mathcal E\)
+--- Holes add to it
+tex: \sigma = \sigma_n + \sigma_p = e(n\mu_n + p\mu_p)
+move: add | \sigma_p = pe\mu_p
+note: Holes ([[go:m3-types__t1|what a hole is]]) drift the other way, but their charge is \(+e\), so their current is in the same direction as the electrons' current. The two conductivities add.
+ask: Electrons and holes drift in opposite directions. Do their currents add or cancel?
+opt*: add: opposite charge and opposite motion give current in the same direction
+opt: cancel exactly
+opt: only the faster one counts
+opt: they cancel in an intrinsic sample
+why: Current is charge $\times$ velocity; both signs flip for holes, so the product has the same sign.
+--- Intrinsic sample
+tex: \sigma_i = en_i(\mu_n + \mu_p)
+move: substitute | by=n = p = n_i
+note: \(\mu_n>\mu_p\) because a hole moves by electrons hopping between bonds and has the larger effective mass. Si at 300 K: \(\mu_n=0.135\), \(\mu_p=0.048\ \mathrm{m^2V^{-1}s^{-1}}\), \(n_i=1.5\times10^{16}\ \mathrm{m^{-3}}\) give \(\sigma_i=4.4\times10^{-4}\ \mathrm{S\,m^{-1}}\).
+
+=== ncb
+title: Electron concentration in the conduction band
+marks: 8 marks
+src: Puri & Babbar §7.5.1, Eqs. (7.13)–(7.21)
+legend: \(D(E)\): density of states per unit volume. \(f(E)\): Fermi function. \(m_n^*\): effective mass of electrons in the conduction band. \(E_c\): bottom of the conduction band. Kinetic energy of an electron at \(E\) is \(E-E_c\).
+figure: bands
+result: \begin{gathered}n = N_c\,e^{-(E_c-E_F)/kT}\\ N_c = 2\left(\frac{2\pi m_n^*kT}{h^2}\right)^{3/2}\end{gathered}
+use: D(E) | states per unit energy and volume, from [[go:der:dos|the density-of-states derivation]] (the version with \(h\) is its last step)
+use: f(E) | Fermi function, probability that a state is occupied: [[go:m2-fd__t0|the Fermi function]]
+use: E_c,\ E_v,\ E_g | band edges and gap: [[go:m2-dynamics__t3|metals, semiconductors, insulators]]
+use: m_n^* | effective mass of an electron in the conduction band: [[go:der:effmass|effective-mass derivation]]
+use: E_F | Fermi level, lying inside the gap: [[go:m3-carriers__t0|the recipe: states times occupation]]
+use: \int_0^\infty x^{1/2}e^{-x}dx | the integral is evaluated in the steps below
+--- Count occupied states
+tex: dn = D(E)f(E)\,dE
+note: Electrons between \(E\) and \(E+dE\) = (states there) $\times$ (chance each is occupied).
+fig: focus Ec Ef | keep Ev Eax Eg | cap Electrons fill the conduction band from $E_c$ up
+---
+tex: D(E) = \frac{4\pi}{h^3}(2m_n^*)^{3/2}(E-E_c)^{1/2}
+move: substitute | label=Free-electron \(D(E)\), with \(m\to m_n^*\) and \(E\to E-E_c\)
+note: The free-electron result \(\frac{4\pi}{h^3}(2m)^{3/2}E^{1/2}\) per unit volume ([[go:der:dos|derived in Module II]]) counts kinetic energy from zero. In the conduction band the electron behaves as a free particle of mass \(m_n^*\) ([[go:der:effmass|effective mass]]) with kinetic energy counted from \(E_c\).
+fig: focus Dc dE Pc | keep Ec Ev Eax Ef | cap $D(E)\propto\sqrt{E - E_c}$
+--- Boltzmann tail
+tex: f(E) = \frac{1}{e^{(E-E_F)/kT}+1} \approx e^{-(E-E_F)/kT}
+move: identity | label=For \(E-E_F\gg kT\), drop the 1
+note: \(E_F\) lies in the gap, several \(kT\) below \(E_c\) (\(kT=0.026\) eV at 300 K), so the exponential is huge for every conduction-band state and the 1 is negligible. This is the classical Boltzmann form of the [[go:m2-fd__t0|Fermi function]].
+ask: Why can we drop the \(+1\) in the Fermi function here?
+opt*: \(E-E_F\gg kT\) for every state in the conduction band
+opt: \(E_F\) is above \(E_c\)
+opt: \(kT\) is large
+opt: the band is full
+why: With \(E-E_F\) several \(kT\), \(e^{(E-E_F)/kT}\) is very much greater than 1.
+fig: focus nC | keep Dc Ec Ev Ef Eax | cap Occupied states: $D(E)\times f(E)$
+--- Integrate over the band
+tex: n = A\int_{E_c}^{\infty}(E-E_c)^{1/2}e^{-(E-E_F)/kT}\,dE
+move: integrate | label=Add up from \(E_c\) to \(\infty\), writing \(A=\frac{4\pi}{h^3}(2m_n^*)^{3/2}\)
+---
+tex: n = Ae^{-(E_c-E_F)/kT}\int_{E_c}^{\infty}(E-E_c)^{1/2}e^{-(E-E_c)/kT}\,dE
+move: factor | label=Split \(E-E_F=(E-E_c)+(E_c-E_F)\) and take the constant out
+--- Substitute $x = (E - E_c)/kT$
+tex: n = A(kT)^{3/2}e^{-(E_c-E_F)/kT}\int_0^{\infty}x^{1/2}e^{-x}\,dx
+move: substitute | by=E-E_c = kTx,\ dE = kT\,dx
+note: \((E-E_c)^{1/2}dE = (kT)^{3/2}x^{1/2}dx\); the limits become 0 and \(\infty\).
+--- The integral over \(x\)
+tex: \int_0^\infty x^{1/2}e^{-x}dx = \frac12\int_0^\infty x^{-1/2}e^{-x}dx
+move: integrate | label=By parts: \(u=x^{1/2}\), \(dv=e^{-x}dx\)
+note: The boundary term \(\left[-x^{1/2}e^{-x}\right]_0^\infty\) is zero and what is left is \(\int_0^\infty\tfrac12x^{-1/2}e^{-x}dx\).
+---
+tex: \int_0^\infty x^{-1/2}e^{-x}dx = 2\int_0^\infty e^{-y^2}dy
+move: substitute | by=x=y^2,\ dx=2y\,dy
+---
+tex: \int_0^\infty e^{-y^2}dy = \frac{\sqrt\pi}{2}
+move: evaluate | label=The Gaussian integral
+note: Call it \(I\) and square it: \(I^2=\int_0^\infty\!\!\int_0^\infty e^{-(x^2+y^2)}dx\,dy\). In polar coordinates over the quarter plane, \(I^2=\int_0^{\pi/2}d\phi\int_0^\infty e^{-r^2}r\,dr=\frac\pi2\cdot\frac12=\frac\pi4\).
+---
+tex: \int_0^\infty x^{1/2}e^{-x}dx = \frac12\cdot2\cdot\frac{\sqrt\pi}{2} = \frac{\sqrt\pi}{2}
+move: combine
+---
+tex: n = A(kT)^{3/2}e^{-(E_c-E_F)/kT}\cdot\frac{\sqrt\pi}{2}
+move: evaluate | by=\int_0^\infty x^{1/2}e^{-x}dx = \sqrt\pi/2
+note: Put the value just derived into the integral.
+--- Tidy
+tex: n = 2\left(\frac{2\pi m_n^*kT}{h^2}\right)^{3/2}e^{-(E_c-E_F)/kT}
+move: simplify
+note: \(A(kT)^{3/2}\frac{\sqrt\pi}2=\frac{4\pi}{h^3}\cdot\frac{\sqrt\pi}2(2m_n^*kT)^{3/2} = 2\left(\frac{2\pi m_n^*kT}{h^2}\right)^{3/2}\).
+---
+tex: n = N_c\,e^{-(E_c-E_F)/kT}
+move: define | by=N_c = 2\left(\frac{2\pi m_n^*kT}{h^2}\right)^{3/2}
+note: \(N_c\) is the effective density of states at the band edge: it is as if all the states were squeezed onto \(E_c\), each occupied with probability \(e^{-(E_c-E_F)/kT}\). For Si, \(N_c\approx2.8\times10^{25}(T/300)^{3/2}\ \mathrm{m^{-3}}\). The result holds for doped samples too.
+fig: focus nC Ec Ef | keep Dc Ev Eax | cap $n = N_ce^{-(E_c - E_F)/kT}$
+
+=== pvb
+title: Hole concentration in the valence band
+marks: 5 marks
+src: Puri & Babbar §7.5.2, Eqs. (7.22)–(7.27)
+legend: \(1-f(E)\): probability that a state is empty, i.e. holds a hole. \(m_p^*\): hole effective mass. \(E_v\): top of the valence band; a hole at \(E\) has kinetic energy \(E_v-E\).
+figure: bands
+result: \begin{gathered}p = N_v\,e^{-(E_F-E_v)/kT}\\ N_v = 2\left(\frac{2\pi m_p^*kT}{h^2}\right)^{3/2}\end{gathered}
+use: 1-f(E) | probability that a state is empty, that is, holds a hole: [[go:m3-types__t1|holes]]
+use: m_p^* | hole effective mass: [[go:m2-dynamics__t2|holes]]
+use: E_v | top of the valence band; a hole at \(E\) has kinetic energy \(E_v-E\)
+use: D(E),\ \sqrt\pi/2 | same density of states and same integral as in [[go:der:ncb|the electron derivation]]
+--- Count empty states
+tex: dp = D(E)\left[1-f(E)\right]dE
+note: A hole is a state the electrons have left empty.
+fig: focus Ev Ef | keep Ec Eax Eg | cap Holes: empty states below $E_v$
+--- Probability of an empty state
+tex: 1-f(E) = 1-\frac{1}{e^{(E-E_F)/kT}+1} = \frac{e^{(E-E_F)/kT}}{e^{(E-E_F)/kT}+1}
+move: identity | label=Put over a common denominator
+---
+tex: 1-f(E) = \frac{1}{e^{(E_F-E)/kT}+1} \approx e^{-(E_F-E)/kT}
+move: identity | label=For \(E_F-E\gg kT\)
+note: Divide top and bottom by \(e^{(E-E_F)/kT}\) to get \(1/(e^{(E_F-E)/kT}+1)\). Holes become exponentially rarer as you go deeper into the valence band.
+ask: In the valence band \(E<E_F\). Which form does \(1-f(E)\) take?
+opt*: \(e^{-(E_F-E)/kT}\)
+opt: \(e^{-(E-E_F)/kT}\)
+opt: \(1\)
+opt: \(e^{-E/kT}\)
+why: \(1-\frac{1}{e^{x}+1}=\frac{1}{e^{-x}+1}\) with \(x=(E-E_F)/kT<0\); for \(|x|\gg1\) this is \(e^{x}=e^{-(E_F-E)/kT}\).
+fig: focus pV | keep Dv Ec Ev Ef Eax | cap Empty states: $D(E)\times[1 - f(E)]$
+---
+tex: D(E) = \frac{4\pi}{h^3}(2m_p^*)^{3/2}(E_v-E)^{1/2}
+move: substitute | label=Same \(D(E)\), with \(m_p^*\) and kinetic energy \(E_v-E\)
+fig: focus Dv | keep pV Ec Ev Ef Eax | cap $D(E)\propto\sqrt{E_v - E}$
+--- Integrate down the band
+tex: p = A'\int_{-\infty}^{E_v}(E_v-E)^{1/2}e^{-(E_F-E)/kT}\,dE
+move: integrate | label=Add up from \(-\infty\) to \(E_v\), with \(A'=\frac{4\pi}{h^3}(2m_p^*)^{3/2}\)
+---
+tex: p = A'(kT)^{3/2}e^{-(E_F-E_v)/kT}\cdot\frac{\sqrt\pi}{2}
+move: substitute | by=E_v - E = kTx
+note: The same integral as for electrons, derived in [[go:der:ncb|the electron derivation]].
+---
+tex: p = N_v\,e^{-(E_F-E_v)/kT}
+move: define | by=N_v = 2\left(\frac{2\pi m_p^*kT}{h^2}\right)^{3/2}
+note: The mirror image of the electron result, with \(m_p^*\) and the distance of \(E_F\) above \(E_v\).
+fig: focus pV Ev Ef | keep Dv Ec Eax | cap $p = N_ve^{-(E_F - E_v)/kT}$
+
+=== efint
+title: Fermi level of an intrinsic semiconductor
+marks: 5 marks
+src: Puri & Babbar §7.5.3, Eqs. (7.29)–(7.31)
+legend: Intrinsic: \(n=p=n_i\). \(N_c\), \(N_v\) as in the two previous derivations.
+figure: bands
+result: E_F = \frac{E_c+E_v}{2} + \frac{3kT}{4}\ln\frac{m_p^*}{m_n^*}
+use: n=p=n_i | in a pure sample every electron in the conduction band left a hole: [[go:m3-types__t1|intrinsic semiconductors]]
+use: N_c,\ N_v | effective densities of states from [[go:der:ncb|the electron]] and [[go:der:pvb|the hole]] derivations
+use: E_F | Fermi level: [[go:m3-carriers__t3|where it sits in a pure sample]]
+use: \ln x^a=a\ln x | the logarithm rule used in the step with the ask
+--- n = p
+tex: N_ce^{-(E_c-E_F)/kT} = N_ve^{-(E_F-E_v)/kT}
+note: In a pure sample every conduction electron left a hole behind.
+fig: focus nC pV | keep Dc Dv Ec Ev Ef Eax | cap $n = p$
+---
+tex: e^{(2E_F-E_c-E_v)/kT} = \frac{N_v}{N_c}
+move: rearrange | label=Collect the exponentials on one side
+---
+tex: \frac{2E_F-E_c-E_v}{kT} = \ln\frac{N_v}{N_c}
+move: ln
+---
+tex: E_F = \frac{E_c+E_v}{2} + \frac{kT}{2}\ln\frac{N_v}{N_c}
+move: rearrange
+--- Put in $N_c$ and $N_v$
+tex: \frac{N_v}{N_c} = \left(\frac{m_p^*}{m_n^*}\right)^{3/2}
+move: identity | label=Everything in \(N_c\), \(N_v\) cancels except the masses
+ask: What is \(\ln\!\left[(m_p^*/m_n^*)^{3/2}\right]\)?
+opt*: \(\tfrac32\ln(m_p^*/m_n^*)\)
+opt: \(\ln(m_p^*/m_n^*)^{2/3}\)
+opt: \((\ln m_p^*/\ln m_n^*)^{3/2}\)
+opt: \(\tfrac23\ln(m_p^*/m_n^*)\)
+why: \(\ln x^a = a\ln x\).
+---
+tex: E_F = \frac{E_c+E_v}{2} + \frac{3kT}{4}\ln\frac{m_p^*}{m_n^*}
+move: substitute
+note: At 0 K, or whenever \(m_p^*=m_n^*\), \(E_F\) is exactly at mid-gap. Usually \(m_p^*>m_n^*\), so \(E_F\) rises slightly with \(T\); for Si at 300 K by only about 0.01 eV.
+fig: focus Ef Eg | keep Ec Ev Eax | cap $E_F$ at the middle of the gap
+
+=== massaction
+title: Law of mass action and the intrinsic concentration \(n_i\)
+marks: 5 marks
+src: Puri & Babbar §7.5.4, Eqs. (7.32)–(7.36)
+legend: \(E_g=E_c-E_v\): band gap. \(n\), \(p\) from the two concentration derivations.
+result: n_i = 2\left(\frac{2\pi kT}{h^2}\right)^{3/2}(m_n^*m_p^*)^{3/4}e^{-E_g/2kT}
+use: n,\ p | from [[go:der:ncb|the electron]] and [[go:der:pvb|the hole]] derivations
+use: E_g=E_c-E_v | band gap: [[go:m2-dynamics__t3|metals, semiconductors, insulators]]
+use: n_i | intrinsic carrier concentration: [[go:m3-types__t1|intrinsic semiconductors]]
+use: \text{mass action} | \(np\) fixed at a given temperature: [[go:m3-carriers__t4|the law and \(n_i\)]]
+--- Multiply n and p
+tex: np = N_cN_ve^{-(E_c-E_F)/kT}e^{-(E_F-E_v)/kT}
+note: Multiply the two results.
+---
+tex: np = N_cN_ve^{-(E_c-E_v)/kT}
+move: combine
+note: \(E_F\) cancels.
+ask: What happened to \(E_F\)?
+opt*: it cancelled: \(-(E_c-E_F)-(E_F-E_v)=-(E_c-E_v)\)
+opt: it was set to zero
+opt: it equals \(E_c\)
+opt: it doubles
+why: Add the two exponents: the \(E_F\) terms are \(+E_F\) and \(-E_F\).
+---
+tex: np = N_cN_ve^{-E_g/kT} = n_i^2
+move: substitute | by=E_c - E_v = E_g
+note: <b>Law of mass action</b>: at a given temperature \(np\) is fixed, whether the sample is doped or not. Doping that raises \(n\) lowers \(p\) in proportion.
+--- Intrinsic concentration
+tex: n_i = (N_cN_v)^{1/2}e^{-E_g/2kT}
+move: root
+note: Note the 2 in the exponent: \(E_g/2kT\), not \(E_g/kT\).
+---
+tex: n_i = 2\left(\frac{2\pi kT}{h^2}\right)^{3/2}(m_n^*m_p^*)^{3/4}e^{-E_g/2kT}
+move: substitute | label=Put in \(N_c\) and \(N_v\)
+note: Pure Ge at 300 K: \(n_i\approx2.4\times10^{19}\ \mathrm{m^{-3}}\) out of \(4.4\times10^{28}\) atoms per $\mathrm{m}^{3}$, about 5 broken bonds in \(10^{10}\) atoms.
+
+=== lnsigma
+title: \(\ln\sigma\) against \(1/T\) measures the band gap
+marks: 4 marks
+src: Puri & Babbar §7.4, Eqs. (7.10)–(7.12), Fig. 7.5
+legend: Mobilities taken as independent of temperature. \(n_i\) from the law of mass action.
+result: \ln\sigma = -\frac{E_g}{2k}\cdot\frac1T + \frac32\ln T + \text{const}
+use: \sigma_i=en_i(\mu_n+\mu_p) | intrinsic conductivity: [[go:der:sigma|conductivity derivation]]
+use: n_i=(N_cN_v)^{1/2}e^{-E_g/2kT} | from [[go:der:massaction|the law of mass action]]
+use: \mu_n,\ \mu_p | mobilities, taken as independent of temperature here
+use: N_cN_v\propto T^3 | shown in the step below
+--- Start
+tex: \sigma = en_i(\mu_n + \mu_p)
+note: The intrinsic conductivity.
+---
+tex: \sigma = e(\mu_n+\mu_p)(N_cN_v)^{1/2}e^{-E_g/2kT}
+move: substitute | by=n_i
+---
+tex: (N_cN_v)^{1/2} = 2\left(\frac{2\pi k}{h^2}\right)^{3/2}(m_n^*m_p^*)^{3/4}\,T^{3/2}
+move: identity | label=Put in \(N_c\) and \(N_v\) ([[go:der:ncb|electron]], [[go:der:pvb|hole]] derivations): each carries \(T^{3/2}\)
+note: Only \(T\) changes with temperature; the masses are constants.
+---
+tex: \sigma = CT^{3/2}e^{-E_g/2kT}
+move: simplify | label=\(N_cN_v\propto T^3\): collect the constants into \(C\)
+--- Take logs
+tex: \ln\sigma = \ln C + \frac32\ln T - \frac{E_g}{2kT}
+move: ln
+---
+tex: \ln\sigma = -\frac{E_g}{2k}\cdot\frac1T + \frac32\ln T + \text{const}
+move: rearrange
+note: The \(1/T\) term dominates: \(\ln\sigma\) against \(1/T\) is nearly a straight line of slope \(-E_g/2k\). This is how a band gap is measured.
+ask: The slope of \(\ln\sigma\) against \(1/T\) is \(-5800\) K. What is \(E_g\)?
+opt*: \(2k\times5800\ \mathrm{K}\approx1.0\) eV
+opt: \(k\times5800\ \mathrm{K}\approx0.5\) eV
+opt: \(5800\ \mathrm{K}/2k\)
+opt: \(0.26\) eV
+why: Slope \(=-E_g/2k\), so \(E_g=2k\times5800 = 2\times8.62\times10^{-5}\times5800\approx1.0\) eV.
+
+=== efn
+title: n-type: Fermi level and electron concentration
+marks: 8 marks
+src: Puri & Babbar §7.6(a), Eqs. (7.37)–(7.44)
+legend: \(N_d\): donors per unit volume at level \(E_d\), just below \(E_c\). \(N_d^+\): ionised donors. \(\Delta E=E_c-E_d\): ionisation energy of a donor. Moderate temperature: holes are negligible, and \(E_F\) is a few \(kT\) from both \(E_c\) and \(E_d\).
+figure: bands_n
+result: n = (N_dN_c)^{1/2}e^{-\Delta E/2kT}
+use: N_d,\ E_d | donor concentration and donor level just below \(E_c\): [[go:m3-types__t2|extrinsic semiconductors]]
+use: N_d^+ | ionised donors: donors that have lost their electron
+use: n=N_ce^{-(E_c-E_F)/kT} | electron concentration: [[go:der:ncb|the electron derivation]]
+use: p=n_i^2/n | law of mass action: [[go:der:massaction|mass-action derivation]]
+use: 1-f(E_d) | chance that the donor level is empty: [[go:der:pvb|how \(1-f\) becomes a Boltzmann factor]]
+use: \Delta E=E_c-E_d | ionisation energy of a donor
+--- Neutrality
+tex: n = N_d^+ + p \approx N_d^+
+note: Every conduction electron came from an ionised donor or from a broken bond. With enough donors, \(p=n_i^2/n\) is tiny ([[go:der:massaction|mass action]]), so drop it. This is charge neutrality ([[go:m3-types__t2|extrinsic semiconductors]]).
+fig: focus Ed dn0 dn1 dn2 dn3 dn4 | keep Ec Ev Eax | cap Donor levels $E_d$ just below $E_c$
+--- Ionised donors
+tex: N_d^+ = N_d\left[1-f(E_d)\right]
+move: identity | label=A donor is ionised when its level is empty
+---
+tex: N_d^+ \approx N_de^{-(E_F-E_d)/kT}
+move: substitute | label=Boltzmann form of \(1-f\), since \(E_F-E_d\gg kT\)
+ask: Is \(E_F\) above or below \(E_d\) here, and what does that give?
+opt*: above, so \(1-f(E_d)\approx e^{-(E_F-E_d)/kT}\)
+opt: below, so \(1-f\approx1\)
+opt: equal, so \(1-f=\tfrac12\)
+opt: it does not matter
+why: At moderate \(T\), \(E_F\) lies between \(E_d\) and \(E_c\), a few \(kT\) above \(E_d\). Then \(1-f(E_d)=1/(e^{(E_F-E_d)/kT}+1)\approx e^{-(E_F-E_d)/kT}\).
+fig: focus Ed Ef | keep Ec Ev Eax | cap $E_F$ between $E_d$ and $E_c$
+--- Equate with n
+tex: N_ce^{-(E_c-E_F)/kT} = N_de^{-(E_F-E_d)/kT}
+move: substitute | by=n = N_ce^{-(E_c-E_F)/kT}
+---
+tex: e^{(2E_F-E_c-E_d)/kT} = \frac{N_d}{N_c}
+move: rearrange
+---
+tex: E_F = \frac{E_c+E_d}{2} + \frac{kT}{2}\ln\frac{N_d}{N_c}
+move: ln | label=Take \(\ln\) and solve for \(E_F\)
+note: At moderate \(T\), \(E_F\) lies about midway between \(E_d\) and \(E_c\). As \(T\) rises (\(N_c\propto T^{3/2}\)) it moves down and finally reaches mid-gap: the sample turns intrinsic. Not valid at \(T=0\) or very high \(T\).
+fig: focus Ef dEi | keep Ec Ed Ev Eax | cap $E_F\approx(E_c + E_d)/2$
+--- Electron concentration
+tex: n = N_c\exp\!\left[-\frac{E_c - \frac{E_c+E_d}{2} - \frac{kT}{2}\ln\frac{N_d}{N_c}}{kT}\right]
+move: substitute | by=E_F
+---
+tex: n = N_c\left(\frac{N_d}{N_c}\right)^{1/2}e^{-(E_c-E_d)/2kT}
+move: simplify
+---
+tex: n = (N_dN_c)^{1/2}e^{-\Delta E/2kT}
+move: simplify
+note: \(n\propto\sqrt{N_d}\) at moderate temperatures. Conductivity \(\sigma=ne\mu_n\approx N_de\mu_n\) once all donors are ionised. p-type, the same way: \(E_F=\frac{E_v+E_a}{2}-\frac{kT}{2}\ln\frac{N_a}{N_v}\), \(\sigma_p\approx N_a e\mu_p\).
+fig: focus dEi | keep Ec Ed Ef Ev Eax | cap $ΔE = E_c - E_d$

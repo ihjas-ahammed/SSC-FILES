@@ -264,3 +264,10 @@ All four were built and reviewed page by page. Every past question of each modul
 - Trigger: the user uploads a screenshot of the study plan and says "create model day paper". Method: `create-model-day-paper.md` (this folder). Builder: `build_model_paper.py`, which takes a JSON paper and writes the HTML and PDF. Each paper is a `model-paper-<N>.json` in this folder.
 - Scope is the syllabus's section list, checked against the book excerpt headings. A question whose section is not listed is out, even when the topic sounds right. Do not pad a paper with out-of-scope questions.
 - Layout: copy the university paper for this subject (under `GitHub/SSC-FILES/PYQ/` or `ssc-v3/fyug/`), including its marks, ceilings and time. No name or register-number block.
+
+## Nov 2026 paper trace (2026-10-27)
+- `source/pyq/2026-NOV-paper-trace.{html,pdf}` (QP D153249, 70 marks, 2024 admission). No question is a verbatim book exercise: 17 of 21 parts are printed theory, 4 are same-type numericals. Repeats of old papers: Q1 (N21/N22 Q13), Q14 (N20 Q19), and Q17 uses the quartz indices from N20 Q28 and N25 Q17. The Module 1–4 model papers covered 19 of the 20 questions; the one missed was Q2 (polarisation proves light is transverse). Diffraction got 34 marks on offer against 15 in the syllabus.
+- Answers checked: Q12 5000 Å; Q16 ≈ 0.54 mm (Cornu, point source a = 20 cm, b = 60 cm; half-period gives 0.52 mm); Q17a 0.856 µm; Q17b 10.9 µm.
+- New cuts: `module-2/gap-14.3-coherence.pdf` (Ghatak PDF 206) and `module-3/exercises-20-problems.pdf` (PDF 341–342); listed in `map.md`.
+
+- 2026-10-27: `2026-NOV-paper-trace.pdf` mailed to ihjas.one@gmail.com with quickmail (subject "Optics Nov 2026 (D153249) paper trace"). Quickmail keeps no log, so this line is the record.

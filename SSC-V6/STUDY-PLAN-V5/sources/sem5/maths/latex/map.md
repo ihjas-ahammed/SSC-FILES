@@ -33,3 +33,7 @@ Syllabus: `syllabus.pdf` (copied from `SSC-V2/SEM5/MATH/`).
 Notes
 - Units 13 and 19 include the omitted subsections in their page ranges, because the syllabus omits them within a section and the pages cannot be split.
 - Module V (open-ended: install LaTeX, Overleaf, write a chapter) is not cut.
+
+## Exercise pages (checked 2026-10-27)
+
+The unit cuts contain no exercise sets (text search of every cut). The two books are not on disk, so the pages after each cut could not be checked. Nothing was added.

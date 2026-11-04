@@ -1,0 +1,18 @@
+<!-- id: m3-gp | mod: Module III | modName: Convex optimization problems | modClass: m3 | title: Geometric programming | short: Geometric programming (4.5) | est: ~25 min -->
+<gist>Monomials and posynomials are not convex, so a GP is not a convex problem as written. Substitute $x_i=e^{y_i}$ and take logarithms: monomials become affine, posynomials become log-sum-exp, and the GP becomes convex.</gist>
+
+<tp>Monomials and posynomials (§4.5.1)</tp>
+<must><p><b>Monomial:</b> $f(\mathbf x)=cx_1^{a_1}x_2^{a_2}\cdots x_n^{a_n}$ with $c\gt0$, $a_i\in\mathbf R$, on $\mathbf R^n_{++}$. <b>Posynomial:</b> a sum of monomials $\sum_{k=1}^Kc_kx_1^{a_{1k}}\cdots x_n^{a_{nk}}$. Monomials are closed under products, quotients and powers; posynomials under sums, products and positive scaling; a posynomial divided by a monomial is a posynomial.</p></must>
+
+<tp>Geometric programs and their convex form (§4.5.2–4.5.3)</tp>
+<must><p><b>GP:</b> minimise $f_0(\mathbf x)$ s.t. $f_i(\mathbf x)\le1$, $h_i(\mathbf x)=1$, with $f_0,\dots,f_m$ posynomials and $h_i$ monomials; implicitly $\mathbf x\succ0$.</p></must>
+<p>Other forms reduce to this: $f\le h$ with $h$ a monomial ⇔ $f/h\le1$; $h_1=h_2$ (monomials) ⇔ $h_1/h_2=1$; maximise a nonzero monomial ⇔ minimise its inverse.</p>
+<der id="d-gp"/>
+
+<tp>Examples (§4.5.4)</tp>
+<p><b>Frobenius norm diagonal scaling.</b> Minimise $\|DMD^{-1}\|_F^2=\sum_{i,j}M_{ij}^2d_i^2/d_j^2$ over $D=\diag(\mathbf d)\succ0$: an unconstrained GP in $\mathbf d$.</p>
+<p><b>Design of a cantilever beam.</b> $N$ segments with widths $w_i$ and heights $h_i$: minimise total volume $\sum w_ih_il_i$ subject to bounds on widths, heights, aspect ratios $h_i/w_i$, stress $6iF/(w_ih_i^2)\le\sigma_{\max}$ and vertical deflection $y_1\le y_{\max}$, where the deflection and slope are given by recursions that keep everything posynomial. A GP.</p>
+<p><b>Minimising the spectral radius via Perron–Frobenius.</b> For an elementwise positive $A(\mathbf x)$ with posynomial entries, $\lambda_{\mathrm{pf}}(A)=\inf\{\lambda\mid A\mathbf v\preceq\lambda\mathbf v\text{ for some }\mathbf v\succ0\}$; minimising it is the GP: minimise $\lambda$ s.t. $\sum_jA(\mathbf x)_{ij}v_j/(\lambda v_i)\le1$.</p>
+<trap><p>A posynomial needs positive coefficients $c_k\gt0$; $x_1-x_2$ is not a posynomial, and an equality constraint must be a monomial, not a posynomial.</p></trap>
+<chk><q>Convert to convex form: minimise $x/y$ subject to $2\le x\le3$, $x^2+3y/z\le\sqrt y$, $x/y=z^2$.</q><a><p>GP form: minimise $xy^{-1}$ s.t. $2x^{-1}\le1$, $x/3\le1$, $x^2y^{-1/2}+3y^{1/2}z^{-1}\le1$, $xy^{-1}z^{-2}=1$. With $u=\log x$, $v=\log y$, $w=\log z$: minimise $u-v$ s.t. $\log2-u\le0$, $u-\log3\le0$, $\log(e^{2u-v/2}+e^{\log3+v/2-w})\le0$, $u-v-2w=0$.</p></a></chk>
+<chk><q>Is a posynomial a convex function of $\mathbf x$?</q><a><p>Not in general: $\sqrt x$ is a monomial and concave. After $x=e^y$, $\log f$ is convex in $\mathbf y$.</p></a></chk>

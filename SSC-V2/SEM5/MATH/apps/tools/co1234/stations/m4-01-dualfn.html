@@ -1,0 +1,25 @@
+<!-- id: m4-dualfn | mod: Module IV | modName: Duality | modClass: m4 | title: The Lagrange dual function | short: Lagrange dual function (5.1) | est: ~35 min -->
+<gist>Add the constraints to the objective with weights (multipliers): the Lagrangian. Minimising it over $\mathbf x$ gives the dual function $g(\boldsymbol\lambda,\boldsymbol\nu)$, which is always concave and, for $\boldsymbol\lambda\succeq0$, always a lower bound on the optimal value $p^\star$ — convex problem or not.</gist>
+
+<tp>The Lagrangian (§5.1.1)</tp>
+<must><p>For the problem in standard form (domain $\mathcal D$, optimal value $p^\star$; not necessarily convex): $$L(\mathbf x,\boldsymbol\lambda,\boldsymbol\nu)=f_0(\mathbf x)+\sum_{i=1}^m\lambda_if_i(\mathbf x)+\sum_{i=1}^p\nu_ih_i(\mathbf x),$$ $\lambda_i$ the Lagrange multiplier of $f_i\le0$, $\nu_i$ that of $h_i=0$; $\boldsymbol\lambda,\boldsymbol\nu$ are the <b>dual variables</b>.</p></must>
+
+<tp>The dual function and the lower bound (§5.1.2–5.1.3)</tp>
+<must><p>$g(\boldsymbol\lambda,\boldsymbol\nu)=\inf_{\mathbf x\in\mathcal D}L(\mathbf x,\boldsymbol\lambda,\boldsymbol\nu)$. Concave (pointwise infimum of affine functions of $(\boldsymbol\lambda,\boldsymbol\nu)$), possibly $-\infty$. <b>For any $\boldsymbol\lambda\succeq0$ and any $\boldsymbol\nu$: $g(\boldsymbol\lambda,\boldsymbol\nu)\le p^\star$.</b> A pair with $\boldsymbol\lambda\succeq0$, $g\gt-\infty$ is <b>dual feasible</b>.</p></must>
+<der id="d-lb"/>
+<fig name="dualfn"><cap>Exercise 5.1. Each $\lambda$ gives a Lagrangian (indigo) that lies below $f_0$ on the feasible interval (there $f_1\le0$); its minimum $g(\lambda)$ is a lower bound. At $\lambda=2$ the bound reaches $p^\star=5$.</cap></fig>
+
+<tp>Linear approximation interpretation (§5.1.4)</tp>
+<p>The ideal penalty problem is minimise $f_0(\mathbf x)+\sum I_-(f_i(\mathbf x))+\sum I_0(h_i(\mathbf x))$, with $I_-(u)=0$ for $u\le0$, $\infty$ otherwise ("infinitely displeased" by violations) and $I_0$ the indicator of $\{0\}$. The Lagrangian replaces these hard walls by linear penalties $\lambda_iu$ and $\nu_iu$. Since $\lambda_iu\le I_-(u)$ for $\lambda_i\ge0$ and $\nu_iu\le I_0(u)$, each linear penalty under-estimates the hard one, which is again why $g\le p^\star$.</p>
+
+<tp>Examples (§5.1.5)</tp>
+<der id="d-lnorm"/>
+<der id="d-lpdual"/>
+<p><b>Two-way partitioning</b> (a non-convex problem): minimise $\mathbf x^TW\mathbf x$ s.t. $x_i^2=1$. $L=\mathbf x^T(W+\diag\boldsymbol\nu)\mathbf x-\mathbf 1^T\boldsymbol\nu$, so $g(\boldsymbol\nu)=-\mathbf 1^T\boldsymbol\nu$ if $W+\diag\boldsymbol\nu\succeq0$, $-\infty$ otherwise. Taking $\boldsymbol\nu=-\lambda_{\min}(W)\mathbf 1$: $p^\star\ge n\lambda_{\min}(W)$, a bound that is easy to compute although the problem is hard.</p>
+
+<tp>Dual function and conjugate functions (§5.1.6)</tp>
+<must><p>For minimise $f_0(\mathbf x)$ s.t. $A\mathbf x\preceq\mathbf b$, $C\mathbf x=\mathbf d$: $$g(\boldsymbol\lambda,\boldsymbol\nu)=-\mathbf b^T\boldsymbol\lambda-\mathbf d^T\boldsymbol\nu-f_0^*(-A^T\boldsymbol\lambda-C^T\boldsymbol\nu).$$ (Because $\inf_{\mathbf x}(f_0(\mathbf x)+\mathbf y^T\mathbf x)=-f_0^*(-\mathbf y)$.)</p></must>
+<p><b>Examples.</b> <em>Equality constrained norm minimisation</em> min $\|\mathbf x\|$ s.t. $A\mathbf x=\mathbf b$: $g(\boldsymbol\nu)=-\mathbf b^T\boldsymbol\nu$ if $\|A^T\boldsymbol\nu\|_*\le1$, $-\infty$ otherwise (conjugate of a norm). <em>Entropy maximisation</em> min $\sum x_i\log x_i$ s.t. $A\mathbf x\preceq\mathbf b$, $\mathbf 1^T\mathbf x=1$: $g(\boldsymbol\lambda,\nu)=-\mathbf b^T\boldsymbol\lambda-\nu-e^{-\nu-1}\sum_ie^{-\mathbf a_i^T\boldsymbol\lambda}$ ($\mathbf a_i$ the columns of $A$). <em>Minimum volume covering ellipsoid</em> min $\log\det X^{-1}$ s.t. $\mathbf a_i^TX\mathbf a_i\le1$: $g(\boldsymbol\lambda)=\log\det(\sum\lambda_i\mathbf a_i\mathbf a_i^T)-\mathbf 1^T\boldsymbol\lambda+n$ when $\sum\lambda_i\mathbf a_i\mathbf a_i^T\succ0$.</p>
+<trap><p>$g$ is an infimum over all of $\mathcal D$, not just the feasible set. Forgetting the "$-\infty$ otherwise" case (when $L$ is unbounded below in $\mathbf x$) is the commonest lost mark: it is what produces the dual constraints.</p></trap>
+<chk><q>Find the dual function of minimise $x^2$ subject to $x\ge1$.</q><a><p>$L=x^2+\lambda(1-x)$, minimised at $x=\lambda/2$: $g(\lambda)=\lambda-\lambda^2/4$. Maximum at $\lambda=2$, $g=1=p^\star$.</p></a></chk>
+<chk><q>Why is $g$ concave even when the problem is not convex?</q><a><p>For each fixed $\mathbf x$, $L(\mathbf x,\boldsymbol\lambda,\boldsymbol\nu)$ is affine in $(\boldsymbol\lambda,\boldsymbol\nu)$; the pointwise infimum of affine functions is concave.</p></a></chk>

@@ -1,0 +1,22 @@
+<!-- id: m4-geom | mod: Module IV | modName: Duality | modClass: m4 | title: Geometric interpretation of duality | short: Geometric interpretation (5.3) | est: ~30 min -->
+<gist>Map every $\mathbf x$ to its pair (constraint values, objective value). The dual function is the height at which a supporting hyperplane with slope set by $\boldsymbol\lambda$ meets the vertical axis. When the region above the values is convex and has a strictly feasible point, the best supporting hyperplane passes through $(0,p^\star)$: strong duality.</gist>
+
+<tp>Weak and strong duality via the set of values (§5.3.1)</tp>
+<must><p>One inequality, no equalities: $\mathcal G=\{(f_1(\mathbf x),f_0(\mathbf x))\mid\mathbf x\in\mathcal D\}$. Then $p^\star=\inf\{t\mid(u,t)\in\mathcal G,\ u\le0\}$ and $$g(\lambda)=\inf\{(\lambda,1)^T(u,t)\mid(u,t)\in\mathcal G\}.$$ For $\lambda\ge0$, the line $\lambda u+t=g(\lambda)$ is a (non-vertical) supporting line of $\mathcal G$ and cuts the $t$-axis at $g(\lambda)$. Weak duality: $t\ge\lambda u+t\ge g(\lambda)$ whenever $u\le0$.</p></must>
+<fig name="geomG"><cap>Exercise 5.1 in the $(u,t)$-plane. Step 2: a supporting line of slope $-\lambda$. Step 3: the epigraph-like set $\mathcal A$; the optimal $\lambda^\star=2$ gives a line through $(0,5)$.</cap></fig>
+<p><b>Epigraph variation.</b> $\mathcal A=\{(u,t)\mid\exists\mathbf x\in\mathcal D,\ f_1(\mathbf x)\le u,\ f_0(\mathbf x)\le t\}=\mathcal G+(\mathbf R_+\times\mathbf R_+)$. Then $p^\star=\inf\{t\mid(0,t)\in\mathcal A\}$ and $g(\lambda)=\inf\{\lambda u+t\mid(u,t)\in\mathcal A\}$ for $\lambda\ge0$. $\mathcal A$ is convex when the problem is convex, which is the source of strong duality. A duality gap appears when $\mathcal A$ has a dent at $u=0$ that no line can reach.</p>
+
+<tp>Proof of strong duality under Slater (§5.3.2)</tp>
+<p>Assume (for simplicity) $\intr\mathcal D\ne\emptyset$, $\rank A=p$, $p^\star$ finite. Define $$\mathcal A=\{(\mathbf u,\mathbf v,t)\mid\exists\mathbf x\in\mathcal D:\ f_i(\mathbf x)\le u_i,\ h_i(\mathbf x)=v_i,\ f_0(\mathbf x)\le t\},\qquad\mathcal B=\{(\mathbf 0,\mathbf 0,s)\mid s\lt p^\star\}.$$</p>
+<ol>
+<li>$\mathcal A$ is convex (convex problem), $\mathcal B$ is convex, and they are disjoint (a point of both would be feasible with $f_0\lt p^\star$).</li>
+<li>Separating hyperplane: $(\tilde{\boldsymbol\lambda},\tilde{\boldsymbol\nu},\mu)\ne0$ and $\alpha$ with $\tilde{\boldsymbol\lambda}^T\mathbf u+\tilde{\boldsymbol\nu}^T\mathbf v+\mu t\ge\alpha$ on $\mathcal A$ and $\mu t\le\alpha$ on $\mathcal B$.</li>
+<li>$\mathcal A$ is unbounded upward in $\mathbf u$ and $t$, so $\tilde{\boldsymbol\lambda}\succeq0$, $\mu\ge0$; from $\mathcal B$, $\mu p^\star\le\alpha$. Hence $\sum\tilde\lambda_if_i(\mathbf x)+\tilde{\boldsymbol\nu}^T(A\mathbf x-\mathbf b)+\mu f_0(\mathbf x)\ge\mu p^\star$ for all $\mathbf x\in\mathcal D$.</li>
+<li>If $\mu\gt0$, divide by $\mu$: $L(\mathbf x,\tilde{\boldsymbol\lambda}/\mu,\tilde{\boldsymbol\nu}/\mu)\ge p^\star$ for all $\mathbf x$, so $g\ge p^\star$ and with weak duality $g=p^\star$: strong duality, dual optimum attained.</li>
+<li>If $\mu=0$: $\sum\tilde\lambda_if_i(\mathbf x)+\tilde{\boldsymbol\nu}^T(A\mathbf x-\mathbf b)\ge0$ on $\mathcal D$. At the Slater point the first sum is $\lt0$ unless $\tilde{\boldsymbol\lambda}=0$; so $\tilde{\boldsymbol\lambda}=0$, $\tilde{\boldsymbol\nu}\ne0$, and $\tilde{\boldsymbol\nu}^T(A\mathbf x-\mathbf b)\ge0$ on $\mathcal D$ with equality at an interior point, forcing $A^T\tilde{\boldsymbol\nu}=0$, contradicting $\rank A=p$. So $\mu\gt0$.</li>
+</ol>
+
+<tp>Multicriterion interpretation (§5.3.3)</tp>
+<p>The unconstrained problem "minimise $\boldsymbol\lambda^T(f_1,\dots,f_m)+f_0$" is the scalarization, with weights $(\boldsymbol\lambda,1)$, of the bi-criterion problem with objectives $F=(f_1,\dots,f_m,f_0)$. Strong duality says the Pareto optimal point $(0,p^\star)$ is reached by some scalarization — exactly the statement of §4.7.4 for convex problems.</p>
+<chk><q>In the $(u,t)$ picture, what is $g(\lambda)$ geometrically?</q><a><p>The $t$-intercept of the supporting line $\lambda u+t=c$ of $\mathcal G$ with slope $-\lambda$.</p></a></chk>
+<chk><q>Why does convexity of the problem make $\mathcal A$ convex?</q><a><p>If $(\mathbf u_j,\mathbf v_j,t_j)\in\mathcal A$ via $\mathbf x_j$, then $\mathbf x=\theta\mathbf x_1+(1-\theta)\mathbf x_2$ has $f_i(\mathbf x)\le\theta u_{1i}+(1-\theta)u_{2i}$ (convex $f_i$), $h_i(\mathbf x)$ equal to the combination (affine $h_i$), and $f_0(\mathbf x)\le\theta t_1+(1-\theta)t_2$.</p></a></chk>

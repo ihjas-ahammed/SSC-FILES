@@ -1,0 +1,1034 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Optics revision · Module 2</title><style>
+*{box-sizing:border-box}body{margin:0;font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#0f1220;color:#e8eaf3}
+header{position:sticky;top:0;z-index:5;background:#151a2e;border-bottom:1px solid #2a3150;padding:10px 14px}
+header h1{font-size:17px;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}header .sub{font-size:12px;color:#9aa3c7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+nav{display:flex;gap:6px;overflow-x:auto;padding:8px 14px;background:#121628;border-bottom:1px solid #222944;position:sticky;top:52px;z-index:4}
+nav a{flex:none;color:#c9cff0;text-decoration:none;font-size:12px;padding:4px 9px;border:1px solid #2f3760;border-radius:14px}
+main{max-width:760px;margin:0 auto;padding:12px}
+.unit{margin:18px 0 26px}.unit>h2{font-size:15px;color:#ffd37a;margin:0 0 8px;letter-spacing:.2px}
+.card{background:#181d33;border:1px solid #2b3358;border-radius:14px;padding:14px 14px 10px;margin:0 0 12px;box-shadow:0 2px 10px #0006}
+.card h3{margin:0 0 8px;font-size:14px;text-transform:uppercase;letter-spacing:.8px}
+.th h3{color:#7fd3ff}.dv h3{color:#b7a2ff}
+.card .t{font-size:16px;font-weight:600;margin-bottom:8px;color:#fff}
+ul{margin:0;padding-left:18px}li{margin:0 0 6px}li b{color:#ffe7a8}
+.key{margin-top:10px;padding:8px 10px;border-radius:10px;background:#20284a;border-left:3px solid #ffd37a}
+.key .k{font-size:11px;color:#ffd37a;text-transform:uppercase;letter-spacing:.8px}
+.legend{font-size:13px;color:#b9c0e0;margin-bottom:8px}
+.phase{margin:10px 0 4px;font-size:12.5px;color:#cbbcff}.phase b{color:#e2d8ff}
+.st{border-left:2px solid #3b4478;padding:2px 0 4px 10px;margin:0 0 4px}
+.st.final{border-left-color:#ffd37a;background:#252b4f;border-radius:0 8px 8px 0}
+.tex{overflow-x:auto;overflow-y:hidden}.tex mjx-container{margin:4px 0!important}
+.mv{font-size:11.5px;color:#9ad6a6}.nt{font-size:12px;color:#99a0c4}
+details.dv summary{cursor:pointer;list-style:none}details.dv summary::-webkit-details-marker{display:none}
+details.dv summary h3:after{content:" ▸ tap to open";font-size:11px;color:#8088b8;text-transform:none;letter-spacing:0}
+details.dv[open] summary h3:after{content:" ▾"}
+.figwrap{position:sticky;top:var(--stick,92px);z-index:3;background:#181d33;padding:4px 0 6px;margin:0 -4px 8px}
+.fgbox{width:100%;max-height:300px;border-radius:12px}
+.figctl{display:flex;gap:6px;align-items:center;margin-top:6px}.figctl button{background:#2b3360;color:#fff;border:0;border-radius:8px;padding:5px 10px;font-size:13px}
+.figctl .play{background:#6a55d8}.fighint{font-size:11px;color:#8088b8}
+.st{cursor:pointer}.st.on{background:#2c2a55;border-left-color:#f7c04f;border-radius:0 8px 8px 0}
+footer{text-align:center;font-size:11px;color:#6d75a0;padding:20px}
+</style>
+<script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},chtml:{scale:0.95}};</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script><style>:root{--paper:#111326;--card:#181d33;--ink:#ECEAFB;--ink-2:#B7B9D8;--muted:#7D82A6;--line:rgba(255,255,255,.09);--lav:#232748;--lav-2:#343A6E;--violet:#A898FF;--on-violet:#15172C;--amber:#F7C04F;--orange:#F59A55;--hl:#F7C04F;--sage:#5BC48E;--coral:#FF7B68}
+/* =====================================================================
+   Focused derivation card (.mf-v2) and animated figure (.fg-*)
+   A derivation card gets .mf-v2 when its setup has a "figure" (see 02-figure.js).
+   The back keeps three things on screen together: the figure, the equation
+   board and the instruction for the current move. Nothing here touches other cards.
+   ===================================================================== */
+
+/* ---------- Figure ---------- */
+.fg-host {
+  position: relative; display: block; padding: 0; overflow: hidden;
+  --fg-pad: 10px; --fg-pad-top: 34px;
+  background: color-mix(in srgb, var(--lav) 62%, var(--card));
+}
+.fg-host > .fg-svg {
+  position: absolute; inset: 0; width: 100%; height: 100%; max-height: none; overflow: visible;
+  font-size: var(--fg-fs, 14px); pointer-events: none;
+}
+.fg-svg path, .fg-svg circle { vector-effect: non-scaling-stroke; }
+
+/* every part fades between off, on, dim and focus; draw-in is done in JS */
+.fg-part { transition: opacity 0.45s ease; }
+.fg-part.is-off { opacity: 0; }
+.fg-part.is-dim { opacity: 0.22; }
+.fg-instant .fg-part, .fg-instant .fg-part * { transition: none !important; }
+
+.fg-stroke { fill: none; stroke: var(--violet); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: stroke 0.4s ease, stroke-width 0.4s ease; }
+.fg-head { fill: var(--violet); stroke: none; transition: fill 0.4s ease; }
+.fg-fill { fill: var(--violet); fill-opacity: 0.1; stroke: none; transition: fill 0.4s ease, fill-opacity 0.4s ease; }
+.fg-dot { fill: var(--violet); stroke: var(--card); stroke-width: 1.6; transition: fill 0.4s ease; }
+.fg-hatch { fill: none; stroke: var(--ink-2); stroke-width: 1.1; stroke-linecap: round; opacity: 0.55; }
+.fg-ext { fill: none; stroke: var(--ink-2); stroke-width: 1.3; stroke-linecap: round; }
+
+.fg-axis .fg-stroke { stroke: var(--ink-2); stroke-width: 1.3; }
+.fg-axis .fg-head { fill: var(--ink-2); }
+.fg-mirror .fg-stroke { stroke: var(--ink); stroke-width: 2.8; }
+.fg-ray .fg-stroke { stroke-width: 2.2; }
+.fg-normal .fg-stroke { stroke: var(--ink-2); stroke-width: 1.4; stroke-dasharray: 5 4; }
+.fg-guide .fg-stroke { stroke: var(--ink-2); stroke-width: 1.4; stroke-dasharray: 3 3; }
+.fg-dim .fg-stroke { stroke: var(--ink-2); stroke-width: 1.3; }
+.fg-dim .fg-head { fill: var(--ink-2); }
+.fg-angle .fg-stroke { stroke-width: 1.7; }
+.fg-angle .fg-fill { fill-opacity: 0.14; }
+.fg-polygon .fg-stroke { stroke: var(--hl); stroke-width: 2.2; }
+.fg-polygon .fg-fill { fill: var(--amber); fill-opacity: 0.2; }
+
+/* focus: the accent colour, a little heavier */
+.fg-part.is-focus .fg-stroke { stroke: var(--hl); }
+.fg-part.is-focus.fg-line .fg-stroke, .fg-part.is-focus.fg-dim .fg-stroke { stroke-width: 2.4; }
+.fg-part.is-focus .fg-head, .fg-part.is-focus .fg-dot { fill: var(--hl); }
+.fg-part.is-focus .fg-ext { stroke: var(--hl); }
+.fg-part.is-focus.fg-angle .fg-stroke { stroke-width: 2.2; }
+.fg-part.is-focus.fg-angle .fg-fill { fill: var(--amber); fill-opacity: 0.32; }
+
+/* labels: fixed pixel size, italic like the symbols on the board, with a halo so lines never cut them */
+.fg-label {
+  font-family: "STIX Two Text", "Cambria Math", "Times New Roman", "Noto Serif", "DejaVu Serif", serif;
+  font-style: italic; font-weight: 600; fill: var(--ink);
+  paint-order: stroke; stroke: color-mix(in srgb, var(--lav) 62%, var(--card)); stroke-width: 4px; stroke-linejoin: round;
+  transition: fill 0.4s ease;
+}
+.fg-label .fg-sub, .fg-label .fg-sup { font-size: 70%; }
+.fg-plate { fill: color-mix(in srgb, var(--lav) 62%, var(--card)); stroke: none; }
+.fg-point .fg-label { font-style: normal; font-weight: 700; }
+.fg-dim .fg-label { font-size: 92%; }
+.fg-part.is-focus .fg-label { fill: var(--hl); font-weight: 800; }
+
+/* caption: one line in the top-left corner, says what the figure is showing now */
+.fg-cap {
+  position: absolute; left: 8px; top: 7px; max-width: calc(100% - 16px); z-index: 1;
+  font-size: 12.5px; line-height: 1.3; font-weight: 700; color: var(--ink);
+  padding: 4px 10px; border-radius: 999px; background: var(--card); box-shadow: inset 0 0 0 1px var(--line);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  opacity: 0; transform: translateY(-4px); transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.fg-cap.is-on { opacity: 1; transform: none; }
+.fg-cap.is-on.is-swap { opacity: 0; transform: translateY(-3px); }
+.fg-cap sub, .fg-cap sup { font-size: 72%; line-height: 0; }
+
+/* the old phone rule forces 15px on every setup label; the figure sizes its own labels */
+.mf-v2 .mf-setup .fg-svg text, .mf-v2 .mf-front-art .fg-svg text { font-size: inherit !important; font-weight: 600; }
+.mf-v2 .mf-setup .fg-svg .fg-point text { font-weight: 700; }
+
+/* ---------- Card: front ---------- */
+.mf-v2 .mf-front-art.fg-host { flex: 0 0 auto; height: clamp(170px, calc(var(--sheet-h, 620px) * 0.36), 250px); padding: 0; border-radius: 16px; }
+.mf-v2 .mf-route-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.mf-v2 .mf-route-pair .route-eq { min-width: 0; overflow-x: auto; }
+.mf-v2 .mf-front-route .math { font-size: 16px; }
+
+/* ---------- Card: back ---------- */
+.mf-v2 { --mf-size: 17px; --mf-ghosts: 1; --fg-fs: 14px; }
+.mf-v2 .mf-back { gap: 8px; padding: 10px 12px; }
+.mf-v2 .mf-back .mf-top { min-height: 36px; }
+.mf-v2 .mf-back-title { flex: 1 1 auto; min-width: 0; margin: 0; font-size: 15px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mf-v2 .mf-count { font-size: 12.5px; }
+.mf-v2 button.chip.mf-icon { width: 36px; height: 36px; min-width: 36px; min-height: 36px; padding: 0; border-radius: 50%; font-size: 17px; }
+
+/* phases: a segmented progress line; the current phase shows its name */
+.mf-v2 .mf-back .mf-phases { display: flex; flex-wrap: nowrap; gap: 4px; align-items: center; overflow: hidden; min-height: 22px; }
+.mf-v2 .mf-ph { flex: 1 1 0; min-width: 8px; height: 5px; padding: 0; font-size: 0; border-radius: 3px; background: var(--lav-2); box-shadow: none; overflow: hidden; white-space: nowrap; }
+.mf-v2 .mf-ph::before { content: none; }
+.mf-v2 .mf-ph.is-past { background: var(--violet); opacity: 0.45; box-shadow: none; }
+.mf-v2 .mf-ph.is-now { flex: 0 0 auto; max-width: 62%; height: auto; padding: 3px 10px; font-size: 12px; line-height: 16px; background: var(--violet); color: var(--on-violet); text-overflow: ellipsis; }
+
+/* work area: figure on top (takes the spare height), then board, then instruction and controls */
+.mf-v2 .mf-work, .mf-v2 .mf-work.has-setup { display: flex; flex-direction: column; gap: 8px; flex: 1 1 auto; min-height: 0; overflow: hidden; }
+.mf-v2 .mf-back .mf-setup, .mf-v2 .mf-work.has-setup .mf-setup {
+  display: block; flex: 1 1 auto; height: auto; min-height: 150px; padding: 0; border-radius: 16px;
+}
+.mf-v2 .mf-right { flex: 0 0 auto; min-height: 0; gap: 8px; }
+.mf-v2 .mf-board { flex: 0 0 auto; min-height: 0; padding: 4px 6px; border-radius: 14px; overflow-x: auto; overflow-y: hidden; }
+
+/* instruction: the move on its own line, the reason under it; fixed height so nothing above it jumps */
+.mf-v2 .mf-panel { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto auto; align-items: center; gap: 8px; }
+.mf-v2 .mf-panel[hidden], .mf-v2 .mf-ask[hidden] { display: none; }
+.mf-v2 .mf-note {
+  grid-column: 1 / -1; margin: 0; min-height: calc(1.4em * 4 + 16px); max-height: calc(1.4em * 4 + 16px); overflow-y: auto;
+  font-size: 14px; line-height: 1.4; font-weight: 600; color: var(--ink-2);
+  padding: 8px 10px 8px 12px; border-radius: 12px; background: var(--lav); box-shadow: inset 3px 0 0 var(--violet);
+}
+.mf-v2 .mf-note > b:first-child { display: block; color: var(--violet); font-weight: 800; }
+.mf-v2 .mf-ctrl { display: contents; }
+.mf-v2 .mf-dots { justify-content: center; flex-wrap: nowrap; gap: 4px; min-width: 0; overflow: hidden; min-height: 0; padding: 4px 2px; }
+.mf-v2 .mf-dot { flex: 0 0 6px; width: 6px; height: 6px; }
+.mf-v2 .mf-dot.is-now { flex: 0 0 16px; width: 16px; }
+.mf-v2 .mf-dot.is-ask { box-shadow: none; background: transparent; outline: 1.5px solid var(--violet); outline-offset: 0; }
+.mf-v2 .mf-dot.is-ask.is-done, .mf-v2 .mf-dot.is-ask.is-now { background: var(--violet); }
+.mf-v2 .mf-ctrl .chip { min-height: 44px; min-width: 44px; padding: 0 12px; }
+.mf-v2 .mf-ctrl .chip.mf-next { background: var(--violet); color: var(--on-violet); padding: 0 16px; font-weight: 800; }
+
+/* a checkpoint question replaces the instruction; the figure and the current line stay in view */
+.mf-v2 .mf-ask { padding: 9px 10px; gap: 7px; }
+.mf-v2 .mf-ask-q { font-size: 14.5px; margin: 0; }
+.mf-v2 .mf-ask-opts { grid-template-columns: 1fr 1fr; gap: 6px; }
+.mf-v2 .mf-ask-opts button { min-height: 44px; padding: 6px 9px; font-size: 14px; }
+.mf-v2 .mf-ask-why { margin: 0; font-size: 13.5px; }
+.mf-v2 .mf-work:has(.mf-ask:not([hidden])) .mf-setup { min-height: 120px; }
+.mf-v2 .mf-right:has(.mf-ask:not([hidden])) .mf-board { height: 66px; min-height: 0; justify-content: flex-end; overflow: hidden; }
+/* once answered, only the right option (and a wrong pick) stay, so the reason and Continue fit */
+.mf-v2 .mf-ask-opts:has(button:disabled) button:not(.is-correct):not(.is-wrong) { display: none; }
+
+/* all steps open: the list replaces the board, the figure shrinks to make room */
+.mf-v2 .mf-work:has(.mf-summary:not([hidden])) { overflow-y: auto; }
+.mf-v2 .mf-work:has(.mf-summary:not([hidden])) .mf-setup { flex: 0 0 auto; height: 160px; min-height: 0; }
+
+/* phone: the old rules hid the figure on the back; here it stays */
+@media (max-width: 899px) {
+  .mf-v2 .mf-back .mf-setup { display: block; }
+  .mf-v2 .mf-back .mf-phases { display: flex; }
+}
+
+/* very short phones: a little less of everything */
+@media (max-width: 899px) and (max-height: 700px) {
+  .mf-v2 { --mf-size: 16px; --fg-fs: 13px; }
+  .mf-v2 .mf-back .mf-setup { min-height: 120px; }
+  .mf-v2 .mf-note { font-size: 13.5px; }
+}
+
+/* ---------- Desktop: figure left, board, instruction and controls right ---------- */
+@media (min-width: 900px) {
+  .mf-v2 { --mf-size: 21px; --mf-ghosts: 2; --fg-fs: 16px; }
+  .mf-v2 .fg-host { --fg-pad: 14px; --fg-pad-top: 40px; }
+  .mf-v2 .fg-cap { font-size: 13.5px; top: 9px; left: 10px; }
+  .mf-v2 .mf-back { gap: 10px; padding: 16px 18px; }
+  .mf-v2 .mf-back-title { font-size: 17px; }
+  .mf-v2 .mf-back .mf-phases { gap: 6px; }
+  .mf-v2 .mf-ph { flex: 0 1 auto; height: auto; padding: 4px 10px; font-size: 12px; line-height: 16px; background: var(--lav); color: var(--ink-2); text-overflow: ellipsis; }
+  .mf-v2 .mf-ph.is-past { opacity: 1; background: var(--lav); color: var(--ink-2); box-shadow: inset 0 0 0 1.5px var(--sage); }
+  .mf-v2 .mf-ph.is-past::before { content: "\2713\00a0"; }
+  .mf-v2 .mf-ph.is-now { max-width: none; }
+  .mf-v2 .mf-work.has-setup { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 16px; align-items: stretch; }
+  .mf-v2 .mf-work.has-setup .mf-setup { height: 100%; min-height: 0; }
+  .mf-v2 .mf-right { height: 100%; display: flex; flex-direction: column; gap: 10px; }
+  .mf-v2 .mf-board { flex: 1 1 auto; justify-content: flex-end; padding: 10px; overflow-y: auto; }
+  .mf-v2 .mf-note { font-size: 15px; }
+  .mf-v2 .mf-front { grid-template-columns: minmax(300px, 52%) minmax(0, 1fr); }
+  .mf-v2 .mf-front-art.fg-host { height: 100%; }
+  .mf-v2 .mf-route-pair { grid-template-columns: 1fr; }
+  .mf-v2 .mf-right:has(.mf-ask:not([hidden])) .mf-board { height: auto; flex: 0 0 auto; }
+  .mf-v2 .mf-work:has(.mf-ask:not([hidden])) .mf-setup { min-height: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fg-part, .fg-cap, .fg-stroke, .fg-label { transition: none; }
+}
+
+/* phone: the focused card is almost full width (07-mathflow.css means to do this for every derivation,
+   but a comment nested inside its header comment swallows that @media rule) */
+@media (max-width: 699px) {
+  .sheet:has(.mf-v2), .card.mf-v2 { --card-w: min(calc(var(--view) - 24px), 560px); }
+}
+
+/* light: the tip of a ray glows while the ray is being drawn */
+.fg-glow { fill: var(--amber); stroke: none; filter: drop-shadow(0 0 3px var(--amber)) drop-shadow(0 0 6px var(--orange)); pointer-events: none; }
+
+/* record: plays the derivation by itself and saves it as a video */
+.mf-v2 button.chip.mf-rec i { display: block; width: 12px; height: 12px; border-radius: 50%; background: var(--coral); transition: border-radius 0.2s ease; }
+.mf-v2.is-recording button.chip.mf-rec i { border-radius: 2px; animation: mf-rec-pulse 1.2s ease-in-out infinite; }
+@keyframes mf-rec-pulse { 50% { opacity: 0.35; } }
+.mf-v2.is-presenting .mf-ask-opts button { cursor: default; }
+@media (prefers-reduced-motion: reduce) { .mf-v2.is-recording button.chip.mf-rec i { animation: none; } }
+
+/* glass: prisms, lenses, plates drawn as apparatus (a polygon with "style": "glass") */
+.fg-glass .fg-fill { fill: var(--violet); fill-opacity: 0.13; }
+.fg-glass .fg-stroke { stroke: var(--ink-2); stroke-width: 1.6; }
+.fg-part.is-focus.fg-glass .fg-fill { fill: var(--amber); fill-opacity: 0.3; }
+</style></head><body>
+<header><h1>Optics · Module 2 revision cards</h1><div class="sub">Interference: division of wavefront and amplitude · two cards per unit: theory points + key derivation</div></header>
+<nav><a href="#u5">U5</a><a href="#u6">U6</a><a href="#u7">U7</a><a href="#u8">U8</a><a href="#u9">U9</a><a href="#u10">U10</a><a href="#u11">U11</a><a href="../1/">M1</a><a href="../3/">M3</a><a href="../4/">M4</a></nav><main><section class="unit" id="u5"><h2>Unit 5 · Superposition of waves</h2>
+<div class="card th"><h3>① Theory — points</h3><ul><li><b>Superposition principle</b>: when two or more waves overlap, the resultant displacement is the algebraic (vector) sum of the individual displacements.</li><li>Each wave travels on unaffected after the overlap.</li><li>Two waves of the same frequency: \(y_1 = a_1\cos(\omega t - \phi_1)\), \(y_2 = a_2\cos(\omega t - \phi_2)\) give \(y = A\cos(\omega t - \phi)\), same frequency.</li><li><b>Resultant amplitude</b>: \(A^2 = a_1^2 + a_2^2 + 2a_1a_2\cos\delta\), \(\delta = \phi_1 - \phi_2\).</li><li>Phase: \(\tan\phi = \frac{a_1\sin\phi_1 + a_2\sin\phi_2}{a_1\cos\phi_1 + a_2\cos\phi_2}\).</li><li><b>Constructive</b>: \(\delta = 2n\pi\), \(A = a_1 + a_2\). <b>Destructive</b>: \(\delta = (2n+1)\pi\), \(A = |a_1 - a_2|\).</li><li>Equal amplitudes: \(A = 2a\cos(\delta/2)\), intensity \(I = 4I_0\cos^2(\delta/2)\).</li><li>Phasor (vector) method: add amplitudes as vectors at angle \(\delta\) — the cosine rule gives \(A\).</li><li>Path difference \(\Delta\) ↔ phase difference: \(\delta = \frac{2\pi}{\lambda}\Delta\).</li></ul><div class="key"><div class="k">Must remember</div><div>\(A^2 = a_1^2 + a_2^2 + 2a_1a_2\cos\delta\)</div><div>\(\delta = \frac{2\pi}{\lambda}\Delta\)</div></div></div>
+<details class="card dv" open><summary><h3>② Key derivation</h3></summary><div class="t">Resultant amplitude of two sinusoidal waves</div><div class="legend">At one point, add two vibrations along the same direction with equal angular frequency ω. Their amplitudes are a₁,a₂ and initial phases θ₁,θ₂. Seek resultant amplitude a ≥ 0 and phase θ. The diagram uses phasor arrows OP and PR, whose sum is OR. Angles are measured from the horizontal component axis.</div>
+<div class="figwrap"><div class="fgbox" data-fig="0" style="aspect-ratio:122/132"></div><div class="figctl"><button class="play">▶ Play</button><button class="prev">◀</button><button class="next">▶|</button><span class="fighint">tap any step to show it on the figure</span></div></div>
+<div class="phase"><b>Superpose</b> — add the two harmonic displacements x₁(t) and x₂(t)</div>
+<div class="st" data-i="0"><div class="tex">\[x(t) = a_1\cos(\omega t + \theta_1) + a_2\cos(\omega t + \theta_2)\]</div><div class="nt">By superposition, the resultant displacement is \(x_1(t) + x_2(t)\) (Eq. 13.21).</div></div>
+<div class="phase"><b>Components</b> — equate cos ωt and sin ωt parts to get a cos θ and a sin θ</div>
+<div class="st" data-i="1"><div class="tex">\[x(t)=(a_1\cos\theta_1+a_2\cos\theta_2)\cos\omega t-(a_1\sin\theta_1+a_2\sin\theta_2)\sin\omega t\]</div><div class="mv">rearrange</div><div class="nt">Use cos(A+B) = cos A cos B - sin A sin B on each wave.</div></div>
+<div class="st" data-i="2"><div class="tex">\[x(t)=a\cos\theta\cos\omega t-a\sin\theta\sin\omega t\]</div><div class="mv">rearrange</div><div class="nt">Expand the desired resultant a cos(ωt + θ) in the same way.</div></div>
+<div class="st" data-i="3"><div class="tex">\[a\cos\theta = a_1\cos\theta_1 + a_2\cos\theta_2\]</div><div class="mv">Equate cos ωt coefficients (Eq. 13.23)</div><div class="nt">Expand \(\cos(\omega t + \theta_i)\) and match coefficients of \(\cos\omega t\) (Eq. 13.23).</div></div>
+<div class="st" data-i="4"><div class="tex">\[a\sin\theta = a_1\sin\theta_1 + a_2\sin\theta_2\]</div><div class="mv">Equate sin ωt coefficients (Eq. 13.24)</div><div class="nt">Matching coefficients of \(-\sin\omega t\) gives the vertical component (Eq. 13.24).</div></div>
+<div class="phase"><b>Square &amp; add</b> — square and add Eqs. (13.23) and (13.24) to eliminate θ</div>
+<div class="st" data-i="5"><div class="tex">\[a^2(\cos^2\theta + \sin^2\theta) = (a_1\cos\theta_1 + a_2\cos\theta_2)^2 + (a_1\sin\theta_1 + a_2\sin\theta_2)^2\]</div><div class="mv">Square and add Eqs. (13.23) and (13.24)</div><div class="nt">Square Eqs. (13.23) and (13.24) and add them together.</div></div>
+<div class="st" data-i="6"><div class="tex">\[a^2 = a_1^2 + a_2^2 + 2a_1a_2(\cos\theta_1\cos\theta_2 + \sin\theta_1\sin\theta_2)\]</div><div class="mv">expand</div><div class="nt">Expand the squares and use \(\cos^2\theta_i + \sin^2\theta_i = 1\).</div></div>
+<div class="phase"><b>Cosine law</b> — apply the cosine difference identity and take the square root</div>
+<div class="st" data-i="7"><div class="tex">\[a^2 = a_1^2 + a_2^2 + 2a_1a_2\cos(\theta_1 - \theta_2)\]</div><div class="mv">identity by \(\cos\theta_1\cos\theta_2 + \sin\theta_1\sin\theta_2 = \cos(\theta_1 - \theta_2)\)</div><div class="nt">Rewrite the cross term using \(\cos(\theta_1 - \theta_2)\).</div></div>
+<div class="st final" data-i="8"><div class="tex">\[a = [a_1^2 + a_2^2 + 2a_1a_2\cos(\theta_1 - \theta_2)]^{1/2}\]</div><div class="mv">root</div><div class="nt">Take the positive square root to get the resultant amplitude (Eq. 13.25).</div></div></details></section>
+<section class="unit" id="u6"><h2>Unit 6 · Interference by division of wavefront; two point sources</h2>
+<div class="card th"><h3>① Theory — points</h3><ul><li><b>Interference</b>: redistribution of intensity when coherent waves superpose; energy is conserved, only redistributed.</li><li><b>Division of wavefront</b>: one wavefront split into two parts by slits, mirrors or a prism (Young, Fresnel mirrors, biprism, Lloyd).</li><li><b>Division of amplitude</b>: one beam split by partial reflection (thin films, Newton's rings, Michelson).</li><li>Two coherent point sources \(S_1, S_2\) separated by \(d\): maxima where \(S_2P - S_1P = n\lambda\), minima where \(S_2P - S_1P = (n + \tfrac12)\lambda\).</li><li><b>Locus of constant path difference</b> in a plane is a <b>hyperbola</b> with \(S_1, S_2\) as foci; in 3D a hyperboloid of revolution.</li><li>Nodal lines (dark) and antinodal lines (bright) are hyperbolas; on a distant screen they look like straight fringes.</li><li>Screen parallel to \(S_1S_2\): straight fringes; screen perpendicular to \(S_1S_2\): circular rings.</li><li>Condition for sustained pattern: <b>coherent</b> sources (constant phase difference), same frequency, nearly equal amplitudes, small \(d\).</li></ul><div class="key"><div class="k">Must remember</div><div>\(S_2P - S_1P = n\lambda \quad(\text{bright})\)</div><div>\(\frac{x^2}{a^2} - \frac{y^2}{b^2} = 1\)</div></div></div>
+<details class="card dv" open><summary><h3>② Key derivation</h3></summary><div class="t">Hyperbolic equation of nodal and antinodal curves</div><div class="legend">Put equal, in-phase sources S₁ at (d/2, 0) and S₂ at (-d/2, 0), with midpoint O. P has coordinates (x,z). Find the curve with fixed path difference Δ = S₂P - S₁P. For the hyperbola calculation assume 0 < |Δ| < d. When Δ = 0 the curve is x = 0; when |Δ| > d there is no solution. Squaring loses the sign of Δ, so retain the branch with x and Δ of the same sign.</div>
+<div class="figwrap"><div class="fgbox" data-fig="1" style="aspect-ratio:130/132"></div><div class="figctl"><button class="play">▶ Play</button><button class="prev">◀</button><button class="next">▶|</button><span class="fighint">tap any step to show it on the figure</span></div></div>
+<div class="phase"><b>Distances</b> — express S₁P and S₂P using coordinates (x, z)</div>
+<div class="st" data-i="0"><div class="tex">\[S_2P - S_1P = \Delta\]</div><div class="nt">Start with constant path difference \(\Delta\) at point \(P(x, z)\) (Eq. 14.5).</div></div>
+<div class="st" data-i="1"><div class="tex">\[[(x + \tfrac{d}{2})^2 + z^2]^{1/2} - [(x - \tfrac{d}{2})^2 + z^2]^{1/2} = \Delta\]</div><div class="mv">substitute by \(S_1P,\,S_2P\)</div><div class="nt">Substitute distances from \(S_1(d/2, 0)\) and \(S_2(-d/2, 0)\) to \(P(x, z)\).</div></div>
+<div class="phase"><b>Isolate root</b> — move S₁P to the right before squaring</div>
+<div class="st" data-i="2"><div class="tex">\[[(x + \tfrac{d}{2})^2 + z^2]^{1/2} = \Delta + [(x - \tfrac{d}{2})^2 + z^2]^{1/2}\]</div><div class="mv">add by \([(x - \tfrac{d}{2})^2 + z^2]^{1/2}\)</div><div class="nt">Add \(S_1P\) to both sides so only one square root sits on the left.</div></div>
+<div class="phase"><b>Square</b> — square both sides and simplify to 2xd - Δ²</div>
+<div class="st" data-i="3"><div class="tex">\[(x + \tfrac{d}{2})^2 + z^2 = (x - \tfrac{d}{2})^2 + z^2 + \Delta^2 + 2\Delta[(x - \tfrac{d}{2})^2 + z^2]^{1/2}\]</div><div class="mv">power by \(2\)</div><div class="nt">Square both sides of the equation.</div></div>
+<div class="st" data-i="4"><div class="tex">\[2xd - \Delta^2 = 2\Delta[(x - \tfrac{d}{2})^2 + z^2]^{1/2}\]</div><div class="mv">simplify</div><div class="nt">Cancel \(x^2 + d^2/4 + z^2\) and move \(\Delta^2\) to the left.</div></div>
+<div class="phase"><b>Hyperbola</b> — square again and divide into standard hyperbola form</div>
+<div class="st" data-i="5"><div class="tex">\[4x^2d^2-4xd\Delta^2+\Delta^4=4\Delta^2(x^2-xd+d^2/4+z^2)\]</div><div class="mv">rearrange</div><div class="nt">Square both sides and expand every bracket before cancelling the common -4xdΔ² term.</div></div>
+<div class="st" data-i="6"><div class="tex">\[(d^2 - \Delta^2)x^2 - \Delta^2 z^2 = \tfrac{1}{4}\Delta^2(d^2 - \Delta^2)\]</div><div class="mv">Cancel the cross term and divide by 4</div><div class="nt">Collect the x² and z² terms on the left; factor Δ²(d²-Δ²)/4 on the right.</div></div>
+<div class="st final" data-i="7"><div class="tex">\[\frac{x^2}{\frac{1}{4}\Delta^2} - \frac{z^2}{\frac{1}{4}(d^2 - \Delta^2)} = 1\]</div><div class="mv">divide by \(\tfrac{1}{4}\Delta^2(d^2 - \Delta^2)\)</div><div class="nt">Divide through by the right-hand side to obtain the hyperbola (Eq. 14.6).</div></div></details></section>
+<section class="unit" id="u7"><h2>Unit 7 · Interference of light: Young&#x27;s experiment, intensity</h2>
+<div class="card th"><h3>① Theory — points</h3><ul><li><b>Young's double slit</b>: light from slit S falls on two narrow slits \(S_1, S_2\) (distance \(d\)); screen at distance \(D \gg d\).</li><li>Path difference at height \(x\) on screen: \(\Delta = S_2P - S_1P \approx \frac{xd}{D}\).</li><li>Bright fringes: \(x_n = \frac{n\lambda D}{d}\); dark: \(x_n = (n+\tfrac12)\frac{\lambda D}{d}\).</li><li><b>Fringe width</b> \(\beta = \frac{\lambda D}{d}\): equally spaced, independent of n.</li><li><b>Intensity</b>: \(I = I_1 + I_2 + 2\sqrt{I_1I_2}\cos\delta\); equal beams: \(I = 4I_0\cos^2\frac{\delta}{2}\), \(\delta = \frac{2\pi}{\lambda}\frac{xd}{D}\).</li><li>\(I_{max} = 4I_0\), \(I_{min} = 0\); average intensity \(2I_0\) — energy conserved.</li><li>Two independent sources are <b>incoherent</b>: phase changes randomly in ~\(10^{-10}\) s, so intensities simply add (\(I = I_1 + I_2\)).</li><li><b>Coherence</b>: temporal (finite wave-train length \(L = c\tau\)), spatial (finite source size). Path difference must be less than the coherence length.</li><li>Visibility \(V = \frac{I_{max} - I_{min}}{I_{max} + I_{min}}\).</li></ul><div class="key"><div class="k">Must remember</div><div>\(\beta = \frac{\lambda D}{d}\)</div><div>\(I = 4I_0\cos^2\frac{\delta}{2}\)</div></div></div>
+<details class="card dv" open><summary><h3>② Key derivation</h3></summary><div class="t">Path difference and fringe width in Young&#x27;s experiment</div><div class="legend">Two in-phase pinholes S₁ and S₂ are d apart, with S₁ above the midpoint. O is opposite their midpoint on screen LL′, distance D away. A bright point P is x_n above O. Assume D ≫ d and D ≫ |x_n|, so both ray lengths are approximately D. λ is the wavelength in the surrounding medium and n is integer fringe order. The figure exaggerates d and x_n; the derivation assumes D ≫ d, x_n.</div>
+<div class="figwrap"><div class="fgbox" data-fig="2" style="aspect-ratio:364/230"></div><div class="figctl"><button class="play">▶ Play</button><button class="prev">◀</button><button class="next">▶|</button><span class="fighint">tap any step to show it on the figure</span></div></div>
+<div class="phase"><b>Right triangles</b> — write (S₁P)² and (S₂P)² from right triangles S₁N₁P and S₂N₂P, then subtract</div>
+<div class="st" data-i="0"><div class="tex">\[(S_1P)^2 = D^2 + \left(x_n - \tfrac{d}{2}\right)^2\]</div><div class="nt"><b>Pythagoras in right triangle \(S_1N_1P\).</b> \(N_1\) is the foot of the perpendicular from \(S_1\) on the screen. The legs are \(S_1N_1 = D\) and \(N_1P = x_n - d/2\); the hypotenuse is \(S_1P\).</div></div>
+<div class="st" data-i="1"><div class="tex">\[(S_2P)^2 = D^2 + \left(x_n + \tfrac{d}{2}\right)^2\]</div><div class="mv">Pythagoras in right triangle \(S_2N_2P\)</div><div class="nt">\(S_2\) is \(d/2\) below \(O\)'s level, so \(N_2P = x_n + d/2\); the other leg is again \(D\).</div></div>
+<div class="st" data-i="2"><div class="tex">\[(S_2P)^2 - (S_1P)^2 = [D^2 + (x_n + \tfrac{d}{2})^2] - [D^2 + (x_n - \tfrac{d}{2})^2]\]</div><div class="mv">Subtract the first result from the second</div><div class="nt">Subtract \((S_1P)^2\) from \((S_2P)^2\) (Eq. 14.18).</div></div>
+<div class="st" data-i="3"><div class="tex">\[(S_2P)^2 - (S_1P)^2 = 2x_n d\]</div><div class="mv">expand</div><div class="nt">Expand the squares; \(D^2 + x_n^2 + d^2/4\) cancels out.</div></div>
+<div class="phase"><b>Factor</b> — use difference of squares to isolate S₂P - S₁P</div>
+<div class="st" data-i="4"><div class="tex">\[(S_2P - S_1P)(S_2P + S_1P) = 2x_n d\]</div><div class="mv">factor</div><div class="nt">Factor the left-hand side as a difference of squares.</div></div>
+<div class="st" data-i="5"><div class="tex">\[S_2P - S_1P = \frac{2x_n d}{S_2P + S_1P}\]</div><div class="mv">divide by \(S_2P + S_1P\)</div><div class="nt">Divide both sides by \(S_2P + S_1P\).</div></div>
+<div class="phase"><b>Paraxial</b> — replace S₂P + S₁P by 2D when D ≫ d, x_n</div>
+<div class="st" data-i="6"><div class="tex">\[S_2P - S_1P = \frac{x_n d}{D}\]</div><div class="mv">substitute by \(S_2P + S_1P \approx 2D\)</div><div class="nt">Replace \(S_2P + S_1P\) with \(2D\) and cancel the factor of 2 (Eq. 14.19).</div></div>
+<div class="phase"><b>Fringe width</b> — set path difference equal to nλ and subtract adjacent maxima</div>
+<div class="st" data-i="7"><div class="tex">\[\frac{x_n d}{D} = n\lambda\]</div><div class="mv">substitute by \(S_2P - S_1P = n\lambda\)</div><div class="nt">Set the path difference equal to \(n\lambda\) for the \(n\)-th bright fringe (Eq. 14.17).</div></div>
+<div class="st" data-i="8"><div class="tex">\[x_n = \frac{n\lambda D}{d}\]</div><div class="mv">multiply by \(\frac{D}{d}\)</div><div class="nt">Multiply both sides by \(D/d\) to find the bright fringe position (Eq. 14.20).</div></div>
+<div class="st" data-i="9"><div class="tex">\[x_{n+1}-x_n=\frac{(n+1)\lambda D}{d}-\frac{n\lambda D}{d}\]</div><div class="mv">rearrange</div><div class="nt">Write the next bright-fringe position and subtract the current one.</div></div>
+<div class="st final" data-i="10"><div class="tex">\[\beta = \frac{\lambda D}{d}\]</div><div class="mv">define by \(\beta = x_{n+1} - x_n\)</div><div class="nt">Subtract \(x_n\) from \(x_{n+1}\) to obtain the fringe width (Eq. 14.21).</div></div></details></section>
+<section class="unit" id="u8"><h2>Unit 8 · Fresnel&#x27;s two-mirror arrangement and biprism</h2>
+<div class="card th"><h3>① Theory — points</h3><ul><li><b>Fresnel two mirrors</b>: two plane mirrors inclined at a small angle \(\theta\) form two virtual images \(S_1, S_2\) of slit S — two coherent sources.</li><li>Virtual source separation (two mirrors): \(d = 2b\theta\), where \(b\) = distance of S from the mirror junction.</li><li><b>Fresnel biprism</b>: two thin prisms of small angle \(\alpha\) base to base (obtuse angle ≈ 179°); refraction gives two virtual sources.</li><li>Each half deviates light by \(\delta = (n-1)\alpha\); virtual source separation \(d = 2a(n-1)\alpha\), \(a\) = slit-to-prism distance.</li><li>Fringe width \(\beta = \frac{\lambda D}{d}\), \(D\) = slit-to-eyepiece distance.</li><li><b>Measuring d</b> — displacement method: a convex lens between biprism and eyepiece gives two positions; \(d = \sqrt{d_1 d_2}\).</li><li>Then \(\lambda = \frac{\beta d}{D}\).</li><li>White light: central fringe white, others coloured; used to locate the zero-order fringe.</li><li>Biprism is used to find wavelength, thickness of a thin plate (fringe shift), refractive index.</li></ul><div class="key"><div class="k">Must remember</div><div>\(d = 2a(n-1)\alpha\)</div><div>\(d = \sqrt{d_1 d_2}\)</div><div>\(\lambda = \frac{\beta d}{D}\)</div></div></div>
+<details class="card dv" open><summary><h3>② Key derivation</h3></summary><div class="t">Virtual slit separation and wavelength in Fresnel&#x27;s biprism</div><div class="legend">The two halves of a thin biprism deviate light oppositely, producing virtual slit images S₁,S₂. Each half has small angle α in radians and index n relative to air. The source slit S is distance a from the biprism. d = S₁S₂ is virtual-source separation; D is source-plane to screen distance and β is measured fringe width. After finding λ, the final steps explain how a movable convex lens measures d without knowing α. Angles and the separation of S₁ and S₂ are exaggerated in the figure.</div>
+<div class="figwrap"><div class="fgbox" data-fig="3" style="aspect-ratio:306/172"></div><div class="figctl"><button class="play">▶ Play</button><button class="prev">◀</button><button class="next">▶|</button><span class="fighint">tap any step to show it on the figure</span></div></div>
+<div class="phase"><b>Prism deviation</b> — each half is a thin prism: δ = (n − 1)α</div>
+<div class="st" data-i="0"><div class="tex">\[\delta = (n - 1)\alpha\]</div><div class="nt">Each half of the biprism is a thin prism of very small angle \(\alpha\). A thin prism of index \(n\) turns a ray through about \(\delta = (n-1)\alpha\), towards its base.</div></div>
+<div class="phase"><b>Virtual slits</b> — right triangle SQS₁ gives SS₁ = a tan δ ≈ aδ; symmetry doubles it</div>
+<div class="st" data-i="1"><div class="tex">\[\tan\delta = \frac{SS_1}{a}\]</div><div class="mv">Tangent in triangle \(SQS_1\)</div><div class="nt">The emerging ray, traced back from \(Q\), meets the plane of \(S\) at \(S_1\). It makes \(\delta\) with \(QS\). Since \(Q\) is close to the axis, \(SQ \approx a\) and the angle at \(S\) is nearly a right angle: \(SS_1\) is opposite \(\delta\) and \(a\) is adjacent.</div></div>
+<div class="st" data-i="2"><div class="tex">\[SS_1 = a\tan\delta\]</div><div class="mv">Rearrange: multiply by \(a\)</div><div class="nt">Multiply both sides by \(a\).</div></div>
+<div class="st" data-i="3"><div class="tex">\[SS_1 \approx a\delta\]</div><div class="mv">substitute by \(\tan\delta \approx \delta\)</div><div class="nt">\(\delta\) is very small (a few minutes of arc), so \(\tan\delta \approx \delta\) in radians.</div></div>
+<div class="st" data-i="4"><div class="tex">\[SS_1 \approx a(n-1)\alpha\]</div><div class="mv">substitute by \(\delta = (n-1)\alpha\)</div><div class="nt">Apply the thin-prism deviation.</div></div>
+<div class="st" data-i="5"><div class="tex">\[d = 2a(n - 1)\alpha\]</div><div class="mv">The lower half puts \(S_2\) the same distance below \(S\)</div><div class="nt">The lower half bends light the other way by the same \(\delta\), so \(SS_2 = SS_1\) and \(d = S_1S_2 = 2a(n-1)\alpha\).</div></div>
+<div class="phase"><b>Wavelength</b> — S₁, S₂ are coherent: β = λD/d, solved for λ</div>
+<div class="st" data-i="6"><div class="tex">\[\beta = \frac{\lambda D}{d}\]</div><div class="mv">Fringe width for two coherent sources</div><div class="nt">\(S_1\) and \(S_2\) come from the one slit, so they are coherent, as in Young's experiment. At distance \(D\) from them, at the crosswires, the fringes have width \(\beta = \lambda D/d\).</div></div>
+<div class="st" data-i="7"><div class="tex">\[\frac{d\beta}{D} = \lambda\]</div><div class="mv">multiply by \(\frac{d}{D}\)</div><div class="nt">Multiply both sides by \(d / D\).</div></div>
+<div class="st" data-i="8"><div class="tex">\[\lambda = \frac{d\beta}{D}\]</div><div class="mv">swap</div><div class="nt">Swap sides to obtain the biprism wavelength relation (Eq. 14.34).</div></div>
+<div class="phase"><b>Measuring d</b> — two lens positions give d₁, d₂ with d = √(d₁d₂) and D = b₁ + b₂</div>
+<div class="st" data-i="9"><div class="tex">\[\frac{d_1}{d} = \frac{b_1}{a_1}\]</div><div class="mv">Similar triangles through the centre of the lens at \(L_1\)</div><div class="nt">A convex lens between biprism and eyepiece shows sharp images of \(S_1\) and \(S_2\) at two positions. At \(L_1\), rays through the lens centre are undeviated, so triangles \(S_1O_1S_2\) and \(I_1O_1I_1'\) are similar: image gap over object gap equals image distance \(b_1\) over object distance \(a_1\).</div></div>
+<div class="st" data-i="10"><div class="tex">\[d_1 = \frac{b_1}{a_1}d\]</div><div class="mv">Rearrange: multiply by \(d\)</div><div class="nt">Multiply both sides by \(d\).</div></div>
+<div class="st" data-i="11"><div class="tex">\[\frac{d_2}{d} = \frac{a_1}{b_1}\]</div><div class="mv">Similar triangles at the second position \(L_2\)</div><div class="nt">The second sharp position is the conjugate one: object and image distances swap. Now the object distance is \(b_1\) and the image distance is \(b_2 = a_1\), so the image is reduced by the reciprocal ratio.</div></div>
+<div class="st" data-i="12"><div class="tex">\[d_2 = \frac{a_1}{b_1}d\]</div><div class="mv">Rearrange: multiply by \(d\)</div><div class="nt">Multiply both sides by \(d\).</div></div>
+<div class="st" data-i="13"><div class="tex">\[d_1d_2=d^2\]</div><div class="mv">Multiply the two results</div><div class="nt">Multiply \(d_1\) by \(d_2\): \(\frac{b_1}{a_1}\cdot\frac{a_1}{b_1} = 1\), so the lens distances cancel.</div></div>
+<div class="st" data-i="14"><div class="tex">\[d=\sqrt{d_1d_2}\]</div><div class="mv">root</div><div class="nt">Take the positive root for the physical source separation.</div></div>
+<div class="st final" data-i="15"><div class="tex">\[D=b_1+b_2\]</div><div class="mv">substitute by \(D = a_1 + b_1,\; a_1 = b_2\)</div><div class="nt">From \(S_1S_2\) to the crosswires, \(D = a_1 + b_1\). At the conjugate position \(b_2 = a_1\), so \(D = b_1 + b_2\): both are lens-to-crosswire distances, easy to read off.</div></div></details></section>
+<section class="unit" id="u9"><h2>Unit 9 · White-light fringes, fringe displacement, Lloyd&#x27;s mirror, Stokes relations</h2>
+<div class="card th"><h3>① Theory — points</h3><ul><li><b>White-light fringes</b>: each colour makes its own pattern; at zero path difference all are bright → central white fringe, then a few coloured fringes, then uniform white.</li><li><b>Displacement of fringes</b>: a thin plate (thickness \(t\), index \(n\)) in one beam adds optical path \((n-1)t\); whole pattern shifts toward that beam.</li><li>Shift \(x_0 = \frac{D}{d}(n-1)t = \frac{\beta}{\lambda}(n-1)t\); number of fringes shifted \(N = (n-1)t/\lambda\).</li><li>Use: thickness of a mica sheet, or \(n\) — locate central fringe with white light.</li><li><b>Lloyd's mirror</b>: slit S and its virtual image S′ in a plane mirror (grazing incidence) act as two coherent sources.</li><li>In Lloyd's mirror the fringe at the mirror edge (zero geometric path difference) is <b>dark</b> → reflection from a denser medium gives a phase change of \(\pi\).</li><li><b>Stokes' relations</b> (principle of optical reversibility): \(r^2 + tt' = 1\) and \(r' = -r\).</li><li>\(r' = -r\): reflection from one side differs by a phase \(\pi\) from reflection on the other side.</li></ul><div class="key"><div class="k">Must remember</div><div>\(x_0 = \frac{D}{d}(n-1)t\)</div><div>\(r' = -r,\quad tt' = 1 - r^2\)</div></div></div>
+<details class="card dv" open><summary><h3>② Key derivation</h3></summary><div class="t">Fringes and the phase change in Lloyd&#x27;s mirror</div><div class="legend">Slit S₁ is a height h above the plane of a mirror AO used at grazing incidence; S₂ is its image. The screen touches the far end O of the mirror, a distance D from the plane of S₁ and S₂; P is a height x above O. Ghatak §14.11 gives the conditions S₂P − S₁P = nλ (minima) and (n + ½)λ (maxima) from the observed dark central fringe; the fringe positions use the two-source path difference of Eq. 14.19.</div>
+<div class="figwrap"><div class="fgbox" data-fig="4" style="aspect-ratio:248/176"></div><div class="figctl"><button class="play">▶ Play</button><button class="prev">◀</button><button class="next">▶|</button><span class="fighint">tap any step to show it on the figure</span></div></div>
+<div class="phase"><b>Virtual source</b> — S₂ is the mirror image of S₁: d = 2h</div>
+<div class="st" data-i="0"><div class="tex">\[NS_2 = S_1N\]</div><div class="nt"><b>Image in the mirror.</b> The mirror plane, extended back to \(N\) under \(S_1\), sends \(S_1\) to its image \(S_2\): the image is as far below the plane as \(S_1\) is above it. Call this height \(h\).</div></div>
+<div class="st" data-i="1"><div class="tex">\[d = 2h\]</div><div class="mv">Add the two heights</div><div class="nt">The two coherent sources are \(S_1\) and its image \(S_2\), separated by \(d = S_1S_2 = S_1N + NS_2 = 2h\).</div></div>
+<div class="phase"><b>Path difference</b> — the reflected path equals S₂P; two sources give xd/D</div>
+<div class="st" data-i="2"><div class="tex">\[S_1R + RP = S_2P\]</div><div class="mv">The reflected path, seen from the image</div><div class="nt">Right triangles \(S_1NR\) and \(S_2NR\) share \(NR\) and have \(S_1N = NS_2\), so \(S_1R = S_2R\). The reflected path \(S_1R + RP\) is therefore \(S_2R + RP\), and \(S_2\), \(R\), \(P\) lie on one line.</div></div>
+<div class="st" data-i="3"><div class="tex">\[S_2P - S_1P = \frac{xd}{D}\]</div><div class="mv">Path difference for two sources, as in Young's experiment (Eq. 14.19)</div><div class="nt">\(S_1\) and \(S_2\) act like the two pinholes of Young's experiment, a distance \(d\) apart and \(D\) from the screen. \(x\) is the height of \(P\) above \(O\), the point level with the mirror.</div></div>
+<div class="phase"><b>Phase change</b> — the dark central fringe shows a π change on reflection</div>
+<div class="st" data-i="4"><div class="tex">\[\Delta\phi = \frac{2\pi}{\lambda}(S_2P - S_1P) + \pi\]</div><div class="mv">Reflection at the denser mirror adds \(\pi\)</div><div class="nt">With white light the central fringe (zero path difference) is found to be dark. So the reflected beam undergoes a sudden phase change of \(\pi\) on reflection, on top of the phase from its extra path.</div></div>
+<div class="st" data-i="5"><div class="tex">\[S_2P - S_1P = n\lambda\]</div><div class="mv">substitute by \(\Delta\phi = (2n+1)\pi\)</div><div class="nt">Destructive interference needs \(\Delta\phi = (2n+1)\pi\). The \(\pi\) from reflection is already there, so the path difference must be a whole number of wavelengths: \(n = 0, 1, 2, \ldots\) give minima.</div></div>
+<div class="st" data-i="6"><div class="tex">\[\frac{x_n d}{D} = n\lambda\]</div><div class="mv">substitute by \(S_2P - S_1P = \frac{x_n d}{D}\)</div><div class="nt">Put the geometric path difference into the condition for the \(n\)-th dark fringe at height \(x_n\).</div></div>
+<div class="st" data-i="7"><div class="tex">\[x_n = \frac{n\lambda D}{d}\]</div><div class="mv">multiply by \(\frac{D}{d}\)</div><div class="nt">Multiply by \(D/d\). For \(n = 0\), \(x_0 = 0\): the fringe at \(O\), where the screen touches the mirror, is dark.</div></div>
+<div class="st" data-i="8"><div class="tex">\[S_2P - S_1P = \left(n + \tfrac{1}{2}\right)\lambda\]</div><div class="mv">Condition for maxima</div><div class="nt">Constructive interference needs \(\Delta\phi = 2n\pi\), so with the extra \(\pi\) the path difference must be a half-odd number of wavelengths: these are the bright fringes, halfway between the dark ones.</div></div>
+<div class="st final" data-i="9"><div class="tex">\[\beta = \frac{\lambda D}{2h}\]</div><div class="mv">substitute by \(\beta = x_{n+1} - x_n = \frac{\lambda D}{d},\; d = 2h\)</div><div class="nt">Successive dark fringes are \(\lambda D/d\) apart, as in Young's experiment; with \(d = 2h\) the fringe width is \(\lambda D/2h\). The pattern is Young's, shifted by half a fringe.</div></div></details></section>
+<section class="unit" id="u10"><h2>Unit 10 · Division of amplitude: thin films, cosine law, non-reflecting films</h2>
+<div class="card th"><h3>① Theory — points</h3><ul><li><b>Thin film</b>: rays reflected from top and bottom surfaces interfere (division of amplitude).</li><li><b>Cosine law</b>: optical path difference \(\Delta = 2n_2 d\cos\theta'\) (\(\theta'\) = angle of refraction inside the film).</li><li>One of the two reflections has a phase change \(\pi\) (film in air) → reflected: bright when \(2nd\cos\theta' = (m+\tfrac12)\lambda\), dark when \(2nd\cos\theta' = m\lambda\).</li><li>Transmitted pattern is complementary to the reflected one.</li><li><b>Fringes of equal inclination</b> (Haidinger): film of constant thickness, fringes depend on \(\theta'\) — circles seen at infinity.</li><li><b>Fringes of equal thickness</b> (Fizeau): film of varying thickness (wedge), fringes follow constant \(d\); wedge fringe width \(\beta = \frac{\lambda}{2n\alpha}\).</li><li>Colours of soap bubbles / oil films: white light, different \(\lambda\) satisfy the bright condition at different thickness.</li><li><b>Non-reflecting (anti-reflection) film</b>: \(n_f d = \lambda/4\) (quarter-wave) and \(n_f = \sqrt{n_g}\) (equal amplitudes) → reflected beams cancel.</li><li>MgF₂ (\(n = 1.38\)) on glass — blooming of lenses.</li></ul><div class="key"><div class="k">Must remember</div><div>\(\Delta = 2n_2 d\cos\theta'\)</div><div>\(n_f d = \frac{\lambda}{4},\quad n_f = \sqrt{n_g}\)</div></div></div>
+<details class="card dv" open><summary><h3>② Key derivation</h3></summary><div class="t">The cosine law for a plane parallel thin film</div><div class="legend">A parallel film of thickness d and index n₂ lies in index n₁. A ray first reflects at upper point B; another travels inside B → D → F before emerging parallel to it. C is the perpendicular projection of F onto the upper reflected ray, so BC must be subtracted when comparing equal outgoing wavefronts. θ is incidence angle and θ′ the internal angle, both from the normal. Reflect B across the lower face to B′; K is the perpendicular projection of B onto B′F. Δ below is propagation path difference; add any reflection phase reversals separately.</div>
+<div class="figwrap"><div class="fgbox" data-fig="5" style="aspect-ratio:172/182"></div><div class="figctl"><button class="play">▶ Play</button><button class="prev">◀</button><button class="next">▶|</button><span class="fighint">tap any step to show it on the figure</span></div></div>
+<div class="phase"><b>Optical path</b> — write the extra optical path Δ = n₂(BD + DF) − n₁ BC</div>
+<div class="st" data-i="0"><div class="tex">\[\Delta = n_2(BD + DF) - n_1 BC\]</div><div class="nt">Start with the optical path difference between the ray that crosses the film \(B \to D \to F\) and the ray reflected at \(B\) (Eq. 15.3). \(C\) is the foot of the perpendicular from \(F\), so both rays are compared on one wavefront \(FC\).</div></div>
+<div class="phase"><b>Image point B′</b> — reflect B in the lower face so BD + DF = B′F</div>
+<div class="st" data-i="1"><div class="tex">\[BD = B'D\]</div><div class="mv">Mirror image \(B'\) of \(B\) in the lower face</div><div class="nt">\(BJ = JB' = d\) and \(DJ\) is common, so right triangles \(BDJ\) and \(B'DJ\) are congruent.</div></div>
+<div class="st" data-i="2"><div class="tex">\[\Delta = n_2 B'F - n_1 BC\]</div><div class="mv">substitute by \(BD + DF = B'D + DF = B'F\)</div><div class="nt">\(B'\), \(D\) and \(F\) lie on one straight line, so \(B'D + DF = B'F\) (Eq. 15.7).</div></div>
+<div class="phase"><b>Snell&#x27;s law</b> — use right triangles BCF and BKF, then Snell&#x27;s law, to show n₁ BC = n₂ KF</div>
+<div class="st" data-i="3"><div class="tex">\[\sin\theta = \frac{BC}{BF}\]</div><div class="mv">Sine in right triangle \(BCF\)</div><div class="nt">\(BC\) runs along the reflected ray and \(BF\) along the surface, so \(\angle BFC = \theta\). The side opposite \(\theta\) is \(BC\); the hypotenuse is \(BF\).</div></div>
+<div class="st" data-i="4"><div class="tex">\[BC = BF\sin\theta\]</div><div class="mv">Rearrange: multiply by \(BF\)</div><div class="nt">Multiply both sides by \(BF\).</div></div>
+<div class="st" data-i="5"><div class="tex">\[\sin\theta' = \frac{KF}{BF}\]</div><div class="mv">Sine in right triangle \(BKF\)</div><div class="nt">\(BK \perp B'F\) and \(B'F\) makes \(\theta'\) with the normal, so \(\angle KBF = \theta'\). The side opposite \(\theta'\) is \(KF\); the hypotenuse is \(BF\).</div></div>
+<div class="st" data-i="6"><div class="tex">\[KF = BF\sin\theta'\]</div><div class="mv">Rearrange: multiply by \(BF\)</div><div class="nt">Multiply both sides by \(BF\).</div></div>
+<div class="st" data-i="7"><div class="tex">\[n_1\sin\theta = n_2\sin\theta'\]</div><div class="mv">Snell's law at \(B\)</div><div class="nt">The ray enters the film at \(B\): incidence angle \(\theta\) in index \(n_1\), refraction angle \(\theta'\) in index \(n_2\).</div></div>
+<div class="st" data-i="8"><div class="tex">\[n_1 BF\sin\theta = n_2 BF\sin\theta'\]</div><div class="mv">multiply by \(BF\)</div><div class="nt">Multiply both sides by \(BF\) so each side matches one of the two lengths found above.</div></div>
+<div class="st" data-i="9"><div class="tex">\[n_1 BC = n_2 KF\]</div><div class="mv">substitute by \(BF\sin\theta = BC,\; BF\sin\theta' = KF\)</div><div class="nt">Apply the two triangle results: \(BF\sin\theta = BC\) and \(BF\sin\theta' = KF\) (Eq. 15.8).</div></div>
+<div class="st" data-i="10"><div class="tex">\[\Delta = n_2 B'F - n_2 KF\]</div><div class="mv">substitute by \(n_1 BC = n_2 KF\)</div><div class="nt">Put \(n_2 KF\) in place of \(n_1 BC\) in the path difference.</div></div>
+<div class="st" data-i="11"><div class="tex">\[\Delta = n_2(B'F - KF)\]</div><div class="mv">factor</div><div class="nt">Take out the common factor \(n_2\).</div></div>
+<div class="phase"><b>Cosine law</b> — use right triangle BB′K to get B′K = 2d cos θ′</div>
+<div class="st" data-i="12"><div class="tex">\[\Delta = n_2 B'K\]</div><div class="mv">substitute by \(B'F - KF = B'K\)</div><div class="nt">\(K\) lies on \(B'F\), so \(B'F - KF = B'K\).</div></div>
+<div class="st" data-i="13"><div class="tex">\[\cos\theta' = \frac{B'K}{BB'}\]</div><div class="mv">Cosine in right triangle \(BB'K\)</div><div class="nt">\(BB'\) is the normal and \(B'F\) makes \(\theta'\) with it, so \(\angle BB'K = \theta'\). The side next to \(\theta'\) is \(B'K\); the hypotenuse is \(BB'\).</div></div>
+<div class="st" data-i="14"><div class="tex">\[B'K = BB'\cos\theta'\]</div><div class="mv">Rearrange: multiply by \(BB'\)</div><div class="nt">Multiply both sides by \(BB'\).</div></div>
+<div class="st final" data-i="15"><div class="tex">\[\Delta = 2n_2 d\cos\theta'\]</div><div class="mv">substitute by \(B'K = BB'\cos\theta',\; BB' = 2d\)</div><div class="nt">Apply it with \(BB' = BJ + JB' = 2d\): the cosine law (Eq. 15.9).</div></div></details></section>
+<section class="unit" id="u11"><h2>Unit 11 · Newton&#x27;s rings and the Michelson interferometer</h2>
+<div class="card th"><h3>① Theory — points</h3><ul><li><b>Newton's rings</b>: plano-convex lens (radius \(R\)) on flat glass; air film of varying thickness → concentric circular fringes of equal thickness.</li><li>Centre is <b>dark</b> in reflected light (zero thickness, phase change \(\pi\)).</li><li>Film thickness at radius \(r\): \(t = \frac{r^2}{2R}\). Dark rings: \(2t = m\lambda\) → \(r_m^2 = m\lambda R\).</li><li>Radii \(\propto \sqrt{m}\): rings get closer outward. Bright rings: \(r_m^2 = (m + \tfrac12)\lambda R\).</li><li><b>Wavelength</b>: \(\lambda = \frac{D_{m+p}^2 - D_m^2}{4pR}\). With liquid of index \(\mu\): \(D^2\) reduced by factor \(\mu\); \(\mu = \frac{(D_{m+p}^2 - D_m^2)_{air}}{(D_{m+p}^2 - D_m^2)_{liq}}\).</li><li><b>Michelson interferometer</b>: beam splitter \(G_1\) (45°), compensating plate \(G_2\) (equal glass path, needed for white light), mirrors \(M_1, M_2\).</li><li>Equivalent to an air film between \(M_1\) and the image \(M_2'\): \(\Delta = 2d\cos\theta\) → circular fringes; tilted → straight fringes.</li><li><b>Wavelength</b>: mirror moved \(d_0\), \(N\) fringes cross: \(2d_0 = N\lambda\).</li><li><b>Two close lines</b> (Na D₁, D₂): mirror travel \(\Delta d\) between successive minima of visibility: \(\Delta\lambda = \frac{\lambda^2}{2\Delta d}\).</li></ul><div class="key"><div class="k">Must remember</div><div>\(r_m^2 = m\lambda R\)</div><div>\(\lambda = \frac{D_{m+p}^2 - D_m^2}{4pR}\)</div><div>\(2d_0 = N\lambda\)</div><div>\(\Delta\lambda = \frac{\lambda^2}{2\Delta d}\)</div></div></div>
+<details class="card dv" open><summary><h3>② Key derivation</h3></summary><div class="t">Radii of dark rings and wavelength in Newton&#x27;s rings</div><div class="legend">A plano-convex lens of radius of curvature \(R\) rests on flat glass at \(O\). At radius \(r_m\) from the centre the air film between lens and plate has thickness \(t\). \(C\) is the centre of curvature; \(N\) is the foot of the perpendicular from the lens point \(P\) on the axis. Light falls normally and is viewed in reflection.</div>
+<div class="figwrap"><div class="fgbox" data-fig="6" style="aspect-ratio:164/158"></div><div class="figctl"><button class="play">▶ Play</button><button class="prev">◀</button><button class="next">▶|</button><span class="fighint">tap any step to show it on the figure</span></div></div>
+<div class="phase"><b>Air film</b> — dark-ring condition 2t = mλ</div>
+<div class="st" data-i="0"><div class="tex">\[2t = m\lambda\]</div><div class="nt">Reflected light from the top and bottom of the air film (\(n = 1\), \(\cos\theta' = 1\)) differs in path by \(2t\); the reflection at the glass plate adds a \(\pi\) phase change, so a dark ring needs \(2t = m\lambda\) (Eq. 15.63).</div></div>
+<div class="phase"><b>Circle geometry</b> — Pythagoras in △CNP relates r_m, t and R</div>
+<div class="st" data-i="1"><div class="tex">\[CP^2 = CN^2 + NP^2\]</div><div class="mv">Pythagoras in right triangle \(CNP\)</div><div class="nt">\(N\) is the foot of the perpendicular from \(P\) on the axis, so triangle \(CNP\) is right-angled at \(N\). The hypotenuse is \(CP\).</div></div>
+<div class="st" data-i="2"><div class="tex">\[R^2 = (R - t)^2 + r_m^2\]</div><div class="mv">substitute by \(CP = R,\; CN = R - t,\; NP = r_m\)</div><div class="nt">\(CP\) is a radius \(R\); \(CN = CO - NO = R - t\); \(NP = OQ = r_m\) is the ring radius.</div></div>
+<div class="st" data-i="3"><div class="tex">\[R^2 = R^2 - 2Rt + t^2 + r_m^2\]</div><div class="mv">expand</div><div class="nt">Expand \((R - t)^2\).</div></div>
+<div class="st" data-i="4"><div class="tex">\[r_m^2 = 2Rt - t^2\]</div><div class="mv">Cancel \(R^2\) and solve for \(r_m^2\)</div><div class="nt">\(R^2\) cancels on both sides (Eq. 15.64).</div></div>
+<div class="phase"><b>Thin film</b> — drop t² since t ≪ R</div>
+<div class="st" data-i="5"><div class="tex">\[r_m^2 \approx 2Rt\]</div><div class="mv">Neglect \(t^2\) since \(t \ll R\)</div><div class="nt">\(R \approx 100\text{ cm}\) while \(t \lesssim 10^{-3}\text{ cm}\), so \(t^2\) is negligible beside \(2Rt\) (Eq. 15.65).</div></div>
+<div class="phase"><b>Dark ring radius</b> — r_m² = mλR</div>
+<div class="st" data-i="6"><div class="tex">\[r_m^2 = m\lambda R\]</div><div class="mv">substitute by \(2t = m\lambda\)</div><div class="nt">Put the dark-ring condition into \(r_m^2 = R(2t)\) (Eq. 15.66). Radii grow as \(\sqrt{m}\), so rings crowd together outward.</div></div>
+<div class="phase"><b>Ring diameters</b> — λ from D²ₘ₊ₚ − D²ₘ</div>
+<div class="st" data-i="7"><div class="tex">\[D_m^2 = 4m\lambda R\]</div><div class="mv">substitute by \(r_m = D_m/2\)</div><div class="nt">Diameters are measured with the travelling microscope, so write \(D_m = 2r_m\): \(D_m^2 = 4r_m^2\).</div></div>
+<div class="st" data-i="8"><div class="tex">\[D_{m+p}^2 = 4(m+p)\lambda R\]</div><div class="mv">substitute by \(m \to m+p\)</div><div class="nt">The same result for the ring \(p\) orders further out.</div></div>
+<div class="st" data-i="9"><div class="tex">\[D_{m+p}^2 - D_m^2 = 4p\lambda R\]</div><div class="mv">subtract by \(D_m^2 = 4m\lambda R\)</div><div class="nt">Subtracting removes \(m\), so the unknown order of a ring and any dust gap at \(O\) drop out (Eq. 15.67).</div></div>
+<div class="st final" data-i="10"><div class="tex">\[\lambda = \frac{D_{m+p}^2 - D_m^2}{4pR}\]</div><div class="mv">divide by \(4pR\)</div><div class="nt">Wavelength from two ring diameters and the lens radius (Eq. 15.68).</div></div></details></section></main><footer>PHY5B08 Optics · revision · built from the study-match deck</footer>
+<script>/* ==========================================================================
+   Figure: animated SVG diagram for derivation cards (setup.figure)
+   --------------------------------------------------------------------------
+   A derivation card opts in by giving its setup a "figure". The JSXGraph
+   "steps" stay in the data as the fallback; they are not drawn when a figure exists.
+
+     "setup": { ..., "figure": {
+       "box":    [left, bottom, right, top],             figure units, y up
+       "points": { "O": { "at": [-230, 0], "label": "O", "side": "s" }, ... },
+       "parts":  { "OS": { "type": "line", "from": "O", "to": "S", "style": "ray", "arrow": true }, ... },
+       "draw":   [ { "parts": ["axis"], "caption": "Principal axis" }, ... ]
+     } }
+
+   and on any derivation step:
+
+     "figure": { "focus": ["triOSC", "alpha1"], "keep": ["OS"], "caption": "..." }
+
+   draw     the order in which the figure is drawn when the card starts. Its parts are the base figure.
+   focus    parts drawn in the accent colour for that step. Parts outside the base draw in.
+   keep     base parts left at full strength. While a step has focus or keep, the other base parts dim.
+            The points a focused part is built on are kept automatically.
+   caption  one line shown in the corner of the figure ("α_1" gives a subscript).
+
+   Part types: line (from, to, style, arrow), arc (center, r, from, to in degrees, hatch),
+   polygon (points), angle (at, from, to, r in px), dim (from, to, offset in px, arrow), text (at).
+   Styles: axis, mirror, ray, normal, guide.
+
+   Labels are placed once per layout, in screen pixels, at a fixed font size. Two labels that can be on
+   screen at the same time never overlap, labels keep clear of lines and points, and a label keeps its
+   place from step to step.
+   ========================================================================== */
+(function () {
+  var SM = window.SM = window.SM || {};
+  var NS = 'http://www.w3.org/2000/svg';
+  var REDUCE = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var DIRS = { e: [1, 0], ne: [1, -1], n: [0, -1], nw: [-1, -1], w: [-1, 0], sw: [-1, 1], s: [0, 1], se: [1, 1] };
+  var RING = ['e', 'ne', 'n', 'nw', 'w', 'sw', 's', 'se'];
+  var DRAW_MS = { line: 620, arc: 820, polygon: 900, angle: 560, dim: 620, point: 280, text: 300 };
+  var RANK = { point: 0, angle: 1, line: 2, dim: 3, arc: 4, polygon: 5, text: 6 };
+
+  function mk(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    if (attrs) Object.keys(attrs).forEach(function (k) { if (attrs[k] != null) e.setAttribute(k, attrs[k]); });
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function ease(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+  function clamp01(t) { return t < 0 ? 0 : t > 1 ? 1 : t; }
+  function f2(v) { return (Math.round(v * 100) / 100).toString(); }
+  function xy(p) { return f2(p[0]) + ' ' + f2(p[1]); }
+  function lerp(a, b, t) { return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]; }
+  function unit(a, b) { var dx = b[0] - a[0], dy = b[1] - a[1], l = Math.sqrt(dx * dx + dy * dy) || 1; return [dx / l, dy / l]; }
+
+  /* "α_1" -> α with a subscript 1, "x^2" -> superscript; "_{ab}" takes several characters */
+  var MARK = /([_^])(\{[^}]*\}|[^\s])/g;
+  function pieces(s) {
+    var out = [], last = 0, m;
+    s = String(s);
+    MARK.lastIndex = 0;
+    while ((m = MARK.exec(s))) {
+      if (m.index > last) out.push({ t: s.slice(last, m.index) });
+      out.push({ t: m[2].replace(/^\{|\}$/g, ''), k: m[1] === '_' ? 'sub' : 'sup' });
+      last = MARK.lastIndex;
+    }
+    if (last < s.length) out.push({ t: s.slice(last) });
+    return out;
+  }
+  function svgText(el, s) {
+    el.textContent = '';
+    var shift = 0;
+    pieces(s).forEach(function (p) {
+      var ts = mk('tspan', null, el);
+      var want = p.k === 'sub' ? 0.32 : p.k === 'sup' ? -0.42 : 0;
+      if (want !== shift) ts.setAttribute('dy', (want - shift) + 'em');
+      shift = want;
+      if (p.k) ts.setAttribute('class', 'fg-' + p.k);
+      ts.textContent = p.t;
+    });
+  }
+  function htmlText(s) {
+    return pieces(s).map(function (p) {
+      var t = SM.esc ? SM.esc(p.t) : p.t;
+      return p.k ? '<' + p.k + '>' + t + '</' + p.k + '>' : t;
+    }).join('');
+  }
+
+  /* ---------- box and segment tests for label placement ---------- */
+  function overlap(a, b) {
+    var w = Math.min(a.x1, b.x1) - Math.max(a.x0, b.x0), h = Math.min(a.y1, b.y1) - Math.max(a.y0, b.y0);
+    return w > 0 && h > 0 ? w * h : 0;
+  }
+  function segHitsBox(a, b, r) {
+    // Liang-Barsky clip of segment ab against box r
+    var x0 = a[0], y0 = a[1], dx = b[0] - x0, dy = b[1] - y0, t0 = 0, t1 = 1;
+    var p = [-dx, dx, -dy, dy], q = [x0 - r.x0, r.x1 - x0, y0 - r.y0, r.y1 - y0];
+    for (var i = 0; i < 4; i++) {
+      if (p[i] === 0) { if (q[i] < 0) return false; continue; }
+      var t = q[i] / p[i];
+      if (p[i] < 0) { if (t > t1) return false; if (t > t0) t0 = t; }
+      else { if (t < t0) return false; if (t < t1) t1 = t; }
+    }
+    return t0 <= t1;
+  }
+  function dotHitsBox(c, rad, r) {
+    var nx = Math.max(r.x0, Math.min(c[0], r.x1)), ny = Math.max(r.y0, Math.min(c[1], r.y1));
+    return (nx - c[0]) * (nx - c[0]) + (ny - c[1]) * (ny - c[1]) < rad * rad;
+  }
+
+  /* ======================================================================== */
+  function mount(host, spec, steps, opts) {
+    opts = opts || {};
+    host.innerHTML = '';
+    host.classList.add('fg-host');
+    if (opts.player) host.classList.add('fg-player');
+    var svg = mk('svg', { class: 'fg-svg', 'aria-hidden': 'true', focusable: 'false' }, host);
+    var layers = {
+      fill: mk('g', { class: 'fg-l-fill' }, svg), line: mk('g', { class: 'fg-l-line' }, svg),
+      dot: mk('g', { class: 'fg-l-dot' }, svg), text: mk('g', { class: 'fg-l-text' }, svg)
+    };
+    var cap = document.createElement('div');
+    cap.className = 'fg-cap';
+    cap.setAttribute('aria-live', 'polite');
+    cap.setAttribute('data-no-glossary', '');   // the glossary must not turn caption words into links
+    host.appendChild(cap);
+
+    var pts = {};
+    Object.keys(spec.points || {}).forEach(function (k) {
+      var p = spec.points[k];
+      pts[k] = Array.isArray(p) ? { at: p } : p;
+    });
+    function P(ref) { return Array.isArray(ref) ? ref : (pts[ref] ? pts[ref].at : [0, 0]); }
+
+    /* parts: one per point, then the named shapes */
+    var parts = {}, names = [];
+    function addPart(name, type, def) { parts[name] = { name: name, type: type, def: def, p: 0, mode: 'off', w: {} }; names.push(name); }
+    Object.keys(pts).forEach(function (k) { addPart(k, 'point', pts[k]); });
+    Object.keys(spec.parts || {}).forEach(function (k) { if (!parts[k]) addPart(k, spec.parts[k].type, spec.parts[k]); });
+
+    function wrap(pr, layer) {
+      if (!pr.w[layer]) pr.w[layer] = mk('g', { class: 'fg-part fg-' + pr.type + (pr.def.style ? ' fg-' + pr.def.style : '') + ' is-off' }, layers[layer]);
+      return pr.w[layer];
+    }
+    names.forEach(function (n) {
+      var pr = parts[n], d = pr.def, e = pr.el = {};
+      switch (pr.type) {
+        case 'point':
+          if (d.dot !== false) e.dot = mk('circle', { class: 'fg-dot', r: 0 }, wrap(pr, 'dot'));
+          break;
+        case 'line':
+          e.path = mk('path', { class: 'fg-stroke' }, wrap(pr, 'line'));
+          if (d.arrow) e.arrow = mk('path', { class: 'fg-head' }, wrap(pr, 'line'));
+          if (d.style === 'ray') e.glow = mk('circle', { class: 'fg-glow', r: 4.5 }, wrap(pr, 'line'));   // light: a bright tip travels along the ray as it draws
+          break;
+        case 'arc':
+          e.path = mk('path', { class: 'fg-stroke' }, wrap(pr, 'line'));
+          if (d.hatch) e.hatch = mk('path', { class: 'fg-hatch' }, wrap(pr, 'line'));
+          break;
+        case 'polygon':
+          e.fill = mk('path', { class: 'fg-fill' }, wrap(pr, 'fill'));
+          e.path = mk('path', { class: 'fg-stroke' }, wrap(pr, 'line'));
+          break;
+        case 'angle':
+          e.fill = mk('path', { class: 'fg-fill' }, wrap(pr, 'fill'));
+          e.path = mk('path', { class: 'fg-stroke' }, wrap(pr, 'line'));
+          break;
+        case 'dim':
+          e.ext = mk('path', { class: 'fg-ext' }, wrap(pr, 'line'));
+          e.path = mk('path', { class: 'fg-stroke' }, wrap(pr, 'line'));
+          e.arrow = mk('path', { class: 'fg-head' }, wrap(pr, 'line'));
+          break;
+      }
+      var text = pr.type === 'point' ? (d.label === false ? '' : (d.label || n)) : (d.label || d.text || '');
+      if (text) {
+        // a length's label sits on its line: a plate behind it hides the line in the gaps between words
+        if (pr.type === 'dim') e.plate = mk('rect', { class: 'fg-plate', rx: 4 }, wrap(pr, 'text'));
+        e.label = mk('text', { class: 'fg-label' + (d.labelClass ? ' ' + d.labelClass : ''), 'text-anchor': 'middle', 'dominant-baseline': 'central' }, wrap(pr, 'text'));
+        svgText(e.label, text);
+      }
+    });
+
+    /* base figure = everything the draw list draws; one state per step */
+    var base = {};
+    (spec.draw || []).forEach(function (st) { (st.parts || []).forEach(function (n) { if (parts[n]) base[n] = 1; }); });
+    function refsOf(pr) {
+      var d = pr.def, out = [];
+      ['from', 'to', 'at', 'center'].forEach(function (k) { if (typeof d[k] === 'string') out.push(d[k]); });
+      (d.points || []).forEach(function (r) { if (typeof r === 'string') out.push(r); });
+      return out;
+    }
+    function stateFor(si) {
+      var f = (si != null && steps[si] && steps[si].figure) || null;
+      var focus = (f && f.focus) || [], keep = ((f && f.keep) || []).slice();
+      focus.forEach(function (n) { if (parts[n]) refsOf(parts[n]).forEach(function (r) { if (base[r] && keep.indexOf(r) < 0) keep.push(r); }); });
+      var dimOthers = focus.length > 0 || keep.length > 0, mode = {};
+      names.forEach(function (n) {
+        mode[n] = focus.indexOf(n) >= 0 ? 'focus' : keep.indexOf(n) >= 0 ? 'on' : base[n] ? (dimOthers ? 'dim' : 'on') : 'off';
+      });
+      return { mode: mode, order: focus, caption: (f && f.caption) || '' };
+    }
+    // which parts can be on screen together: labels only have to avoid what they can be seen with
+    var states = [stateFor(null)];
+    steps.forEach(function (st, i) { if (st && st.figure) states.push(stateFor(i)); });
+    names.forEach(function (n) { parts[n].seen = states.map(function (s) { return s.mode[n] !== 'off'; }); });
+    function together(a, b) {
+      for (var i = 0; i < a.seen.length; i++) if (a.seen[i] && b.seen[i]) return true;
+      return false;
+    }
+
+    /* ---------- layout: figure units -> screen pixels ---------- */
+    var T = null, W = 0, H = 0;
+    // captions sit in the top-left corner: the figure keeps clear of that strip
+    var hasCaptions = (spec.draw || []).some(function (s) { return s.caption; }) ||
+      steps.some(function (s) { return s && s.figure && s.figure.caption; });
+    function geometry(pr) {
+      var d = pr.def, g = pr.g = {}, segs = pr.segs = [];
+      switch (pr.type) {
+        case 'point': g.c = T(P(n0(pr))); break;
+        case 'text': g.c = T(P(d.at)); break;
+        case 'line': g.a = T(P(d.from)); g.b = T(P(d.to)); segs.push([g.a, g.b]); break;
+        case 'arc': {
+          var c = T(P(d.center)), R = d.r * T.s, a0 = d.from * Math.PI / 180, a1 = d.to * Math.PI / 180, list = [];
+          for (var i = 0; i <= 48; i++) { var t = a0 + (a1 - a0) * i / 48; list.push([c[0] + R * Math.cos(t), c[1] - R * Math.sin(t)]); }
+          g.list = list; g.c = c; g.R = R;
+          for (var j = 0; j < list.length - 1; j++) segs.push([list[j], list[j + 1]]);
+          if (d.hatch) {   // the hatching behind the mirror is in the way of labels as well
+            var hs = d.hatch === 'in' ? -1 : 1, outer = list.map(function (q) { var u = unit(c, q); return [q[0] + hs * u[0] * 8, q[1] + hs * u[1] * 8]; });
+            for (var j2 = 0; j2 < outer.length - 1; j2 += 2) segs.push([outer[j2], outer[Math.min(j2 + 2, outer.length - 1)]]);
+          }
+          break;
+        }
+        case 'polygon': {
+          g.list = (d.points || []).map(function (r) { return T(P(r)); });
+          var cx = 0, cy = 0;
+          g.list.forEach(function (q) { cx += q[0]; cy += q[1]; });
+          g.c = [cx / g.list.length, cy / g.list.length];
+          for (var k = 0; k < g.list.length; k++) segs.push([g.list[k], g.list[(k + 1) % g.list.length]]);
+          break;
+        }
+        case 'angle': {
+          var v = T(P(d.at)), ua = unit(v, T(P(d.from))), ub = unit(v, T(P(d.to)));
+          var ta = Math.atan2(ua[1], ua[0]), span = Math.atan2(ub[1], ub[0]) - ta;
+          while (span > Math.PI) span -= 2 * Math.PI;
+          while (span <= -Math.PI) span += 2 * Math.PI;
+          g.v = v; g.ta = ta; g.span = span; g.r = d.r || 22;
+          var steps2 = 16, prev = null;
+          for (var s2 = 0; s2 <= steps2; s2++) {
+            var tt = ta + span * s2 / steps2, q2 = [v[0] + g.r * Math.cos(tt), v[1] + g.r * Math.sin(tt)];
+            if (prev) segs.push([prev, q2]);
+            prev = q2;
+          }
+          break;
+        }
+        case 'dim': {
+          var off = Array.isArray(d.offset) ? d.offset : [0, d.offset || 0];
+          g.a0 = T(P(d.from)); g.b0 = T(P(d.to));
+          g.a = [g.a0[0] + off[0], g.a0[1] + off[1]]; g.b = [g.b0[0] + off[0], g.b0[1] + off[1]];
+          segs.push([g.a, g.b]);
+          break;
+        }
+      }
+    }
+    function n0(pr) { return pr.name; }
+
+    function measure(el, fs) {
+      var bb = null;
+      try { bb = el.getBBox(); } catch (e) { bb = null; }
+      var txt = el.textContent || '';
+      if (!bb || bb.width < 0.5) bb = { width: txt.length * fs * 0.62, height: fs * 1.15 };
+      return { w: bb.width + 3, h: Math.max(bb.height, fs) + 1 };
+    }
+
+    function candidates(pr, w, h) {
+      var d = pr.def, g = pr.g, out = [];
+      function push(c) { out.push(c); }
+      if (pr.type === 'point') {
+        var first = RING.indexOf(d.side || 's'), gap = 6;
+        if (first < 0) first = 6;
+        [0, 1, 2].forEach(function (lvl) {
+          var order = [first];
+          for (var k = 1; k <= 4; k++) { order.push((first + k) % 8); order.push((first - k + 8) % 8); }
+          order.forEach(function (ix) {
+            var dv = DIRS[RING[ix]], gg = gap + lvl * 5;
+            push([g.c[0] + dv[0] * (w / 2 + gg), g.c[1] + dv[1] * (h / 2 + gg)]);
+          });
+        });
+      } else if (pr.type === 'angle') {
+        var mid = g.ta + g.span / 2, ux = Math.cos(mid), uy = Math.sin(mid), ext = Math.abs(ux) * w / 2 + Math.abs(uy) * h / 2;
+        // along the bisector, just outside the arc first; every step further out costs more (see placeLabels)
+        [0, -0.2, 0.2].forEach(function (tilt) {
+          for (var k2 = 0; k2 < 9; k2++) {
+            var m2 = mid + tilt * g.span, dd = g.r + 3 + ext + k2 * 4;
+            out.push({ c: [g.v[0] + Math.cos(m2) * dd, g.v[1] + Math.sin(m2) * dd], pen: k2 * k2 * 7 + (tilt ? 40 : 0) });
+          }
+        });
+      } else if (pr.type === 'line' || pr.type === 'dim') {
+        var u = unit(g.a, g.b), nx = -u[1], ny = u[0], e2 = Math.abs(nx) * w / 2 + Math.abs(ny) * h / 2 + 4;
+        var side = d.labelSide === 'left' ? -1 : 1;
+        [0.5, 0.4, 0.6, 0.3, 0.7, 0.2, 0.8].forEach(function (t) {
+          var q = lerp(g.a, g.b, t);
+          if (pr.type === 'dim') push(q);
+          push([q[0] + side * nx * e2, q[1] + side * ny * e2]);
+          push([q[0] - side * nx * e2, q[1] - side * ny * e2]);
+        });
+      } else if (pr.type === 'polygon' || pr.type === 'text' || pr.type === 'arc') {
+        var c = pr.type === 'arc' ? g.list[0] : (g.c || [0, 0]);
+        if (d.labelAt) c = T(d.labelAt);
+        push(c);
+        [6, 12, 18].forEach(function (r) { RING.forEach(function (k) { var dv = DIRS[k]; push([c[0] + dv[0] * r, c[1] + dv[1] * r]); }); });
+      }
+      return out;
+    }
+
+    function placeLabels() {
+      var fs = parseFloat(getComputedStyle(svg).fontSize) || 14;
+      var list = names.map(function (n) { return parts[n]; }).filter(function (pr) { return pr.el.label; });
+      list.forEach(function (pr) { var m = measure(pr.el.label, fs); pr.lw = m.w; pr.lh = m.h; });
+      list.sort(function (a, b) { return (RANK[a.type] - RANK[b.type]) || (names.indexOf(a.name) - names.indexOf(b.name)); });
+      var placed = [];
+      list.forEach(function (pr) {
+        var w = pr.lw, h = pr.lh, best = null, bc = Infinity;
+        if (pr.def.labelOffset) {
+          var anc = pr.g.c || pr.g.v || lerp(pr.g.a, pr.g.b, 0.5);
+          best = [anc[0] + pr.def.labelOffset[0], anc[1] + pr.def.labelOffset[1]];
+        } else candidates(pr, w, h).forEach(function (c, i) {
+          var pen = i * 4;
+          if (!Array.isArray(c)) { pen = c.pen; c = c.c; }
+          var box = { x0: c[0] - w / 2, y0: c[1] - h / 2, x1: c[0] + w / 2, y1: c[1] + h / 2 };
+          var cost = pen;
+          if (box.x0 < 2 || box.y0 < 2 || box.x1 > W - 2 || box.y1 > H - 2) cost += 6000;
+          if (opts.avoidTop && box.y0 < opts.avoidTop - 2) cost += 3000;   // the caption strip
+          placed.forEach(function (q) {
+            if (!together(pr, q)) return;
+            var ov = overlap(box, q.box);
+            if (ov > 0) cost += 4000 + ov * 30;
+          });
+          names.forEach(function (qn) {
+            var q = parts[qn];
+            if (!together(pr, q)) return;
+            if (q.type === 'point') {
+              if (q.el.dot && dotHitsBox(q.g.c, (q.def.size || 3.6) + 1.5, box)) cost += 2500;
+              return;
+            }
+            if (q === pr && pr.type === 'dim') return;   // a length's label sits on its own line, which breaks round it
+            var hits = 0, grown = { x0: box.x0 - 1.5, y0: box.y0 - 1.5, x1: box.x1 + 1.5, y1: box.y1 + 1.5 };
+            (q.segs || []).forEach(function (sg) { if (segHitsBox(sg[0], sg[1], grown)) hits++; });
+            if (hits) cost += (q.type === 'polygon' ? 150 : 500) + hits * 20;
+          });
+          if (cost < bc) { bc = cost; best = c; }
+        });
+        pr.box = { x0: best[0] - w / 2, y0: best[1] - h / 2, x1: best[0] + w / 2, y1: best[1] + h / 2 };
+        pr.el.label.setAttribute('x', f2(best[0]));
+        pr.el.label.setAttribute('y', f2(best[1]));
+        if (pr.el.plate) {
+          pr.el.plate.setAttribute('x', f2(pr.box.x0 - 2)); pr.el.plate.setAttribute('y', f2(pr.box.y0));
+          pr.el.plate.setAttribute('width', f2(w + 4)); pr.el.plate.setAttribute('height', f2(h));
+        }
+        placed.push(pr);
+      });
+    }
+
+    function layout() {
+      W = host.clientWidth; H = host.clientHeight;
+      if (W < 40 || H < 40) return false;
+      svg.setAttribute('width', W); svg.setAttribute('height', H); svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+      var cs = getComputedStyle(host), pad = parseFloat(cs.getPropertyValue('--fg-pad')) || 10;
+      var padTop = hasCaptions ? (parseFloat(cs.getPropertyValue('--fg-pad-top')) || pad) : pad;
+      var b = spec.box || [0, 0, 100, 100], bw = b[2] - b[0], bh = b[3] - b[1];
+      var s = Math.min((W - 2 * pad) / bw, (H - pad - padTop) / bh);
+      var ox = (W - s * bw) / 2 - s * b[0], oy = padTop + ((H - pad - padTop) - s * bh) / 2 + s * b[3];
+      T = function (p) { return [ox + s * p[0], oy - s * p[1]]; };
+      T.s = s;
+      opts.avoidTop = hasCaptions ? padTop : 0;
+      names.forEach(function (n) { geometry(parts[n]); });
+      placeLabels();
+      names.forEach(function (n) { render(parts[n]); });
+      return true;
+    }
+
+    /* ---------- draw one part at progress p (0 = not drawn, 1 = complete) ---------- */
+    function head(tip, u, size) {
+      var nx = -u[1], ny = u[0], bx = tip[0] - u[0] * size, by = tip[1] - u[1] * size;
+      return 'M' + xy(tip) + 'L' + xy([bx + nx * size * 0.5, by + ny * size * 0.5]) + 'L' + xy([bx - nx * size * 0.5, by - ny * size * 0.5]) + 'Z';
+    }
+    function polyD(list, p, closed) {
+      if (!list.length || p <= 0) return '';
+      var seg = [], total = 0, i;
+      var L = closed ? list.concat([list[0]]) : list;
+      for (i = 0; i < L.length - 1; i++) { var l = Math.hypot(L[i + 1][0] - L[i][0], L[i + 1][1] - L[i][1]); seg.push(l); total += l; }
+      var left = total * p, d = 'M' + xy(L[0]);
+      for (i = 0; i < seg.length; i++) {
+        if (left >= seg[i]) { d += 'L' + xy(L[i + 1]); left -= seg[i]; }
+        else { d += 'L' + xy(lerp(L[i], L[i + 1], seg[i] ? left / seg[i] : 0)); break; }
+      }
+      if (closed && p >= 1) d += 'Z';
+      return d;
+    }
+    function render(pr) {
+      if (!pr.g) return;
+      var e = pr.el, g = pr.g, d = pr.def, p = pr.p, labelIn = clamp01((p - 0.62) / 0.38);
+      switch (pr.type) {
+        case 'point':
+          if (e.dot) { e.dot.setAttribute('cx', f2(g.c[0])); e.dot.setAttribute('cy', f2(g.c[1])); var k = clamp01(p * 1.4); e.dot.setAttribute('r', f2((d.size || 3.6) * (k < 1 ? k * (1.25 - 0.25 * k) : 1))); }
+          labelIn = clamp01((p - 0.3) / 0.7);
+          break;
+        case 'line': {
+          var end = lerp(g.a, g.b, p);
+          e.path.setAttribute('d', p > 0 ? 'M' + xy(g.a) + 'L' + xy(end) : '');
+          if (e.glow) {
+            e.glow.setAttribute('cx', f2(end[0])); e.glow.setAttribute('cy', f2(end[1]));
+            e.glow.style.opacity = p > 0 && p < 1 ? Math.min(1, p / 0.05, (1 - p) / 0.06) : 0;
+          }
+          if (e.arrow) {
+            var at = typeof d.arrow === 'number' ? d.arrow : 0.56;
+            e.arrow.setAttribute('d', head(lerp(g.a, g.b, at), unit(g.a, g.b), 8));
+            e.arrow.style.opacity = clamp01((p - at) / 0.08 + 1);   // shows once the line has reached it
+          }
+          break;
+        }
+        case 'arc':
+          e.path.setAttribute('d', polyD(g.list, p, false));
+          if (e.hatch) {
+            var hd = '', n = 13, dir = d.hatch === 'in' ? -1 : 1;
+            for (var i = 1; i < n; i++) {
+              var q = g.list[Math.round(i * (g.list.length - 1) / n)], u = unit(g.c, q);
+              var tip = [q[0] + dir * u[0] * 7, q[1] + dir * u[1] * 7];
+              hd += 'M' + xy(q) + 'L' + xy([tip[0] + u[1] * 3, tip[1] - u[0] * 3]);
+            }
+            e.hatch.setAttribute('d', hd);
+            e.hatch.style.opacity = clamp01((p - 0.5) / 0.5);
+          }
+          break;
+        case 'polygon':
+          e.path.setAttribute('d', polyD(g.list, clamp01(p / 0.78), true));
+          e.fill.setAttribute('d', 'M' + g.list.map(xy).join('L') + 'Z');
+          e.fill.style.opacity = clamp01((p - 0.55) / 0.45);
+          labelIn = clamp01((p - 0.7) / 0.3);
+          break;
+        case 'angle': {
+          var sw = g.span * p, a0 = [g.v[0] + g.r * Math.cos(g.ta), g.v[1] + g.r * Math.sin(g.ta)];
+          var a1 = [g.v[0] + g.r * Math.cos(g.ta + sw), g.v[1] + g.r * Math.sin(g.ta + sw)];
+          var flag = Math.abs(sw) > Math.PI ? 1 : 0, sweep = sw > 0 ? 1 : 0;
+          var arcD = 'M' + xy(a0) + 'A' + f2(g.r) + ' ' + f2(g.r) + ' 0 ' + flag + ' ' + sweep + ' ' + xy(a1);
+          e.path.setAttribute('d', p > 0 ? arcD : '');
+          e.fill.setAttribute('d', p > 0 ? 'M' + xy(g.v) + 'L' + xy(a0) + arcD.replace(/^M[^A]*/, '') + 'Z' : '');
+          break;
+        }
+        case 'dim': {
+          var tipD = lerp(g.a, g.b, p);
+          e.path.setAttribute('d', p > 0 ? 'M' + xy(g.a) + 'L' + xy(tipD) : '');
+          // short end ticks across the length line (long extension lines would cut through the point labels)
+          var ud = unit(g.a, g.b), tx = -ud[1] * 5, ty = ud[0] * 5, extD = '';
+          [g.a, g.b].forEach(function (q, idx) {
+            if (idx === 1 && p < 0.98) return;
+            extD += 'M' + xy([q[0] - tx, q[1] - ty]) + 'L' + xy([q[0] + tx, q[1] + ty]);
+          });
+          e.ext.setAttribute('d', p > 0 ? extD : '');
+          e.arrow.setAttribute('d', p > 0.05 ? head(tipD, unit(g.a, g.b), 7) : '');
+          if (d.arrow === 'both' && p >= 1) e.arrow.setAttribute('d', head(g.b, unit(g.a, g.b), 7) + head(g.a, unit(g.b, g.a), 7));
+          break;
+        }
+      }
+      if (e.label) e.label.style.opacity = labelIn;
+      if (e.plate) e.plate.style.opacity = labelIn;
+    }
+
+    /* ---------- smooth progress tweens ---------- */
+    var tw = [], raf = 0;
+    function frame(now) {
+      raf = 0;
+      tw = tw.filter(function (t) {
+        if (now < t.t0) return true;
+        var k = clamp01((now - t.t0) / t.dur);
+        t.pr.p = t.from + (t.to - t.from) * ease(k);
+        render(t.pr);
+        return k < 1;
+      });
+      if (tw.length) raf = requestAnimationFrame(frame);
+    }
+    function tween(pr, to, dur, delay) {
+      tw = tw.filter(function (t) { return t.pr !== pr; });
+      if (REDUCE || !dur) { pr.p = to; render(pr); return; }
+      tw.push({ pr: pr, from: pr.p, to: to, t0: performance.now() + (delay || 0), dur: dur });
+      if (!raf) raf = requestAnimationFrame(frame);
+    }
+    function stopTweens(finish) {
+      tw.forEach(function (t) { if (finish) { t.pr.p = t.to; render(t.pr); } });
+      tw = [];
+      if (raf) { cancelAnimationFrame(raf); raf = 0; }
+    }
+
+    function setMode(pr, m) {
+      pr.mode = m;
+      Object.keys(pr.w).forEach(function (k) {
+        var c = pr.w[k].classList;
+        c.toggle('is-off', m === 'off'); c.toggle('is-on', m === 'on'); c.toggle('is-dim', m === 'dim'); c.toggle('is-focus', m === 'focus');
+      });
+    }
+    function instantly(fn) {
+      host.classList.add('fg-instant');
+      fn();
+      void host.offsetWidth;
+      host.classList.remove('fg-instant');
+    }
+    var capT = null;
+    function setCaption(text, instant) {
+      clearTimeout(capT);
+      if (!text) { cap.classList.remove('is-on'); return; }
+      var html = htmlText(text);
+      if (cap.classList.contains('is-on') && cap._html === html) return;
+      cap._html = html;
+      if (instant || REDUCE || !cap.classList.contains('is-on')) { cap.innerHTML = html; cap.classList.add('is-on'); return; }
+      cap.classList.add('is-swap');
+      capT = setTimeout(function () { cap.innerHTML = html; cap.classList.remove('is-swap'); }, 180);
+    }
+
+    /* ---------- apply a step: highlight, draw in what is new, dim the rest ---------- */
+    var cur = null, introOn = false, introTimers = [], pending = null, introEnd = 0;
+    function apply(si, animate) {
+      var st = stateFor(si);
+      cur = si;
+      var n = 0;
+      var run = function () {
+        names.forEach(function (name) {
+          var pr = parts[name], m = st.mode[name], was = pr.mode;
+          if (m === was) return;
+          if (was === 'off') {
+            var k = st.order.indexOf(name);
+            if (animate) { pr.p = 0; render(pr); tween(pr, 1, DRAW_MS[pr.type], 120 + (k >= 0 ? k : n++) * 240); }
+            else { stopTweensFor(pr); pr.p = 1; render(pr); }
+          }
+          setMode(pr, m);
+        });
+      };
+      if (animate) run(); else instantly(run);
+      setCaption(st.caption, !animate);
+    }
+    function stopTweensFor(pr) { tw = tw.filter(function (t) { return t.pr !== pr; }); }
+
+    function clearIntro() { introTimers.forEach(clearTimeout); introTimers = []; }
+    function intro() {
+      if (!T && !layout()) { pending = cur; return; }
+      clearIntro(); stopTweens(false);
+      introOn = true; pending = null;
+      instantly(function () { names.forEach(function (n) { setMode(parts[n], 'off'); parts[n].p = 0; render(parts[n]); }); });
+      setCaption('', true);
+      if (REDUCE) { finishIntro(); return; }
+      var t = 200;
+      (spec.draw || []).forEach(function (stage) {
+        var list = (stage.parts || []).filter(function (n) { return parts[n]; }), longest = 0;
+        introTimers.push(setTimeout(function () {
+          list.forEach(function (n, j) {
+            var pr = parts[n];
+            setMode(pr, 'on'); pr.p = 0; render(pr);
+            tween(pr, 1, DRAW_MS[pr.type], j * 140);
+          });
+          if (stage.caption) setCaption(stage.caption);
+        }, t));
+        list.forEach(function (n, j) { longest = Math.max(longest, DRAW_MS[parts[n].type] + j * 140); });
+        t += Math.max(560, longest * 0.8) + (stage.caption ? 240 : 0);
+      });
+      introTimers.push(setTimeout(function () { finishIntro(); }, t + 380));
+      introEnd = performance.now() + t + 380;
+    }
+    function finishIntro(fast) {
+      clearIntro();
+      var was = introOn;
+      introOn = false;
+      names.forEach(function (n) {
+        var pr = parts[n];
+        if (!base[n]) return;
+        if (pr.mode === 'off') setMode(pr, 'on');
+        if (pr.p < 1) tween(pr, 1, fast ? 220 : DRAW_MS[pr.type]);
+      });
+      if (!was) return;
+      if (pending != null) { var s = pending; pending = null; apply(s, true); }
+      else if (opts.player) apply(cur, true);
+      else setCaption('');
+    }
+
+    /* the derivation moves to step si. The first call after the intro waits for the intro to end;
+       a later call (Next pressed during the intro) finishes the intro at once. */
+    var firstWait = false;
+    function step(si, instant) {
+      if (!T && !layout()) { cur = si; pending = si; return; }
+      if (instant) { clearIntro(); introOn = false; stopTweens(true); apply(si, false); return; }
+      if (introOn) {
+        if (!firstWait || pending === si) { firstWait = true; pending = si; return; }
+        pending = si;
+        finishIntro(true);
+        return;
+      }
+      if (si === cur) return;
+      apply(si, true);
+    }
+
+    var api = {
+      layout: function () {
+        var was = !!T;
+        if (!layout()) return;
+        if (!was) {
+          if (pending != null) { var s = pending; pending = null; apply(s, false); }
+          else if (!opts.player) { if (opts.autoIntro) watchIntro(); else apply(null, false); }
+        }
+      },
+      intro: function () { firstWait = false; intro(); },
+      introLeft: function () { return introOn ? Math.max(0, introEnd - performance.now()) : 0; },   // ms of the drawing intro still to run
+      step: step,
+      isFigure: true
+    };
+
+    /* the front figure draws itself the first time it comes into view */
+    var watched = false;
+    function watchIntro() {
+      if (watched) return;
+      watched = true;
+      if (!('IntersectionObserver' in window)) { apply(null, false); return; }
+      var io = new IntersectionObserver(function (en) {
+        en.forEach(function (x) {
+          if (!x.isIntersecting || x.intersectionRatio < 0.55) return;
+          io.disconnect();
+          intro();
+        });
+      }, { threshold: [0, 0.55, 0.8] });
+      io.observe(host);
+    }
+
+    api.layout();
+    return api;
+  }
+
+  SM.Figure = { mount: mount, has: function (diag) { return !!(diag && diag.figure && diag.figure.parts); } };
+})();
+</script><script>var FIGS = [{"figure": {"box": [-14, -22, 108, 80], "points": {"O": {"at": [0, 0], "side": "sw"}, "P": {"at": [58.97, 19.16], "side": "se"}, "R": {"at": [68.53, 64.15], "side": "n"}, "Rx": {"at": [68.53, 0], "side": "s", "label": false, "size": 2.5}, "Ry": {"at": [0, 64.15], "side": "w", "label": false, "size": 2.5}}, "parts": {"xax": {"type": "line", "from": [-10, 0], "to": [104, 0], "style": "axis", "arrow": true}, "yax": {"type": "line", "from": [0, -10], "to": [0, 76], "style": "axis", "arrow": true}, "OP": {"type": "line", "from": "O", "to": "P", "arrow": true, "label": "a_1"}, "PR": {"type": "line", "from": "P", "to": "R", "arrow": true, "label": "a_2"}, "OR": {"type": "line", "from": "O", "to": "R", "style": "ray", "arrow": true, "label": "a"}, "th1": {"type": "angle", "at": "O", "from": [30, 0], "to": "P", "r": 34, "label": "θ_1"}, "hP": {"type": "line", "from": "P", "to": [90.97, 19.16], "style": "guide"}, "th2": {"type": "angle", "at": "P", "from": [88.97, 19.16], "to": "R", "r": 22, "label": "θ_2"}, "th": {"type": "angle", "at": "O", "from": [30, 0], "to": "R", "r": 22, "label": "θ"}, "ext": {"type": "line", "from": "P", "to": [85.51, 27.78], "style": "guide"}, "dl": {"type": "angle", "at": "P", "from": [85.51, 27.78], "to": "R", "r": 16, "label": "θ_2−θ_1"}, "tri": {"type": "polygon", "points": ["O", "P", "R"]}, "gx": {"type": "line", "from": "R", "to": "Rx", "style": "guide"}, "gy": {"type": "line", "from": "R", "to": "Ry", "style": "guide"}, "ax": {"type": "dim", "from": "O", "to": "Rx", "offset": -14, "arrow": "both", "label": "a cos θ"}, "ay": {"type": "dim", "from": "O", "to": "Ry", "offset": 14, "arrow": "both", "label": "a sin θ"}}, "draw": [{"parts": ["xax", "yax", "O"], "caption": "Phasor plane"}, {"parts": ["OP", "P", "th1"], "caption": "First vibration: phasor a_1 at θ_1"}, {"parts": ["hP", "PR", "R", "th2"], "caption": "Second: a_2 at θ_2, tip to tail"}, {"parts": ["OR", "th"], "caption": "Resultant OR = a at θ"}]}, "steps": [{"figure": {"focus": ["OP", "PR"], "caption": "Two vibrations, same ω", "keep": ["xax"]}}, {"figure": {"focus": ["OP", "PR", "th1", "th2"], "caption": "Split each into cos ωt and sin ωt parts", "keep": ["xax", "hP"]}}, {"figure": {"focus": ["OR", "th"], "caption": "Resultant a at phase θ", "keep": ["xax"]}}, {"figure": {"focus": ["ax", "gx", "OR"], "caption": "Horizontal: a cos θ = a_1cos θ_1 + a_2cos θ_2", "keep": ["OP", "PR"]}}, {"figure": {"focus": ["ay", "gy", "OR"], "caption": "Vertical: a sin θ = a_1sin θ_1 + a_2sin θ_2", "keep": ["OP", "PR"]}}, {"figure": {"focus": ["ax", "ay", "OR"], "caption": "Square and add the components", "keep": ["gx", "gy"]}}, {"figure": {"focus": ["OP", "PR", "OR"], "caption": "Expand: cos² + sin² = 1"}}, {"figure": {"focus": ["tri", "ext", "dl", "OP", "PR", "OR"], "caption": "Angle between phasors: θ_2 − θ_1 (cosine law)"}}, {"figure": {"focus": ["OR"], "caption": "a² = a_1² + a_2² + 2a_1a_2cos(θ_1−θ_2)", "keep": ["OP", "PR", "dl"]}}]}, {"figure": {"box": [-62, -50, 68, 52], "points": {"S₁": {"at": [30.0, 0], "side": "s"}, "S₂": {"at": [-30.0, 0], "side": "s"}, "O": {"at": [0, 0], "side": "sw"}, "P": {"at": [19.42, 21.36], "side": "ne"}, "N": {"at": [19.42, 0], "side": "s", "size": 2.5}}, "parts": {"xax": {"type": "line", "from": [-62, 0], "to": [66, 0], "style": "axis", "arrow": true, "label": "x"}, "zax": {"type": "line", "from": [0, -46], "to": [0, 50], "style": "normal"}, "S1P": {"type": "line", "from": "S₁", "to": "P", "style": "ray", "label": "S₁P"}, "S2P": {"type": "line", "from": "S₂", "to": "P", "style": "ray", "label": "S₂P"}, "foot": {"type": "line", "from": "P", "to": "N", "style": "guide"}, "tri1": {"type": "polygon", "points": ["S₁", "N", "P"]}, "tri2": {"type": "polygon", "points": ["S₂", "N", "P"]}, "dd": {"type": "dim", "from": "S₂", "to": "S₁", "offset": -16, "arrow": "both", "label": "d"}, "zz": {"type": "dim", "from": "N", "to": "P", "offset": -12, "arrow": "both", "label": "z"}, "h0": {"type": "line", "from": [30.87, -46.74], "to": [27.16, -39.22], "style": "mirror"}, "h1": {"type": "line", "from": [27.16, -39.22], "to": [24.06, -32.58], "style": "mirror"}, "h2": {"type": "line", "from": [24.06, -32.58], "to": [21.5, -26.67], "style": "mirror"}, "h3": {"type": "line", "from": [21.5, -26.67], "to": [19.42, -21.36], "style": "mirror"}, "h4": {"type": "line", "from": [19.42, -21.36], "to": [17.78, -16.54], "style": "mirror"}, "h5": {"type": "line", "from": [17.78, -16.54], "to": [16.54, -12.09], "style": "mirror"}, "h6": {"type": "line", "from": [16.54, -12.09], "to": [15.68, -7.91], "style": "mirror"}, "h7": {"type": "line", "from": [15.68, -7.91], "to": [15.17, -3.91], "style": "mirror"}, "h8": {"type": "line", "from": [15.17, -3.91], "to": [15.0, -0.0], "style": "mirror"}, "h9": {"type": "line", "from": [15.0, -0.0], "to": [15.17, 3.91], "style": "mirror"}, "h10": {"type": "line", "from": [15.17, 3.91], "to": [15.68, 7.91], "style": "mirror"}, "h11": {"type": "line", "from": [15.68, 7.91], "to": [16.54, 12.09], "style": "mirror"}, "h12": {"type": "line", "from": [16.54, 12.09], "to": [17.78, 16.54], "style": "mirror"}, "h13": {"type": "line", "from": [17.78, 16.54], "to": [19.42, 21.36], "style": "mirror"}, "h14": {"type": "line", "from": [19.42, 21.36], "to": [21.5, 26.67], "style": "mirror"}, "h15": {"type": "line", "from": [21.5, 26.67], "to": [24.06, 32.58], "style": "mirror"}, "h16": {"type": "line", "from": [24.06, 32.58], "to": [27.16, 39.22], "style": "mirror"}, "h17": {"type": "line", "from": [27.16, 39.22], "to": [30.87, 46.74], "style": "mirror"}}, "draw": [{"parts": ["xax", "zax", "O"], "caption": "Axes through the midpoint O"}, {"parts": ["S₁", "S₂", "dd"], "caption": "Coherent sources S₁, S₂ a distance d apart"}, {"parts": ["P", "S1P", "S2P"], "caption": "Point P(x, z): path difference S₂P − S₁P"}, {"parts": ["h0", "h1", "h2", "h3", "h4", "h5", "h6", "h7", "h8", "h9", "h10", "h11", "h12", "h13", "h14", "h15", "h16", "h17"], "caption": "All points with the same Δ: a hyperbola"}]}, "steps": [{"figure": {"focus": ["S1P", "S2P"], "caption": "Δ = S₂P − S₁P fixed", "keep": ["P"]}}, {"figure": {"focus": ["tri1", "tri2", "foot", "zz"], "caption": "Pythagoras: S₁P² = (x − d/2)² + z²", "keep": ["S1P", "S2P"]}}, {"figure": {"focus": ["S2P"], "caption": "Isolate the root S₂P", "keep": ["S1P"]}}, {"figure": {"focus": ["S2P", "S1P"], "caption": "Square both sides"}}, {"figure": {"focus": ["S1P"], "caption": "One root left: S₁P", "keep": ["S2P"]}}, {"figure": {"focus": ["S1P", "S2P"], "caption": "Square again"}}, {"figure": {"focus": ["h0", "h1", "h2", "h3", "h4", "h5", "h6", "h7", "h8", "h9", "h10", "h11", "h12", "h13", "h14", "h15", "h16", "h17"], "caption": "Collect x² and z²", "keep": ["S₁", "S₂"]}}, {"figure": {"focus": ["h0", "h1", "h2", "h3", "h4", "h5", "h6", "h7", "h8", "h9", "h10", "h11", "h12", "h13", "h14", "h15", "h16", "h17"], "caption": "Hyperbola: semi-axis Δ/2, foci S₁, S₂", "keep": ["S₁", "S₂", "dd"]}}]}, {"figure": {"box": [-72, -100, 292, 100], "points": {"S": {"at": [-58, 0], "side": "w"}, "S₁": {"at": [0, 25], "side": "nw"}, "S₂": {"at": [0, -25], "side": "sw"}, "O": {"at": [200, 0], "side": "e"}, "P": {"at": [200, 56], "side": "e"}, "N₁": {"at": [200, 25], "side": "e", "size": 2.8}, "N₂": {"at": [200, -25], "side": "e", "size": 2.8}, "P′": {"at": [200, 84], "side": "e", "size": 2.8}, "L": {"at": [200, 99], "side": "w", "dot": false}, "L′": {"at": [200, -99], "side": "w", "dot": false}}, "parts": {"barTop": {"type": "line", "from": [0, 96], "to": [0, 31], "style": "mirror"}, "barMid": {"type": "line", "from": [0, 19], "to": [0, -19], "style": "mirror"}, "barBot": {"type": "line", "from": [0, -31], "to": [0, -96], "style": "mirror"}, "screen": {"type": "line", "from": "L", "to": "L′", "style": "mirror"}, "SS1": {"type": "line", "from": "S", "to": "S₁", "style": "ray", "arrow": true}, "SS2": {"type": "line", "from": "S", "to": "S₂", "style": "ray", "arrow": true}, "w1a": {"type": "arc", "center": "S₁", "r": 30, "from": 62, "to": -62, "style": "normal"}, "w1b": {"type": "arc", "center": "S₁", "r": 60, "from": 55, "to": -55, "style": "normal"}, "w2a": {"type": "arc", "center": "S₂", "r": 30, "from": 62, "to": -62, "style": "normal"}, "w2b": {"type": "arc", "center": "S₂", "r": 60, "from": 55, "to": -55, "style": "normal"}, "S1P": {"type": "line", "from": "S₁", "to": "P", "style": "ray", "arrow": 0.62}, "S2P": {"type": "line", "from": "S₂", "to": "P", "style": "ray", "arrow": 0.62}, "axis": {"type": "line", "from": [0, 0], "to": "O", "style": "guide"}, "Ddim": {"type": "dim", "from": [0, -86], "to": [200, -86], "arrow": "both", "label": "D"}, "ddim": {"type": "dim", "from": "S₂", "to": "S₁", "offset": [-16, 0], "arrow": "both", "label": "d"}, "xdim": {"type": "dim", "from": "O", "to": "P", "offset": [-18, 0], "arrow": "both", "label": "x_n"}, "S1N1": {"type": "line", "from": "S₁", "to": "N₁", "style": "guide", "label": "D"}, "S2N2": {"type": "line", "from": "S₂", "to": "N₂", "style": "guide", "label": "D"}, "N1P": {"type": "dim", "from": "N₁", "to": "P", "offset": [36, 0], "arrow": "both", "label": "x_n − d/2"}, "N2P": {"type": "dim", "from": "N₂", "to": "P", "offset": [66, 0], "arrow": "both", "label": "x_n + d/2"}, "tri1": {"type": "polygon", "points": ["S₁", "N₁", "P"]}, "tri2": {"type": "polygon", "points": ["S₂", "N₂", "P"]}, "right1": {"type": "polygon", "points": [[200, 25], [193, 25], [193, 32], [200, 32]]}, "right2": {"type": "polygon", "points": [[200, -25], [193, -25], [193, -18], [200, -18]]}, "bdim": {"type": "dim", "from": "P", "to": "P′", "offset": [-18, 0], "arrow": "both", "label": "β"}}, "draw": [{"parts": ["S"], "caption": "Monochromatic point source S"}, {"parts": ["barTop", "barMid", "barBot", "S₁", "S₂"], "caption": "Screen with two pinholes S_1 and S_2"}, {"parts": ["screen", "L", "L′", "O"], "caption": "Observation screen LL′, O opposite the midpoint"}, {"parts": ["SS1", "SS2"], "caption": "Light from S reaches both pinholes in phase"}, {"parts": ["w1a", "w2a", "w1b", "w2b"], "caption": "Each pinhole sends out spherical waves"}, {"parts": ["S1P", "S2P", "P"], "caption": "The two waves meet at a point P on the screen"}, {"parts": ["axis", "ddim", "Ddim", "xdim"], "caption": "Spacing d, screen distance D, height x_n of P"}]}, "steps": [{"figure": {"focus": ["tri1", "right1", "S1N1", "N1P", "S1P"], "keep": ["S₁", "N₁", "P", "O"], "caption": "Right triangle S_1N_1P: legs D and x_n − d/2"}}, {"figure": {"focus": ["tri2", "right2", "S2N2", "N2P", "S2P"], "keep": ["S₂", "N₂", "P", "O"], "caption": "Right triangle S_2N_2P: legs D and x_n + d/2"}}, {"figure": {"focus": ["tri1", "tri2", "S1P", "S2P"], "keep": ["S₁", "S₂", "P"], "caption": "Both triangles share the leg D"}}, {"figure": {"focus": ["N1P", "N2P", "ddim"], "keep": ["S1P", "S2P", "P"], "caption": "D² cancels: only x_n and d survive"}}, {"figure": {"focus": ["S1P", "S2P"], "keep": ["P", "S₁", "S₂"], "caption": "Difference of squares: (S_2P − S_1P)(S_2P + S_1P)"}}, {"figure": {"focus": ["S1P", "S2P"], "keep": ["P", "S₁", "S₂"], "caption": "Path difference S_2P − S_1P"}}, {"figure": {"focus": ["S1P", "S2P", "Ddim"], "keep": ["P", "S₁", "S₂"], "caption": "D ≫ d, x_n: S_1P ≈ S_2P ≈ D"}}, {"figure": {"focus": ["P", "S1P", "S2P"], "keep": ["xdim", "ddim", "Ddim"], "caption": "Bright at P: path difference = nλ"}}, {"figure": {"focus": ["xdim", "P"], "keep": ["Ddim", "ddim", "O"], "caption": "Position of the n-th bright fringe"}}, {"figure": {"focus": ["P", "P′", "bdim"], "keep": ["xdim", "O"], "caption": "Next bright fringe P′ at x_{n+1}"}}, {"figure": {"focus": ["bdim", "P", "P′"], "keep": ["Ddim", "ddim"], "caption": "Fringe width β = λD/d"}}]}, {"figure": {"box": [-24, -84, 282, 58], "points": {"S": {"at": [0, 0], "side": "w"}, "S₁": {"at": [0, 28], "side": "w"}, "S₂": {"at": [0, -28], "side": "w"}, "Q": {"at": [60, 14], "side": "n", "size": 2.8}, "Q′": {"at": [60, -14], "label": false, "size": 2.8}, "A": {"at": [60, 50], "label": false, "dot": false}, "Ab": {"at": [60, -50], "label": false, "dot": false}, "V": {"at": [70, 0], "label": false, "dot": false}, "Qf": {"at": [93.11, 21.73], "label": false, "dot": false}, "Qo": {"at": [93.11, 6.27], "label": false, "dot": false}, "C": {"at": [260, 44], "side": "e", "dot": false}, "O₁": {"at": [110, 0], "label": false, "size": 2.6}, "O₂": {"at": [150, 0], "label": false, "size": 2.6}, "L₁": {"at": [110, 40], "side": "n", "dot": false}, "L₂": {"at": [150, 40], "side": "n", "dot": false}, "I₁": {"at": [260, -38.18], "label": false, "size": 2.8}, "I₁′": {"at": [260, 38.18], "label": false, "size": 2.8}, "I₂": {"at": [260, -20.53], "label": false, "size": 2.8}, "I₂′": {"at": [260, 20.53], "label": false, "size": 2.8}}, "parts": {"prism": {"type": "polygon", "points": ["A", "V", "Ab"], "style": "glass"}, "alpha": {"type": "angle", "at": "A", "from": "Ab", "to": "V", "r": 26, "label": "α"}, "screen": {"type": "line", "from": [260, 46], "to": [260, -46], "style": "axis"}, "SQ": {"type": "line", "from": "S", "to": "Q", "style": "ray", "arrow": true}, "Qout": {"type": "line", "from": "Q", "to": [260, -32.67], "style": "ray", "arrow": 0.4}, "SQ2": {"type": "line", "from": "S", "to": "Q′", "style": "ray", "arrow": true}, "Q2out": {"type": "line", "from": "Q′", "to": [260, 32.67], "style": "ray", "arrow": 0.4}, "QS1": {"type": "line", "from": "Q", "to": "S₁", "style": "guide"}, "Q2S2": {"type": "line", "from": "Q′", "to": "S₂", "style": "guide"}, "Qext": {"type": "line", "from": "Q", "to": "Qf", "style": "guide"}, "delta": {"type": "angle", "at": "Q", "from": "Qf", "to": "Qo", "r": 24, "label": "δ"}, "triSQS1": {"type": "polygon", "points": ["S", "Q", "S₁"]}, "deltaQ": {"type": "angle", "at": "Q", "from": "S", "to": "S₁", "r": 22, "label": "δ"}, "SS1": {"type": "line", "from": "S", "to": "S₁", "style": "guide", "label": "SS_1"}, "SS2": {"type": "line", "from": "S", "to": "S₂", "style": "guide"}, "triSQ2S2": {"type": "polygon", "points": ["S", "Q′", "S₂"]}, "adim": {"type": "dim", "from": [0, -36], "to": [60, -36], "arrow": "both", "label": "a"}, "ddim": {"type": "dim", "from": "S₂", "to": "S₁", "offset": [-34, 0], "arrow": "both", "label": "d"}, "Ddim": {"type": "dim", "from": [0, -78], "to": [260, -78], "arrow": "both", "label": "D"}, "L1": {"type": "polygon", "points": [[115.0, 0.0], [114.83, 9.32], [114.33, 18.0], [113.54, 25.46], [112.5, 31.18], [111.29, 34.77], [110.0, 36.0], [108.71, 34.77], [107.5, 31.18], [106.46, 25.46], [105.67, 18.0], [105.17, 9.32], [105.0, 0.0], [105.17, -9.32], [105.67, -18.0], [106.46, -25.46], [107.5, -31.18], [108.71, -34.77], [110.0, -36.0], [111.29, -34.77], [112.5, -31.18], [113.54, -25.46], [114.33, -18.0], [114.83, -9.32]], "style": "glass"}, "L2": {"type": "polygon", "points": [[155.0, 0.0], [154.83, 9.32], [154.33, 18.0], [153.54, 25.46], [152.5, 31.18], [151.29, 34.77], [150.0, 36.0], [148.71, 34.77], [147.5, 31.18], [146.46, 25.46], [145.67, 18.0], [145.17, 9.32], [145.0, 0.0], [145.17, -9.32], [145.67, -18.0], [146.46, -25.46], [147.5, -31.18], [148.71, -34.77], [150.0, -36.0], [151.29, -34.77], [152.5, -31.18], [153.54, -25.46], [154.33, -18.0], [154.83, -9.32]], "style": "glass"}, "r1a": {"type": "line", "from": "S₁", "to": "I₁", "style": "guide"}, "r1b": {"type": "line", "from": "S₂", "to": "I₁′", "style": "guide"}, "r2a": {"type": "line", "from": "S₁", "to": "I₂", "style": "guide"}, "r2b": {"type": "line", "from": "S₂", "to": "I₂′", "style": "guide"}, "triO1a": {"type": "polygon", "points": ["S₁", "O₁", "S₂"]}, "triO1b": {"type": "polygon", "points": ["I₁", "O₁", "I₁′"]}, "triO2a": {"type": "polygon", "points": ["S₁", "O₂", "S₂"]}, "triO2b": {"type": "polygon", "points": ["I₂", "O₂", "I₂′"]}, "d1dim": {"type": "dim", "from": "I₁", "to": "I₁′", "offset": [12, 0], "arrow": "both", "label": "d_1"}, "d2dim": {"type": "dim", "from": "I₂", "to": "I₂′", "offset": [12, 0], "arrow": "both", "label": "d_2"}, "a1dim": {"type": "dim", "from": [0, -52], "to": [110, -52], "arrow": "both", "label": "a_1"}, "b1dim": {"type": "dim", "from": [110, -52], "to": [260, -52], "arrow": "both", "label": "b_1"}, "o2dim": {"type": "dim", "from": [0, -65], "to": [150, -65], "arrow": "both", "label": "b_1"}, "b2dim": {"type": "dim", "from": [150, -65], "to": [260, -65], "arrow": "both", "label": "b_2 = a_1"}}, "draw": [{"parts": ["S"], "caption": "Narrow slit S"}, {"parts": ["prism", "alpha"], "caption": "Biprism: two thin prisms of small angle α, base to base"}, {"parts": ["screen", "C"], "caption": "Crosswires C of the eyepiece"}, {"parts": ["SQ", "Qout", "Q"], "caption": "The upper half bends the light from S down"}, {"parts": ["SQ2", "Q2out", "Q′"], "caption": "The lower half bends it up; the beams overlap"}, {"parts": ["QS1", "S₁", "Q2S2", "S₂"], "caption": "Traced back, they come from virtual slits S_1 and S_2"}, {"parts": ["adim"], "caption": "S is a distance a from the biprism"}]}, "steps": [{"figure": {"focus": ["prism", "alpha", "delta", "Qext", "SQ", "Qout"], "keep": ["S", "Q"], "caption": "Thin prism: deviation δ = (n − 1)α"}}, {"figure": {"focus": ["triSQS1", "deltaQ", "SS1", "adim"], "keep": ["S", "S₁", "Q", "QS1", "SQ"], "caption": "△SQS_1: δ at Q; SS_1 opposite, SQ ≈ a adjacent"}}, {"figure": {"focus": ["SS1", "adim", "deltaQ"], "keep": ["S", "S₁", "Q"], "caption": "SS_1 = a tan δ"}}, {"figure": {"focus": ["SS1", "deltaQ"], "keep": ["S", "S₁", "Q"], "caption": "Small δ: tan δ ≈ δ"}}, {"figure": {"focus": ["SS1", "alpha", "prism"], "keep": ["S", "S₁"], "caption": "SS_1 ≈ a(n − 1)α"}}, {"figure": {"focus": ["triSQS1", "triSQ2S2", "SS1", "SS2", "ddim"], "keep": ["S", "S₁", "S₂", "QS1", "Q2S2"], "caption": "By symmetry SS_2 = SS_1, so d = 2a(n − 1)α"}}, {"figure": {"focus": ["Qout", "Q2out", "ddim", "Ddim", "screen"], "keep": ["S₁", "S₂", "C"], "caption": "S_1, S_2 coherent: fringe width β = λD/d"}}, {"figure": {"focus": ["ddim", "Ddim"], "keep": ["S₁", "S₂", "screen"], "caption": "Solve for λ"}}, {"figure": {"focus": ["ddim", "Ddim", "screen"], "keep": ["S₁", "S₂"], "caption": "λ = dβ/D (Eq. 14.34)"}}, {"figure": {"focus": ["L1", "triO1a", "triO1b", "r1a", "r1b", "d1dim", "ddim", "a1dim", "b1dim"], "keep": ["L₁", "O₁", "S₁", "S₂", "screen"], "caption": "Lens at L_1: d_1/d = b_1/a_1"}}, {"figure": {"focus": ["d1dim", "L1"], "keep": ["L₁", "r1a", "r1b"], "caption": "d_1 = (b_1/a_1) d"}}, {"figure": {"focus": ["L2", "triO2a", "triO2b", "r2a", "r2b", "d2dim", "ddim", "o2dim", "b2dim"], "keep": ["L₂", "O₂", "S₁", "S₂", "screen"], "caption": "Lens at L_2: distances swap, d_2/d = a_1/b_1"}}, {"figure": {"focus": ["d2dim", "L2"], "keep": ["L₂", "r2a", "r2b"], "caption": "d_2 = (a_1/b_1) d"}}, {"figure": {"focus": ["d1dim", "d2dim"], "keep": ["L1", "L2", "screen"], "caption": "d_1 d_2 = d²: the magnifications cancel"}}, {"figure": {"focus": ["ddim", "d1dim", "d2dim"], "keep": ["S₁", "S₂", "screen"], "caption": "d = √(d_1 d_2)"}}, {"figure": {"focus": ["Ddim", "b1dim", "b2dim"], "keep": ["L1", "L2", "screen"], "caption": "D = a_1 + b_1 = b_1 + b_2"}}]}, {"figure": {"box": [-36, -48, 212, 98], "points": {"S₁": {"at": [0, 26], "side": "w"}, "S₂": {"at": [0, -26], "side": "w"}, "N": {"at": [0, 0], "side": "w", "size": 2.6}, "A": {"at": [28, 0], "side": "s", "size": 2.6}, "O": {"at": [180, 0], "side": "se"}, "P": {"at": [180, 52], "side": "e"}, "R": {"at": [60, 0], "side": "s", "size": 2.8}, "L₁′": {"at": [180, 94], "side": "e", "dot": false}}, "parts": {"mirror": {"type": "line", "from": "A", "to": "O", "style": "mirror"}, "plane": {"type": "line", "from": "N", "to": "A", "style": "guide"}, "screen": {"type": "line", "from": "O", "to": "L₁′", "style": "axis"}, "S1P": {"type": "line", "from": "S₁", "to": "P", "style": "ray", "arrow": 0.55}, "S1R": {"type": "line", "from": "S₁", "to": "R", "style": "ray", "arrow": true}, "RP": {"type": "line", "from": "R", "to": "P", "style": "ray", "arrow": 0.5}, "S2R": {"type": "line", "from": "S₂", "to": "R", "style": "guide"}, "S2P": {"type": "line", "from": "S₂", "to": "P", "style": "guide"}, "S1S2": {"type": "line", "from": "S₁", "to": "S₂", "style": "guide"}, "rightN": {"type": "polygon", "points": [[0, 0], [5, 0], [5, 5], [0, 5]]}, "tri1": {"type": "polygon", "points": ["S₁", "N", "R"]}, "tri2": {"type": "polygon", "points": ["S₂", "N", "R"]}, "h1": {"type": "dim", "from": "N", "to": "S₁", "offset": [-14, 0], "arrow": "both", "label": "h"}, "h2": {"type": "dim", "from": "S₂", "to": "N", "offset": [-14, 0], "arrow": "both", "label": "h"}, "ddim": {"type": "dim", "from": "S₂", "to": "S₁", "offset": [-30, 0], "arrow": "both", "label": "d"}, "Ddim": {"type": "dim", "from": [0, -42], "to": [180, -42], "arrow": "both", "label": "D"}, "xdim": {"type": "dim", "from": "O", "to": "P", "offset": [16, 0], "arrow": "both", "label": "x"}, "fringe0": {"type": "text", "at": [166, 7], "text": "dark", "labelClass": "fg-note"}}, "draw": [{"parts": ["mirror", "A", "O"], "caption": "Plane mirror AO, used at grazing incidence"}, {"parts": ["S₁"], "caption": "Slit S_1 a small height above the mirror plane"}, {"parts": ["screen", "L₁′"], "caption": "Screen L_1′ touching the far end O of the mirror"}, {"parts": ["S1P", "P"], "caption": "Direct light from S_1 reaches P"}, {"parts": ["S1R", "RP", "R"], "caption": "Grazing light reflects at R and also reaches P"}, {"parts": ["S2R", "S₂", "plane", "N"], "caption": "The reflected light seems to come from the image S_2"}]}, "steps": [{"figure": {"focus": ["h1", "h2", "rightN", "plane", "S1S2"], "keep": ["S₁", "S₂", "N"], "caption": "S_2 is the image of S_1: h above, h below"}}, {"figure": {"focus": ["ddim", "S1S2"], "keep": ["S₁", "S₂", "h1", "h2"], "caption": "Source separation d = 2h"}}, {"figure": {"focus": ["tri1", "tri2", "rightN", "S1R", "S2R", "RP"], "keep": ["S₁", "S₂", "N", "R", "P"], "caption": "△S_1NR ≅ △S_2NR, so S_1R = S_2R"}}, {"figure": {"focus": ["S1P", "S2P", "xdim", "ddim", "Ddim"], "keep": ["S₁", "S₂", "P", "O"], "caption": "Two sources d apart: path difference xd/D"}}, {"figure": {"focus": ["S1R", "RP", "R", "fringe0"], "keep": ["S1P", "O", "P"], "caption": "Reflection at R adds a phase of π"}}, {"figure": {"focus": ["S1P", "S2P", "P"], "keep": ["S₁", "S₂"], "caption": "Minima: S_2P − S_1P = nλ"}}, {"figure": {"focus": ["xdim", "P"], "keep": ["ddim", "Ddim", "O"], "caption": "Dark fringe n at height x_n"}}, {"figure": {"focus": ["fringe0", "O", "xdim"], "keep": ["screen", "P"], "caption": "n = 0: the fringe at O is dark"}}, {"figure": {"focus": ["S1P", "S2P", "P"], "keep": ["S₁", "S₂", "xdim"], "caption": "Maxima: S_2P − S_1P = (n + ½)λ"}}, {"figure": {"focus": ["xdim", "ddim", "Ddim"], "keep": ["S₁", "S₂", "O", "P"], "caption": "Fringe width β = λD/d = λD/(2h)"}}]}, {"figure": {"box": [-56, -60, 116, 92], "points": {"B": {"at": [0, 50], "side": "nw"}, "D": {"at": [32.59, 0], "side": "s"}, "F": {"at": [65.19, 50], "side": "se"}, "C": {"at": [43.74, 80.63], "side": "nw", "size": 3}, "K": {"at": [45.75, 20.18], "side": "e", "size": 3}, "B′": {"at": [0, -50], "side": "sw"}, "J": {"at": [0, 0], "side": "sw", "size": 2.8}}, "parts": {"top": {"type": "line", "from": [-56, 50], "to": [116, 50], "style": "mirror"}, "bottom": {"type": "line", "from": [-56, 0], "to": [116, 0], "style": "mirror"}, "n1": {"type": "text", "at": [-44, 64], "text": "n_1"}, "n2": {"type": "text", "at": [100, 24], "text": "n_2"}, "d": {"type": "dim", "from": [-46, 0], "to": [-46, 50], "offset": 0, "arrow": "both", "label": "d"}, "AB": {"type": "line", "from": [-40.96, 78.68], "to": "B", "style": "ray", "arrow": true}, "BU": {"type": "line", "from": "B", "to": [49.15, 84.41], "style": "ray", "arrow": 0.75}, "BD": {"type": "line", "from": "B", "to": "D", "style": "ray", "arrow": true}, "DF": {"type": "line", "from": "D", "to": "F", "style": "ray", "arrow": true}, "FE": {"type": "line", "from": "F", "to": [106.15, 78.68], "style": "ray", "arrow": true}, "normal": {"type": "line", "from": [0, 86], "to": [0, 12], "style": "normal"}, "theta": {"type": "angle", "at": "B", "from": [0, 86], "to": [-40.96, 78.68], "r": 24, "label": "θ"}, "thetap": {"type": "angle", "at": "B", "from": "J", "to": "D", "r": 24, "label": "θ′"}, "BC": {"type": "line", "from": "B", "to": "C", "style": "guide", "label": "BC", "labelSide": "left"}, "FC": {"type": "line", "from": "F", "to": "C", "style": "guide"}, "rightC": {"type": "polygon", "points": [[43.74, 80.63], [39.65, 77.76], [42.51, 73.67], [46.61, 76.53]]}, "BF": {"type": "line", "from": "B", "to": "F", "style": "guide", "label": "BF"}, "BBp": {"type": "line", "from": "B", "to": "B′", "style": "guide", "label": "2d"}, "BpD": {"type": "line", "from": "B′", "to": "D", "style": "guide"}, "BpF": {"type": "line", "from": "B′", "to": "F", "style": "guide"}, "BpK": {"type": "line", "from": "B′", "to": "K", "style": "guide", "label": "B′K"}, "KF": {"type": "line", "from": "K", "to": "F", "style": "guide", "label": "KF"}, "BK": {"type": "line", "from": "B", "to": "K", "style": "guide"}, "rightK": {"type": "polygon", "points": [[45.75, 20.18], [43.02, 15.99], [38.83, 18.72], [41.56, 22.91]]}, "triBDJ": {"type": "polygon", "points": ["B", "D", "J"]}, "triBpDJ": {"type": "polygon", "points": ["B′", "D", "J"]}, "triBBpK": {"type": "polygon", "points": ["B", "B′", "K"]}, "angBp": {"type": "angle", "at": "B′", "from": "B", "to": "K", "r": 26, "label": "θ′"}, "triBCF": {"type": "polygon", "points": ["B", "C", "F"]}, "angF": {"type": "angle", "at": "F", "from": "B", "to": "C", "r": 22, "label": "θ"}, "triBKF": {"type": "polygon", "points": ["B", "K", "F"]}, "angBK": {"type": "angle", "at": "B", "from": "F", "to": "K", "r": 30, "label": "θ′"}}, "draw": [{"parts": ["top", "bottom", "n1", "n2"], "caption": "Plane parallel film of index n_2 in a medium n_1"}, {"parts": ["d"], "caption": "Film thickness d"}, {"parts": ["AB", "B"], "caption": "Light strikes the film at B"}, {"parts": ["BU"], "caption": "Part of it reflects at B"}, {"parts": ["BD", "D"], "caption": "Part refracts and reflects at D on the lower face"}, {"parts": ["DF", "F", "FE"], "caption": "It leaves at F, parallel to the first reflection"}, {"parts": ["normal", "theta", "thetap"], "caption": "Normal at B: angles θ outside, θ′ inside"}]}, "steps": [{"figure": {"focus": ["BD", "DF", "BC", "FC", "rightC"], "keep": ["BU", "FE", "C"], "caption": "Extra path: n_2(BD + DF) − n_1 BC"}}, {"figure": {"focus": ["triBDJ", "triBpDJ", "BBp", "BpD"], "keep": ["DF", "B′", "J", "d"], "caption": "△BDJ ≅ △B′DJ, so BD = B′D"}}, {"figure": {"focus": ["BpF"], "keep": ["B′", "F", "BC"], "caption": "B′, D, F are collinear: BD + DF = B′F"}}, {"figure": {"focus": ["triBCF", "angF", "BC", "BF", "rightC"], "keep": ["C", "FC"], "caption": "△BCF: θ at F; BC opposite, BF hypotenuse"}}, {"figure": {"focus": ["BC", "BF", "angF"], "keep": ["C"], "caption": "BC = BF sin θ"}}, {"figure": {"focus": ["triBKF", "angBK", "KF", "BF", "rightK"], "keep": ["K", "BK"], "caption": "△BKF: θ′ at B; KF opposite, BF hypotenuse"}}, {"figure": {"focus": ["KF", "BF", "angBK"], "keep": ["K"], "caption": "KF = BF sin θ′"}}, {"figure": {"focus": ["theta", "thetap", "normal", "AB", "BD"], "keep": ["B", "n1", "n2"], "caption": "Snell's law at B: n_1 sin θ = n_2 sin θ′"}}, {"figure": {"focus": ["BF", "theta", "thetap"], "keep": ["B", "F"], "caption": "Multiply by BF"}}, {"figure": {"focus": ["BC", "KF"], "keep": ["C", "K", "B", "F"], "caption": "n_1 BC = n_2 KF"}}, {"figure": {"focus": ["BpF", "KF"], "keep": ["B′", "K", "F"], "caption": "Δ = n_2 B′F − n_2 KF"}}, {"figure": {"focus": ["BpF", "KF"], "keep": ["B′", "K"], "caption": "Δ = n_2(B′F − KF)"}}, {"figure": {"focus": ["BpK"], "keep": ["B′", "K", "KF", "BK"], "caption": "K lies on B′F: B′F − KF = B′K"}}, {"figure": {"focus": ["triBBpK", "angBp", "BpK", "BBp", "rightK"], "keep": ["B′", "K", "B"], "caption": "△BB′K: θ′ at B′; B′K adjacent, BB′ hypotenuse"}}, {"figure": {"focus": ["BpK", "BBp", "angBp"], "keep": ["B′", "K"], "caption": "B′K = BB′ cos θ′"}}, {"figure": {"focus": ["BBp", "d", "BpK", "angBp"], "keep": ["B′", "K", "J"], "caption": "BB′ = 2d: Δ = 2n_2 d cos θ′"}}]}, {"figure": {"box": [-82, -16, 82, 112], "points": {"C": {"at": [0, 100], "side": "ne"}, "O": {"at": [0, 0], "side": "s"}, "P": {"at": [50, 13.4], "side": "ne"}, "N": {"at": [0, 13.4], "side": "w", "size": 2.8}, "Q": {"at": [50, 0], "side": "se", "size": 2.8}}, "parts": {"plate": {"type": "line", "from": [-78, 0], "to": [78, 0], "style": "mirror"}, "lens": {"type": "polygon", "points": [[-57.36, 18.08], [-50.0, 13.4], [-42.26, 9.37], [-34.2, 6.03], [-25.88, 3.41], [-17.36, 1.52], [-8.72, 0.38], [-0.0, 0.0], [8.72, 0.38], [17.36, 1.52], [25.88, 3.41], [34.2, 6.03], [42.26, 9.37], [50.0, 13.4], [57.36, 18.08], [57.36, 28], [-57.36, 28]], "style": "glass"}, "surf": {"type": "arc", "center": "C", "r": 100, "from": 235, "to": 305, "style": "mirror"}, "light": {"type": "line", "from": [50, 40], "to": "P", "style": "ray", "arrow": true}, "film": {"type": "line", "from": "P", "to": "Q", "style": "ray"}, "t": {"type": "dim", "from": [60, 0], "to": [60, 13.4], "arrow": "both", "label": "t"}, "axis": {"type": "line", "from": "C", "to": "O", "style": "normal"}, "CP": {"type": "line", "from": "C", "to": "P", "style": "guide", "label": "R"}, "CN": {"type": "line", "from": "C", "to": "N", "style": "guide", "label": "R − t", "labelSide": "left"}, "NP": {"type": "line", "from": "N", "to": "P", "style": "guide", "label": "r_m"}, "rightN": {"type": "polygon", "points": [[0, 13.4], [5, 13.4], [5, 18.4], [0, 18.4]]}, "tri": {"type": "polygon", "points": ["C", "N", "P"]}, "Dm": {"type": "dim", "from": [-50, -10], "to": [50, -10], "arrow": "both", "label": "D_m = 2r_m"}, "note": {"type": "text", "at": [-55, 100], "text": "not to scale"}}, "draw": [{"parts": ["plate"], "caption": "Flat glass plate"}, {"parts": ["lens", "surf", "C", "O"], "caption": "Plano-convex lens of radius R touches the plate at O"}, {"parts": ["light", "P", "film", "Q", "t"], "caption": "Light at ring radius r_m crosses an air film of thickness t"}, {"parts": ["axis", "note"], "caption": "Axis through the centre of curvature C"}]}, "steps": [{"figure": {"focus": ["film", "t", "light"], "keep": ["P", "Q", "plate", "lens"], "caption": "Air film t under the ring: dark when 2t = mλ"}}, {"figure": {"focus": ["tri", "CP", "CN", "NP", "rightN"], "keep": ["C", "N", "P"], "caption": "△CNP, right angle at N"}}, {"figure": {"focus": ["CP", "CN", "NP"], "keep": ["tri", "C", "N", "P", "t"], "caption": "CP = R, CN = R − t, NP = r_m"}}, {"figure": {"focus": ["CN"], "keep": ["tri", "C", "N"], "caption": "Expand (R − t)²"}}, {"figure": {"focus": ["NP"], "keep": ["tri", "P", "N"], "caption": "r_m² = 2Rt − t²"}}, {"figure": {"focus": ["t"], "keep": ["film", "P", "Q"], "caption": "t ≪ R: drop t²"}}, {"figure": {"focus": ["NP", "film"], "keep": ["P", "Q", "t"], "caption": "r_m² = mλR"}}, {"figure": {"focus": ["Dm"], "keep": ["plate", "O"], "caption": "D_m = 2r_m"}}, {"figure": {"focus": ["Dm"], "keep": ["plate"], "caption": "Ring m + p"}}, {"figure": {"focus": ["Dm"], "keep": ["plate", "lens"], "caption": "Difference of squares of two diameters"}}, {"figure": {"focus": ["Dm", "CP"], "keep": ["lens", "plate", "C"], "caption": "λ = (D²ₘ₊ₚ − D²ₘ)/4pR"}}]}];
+(function(){var h=document.querySelector('header').offsetHeight+document.querySelector('nav').offsetHeight;document.documentElement.style.setProperty('--stick',h+'px');})();
+document.querySelectorAll('.fgbox').forEach(function (host) {
+  var d = FIGS[+host.dataset.fig], card = host.closest('.card'), rows = [].slice.call(card.querySelectorAll('.st'));
+  var api = SM.Figure.mount(host, d.figure, d.steps, { autoIntro: true }), cur = -1, timer = null;
+  function show(i, scroll) {
+    cur = Math.max(-1, Math.min(rows.length - 1, i));
+    rows.forEach(function (r, k) { r.classList.toggle('on', k === cur); });
+    if (cur >= 0) { api.step(cur); if (scroll) rows[cur].scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+  }
+  function stop() { clearInterval(timer); timer = null; btn.textContent = '\u25B6 Play'; }
+  var btn = card.querySelector('.play');
+  btn.onclick = function () {
+    if (timer) return stop();
+    btn.textContent = '\u275A\u275A Pause';
+    if (cur >= rows.length - 1 || cur < 0) { api.intro(); cur = -1; setTimeout(function () { show(0, true); }, (api.introLeft ? api.introLeft() : 0) + 300); }
+    timer = setInterval(function () { if (cur >= rows.length - 1) return stop(); show(cur + 1, true); }, 3200);
+  };
+  card.querySelector('.next').onclick = function () { stop(); show(cur + 1, true); };
+  card.querySelector('.prev').onclick = function () { stop(); show(cur - 1, true); };
+  rows.forEach(function (r, k) { r.onclick = function () { stop(); show(k, false); }; });
+  window.addEventListener('resize', function () { api.layout(); });
+});
+</script></body></html>

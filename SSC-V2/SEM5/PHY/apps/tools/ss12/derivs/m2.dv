@@ -1,0 +1,549 @@
+# Module II derivations (Properties of Solids)
+
+=== drude
+title: Drude conductivity \(\sigma = ne^2\tau/m\)
+marks: 4–5 marks
+src: Drude–Lorentz model, Puri & Babbar §5.1 (the book states the result in words; this is the standard working)
+legend: \(n\): free electrons per unit volume. \(\tau\): mean free time between collisions (relaxation time). \(v_d\): drift velocity. \(\mathcal E\): applied field. \(J\): current density.
+result: \sigma = \frac{ne^2\tau}{m}
+use: n | free electrons per unit volume: [[go:m2-drude__t0|the Drude–Lorentz picture]]
+use: \tau | relaxation time, the mean time between collisions: defined and averaged in the steps below
+use: m\,dv/dt=-e\mathcal E | Newton's second law with the force on a charge \(-e\) in a field \(\mathcal E\)
+use: J=\sigma\mathcal E | Ohm's law in local form: [[go:m3-drift__t0|drift velocity and mobility]]
+--- Force and acceleration
+tex: m\frac{dv}{dt} = -e\mathcal E
+note: Between collisions a free electron is pushed only by the field. Its random thermal motion averages to zero, so only this push gives a net drift.
+---
+tex: v(t) = -\frac{e\mathcal E}{m}\,t
+move: integrate | label=Speed gained a time \(t\) after the last collision
+note: After a collision the electron restarts in a random direction, so its velocity averages to zero at that moment, and then it accelerates uniformly for a time \(t\).
+---
+tex: \langle t\rangle = \int_0^\infty t\,\frac{e^{-t/\tau}}{\tau}\,dt = \tau
+move: evaluate | label=Average the time since the last collision
+note: Collisions are random, so the chance of going a time \(t\) without one is \(e^{-t/\tau}\); this is what "mean time between collisions \(\tau\)" means. By parts, \(\int_0^\infty te^{-t/\tau}dt=\tau^2\).
+---
+tex: v_d = -\frac{e\mathcal E}{m}\tau
+move: substitute | by=t\to\langle t\rangle=\tau
+note: The average extra velocity is \(-e\mathcal E\tau/m\).
+--- Current density
+tex: J = -nev_d
+move: define | label=Charge \(-e\), \(n\) electrons per unit volume, moving at \(v_d\)
+ask: \(n\) electrons per unit volume, charge \(-e\), drift velocity \(v_d\). What is the current density?
+opt*: \(J=-nev_d\)
+opt: \(J=nev_d^2\)
+opt: \(J=-ev_d/n\)
+opt: \(J=nmv_d\)
+why: In a time \(dt\) every electron within a distance \(v_d\,dt\) of a surface of area \(A\) crosses it. They fill a box of volume \(Av_d\,dt\) holding \(nAv_d\,dt\) electrons of charge \(-e\), so the current per area is \(-nev_d\).
+---
+tex: J = \frac{ne^2\tau}{m}\,\mathcal E
+move: substitute | by=v_d = -e\mathcal E\tau/m
+note: The two minus signs cancel: electrons drift against the field, but the current flows along it.
+--- Ohm's law
+tex: \sigma = \frac{ne^2\tau}{m}
+move: identity | label=Compare with Ohm's law \(J=\sigma\mathcal E\)
+note: \(J\propto\mathcal E\) is Ohm's law, a success of the model. The mobility is \(\mu=v_d/\mathcal E=e\tau/m\), so \(\sigma=ne\mu\). Failures ([[go:m2-drude__t1|three successes, four failures]]): the wrong temperature dependence of resistivity, and an electronic specific heat of \(\tfrac32R\) per mole that is not seen ([[go:der:cv|why it is so small]]).
+
+=== box1d
+title: Free electrons in a 1-D box: \(E_n\) and \(E_F\)
+marks: 5 marks
+src: Puri & Babbar §5.2.1, Eqs. (5.1)–(5.13)
+legend: A line of length \(L\) with infinite walls at \(x=0\) and \(x=L\); \(V=0\) inside. \(E_n\): energy of level \(n\). \(N\): number of electrons. \(n_F\): the highest filled level.
+figure: box1d
+result: E_F = \frac{h^2N^2}{32mL^2}
+use: \psi | wavefunction of the electron, \(|\psi|^2\) is the chance of finding it: [[go:m2-fermi__t0|the 1-D free-electron model]]
+use: \hbar=h/2\pi | reduced Planck constant
+use: E=\hbar^2k^2/2m | kinetic energy with de Broglie's \(p=\hbar k\): shown in the first steps
+use: \text{Pauli} | at most two electrons (opposite spins) in each level: stated at the step where it is used
+--- Where the equation comes from
+tex: E = \frac{p^2}{2m} = \frac{\hbar^2k^2}{2m}
+move: substitute | by=p = \hbar k
+note: Inside the box the electron has only kinetic energy. A matter wave of wave number \(k\) carries momentum \(p=\hbar k\) (de Broglie: \(p=h/\lambda\) and \(k=2\pi/\lambda\)).
+fig: focus wall0 wall1 floor | cap $V = 0$ inside, $V = \infty$ at the walls
+---
+tex: \frac{d^2\psi}{dx^2} = -k^2\psi
+move: identity | label=A wave of wave number \(k\) obeys this
+note: Differentiating \(\sin kx\) or \(\cos kx\) twice gives back \(-k^2\) times the same function.
+--- Schrödinger equation inside
+tex: \frac{d^2\psi}{dx^2} + \frac{2mE}{\hbar^2}\psi = 0
+note: Put \(k^2=2mE/\hbar^2\) from the first line into \(\psi''=-k^2\psi\). This is the time-independent Schrödinger equation with \(V=0\): only the kinetic term is left inside the box.
+fig: focus wall0 wall1 floor | cap $V = 0$ inside, $V = \infty$ at the walls
+---
+tex: \psi = A\sin kx + B\cos kx
+move: identity | label=Solution of \(\psi''+k^2\psi=0\)
+note: with \(k^2 = 2mE/\hbar^2\).
+--- Boundary conditions
+tex: \psi(0) = 0 \;\Rightarrow\; B = 0
+move: evaluate | by=x=0
+note: The walls are infinitely high, so \(\psi\) must vanish at \(x=0\) and \(x=L\). At \(x=0\), \(\sin0=0\) and \(\cos0=1\).
+fig: focus psi1 | keep wall0 wall1 floor | cap $ψ$ must vanish at both walls
+---
+tex: \sin kL = 0
+move: evaluate | by=x=L
+ask: \(\psi(L)=A\sin kL=0\) with \(A\neq0\). What does this force?
+opt*: \(kL=n\pi\), \(n=1,2,3,\dots\)
+opt: \(kL=(n+\tfrac12)\pi\)
+opt: \(k=0\)
+opt: \(kL=2n\pi\) only
+why: The sine is zero at whole multiples of \(\pi\). \(n=0\) would give \(\psi=0\) everywhere, so \(n\) starts at 1.
+---
+tex: k = \frac{n\pi}{L}
+move: rearrange
+note: Only standing waves with a whole number of half-wavelengths fit in the box.
+fig: focus psi1 psi2 psi3 | keep wall0 wall1 floor | cap Half-wavelengths: $n = 1, 2, 3$
+--- Normalise
+tex: \int_0^L A^2\sin^2\frac{n\pi x}{L}\,dx = \frac{A^2L}{2} = 1
+move: integrate | label=The electron is somewhere in the box: total probability 1
+note: \(\sin^2\theta=\tfrac12(1-\cos2\theta)\). The cosine part integrates to zero over whole half-wavelengths, leaving \(\tfrac12L\).
+---
+tex: \psi_n = \sqrt{\frac2L}\,\sin\frac{n\pi x}{L}
+move: rearrange | label=Solve for \(A\): \(A=\sqrt{2/L}\)
+--- Allowed energies
+tex: E_n = \frac{\hbar^2k^2}{2m} = \frac{\hbar^2}{2m}\left(\frac{n\pi}{L}\right)^2
+move: substitute | by=k = n\pi/L
+---
+tex: E_n = \frac{n^2h^2}{8mL^2}
+move: substitute | by=\hbar = h/2\pi
+note: Discrete levels, \(E_n\propto n^2\). For a box a centimetre long they are so close they form a near-continuum.
+fig: focus lev1 lev2 lev3 | keep psi1 psi2 psi3 wall0 wall1 floor | cap $E_n\propto n^2$
+--- Fill the levels
+tex: 2n_F = N
+move: define | label=Pauli: two electrons (spin up, spin down) per level
+note: Pauli exclusion principle (taken as a law of nature): no two electrons share a state, and each level \(n\) has two spin states. At 0 K the \(N\) electrons fill the lowest levels two at a time. The top filled level \(n_F\) is the Fermi level ([[go:m2-fermi__t0|one dimension first]]).
+ask: How many electrons can one level \(n\) hold?
+opt*: 2, one of each spin
+opt: 1
+opt: \(n\)
+opt: \(2n^2\)
+why: Each \(n\) has two spin states, \(m_s=\pm\tfrac12\), and Pauli allows one electron per state.
+fig: focus e1a e1b e2a e2b e3a e3b | keep lev1 lev2 lev3 wall0 wall1 floor | cap Two electrons per level
+---
+tex: E_F = \frac{h^2}{8mL^2}\left(\frac N2\right)^2
+move: substitute | by=n = n_F = N/2
+---
+tex: E_F = \frac{h^2N^2}{32mL^2}
+move: simplify
+note: \(E_F\) depends only on the line density \(N/L\). With \(N/L=0.5\) electron per Å, \(E_F\approx2.4\) eV. The average energy per electron in 1-D is one third of \(E_F\) ([[go:m2-dos__t1|the 1-D case]]).
+fig: focus lev3 e3a e3b | keep lev1 lev2 e1a e1b e2a e2b wall0 wall1 floor | cap The top filled level is $E_F$
+
+=== fermi3d
+title: Fermi energy of a 3-D electron gas
+marks: 5–8 marks
+src: Puri & Babbar §5.2.2 (book: momentum sphere, Eq. 5.37; here the same count in k-space)
+legend: Cube of side \(L\), volume \(V=L^3\), periodic boundary conditions. Allowed \(k_x,k_y,k_z\) are multiples of \(2\pi/L\). \(N\) electrons, density \(n=N/V\). \(k_F\): radius of the filled sphere at 0 K.
+figure: kspace
+result: E_F = \frac{\hbar^2}{2m}\left(3\pi^2n\right)^{2/3}
+use: \psi_{\mathbf k}\propto e^{i\mathbf k\cdot\mathbf r} | free-electron plane wave in a box: [[go:m2-fermi__t1|three dimensions and the Fermi sphere]]
+use: E=\hbar^2k^2/2m | kinetic energy from \(p=\hbar k\): [[go:der:box1d|first steps of the 1-D box]]
+use: \text{Pauli} | two electrons (spin up and down) per allowed \(\mathbf k\): [[go:der:box1d|stated in the 1-D box]]
+use: \tfrac43\pi k^3 | volume of a sphere in \(k\)-space: derived in the step "Volume of a sphere" below
+--- Allowed states
+tex: k_x = \frac{2\pi n_x}{L}
+note: A travelling wave \(e^{i\mathbf k\cdot\mathbf r}\) that repeats after \(L\) in each direction needs \(e^{ik_xL}=1\), so \(k_x=2\pi n_x/L\) with \(n_x=0,\pm1,\pm2,\dots\), and the same for \(k_y,k_z\). (Periodic boundary conditions are bookkeeping: for a large crystal the count of states does not depend on the choice of boundary condition.)
+fig: keep axx axy | cap Grid of allowed $k$, spacing $2π/L$
+---
+tex: \text{volume per state} = \left(\frac{2\pi}{L}\right)^3
+move: define | label=Each allowed \(\mathbf k\) owns one small cube of \(k\)-space
+fig: focus cell cellw | cap One state per $(2π/L)^3$
+--- Volume of a sphere
+tex: V_{\text{sphere}} = \int_{-k_F}^{k_F}\pi\left(k_F^2-k_z^2\right)dk_z
+move: integrate | label=Slice the sphere into discs perpendicular to \(k_z\)
+note: At height \(k_z\) the slice is a disc of radius \(\sqrt{k_F^2-k_z^2}\), area \(\pi(k_F^2-k_z^2)\).
+---
+tex: V_{\text{sphere}} = \pi\left[k_F^2k_z-\frac{k_z^3}{3}\right]_{-k_F}^{k_F} = \tfrac43\pi k_F^3
+move: evaluate
+--- Count the filled sphere
+tex: N = 2\cdot\frac{\frac43\pi k_F^3}{(2\pi/L)^3}
+move: identity | label=States in the sphere = sphere volume ÷ volume per state, $\times 2$ for spin
+note: \(E=\hbar^2k^2/2m\) ([[go:der:box1d|1-D box]]), so all states of one energy lie on a sphere. At 0 K they fill a sphere of radius \(k_F\).
+ask: Why the factor 2?
+opt*: two spin states for each \(\mathbf k\)
+opt: the sphere has two halves
+opt: \(\pm k\) give the same energy
+opt: it comes from \(\hbar=h/2\pi\)
+why: Each allowed \(\mathbf k\) can hold one spin-up and one spin-down electron.
+fig: focus sphere kFr | keep cell | cap Count the $k$-points inside radius $k_F$
+---
+tex: N = \frac{V}{3\pi^2}k_F^3
+move: simplify
+note: \(2\cdot\tfrac43\pi\cdot L^3/(8\pi^3) = L^3/3\pi^2\).
+---
+tex: k_F^3 = 3\pi^2\frac NV
+move: multiply | \frac{3\pi^2}{V}
+---
+tex: k_F = \left(3\pi^2n\right)^{1/3}
+move: root | 3
+note: \(k_F\) depends only on the electron density \(n=N/V\), not on the size or shape of the crystal.
+--- Fermi energy
+tex: E_F = \frac{\hbar^2k_F^2}{2m}
+move: define | label=Energy at the surface of the sphere
+fig: focus kFr | keep sphere | cap $E_F$ at radius $k_F$
+---
+tex: E_F = \frac{\hbar^2}{2m}\left(3\pi^2n\right)^{2/3}
+move: substitute | by=k_F = (3\pi^2n)^{1/3}
+note: An equivalent way to write this is \(E_F=\dfrac{h^2}{8m}\left(\dfrac{3n}{\pi}\right)^{2/3}\). Then the Fermi speed is \(v_F=\hbar k_F/m\) and the Fermi temperature \(T_F=E_F/k_B\) ([[go:m2-fermi__t1|Fermi parameters]]). Metals: \(E_F\approx2\)–\(7\) eV, \(T_F\sim10^4\)–\(10^5\) K.
+
+=== dos
+title: Density of states \(D(E)\) in 3-D
+marks: 5 marks
+src: Puri & Babbar §5.2.2(ii), Eq. (5.40)
+legend: \(N(E)\): number of electron states with energy less than \(E\). \(D(E)=dN/dE\): number of states per unit energy range. Cube of volume \(V\).
+result: D(E) = \frac{V}{2\pi^2}\left(\frac{2m}{\hbar^2}\right)^{3/2}E^{1/2}
+use: N(E) | number of electron states with energy below \(E\): [[go:der:fermi3d|the 3-D Fermi-energy derivation]]
+use: D(E)=dN/dE | states per unit energy: [[go:m2-dos__t0|what \(D(E)\) means]]
+use: k=\sqrt{2mE}/\hbar | free-electron relation \(E=\hbar^2k^2/2m\): [[go:der:box1d|1-D box]]
+--- States below E
+tex: N(E) = \frac{V}{3\pi^2}k^3
+note: The count in [[go:der:fermi3d|the Fermi-energy derivation]] holds for a sphere of any radius \(k\), not just \(k_F\).
+---
+tex: N(E) = \frac{V}{3\pi^2}\left(\frac{2mE}{\hbar^2}\right)^{3/2}
+move: substitute | by=k = \sqrt{2mE}/\hbar
+--- Differentiate
+tex: D(E) = \frac{dN}{dE}
+move: define | label=Density of states
+ask: \(N\propto E^{3/2}\). How does \(D=dN/dE\) depend on \(E\)?
+opt*: \(D\propto E^{1/2}\)
+opt: \(D\propto E^{3/2}\)
+opt: \(D\propto E^{-1/2}\)
+opt: \(D\) is constant
+why: \(\frac{d}{dE}E^{3/2}=\tfrac32E^{1/2}\).
+---
+tex: D(E) = \frac{V}{3\pi^2}\left(\frac{2m}{\hbar^2}\right)^{3/2}\cdot\frac32E^{1/2}
+move: differentiate | wrt=E
+---
+tex: D(E) = \frac{V}{2\pi^2}\left(\frac{2m}{\hbar^2}\right)^{3/2}E^{1/2}
+move: simplify
+note: In the usual units (per unit volume, with \(h\)): \(D(E)=\dfrac{4\pi}{h^3}(2m)^{3/2}E^{1/2}\). It rises as \(\sqrt E\). In 1-D the same steps give \(D\propto E^{-1/2}\); in 2-D, a constant ([[go:m2-dos__t1|why the dimension matters]]).
+--- At the Fermi level
+tex: D(E_F) = \frac{3N}{2E_F}
+move: identity | label=Divide \(D\) by \(N=\tfrac23E_FD(E_F)\)
+note: Since \(N\propto E_F^{3/2}\), \(dN/dE = \tfrac32 N/E\) at \(E_F\). A quick result for numericals.
+
+--- The same with \(h\)
+tex: D(E) = \frac{4\pi V}{h^3}(2m)^{3/2}E^{1/2}
+move: substitute | by=\hbar = h/2\pi
+note: \(\hbar^{-3}=(2\pi)^3/h^3\) and \(\frac{(2\pi)^3}{2\pi^2}=4\pi\). Divide by \(V\) for the density of states per unit volume, the form used for semiconductors in [[go:der:ncb|Module III]].
+=== avgE
+title: Average energy at 0 K is \(\tfrac35E_F\)
+marks: 4 marks
+src: Puri & Babbar §5.2.2, Eqs. (5.48)–(5.49)
+legend: \(D(E)=CE^{1/2}\) with \(C=\dfrac{V}{2\pi^2}\left(\dfrac{2m}{\hbar^2}\right)^{3/2}\). At 0 K every state below \(E_F\) is filled and every state above is empty.
+result: \bar E_0 = \frac35E_F
+use: f(E) | Fermi function; at 0 K it is 1 below \(E_F\) and 0 above: [[go:m2-fd__t0|the Fermi function]]
+use: D(E) | density of states, \(D=CE^{1/2}\): [[go:der:dos|density-of-states derivation]]
+use: E_F | Fermi energy: [[go:der:fermi3d|Fermi-energy derivation]]
+--- Total energy
+tex: E_{\text{tot}} = \int_0^{E_F}E\,D(E)\,dE
+note: At 0 K, \(f(E)=1\) below \(E_F\), 0 above. Each filled state contributes its energy \(E\).
+---
+tex: E_{\text{tot}} = C\int_0^{E_F}E^{3/2}\,dE = \frac25CE_F^{5/2}
+move: substitute | by=D = CE^{1/2}
+--- Number of electrons
+tex: N = \int_0^{E_F}D(E)\,dE = \frac23CE_F^{3/2}
+move: identity | label=Count the filled states the same way
+--- Divide
+tex: \bar E_0 = \frac{E_{\text{tot}}}{N} = \frac{\frac25CE_F^{5/2}}{\frac23CE_F^{3/2}}
+move: define | label=Average energy per electron
+ask: What is \(\dfrac{2/5}{2/3}\)?
+opt*: \(3/5\)
+opt: \(4/15\)
+opt: \(5/3\)
+opt: \(1/2\)
+why: \(\tfrac25\times\tfrac32=\tfrac35\).
+---
+tex: \bar E_0 = \frac35E_F
+move: simplify
+note: Above the midpoint \(\tfrac12E_F\), because \(D\propto\sqrt E\) puts more states near the top. Even at 0 K the gas has a large kinetic energy (Pauli forbids everyone sitting at \(E=0\)). The degeneracy pressure and the bulk modulus follow in the steps below.
+
+--- Pressure and bulk modulus
+tex: P = -\frac{\partial E_{\text{tot}}}{\partial V}
+move: define | label=Compressing the gas costs energy: work done on it is \(-P\,dV\)
+note: At 0 K and fixed \(N\), so no heat is exchanged.
+---
+tex: E_{\text{tot}} = \tfrac35NE_F \propto V^{-2/3}
+move: substitute | by=E_F\propto(N/V)^{2/3}
+note: From \(E_F=\frac{\hbar^2}{2m}(3\pi^2N/V)^{2/3}\) ([[go:der:fermi3d|Fermi-energy derivation]]).
+---
+tex: P = \frac23\,\frac{E_{\text{tot}}}{V}
+move: differentiate | wrt=V
+note: \(-\frac{d}{dV}V^{-2/3}=\tfrac23V^{-5/3}\).
+---
+tex: B = -V\frac{dP}{dV} = \frac53P
+move: differentiate | label=Bulk modulus: pressure change per fractional volume change
+note: \(P\propto V^{-5/3}\), so \(-V\,dP/dV=\tfrac53P\).
+=== cv
+title: Electronic specific heat: only a fraction \(T/T_F\) can be excited
+marks: 5 marks
+src: Puri & Babbar §5.3.1, Eqs. (5.50)–(5.51)
+legend: \(T_F=E_F/k_B\) (Fermi temperature). Classically every electron would take \(\tfrac32k_BT\).
+result: C_v = \frac32Nk_B\frac{T}{T_F}
+use: T_F=E_F/k_B | Fermi temperature: [[go:m2-fermi__t1|Fermi parameters]]
+use: k_BT | thermal energy; the Fermi function changes from 1 to 0 over about this width: [[go:m2-fd__t0|the Fermi function]]
+use: E=\tfrac32Nk_BT | classical equipartition: derived in the first steps below
+use: \text{Pauli} | an electron can only move into an empty state: [[go:der:box1d|Pauli principle]]
+--- The classical answer
+tex: \left\langle\tfrac12mv_x^2\right\rangle = \frac{\int\tfrac12mv_x^2\,e^{-mv_x^2/2k_BT}\,dv_x}{\int e^{-mv_x^2/2k_BT}\,dv_x} = \tfrac12k_BT
+move: evaluate | label=Average over the Boltzmann distribution (the classical gas, [[go:m2-drude__t0|Drude–Lorentz]])
+note: With \(a=m/2k_BT\), \(\int v^2e^{-av^2}dv=\frac1{2a}\int e^{-av^2}dv\), so the ratio is \(\tfrac12m\cdot\frac1{2a}=\tfrac12k_BT\).
+---
+tex: E = \frac32Nk_BT
+move: multiply | label=Three independent directions \(x,y,z\), \(N\) electrons
+note: Each electron has \(3\times\tfrac12k_BT\): classical (Drude–Lorentz) theory.
+---
+tex: C_v = \frac32Nk_B
+move: differentiate | wrt=T
+note: About \(\tfrac32R\) per mole of electrons. Experiment shows about 1% of this, growing in proportion to \(T\).
+--- Who can actually take heat
+tex: N_{\text{eff}} = N\frac{k_BT}{E_F}
+move: define | label=Only electrons within about \(k_BT\) of \(E_F\) have empty states to move into
+note: An electron deep in the Fermi sea would have to jump into a state that is already full. Only those within about \(k_BT\) below \(E_F\) can gain \(\sim k_BT\): that is the width over which \(f(E)\) falls from 1 to 0 ([[go:m2-fd__t0|the Fermi function]]).
+ask: Why can't an electron 1 eV below \(E_F\) absorb \(k_BT\approx0.025\) eV?
+opt*: the states \(0.025\) eV above it are all occupied
+opt: it is bound to an ion
+opt: it has no kinetic energy
+opt: \(k_BT\) is too large
+why: Pauli: it can only move into an empty state, and the only empty states are above \(E_F\).
+---
+tex: N_{\text{eff}} = N\frac{T}{T_F}
+move: substitute | by=E_F = k_BT_F
+--- Quantum answer
+tex: C_v = \frac32N_{\text{eff}}k_B = \frac32Nk_B\frac{T}{T_F}
+move: substitute | label=Use \(N_{\text{eff}}\) in place of \(N\)
+note: With \(T=300\) K and \(T_F\sim3\times10^4\) K this is about 1% of the classical value, and it is proportional to \(T\), as observed. (The exact Sommerfeld result is \(\tfrac{\pi^2}{2}Nk_BT/T_F\).)
+
+=== bloch
+title: Bloch theorem: \(\psi(x+a)=e^{ika}\psi(x)\)
+marks: 5–8 marks
+src: Puri & Babbar §6.2, Eqs. (6.3)–(6.17)
+legend: \(V(x+a)=V(x)\): a periodic potential with lattice constant \(a\). \(f(x)\), \(g(x)\): two real independent solutions of the Schrödinger equation. \(\lambda\): a constant.
+result: \psi(x) = e^{ikx}u_k(x)
+use: V(x+a)=V(x) | the potential of a perfect crystal repeats with the lattice period \(a\): [[go:m2-bloch__t0|where the gaps come from]]
+use: \text{Schrödinger equation} | \(\psi''=-\frac{2m}{\hbar^2}(E-V)\psi\): [[go:der:box1d|how it arises in the 1-D box]]
+use: f,\ g | two independent solutions: a second-order linear equation has exactly two
+use: W=fg'-gf' | the Wronskian: shown constant in the steps below
+use: \lambda | a constant multiplier, found from the quadratic below
+--- Shift by one lattice step
+tex: \frac{d^2\psi}{dx^2} + \frac{2m}{\hbar^2}\left[E - V(x)\right]\psi = 0
+note: The equation does not change when \(x\to x+a\), because \(V(x+a)=V(x)\). So \(f(x+a)\) and \(g(x+a)\) are also solutions.
+---
+tex: f(x+a) = \alpha_1f(x) + \alpha_2g(x)
+move: identity | label=A second-order equation has only two independent solutions
+note: and \(g(x+a)=\beta_1f(x)+\beta_2g(x)\).
+--- Pick the special combination
+tex: \psi(x+a) = \lambda\psi(x)
+move: define | label=Choose \(\psi=Af+Bg\) so that a shift only multiplies it
+note: This needs \(A\alpha_1+B\beta_1=\lambda A\), \(A\alpha_2+B\beta_2=\lambda B\), which has a non-zero solution only if the determinant vanishes.
+---
+tex: (\alpha_1-\lambda)(\beta_2-\lambda) - \alpha_2\beta_1 = 0
+move: identity | label=Determinant of the two conditions
+note: Matching the coefficients of \(f\) and \(g\) in \(A(\alpha_1f+\alpha_2g)+B(\beta_1f+\beta_2g)=\lambda(Af+Bg)\) gives \(A\alpha_1+B\beta_1=\lambda A\) and \(A\alpha_2+B\beta_2=\lambda B\).
+---
+tex: \lambda^2 - (\alpha_1+\beta_2)\lambda + (\alpha_1\beta_2-\alpha_2\beta_1) = 0
+move: expand
+---
+tex: \frac{dW}{dx} = fg''-gf'' = 0
+move: differentiate | label=The Wronskian \(W=fg'-gf'\) is constant
+note: Both \(f\) and \(g\) obey \(\psi''=-\frac{2m}{\hbar^2}(E-V)\psi\), so \(fg''-gf''=-\frac{2m}{\hbar^2}(E-V)(fg-gf)=0\).
+---
+tex: W(x+a) = (\alpha_1\beta_2-\alpha_2\beta_1)\,W(x)
+move: substitute | by=f(x+a),\ g(x+a) from the first lines
+note: Expand \((\alpha_1f+\alpha_2g)(\beta_1f'+\beta_2g')-(\beta_1f+\beta_2g)(\alpha_1f'+\alpha_2g')\): the \(ff'\) and \(gg'\) terms cancel and \((\alpha_1\beta_2-\alpha_2\beta_1)(fg'-gf')\) is left.
+---
+tex: \alpha_1\beta_2-\alpha_2\beta_1 = 1
+move: identity | label=\(W\) is constant, so \(W(x+a)=W(x)\)
+---
+tex: \lambda^2 - (\alpha_1+\beta_2)\lambda + 1 = 0
+move: substitute | label=Put the constant term into the quadratic
+note: The product of the roots is 1.
+--- The roots
+tex: \lambda_1\lambda_2 = 1
+move: identity | label=Product of the roots of the quadratic
+ask: The roots multiply to 1, and the solution must stay finite over the whole (huge) crystal. What must \(\lambda\) be?
+opt*: \(e^{\pm ika}\) with real \(k\), so \(|\lambda|=1\)
+opt: any real number
+opt: \(\lambda>1\)
+opt: \(\lambda=0\)
+why: If \(|\lambda|>1\), \(\psi\) grows without limit after many steps; if \(|\lambda|<1\), the other root does. Only \(|\lambda|=1\) works: these energies form the allowed bands.
+---
+tex: \psi(x+a) = e^{ika}\psi(x)
+move: substitute | by=\lambda = e^{ika}
+note: When \((\alpha_1+\beta_2)^2<4\) the roots are complex conjugates on the unit circle. Energies with \((\alpha_1+\beta_2)^2>4\) have no bounded solution: forbidden gaps.
+--- Bloch form
+tex: \psi(x) = e^{ikx}u_k(x),\quad u_k(x+a) = u_k(x)
+move: identity | label=Check: this form has exactly that property
+note: \(\psi(x+a)=e^{ik(x+a)}u_k(x+a)=e^{ika}e^{ikx}u_k(x)=e^{ika}\psi(x)\). A plane wave modulated by a function with the lattice period: a Bloch function.
+
+=== kp
+title: The Kronig–Penney model
+marks: 8 marks
+src: Puri & Babbar §6.3, Eqs. (6.21)–(6.39)
+legend: Wells of width \(a\) (\(V=0\)) between barriers of width \(b\) and height \(V_0\); period \(a+b\). \(E<V_0\). \(\alpha^2=2mE/\hbar^2\), \(\beta^2=2m(V_0-E)/\hbar^2\).
+figure: kp
+result: P\frac{\sin\alpha a}{\alpha a} + \cos\alpha a = \cos ka
+use: V_0,\ a,\ b | barrier height, well width, barrier width: [[go:m2-kp__t0|the model and its one equation]]
+use: \alpha,\ \beta | wave number in the well and decay constant in the barrier, from \(\psi''=-\frac{2m}{\hbar^2}(E-V)\psi\): [[go:der:box1d|Schrödinger equation]]
+use: \text{Bloch} | one period later \(\psi\) is multiplied by \(e^{ik(a+b)}\): [[go:der:bloch|Bloch's theorem]]
+use: E<V_0 | bound-electron case, energies below the barrier top
+use: P | barrier strength: defined in the step "Thin, high barriers"
+--- Two regions
+tex: \frac{d^2\psi}{dx^2} + \alpha^2\psi = 0\quad(0<x<a)
+note: Inside a well \(V=0\).
+fig: focus t1 dA | keep V xaxis | cap Region I, the well
+---
+tex: \frac{d^2\psi}{dx^2} - \beta^2\psi = 0\quad(-b<x<0)
+move: define | label=Inside a barrier, \(V=V_0>E\)
+fig: focus t2 dB dV | keep V xaxis | cap Region II, the barrier
+--- Solve in each region
+tex: \psi(x) = \psi(0)\cos\alpha x + \psi'(0)\,\frac{\sin\alpha x}{\alpha}
+move: identity | label=General solution of \(\psi''=-\alpha^2\psi\), written with its starting values
+note: \(\cos\alpha x\) and \(\sin\alpha x/\alpha\) have (value, slope) \(=(1,0)\) and \((0,1)\) at \(x=0\), so any solution is a mix of them with the weights \(\psi(0)\) and \(\psi'(0)\).
+fig: none
+---
+tex: \begin{pmatrix}\psi\\ \psi'\end{pmatrix}_{a} = \begin{pmatrix}\cos\alpha a & \dfrac{\sin\alpha a}{\alpha}\\[4pt] -\alpha\sin\alpha a & \cos\alpha a\end{pmatrix}\begin{pmatrix}\psi\\ \psi'\end{pmatrix}_{0}
+move: define | label=Carry \((\psi,\psi')\) across the well: matrix \(M_w\)
+note: The second row is the derivative of the solution above.
+---
+tex: \begin{pmatrix}\psi\\ \psi'\end{pmatrix}_{b} = \begin{pmatrix}\cosh\beta b & \dfrac{\sinh\beta b}{\beta}\\[4pt] \beta\sinh\beta b & \cosh\beta b\end{pmatrix}\begin{pmatrix}\psi\\ \psi'\end{pmatrix}_{0}
+move: define | label=Across the barrier, \(\psi''=+\beta^2\psi\): matrix \(M_b\)
+note: Now the two basic solutions are \(\cosh\beta x\) and \(\sinh\beta x/\beta\).
+--- Join the regions
+tex: \psi,\ \psi'\ \text{continuous at each boundary}
+move: define | label=Why \(\psi\) and \(\psi'\) match
+note: The Schrödinger equation makes \(\psi''\) finite, so \(\psi'\) has no jump, and then \(\psi\) has none either. So the barrier matrix can be applied straight after the well matrix.
+---
+tex: M = M_bM_w
+move: combine | label=One full period: well, then barrier
+---
+tex: \det M = \det M_b\,\det M_w = 1
+move: evaluate | label=Each matrix has determinant 1
+note: \(\det M_w=\cos^2\alpha a+\sin^2\alpha a=1\) and \(\det M_b=\cosh^2\beta b-\sinh^2\beta b=1\).
+--- Bloch's condition
+tex: \begin{pmatrix}\psi\\ \psi'\end{pmatrix}_{a+b} = e^{ik(a+b)}\begin{pmatrix}\psi\\ \psi'\end{pmatrix}_{0}
+move: define | label=Bloch's theorem: one period later \(\psi\) is multiplied by \(e^{ik(a+b)}\)
+note: The same factor applies to the slope. See [[go:der:bloch|the Bloch derivation]].
+---
+tex: M\begin{pmatrix}\psi\\ \psi'\end{pmatrix}_0 = \lambda\begin{pmatrix}\psi\\ \psi'\end{pmatrix}_0,\quad \lambda = e^{ik(a+b)}
+move: identity | label=So \(\lambda\) is an eigenvalue of \(M\)
+---
+tex: \lambda^2 - (\operatorname{Tr}M)\,\lambda + \det M = 0
+move: identity | label=Eigenvalue equation of a \(2\times2\) matrix
+---
+tex: \lambda + \frac1\lambda = \operatorname{Tr}M
+move: rearrange | label=Divide by \(\lambda\), using \(\det M=1\)
+---
+tex: \cos k(a+b) = \tfrac12\operatorname{Tr}M
+move: substitute | by=\lambda+\lambda^{-1} = 2\cos k(a+b)
+--- The trace
+tex: \operatorname{Tr}M = 2\cosh\beta b\cos\alpha a + \left(\frac\beta\alpha-\frac\alpha\beta\right)\sinh\beta b\,\sin\alpha a
+move: evaluate | label=Multiply \(M_bM_w\) and add the two diagonal entries
+note: The diagonal entries are \(\cosh\beta b\cos\alpha a-\frac\alpha\beta\sinh\beta b\sin\alpha a\) and \(\frac\beta\alpha\sinh\beta b\sin\alpha a+\cosh\beta b\cos\alpha a\).
+---
+tex: \frac{\beta^2-\alpha^2}{2\alpha\beta}\sinh\beta b\,\sin\alpha a + \cosh\beta b\,\cos\alpha a = \cos k(a+b)
+move: substitute | label=\(\frac\beta\alpha-\frac\alpha\beta=\frac{\beta^2-\alpha^2}{\alpha\beta}\)
+note: The exact Kronig–Penney condition, with \(Q=\frac{\beta^2-\alpha^2}{2\alpha\beta}\). The usual textbook route (a \(4\times4\) determinant in \(A,B,C,D\)) is the same algebra written differently.
+--- Thin, high barriers
+tex: P = \frac{mV_0ba}{\hbar^2}
+move: define | label=Let \(V_0\to\infty\), \(b\to0\), keeping \(V_0b\) finite
+note: \(P\) measures the barrier strength (its area \(V_0b\)): how tightly an electron is held in one well. With \(b\to0\): \(\sinh\beta b\to\beta b\), \(\cosh\beta b\to1\), \(\beta^2\gg\alpha^2\).
+ask: As \(b\to0\), what do \(\sinh\beta b\) and \(\cosh\beta b\) become?
+opt*: \(\beta b\) and \(1\)
+opt: \(0\) and \(0\)
+opt: \(1\) and \(\beta b\)
+opt: \(\beta b\) and \(\beta b\)
+why: For a small argument \(\sinh x\approx x\) and \(\cosh x\approx1\).
+fig: focus dV dB | keep V xaxis | cap Barrier area $V_0b$ stays finite
+---
+tex: \frac{\beta^2-\alpha^2}{2\alpha\beta}\,\sinh\beta b\,\sin\alpha a \;\to\; \frac{\beta^2b}{2\alpha}\,\sin\alpha a
+move: simplify | label=\(\sinh\beta b\to\beta b\) and \(\beta^2\gg\alpha^2\)
+---
+tex: \frac{\beta^2b}{2\alpha} = \frac{mV_0b}{\hbar^2\alpha} = \frac{P}{\alpha a}
+move: substitute | by=\beta^2\approx2mV_0/\hbar^2
+note: For \(V_0\gg E\), \(\beta^2=2m(V_0-E)/\hbar^2\approx2mV_0/\hbar^2\). Multiplying top and bottom by \(a\) gives \(P/\alpha a\) with \(P=mV_0ba/\hbar^2\).
+---
+tex: P\frac{\sin\alpha a}{\alpha a} + \cos\alpha a = \cos ka
+move: simplify
+note: The Kronig–Penney condition. Also \(a+b\to a\) because \(b\to0\).
+fig: none
+--- What it means
+tex: -1 \le P\frac{\sin\alpha a}{\alpha a} + \cos\alpha a \le 1
+move: identity | label=The right side is a cosine
+note: Only energies (values of \(\alpha a\)) that keep the left side between \(-1\) and \(1\) are allowed: <b>allowed bands separated by forbidden gaps</b>. Bands widen as the energy rises and narrow as \(P\) grows.
+---
+tex: P \to 0:\quad \alpha = k,\;\; E = \frac{\hbar^2k^2}{2m}
+move: evaluate | by=P\to0
+note: No barriers: free electrons, no gaps (\(E=\hbar^2k^2/2m\) as in [[go:der:fermi3d|the 3-D Fermi-energy derivation]]).
+---
+tex: P \to \infty:\quad \sin\alpha a = 0,\;\; E = \frac{n^2h^2}{8ma^2}
+move: evaluate | by=P\to\infty
+note: Impenetrable barriers: each well is an isolated box, and the bands shrink to the discrete levels of a particle in a box of width \(a\), as derived in [[go:der:box1d|the 1-D box]].
+
+=== vgroup
+title: Velocity of a Bloch electron: \(v = \frac1\hbar\frac{dE}{dk}\)
+marks: 3 marks
+src: Puri & Babbar §6.4.1
+legend: An electron in a band is a wave packet; it moves with the group velocity \(v_g=d\omega/dk\). \(E=\hbar\omega\).
+result: v = \frac1\hbar\frac{dE}{dk}
+use: \omega=E/\hbar | Planck–Einstein relation, also true for matter waves
+use: E(k) | band energy of a Bloch state: [[go:m2-bloch__t1|Bloch's theorem]]
+use: v_g=d\omega/dk | group velocity: derived in the first two steps below
+use: \text{wave packet} | a localised electron is a sum of waves with nearby \(k\)
+--- Two nearby waves
+tex: \cos(kx-\omega t)+\cos\big((k+\delta k)x-(\omega+\delta\omega)t\big) = 2\cos\tfrac12(\delta k\,x-\delta\omega\,t)\,\cos(\text{fast wave})
+move: identity | label=Two nearby waves beat: the sum has a slowly varying envelope
+note: \(\cos P+\cos Q=2\cos\frac{P+Q}2\cos\frac{P-Q}2\). The factor \(\cos\tfrac12(\delta k\,x-\delta\omega\,t)\) is the envelope, a wave packet.
+---
+tex: \delta k\,x-\delta\omega\,t=\text{const}\quad\Rightarrow\quad v=\frac xt=\frac{\delta\omega}{\delta k}
+move: identity | label=Follow a point of the envelope
+note: This is the speed of the envelope, which carries the electron, not the speed \(\omega/k\) of the crests inside it.
+--- Group velocity
+tex: v = \frac{d\omega}{dk}
+note: Let \(\delta k\to0\): a localised electron is a packet of Bloch waves with \(k\) near some value, and it moves at the group velocity \(d\omega/dk\).
+---
+tex: v = \frac{d(E/\hbar)}{dk}
+move: substitute | by=\omega = E/\hbar
+note: The energy of a wave is \(E=\hbar\omega\) (Planck–Einstein, also for matter waves).
+---
+tex: v = \frac1\hbar\frac{dE}{dk}
+move: simplify
+note: The slope of the band. For free electrons \(E=\hbar^2k^2/2m\) gives \(v=\hbar k/m\), as expected. At the bottom and top of a band and at the zone boundary \(k=\pm\pi/a\), \(dE/dk=0\): the electron does not move (a standing wave).
+
+=== effmass
+title: Effective mass \(m^* = \hbar^2/(d^2E/dk^2)\)
+marks: 5 marks
+src: Puri & Babbar §6.4.2
+legend: \(\mathcal E\): applied field. \(v=\frac1\hbar\frac{dE}{dk}\) (group velocity). The electron's charge is taken as \(e\) in magnitude; only the form of the result matters here.
+result: m^* = \frac{\hbar^2}{d^2E/dk^2}
+use: v=\frac1\hbar\frac{dE}{dk} | group velocity of a Bloch electron: [[go:der:vgroup|group-velocity derivation]]
+use: F=e\mathcal E | force on a charge \(e\) in a field \(\mathcal E\)
+use: dE=F\,v\,dt | work = force \(\times\) distance moved in \(dt\)
+use: m^* | effective mass: [[go:m2-dynamics__t0|speed and effective mass]]
+use: a=F/m^* | the comparison with Newton's second law made in the last step
+--- Work done by the field
+tex: dE = e\mathcal E\,v\,dt
+note: In a time \(dt\) the field does work force $\times$ distance \(=e\mathcal E\cdot v\,dt\).
+---
+tex: dE = \frac{e\mathcal E}{\hbar}\frac{dE}{dk}\,dt
+move: substitute | by=v = \frac1\hbar\frac{dE}{dk}
+---
+tex: \frac{dE}{dk}dk = \frac{e\mathcal E}{\hbar}\frac{dE}{dk}\,dt
+move: substitute | by=dE = \frac{dE}{dk}dk
+---
+tex: \hbar\frac{dk}{dt} = e\mathcal E
+move: cancel
+note: Cancel \(dE/dk\) and rearrange. \(\hbar k\) behaves like momentum (crystal momentum) and changes at the rate of the external force.
+--- Acceleration
+tex: a = \frac{dv}{dt} = \frac1\hbar\frac{d^2E}{dk^2}\frac{dk}{dt}
+move: differentiate | wrt=t
+note: Chain rule: \(v\) depends on \(t\) through \(k\).
+ask: Using \(\hbar\,dk/dt=e\mathcal E\), what does \(dk/dt\) become?
+opt*: \(e\mathcal E/\hbar\)
+opt: \(\hbar e\mathcal E\)
+opt: \(e\mathcal E/m\)
+opt: \(\hbar/e\mathcal E\)
+why: Divide both sides by \(\hbar\).
+---
+tex: a = \frac{e\mathcal E}{\hbar^2}\frac{d^2E}{dk^2}
+move: substitute | by=\frac{dk}{dt} = \frac{e\mathcal E}{\hbar}
+--- Compare with Newton
+tex: m^* = \frac{\hbar^2}{d^2E/dk^2}
+move: identity | label=Compare with \(a = F/m^*\), \(F=e\mathcal E\)
+note: The curvature of the band plays the part of mass. Bottom of a band: \(m^*>0\). Top of a band: \(m^*<0\) (the electron behaves like a positive charge, a hole: [[go:m2-dynamics__t2|holes]]). At the inflection point \(m^*\to\infty\). For free electrons \(d^2E/dk^2=\hbar^2/m\) gives \(m^*=m\).

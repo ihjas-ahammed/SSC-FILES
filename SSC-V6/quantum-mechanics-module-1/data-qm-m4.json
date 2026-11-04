@@ -1,0 +1,1535 @@
+{
+  "meta": {
+    "title": "Quantum Mechanics I — Module IV: The Quantum Harmonic Oscillator and 3D Cartesian Problems",
+    "subject": "Quantum Mechanics I (MAT/PHY, Sem 5)",
+    "home": "Focus",
+    "opponent": "Time",
+    "version": 1,
+    "inlineChecks": false,
+    "autoRevealQuestions": true,
+    "definitionChecks": true,
+    "date": "",
+    "sessions": []
+  },
+  "match": {
+    "periodEnds": [25, 45, 70, 90],
+    "breaks": [5, 10, 5]
+  },
+  "glossary": [
+    {
+      "id": "qm-m4-harmonic-oscillator",
+      "term": "harmonic oscillator",
+      "aliases": ["quantum harmonic oscillator"],
+      "definition": "A harmonic oscillator is a particle of mass m moving in a parabolic potential V(x) = (1/2)mω²x² with angular frequency ω.",
+      "example": "In Equation (4.114), the Hamiltonian is Ĥ = P̂²/(2m) + (1/2)mω²X̂²."
+    },
+    {
+      "id": "qm-m4-hermite-polynomials",
+      "term": "Hermite polynomials",
+      "aliases": ["Hermite polynomial"],
+      "definition": "Hermite polynomials H_n(y) are nth-order polynomials defined by H_n(y) = (-1)^n e^{y²}(d^n/dy^n)e^{-y²} that appear in harmonic oscillator wave functions.",
+      "example": "In Equation (4.120), H_0(y) = 1 and H_1(y) = 2y."
+    },
+    {
+      "id": "qm-m4-ladder-operators",
+      "term": "ladder operators",
+      "aliases": ["raising and lowering operators", "creation and annihilation operators"],
+      "definition": "Ladder operators are the non-Hermitian dimensionless operators â and â† that lower or raise a harmonic oscillator energy state |n⟩ by one quantum ħω.",
+      "example": "By Equations (4.143) and (4.144), â|n⟩ = √n|n-1⟩ and â†|n⟩ = √(n+1)|n+1⟩."
+    },
+    {
+      "id": "qm-m4-number-operator",
+      "term": "number operator",
+      "aliases": ["occupation number operator"],
+      "definition": "The number operator N̂ = â†â is a Hermitian operator whose eigenvalue on the energy eigenstate |n⟩ is the nonnegative integer n.",
+      "example": "In Equation (4.130), N̂|n⟩ = n|n⟩ and Ĥ = ħω(N̂ + 1/2)."
+    },
+    {
+      "id": "qm-m4-zero-point-energy",
+      "term": "zero-point energy",
+      "definition": "Zero-point energy is the non-zero lowest possible energy of a bound quantum system in its ground state, required by the Heisenberg uncertainty principle.",
+      "example": "A 1D harmonic oscillator has E_0 = ħω/2, and a 3D cubic box has E_{111} = 3π²ħ²/(2mL²)."
+    },
+    {
+      "id": "qm-m4-virial-theorem",
+      "term": "virial theorem",
+      "aliases": ["Virial theorem"],
+      "definition": "For the harmonic oscillator, the virial theorem states that the expectation values of potential and kinetic energies in state |n⟩ are equal and each equals half the total energy.",
+      "example": "Equation (4.189): (mω²/2)⟨n|X̂²|n⟩ = (1/2m)⟨n|P̂²|n⟩ = (1/2)⟨n|Ĥ|n⟩."
+    },
+    {
+      "id": "qm-m4-laplacian",
+      "term": "Laplacian",
+      "aliases": ["Laplacian operator"],
+      "definition": "The Laplacian ∇² = ∂²/∂x² + ∂²/∂y² + ∂²/∂z² is the three-dimensional second-derivative spatial operator in the Schrödinger equation.",
+      "example": "In Equation (6.1), the 3D kinetic energy operator is -(ħ²/2m)∇²."
+    },
+    {
+      "id": "qm-m4-separation-of-variables",
+      "term": "separation of variables",
+      "definition": "Separation of variables is the technique of splitting the 3D Schrödinger equation into three independent 1D equations when V(x,y,z) = V_x(x) + V_y(y) + V_z(z).",
+      "example": "In Equations (6.7) and (6.10), ψ(x,y,z) = X(x)Y(y)Z(z) and E = E_x + E_y + E_z."
+    },
+    {
+      "id": "qm-m4-rectangular-box-potential",
+      "term": "rectangular box potential",
+      "aliases": ["3D box potential"],
+      "definition": "The rectangular box potential confines a particle inside a 3D box of sides a, b, c where V = 0 inside and V = ∞ outside.",
+      "example": "Equation (6.26) gives the energies E_{n_x n_y n_z} = (ħ²π²/2m)(n_x²/a² + n_y²/b² + n_z²/c²)."
+    },
+    {
+      "id": "qm-m4-cubic-box-potential",
+      "term": "cubic box potential",
+      "aliases": ["cubic potential"],
+      "definition": "The cubic box potential is a 3D box with equal sides a = b = c = L, whose symmetry makes permutations of (n_x, n_y, n_z) share the same energy.",
+      "example": "In Equation (6.27), E_{n_x n_y n_z} = (ħ²π²/2mL²)(n_x² + n_y² + n_z²)."
+    },
+    {
+      "id": "qm-m4-degeneracy",
+      "term": "degeneracy",
+      "aliases": ["degenerate", "degenerate states"],
+      "definition": "Degeneracy is the presence of two or more distinct linearly independent quantum states that have the exact same energy eigenvalue due to symmetry in the potential.",
+      "example": "In a cubic box, ψ_{211}, ψ_{121}, and ψ_{112} all have energy 6E_1, so the first excited state is threefold degenerate."
+    },
+    {
+      "id": "qm-m4-anisotropic-oscillator",
+      "term": "anisotropic oscillator",
+      "aliases": ["anisotropic"],
+      "definition": "An anisotropic oscillator is a 3D harmonic oscillator whose angular frequencies ω_x, ω_y, ω_z along the three Cartesian axes are different, so it has no symmetry or degeneracy.",
+      "example": "Equation (6.31): V̂ = (1/2)mω_x²X̂² + (1/2)mω_y²Ŷ² + (1/2)mω_z²Ẑ²."
+    },
+    {
+      "id": "qm-m4-isotropic-oscillator",
+      "term": "isotropic oscillator",
+      "aliases": ["isotropic", "isotropic harmonic oscillator"],
+      "definition": "An isotropic oscillator is a 3D harmonic oscillator with equal angular frequencies ω_x = ω_y = ω_z = ω along all three axes, producing degenerate energy levels.",
+      "example": "Equation (6.35): E_{n_x n_y n_z} = (n + 3/2)ħω with degeneracy g_n = (1/2)(n+1)(n+2)."
+    }
+  ],
+  "sections": [
+    {
+      "id": "qm-m4-section-1",
+      "short": "Module IV",
+      "title": "Module IV",
+      "sheets": [
+        {
+          "id": "qm-m4-unit-22",
+          "title": "The Harmonic Oscillator",
+          "icon": "wave",
+          "source": "Unit 22 · Zettili §4.8–4.8.5",
+          "cards": [
+            {
+              "id": "qm-m4-u22-c1",
+              "type": "intuition",
+              "term": "qm-m4-harmonic-oscillator",
+              "title": "A particle trapped in a parabolic spring bowl",
+              "meaning": "A harmonic oscillator is a particle pulled back toward x = 0 by a spring-like restoring force, moving in a parabolic potential bowl V(x) = (1/2)mω²x².",
+              "art": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"152\" x2=\"240\" y2=\"152\" class=\"ik\"/><line x1=\"130\" y1=\"162\" x2=\"130\" y2=\"18\" class=\"ik\"/><path d=\"M 46 24 Q 130 280 214 24\" class=\"lk\"/><line x1=\"101\" y1=\"132\" x2=\"159\" y2=\"132\" class=\"ik\"/><line x1=\"82\" y1=\"96\" x2=\"178\" y2=\"96\" class=\"ik\"/><line x1=\"66\" y1=\"60\" x2=\"194\" y2=\"60\" class=\"ik\"/><text x=\"136\" y=\"26\" class=\"t\">V(x)</text><text x=\"236\" y=\"166\" class=\"t\">x</text><text x=\"166\" y=\"136\" class=\"t\">E₀ = ½ħω</text><text x=\"184\" y=\"100\" class=\"t\">E₁ = 3/2 ħω</text><text x=\"198\" y=\"64\" class=\"t\">E₂ = 5/2 ħω</text></svg>",
+              "picture": "Look at the parabolic bowl V(x) = ½mω²x² and its equally spaced energy rungs E_n = (n + ½)ħω.",
+              "example": "Vibrating atoms in a solid or a diatomic molecule oscillate back and forth like a mass on a spring.",
+              "bridge": "Writing the Hamiltonian Ĥ = P̂²/(2m) + ½mω²X̂² gives Equation (4.114), which we solve by the analytic or algebraic method."
+            },
+            {
+              "id": "qm-m4-u22-c2",
+              "type": "info",
+              "label": "01 · §4.8",
+              "title": "What is the quantum harmonic oscillator?",
+              "defines": ["qm-m4-harmonic-oscillator", "qm-m4-hermite-polynomials"],
+              "body": "A harmonic oscillator is a mass \\(m\\) in potential \\(V(x)=\\frac{1}{2}m\\omega^2 x^2\\) with Hamiltonian (4.114), length scale \\(x_0=\\sqrt{\\hbar/(m\\omega)}\\), and Hermite polynomial wave functions (4.118).",
+              "tex": "\\hat{H} = \\frac{\\hat{P}^2}{2m} + \\frac{1}{2}m\\omega^2\\hat{X}^2, \\quad x_0 = \\sqrt{\\frac{\\hbar}{m\\omega}}, \\quad \\psi_n(x) = \\frac{1}{\\sqrt{\\sqrt{\\pi}2^n n! x_0}}e^{-x^2/2x_0^2}H_n\\!\\left(\\frac{x}{x_0}\\right)",
+              "examples": ["Equations (4.114)–(4.119)", "H₀(y)=1, H₁(y)=2y", "Length scale x₀"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "parabola-well",
+                    "objects": [
+                      { "type": "segment", "p1": [20, 26], "p2": [240, 26], "role": "ik", "width": 2, "name": "xaxis" },
+                      { "type": "segment", "p1": [130, 16], "p2": [130, 164], "role": "ik", "width": 2, "name": "yaxis" },
+                      { "type": "curve", "points": [[48, 156], [130, -104], [212, 156]], "role": "lk", "width": 2.2, "name": "pot" },
+                      { "type": "segment", "p1": [98, 52], "p2": [162, 52], "role": "ik", "width": 1.8, "name": "e0" },
+                      { "type": "segment", "p1": [78, 92], "p2": [182, 92], "role": "ik", "width": 1.8, "name": "e1" },
+                      { "type": "segment", "p1": [62, 132], "p2": [198, 132], "role": "ik", "width": 1.8, "name": "e2" },
+                      { "type": "label", "coords": [152, 160], "text": "V(x) = ½mω²x²", "size": 11, "align": "center", "role": "t", "name": "pot" },
+                      { "type": "label", "coords": [196, 52], "text": "n = 0", "size": 11, "align": "center", "role": "t", "name": "e0" },
+                      { "type": "label", "coords": [208, 92], "text": "n = 1", "size": 11, "align": "center", "role": "t", "name": "e1" },
+                      { "type": "label", "coords": [220, 132], "text": "n = 2", "size": 11, "align": "center", "role": "t", "name": "e2" },
+                      { "type": "label", "coords": [238, 14], "text": "x", "size": 11, "align": "center", "role": "t", "name": "xaxis" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "qm-m4-u22-c3",
+              "type": "intuition",
+              "term": "qm-m4-ladder-operators",
+              "title": "Stepping up and down the energy ladder by ħω",
+              "meaning": "Instead of solving a differential equation for each level, ladder operators step directly up or down from one energy eigenstate |n⟩ to the next.",
+              "art": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"64\" y1=\"144\" x2=\"196\" y2=\"144\" class=\"ik\"/><line x1=\"64\" y1=\"104\" x2=\"196\" y2=\"104\" class=\"ik\"/><line x1=\"64\" y1=\"64\" x2=\"196\" y2=\"64\" class=\"ik\"/><line x1=\"64\" y1=\"24\" x2=\"196\" y2=\"24\" class=\"ik\"/><line x1=\"104\" y1=\"140\" x2=\"104\" y2=\"108\" class=\"lk\"/><polygon points=\"100,112 104,104 108,112\" class=\"f\"/><line x1=\"104\" y1=\"100\" x2=\"104\" y2=\"68\" class=\"lk\"/><polygon points=\"100,72 104,64 108,72\" class=\"f\"/><line x1=\"156\" y1=\"68\" x2=\"156\" y2=\"100\" class=\"ik\"/><polygon points=\"152,96 156,104 160,96\" class=\"f\"/><line x1=\"156\" y1=\"108\" x2=\"156\" y2=\"140\" class=\"ik\"/><polygon points=\"152,136 156,144 160,136\" class=\"f\"/><text x=\"36\" y=\"148\" class=\"t\">|0⟩</text><text x=\"36\" y=\"108\" class=\"t\">|1⟩</text><text x=\"36\" y=\"68\" class=\"t\">|2⟩</text><text x=\"36\" y=\"28\" class=\"t\">|3⟩</text><text x=\"82\" y=\"88\" text-anchor=\"end\" class=\"t\">â† (+ħω)</text><text x=\"176\" y=\"88\" class=\"t\">â (-ħω)</text><text x=\"130\" y=\"168\" text-anchor=\"middle\" class=\"t\">â|0⟩ = 0 (bottom rung)</text></svg>",
+              "picture": "Look at the rungs |0⟩, |1⟩, |2⟩, |3⟩: â† climbs up one rung (+ħω) and â steps down one rung (−ħω).",
+              "example": "Acting with â† on |0⟩ creates the first excited state |1⟩; acting with â on |0⟩ gives 0 because no lower rung exists.",
+              "bridge": "Defining dimensionless operators q̂ and p̂ in Equation (4.121) lets us build â, â†, and the number operator N̂ = â†â."
+            },
+            {
+              "id": "qm-m4-u22-c4",
+              "type": "info",
+              "label": "02 · §4.8–4.8.1",
+              "title": "What are ladder operators, number operator, and zero-point energy?",
+              "defines": ["qm-m4-ladder-operators", "qm-m4-number-operator", "qm-m4-zero-point-energy"],
+              "body": "Ladder operators \\(\\hat{a}\\) and \\(\\hat{a}^\\dagger\\) (4.122) lower or raise \\(|n\\rangle\\) by \\(\\hbar\\omega\\), the number operator \\(\\hat{N}=\\hat{a}^\\dagger\\hat{a}\\) counts \\(n\\), and \\(E_0=\\frac{1}{2}\\hbar\\omega\\) is the zero-point energy.",
+              "tex": "\\hat{a}=\\frac{1}{\\sqrt{2}}(\\hat{q}+i\\hat{p}), \\quad \\hat{a}^\\dagger=\\frac{1}{\\sqrt{2}}(\\hat{q}-i\\hat{p}), \\quad [\\hat{a},\\hat{a}^\\dagger]=1, \\quad \\hat{a}|n\\rangle=\\sqrt{n}|n-1\\rangle, \\quad \\hat{a}^\\dagger|n\\rangle=\\sqrt{n+1}|n+1\\rangle",
+              "examples": ["Equations (4.122)–(4.145)", "E_n = (n + 1/2)ħω", "E₀ = ħω/2 > 0"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "ladder-rungs",
+                    "objects": [
+                      { "type": "segment", "p1": [56, 36], "p2": [204, 36], "role": "ik", "width": 2, "name": "r0" },
+                      { "type": "segment", "p1": [56, 84], "p2": [204, 84], "role": "ik", "width": 2, "name": "r1" },
+                      { "type": "segment", "p1": [56, 132], "p2": [204, 132], "role": "ik", "width": 2, "name": "r2" },
+                      { "type": "arrow", "p1": [100, 38], "p2": [100, 82], "role": "lk", "width": 2, "name": "up" },
+                      { "type": "arrow", "p1": [160, 130], "p2": [160, 86], "role": "ik", "width": 2, "name": "down" },
+                      { "type": "label", "coords": [34, 36], "text": "E₀=½ħω", "size": 11, "align": "center", "role": "t", "name": "r0" },
+                      { "type": "label", "coords": [34, 84], "text": "E₁=3/2ħω", "size": 11, "align": "center", "role": "t", "name": "r1" },
+                      { "type": "label", "coords": [34, 132], "text": "E₂=5/2ħω", "size": 11, "align": "center", "role": "t", "name": "r2" },
+                      { "type": "label", "coords": [100, 100], "text": "â†", "size": 11, "align": "center", "role": "t", "name": "up" },
+                      { "type": "label", "coords": [160, 68], "text": "â", "size": 11, "align": "center", "role": "t", "name": "down" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "qm-m4-u22-c5",
+              "type": "derivation",
+              "label": "Derivation · §4.8–4.8.1",
+              "title": "Algebraic Hamiltonian and energy eigenvalues (Equations (4.121)–(4.145))",
+              "legend": "\\(\\hat{q}=\\hat{X}\\sqrt{m\\omega/\\hbar}\\), \\(\\hat{p}=\\hat{P}/\\sqrt{m\\hbar\\omega}\\), \\(\\hat{a}, \\hat{a}^\\dagger\\) ladder operators, \\(\\hat{N}=\\hat{a}^\\dagger\\hat{a}\\) number operator.",
+              "setup": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "ops",
+                    "objects": [
+                      { "type": "polygon", "points": [[24, 118], [24, 156], [118, 156], [118, 118]], "role": "s ok", "name": "ops" },
+                      { "type": "polygon", "points": [[142, 118], [142, 156], [236, 156], [236, 118]], "role": "s ok", "name": "ops" },
+                      { "type": "label", "coords": [71, 137], "text": "â = (q̂ + ip̂)/√2", "size": 11, "align": "center", "role": "t", "name": "ops" },
+                      { "type": "label", "coords": [189, 137], "text": "â† = (q̂ - ip̂)/√2", "size": 11, "align": "center", "role": "t", "name": "ops" }
+                    ]
+                  },
+                  {
+                    "step": 2,
+                    "name": "numop",
+                    "objects": [
+                      { "type": "polygon", "points": [[56, 68], [56, 102], [204, 102], [204, 68]], "role": "f", "name": "numop" },
+                      { "type": "label", "coords": [130, 85], "text": "Ĥ = ħω(N̂ + 1/2), N̂ = â†â", "size": 11, "align": "center", "role": "i", "name": "numop" }
+                    ]
+                  },
+                  {
+                    "step": 4,
+                    "name": "levels",
+                    "objects": [
+                      { "type": "segment", "p1": [44, 22], "p2": [216, 22], "role": "ik", "width": 2, "name": "levels" },
+                      { "type": "segment", "p1": [44, 46], "p2": [216, 46], "role": "lk", "width": 2, "name": "levels" },
+                      { "type": "label", "coords": [130, 34], "text": "E_n = (n + 1/2)ħω, ΔE = ħω", "size": 11, "align": "center", "role": "t", "name": "levels" }
+                    ]
+                  }
+                ]
+              },
+              "phases": [
+                { "name": "Dimensionless form", "why": "write Ĥ in terms of dimensionless q̂ and p̂" },
+                { "name": "Number operator", "why": "evaluate â†â using [q̂, p̂] = i to express Ĥ via N̂" },
+                { "name": "Eigenvalues", "why": "apply Ĥ to joint eigenstate |n⟩ of N̂ and Ĥ" },
+                { "name": "Quantized spectrum", "why": "use â|0⟩ = 0 to fix n = 0, 1, 2, ... and E_n" }
+              ],
+              "steps": [
+                {
+                  "phase": "Dimensionless form",
+                  "tex": "\\hat{H} = \\frac{\\hbar\\omega}{2}(\\hat{p}^2 + \\hat{q}^2)",
+                  "focus": ["ops"],
+                  "note": "Equation (4.121): rewrite Hamiltonian (4.114) using \\(\\hat{p}=\\hat{P}/\\sqrt{m\\hbar\\omega}\\) and \\(\\hat{q}=\\hat{X}\\sqrt{m\\omega/\\hbar}\\).",
+                  "ask": {
+                    "q": "From Equation (4.122), what is \\(\\hat{a}^\\dagger\\hat{a}\\) when expanded in Equation (4.123)?",
+                    "options": [
+                      "\\(\\frac{1}{2}(\\hat{q}^2 + \\hat{p}^2) + \\frac{i}{2}[\\hat{q}, \\hat{p}]\\)",
+                      "\\(\\hat{q}^2 - \\hat{p}^2\\)",
+                      "\\(\\frac{1}{2}(\\hat{q}^2 + \\hat{p}^2)\\) only",
+                      "\\(i[\\hat{q}, \\hat{p}]\\) only"
+                    ],
+                    "answer": 0,
+                    "why": "Multiplying (q̂ − ip̂)(q̂ + ip̂)/2 gives (q̂² + p̂² + iq̂p̂ − ip̂q̂)/2 = (q̂² + p̂²)/2 + (i/2)[q̂, p̂]."
+                  }
+                },
+                {
+                  "move": { "type": "substitute", "by": "\\hat{a}^\\dagger\\hat{a} = \\frac{1}{2}(\\hat{q}-i\\hat{p})(\\hat{q}+i\\hat{p})" },
+                  "tex": "\\hat{a}^\\dagger\\hat{a} = \\frac{1}{2}(\\hat{q}^2 + \\hat{p}^2) + \\frac{i}{2}[\\hat{q}, \\hat{p}]",
+                  "focus": ["ops"],
+                  "note": "Equation (4.123): expand \\(\\hat{a}^\\dagger\\hat{a}\\) and group \\(i(\\hat{q}\\hat{p}-\\hat{p}\\hat{q}) = i[\\hat{q},\\hat{p}]\\).",
+                  "ask": {
+                    "q": "Using \\([\\hat{X}, \\hat{P}] = i\\hbar\\), what is the commutator \\([\\hat{q}, \\hat{p}]\\) in Equation (4.124)?",
+                    "options": [
+                      "\\(i\\hbar\\)",
+                      "\\(i\\)",
+                      "\\(1\\)",
+                      "\\(0\\)"
+                    ],
+                    "answer": 1,
+                    "why": "By Equation (4.124), the factors √(mω/ħ) and 1/√(ħmω) multiply to 1/ħ, so [q̂, p̂] = (1/ħ)[X̂, P̂] = i."
+                  }
+                },
+                {
+                  "phase": "Number operator",
+                  "move": { "type": "substitute", "by": "[\\hat{q}, \\hat{p}] = i" },
+                  "tex": "\\hat{a}^\\dagger\\hat{a} = \\frac{1}{2}(\\hat{q}^2 + \\hat{p}^2) - \\frac{1}{2}",
+                  "focus": ["ops", "numop"],
+                  "note": "Equation (4.125): substituting \\([\\hat{q},\\hat{p}] = i\\) gives \\(\\frac{i}{2}(i) = -\\frac{1}{2}\\)."
+                },
+                {
+                  "move": { "type": "substitute", "by": "\\frac{1}{2}(\\hat{q}^2+\\hat{p}^2) = \\hat{N} + \\frac{1}{2}" },
+                  "tex": "\\hat{H} = \\hbar\\omega\\left(\\hat{N} + \\frac{1}{2}\\right)",
+                  "focus": ["numop"],
+                  "note": "Equation (4.127): insert (4.126) into (4.121) with number operator \\(\\hat{N} = \\hat{a}^\\dagger\\hat{a}\\).",
+                  "ask": {
+                    "q": "How does \\(\\hat{H}\\) act on a joint eigenstate \\(|n\\rangle\\) where \\(\\hat{N}|n\\rangle = n|n\\rangle\\)?",
+                    "options": [
+                      "\\(n\\hbar\\omega|n\\rangle\\)",
+                      "\\(\\sqrt{n}\\hbar\\omega|n\\rangle\\)",
+                      "\\(\\left(n + \\frac{1}{2}\\right)\\hbar\\omega|n\\rangle\\)",
+                      "\\(\\left(n - \\frac{1}{2}\\right)\\hbar\\omega|n\\rangle\\)"
+                    ],
+                    "answer": 2,
+                    "why": "Replacing N̂|n⟩ by n|n⟩ in Equation (4.127) immediately yields ħω(n + 1/2)|n⟩."
+                  }
+                },
+                {
+                  "phase": "Eigenvalues",
+                  "move": { "type": "evaluate", "by": "\\hat{N}|n\\rangle = n|n\\rangle" },
+                  "tex": "\\hat{H}|n\\rangle = \\left(n + \\frac{1}{2}\\right)\\hbar\\omega|n\\rangle",
+                  "focus": ["numop", "levels"],
+                  "note": "Equations (4.130)–(4.131): \\(|n\\rangle\\) is a simultaneous eigenstate of \\(\\hat{N}\\) and \\(\\hat{H}\\).",
+                  "ask": {
+                    "q": "Why must \\(n\\) in Equation (4.145) be a nonnegative integer \\(0, 1, 2, \\dots\\)?",
+                    "options": [
+                      "Ladder sequence must terminate at \\(\\hat{a}|0\\rangle = 0\\)",
+                      "The potential \\(V(x)\\) is negative",
+                      "Momentum \\(\\hat{P}\\) is non-Hermitian",
+                      "The commutator \\([\\hat{a}, \\hat{a}^\\dagger]\\) is zero"
+                    ],
+                    "answer": 0,
+                    "why": "Since ⟨n|â†â|n⟩ = n ≥ 0, repeated lowering by â|n⟩ = √n|n−1⟩ must terminate at â|0⟩ = 0, forcing n to be a nonnegative integer."
+                  }
+                },
+                {
+                  "phase": "Quantized spectrum",
+                  "move": { "type": "evaluate", "by": "\\hat{H}|n\\rangle = E_n|n\\rangle" },
+                  "tex": "E_n = \\left(n + \\frac{1}{2}\\right)\\hbar\\omega",
+                  "focus": ["levels"],
+                  "note": "Equation (4.145): discrete, equally spaced energy levels for \\(n = 0, 1, 2, 3, \\dots\\)."
+                }
+              ]
+            },
+            {
+              "id": "qm-m4-u22-c6",
+              "type": "info",
+              "label": "03 · §4.8.2–4.8.3",
+              "title": "Position-space eigenstates up to the first excited state",
+              "body": "From \\(|n\\rangle = \\frac{1}{\\sqrt{n!}}(\\hat{a}^\\dagger)^n|0\\rangle\\) (4.149), solving \\(\\hat{a}|0\\rangle = 0\\) in position space gives the even Gaussian \\(\\psi_0(x)\\) (4.158), and applying \\(\\hat{a}^\\dagger\\) once gives odd \\(\\psi_1(x)\\) (4.160).",
+              "tex": "\\psi_0(x) = \\frac{1}{\\sqrt{\\sqrt{\\pi}x_0}}\\exp\\!\\left(-\\frac{x^2}{2x_0^2}\\right), \\qquad \\psi_1(x) = \\sqrt{\\frac{2}{\\sqrt{\\pi}x_0^3}}\\,x\\exp\\!\\left(-\\frac{x^2}{2x_0^2}\\right)",
+              "examples": ["Equations (4.146)–(4.160)", "ψ₀(x) even, 0 nodes", "ψ₁(x) odd, 1 node"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "psi0-psi1",
+                    "objects": [
+                      { "type": "segment", "p1": [14, 90], "p2": [122, 90], "role": "ik", "width": 1.8, "name": "ax0" },
+                      { "type": "segment", "p1": [68, 28], "p2": [68, 156], "role": "ik", "width": 1.8, "name": "ay0" },
+                      { "type": "polyline", "points": [[18, 91], [34, 95], [48, 112], [58, 134], [68, 146], [78, 134], [88, 112], [102, 95], [118, 91]], "role": "lk", "width": 2.2, "dash": 0, "name": "p0" },
+                      { "type": "segment", "p1": [138, 90], "p2": [246, 90], "role": "ik", "width": 1.8, "name": "ax1" },
+                      { "type": "segment", "p1": [192, 28], "p2": [192, 156], "role": "ik", "width": 1.8, "name": "ay1" },
+                      { "type": "polyline", "points": [[142, 89], [156, 80], [168, 52], [176, 44], [192, 90], [208, 136], [216, 128], [228, 100], [242, 91]], "role": "lk", "width": 2.2, "dash": 0, "name": "p1" },
+                      { "type": "label", "coords": [68, 166], "text": "ψ₀(x) (even)", "size": 11, "align": "center", "role": "t", "name": "p0" },
+                      { "type": "label", "coords": [192, 166], "text": "ψ₁(x) (odd)", "size": 11, "align": "center", "role": "t", "name": "p1" },
+                      { "type": "label", "coords": [118, 76], "text": "x", "size": 11, "align": "center", "role": "t", "name": "ax0" },
+                      { "type": "label", "coords": [242, 76], "text": "x", "size": 11, "align": "center", "role": "t", "name": "ax1" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "qm-m4-u22-c7",
+              "type": "derivation",
+              "label": "Derivation · §4.8.3",
+              "title": "Ground and first excited states in position space (Equations (4.151)–(4.160))",
+              "legend": "\\(x_0 = \\sqrt{\\hbar/(m\\omega)}\\) oscillator length scale, \\(\\psi_0(x) = \\langle x|0\\rangle\\) ground state, \\(\\psi_1(x) = \\langle x|1\\rangle\\) first excited state.",
+              "setup": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "gwave",
+                    "objects": [
+                      { "type": "segment", "p1": [18, 42], "p2": [122, 42], "role": "ik", "width": 1.8, "name": "gwave" },
+                      { "type": "segment", "p1": [70, 22], "p2": [70, 154], "role": "ik", "width": 1.8, "name": "gwave" },
+                      { "type": "polyline", "points": [[22, 44], [38, 52], [52, 82], [62, 118], [70, 136], [78, 118], [88, 82], [102, 52], [118, 44]], "role": "lk", "width": 2.2, "dash": 0, "name": "gwave" },
+                      { "type": "label", "coords": [70, 164], "text": "ψ₀(x): â|0⟩ = 0", "size": 11, "align": "center", "role": "t", "name": "gwave" }
+                    ]
+                  },
+                  {
+                    "step": 4,
+                    "name": "ewave",
+                    "objects": [
+                      { "type": "segment", "p1": [138, 90], "p2": [242, 90], "role": "ik", "width": 1.8, "name": "ewave" },
+                      { "type": "segment", "p1": [190, 22], "p2": [190, 154], "role": "ik", "width": 1.8, "name": "ewave" },
+                      { "type": "polyline", "points": [[142, 89], [156, 78], [170, 44], [190, 90], [210, 136], [224, 102], [238, 91]], "role": "lk", "width": 2.2, "dash": 0, "name": "ewave" },
+                      { "type": "label", "coords": [190, 164], "text": "ψ₁(x) = ⟨x|â†|0⟩", "size": 11, "align": "center", "role": "t", "name": "ewave" }
+                    ]
+                  }
+                ]
+              },
+              "phases": [
+                { "name": "Position ladder", "why": "write â in the position representation using Equation (4.152)" },
+                { "name": "Ground state", "why": "solve ⟨x|â|0⟩ = 0 and normalize ψ₀(x)" },
+                { "name": "First excited state", "why": "apply â† once to ψ₀(x) as in Equation (4.159)" },
+                { "name": "Final wave function", "why": "simplify to reach Equation (4.160)" }
+              ],
+              "steps": [
+                {
+                  "phase": "Position ladder",
+                  "tex": "\\hat{a} = \\frac{1}{\\sqrt{2}x_0}\\left(\\hat{X} + x_0^2\\frac{d}{dx}\\right)",
+                  "focus": ["gwave"],
+                  "note": "Equation (4.152): substitute \\(\\hat{p} = -ix_0\\frac{d}{dx}\\) (4.151) into \\(\\hat{a}\\).",
+                  "ask": {
+                    "q": "Which condition on the ground state \\(|0\\rangle\\) gives the differential equation for \\(\\psi_0(x)\\)?",
+                    "options": [
+                      "\\(\\langle x|\\hat{a}|0\\rangle = 0\\)",
+                      "\\(\\langle x|\\hat{a}^\\dagger|0\\rangle = 0\\)",
+                      "\\(\\langle x|\\hat{H}|0\\rangle = 0\\)",
+                      "\\(\\psi_0(0) = 0\\)"
+                    ],
+                    "answer": 0,
+                    "why": "Since |0⟩ is the lowest state, â|0⟩ = 0; projecting onto ⟨x| gives Equation (4.154)."
+                  }
+                },
+                {
+                  "phase": "Ground state",
+                  "move": { "type": "evaluate", "by": "\\langle x|\\hat{a}|0\\rangle = 0" },
+                  "tex": "\\frac{d\\psi_0(x)}{dx} = -\\frac{x}{x_0^2}\\psi_0(x)",
+                  "focus": ["gwave"],
+                  "note": "Equations (4.154)–(4.155): \\(x\\psi_0(x) + x_0^2(d\\psi_0/dx) = 0\\) isolates \\(d\\psi_0/dx\\).",
+                  "ask": {
+                    "q": "What is the solution \\(\\psi_0(x)\\) to Equation (4.155) before normalization?",
+                    "options": [
+                      "\\(A\\exp\\left(+\\frac{x^2}{2x_0^2}\\right)\\)",
+                      "\\(A\\exp\\left(-\\frac{x^2}{2x_0^2}\\right)\\)",
+                      "\\(A\\sin\\left(\\frac{x}{x_0}\\right)\\)",
+                      "\\(Ax\\exp\\left(-\\frac{x}{x_0}\\right)\\)"
+                    ],
+                    "answer": 1,
+                    "why": "Integrating dψ₀/ψ₀ = −(x/x₀²)dx gives Equation (4.156), ψ₀(x) = A exp(−x²/(2x₀²))."
+                  }
+                },
+                {
+                  "move": { "type": "integrate", "wrt": "x" },
+                  "tex": "\\psi_0(x) = A\\exp\\left(-\\frac{x^2}{2x_0^2}\\right)",
+                  "focus": ["gwave"],
+                  "note": "Equation (4.156): integrating gives a Gaussian with normalization constant \\(A\\).",
+                  "ask": {
+                    "q": "From \\(\\int_{-\\infty}^{+\\infty}|\\psi_0(x)|^2 dx = A^2\\sqrt{\\pi}x_0 = 1\\) (4.157), what is \\(A\\)?",
+                    "options": [
+                      "\\(\\frac{1}{\\sqrt{\\sqrt{\\pi}x_0}}\\)",
+                      "\\(\\sqrt{\\sqrt{\\pi}x_0}\\)",
+                      "\\(\\frac{1}{\\pi x_0}\\)",
+                      "\\(\\frac{1}{\\sqrt{2x_0}}\\)"
+                    ],
+                    "answer": 0,
+                    "why": "Solving A²√π x₀ = 1 gives A = 1 / √(√π x₀) = (mω/(πħ))^{1/4}."
+                  }
+                },
+                {
+                  "move": { "type": "substitute", "by": "A = \\frac{1}{\\sqrt{\\sqrt{\\pi}x_0}}" },
+                  "tex": "\\psi_0(x) = \\frac{1}{\\sqrt{\\sqrt{\\pi}x_0}}\\exp\\left(-\\frac{x^2}{2x_0^2}\\right)",
+                  "focus": ["gwave"],
+                  "note": "Equation (4.158): the normalized ground-state wave function is a Gaussian.",
+                  "ask": {
+                    "q": "How do we obtain the first excited state \\(\\psi_1(x) = \\langle x|1\\rangle\\) in Equation (4.159)?",
+                    "options": [
+                      "Apply \\(\\hat{a}\\) once to \\(\\psi_0(x)\\)",
+                      "Apply \\(\\hat{a}^\\dagger\\) once to \\(\\psi_0(x)\\)",
+                      "Square \\(\\psi_0(x)\\)",
+                      "Integrate \\(\\psi_0(x)\\) over \\(x\\)"
+                    ],
+                    "answer": 1,
+                    "why": "Since |1⟩ = â†|0⟩ (4.146), projecting onto ⟨x| with â† from (4.153) gives Equation (4.159)."
+                  }
+                },
+                {
+                  "phase": "First excited state",
+                  "move": { "type": "apply", "fn": "\\hat{a}^\\dagger" },
+                  "tex": "\\psi_1(x) = \\frac{1}{\\sqrt{2}x_0}\\left(x - x_0^2\\frac{d}{dx}\\right)\\psi_0(x)",
+                  "focus": ["gwave", "ewave"],
+                  "note": "Equation (4.159): apply \\(\\hat{a}^\\dagger = \\frac{1}{\\sqrt{2}x_0}(\\hat{X}-x_0^2\\frac{d}{dx})\\) (4.153) to \\(\\psi_0(x)\\)."
+                },
+                {
+                  "phase": "Final wave function",
+                  "move": { "type": "simplify" },
+                  "tex": "\\psi_1(x) = \\sqrt{\\frac{2}{\\sqrt{\\pi}x_0^3}}\\,x\\exp\\left(-\\frac{x^2}{2x_0^2}\\right)",
+                  "focus": ["ewave"],
+                  "note": "Equation (4.160): since \\(-x_0^2(d\\psi_0/dx) = x\\psi_0\\), we get \\(\\psi_1(x) = (\\sqrt{2}/x_0)x\\psi_0(x)\\)."
+                }
+              ]
+            },
+            {
+              "id": "qm-m4-u22-c8",
+              "type": "info",
+              "label": "04 · §4.8.4",
+              "title": "Matrix representation of operators in the N-basis",
+              "body": "In the \\(\\{|n\\rangle\\}\\) basis, \\(\\hat{N}\\) and \\(\\hat{H}\\) are diagonal (4.173), while \\(\\hat{a}, \\hat{a}^\\dagger, \\hat{X}, \\hat{P}\\) have only off-diagonal elements \\(n'=n\\pm 1\\) so \\(\\langle n|\\hat{X}|n\\rangle = \\langle n|\\hat{P}|n\\rangle = 0\\).",
+              "tex": "\\hat{X} = \\sqrt{\\frac{\\hbar}{2m\\omega}}(\\hat{a} + \\hat{a}^\\dagger), \\quad \\hat{P} = i\\sqrt{\\frac{m\\hbar\\omega}{2}}(\\hat{a}^\\dagger - \\hat{a}), \\quad \\langle n|\\hat{X}|n\\rangle = \\langle n|\\hat{P}|n\\rangle = 0",
+              "examples": ["Equations (4.173)–(4.183)", "Ĥ, N̂ diagonal", "⟨n|X̂|n⟩ = ⟨n|P̂|n⟩ = 0"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "matrix-grid",
+                    "objects": [
+                      { "type": "polygon", "points": [[24, 52], [24, 142], [114, 142], [114, 52]], "role": "s ok", "name": "hmat" },
+                      { "type": "segment", "p1": [34, 132], "p2": [104, 62], "role": "lk", "width": 2.4, "name": "diag" },
+                      { "type": "polygon", "points": [[146, 52], [146, 142], [236, 142], [236, 52]], "role": "s ok", "name": "xmat" },
+                      { "type": "segment", "p1": [168, 132], "p2": [226, 74], "role": "ik", "width": 2, "name": "off1" },
+                      { "type": "segment", "p1": [156, 120], "p2": [214, 62], "role": "ik", "width": 2, "name": "off2" },
+                      { "type": "label", "coords": [69, 156], "text": "Ĥ, N̂: diagonal", "size": 11, "align": "center", "role": "t", "name": "hmat" },
+                      { "type": "label", "coords": [191, 156], "text": "X̂, P̂: n' = n ± 1", "size": 11, "align": "center", "role": "t", "name": "xmat" },
+                      { "type": "label", "coords": [130, 26], "text": "Eq. (4.180): ⟨n|X̂|n⟩ = ⟨n|P̂|n⟩ = 0", "size": 11, "align": "center", "role": "t", "name": "xmat" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "qm-m4-u22-c9",
+              "type": "info",
+              "label": "05 · §4.8.5",
+              "title": "What is the virial theorem for the harmonic oscillator?",
+              "defines": ["qm-m4-virial-theorem"],
+              "body": "The virial theorem (4.189) states that average potential and kinetic energies in state \\(|n\\rangle\\) are equal and each equals \\(\\frac{1}{2}E_n\\), giving uncertainty product \\(\\Delta x\\Delta p = (n+\\frac{1}{2})\\hbar\\) (4.192).",
+              "tex": "\\frac{m\\omega^2}{2}\\langle n|\\hat{X}^2|n\\rangle = \\frac{1}{2m}\\langle n|\\hat{P}^2|n\\rangle = \\frac{1}{2}\\langle n|\\hat{H}|n\\rangle, \\qquad \\Delta x\\Delta p = \\left(n + \\frac{1}{2}\\right)\\hbar \\ge \\frac{\\hbar}{2}",
+              "examples": ["Equations (4.187)–(4.192)", "⟨V⟩ = ⟨T⟩ = E_n / 2", "Ground state: ΔxΔp = ħ/2"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "virial-split",
+                    "objects": [
+                      { "type": "polygon", "points": [[28, 86], [28, 142], [116, 142], [116, 86]], "role": "s ok", "name": "potbox" },
+                      { "type": "polygon", "points": [[144, 86], [144, 142], [232, 142], [232, 86]], "role": "s ok", "name": "kinbox" },
+                      { "type": "polygon", "points": [[56, 26], [56, 64], [204, 64], [204, 26]], "role": "f", "name": "uncbox" },
+                      { "type": "label", "coords": [72, 114], "text": "⟨V⟩ = ½E_n", "size": 11, "align": "center", "role": "t", "name": "potbox" },
+                      { "type": "label", "coords": [188, 114], "text": "⟨T⟩ = ½E_n", "size": 11, "align": "center", "role": "t", "name": "kinbox" },
+                      { "type": "label", "coords": [130, 45], "text": "ΔxΔp = (n + 1/2)ħ", "size": 11, "align": "center", "role": "i", "name": "uncbox" },
+                      { "type": "label", "coords": [130, 160], "text": "Virial theorem Eq. (4.189)", "size": 11, "align": "center", "role": "t", "name": "potbox" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "qm-m4-u22-c10",
+              "type": "derivation",
+              "label": "Derivation · §4.8.5",
+              "title": "Expectation values, virial theorem, and ΔxΔp (Equations (4.184)–(4.192))",
+              "legend": "\\(\\langle n|\\hat{X}^2|n\\rangle\\) mean squared position, \\(\\langle n|\\hat{P}^2|n\\rangle\\) mean squared momentum, \\(\\Delta x, \\Delta p\\) uncertainties.",
+              "setup": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "x2p2",
+                    "objects": [
+                      { "type": "polygon", "points": [[22, 114], [22, 154], [122, 154], [122, 114]], "role": "s ok", "name": "x2p2" },
+                      { "type": "polygon", "points": [[138, 114], [138, 154], [238, 154], [238, 114]], "role": "s ok", "name": "x2p2" },
+                      { "type": "label", "coords": [72, 134], "text": "⟨X̂²⟩ = ħ(2n+1)/(2mω)", "size": 11, "align": "center", "role": "t", "name": "x2p2" },
+                      { "type": "label", "coords": [188, 134], "text": "⟨P̂²⟩ = mħω(2n+1)/2", "size": 11, "align": "center", "role": "t", "name": "x2p2" }
+                    ]
+                  },
+                  {
+                    "step": 3,
+                    "name": "virunc",
+                    "objects": [
+                      { "type": "polygon", "points": [[36, 34], [36, 86], [224, 86], [224, 34]], "role": "f", "name": "virunc" },
+                      { "type": "label", "coords": [130, 68], "text": "⟨V⟩ = ⟨T⟩ = ½⟨Ĥ⟩ (Virial)", "size": 11, "align": "center", "role": "i", "name": "virunc" },
+                      { "type": "label", "coords": [130, 48], "text": "ΔxΔp = (n + 1/2)ħ ≥ ħ/2", "size": 11, "align": "center", "role": "i", "name": "virunc" }
+                    ]
+                  }
+                ]
+              },
+              "phases": [
+                { "name": "Square X̂", "why": "expand X̂² in terms of â and â† as in Equation (4.184)" },
+                { "name": "Expectation ⟨X̂²⟩", "why": "evaluate ⟨n|X̂²|n⟩ using ⟨n|â²|n⟩ = ⟨n|â†²|n⟩ = 0" },
+                { "name": "Expectation ⟨P̂²⟩", "why": "evaluate ⟨n|P̂²|n⟩ from Equation (4.185)" },
+                { "name": "Virial & Uncertainty", "why": "compare ⟨V⟩ and ⟨T⟩ and multiply Δx by Δp" }
+              ],
+              "steps": [
+                {
+                  "phase": "Square X̂",
+                  "tex": "\\hat{X}^2 = \\frac{\\hbar}{2m\\omega}\\left(\\hat{a}^2 + \\hat{a}^{\\dagger 2} + 2\\hat{a}^\\dagger\\hat{a} + 1\\right)",
+                  "focus": ["x2p2"],
+                  "note": "Equation (4.184): square \\(\\hat{X}\\) from (4.177) and use \\(\\hat{a}\\hat{a}^\\dagger + \\hat{a}^\\dagger\\hat{a} = 2\\hat{a}^\\dagger\\hat{a} + 1\\).",
+                  "ask": {
+                    "q": "In state \\(|n\\rangle\\), what are the expectation values \\(\\langle n|\\hat{a}^2|n\\rangle\\) and \\(\\langle n|\\hat{a}^{\\dagger 2}|n\\rangle\\)?",
+                    "options": [
+                      "Both equal \\(0\\)",
+                      "\\(n\\) and \\(n+1\\)",
+                      "\\(n(n-1)\\) and \\((n+1)(n+2)\\)",
+                      "Both equal \\(1\\)"
+                    ],
+                    "answer": 0,
+                    "why": "Since â²|n⟩ ~ |n−2⟩ and â†²|n⟩ ~ |n+2⟩ are orthogonal to ⟨n|, both expectation values are zero."
+                  }
+                },
+                {
+                  "phase": "Expectation ⟨X̂²⟩",
+                  "move": { "type": "evaluate", "by": "\\langle n|\\hat{a}^2|n\\rangle = 0,\\ \\langle n|\\hat{a}^\\dagger\\hat{a}|n\\rangle = n" },
+                  "tex": "\\langle n|\\hat{X}^2|n\\rangle = \\frac{\\hbar}{2m\\omega}(2n + 1)",
+                  "focus": ["x2p2"],
+                  "note": "Equation (4.187): using \\(\\langle n|2\\hat{a}^\\dagger\\hat{a}+1|n\\rangle = 2n+1\\) (4.186) gives \\(\\langle n|\\hat{X}^2|n\\rangle\\).",
+                  "ask": {
+                    "q": "Using Equation (4.185) for \\(\\hat{P}^2\\), what is \\(\\langle n|\\hat{P}^2|n\\rangle\\) in Equation (4.188)?",
+                    "options": [
+                      "\\(\\frac{\\hbar}{2m\\omega}(2n + 1)\\)",
+                      "\\(\\frac{m\\hbar\\omega}{2}(2n + 1)\\)",
+                      "\\(m\\hbar\\omega n\\)",
+                      "\\(0\\)"
+                    ],
+                    "answer": 1,
+                    "why": "In Equation (4.185), the minus signs on −(mħω/2) and (−2â†â − 1) cancel, giving (mħω/2)(2n + 1)."
+                  }
+                },
+                {
+                  "phase": "Expectation ⟨P̂²⟩",
+                  "move": { "type": "evaluate", "by": "\\hat{P}^2 = -\\frac{m\\hbar\\omega}{2}(\\hat{a}^2+\\hat{a}^{\\dagger 2}-2\\hat{a}^\\dagger\\hat{a}-1)" },
+                  "tex": "\\langle n|\\hat{P}^2|n\\rangle = \\frac{m\\hbar\\omega}{2}(2n + 1)",
+                  "focus": ["x2p2"],
+                  "note": "Equation (4.188): evaluating \\(\\langle n|\\hat{P}^2|n\\rangle\\) yields \\(\\frac{1}{2}m\\hbar\\omega(2n+1)\\).",
+                  "ask": {
+                    "q": "How do \\(\\frac{m\\omega^2}{2}\\langle n|\\hat{X}^2|n\\rangle\\) and \\(\\frac{1}{2m}\\langle n|\\hat{P}^2|n\\rangle\\) relate to \\(\\langle n|\\hat{H}|n\\rangle\\)?",
+                    "options": [
+                      "Each equals \\(\\frac{1}{2}\\langle n|\\hat{H}|n\\rangle\\)",
+                      "Each equals \\(\\langle n|\\hat{H}|n\\rangle\\)",
+                      "Potential is twice kinetic energy",
+                      "Their difference equals \\(\\hbar\\omega\\)"
+                    ],
+                    "answer": 0,
+                    "why": "Both equal (ħω/2)(n + 1/2) = (1/2)E_n, proving the virial theorem in Equation (4.189)."
+                  }
+                },
+                {
+                  "phase": "Virial & Uncertainty",
+                  "move": { "type": "multiply", "by": "\\frac{m\\omega^2}{2}" },
+                  "tex": "\\frac{m\\omega^2}{2}\\langle n|\\hat{X}^2|n\\rangle = \\frac{1}{2}\\langle n|\\hat{H}|n\\rangle",
+                  "focus": ["virunc"],
+                  "note": "Equation (4.189): Virial theorem—average potential and kinetic energies each equal \\(\\frac{1}{2}E_n\\).",
+                  "ask": {
+                    "q": "With \\(\\langle\\hat{X}\\rangle = \\langle\\hat{P}\\rangle = 0\\), what is \\(\\Delta x\\Delta p = \\sqrt{\\langle\\hat{X}^2\\rangle\\langle\\hat{P}^2\\rangle}\\) in Equation (4.192)?",
+                    "options": [
+                      "\\(n\\hbar\\)",
+                      "\\(\\frac{\\hbar}{2}\\) for all \\(n\\)",
+                      "\\(\\left(n + \\frac{1}{2}\\right)\\hbar\\)",
+                      "\\((2n + 1)\\hbar\\)"
+                    ],
+                    "answer": 2,
+                    "why": "Multiplying Δx = √(ħ(2n+1)/(2mω)) and Δp = √(mħω(2n+1)/2) cancels mω and gives (n + 1/2)ħ."
+                  }
+                },
+                {
+                  "move": { "type": "evaluate", "by": "\\Delta x\\Delta p = \\sqrt{\\langle\\hat{X}^2\\rangle\\langle\\hat{P}^2\\rangle}" },
+                  "tex": "\\Delta x\\Delta p = \\left(n + \\frac{1}{2}\\right)\\hbar",
+                  "focus": ["virunc"],
+                  "note": "Equation (4.192): since \\(n \\ge 0\\), \\(\\Delta x\\Delta p \\ge \\hbar/2\\), satisfying Heisenberg's uncertainty principle."
+                }
+              ]
+            },
+            {
+              "id": "qm-m4-u22-c11",
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "According to Equation (4.144), what is the result of \\(\\hat{a}^\\dagger|n\\rangle\\)?",
+              "options": [
+                "\\(\\sqrt{n}|n-1\\rangle\\)",
+                "\\(\\sqrt{n+1}|n+1\\rangle\\)",
+                "\\((n+1)|n+1\\rangle\\)",
+                "\\(n|n\\rangle\\)"
+              ],
+              "answer": 1,
+              "why": "By Equation (4.144), the raising (creation) operator acting on |n⟩ gives â†|n⟩ = √(n+1)|n+1⟩."
+            },
+            {
+              "id": "qm-m4-u22-c12",
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "In Equation (4.160), how is the first excited wave function \\(\\psi_1(x)\\) related to \\(\\psi_0(x)\\)?",
+              "options": [
+                "\\(\\psi_1(x) = \\frac{x}{x_0}\\psi_0(x)\\)",
+                "\\(\\psi_1(x) = \\frac{\\sqrt{2}}{x_0}x\\psi_0(x)\\)",
+                "\\(\\psi_1(x) = \\frac{2x^2}{x_0^2}\\psi_0(x)\\)",
+                "\\(\\psi_1(x) = \\frac{1}{\\sqrt{2}x_0}\\psi_0(x)\\)"
+              ],
+              "answer": 1,
+              "why": "Applying â† once to ψ₀(x) in Equations (4.159)–(4.160) gives ψ₁(x) = (√2 / x₀) x ψ₀(x)."
+            },
+            {
+              "id": "qm-m4-u22-c13",
+              "type": "fill",
+              "label": "Quiz · Fill in",
+              "time": 60,
+              "q": "Equation (4.189), showing equal average kinetic and potential energies in state \\(|n\\rangle\\), is the ______ theorem.",
+              "answer": "virial|Virial",
+              "why": "The virial theorem (Equation (4.189)) states that ⟨V⟩ = ⟨T⟩ = (1/2)⟨Ĥ⟩ for any harmonic oscillator eigenstate |n⟩."
+            },
+            {
+              "id": "qm-m4-u22-c14",
+              "type": "number",
+              "label": "Quiz · Number",
+              "time": 60,
+              "q": "For a 1D harmonic oscillator in state \\(n = 2\\), what is \\(\\Delta x\\Delta p / \\hbar\\)?",
+              "answer": 2.5,
+              "tolerance": 0.01,
+              "unit": "",
+              "why": "By Equation (4.192), ΔxΔp = (n + 1/2)ħ, so for n = 2 we have ΔxΔp/ħ = 2 + 0.5 = 2.5."
+            }
+          ]
+        },
+        {
+          "id": "qm-m4-unit-23",
+          "title": "3D Cartesian Separation of Variables",
+          "icon": "atom",
+          "source": "Unit 23 · Zettili §6.2.1",
+          "cards": [
+            {
+              "id": "qm-m4-u23-c1",
+              "type": "intuition",
+              "term": "qm-m4-separation-of-variables",
+              "title": "Splitting one 3D problem into three independent 1D problems",
+              "meaning": "When a 3D potential is a sum of separate x, y, and z terms, the wave function factors into X(x)Y(y)Z(z) and the energies add as E_x + E_y + E_z.",
+              "art": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"48\" y=\"16\" width=\"164\" height=\"38\" class=\"f\"/><line x1=\"84\" y1=\"54\" x2=\"50\" y2=\"96\" class=\"lk\"/><line x1=\"130\" y1=\"54\" x2=\"130\" y2=\"96\" class=\"lk\"/><line x1=\"176\" y1=\"54\" x2=\"210\" y2=\"96\" class=\"lk\"/><rect x=\"14\" y=\"96\" width=\"72\" height=\"48\" class=\"s ok\"/><rect x=\"94\" y=\"96\" width=\"72\" height=\"48\" class=\"s ok\"/><rect x=\"174\" y=\"96\" width=\"72\" height=\"48\" class=\"s ok\"/><text x=\"130\" y=\"39\" text-anchor=\"middle\" class=\"i\">V(x,y,z) = V_x + V_y + V_z</text><text x=\"50\" y=\"118\" text-anchor=\"middle\" class=\"t\">X(x), E_x</text><text x=\"130\" y=\"118\" text-anchor=\"middle\" class=\"t\">Y(y), E_y</text><text x=\"210\" y=\"118\" text-anchor=\"middle\" class=\"t\">Z(z), E_z</text><text x=\"130\" y=\"166\" text-anchor=\"middle\" class=\"t\">ψ = X(x)Y(y)Z(z),  E = E_x + E_y + E_z</text></svg>",
+              "picture": "Look at how an additive potential V_x + V_y + V_z splits the 3D equation into three 1D problems.",
+              "example": "A particle in a 3D box or 3D harmonic oscillator moves independently along x, y, and z.",
+              "bridge": "Substituting ψ(x,y,z) = X(x)Y(y)Z(z) into the 3D Schrödinger equation (6.3) yields three 1D equations (6.9)."
+            },
+            {
+              "id": "qm-m4-u23-c2",
+              "type": "info",
+              "label": "01 · §6.2.1",
+              "title": "What is the 3D Schrödinger equation and the Laplacian?",
+              "defines": ["qm-m4-laplacian"],
+              "body": "In 3D Cartesian coordinates, a spinless mass \\(m\\) obeys Equation (6.1) with Laplacian \\(\\vec{\\nabla}^2 = \\frac{\\partial^2}{\\partial x^2}+\\frac{\\partial^2}{\\partial y^2}+\\frac{\\partial^2}{\\partial z^2}\\), and stationary states (6.2) satisfy (6.3).",
+              "tex": "-\\frac{\\hbar^2}{2m}\\vec{\\nabla}^2\\psi(x,y,z) + \\hat{V}(x,y,z)\\psi(x,y,z) = E\\psi(x,y,z), \\qquad \\Psi(x,y,z,t) = \\psi(x,y,z)e^{-iEt/\\hbar}",
+              "examples": ["Equations (6.1)–(6.3)", "∇² = ∂²/∂x²+∂²/∂y²+∂²/∂z²", "Ĥψ = Eψ"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "cartesian-axes",
+                    "objects": [
+                      { "type": "arrow", "p1": [96, 68], "p2": [210, 68], "role": "ik", "width": 2, "name": "yaxis" },
+                      { "type": "arrow", "p1": [96, 68], "p2": [96, 160], "role": "ik", "width": 2, "name": "zaxis" },
+                      { "type": "arrow", "p1": [96, 68], "p2": [38, 22], "role": "ik", "width": 2, "name": "xaxis" },
+                      { "type": "point", "coords": [162, 124], "size": 4, "role": "f", "name": "pt" },
+                      { "type": "segment", "p1": [96, 68], "p2": [162, 124], "role": "lk", "width": 2, "name": "rvec" },
+                      { "type": "label", "coords": [28, 18], "text": "x", "size": 11, "align": "center", "role": "t", "name": "xaxis" },
+                      { "type": "label", "coords": [222, 68], "text": "y", "size": 11, "align": "center", "role": "t", "name": "yaxis" },
+                      { "type": "label", "coords": [96, 168], "text": "z", "size": 11, "align": "center", "role": "t", "name": "zaxis" },
+                      { "type": "label", "coords": [182, 140], "text": "ψ(x,y,z)", "size": 11, "align": "center", "role": "t", "name": "pt" },
+                      { "type": "label", "coords": [162, 34], "text": "Eq. (6.3): Ĥψ = Eψ", "size": 11, "align": "center", "role": "t", "name": "rvec" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "qm-m4-u23-c3",
+              "type": "info",
+              "label": "02 · §6.2.1",
+              "title": "What is separation of variables in 3D Cartesian coordinates?",
+              "defines": ["qm-m4-separation-of-variables"],
+              "body": "Separation of variables reduces the 3D equation (6.3) into three independent 1D equations (6.9) when \\(V(x,y,z)=V_x(x)+V_y(y)+V_z(z)\\), giving \\(\\psi=X(x)Y(y)Z(z)\\) and \\(E=E_x+E_y+E_z\\).",
+              "tex": "V(x,y,z) = V_x(x) + V_y(y) + V_z(z) \\implies \\psi(x,y,z) = X(x)Y(y)Z(z), \\quad E = E_x + E_y + E_z",
+              "examples": ["Equations (6.4)–(6.10)", "Ĥ = Ĥ_x + Ĥ_y + Ĥ_z", "E = E_x + E_y + E_z"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "sep-boxes",
+                    "objects": [
+                      { "type": "polygon", "points": [[46, 122], [46, 158], [214, 158], [214, 122]], "role": "f", "name": "h3d" },
+                      { "type": "polygon", "points": [[16, 32], [16, 76], [84, 76], [84, 32]], "role": "s ok", "name": "hx" },
+                      { "type": "polygon", "points": [[96, 32], [96, 76], [164, 76], [164, 32]], "role": "s ok", "name": "hy" },
+                      { "type": "polygon", "points": [[176, 32], [176, 76], [244, 76], [244, 32]], "role": "s ok", "name": "hz" },
+                      { "type": "arrow", "p1": [90, 122], "p2": [50, 76], "role": "lk", "width": 1.8, "name": "ax" },
+                      { "type": "arrow", "p1": [130, 122], "p2": [130, 76], "role": "lk", "width": 1.8, "name": "ay" },
+                      { "type": "arrow", "p1": [170, 122], "p2": [210, 76], "role": "lk", "width": 1.8, "name": "az" },
+                      { "type": "label", "coords": [130, 140], "text": "[Ĥ_x + Ĥ_y + Ĥ_z]ψ = Eψ", "size": 11, "align": "center", "role": "i", "name": "h3d" },
+                      { "type": "label", "coords": [50, 54], "text": "Ĥ_x X = E_x X", "size": 11, "align": "center", "role": "t", "name": "hx" },
+                      { "type": "label", "coords": [130, 54], "text": "Ĥ_y Y = E_y Y", "size": 11, "align": "center", "role": "t", "name": "hy" },
+                      { "type": "label", "coords": [210, 54], "text": "Ĥ_z Z = E_z Z", "size": 11, "align": "center", "role": "t", "name": "hz" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "qm-m4-u23-c4",
+              "type": "derivation",
+              "label": "Derivation · §6.2.1",
+              "title": "Separating the 3D Schrödinger equation (Equations (6.4)–(6.10))",
+              "legend": "\\(\\hat{H}_x = -\\frac{\\hbar^2}{2m}\\frac{\\partial^2}{\\partial x^2}+V_x(x)\\), \\(\\psi(x,y,z)=X(x)Y(y)Z(z)\\), \\(E_x, E_y, E_z\\) 1D separation energies.",
+              "setup": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "vsum",
+                    "objects": [
+                      { "type": "polygon", "points": [[36, 124], [36, 160], [224, 160], [224, 124]], "role": "f", "name": "vsum" },
+                      { "type": "label", "coords": [130, 142], "text": "V(x,y,z) = V_x(x) + V_y(y) + V_z(z)", "size": 11, "align": "center", "role": "i", "name": "vsum" }
+                    ]
+                  },
+                  {
+                    "step": 2,
+                    "name": "prod",
+                    "objects": [
+                      { "type": "polygon", "points": [[46, 74], [46, 108], [214, 108], [214, 74]], "role": "s ok", "name": "prod" },
+                      { "type": "label", "coords": [130, 91], "text": "ψ(x,y,z) = X(x)Y(y)Z(z)", "size": 11, "align": "center", "role": "t", "name": "prod" }
+                    ]
+                  },
+                  {
+                    "step": 4,
+                    "name": "esum",
+                    "objects": [
+                      { "type": "polygon", "points": [[36, 22], [36, 56], [224, 56], [224, 22]], "role": "s ok", "name": "esum" },
+                      { "type": "label", "coords": [130, 39], "text": "Ĥ_x X = E_x X,  E_x + E_y + E_z = E", "size": 11, "align": "center", "role": "t", "name": "esum" }
+                    ]
+                  }
+                ]
+              },
+              "phases": [
+                { "name": "Additive potential", "why": "write V(x,y,z) and Ĥ as sums of x, y, and z parts" },
+                { "name": "Product wave function", "why": "substitute ψ(x,y,z) = X(x)Y(y)Z(z) and divide by XYZ" },
+                { "name": "1D equations", "why": "set each single-variable bracket equal to a constant" },
+                { "name": "Total energy", "why": "sum the three separation constants to E" }
+              ],
+              "steps": [
+                {
+                  "phase": "Additive potential",
+                  "tex": "V(x,y,z) = V_x(x) + V_y(y) + V_z(z)",
+                  "focus": ["vsum"],
+                  "note": "Equation (6.4): assume the 3D potential separates into three independent 1D terms.",
+                  "ask": {
+                    "q": "When \\(V(x,y,z)\\) satisfies Equation (6.4), how is the 3D Schrödinger equation written in Equation (6.5)?",
+                    "options": [
+                      "\\(\\left[\\hat{H}_x + \\hat{H}_y + \\hat{H}_z\\right]\\psi = E\\psi\\)",
+                      "\\(\\hat{H}_x\\hat{H}_y\\hat{H}_z\\psi = E\\psi\\)",
+                      "\\(\\left[\\hat{H}_x - \\hat{H}_y - \\hat{H}_z\\right]\\psi = 0\\)",
+                      "\\(\\vec{\\nabla}^2\\psi = 0\\)"
+                    ],
+                    "answer": 0,
+                    "why": "Since both the Laplacian and V(x,y,z) are sums of x, y, z terms, Ĥ splits into Ĥ_x + Ĥ_y + Ĥ_z in Equation (6.5)."
+                  }
+                },
+                {
+                  "move": { "type": "substitute", "by": "\\hat{H} = \\hat{H}_x + \\hat{H}_y + \\hat{H}_z" },
+                  "tex": "\\left[\\hat{H}_x + \\hat{H}_y + \\hat{H}_z\\right]\\psi(x,y,z) = E\\psi(x,y,z)",
+                  "focus": ["vsum"],
+                  "note": "Equation (6.5): each 1D operator is \\(\\hat{H}_x = -\\frac{\\hbar^2}{2m}\\frac{\\partial^2}{\\partial x^2} + V_x(x)\\) (6.6).",
+                  "ask": {
+                    "q": "What form of \\(\\psi(x,y,z)\\) do we substitute in Equation (6.7)?",
+                    "options": [
+                      "\\(\\psi(x,y,z) = X(x) + Y(y) + Z(z)\\)",
+                      "\\(\\psi(x,y,z) = X(x)Y(y)Z(z)\\)",
+                      "\\(\\psi(x,y,z) = \\frac{X(x)}{Y(y)Z(z)}\\)",
+                      "\\(\\psi(x,y,z) = f(x+y+z)\\)"
+                    ],
+                    "answer": 1,
+                    "why": "By Equation (6.7), a separable potential allows a product wave function ψ(x,y,z) = X(x)Y(y)Z(z)."
+                  }
+                },
+                {
+                  "phase": "Product wave function",
+                  "move": { "type": "substitute", "by": "\\psi(x,y,z) = X(x)Y(y)Z(z)" },
+                  "tex": "\\left[\\hat{H}_x + \\hat{H}_y + \\hat{H}_z\\right]X(x)Y(y)Z(z) = EX(x)Y(y)Z(z)",
+                  "focus": ["prod"],
+                  "note": "Substitute the product solution (6.7) into Equation (6.5).",
+                  "ask": {
+                    "q": "What operation turns this equation into the sum of three single-variable brackets in Equation (6.8)?",
+                    "options": [
+                      "Divide both sides by \\(X(x)Y(y)Z(z)\\)",
+                      "Multiply both sides by \\(E\\)",
+                      "Integrate over \\(x, y, z\\)",
+                      "Set \\(V_x = V_y = V_z = 0\\)"
+                    ],
+                    "answer": 0,
+                    "why": "Dividing by X(x)Y(y)Z(z) leaves only 1/X(d²X/dx²) in the first bracket, 1/Y(d²Y/dy²) in the second, and 1/Z(d²Z/dz²) in the third."
+                  }
+                },
+                {
+                  "move": { "type": "divide", "by": "X(x)Y(y)Z(z)" },
+                  "tex": "\\left[-\\frac{\\hbar^2}{2m}\\frac{1}{X}\\frac{d^2X}{dx^2} + V_x(x)\\right] + \\left[-\\frac{\\hbar^2}{2m}\\frac{1}{Y}\\frac{d^2Y}{dy^2} + V_y(y)\\right] + \\left[-\\frac{\\hbar^2}{2m}\\frac{1}{Z}\\frac{d^2Z}{dz^2} + V_z(z)\\right] = E",
+                  "focus": ["prod"],
+                  "note": "Equation (6.8): each bracket depends on only one variable \\(x\\), \\(y\\), or \\(z\\).",
+                  "ask": {
+                    "q": "Since each bracket depends on a different variable and their sum is \\(E\\), what must hold?",
+                    "options": [
+                      "Each bracket equals a constant \\(E_x, E_y, E_z\\)",
+                      "All three brackets must equal zero",
+                      "Only the \\(x\\)-bracket is non-zero",
+                      "\\(X(x), Y(y), Z(z)\\) must be constants"
+                    ],
+                    "answer": 0,
+                    "why": "Independent functions of x, y, and z can sum to a constant E for all (x,y,z) only if each bracket equals a separate constant E_x, E_y, E_z."
+                  }
+                },
+                {
+                  "phase": "1D equations",
+                  "move": { "type": "evaluate", "by": "\\text{x-bracket} = E_x" },
+                  "tex": "\\left[-\\frac{\\hbar^2}{2m}\\frac{d^2}{dx^2} + V_x(x)\\right]X(x) = E_x X(x)",
+                  "focus": ["esum"],
+                  "note": "Equation (6.9): multiplying the \\(x\\)-bracket equation by \\(X(x)\\) gives a 1D Schrödinger equation."
+                },
+                {
+                  "phase": "Total energy",
+                  "move": { "type": "combine" },
+                  "tex": "E_x + E_y + E_z = E",
+                  "focus": ["esum"],
+                  "note": "Equation (6.10): the three 1D eigenvalues add up to the total energy \\(E\\)."
+                }
+              ]
+            },
+            {
+              "id": "qm-m4-u23-c5",
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "Under what condition on \\(V(x,y,z)\\) does Equation (6.3) separate in Cartesian coordinates?",
+              "options": [
+                "\\(V(x,y,z) = V_x(x)V_y(y)V_z(z)\\)",
+                "\\(V(x,y,z) = V_x(x) + V_y(y) + V_z(z)\\)",
+                "\\(V(x,y,z)\\) depends only on \\(r\\)",
+                "\\(V(x,y,z) = \\infty\\) everywhere"
+              ],
+              "answer": 1,
+              "why": "By Equation (6.4), Cartesian separation of variables works when V(x,y,z) is the sum of three independent 1D terms V_x(x) + V_y(y) + V_z(z)."
+            },
+            {
+              "id": "qm-m4-u23-c6",
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "When \\(\\psi(x,y,z) = X(x)Y(y)Z(z)\\) in Equation (6.7), how is the total energy \\(E\\) related to \\(E_x, E_y, E_z\\)?",
+              "options": [
+                "\\(E = E_x E_y E_z\\)",
+                "\\(E = \\sqrt{E_x^2 + E_y^2 + E_z^2}\\)",
+                "\\(E = E_x + E_y + E_z\\)",
+                "\\(E = \\frac{1}{3}(E_x + E_y + E_z)\\)"
+              ],
+              "answer": 2,
+              "why": "While the wave function is the product X(x)Y(y)Z(z), Equation (6.10) shows that the total energy is the sum E = E_x + E_y + E_z."
+            },
+            {
+              "id": "qm-m4-u23-c7",
+              "type": "fill",
+              "label": "Quiz · Fill in",
+              "time": 60,
+              "q": "In Equation (6.1), the operator \\(\\vec{\\nabla}^2 = \\frac{\\partial^2}{\\partial x^2} + \\frac{\\partial^2}{\\partial y^2} + \\frac{\\partial^2}{\\partial z^2}\\) is called the ______.",
+              "answer": "Laplacian|Laplacian operator",
+              "why": "As stated below Equation (6.1), ∇² = ∂²/∂x² + ∂²/∂y² + ∂²/∂z² is the Laplacian in Cartesian coordinates."
+            }
+          ]
+        },
+        {
+          "id": "qm-m4-unit-24",
+          "title": "3D Box Potential & Degeneracy",
+          "icon": "book",
+          "source": "Unit 24 · Zettili §6.2.3",
+          "cards": [
+            {
+              "id": "qm-m4-u24-c1",
+              "type": "intuition",
+              "term": "qm-m4-degeneracy",
+              "title": "Why a symmetric cubic box has multiple states with the same energy",
+              "meaning": "In a cube of side L, the x, y, and z directions are identical, so permuting quantum numbers like (2,1,1), (1,2,1), and (1,1,2) produces distinct wave functions with the same energy.",
+              "art": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"24\" y=\"64\" width=\"68\" height=\"68\" class=\"s ok\"/><polygon points=\"24,64 46,42 114,42 92,64\" class=\"s ok\"/><polygon points=\"92,64 114,42 114,110 92,132\" class=\"s ok\"/><line x1=\"146\" y1=\"132\" x2=\"238\" y2=\"132\" class=\"ik\"/><line x1=\"146\" y1=\"68\" x2=\"172\" y2=\"68\" class=\"lk\"/><line x1=\"179\" y1=\"68\" x2=\"205\" y2=\"68\" class=\"lk\"/><line x1=\"212\" y1=\"68\" x2=\"238\" y2=\"68\" class=\"lk\"/><text x=\"58\" y=\"148\" text-anchor=\"middle\" class=\"t\">Cube: a = b = c = L</text><text x=\"24\" y=\"148\" class=\"t\">0</text><text x=\"192\" y=\"148\" text-anchor=\"middle\" class=\"t\">E₁₁₁ = 3E₁ (g = 1)</text><text x=\"192\" y=\"54\" text-anchor=\"middle\" class=\"t\">(211),(121),(112)</text><text x=\"192\" y=\"84\" text-anchor=\"middle\" class=\"t\">6E₁ (g = 3)</text></svg>",
+              "picture": "Look at the cubic box of side L on the left and the threefold degenerate level 6E₁ on the right.",
+              "example": "Putting two half-waves along x and one along y and z has the same energy as putting two along y or two along z.",
+              "bridge": "Setting a = b = c = L in the rectangular box formula (6.26) gives Equation (6.27) and the degeneracies in Table 6.1."
+            },
+            {
+              "id": "qm-m4-u24-c2",
+              "type": "info",
+              "label": "01 · §6.2.3.1",
+              "title": "What is the rectangular box potential?",
+              "defines": ["qm-m4-rectangular-box-potential"],
+              "body": "A rectangular box potential (6.21) confines a mass \\(m\\) inside walls at \\(0<x<a, 0<y<b, 0<z<c\\) where \\(V=0\\) and \\(V=\\infty\\) elsewhere, giving states (6.25) and energies (6.26).",
+              "tex": "\\psi_{n_x n_y n_z}(x,y,z) = \\sqrt{\\frac{8}{abc}}\\sin\\!\\left(\\frac{n_x\\pi}{a}x\\right)\\sin\\!\\left(\\frac{n_y\\pi}{b}y\\right)\\sin\\!\\left(\\frac{n_z\\pi}{c}z\\right), \\quad E_{n_x n_y n_z} = \\frac{\\hbar^2\\pi^2}{2m}\\left(\\frac{n_x^2}{a^2}+\\frac{n_y^2}{b^2}+\\frac{n_z^2}{c^2}\\right)",
+              "examples": ["Equations (6.21)–(6.26)", "n_x, n_y, n_z = 1,2,3...", "No symmetry: g = 1"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "rect-box",
+                    "objects": [
+                      { "type": "polygon", "points": [[36, 36], [36, 108], [156, 108], [156, 36]], "role": "s ok", "name": "front" },
+                      { "type": "polygon", "points": [[36, 108], [76, 142], [196, 142], [156, 108]], "role": "s ok", "name": "top" },
+                      { "type": "polygon", "points": [[156, 36], [196, 70], [196, 142], [156, 108]], "role": "s ok", "name": "side" },
+                      { "type": "label", "coords": [96, 72], "text": "V = 0 inside", "size": 11, "align": "center", "role": "t", "name": "front" },
+                      { "type": "label", "coords": [96, 22], "text": "0 < x < a", "size": 11, "align": "center", "role": "t", "name": "front" },
+                      { "type": "label", "coords": [206, 52], "text": "b", "size": 11, "align": "center", "role": "t", "name": "side" },
+                      { "type": "label", "coords": [214, 108], "text": "c", "size": 11, "align": "center", "role": "t", "name": "side" },
+                      { "type": "label", "coords": [130, 162], "text": "V = ∞ outside walls (a, b, c)", "size": 11, "align": "center", "role": "t", "name": "top" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "qm-m4-u24-c3",
+              "type": "info",
+              "label": "02 · §6.2.3.2",
+              "title": "What are the cubic box potential and degeneracy?",
+              "defines": ["qm-m4-cubic-box-potential", "qm-m4-degeneracy"],
+              "body": "A cubic box potential sets \\(a=b=c=L\\) in (6.26) to give \\(E_{n_x n_y n_z}=E_1(n_x^2+n_y^2+n_z^2)\\) (6.27); degeneracy \\(g_n\\) is the number of distinct states sharing the same energy due to symmetry.",
+              "tex": "E_{n_x n_y n_z} = \\frac{\\hbar^2\\pi^2}{2mL^2}(n_x^2 + n_y^2 + n_z^2) = E_1(n_x^2 + n_y^2 + n_z^2), \\qquad E_{111} = 3E_1 = \\frac{3\\pi^2\\hbar^2}{2mL^2}",
+              "examples": ["Equations (6.27)–(6.30)", "E₁ = π²ħ²/(2mL²)", "E₂₁₁=E₁₂₁=E₁₁₂=6E₁"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "cubic-sym",
+                    "objects": [
+                      { "type": "polygon", "points": [[28, 42], [28, 114], [100, 114], [100, 42]], "role": "s ok", "name": "cfront" },
+                      { "type": "polygon", "points": [[28, 114], [56, 142], [128, 142], [100, 114]], "role": "s ok", "name": "ctop" },
+                      { "type": "polygon", "points": [[100, 42], [128, 70], [128, 142], [100, 114]], "role": "s ok", "name": "cside" },
+                      { "type": "segment", "p1": [152, 48], "p2": [238, 48], "role": "ik", "width": 2, "name": "g1" },
+                      { "type": "segment", "p1": [152, 114], "p2": [238, 114], "role": "lk", "width": 2, "name": "g2" },
+                      { "type": "label", "coords": [64, 24], "text": "0 < x,y,z < L", "size": 11, "align": "center", "role": "t", "name": "cfront" },
+                      { "type": "label", "coords": [195, 34], "text": "(111): 3E₁, g=1", "size": 11, "align": "center", "role": "t", "name": "g1" },
+                      { "type": "label", "coords": [195, 130], "text": "(211),(121),(112)", "size": 11, "align": "center", "role": "t", "name": "g2" },
+                      { "type": "label", "coords": [195, 98], "text": "6E₁: g = 3", "size": 11, "align": "center", "role": "t", "name": "g2" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "qm-m4-u24-c4",
+              "type": "info",
+              "label": "03 · §6.2.3.2 · Table 6.1",
+              "title": "Energy spectrum and degeneracies of the cubic box (Table 6.1)",
+              "body": "Table 6.1 lists the first six cubic-box energy levels in units of \\(E_1 = \\pi^2\\hbar^2/(2mL^2)\\): \\(3E_1\\ (g_n=1)\\), \\(6E_1\\ (g_n=3)\\), \\(9E_1\\ (g_n=3)\\), \\(11E_1\\ (g_n=3)\\), \\(12E_1\\ (g_n=1)\\), and \\(14E_1\\ (g_n=6)\\).",
+              "tex": "\\frac{E_{n_x n_y n_z}}{E_1} = 3\\ (111, g_n=1),\\ 6\\ (211, g_n=3),\\ 9\\ (221, g_n=3),\\ 11\\ (311, g_n=3),\\ 12\\ (222, g_n=1),\\ 14\\ (321, g_n=6)",
+              "examples": ["Table 6.1", "12E₁: (222), g_n = 1", "14E₁: 6 permutations"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "table-6-1",
+                    "objects": [
+                      { "type": "segment", "p1": [58, 22], "p2": [132, 22], "role": "ik", "width": 2, "name": "l3" },
+                      { "type": "segment", "p1": [58, 48], "p2": [132, 48], "role": "lk", "width": 2, "name": "l6" },
+                      { "type": "segment", "p1": [58, 74], "p2": [132, 74], "role": "lk", "width": 2, "name": "l9" },
+                      { "type": "segment", "p1": [58, 100], "p2": [132, 100], "role": "lk", "width": 2, "name": "l11" },
+                      { "type": "segment", "p1": [58, 126], "p2": [132, 126], "role": "ik", "width": 2, "name": "l12" },
+                      { "type": "segment", "p1": [58, 152], "p2": [132, 152], "role": "lk", "width": 2.4, "name": "l14" },
+                      { "type": "label", "coords": [32, 22], "text": "3E₁", "size": 11, "align": "center", "role": "t", "name": "l3" },
+                      { "type": "label", "coords": [192, 22], "text": "(111) g=1", "size": 11, "align": "center", "role": "t", "name": "l3" },
+                      { "type": "label", "coords": [32, 48], "text": "6E₁", "size": 11, "align": "center", "role": "t", "name": "l6" },
+                      { "type": "label", "coords": [192, 48], "text": "(211)x3 g=3", "size": 11, "align": "center", "role": "t", "name": "l6" },
+                      { "type": "label", "coords": [32, 74], "text": "9E₁", "size": 11, "align": "center", "role": "t", "name": "l9" },
+                      { "type": "label", "coords": [192, 74], "text": "(221)x3 g=3", "size": 11, "align": "center", "role": "t", "name": "l9" },
+                      { "type": "label", "coords": [32, 100], "text": "11E₁", "size": 11, "align": "center", "role": "t", "name": "l11" },
+                      { "type": "label", "coords": [192, 100], "text": "(311)x3 g=3", "size": 11, "align": "center", "role": "t", "name": "l11" },
+                      { "type": "label", "coords": [32, 126], "text": "12E₁", "size": 11, "align": "center", "role": "t", "name": "l12" },
+                      { "type": "label", "coords": [192, 126], "text": "(222) g=1", "size": 11, "align": "center", "role": "t", "name": "l12" },
+                      { "type": "label", "coords": [32, 152], "text": "14E₁", "size": 11, "align": "center", "role": "t", "name": "l14" },
+                      { "type": "label", "coords": [192, 152], "text": "(321)x6 g=6", "size": 11, "align": "center", "role": "t", "name": "l14" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "qm-m4-u24-c5",
+              "type": "derivation",
+              "label": "Derivation · §6.2.3",
+              "title": "Rectangular and cubic box states and energies (Equations (6.23)–(6.30))",
+              "legend": "\\(a, b, c\\) rectangular box lengths, \\(L\\) cubic box length, \\(n_x, n_y, n_z = 1, 2, 3, \\dots\\) quantum numbers, \\(E_1 = \\pi^2\\hbar^2/(2mL^2)\\).",
+              "setup": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "box1d",
+                    "objects": [
+                      { "type": "segment", "p1": [24, 122], "p2": [116, 122], "role": "ik", "width": 2, "name": "box1d" },
+                      { "type": "segment", "p1": [24, 114], "p2": [24, 158], "role": "ik", "width": 2.2, "name": "box1d" },
+                      { "type": "segment", "p1": [116, 114], "p2": [116, 158], "role": "ik", "width": 2.2, "name": "box1d" },
+                      { "type": "polyline", "points": [[24, 122], [47, 144], [70, 152], [93, 144], [116, 122]], "role": "lk", "width": 2, "dash": 0, "name": "box1d" },
+                      { "type": "label", "coords": [24, 102], "text": "0", "size": 11, "align": "center", "role": "t", "name": "box1d" },
+                      { "type": "label", "coords": [116, 102], "text": "a", "size": 11, "align": "center", "role": "t", "name": "box1d" },
+                      { "type": "label", "coords": [70, 164], "text": "X(x) on [0, a]", "size": 11, "align": "center", "role": "t", "name": "box1d" }
+                    ]
+                  },
+                  {
+                    "step": 3,
+                    "name": "cubelev",
+                    "objects": [
+                      { "type": "segment", "p1": [144, 112], "p2": [236, 112], "role": "ik", "width": 2, "name": "cubelev" },
+                      { "type": "segment", "p1": [144, 148], "p2": [236, 148], "role": "lk", "width": 2, "name": "cubelev" },
+                      { "type": "polygon", "points": [[32, 24], [32, 68], [228, 68], [228, 24]], "role": "f", "name": "cubelev" },
+                      { "type": "label", "coords": [190, 98], "text": "E₁₁₁ = 3E₁ (g=1)", "size": 11, "align": "center", "role": "t", "name": "cubelev" },
+                      { "type": "label", "coords": [190, 162], "text": "E₂₁₁ = 6E₁ (g=3)", "size": 11, "align": "center", "role": "t", "name": "cubelev" },
+                      { "type": "label", "coords": [130, 46], "text": "Cubic: E = E₁(n_x² + n_y² + n_z²)", "size": 11, "align": "center", "role": "i", "name": "cubelev" }
+                    ]
+                  }
+                ]
+              },
+              "phases": [
+                { "name": "1D box solution", "why": "start from the 1D infinite well eigenfunction X(x) on 0 < x < a" },
+                { "name": "Rectangular box", "why": "multiply X(x)Y(y)Z(z) and add E_x + E_y + E_z" },
+                { "name": "Cubic box", "why": "set a = b = c = L to obtain Equation (6.27)" },
+                { "name": "Ground & 1st excited", "why": "evaluate E_{111} = 3E_1 and threefold degenerate E_{211} = 6E_1" }
+              ],
+              "steps": [
+                {
+                  "phase": "1D box solution",
+                  "tex": "X(x) = \\sqrt{\\frac{2}{a}}\\sin\\left(\\frac{n_x\\pi}{a}x\\right)",
+                  "focus": ["box1d"],
+                  "note": "Equation (6.23): 1D eigenfunction vanishing at walls \\(x=0\\) and \\(x=a\\) for \\(n_x = 1, 2, 3, \\dots\\).",
+                  "ask": {
+                    "q": "Multiplying \\(X(x)Y(y)Z(z)\\) for sides \\(a, b, c\\), what normalization factor appears in Equation (6.25)?",
+                    "options": [
+                      "\\(\\sqrt{\\frac{2}{abc}}\\)",
+                      "\\(\\sqrt{\\frac{8}{abc}}\\)",
+                      "\\(\\frac{8}{abc}\\)",
+                      "\\(\\sqrt{\\frac{6}{abc}}\\)"
+                    ],
+                    "answer": 1,
+                    "why": "Multiplying √(2/a), √(2/b), and √(2/c) gives √(8/(abc)) in Equation (6.25)."
+                  }
+                },
+                {
+                  "phase": "Rectangular box",
+                  "move": { "type": "substitute", "by": "\\psi(x,y,z) = X(x)Y(y)Z(z)" },
+                  "tex": "\\psi_{n_x n_y n_z}(x,y,z) = \\sqrt{\\frac{8}{abc}}\\sin\\left(\\frac{n_x\\pi}{a}x\\right)\\sin\\left(\\frac{n_y\\pi}{b}y\\right)\\sin\\left(\\frac{n_z\\pi}{c}z\\right)",
+                  "focus": ["box1d"],
+                  "note": "Equation (6.25): normalized 3D eigenfunction for the rectangular box.",
+                  "ask": {
+                    "q": "Using \\(E_{n_x} = \\frac{\\hbar^2\\pi^2}{2ma^2}n_x^2\\) (6.24), what is the total energy \\(E_{n_x n_y n_z}\\) in Equation (6.26)?",
+                    "options": [
+                      "\\(\\frac{\\hbar^2\\pi^2}{2m}\\left(\\frac{n_x^2}{a^2} + \\frac{n_y^2}{b^2} + \\frac{n_z^2}{c^2}\\right)\\)",
+                      "\\(\\frac{\\hbar^2\\pi^2}{2m}\\left(\\frac{n_x}{a} + \\frac{n_y}{b} + \\frac{n_z}{c}\\right)\\)",
+                      "\\(\\frac{\\hbar^2\\pi^2}{2mabc}(n_x^2 + n_y^2 + n_z^2)\\)",
+                      "\\(\\frac{\\hbar^2\\pi^2}{2m}n_x^2 n_y^2 n_z^2\\)"
+                    ],
+                    "answer": 0,
+                    "why": "By Equation (6.10), adding E_{n_x} + E_{n_y} + E_{n_z} yields Equation (6.26)."
+                  }
+                },
+                {
+                  "move": { "type": "substitute", "by": "E = E_{n_x} + E_{n_y} + E_{n_z}" },
+                  "tex": "E_{n_x n_y n_z} = \\frac{\\hbar^2\\pi^2}{2m}\\left(\\frac{n_x^2}{a^2} + \\frac{n_y^2}{b^2} + \\frac{n_z^2}{c^2}\\right)",
+                  "focus": ["box1d"],
+                  "note": "Equation (6.26): energy eigenvalues of the rectangular box (non-degenerate when \\(a,b,c\\) differ).",
+                  "ask": {
+                    "q": "How do we obtain the cubic-box energy formula in Equation (6.27)?",
+                    "options": [
+                      "Set \\(n_x = n_y = n_z = 0\\)",
+                      "Substitute \\(a = b = c = L\\)",
+                      "Multiply by \\(abc\\)",
+                      "Set \\(L = a + b + c\\)"
+                    ],
+                    "answer": 1,
+                    "why": "In a cubic box all three sides have equal length a = b = c = L, factoring 1/L² out of Equation (6.26)."
+                  }
+                },
+                {
+                  "phase": "Cubic box",
+                  "move": { "type": "evaluate", "by": "a = b = c = L" },
+                  "tex": "E_{n_x n_y n_z} = \\frac{\\hbar^2\\pi^2}{2mL^2}(n_x^2 + n_y^2 + n_z^2)",
+                  "focus": ["cubelev"],
+                  "note": "Equation (6.27): cubic box energy with \\(n_x, n_y, n_z = 1, 2, 3, \\dots\\).",
+                  "ask": {
+                    "q": "With \\(E_1 = \\frac{\\pi^2\\hbar^2}{2mL^2}\\), what is the ground-state energy \\(E_{111}\\) in Equation (6.28)?",
+                    "options": [
+                      "\\(E_1\\)",
+                      "\\(\\frac{3}{2}E_1\\)",
+                      "\\(3E_1\\)",
+                      "\\(6E_1\\)"
+                    ],
+                    "answer": 2,
+                    "why": "Since the lowest quantum numbers are n_x = n_y = n_z = 1, we have 1² + 1² + 1² = 3, so E_{111} = 3E₁."
+                  }
+                },
+                {
+                  "phase": "Ground & 1st excited",
+                  "move": { "type": "evaluate", "by": "n_x = n_y = n_z = 1" },
+                  "tex": "E_{111} = \\frac{3\\pi^2\\hbar^2}{2mL^2}",
+                  "focus": ["cubelev"],
+                  "note": "Equation (6.28): the 3D ground state energy is \\(3E_1\\) and is non-degenerate (\\(g_1=1\\))."
+                },
+                {
+                  "move": { "type": "evaluate", "by": "(n_x,n_y,n_z) = (2,1,1),\\ (1,2,1),\\ (1,1,2)" },
+                  "tex": "E_{211} = 6\\frac{\\pi^2\\hbar^2}{2mL^2}",
+                  "focus": ["cubelev"],
+                  "note": "Equation (6.30): \\(E_{211}=E_{121}=E_{112}=6E_1\\), so the first excited state is threefold degenerate."
+                }
+              ]
+            },
+            {
+              "id": "qm-m4-u24-c6",
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "How does the cubic-box ground-state energy \\(E_{111}\\) compare to the 1D box energy \\(E_1\\)?",
+              "options": [
+                "\\(E_{111} = E_1\\)",
+                "\\(E_{111} = 3E_1\\)",
+                "\\(E_{111} = 6E_1\\)",
+                "\\(E_{111} = \\frac{1}{3}E_1\\)"
+              ],
+              "answer": 1,
+              "why": "By Equation (6.28), confining the particle symmetrically in three dimensions gives E_{111} = (1² + 1² + 1²)E₁ = 3E₁."
+            },
+            {
+              "id": "qm-m4-u24-c7",
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "In Table 6.1 for the cubic box, which energy level is sixfold degenerate (\\(g_n = 6\\))?",
+              "options": [
+                "\\(6E_1\\)",
+                "\\(9E_1\\)",
+                "\\(12E_1\\)",
+                "\\(14E_1\\)"
+              ],
+              "answer": 3,
+              "why": "In Table 6.1, 3² + 2² + 1² = 14 gives six distinct permutations (321), (312), (231), (213), (132), (123) at energy 14E₁."
+            },
+            {
+              "id": "qm-m4-u24-c8",
+              "type": "number",
+              "label": "Quiz · Number",
+              "time": 60,
+              "q": "What is the degeneracy \\(g_n\\) of the first excited level (\\(E = 6E_1\\)) in a cubic box?",
+              "answer": 3,
+              "tolerance": 0,
+              "unit": "",
+              "why": "By Equation (6.30) and Table 6.1, the three states ψ_{211}, ψ_{121}, and ψ_{112} all share energy 6E₁, so g_n = 3."
+            },
+            {
+              "id": "qm-m4-u24-c9",
+              "type": "fill",
+              "label": "Quiz · Fill in",
+              "time": 60,
+              "q": "Degeneracy occurs in the cubic box but not in the rectangular box because the cubic potential has ______.",
+              "answer": "symmetry",
+              "why": "As explained in Section 6.2.3.2, degeneracy occurs when there is symmetry in the problem, making the x, y, and z axes equivalent."
+            }
+          ]
+        },
+        {
+          "id": "qm-m4-unit-25",
+          "title": "The 3D Harmonic Oscillator",
+          "icon": "sigma",
+          "source": "Unit 25 · Zettili §6.2.4",
+          "cards": [
+            {
+              "id": "qm-m4-u25-c1",
+              "type": "intuition",
+              "term": "qm-m4-isotropic-oscillator",
+              "title": "Unequal springs (anisotropic) vs. equal springs (isotropic) in 3D",
+              "meaning": "An anisotropic oscillator has different frequencies ω_x, ω_y, ω_z along the three axes, whereas an isotropic oscillator has the same frequency ω in all directions, creating degenerate energy shells.",
+              "art": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"16\" y=\"28\" width=\"96\" height=\"118\" class=\"s ok\"/><line x1=\"30\" y1=\"122\" x2=\"98\" y2=\"122\" class=\"ik\"/><line x1=\"30\" y1=\"96\" x2=\"98\" y2=\"96\" class=\"ik\"/><line x1=\"30\" y1=\"74\" x2=\"98\" y2=\"74\" class=\"ik\"/><line x1=\"30\" y1=\"52\" x2=\"98\" y2=\"52\" class=\"ik\"/><line x1=\"140\" y1=\"134\" x2=\"240\" y2=\"134\" class=\"ik\"/><line x1=\"140\" y1=\"98\" x2=\"240\" y2=\"98\" class=\"lk\"/><line x1=\"140\" y1=\"62\" x2=\"240\" y2=\"62\" class=\"lk\"/><line x1=\"140\" y1=\"26\" x2=\"240\" y2=\"26\" class=\"lk\"/><text x=\"64\" y=\"164\" text-anchor=\"middle\" class=\"t\">Anisotropic: g = 1</text><text x=\"190\" y=\"164\" text-anchor=\"middle\" class=\"t\">Isotropic: ω_x=ω_y=ω_z</text><text x=\"190\" y=\"146\" text-anchor=\"middle\" class=\"t\">n=0: 3/2 ħω (g=1)</text><text x=\"190\" y=\"110\" text-anchor=\"middle\" class=\"t\">n=1: 5/2 ħω (g=3)</text><text x=\"190\" y=\"74\" text-anchor=\"middle\" class=\"t\">n=2: 7/2 ħω (g=6)</text><text x=\"190\" y=\"38\" text-anchor=\"middle\" class=\"t\">n=3: 9/2 ħω (g=10)</text></svg>",
+              "picture": "Compare the non-degenerate anisotropic levels on the left with the degenerate isotropic shells n = 0, 1, 2, 3 on the right.",
+              "example": "For n = n_x + n_y + n_z = 1, one quantum of vibration can be placed along x (100), y (010), or z (001) with the same energy 5ħω/2.",
+              "bridge": "Setting ω_x = ω_y = ω_z = ω in Equation (6.33) gives Equation (6.35) and the degeneracy formula g_n = ½(n+1)(n+2)."
+            },
+            {
+              "id": "qm-m4-u25-c2",
+              "type": "info",
+              "label": "01 · §6.2.4.1",
+              "title": "What is the 3D anisotropic harmonic oscillator?",
+              "defines": ["qm-m4-anisotropic-oscillator"],
+              "body": "An anisotropic oscillator has potential \\(\\hat{V}=\\frac{1}{2}m(\\omega_x^2\\hat{X}^2+\\omega_y^2\\hat{Y}^2+\\omega_z^2\\hat{Z}^2)\\) (6.31) with different frequencies along \\(x,y,z\\); its states (6.34) and energies (6.33) are non-degenerate.",
+              "tex": "E_{n_x n_y n_z} = \\left(n_x + \\frac{1}{2}\\right)\\hbar\\omega_x + \\left(n_y + \\frac{1}{2}\\right)\\hbar\\omega_y + \\left(n_z + \\frac{1}{2}\\right)\\hbar\\omega_z, \\quad \\psi_{n_x n_y n_z} = X_{n_x}(x)Y_{n_y}(y)Z_{n_z}(z)",
+              "examples": ["Equations (6.31)–(6.34)", "n_x, n_y, n_z = 0,1,2...", "No symmetry: non-degenerate"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "aniso-axes",
+                    "objects": [
+                      { "type": "polygon", "points": [[16, 86], [16, 138], [84, 138], [84, 86]], "role": "s ok", "name": "ox" },
+                      { "type": "polygon", "points": [[96, 86], [96, 138], [164, 138], [164, 86]], "role": "s ok", "name": "oy" },
+                      { "type": "polygon", "points": [[176, 86], [176, 138], [244, 138], [244, 86]], "role": "s ok", "name": "oz" },
+                      { "type": "polygon", "points": [[32, 24], [32, 62], [228, 62], [228, 24]], "role": "f", "name": "etot" },
+                      { "type": "label", "coords": [50, 112], "text": "(n_x+½)ħω_x", "size": 11, "align": "center", "role": "t", "name": "ox" },
+                      { "type": "label", "coords": [130, 112], "text": "(n_y+½)ħω_y", "size": 11, "align": "center", "role": "t", "name": "oy" },
+                      { "type": "label", "coords": [210, 112], "text": "(n_z+½)ħω_z", "size": 11, "align": "center", "role": "t", "name": "oz" },
+                      { "type": "label", "coords": [130, 43], "text": "ω_x ≠ ω_y ≠ ω_z: non-degenerate", "size": 11, "align": "center", "role": "i", "name": "etot" },
+                      { "type": "label", "coords": [130, 158], "text": "ψ = X_{n_x}(x)Y_{n_y}(y)Z_{n_z}(z)", "size": 11, "align": "center", "role": "t", "name": "oy" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "qm-m4-u25-c3",
+              "type": "info",
+              "label": "02 · §6.2.4.2",
+              "title": "What is the 3D isotropic harmonic oscillator?",
+              "defines": ["qm-m4-isotropic-oscillator"],
+              "body": "An isotropic oscillator has equal frequencies \\(\\omega_x=\\omega_y=\\omega_z=\\omega\\), giving energy \\(E_n=(n+\\frac{3}{2})\\hbar\\omega\\) (6.35) where \\(n=n_x+n_y+n_z\\) and degeneracy \\(g_n=\\frac{1}{2}(n+1)(n+2)\\) (6.36).",
+              "tex": "E_{n_x n_y n_z} = \\left(n_x + n_y + n_z + \\frac{3}{2}\\right)\\hbar\\omega = \\left(n + \\frac{3}{2}\\right)\\hbar\\omega, \\qquad g_n = \\frac{1}{2}(n + 1)(n + 2)",
+              "examples": ["Equations (6.35)–(6.36)", "E₀₀₀ = 3ħω/2 (g₀ = 1)", "g_n = (n+1)(n+2)/2"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "iso-sphere",
+                    "objects": [
+                      { "type": "circle", "center": [68, 96], "r": 42, "role": "s ok", "name": "sym" },
+                      { "type": "polygon", "points": [[130, 102], [130, 148], [242, 148], [242, 102]], "role": "s ok", "name": "en" },
+                      { "type": "polygon", "points": [[130, 36], [130, 82], [242, 82], [242, 36]], "role": "f", "name": "gn" },
+                      { "type": "label", "coords": [68, 104], "text": "ω_x=ω_y=ω_z", "size": 11, "align": "center", "role": "t", "name": "sym" },
+                      { "type": "label", "coords": [68, 84], "text": "= ω", "size": 11, "align": "center", "role": "t", "name": "sym" },
+                      { "type": "label", "coords": [186, 125], "text": "E_n = (n + 3/2)ħω", "size": 11, "align": "center", "role": "t", "name": "en" },
+                      { "type": "label", "coords": [186, 59], "text": "g_n = ½(n+1)(n+2)", "size": 11, "align": "center", "role": "i", "name": "gn" },
+                      { "type": "label", "coords": [68, 32], "text": "n = n_x+n_y+n_z", "size": 11, "align": "center", "role": "t", "name": "sym" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "qm-m4-u25-c4",
+              "type": "info",
+              "label": "03 · §6.2.4.2 · Table 6.2",
+              "title": "Energy levels and degeneracies of the isotropic oscillator (Table 6.2)",
+              "body": "Table 6.2 lists the first four isotropic oscillator levels by \\(n=n_x+n_y+n_z\\): \\(n=0\\ (3\\hbar\\omega/2, g_0=1)\\), \\(n=1\\ (5\\hbar\\omega/2, g_1=3)\\), \\(n=2\\ (7\\hbar\\omega/2, g_2=6)\\), and \\(n=3\\ (9\\hbar\\omega/2, g_3=10)\\).",
+              "tex": "n=0:\\ \\frac{3}{2}\\hbar\\omega\\ (g_0=1), \\quad n=1:\\ \\frac{5}{2}\\hbar\\omega\\ (g_1=3), \\quad n=2:\\ \\frac{7}{2}\\hbar\\omega\\ (g_2=6), \\quad n=3:\\ \\frac{9}{2}\\hbar\\omega\\ (g_3=10)",
+              "examples": ["Table 6.2", "n=2: (200)x3, (110)x3", "n=3: 10 states, 9ħω/2"],
+              "art": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "table-6-2",
+                    "objects": [
+                      { "type": "segment", "p1": [58, 30], "p2": [132, 30], "role": "ik", "width": 2, "name": "n0" },
+                      { "type": "segment", "p1": [58, 68], "p2": [132, 68], "role": "lk", "width": 2, "name": "n1" },
+                      { "type": "segment", "p1": [58, 106], "p2": [132, 106], "role": "lk", "width": 2.2, "name": "n2" },
+                      { "type": "segment", "p1": [58, 144], "p2": [132, 144], "role": "lk", "width": 2.4, "name": "n3" },
+                      { "type": "label", "coords": [30, 30], "text": "3/2ħω", "size": 11, "align": "center", "role": "t", "name": "n0" },
+                      { "type": "label", "coords": [194, 30], "text": "n=0: (000) g=1", "size": 11, "align": "center", "role": "t", "name": "n0" },
+                      { "type": "label", "coords": [30, 68], "text": "5/2ħω", "size": 11, "align": "center", "role": "t", "name": "n1" },
+                      { "type": "label", "coords": [194, 68], "text": "n=1: (100)x3 g=3", "size": 11, "align": "center", "role": "t", "name": "n1" },
+                      { "type": "label", "coords": [30, 106], "text": "7/2ħω", "size": 11, "align": "center", "role": "t", "name": "n2" },
+                      { "type": "label", "coords": [194, 106], "text": "n=2: 6 states g=6", "size": 11, "align": "center", "role": "t", "name": "n2" },
+                      { "type": "label", "coords": [30, 144], "text": "9/2ħω", "size": 11, "align": "center", "role": "t", "name": "n3" },
+                      { "type": "label", "coords": [194, 144], "text": "n=3: 10 states g=10", "size": 11, "align": "center", "role": "t", "name": "n3" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "qm-m4-u25-c5",
+              "type": "derivation",
+              "label": "Example 6.1 · §6.2.4.2",
+              "title": "Example 6.1: Degeneracy of the isotropic oscillator (Equations (6.35)–(6.40))",
+              "legend": "\\(n = n_x + n_y + n_z\\) total quantum number, \\(n_x, n_y, n_z \\ge 0\\) nonnegative integers, \\(g_n\\) degeneracy of level \\(n\\).",
+              "setup": {
+                "view": { "bbox": [0, 180, 260, 0], "axis": false, "grid": false },
+                "steps": [
+                  {
+                    "step": 0,
+                    "name": "pairs",
+                    "objects": [
+                      { "type": "polygon", "points": [[24, 114], [24, 156], [236, 156], [236, 114]], "role": "s ok", "name": "pairs" },
+                      { "type": "label", "coords": [130, 135], "text": "Fixed n_x: n_y + n_z = n - n_x → (n - n_x + 1) pairs", "size": 11, "align": "center", "role": "t", "name": "pairs" }
+                    ]
+                  },
+                  {
+                    "step": 2,
+                    "name": "gauss",
+                    "objects": [
+                      { "type": "polygon", "points": [[24, 68], [24, 102], [236, 102], [236, 68]], "role": "s ok", "name": "gauss" },
+                      { "type": "label", "coords": [130, 85], "text": "g_n = (n+1) + n + ... + 1  (n+1 terms)", "size": 11, "align": "center", "role": "t", "name": "gauss" }
+                    ]
+                  },
+                  {
+                    "step": 4,
+                    "name": "gresult",
+                    "objects": [
+                      { "type": "polygon", "points": [[46, 20], [46, 56], [214, 56], [214, 20]], "role": "f", "name": "gresult" },
+                      { "type": "label", "coords": [130, 38], "text": "g_n = ½(n + 1)(n + 2)", "size": 11, "align": "center", "role": "i", "name": "gresult" }
+                    ]
+                  }
+                ]
+              },
+              "phases": [
+                { "name": "Isotropic energy", "why": "energy depends only on the sum n = n_x + n_y + n_z" },
+                { "name": "Count pairs", "why": "count (n_y, n_z) pairs for fixed n_x and sum over n_x = 0 to n" },
+                { "name": "Evaluate series", "why": "split the sum and evaluate both series from n_x = 0 to n" },
+                { "name": "Degeneracy formula", "why": "factor (n + 1) to reach Equation (6.36)" }
+              ],
+              "steps": [
+                {
+                  "phase": "Isotropic energy",
+                  "tex": "E_{n_x n_y n_z} = \\left(n_x + n_y + n_z + \\frac{3}{2}\\right)\\hbar\\omega",
+                  "focus": ["pairs"],
+                  "note": "Equation (6.35): energy depends only on the nonnegative integer sum \\(n = n_x + n_y + n_z\\).",
+                  "ask": {
+                    "q": "For fixed \\(n\\) and \\(n_x\\), how many nonnegative pairs \\((n_y, n_z)\\) satisfy \\(n_y + n_z = n - n_x\\)?",
+                    "options": [
+                      "\\(n - n_x + 1\\)",
+                      "\\(n - n_x\\)",
+                      "\\(2n_x + 1\\)",
+                      "\\(n^2\\)"
+                    ],
+                    "answer": 0,
+                    "why": "Since n_y can take every integer value from 0 up to n − n_x inclusive, there are (n − n_x + 1) sets of (n_y, n_z)."
+                  }
+                },
+                {
+                  "phase": "Count pairs",
+                  "move": { "type": "define", "by": "g_n = \\sum_{n_x=0}^n (n - n_x + 1)" },
+                  "tex": "g_n = \\sum_{n_x=0}^n (n - n_x + 1)",
+                  "focus": ["pairs"],
+                  "note": "Equation (6.37): sum the \\((n - n_x + 1)\\) choices over all allowed \\(n_x\\) from \\(0\\) to \\(n\\).",
+                  "ask": {
+                    "q": "How does Equation (6.37) split the sum \\(\\sum_{n_x=0}^n (n - n_x + 1)\\)?",
+                    "options": [
+                      "\\((n + 1)\\sum_{n_x=0}^n 1 - \\sum_{n_x=0}^n n_x\\)",
+                      "\\(n\\sum_{n_x=0}^n n_x + 1\\)",
+                      "\\(\\sum_{n_x=0}^n n_x^2\\)",
+                      "\\((n - 1)\\sum_{n_x=0}^n 1\\)"
+                    ],
+                    "answer": 0,
+                    "why": "Since (n + 1) is independent of the summation index n_x, it factors outside the first sum while n_x is summed separately."
+                  }
+                },
+                {
+                  "phase": "Evaluate series",
+                  "move": { "type": "rearrange" },
+                  "tex": "g_n = (n + 1)\\sum_{n_x=0}^n 1 - \\sum_{n_x=0}^n n_x",
+                  "focus": ["gauss"],
+                  "note": "Separate the constant term \\((n+1)\\) from the summation variable \\(n_x\\).",
+                  "ask": {
+                    "q": "What are the values of \\(\\sum_{n_x=0}^n 1\\) and \\(\\sum_{n_x=0}^n n_x\\)?",
+                    "options": [
+                      "\\(n\\) and \\(\\frac{1}{2}n^2\\)",
+                      "\\(n + 1\\) and \\(\\frac{1}{2}n(n + 1)\\)",
+                      "\\(n + 1\\) and \\(n(n + 1)\\)",
+                      "\\(n\\) and \\(\\frac{1}{2}(n + 1)(n + 2)\\)"
+                    ],
+                    "answer": 1,
+                    "why": "From n_x = 0 to n there are (n + 1) terms of 1, and the arithmetic sum 0 + 1 + ... + n equals ½n(n + 1)."
+                  }
+                },
+                {
+                  "move": { "type": "substitute", "by": "\\sum_{n_x=0}^n 1 = n+1,\\ \\sum_{n_x=0}^n n_x = \\frac{1}{2}n(n+1)" },
+                  "tex": "g_n = (n + 1)^2 - \\frac{1}{2}n(n + 1)",
+                  "focus": ["gauss"],
+                  "note": "Equation (6.37): substitute both series results.",
+                  "ask": {
+                    "q": "What do we get when we factor \\(\\frac{1}{2}(n + 1)\\) out of \\((n + 1)^2 - \\frac{1}{2}n(n + 1)\\)?",
+                    "options": [
+                      "\\(\\frac{1}{2}n(n + 1)\\)",
+                      "\\(\\frac{1}{2}(n + 1)(n + 2)\\)",
+                      "\\((n + 1)(n + 2)\\)",
+                      "\\(\\frac{1}{2}(n + 1)^2\\)"
+                    ],
+                    "answer": 1,
+                    "why": "Factoring ½(n + 1) leaves [2(n + 1) − n] = (n + 2), giving g_n = ½(n + 1)(n + 2)."
+                  }
+                },
+                {
+                  "phase": "Degeneracy formula",
+                  "move": { "type": "factor" },
+                  "tex": "g_n = \\frac{1}{2}(n + 1)(n + 2)",
+                  "focus": ["gresult"],
+                  "note": "Equations (6.36) and (6.40): also obtained by adding reversed series (6.38) and (6.39) in Gauss's method."
+                }
+              ]
+            },
+            {
+              "id": "qm-m4-u25-c6",
+              "type": "mcq",
+              "label": "Quiz · OMR",
+              "time": 60,
+              "q": "What is the ground-state energy \\(E_{000}\\) of a 3D isotropic harmonic oscillator?",
+              "options": [
+                "\\(\\frac{1}{2}\\hbar\\omega\\)",
+                "\\(\\hbar\\omega\\)",
+                "\\(\\frac{3}{2}\\hbar\\omega\\)",
+                "\\(3\\hbar\\omega\\)"
+              ],
+              "answer": 2,
+              "why": "By Equation (6.35) with n_x = n_y = n_z = 0, the ground-state energy is E_{000} = (0 + 3/2)ħω = 3ħω/2."
+            },
+            {
+              "id": "qm-m4-u25-c7",
+              "type": "number",
+              "label": "Quiz · Number",
+              "time": 60,
+              "q": "What is the degeneracy \\(g_2\\) of the second excited state (\\(n = 2\\)) of a 3D isotropic oscillator?",
+              "answer": 6,
+              "tolerance": 0,
+              "unit": "",
+              "why": "By Equation (6.36) and Table 6.2, for n = 2 we have g₂ = ½(2 + 1)(2 + 2) = 6 states at energy 7ħω/2."
+            },
+            {
+              "id": "qm-m4-u25-c8",
+              "type": "number",
+              "label": "Quiz · Number",
+              "time": 60,
+              "q": "How many degenerate states \\(g_3\\) belong to the \\(n = 3\\) level (\\(E = 9\\hbar\\omega/2\\)) of an isotropic oscillator?",
+              "answer": 10,
+              "tolerance": 0,
+              "unit": "",
+              "why": "By Equation (6.36) and Table 6.2, for n = 3 we have g₃ = ½(3 + 1)(3 + 2) = 10 degenerate states."
+            },
+            {
+              "id": "qm-m4-u25-c9",
+              "type": "fill",
+              "label": "Quiz · Fill in",
+              "time": 60,
+              "q": "A 3D harmonic oscillator with unequal frequencies \\(\\omega_x \\neq \\omega_y \\neq \\omega_z\\) is called an ______ oscillator.",
+              "answer": "anisotropic",
+              "why": "In Section 6.2.4.1, an oscillator with different frequencies along x, y, and z displays no symmetry and is called an anisotropic oscillator."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

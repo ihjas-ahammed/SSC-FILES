@@ -64,3 +64,17 @@ Note: the CLAUDE.md map gives the Module III units as "18, 19, 20, 21, 22, 19". 
 Not cut: §5.6 (perturbation and sensitivity) and §5.7 (examples). Unit 26 is included because §5.9 belongs to the duality content; the syllabus does not name it.
 
 Syllabus: `syllabus.pdf` (copied from `SSC-V2/SEM5/MATH/`).
+
+## Exercise pages (added 2026-10-27)
+
+Binmore puts numbered Exercise blocks inside ch. 19; Boyd puts all exercises at the end of each chapter. Only the Boyd ch. 2 exercises (PDF 75–81, in unit-14) were inside a unit cut. The others are now separate files. The unit files are unchanged.
+
+| Book | Exercises | PDF pp | Already cut? | File |
+|---|---|---|---|---|
+| Binmore | 19.11 (partial and directional derivatives) | 212–213 | no (between units 2 and 3) | module-1/exercises-binmore-19-11.pdf |
+| Binmore | 19.26 (chain rule) | 229–231 | 229–230 only (unit 5) | module-1/exercises-binmore-19-26.pdf |
+| Binmore | 19.47 (second derivatives, classification) | 244–245 | 244 only (unit 8) | module-1/exercises-binmore-19-47.pdf |
+| Boyd | Chapter 2 | 75–81 | yes, unit-14 | — |
+| Boyd | Chapter 3 | 128–140 | no | module-2/exercises-boyd-chapter-3.pdf |
+| Boyd | Chapter 4 | 204–228 | no | module-3/exercises-boyd-chapter-4.pdf |
+| Boyd | Chapter 5 | 288–302 | no | module-4/exercises-boyd-chapter-5.pdf |

@@ -1,0 +1,112 @@
+# Module III derivations (Boyd ch. 4)
+
+=== d-optcrit
+title: Optimality criterion for differentiable \(f_0\), and the equality-constrained case
+marks: 6–10 marks
+src: Boyd §4.2.3, eqs. (4.21)–(4.23)
+legend: Convex problem with differentiable \(f_0\), feasible set \(X\). By the first-order condition \(f_0(\mathbf y)\ge f_0(\mathbf x)+\nabla f_0(\mathbf x)^T(\mathbf y-\mathbf x)\).
+result: \mathbf x\ \text{optimal}\iff\nabla f_0(\mathbf x)^T(\mathbf y-\mathbf x)\ge0\ \ \forall\mathbf y\in X
+--- Sufficiency
+tex: f_0(\mathbf y)\ge f_0(\mathbf x)+\nabla f_0(\mathbf x)^T(\mathbf y-\mathbf x)\ge f_0(\mathbf x)
+move: identity | label=First-order condition, then the criterion \(\nabla f_0(\mathbf x)^T(\mathbf y-\mathbf x)\ge0\)
+note: So no feasible \(\mathbf y\) does better: \(\mathbf x\) is optimal.
+--- Necessity
+tex: \frac{d}{dt}f_0(\mathbf x+t(\mathbf y-\mathbf x))\Big|_{t=0} = \nabla f_0(\mathbf x)^T(\mathbf y-\mathbf x)\lt0
+move: differentiate | wrt=t | label=Suppose some feasible \(\mathbf y\) violates the criterion
+note: \(\mathbf z(t)=\mathbf x+t(\mathbf y-\mathbf x)\) is feasible for \(0\le t\le1\) (convex \(X\)), and \(f_0(\mathbf z(t))\lt f_0(\mathbf x)\) for small \(t\): \(\mathbf x\) was not optimal.
+--- Unconstrained problem
+tex: \nabla f_0(\mathbf x) = \mathbf 0
+move: identity | label=\(X=\mathbf R^n\): take \(\mathbf y=\mathbf x-t\nabla f_0(\mathbf x)\), giving \(-t\|\nabla f_0(\mathbf x)\|_2^2\ge0\)
+--- Equality constraints only, \(A\mathbf x=\mathbf b\)
+tex: \nabla f_0(\mathbf x)^T\mathbf v\ge0\quad\forall\mathbf v\in\mathcal N(A)
+move: substitute | by=\mathbf y=\mathbf x+\mathbf v,\ A\mathbf v=\mathbf 0
+---
+tex: \nabla f_0(\mathbf x)\perp\mathcal N(A)
+move: identity | label=A linear function non-negative on a subspace is zero on it (use \(\pm\mathbf v\))
+---
+tex: \nabla f_0(\mathbf x)+A^T\boldsymbol\nu = \mathbf 0\ \ \text{for some}\ \boldsymbol\nu
+move: identity | label=\(\mathcal N(A)^\perp=\mathcal R(A^T)\)
+note: The Lagrange multiplier condition. Over \(\mathbf R^n_+\): \(\mathbf x\succeq0\), \(\nabla f_0(\mathbf x)\succeq0\), \(x_i(\nabla f_0(\mathbf x))_i=0\) (complementarity).
+
+=== d-linfrac
+title: Linear-fractional program to LP (Charnes–Cooper)
+marks: 6 marks
+src: Boyd §4.3.2, eqs. (4.32)–(4.33)
+legend: Minimise \(\dfrac{\mathbf c^T\mathbf x+d}{\mathbf e^T\mathbf x+f}\) s.t. \(G\mathbf x\preceq\mathbf h\), \(A\mathbf x=\mathbf b\), on \(\mathbf e^T\mathbf x+f\gt0\) (feasible set non-empty).
+result: \begin{gathered}\min\ \mathbf c^T\mathbf y+dz\\ G\mathbf y-\mathbf hz\preceq0,\ A\mathbf y-\mathbf bz=0\\ \mathbf e^T\mathbf y+fz=1,\ z\ge0\end{gathered}
+--- New variables
+tex: \mathbf y = \frac{\mathbf x}{\mathbf e^T\mathbf x+f},\qquad z = \frac{1}{\mathbf e^T\mathbf x+f}
+move: define
+---
+tex: \frac{\mathbf c^T\mathbf x+d}{\mathbf e^T\mathbf x+f} = \mathbf c^T\mathbf y+dz
+move: divide | label=Divide numerator and denominator by \(\mathbf e^T\mathbf x+f\)
+---
+tex: \begin{gathered}G\mathbf y-\mathbf hz\preceq0,\quad A\mathbf y-\mathbf bz=0\\\mathbf e^T\mathbf y+fz=1,\quad z\gt0\end{gathered}
+move: divide | label=Constraints divided by \(\mathbf e^T\mathbf x+f\gt0\); the last one is the definition
+---
+tex: \begin{gathered}\min\ \mathbf c^T\mathbf y+dz\\ G\mathbf y-\mathbf hz\preceq0,\ A\mathbf y-\mathbf bz=0\\ \mathbf e^T\mathbf y+fz=1,\ z\ge0\end{gathered}
+move: identity | label=Relax \(z\gt0\) to \(z\ge0\)
+note: Equivalence: \(\mathbf x\) feasible gives \((\mathbf y,z)\) with the same objective; conversely \((\mathbf y,z)\) with \(z\gt0\) gives \(\mathbf x=\mathbf y/z\). (A solution with \(z=0\) is a limit of feasible points.) An LP.
+
+=== d-cheb
+title: Chebyshev centre of a polyhedron as an LP
+marks: 6 marks
+src: Boyd §4.3.1
+legend: \(\mathcal P=\{\mathbf x\mid\mathbf a_i^T\mathbf x\le b_i,\ i=1,\dots,m\}\); ball \(\mathcal B=\{\mathbf x_c+\mathbf u\mid\|\mathbf u\|_2\le r\}\).
+result: \max\ r\ \ \text{s.t.}\ \mathbf a_i^T\mathbf x_c+r\|\mathbf a_i\|_2\le b_i
+--- Ball inside one halfspace
+tex: \mathbf a_i^T(\mathbf x_c+\mathbf u)\le b_i\quad\forall\,\|\mathbf u\|_2\le r
+---
+tex: \sup_{\|\mathbf u\|_2\le r}\mathbf a_i^T\mathbf u = r\|\mathbf a_i\|_2
+move: evaluate | label=Cauchy–Schwarz, equality at \(\mathbf u=r\mathbf a_i/\|\mathbf a_i\|_2\)
+---
+tex: \mathbf a_i^T\mathbf x_c+r\|\mathbf a_i\|_2\le b_i
+move: substitute
+note: Linear in \((\mathbf x_c,r)\): the norms are constants.
+--- Largest ball
+tex: \max\ r\ \ \text{s.t.}\ \mathbf a_i^T\mathbf x_c+r\|\mathbf a_i\|_2\le b_i,\ i=1,\dots,m
+move: combine
+note: An LP in \((\mathbf x_c,r)\).
+
+=== d-gp
+title: Geometric program in convex form
+marks: 6–10 marks
+src: Boyd §4.5.3
+legend: Monomial \(f(\mathbf x)=cx_1^{a_1}\cdots x_n^{a_n}\), \(c\gt0\); posynomial = sum of monomials. GP: minimise posynomial \(f_0\) s.t. posynomials \(f_i\le1\), monomials \(h_i=1\), on \(\mathbf x\succ0\).
+result: \begin{gathered}\min\ \log\textstyle\sum_ke^{\mathbf a_{0k}^T\mathbf y+b_{0k}}\\ \log\textstyle\sum_ke^{\mathbf a_{ik}^T\mathbf y+b_{ik}}\le0,\quad\mathbf g_i^T\mathbf y+h_i=0\end{gathered}
+--- Change of variables
+tex: y_i = \log x_i,\qquad x_i = e^{y_i}
+move: define | label=Allowed because \(\mathbf x\succ0\)
+--- A monomial becomes an exponential of an affine function
+tex: f(\mathbf x) = c\,(e^{y_1})^{a_1}\cdots(e^{y_n})^{a_n} = e^{\mathbf a^T\mathbf y+b},\quad b=\log c
+move: substitute
+--- A posynomial
+tex: f(\mathbf x) = \sum_{k=1}^Ke^{\mathbf a_k^T\mathbf y+b_k}
+move: substitute
+--- Take logarithms
+tex: \tilde f(\mathbf y) = \log\sum_{k=1}^Ke^{\mathbf a_k^T\mathbf y+b_k}
+move: ln
+note: Log-sum-exp of an affine map: convex. A monomial equality \(h=1\) becomes the affine equation \(\mathbf g^T\mathbf y+h=0\). \(\log\) is increasing, so \(f_i\le1\iff\log f_i\le0\) and minimising \(f_0\) is minimising \(\log f_0\).
+---
+tex: \begin{gathered}\min\ \log\textstyle\sum_ke^{\mathbf a_{0k}^T\mathbf y+b_{0k}}\\\log\textstyle\sum_ke^{\mathbf a_{ik}^T\mathbf y+b_{ik}}\le0,\ \mathbf g_i^T\mathbf y+h_i=0\end{gathered}
+move: combine
+note: A convex optimization problem. With only monomials it is an LP.
+
+=== d-robust
+title: Robust LP with ellipsoidal uncertainty as an SOCP
+marks: 6 marks
+src: Boyd §4.4.2
+legend: Constraint \(\mathbf a_i^T\mathbf x\le b_i\) must hold for all \(\mathbf a_i\in\mathcal E_i=\{\bar{\mathbf a}_i+P_i\mathbf u\mid\|\mathbf u\|_2\le1\}\).
+result: \bar{\mathbf a}_i^T\mathbf x+\|P_i^T\mathbf x\|_2\le b_i
+--- Worst case
+tex: \sup\{\mathbf a_i^T\mathbf x\mid\mathbf a_i\in\mathcal E_i\}\le b_i
+---
+tex: \sup_{\|\mathbf u\|_2\le1}(\bar{\mathbf a}_i+P_i\mathbf u)^T\mathbf x = \bar{\mathbf a}_i^T\mathbf x+\sup_{\|\mathbf u\|_2\le1}\mathbf u^TP_i^T\mathbf x
+move: substitute
+---
+tex: \sup_{\|\mathbf u\|_2\le1}\mathbf u^TP_i^T\mathbf x = \|P_i^T\mathbf x\|_2
+move: evaluate | label=Cauchy–Schwarz (the dual of \(\|\cdot\|_2\) is itself)
+---
+tex: \bar{\mathbf a}_i^T\mathbf x+\|P_i^T\mathbf x\|_2\le b_i
+move: substitute
+note: A second-order cone constraint. The \(\|P_i^T\mathbf x\|_2\) term is a regularisation that keeps \(\mathbf x\) small in the uncertain directions.

@@ -1,0 +1,25 @@
+<!-- id: m3-opt | mod: Module III | modName: Convex optimization problems | modClass: m3 | title: Optimization problems: terminology, standard form, equivalent problems | short: Optimization problems (4.1) | est: ~30 min -->
+<gist>Every problem is written in one standard form: minimise $f_0(\mathbf x)$ subject to $f_i(\mathbf x)\le0$ and $h_i(\mathbf x)=0$. Learn the vocabulary (feasible, optimal value, optimal and locally optimal points, active constraints) and the moves that turn one problem into an equivalent one.</gist>
+
+<tp>Basic terminology (§4.1.1)</tp>
+<must><p>$$\begin{array}{ll}\text{minimize}&f_0(\mathbf x)\\\text{subject to}&f_i(\mathbf x)\le0,\quad i=1,\dots,m\\&h_i(\mathbf x)=0,\quad i=1,\dots,p\end{array}$$ $\mathbf x\in\mathbf R^n$ the optimization variable, $f_0$ the objective, $f_i$ inequality and $h_i$ equality constraint functions. Domain $\mathcal D=\bigcap\dom f_i\cap\bigcap\dom h_i$. $\mathbf x$ is <b>feasible</b> if it is in $\mathcal D$ and satisfies the constraints. <b>Optimal value</b> $p^\star=\inf\{f_0(\mathbf x)\mid\mathbf x\text{ feasible}\}$, with $p^\star=\infty$ if infeasible and $p^\star=-\infty$ if <b>unbounded below</b>.</p></must>
+<p>$\mathbf x^\star$ is <strong>optimal</strong> if feasible with $f_0(\mathbf x^\star)=p^\star$; $X_{\text{opt}}$ is the optimal set. $\mathbf x$ is <strong>$\epsilon$-suboptimal</strong> if $f_0(\mathbf x)\le p^\star+\epsilon$. $\mathbf x$ is <strong>locally optimal</strong> if it minimises $f_0$ over feasible $\mathbf z$ with $\|\mathbf z-\mathbf x\|_2\le R$ for some $R\gt0$. A constraint with $f_i(\mathbf x)=0$ is <strong>active</strong> at $\mathbf x$; it is <strong>redundant</strong> if deleting it does not change the feasible set. A <strong>feasibility problem</strong> has $f_0=0$: $p^\star=0$ if feasible, $\infty$ if not.</p>
+<p><b>Example 4.1</b> ($n=1$, no constraints). $f_0=1/x$ on $\mathbf R_{++}$: $p^\star=0$, not attained. $f_0=-\log x$: $p^\star=-\infty$. $f_0=x\log x$: $p^\star=-1/e$ at $x^\star=1/e$. $f_0=x^3-3x$: $p^\star=-\infty$, but $x=1$ is locally optimal.</p>
+
+<tp>Standard form and equivalent problems (§4.1.2–4.1.3)</tp>
+<p>Convert $f_i(\mathbf x)\ge0$ to $-f_i\le0$, $g(\mathbf x)\le u$ to $g-u\le0$, maximisation of $f_0$ to minimisation of $-f_0$. <b>Example 4.2</b>: box constraints $l_i\le x_i\le u_i$ become $l_i-x_i\le0$, $x_i-u_i\le0$.</p>
+<p>Two problems are <strong>equivalent</strong> if a solution of one is readily obtained from a solution of the other. Standard transformations:</p>
+<ul>
+<li><b>Monotone transformations.</b> $\psi_0$ increasing, $\psi_i(u)\le0\iff u\le0$, $\psi_{m+i}(u)=0\iff u=0$: replacing $f_i$ by $\psi_i\circ f_i$ gives an equivalent problem. <b>Example 4.3</b>: minimise $\|A\mathbf x-\mathbf b\|_2$ ⇔ minimise $\|A\mathbf x-\mathbf b\|_2^2$ (smooth).</li>
+<li><b>Change of variables</b> $\mathbf x=\phi(\mathbf z)$ with $\phi$ one-to-one onto a set containing $\mathcal D$.</li>
+<li><b>Slack variables</b>: $f_i(\mathbf x)\le0$ ⇔ $f_i(\mathbf x)+s_i=0$, $s_i\ge0$.</li>
+<li><b>Eliminating equality constraints</b>: parametrise the solution set, $A\mathbf x=\mathbf b$ ⇔ $\mathbf x=F\mathbf z+\mathbf x_0$ ($\mathcal R(F)=\mathcal N(A)$), and minimise over $\mathbf z$.</li>
+<li><b>Introducing equality constraints</b>: $f_0(A_0\mathbf x+\mathbf b_0)$ becomes $f_0(\mathbf y_0)$ with $\mathbf y_0=A_0\mathbf x+\mathbf b_0$.</li>
+<li><b>Optimising over some variables</b>: $\inf_{\mathbf x_1,\mathbf x_2}f=\inf_{\mathbf x_1}\tilde f(\mathbf x_1)$ with $\tilde f(\mathbf x_1)=\inf_{\mathbf x_2}f(\mathbf x_1,\mathbf x_2)$. <b>Example 4.4</b>: a convex quadratic in $(\mathbf x_1,\mathbf x_2)$ minimised over $\mathbf x_2$ leaves $\mathbf x_1^T(P_{11}-P_{12}P_{22}^{-1}P_{12}^T)\mathbf x_1$ (Schur complement).</li>
+<li><b>Epigraph form</b>: minimise $t$ subject to $f_0(\mathbf x)-t\le0$ and the original constraints. The objective is linear.</li>
+<li><b>Implicit / explicit constraints</b>: constraints can be moved into the domain of the objective and back (e.g. $f_0(\mathbf x)=\mathbf x^T\mathbf x$ on $A\mathbf x\preceq\mathbf b$, $\infty$ elsewhere).</li>
+</ul>
+<p><b>Parameter and oracle descriptions (§4.1.4).</b> A problem is often given by its data ($A$, $\mathbf b$, …) or only through an oracle that returns $f_i(\mathbf x)$ and derivatives at a queried $\mathbf x$.</p>
+<trap><p>"Optimal" means global. A locally optimal point need not be optimal unless the problem is convex (next section). $p^\star$ may be finite without being attained ($1/x$).</p></trap>
+<chk><q>Write "maximise $x_1x_2$ subject to $x_1+x_2\le2$, $x_1,x_2\ge1/2$" in standard form.</q><a><p>Minimise $-x_1x_2$ subject to $x_1+x_2-2\le0$, $\tfrac12-x_1\le0$, $\tfrac12-x_2\le0$.</p></a></chk>
+<chk><q>Give the epigraph form of minimise $\max_i(\mathbf a_i^T\mathbf x+b_i)$.</q><a><p>Minimise $t$ subject to $\mathbf a_i^T\mathbf x+b_i\le t$, $i=1,\dots,m$: an LP in $(\mathbf x,t)$.</p></a></chk>

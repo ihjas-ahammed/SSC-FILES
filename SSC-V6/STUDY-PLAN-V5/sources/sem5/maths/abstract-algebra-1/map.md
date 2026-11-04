@@ -45,3 +45,20 @@ Units 13–14 combine 8th §4 and §8: the syllabus item "orbits, cycles, altern
 Module V (open-ended; factor groups, generating sets, field of quotients) is not cut. The CLAUDE.md records it as not started.
 
 Syllabus: `syllabus.pdf` (copied from `SSC-V2/SEM5/MATH/`).
+
+## Exercise pages (added 2026-10-27)
+
+The November 2026 paper took 9 of its 22 question parts word for word from the end-of-section exercises (see `SEM5-PYQ/ABSTRACT-ALGEBRA/source/pyq/2026-NOV-paper-trace.pdf`). The unit cuts for §4, §5, §6 and §8 stopped before those pages. The exercise sets are now separate files; the unit files are unchanged.
+
+| Section | Exercises PDF pp (printed) | Already in a unit cut? | File |
+|---|---|---|---|
+| §1 | 34–35 (17–18) | yes, unit-1-4 | — |
+| §2 | 45–48 (28–31) | yes, unit-5-6 | — |
+| §4 | 67–68 (50–51) | no | module-3/exercises-section-4.pdf |
+| §5 | 74–77 (57–60) | no | module-2/exercises-section-5.pdf |
+| §6 | 85–87 (68–70) | no | module-2/exercises-section-6.pdf (last page also opens §7) |
+| §8 | 101–104 (84–87) | first page only (unit-13-14) | module-2/exercises-section-8.pdf; same file in module-3/ (orbit and cycle exercises 17–25, 41–55) |
+| §10 | 119–121 (102–104) | yes, unit-15-16 | — |
+| §16 | 165–166 (148–149) | yes, unit-17-18 | — |
+| §22 | 208–210 (191–193) | yes, unit-19-20 | — |
+| §23 | 215–217 (198–200) | yes, unit-21-22 | — |

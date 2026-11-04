@@ -97,7 +97,7 @@ function cssLen(t){
 /* ─────────────────────── what latex.js already knows ─────────────────────── */
 /* Commands the linter accepts. Anything else is "Undefined control sequence",
    exactly as TeX would say. The list is deliberately generous for Modules I–II. */
-const KNOWN=new Set((`documentclass usepackage begin end item section subsection subsubsection paragraph
+const KNOWN=new Set((`@ documentclass usepackage begin end item section subsection subsubsection paragraph
 subparagraph part chapter title author date maketitle thanks and today tableofcontents listoftables
 listoffigures textbf textit emph texttt textsf textsc textsl textup textmd textrm textnormal
 bfseries itshape ttfamily sffamily scshape slshape upshape mdseries rmfamily normalfont em bf it tt
@@ -141,6 +141,8 @@ theindex abstract titlepage minipage equation equation* eqnarray eqnarray* array
 letter filecontents filecontents* comment`.split(/\s+/));
 const LISTS=new Set(['itemize','enumerate','description','thebibliography','theindex']);
 
+//@@EMU@@
+
 /* ═════════════════════════════════ LINT ═════════════════════════════════
    Each finding: {line,col,sev:'error'|'warning'|'info',tex,msg,fix}
    `tex` is the message pdflatex would print; `msg`/`fix` say it plainly. */
@@ -168,7 +170,7 @@ function lint(src,files){
     const pre=s.slice(0,dc.index).trim();
     if(pre)add(s.indexOf(pre),'error','! LaTeX Error: \\usepackage before \\documentclass.',
       'Nothing may come before \\documentclass except comments.','Move \\documentclass to the very top.');
-    if(!['article','report','book','letter','slides','proc','minimal'].includes(dc[2].trim()))
+    if(!['article','report','book','letter','slides','proc','minimal','beamer'].includes(dc[2].trim()))
       add(dc.index,'error',`! LaTeX Error: File \`${dc[2].trim()}.cls' not found.`,
         `“${dc[2].trim()}” is not a document class that exists.`,'Standard classes: article, report, book, letter.');
   }
@@ -205,11 +207,13 @@ function lint(src,files){
     'This { opens a group that is never closed, so everything after it is swallowed.','Add the matching }.'));
 
   /* environments */
+  const userEnvs=new Set();(s.match(/\\(?:newtheorem|newenvironment|renewenvironment)\*?\s*\{([A-Za-z]+)\}/g)||[]).forEach(u=>userEnvs.add(u.replace(/.*\{([A-Za-z]+)\}$/,'$1')));
+  const isBeamer=!!dc&&dc[2].trim()==='beamer';
   const es=[];const re=/\\(begin|end)\s*\{([^}]*)\}/g;let m;
   while((m=re.exec(s))){
     const env=m[2].trim();
     if(m[1]==='begin'){
-      if(!ENVS.has(env))add(m.index,'error',`! LaTeX Error: Environment ${env} undefined.`,
+      if(!ENVS.has(env)&&!userEnvs.has(env.replace(/\*$/,'')))add(m.index,'error',`! LaTeX Error: Environment ${env} undefined.`,
         `There is no environment called “${env}”.`,'Check the spelling — e.g. itemize, enumerate, tabular, center.');
       es.push({env,i:m.index});
     }else{
@@ -236,14 +240,14 @@ function lint(src,files){
     let math=null,mathAt=0;
     while((m=rx.exec(body))){
       const t=m[0],i=off+m.index;
-      if(m[1]==='begin'){ctx.push(m[2].trim());if(/^(equation|eqnarray|displaymath|math|array)\*?$/.test(m[2].trim()))math=m[2];continue;}
+      if(m[1]==='begin'){ctx.push(m[2].trim());if(/^(equation|eqnarray|displaymath|math|array|align|alignat|flalign|gather|multline|split|aligned|gathered|alignedat|cases|[pbBvV]?matrix|smallmatrix|subequations)\*?$/.test(m[2].trim()))math=m[2];continue;}
       if(m[1]==='end'){const e=m[2].trim();const k=ctx.lastIndexOf(e);if(k>=0)ctx.splice(k);if(math===m[2])math=null;continue;}
       if(t==='$$'||t==='$'||t==='\\['||t==='\\]'||t==='\\('||t==='\\)'){
         if(t==='$'||t==='$$'){if(math===t)math=null;else if(!math){math=t;mathAt=i;}}
         else if(t==='\\['||t==='\\('){if(!math){math=t;mathAt=i;}}
         else if(math===(t==='\\]'?'\\[':'\\('))math=null;
         continue;}
-      const inTab=ctx.some(e=>/^(tabular\*?|array|eqnarray\*?|tabbing)$/.test(e));
+      const inTab=ctx.some(e=>/^(tabular\*?|array|eqnarray\*?|tabbing|longtable|align\*?|alignat\*?|flalign\*?|split|aligned|alignedat|cases|[pbBvV]?matrix|smallmatrix|gathered)$/.test(e));
       if(t==='&'&&!inTab&&!math)add(i,'error','! Misplaced alignment tab character &.',
         'A bare & is the column separator of a table. In ordinary text it must be written \\&.','Write \\& for an ampersand.');
       if(t==='\\item'&&!ctx.some(e=>LISTS.has(e)))add(i,'error','! LaTeX Error: Lonely \\item--perhaps a missing list environment.',
@@ -265,9 +269,12 @@ function lint(src,files){
   /* commands */
   const pk=new Set();(s.match(/\\usepackage\s*(\[[^\]]*\])?\s*\{([^}]*)\}/g)||[]).forEach(u=>
     u.replace(/\{([^}]*)\}/,(a,b)=>b.split(',').forEach(p=>pk.add(p.trim()))));
+  if(isBeamer)BEAMER_LOADS.forEach(p=>pk.add(p));
+  const hasPkg=list=>list.split(' ').some(p=>pk.has(p)||(p==='@beamer'&&isBeamer));
   const user=new Set();(s.match(/\\(?:re)?newcommand\*?\s*\{?\\([A-Za-z@]+)/g)||[]).forEach(u=>user.add(u.replace(/.*\\/,'')));
   (s.match(/\\providecommand\*?\s*\{?\\([A-Za-z@]+)/g)||[]).forEach(u=>user.add(u.replace(/.*\\/,'')));
   (s.match(/\\def\s*\\([A-Za-z@]+)/g)||[]).forEach(u=>user.add(u.replace(/.*\\/,'')));
+  (s.match(/\\DeclareMathOperator\*?\s*\{\\([A-Za-z]+)\}/g)||[]).forEach(u=>user.add(u.replace(/.*\\([A-Za-z]+)\}$/,'$1')));
   const cre=/\\([A-Za-z@]+)\*?/g;
   while((m=cre.exec(s))){
     const c=m[1];if(KNOWN.has(c)||user.has(c))continue;
@@ -281,6 +288,22 @@ function lint(src,files){
     const p=NEEDS[c].split(' ')[0];
     if(!pk.has(p)&&!(c==='url'&&pk.has('hyperref')))add(i,'error','! Undefined control sequence.  \\'+c,
       `\\${c} is not built in — it comes from the ${NEEDS[c]} package.`,`Add \\usepackage{${p}} to the preamble.`);
+  }
+  for(const c in NEED_CMD){
+    const i=s.search(new RegExp('\\\\'+c+'(?![A-Za-z])'));if(i<0)continue;
+    if(hasPkg(NEED_CMD[c]))continue;
+    const p=NEED_CMD[c].split(' ')[0];
+    add(i,'error','! Undefined control sequence.  \\'+c,
+      p==='@beamer'?`\\${c} belongs to the beamer class.`:`\\${c} is not built in — it comes from the ${p} package.`,
+      p==='@beamer'?'Start the file with \\documentclass{beamer}.':`Add \\usepackage{${p}} to the preamble.`);
+  }
+  for(const e in NEED_ENV){
+    const mm=new RegExp('\\\\begin\\{'+e+'\\*?\\}').exec(s);if(!mm)continue;
+    if(hasPkg(NEED_ENV[e]))continue;
+    const p=NEED_ENV[e].split(' ')[0];
+    add(mm.index,'error',`! LaTeX Error: Environment ${e} undefined.`,
+      p==='@beamer'?`The ${e} environment belongs to the beamer class.`:`The ${e} environment comes from the ${p} package.`,
+      p==='@beamer'?'Start the file with \\documentclass{beamer}.':`Add \\usepackage{${p}} to the preamble.`);
   }
   if(/\\index\s*\{/.test(s)&&!/\\makeindex/.test(s))add(s.search(/\\index\s*\{/),'warning',
     '(no .idx file written — \\makeindex is missing)','Without \\makeindex in the preamble, \\index entries are silently thrown away.',
@@ -345,7 +368,7 @@ function lintTables(src,s,add){
     const e=findEnd(s,'tabular',a.end);if(!e)continue;
     const body=s.slice(a.end,e.start);
     let off=a.end;
-    splitTop(body,'\\\\').forEach(row=>{
+    splitTabRows(body).forEach(row=>{
       const clean=row.replace(/\\hline|\\cline\s*\{[^}]*\}/g,'');
       if(clean.trim()){
         let n=0;splitTop(clean,'&').forEach(cell=>{const mc=/\\multicolumn\s*\{(\d+)\}/.exec(cell);n+=mc?+mc[1]:1;});
@@ -485,6 +508,30 @@ function parseSpec(spec){
   }
   return cols;
 }
+/* rows end at \\ — but in a column that was set \raggedright (or \centering) a \\ is a line break in the cell,
+   and only \tabularnewline ends the row */
+function splitTabRows(body){
+  const raw=[];{
+    let cur='',d=0,rag=false;
+    for(let i=0;i<body.length;i++){
+      const c=body[i];
+      if(c==='\\'){
+        if(body[i+1]==='\\'&&d===0){
+          if(rag){cur+='\\\\';i++;continue;}
+          raw.push(cur);cur='';i++;continue;}
+        const tm=/^\\tabularnewline(?![A-Za-z])/.exec(body.slice(i));
+        if(tm&&d===0){raw.push(cur);cur='';rag=false;i+=tm[0].length-1;continue;}
+        const rm=/^\\(raggedright|centering|raggedleft)(?![A-Za-z])/.exec(body.slice(i));
+        if(rm&&d===0)rag=true;
+        const nm=/^\\[A-Za-z]+|^\\./.exec(body.slice(i));cur+=nm[0];i+=nm[0].length-1;continue;}
+      if(c==='{')d++;else if(c==='}')d--;
+      if(c==='&'&&d===0&&!rag){cur+=c;continue;}
+      cur+=c;
+    }
+    raw.push(cur);
+  }
+  return raw;
+}
 function renderTabular(spec,body,opts,ctx){
   const cols=parseSpec(spec);
   const real=cols.filter(c=>c.kind==='col');
@@ -499,7 +546,8 @@ function renderTabular(spec,body,opts,ctx){
   if(layout.length&&barsL)layout[layout.length-1].barR+=barsL;
   const stretch=ctx.arraystretch||1,sep=ctx.tabcolsep||'6px';
   const rows=[];let pendingTop=0,pendingCl=[];
-  const raw=splitTop(body,'\\\\');
+  const raw=splitTabRows(body);
+  const rowspan={};
   raw.forEach((row,ri)=>{
     let r=row.replace(/^\s*\[[^\]]*\]/,'');
     let mm;
@@ -518,6 +566,11 @@ function renderTabular(spec,body,opts,ctx){
     html+='<tr>';let ci=0;
     r.cells.forEach(cell=>{
       let span=1,al=null,content=cell,cspec=null;
+      const mr=/^\s*\\multirow\s*\{(\d+)\}\s*\{[^}]*\}\s*\{/.exec(cell);
+      let rs=1;
+      if(mr){const g=group(cell,mr.index+mr[0].length-1);if(g){rs=+mr[1];content=g.text;rowspan[ci]=rs-1;}}
+      else if(rowspan[ci]>0&&!cell.trim()){rowspan[ci]--;ci+=1;return;}
+      else if(rowspan[ci]>0){rowspan[ci]=0;}
       const mc=/^\s*\\multicolumn\s*\{(\d+)\}\s*\{([^}]*)\}\s*/.exec(cell);
       if(mc){span=+mc[1];const g=group(cell,cell.indexOf('{',mc.index+mc[0].length-1));
         try{cspec=parseSpec(mc[2]);}catch(e){cspec=[{kind:'col',al:'c'}];}
@@ -537,8 +590,9 @@ function renderTabular(spec,body,opts,ctx){
       const atR=(!cspec&&Rl.atR&&Rl.atR.length)?Rl.atR.map(a=>renderInline(a.tex)).join(''):'';
       const noPadL=!cspec&&L.atL&&L.atL.length,noPadR=!cspec&&Rl.atR&&Rl.atR.length;
       if(noPadL)st.push('padding-left:0');if(noPadR||(!cspec&&Rl.noPadR))st.push('padding-right:0');
-      const txt=renderInline(content.trim());
-      html+=`<td class="al-${al}"${span>1?` colspan="${span}"`:''} style="${st.join(';')}">${atL}${txt}${atR}</td>`;
+      const txt=renderInline(content.replace(/\\(raggedright|centering|raggedleft)(?![A-Za-z])/g,'').trim());
+      if(rs>1){st.push('vertical-align:middle');if(ctx.multirowCenter)st.push('text-align:center');}
+      html+=`<td class="al-${al}"${span>1?` colspan="${span}"`:''}${rs>1?` rowspan="${rs}"`:''} style="${st.join(';')}">${atL}${txt}${atR}</td>`;
       ci+=span;
     });
     html+='</tr>';
@@ -546,35 +600,64 @@ function renderTabular(spec,body,opts,ctx){
   html+='</tbody></table>';
   return html;
 }
-/* tabbing: \= sets a stop, \> jumps to the next, \kill prints nothing, \+ \- indent */
+/* tabbing: \= sets a stop, \> jumps to the next, \kill prints nothing, \+ \- \< change the left edge,
+   \` is flush right, \pushtabs / \poptabs open and close another tab scheme */
 function renderTabbing(body){
   const lines=[];
-  splitTop(body,'\\\\').forEach(l=>{const parts=l.split(/\\kill(?![A-Za-z])/);
+  splitTop(body,'\\\\').forEach(l=>{
+    l=l.replace(/^\s*\[[^\]]*\]/,'');                            // the [5pt] of the \\ before
+    const parts=l.split(/\\kill(?![A-Za-z])/);
     parts.forEach((p,i)=>lines.push(i<parts.length-1?p+'\\kill':p));});
-  let stops=0,indent=0;const rows=[];
-  lines.forEach(l=>{
+  const stack=[{rows:[],stops:0,indent:0}];
+  lines.forEach(l0=>{
+    let l=l0;
+    while(/^\s*\\(pushtabs|poptabs)(?![A-Za-z])/.test(l)){
+      const isPush=/^\s*\\pushtabs/.test(l);
+      l=l.replace(/^\s*\\(pushtabs|poptabs)(?![A-Za-z])/,'');
+      if(isPush)stack.push({rows:[],stops:0,indent:0});
+      else if(stack.length>1){const blk=stack.pop();stack[stack.length-1].rows.push({block:blk});}
+    }
     let t=l.trim();if(!t)return;
+    const cur=stack[stack.length-1];
     const kill=/\\kill\s*$/.test(t);t=t.replace(/\\kill\s*$/,'');
-    while(/^\\[+-]/.test(t)){indent+=t[1]==='+'?1:-1;t=t.slice(2).trim();}
+    let lineIndent=cur.indent;
+    while(/^\\[<+-]/.test(t)){
+      if(t[1]==='<')lineIndent=Math.max(0,lineIndent-1);else cur.indent=Math.max(0,cur.indent+(t[1]==='+'?1:-1));
+      if(t[1]!=='<')lineIndent=cur.indent;
+      t=t.slice(2).trim();}
+    /* trailing \+ \- apply to the next lines */
+    let tail=0,mm;
+    while((mm=/\\([+-])\s*$/.exec(t))){tail+=mm[1]==='+'?1:-1;t=t.slice(0,mm.index).trim();}
+    let right=null;
+    const ri=t.indexOf('\\`');
+    if(ri>=0){right=t.slice(ri+2);t=t.slice(0,ri);}
+    t=t.replace(/\\'/g,'\\>');
     const parts=t.split(/\\[=>]/),nst=(t.match(/\\=/g)||[]).length;
-    if(nst)stops=Math.max(stops,nst+1);
-    rows.push({parts,kill,indent:Math.max(0,indent)});
+    if(nst)cur.stops=Math.max(cur.stops,nst+1);
+    cur.rows.push({parts,kill,indent:lineIndent,right});
+    cur.indent=Math.max(0,cur.indent+tail);
   });
-  const n=Math.max(stops,...rows.map(r=>r.parts.length+r.indent),1);
-  let h=`<div class="lx-tabbing" style="grid-template-columns:repeat(${n},max-content)">`;
-  rows.forEach(r=>{
-    const cells=[];for(let k=0;k<r.indent;k++)cells.push('');
-    r.parts.forEach(p=>cells.push(renderInline(p.trim())));
-    while(cells.length<n)cells.push('');
-    h+=cells.map(c=>`<span class="${r.kill?'kill':''}">${c||'&nbsp;'}</span>`).join('');
-  });
-  return h+'</div>';
+  while(stack.length>1){const blk=stack.pop();stack[stack.length-1].rows.push({block:blk});}
+  const paint=sc=>{
+    const n=Math.max(sc.stops,...sc.rows.filter(r=>!r.block).map(r=>r.parts.length+r.indent),1);
+    const hasRight=sc.rows.some(r=>r.right!==null&&r.right!==undefined);
+    let h=`<div class="lx-tabbing" style="grid-template-columns:repeat(${n},max-content)${hasRight?' 1fr;width:100%':''}">`;
+    sc.rows.forEach(r=>{
+      if(r.block){h+=`<div style="grid-column:1/-1">${paint(r.block)}</div>`;return;}
+      const cells=[];for(let k=0;k<r.indent;k++)cells.push('');
+      r.parts.forEach(p=>cells.push(renderInline(p.trim())));
+      while(cells.length<n)cells.push('');
+      h+=cells.map(c=>`<span class="${r.kill?'kill':''}">${c||'&nbsp;'}</span>`).join('');
+      if(hasRight)h+=`<span class="${r.kill?'kill':''}" style="text-align:right">${r.right?renderInline(r.right.trim()):'&nbsp;'}</span>`;
+    });
+    return h+'</div>';};
+  return paint(stack[0]);
 }
 
 /* ═════════════════════════════ COMPILE ═════════════════════════════ */
 /* src + extra files → {html, cls, errors, emulated:[…], stats} */
-function compile(src,files){
-  const findings=lint(src,files);
+function compile(src,files,inner){
+  const findings=inner?[]:lint(src,files);
   const errors=findings.filter(f=>f.sev==='error');
   const emulated=new Set(),notes=[];
   const PH=[];                                // placeholder payloads
@@ -582,6 +665,7 @@ function compile(src,files){
   let s=src;
   const cls=((/\\documentclass\s*(?:\[[^\]]*\])?\s*\{([^}]*)\}/.exec(s)||[])[1]||'article').trim();
   const isBook=cls==='book'||cls==='report';
+  if(cls==='beamer'&&!inner)return beamerCompile(src,files,findings);
 
   /* 1 ─ verbatim first: nothing inside is TeX */
   s=s.replace(/\\begin\{verbatim(\*?)\}\n?([\s\S]*?)\\end\{verbatim\*?\}/g,(m,star,body)=>{
@@ -599,12 +683,21 @@ function compile(src,files){
 
   /* 4 ─ user macros: record, delete, then expand everywhere */
   const macros={},settings={};
+  let nwEq=null;
+  s=s.replace(/\\DeclareMathOperator(\*?)\s*\{\\([A-Za-z]+)\}\s*\{((?:[^{}]|\{[^{}]*\})*)\}/g,(mm,star,name,txt)=>{
+    macros[name]={n:0,body:'\\operatorname'+star+'{'+txt+'}'};emulated.add('\\DeclareMathOperator');return pad(mm);});
+  s=s.replace(/\\DeclareMathAlphabet\s*(?:\{[^}]*\}\s*){5}/g,mm=>{notes.push('\\DeclareMathAlphabet only works in the Real PDF tab');return pad(mm);});
+  s=s.replace(/\\numberwithin\s*\{equation\}\s*\{(\w+)\}/g,(mm,w)=>{nwEq=w;return pad(mm);});
+  s=emuSideset(s);
+  s=emuLongtable(s,emulated);
+  const pkgOpts={};(s.match(/\\usepackage\s*(\[[^\]]*\])?\s*\{([^}]*)\}/g)||[]).forEach(u=>{const mm=/\\usepackage\s*(?:\[([^\]]*)\])?\s*\{([^}]*)\}/.exec(u);mm[2].split(',').forEach(n=>{pkgOpts[n.trim()]=((pkgOpts[n.trim()]||'')+','+(mm[1]||'')).replace(/^,/,'');});});
   const defRe=/\\(newcommand|renewcommand|providecommand)\*?\s*(\{\\([A-Za-z@]+)\}|\\([A-Za-z@]+))\s*(\[(\d)\])?\s*(\[([^\]]*)\])?\s*/g;
   let m,guard=0;
   while((m=defRe.exec(s))&&guard++<400){
     const name=m[3]||m[4],body=group(s,m.index+m[0].length);if(!body)continue;
+    if(name==='thefootnote'||name==='thempfootnote')continue;
     const whole=s.slice(m.index,body.end);
-    const setting=/^(labelitem[iv]+|labelenum[iv]+|theenum[iv]+|contentsname|refname|bibname|abstractname|indexname|listtablename|listfigurename|tablename|figurename|arraystretch)$/.test(name);
+    const setting=/^(labelitem[iv]+|labelenum[iv]+|theenum[iv]+|contentsname|refname|bibname|abstractname|indexname|listtablename|listfigurename|tablename|figurename|arraystretch|multirowsetup)$/.test(name);
     if(setting)settings[name]=body.text;
     else if(!(m[1]==='providecommand'&&macros[name]))macros[name]={n:+(m[6]||0),def:m[8],body:body.text};
     s=s.slice(0,m.index)+pad(whole)+s.slice(body.end);defRe.lastIndex=m.index;
@@ -624,7 +717,7 @@ function compile(src,files){
     else if(c!=='hyphenation')notes.push('\\'+c+' only affects real pages — see the Real PDF tab');
     return '';});
   s=s.replace(/\\markboth\s*\{[^}]*\}\s*\{[^}]*\}/g,'');
-  s=s.replace(/\\(setlength|addtolength)\s*\{?\\(parindent|parskip|tabcolsep|textwidth|oddsidemargin|evensidemargin|topmargin|textheight|baselineskip|headheight|headsep|footskip|marginparwidth)\}?\s*\{([^}]*)\}/g,
+  s=s.replace(/\\(setlength|addtolength)\s*\{?\\(parindent|parskip|tabcolsep|textwidth|oddsidemargin|evensidemargin|topmargin|textheight|baselineskip|headheight|headsep|footskip|marginparwidth|fboxrule|fboxsep)\}?\s*\{([^}]*)\}/g,
     (mm,c,v,len)=>{settings[v]=len;return '';});
   s=s.replace(/\\(addcontentsline)\s*\{[^}]*\}\s*\{[^}]*\}\s*\{[^}]*\}/g,()=>{notes.push('\\addcontentsline is not shown in the live table of contents');return '';});
   s=s.replace(/\\addtocontents\s*\{[^}]*\}\s*\{[^}]*\}/g,'');
@@ -679,13 +772,6 @@ function compile(src,files){
     return ph(`<div class="lx-tabwrap">${html}</div>`,true)+pad(whole);},true);
   s=s.replace(/\\begin\{tabbing\}([\s\S]*?)\\end\{tabbing\}/g,(mm,body)=>{emulated.add('tabbing');
     return ph(renderTabbing(body),true)+pad(mm);});
-  /* equations (Module III comes later — just enough to not break) */
-  s=s.replace(/\\begin\{equation(\*?)\}([\s\S]*?)\\end\{equation\*?\}/g,(mm,star,body)=>{
-    emulated.add('equation');const t=star?'':'\\tag{'+(++eqN)+'}';
-    return '\\['+body.replace(/\\label\s*\{[^}]*\}/g,'')+t+'\\]'+pad(mm).slice(0,Math.max(0,nl(mm)-nl(body)));});
-  s=s.replace(/\\begin\{(eqnarray|displaymath)(\*?)\}([\s\S]*?)\\end\{\1\*?\}/g,(mm,e,star,body)=>{
-    emulated.add(e);return '\\[\\begin{array}{rcl}'+body+'\\end{array}\\]';});
-
   /* 9 ─ bibliography blocks */
   s=s.replace(/\\begin\{thebibliography\}\s*\{[^}]*\}([\s\S]*?)\\end\{thebibliography\}/g,(mm,body)=>{
     emulated.add('thebibliography');
@@ -698,6 +784,12 @@ function compile(src,files){
     const labs=ks.split(',').map(k=>bibLabel(k.trim())||'<b>?</b>');
     return ph('['+labs.join(', ')+(note?', '+renderInline(note):'')+']');});
   s=s.replace(/\\nocite\s*\{[^}]*\}/g,'');
+  /* 9b ─ Modules III–IV: natbib, amsmath, amsthm, boxes, colour, footnotes */
+  const mkph=html=>ph(html);
+  s=emuNatbib(s,{pkgOpts,emulated,manual,bibLabel,allEntries,ph:mkph,alias:null});
+  s=emuMath(s,{pkgs,macros,settings,floatLabels,emulated,isBook,nwEq,beamer:false});
+  s=emuFootnotes(s,{fns,ph:mkph,emulated});
+  s=emuBoxes(s,{ph:mkph,emulated});
 
   /* 10 ─ index: record entries against the section they occur in */
   const idx=[];
@@ -721,12 +813,6 @@ function compile(src,files){
     if(p)return ph('1');
     if(floatLabels[k])return floatLabels[k];
     return mm;});
-  s=s.replace(/\\thanks\s*\{/g,(mm,k)=>'\\LXTHANKS{');
-  s=repArg(s,'LXTHANKS',t=>{fns.push({mark:'*',text:t});return ph('<sup>*</sup>');});
-  s=repArg(s,'footnote',t=>{emulated.add('\\footnote');const n=++fnN;fns.push({mark:String(n),text:t});
-    return ph(`<sup class="lx-fnm">${n}</sup>`);},true);
-  s=repArg(s,'footnotemark',()=>{const n=++fnN;return ph(`<sup class="lx-fnm">${n}</sup>`);},false,true);
-  s=repArg(s,'footnotetext',t=>{fns.push({mark:String(fnN),text:t});return '';});
   s=repArg(s,'url',t=>{emulated.add('\\url');return ph(`<a class="lx-url" href="${esc(t)}" target="_blank" rel="noopener">${esc(t)}</a>`);});
   s=s.replace(/\\href\s*\{([^}]*)\}\s*\{([^}]*)\}/g,(mm,u,t)=>ph(`<a class="lx-url" href="${esc(u)}" target="_blank" rel="noopener">${renderInline(t)}</a>`));
   s=repArg(s,'textsuperscript',t=>ph('<sup>'+renderInline(t)+'</sup>'));
@@ -773,7 +859,7 @@ function friendly(m){
   if(/KaTeX/.test(m))return 'Something inside math could not be typeset.';
   return 'The live previewer could not typeset this.';
 }
-function settingsCtx(st){return {arraystretch:parseFloat(st.arraystretch)||1,tabcolsep:st.tabcolsep?cssLen(st.tabcolsep):null};}
+function settingsCtx(st){return {arraystretch:parseFloat(st.arraystretch)||1,tabcolsep:st.tabcolsep?cssLen(st.tabcolsep):null,multirowCenter:/centering/.test(st.multirowsetup||'')};}
 function renderFloatBody(body,settings,emulated){
   const parts=[];let rest=body;
   rest=replaceEnv(rest,'tabular',(spec,b)=>{emulated.add('tabular');
@@ -875,9 +961,11 @@ function indexHTML(idx,title,has){
     `</div><p class="lx-note">Locations are section numbers here — in the PDF they are page numbers.</p>`;
 }
 function postProcess(root,PH,o){
-  /* placeholders */
+  /* placeholders (a placeholder can hold another placeholder, so repeat) */
+  for(let round=0;round<4;round++){
   const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);const hits=[];
   while(walker.nextNode()){if(/LXQZ\d+Q/.test(walker.currentNode.nodeValue))hits.push(walker.currentNode);}
+  if(!hits.length)break;
   hits.forEach(t=>{
     const parts=t.nodeValue.split(/(LXQZ\d+Q)/);const frag=document.createDocumentFragment();
     let blockHTML=null;
@@ -893,6 +981,8 @@ function postProcess(root,PH,o){
     else if(blockHTML!==null){const div=document.createElement('div');div.className='lx-block';div.innerHTML=blockHTML;t.replaceWith(div);}
     else t.replaceWith(frag);
   });
+  }
+  if(o.settings.fboxrule||o.settings.fboxsep){root.querySelectorAll('.hbox.frame').forEach(f=>{const r=cssLen(o.settings.fboxrule||'0.4pt'),sp=cssLen(o.settings.fboxsep||'3pt');f.style.borderWidth=r;f.style.padding=sp;});}
   /* \hfill paragraphs become flex rows */
   root.querySelectorAll('.lx-hfill').forEach(h=>{const p=h.closest('p');if(p)p.classList.add('lx-hasfill');});
   /* lists of tables/figures */

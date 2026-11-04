@@ -1,0 +1,205 @@
+/* =====================================================================
+   Focused derivation card (.mf-v2) and animated figure (.fg-*)
+   A derivation card gets .mf-v2 when its setup has a "figure" (see 02-figure.js).
+   The back keeps three things on screen together: the figure, the equation
+   board and the instruction for the current move. Nothing here touches other cards.
+   ===================================================================== */
+
+/* ---------- Figure ---------- */
+.fg-host {
+  position: relative; display: block; padding: 0; overflow: hidden;
+  --fg-pad: 10px; --fg-pad-top: 34px;
+  background: color-mix(in srgb, var(--lav) 62%, var(--card));
+}
+.fg-host > .fg-svg {
+  position: absolute; inset: 0; width: 100%; height: 100%; max-height: none; overflow: visible;
+  font-size: var(--fg-fs, 14px); pointer-events: none;
+}
+.fg-svg path, .fg-svg circle { vector-effect: non-scaling-stroke; }
+
+/* every part fades between off, on, dim and focus; draw-in is done in JS */
+.fg-part { transition: opacity 0.45s ease; }
+.fg-part.is-off { opacity: 0; }
+.fg-part.is-dim { opacity: 0.22; }
+.fg-instant .fg-part, .fg-instant .fg-part * { transition: none !important; }
+
+.fg-stroke { fill: none; stroke: var(--violet); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: stroke 0.4s ease, stroke-width 0.4s ease; }
+.fg-head { fill: var(--violet); stroke: none; transition: fill 0.4s ease; }
+.fg-fill { fill: var(--violet); fill-opacity: 0.1; stroke: none; transition: fill 0.4s ease, fill-opacity 0.4s ease; }
+.fg-dot { fill: var(--violet); stroke: var(--card); stroke-width: 1.6; transition: fill 0.4s ease; }
+.fg-hatch { fill: none; stroke: var(--ink-2); stroke-width: 1.1; stroke-linecap: round; opacity: 0.55; }
+.fg-ext { fill: none; stroke: var(--ink-2); stroke-width: 1.3; stroke-linecap: round; }
+
+.fg-axis .fg-stroke { stroke: var(--ink-2); stroke-width: 1.3; }
+.fg-axis .fg-head { fill: var(--ink-2); }
+.fg-mirror .fg-stroke { stroke: var(--ink); stroke-width: 2.8; }
+.fg-ray .fg-stroke { stroke-width: 2.2; }
+.fg-normal .fg-stroke { stroke: var(--ink-2); stroke-width: 1.4; stroke-dasharray: 5 4; }
+.fg-guide .fg-stroke { stroke: var(--ink-2); stroke-width: 1.4; stroke-dasharray: 3 3; }
+.fg-dim .fg-stroke { stroke: var(--ink-2); stroke-width: 1.3; }
+.fg-dim .fg-head { fill: var(--ink-2); }
+.fg-angle .fg-stroke { stroke-width: 1.7; }
+.fg-angle .fg-fill { fill-opacity: 0.14; }
+.fg-polygon .fg-stroke { stroke: var(--hl); stroke-width: 2.2; }
+.fg-polygon .fg-fill { fill: var(--amber); fill-opacity: 0.2; }
+
+/* focus: the accent colour, a little heavier */
+.fg-part.is-focus .fg-stroke { stroke: var(--hl); }
+.fg-part.is-focus.fg-line .fg-stroke, .fg-part.is-focus.fg-dim .fg-stroke { stroke-width: 2.4; }
+.fg-part.is-focus .fg-head, .fg-part.is-focus .fg-dot { fill: var(--hl); }
+.fg-part.is-focus .fg-ext { stroke: var(--hl); }
+.fg-part.is-focus.fg-angle .fg-stroke { stroke-width: 2.2; }
+.fg-part.is-focus.fg-angle .fg-fill { fill: var(--amber); fill-opacity: 0.32; }
+
+/* labels: fixed pixel size, italic like the symbols on the board, with a halo so lines never cut them */
+.fg-label {
+  font-family: "STIX Two Text", "Cambria Math", "Times New Roman", "Noto Serif", "DejaVu Serif", serif;
+  font-style: italic; font-weight: 600; fill: var(--ink);
+  paint-order: stroke; stroke: color-mix(in srgb, var(--lav) 62%, var(--card)); stroke-width: 4px; stroke-linejoin: round;
+  transition: fill 0.4s ease;
+}
+.fg-label .fg-sub, .fg-label .fg-sup { font-size: 70%; }
+.fg-plate { fill: color-mix(in srgb, var(--lav) 62%, var(--card)); stroke: none; }
+.fg-point .fg-label { font-style: normal; font-weight: 700; }
+.fg-dim .fg-label { font-size: 92%; }
+.fg-part.is-focus .fg-label { fill: var(--hl); font-weight: 800; }
+
+/* caption: one line in the top-left corner, says what the figure is showing now */
+.fg-cap {
+  position: absolute; left: 8px; top: 7px; max-width: calc(100% - 16px); z-index: 1;
+  font-size: 12.5px; line-height: 1.3; font-weight: 700; color: var(--ink);
+  padding: 4px 10px; border-radius: 999px; background: var(--card); box-shadow: inset 0 0 0 1px var(--line);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  opacity: 0; transform: translateY(-4px); transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.fg-cap.is-on { opacity: 1; transform: none; }
+.fg-cap.is-on.is-swap { opacity: 0; transform: translateY(-3px); }
+.fg-cap sub, .fg-cap sup { font-size: 72%; line-height: 0; }
+
+/* the old phone rule forces 15px on every setup label; the figure sizes its own labels */
+.mf-v2 .mf-setup .fg-svg text, .mf-v2 .mf-front-art .fg-svg text { font-size: inherit !important; font-weight: 600; }
+.mf-v2 .mf-setup .fg-svg .fg-point text { font-weight: 700; }
+
+/* ---------- Card: front ---------- */
+.mf-v2 .mf-front-art.fg-host { flex: 0 0 auto; height: clamp(170px, calc(var(--sheet-h, 620px) * 0.36), 250px); padding: 0; border-radius: 16px; }
+.mf-v2 .mf-route-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.mf-v2 .mf-route-pair .route-eq { min-width: 0; overflow-x: auto; }
+.mf-v2 .mf-front-route .math { font-size: 16px; }
+
+/* ---------- Card: back ---------- */
+.mf-v2 { --mf-size: 17px; --mf-ghosts: 1; --fg-fs: 14px; }
+.mf-v2 .mf-back { gap: 8px; padding: 10px 12px; }
+.mf-v2 .mf-back .mf-top { min-height: 36px; }
+.mf-v2 .mf-back-title { flex: 1 1 auto; min-width: 0; margin: 0; font-size: 15px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mf-v2 .mf-count { font-size: 12.5px; }
+.mf-v2 button.chip.mf-icon { width: 36px; height: 36px; min-width: 36px; min-height: 36px; padding: 0; border-radius: 50%; font-size: 17px; }
+
+/* phases: a segmented progress line; the current phase shows its name */
+.mf-v2 .mf-back .mf-phases { display: flex; flex-wrap: nowrap; gap: 4px; align-items: center; overflow: hidden; min-height: 22px; }
+.mf-v2 .mf-ph { flex: 1 1 0; min-width: 8px; height: 5px; padding: 0; font-size: 0; border-radius: 3px; background: var(--lav-2); box-shadow: none; overflow: hidden; white-space: nowrap; }
+.mf-v2 .mf-ph::before { content: none; }
+.mf-v2 .mf-ph.is-past { background: var(--violet); opacity: 0.45; box-shadow: none; }
+.mf-v2 .mf-ph.is-now { flex: 0 0 auto; max-width: 62%; height: auto; padding: 3px 10px; font-size: 12px; line-height: 16px; background: var(--violet); color: var(--on-violet); text-overflow: ellipsis; }
+
+/* work area: figure on top (takes the spare height), then board, then instruction and controls */
+.mf-v2 .mf-work, .mf-v2 .mf-work.has-setup { display: flex; flex-direction: column; gap: 8px; flex: 1 1 auto; min-height: 0; overflow: hidden; }
+.mf-v2 .mf-back .mf-setup, .mf-v2 .mf-work.has-setup .mf-setup {
+  display: block; flex: 1 1 auto; height: auto; min-height: 150px; padding: 0; border-radius: 16px;
+}
+.mf-v2 .mf-right { flex: 0 0 auto; min-height: 0; gap: 8px; }
+.mf-v2 .mf-board { flex: 0 0 auto; min-height: 0; padding: 4px 6px; border-radius: 14px; overflow-x: auto; overflow-y: hidden; }
+
+/* instruction: the move on its own line, the reason under it; fixed height so nothing above it jumps */
+.mf-v2 .mf-panel { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto auto; align-items: center; gap: 8px; }
+.mf-v2 .mf-panel[hidden], .mf-v2 .mf-ask[hidden] { display: none; }
+.mf-v2 .mf-note {
+  grid-column: 1 / -1; margin: 0; min-height: calc(1.4em * 4 + 16px); max-height: calc(1.4em * 4 + 16px); overflow-y: auto;
+  font-size: 14px; line-height: 1.4; font-weight: 600; color: var(--ink-2);
+  padding: 8px 10px 8px 12px; border-radius: 12px; background: var(--lav); box-shadow: inset 3px 0 0 var(--violet);
+}
+.mf-v2 .mf-note > b:first-child { display: block; color: var(--violet); font-weight: 800; }
+.mf-v2 .mf-ctrl { display: contents; }
+.mf-v2 .mf-dots { justify-content: center; flex-wrap: nowrap; gap: 4px; min-width: 0; overflow: hidden; min-height: 0; padding: 4px 2px; }
+.mf-v2 .mf-dot { flex: 0 0 6px; width: 6px; height: 6px; }
+.mf-v2 .mf-dot.is-now { flex: 0 0 16px; width: 16px; }
+.mf-v2 .mf-dot.is-ask { box-shadow: none; background: transparent; outline: 1.5px solid var(--violet); outline-offset: 0; }
+.mf-v2 .mf-dot.is-ask.is-done, .mf-v2 .mf-dot.is-ask.is-now { background: var(--violet); }
+.mf-v2 .mf-ctrl .chip { min-height: 44px; min-width: 44px; padding: 0 12px; }
+.mf-v2 .mf-ctrl .chip.mf-next { background: var(--violet); color: var(--on-violet); padding: 0 16px; font-weight: 800; }
+
+/* a checkpoint question replaces the instruction; the figure and the current line stay in view */
+.mf-v2 .mf-ask { padding: 9px 10px; gap: 7px; }
+.mf-v2 .mf-ask-q { font-size: 14.5px; margin: 0; }
+.mf-v2 .mf-ask-opts { grid-template-columns: 1fr 1fr; gap: 6px; }
+.mf-v2 .mf-ask-opts button { min-height: 44px; padding: 6px 9px; font-size: 14px; }
+.mf-v2 .mf-ask-why { margin: 0; font-size: 13.5px; }
+.mf-v2 .mf-work:has(.mf-ask:not([hidden])) .mf-setup { min-height: 120px; }
+.mf-v2 .mf-right:has(.mf-ask:not([hidden])) .mf-board { height: 66px; min-height: 0; justify-content: flex-end; overflow: hidden; }
+/* once answered, only the right option (and a wrong pick) stay, so the reason and Continue fit */
+.mf-v2 .mf-ask-opts:has(button:disabled) button:not(.is-correct):not(.is-wrong) { display: none; }
+
+/* all steps open: the list replaces the board, the figure shrinks to make room */
+.mf-v2 .mf-work:has(.mf-summary:not([hidden])) { overflow-y: auto; }
+.mf-v2 .mf-work:has(.mf-summary:not([hidden])) .mf-setup { flex: 0 0 auto; height: 160px; min-height: 0; }
+
+/* phone: the old rules hid the figure on the back; here it stays */
+@media (max-width: 899px) {
+  .mf-v2 .mf-back .mf-setup { display: block; }
+  .mf-v2 .mf-back .mf-phases { display: flex; }
+}
+
+/* very short phones: a little less of everything */
+@media (max-width: 899px) and (max-height: 700px) {
+  .mf-v2 { --mf-size: 16px; --fg-fs: 13px; }
+  .mf-v2 .mf-back .mf-setup { min-height: 120px; }
+  .mf-v2 .mf-note { font-size: 13.5px; }
+}
+
+/* ---------- Desktop: figure left, board, instruction and controls right ---------- */
+@media (min-width: 900px) {
+  .mf-v2 { --mf-size: 21px; --mf-ghosts: 2; --fg-fs: 16px; }
+  .mf-v2 .fg-host { --fg-pad: 14px; --fg-pad-top: 40px; }
+  .mf-v2 .fg-cap { font-size: 13.5px; top: 9px; left: 10px; }
+  .mf-v2 .mf-back { gap: 10px; padding: 16px 18px; }
+  .mf-v2 .mf-back-title { font-size: 17px; }
+  .mf-v2 .mf-back .mf-phases { gap: 6px; }
+  .mf-v2 .mf-ph { flex: 0 1 auto; height: auto; padding: 4px 10px; font-size: 12px; line-height: 16px; background: var(--lav); color: var(--ink-2); text-overflow: ellipsis; }
+  .mf-v2 .mf-ph.is-past { opacity: 1; background: var(--lav); color: var(--ink-2); box-shadow: inset 0 0 0 1.5px var(--sage); }
+  .mf-v2 .mf-ph.is-past::before { content: "\2713\00a0"; }
+  .mf-v2 .mf-ph.is-now { max-width: none; }
+  .mf-v2 .mf-work.has-setup { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 16px; align-items: stretch; }
+  .mf-v2 .mf-work.has-setup .mf-setup { height: 100%; min-height: 0; }
+  .mf-v2 .mf-right { height: 100%; display: flex; flex-direction: column; gap: 10px; }
+  .mf-v2 .mf-board { flex: 1 1 auto; justify-content: flex-end; padding: 10px; overflow-y: auto; }
+  .mf-v2 .mf-note { font-size: 15px; }
+  .mf-v2 .mf-front { grid-template-columns: minmax(300px, 52%) minmax(0, 1fr); }
+  .mf-v2 .mf-front-art.fg-host { height: 100%; }
+  .mf-v2 .mf-route-pair { grid-template-columns: 1fr; }
+  .mf-v2 .mf-right:has(.mf-ask:not([hidden])) .mf-board { height: auto; flex: 0 0 auto; }
+  .mf-v2 .mf-work:has(.mf-ask:not([hidden])) .mf-setup { min-height: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fg-part, .fg-cap, .fg-stroke, .fg-label { transition: none; }
+}
+
+/* phone: the focused card is almost full width (07-mathflow.css means to do this for every derivation,
+   but a comment nested inside its header comment swallows that @media rule) */
+@media (max-width: 699px) {
+  .sheet:has(.mf-v2), .card.mf-v2 { --card-w: min(calc(var(--view) - 24px), 560px); }
+}
+
+/* light: the tip of a ray glows while the ray is being drawn */
+.fg-glow { fill: var(--amber); stroke: none; filter: drop-shadow(0 0 3px var(--amber)) drop-shadow(0 0 6px var(--orange)); pointer-events: none; }
+
+/* record: plays the derivation by itself and saves it as a video */
+.mf-v2 button.chip.mf-rec i { display: block; width: 12px; height: 12px; border-radius: 50%; background: var(--coral); transition: border-radius 0.2s ease; }
+.mf-v2.is-recording button.chip.mf-rec i { border-radius: 2px; animation: mf-rec-pulse 1.2s ease-in-out infinite; }
+@keyframes mf-rec-pulse { 50% { opacity: 0.35; } }
+.mf-v2.is-presenting .mf-ask-opts button { cursor: default; }
+@media (prefers-reduced-motion: reduce) { .mf-v2.is-recording button.chip.mf-rec i { animation: none; } }
+
+/* glass: prisms, lenses, plates drawn as apparatus (a polygon with "style": "glass") */
+.fg-glass .fg-fill { fill: var(--violet); fill-opacity: 0.13; }
+.fg-glass .fg-stroke { stroke: var(--ink-2); stroke-width: 1.6; }
+.fg-part.is-focus.fg-glass .fg-fill { fill: var(--amber); fill-opacity: 0.3; }

@@ -1,0 +1,32 @@
+<!-- id: m1-classify | mod: Module I | modName: Multivariable calculus | modClass: m1 | title: Eigenvalues of the Hessian and classification of stationary points | short: Eigenvalues and classification (19.37–19.46) | est: ~40 min -->
+<gist>Diagonalise the symmetric Hessian: in eigen-coordinates the quadratic form is $\lambda_1y_1^2+\dots+\lambda_ny_n^2$. All $\lambda_i\gt0$: positive definite, local minimum. All $\lambda_i\lt0$: negative definite, local maximum. Mixed signs with $\det\ne0$: saddle. A zero eigenvalue: the test says nothing. Principal minors check definiteness without finding eigenvalues.</gist>
+
+<tp>Eigenvalues and quadratic forms (§19.37)</tp>
+<p>For a symmetric $M$ there is an orthogonal $H$ ($H^TH=I$) with $H^TMH=D=\diag(\lambda_1,\dots,\lambda_n)$. The $\lambda_i$ are the <strong>eigenvalues</strong>, the roots of $\det(M-\lambda I)=0$, always real for a real symmetric matrix. $\mathbf x^TM\mathbf x$ is a <strong>quadratic form</strong>; $M$ is <strong>positive definite</strong> if $\mathbf x^TM\mathbf x\gt0$ for all $\mathbf x\ne\mathbf 0$, <strong>negative definite</strong> if $\lt0$.</p>
+<der id="d-eig"/>
+<must><p>$M$ positive definite ⇔ all eigenvalues positive; negative definite ⇔ all negative. $\lambda_1\|\mathbf x\|^2\le\mathbf x^TM\mathbf x\le\lambda_n\|\mathbf x\|^2$ (1). Along the unit eigenvector $\mathbf u^j=H\mathbf e^j$: $\mathbf x=t\mathbf u^j$ gives $\mathbf x^TM\mathbf x=\lambda_jt^2$ (2).</p></must>
+<p>Consequences of (2): if some $\lambda_j=0$, the form is identically zero on the whole line through $\mathbf 0$ in the direction $\mathbf u^j$. If $\lambda_1\lt0\lt\lambda_n$, the form is strictly smallest at $\mathbf 0$ along one line ($\mathbf u^n$) and strictly largest along another ($\mathbf u^1$): $\mathbf 0$ is a <strong>saddle point</strong>.</p>
+<fig name="quadform"><cap>The four cases of the book's diagrams: $\lambda_1,\lambda_2\gt0$ minimum; both negative maximum; $\lambda_1=0\lt\lambda_2$ flat valley; $\lambda_1\lt0\lt\lambda_2$ saddle.</cap></fig>
+
+<tp>Principal minors (§19.38–19.39)</tp>
+<p>$\det M=\det(HDH^T)=\det D=\lambda_1\lambda_2\cdots\lambda_n$. So $M$ has a zero eigenvalue iff $\det M=0$; $\det M\gt0$ when $M$ is positive definite; $\det M$ has the sign of $(-1)^n$ when negative definite. The <strong>(leading) principal minors</strong> are $P_1=m_{11}$, $P_2=\begin{vmatrix}m_{11}&m_{12}\\m_{21}&m_{22}\end{vmatrix}$, …, $P_n=\det M$.</p>
+<must><p>(I) $M$ positive definite ⇔ $P_j\gt0$ for $j=1,\dots,n$. (II) $M$ negative definite ⇔ $(-1)^jP_j\gt0$ for all $j$ (signs $-,+,-,\dots$).</p></must>
+<trap><p>Non-strict versions are false: $M=\begin{pmatrix}1&1&0\\1&1&0\\0&0&-1\end{pmatrix}$ has $P_1=1$, $P_2=0$, $P_3=0$, all $\ge0$, but eigenvalues $-1,0,2$.</p></trap>
+<p><b>Examples 19.39.</b> $\begin{pmatrix}5&-3\\-3&5\end{pmatrix}$: $P_1=5$, $P_2=16$: positive definite. $\begin{pmatrix}-2&1\\1&-2\end{pmatrix}$: $P_1=-2$, $P_2=3$: negative definite. $\begin{pmatrix}1&6\\6&4\end{pmatrix}$: $\det=-32\lt0$: neither (and no zero eigenvalue).</p>
+
+<tp>Classification theorems (§19.40–19.44)</tp>
+<p>Taylor at a stationary point: $f(\boldsymbol\xi+\mathbf h)-f(\boldsymbol\xi)=\tfrac12\mathbf h^Tf''(\boldsymbol\eta)\mathbf h$. To pass from $f''(\boldsymbol\eta)$ to $f''(\boldsymbol\xi)$ we use $|\mathbf h^TL\mathbf h|\le\{\sum_i\sum_jl_{ij}^2\}^{1/2}\|\mathbf h\|^2$ (two applications of Cauchy–Schwarz) and continuity: <b>lemma 19.41</b>, $|\mathbf h^T(f''(\boldsymbol\xi)-f''(\boldsymbol\eta))\mathbf h|\lt\epsilon\|\mathbf h\|^2$ for $0\lt\|\mathbf h\|\lt\delta$.</p>
+<must><p><b>Theorem 19.42.</b> Second partials continuous near $\boldsymbol\xi$, $f'(\boldsymbol\xi)=\mathbf 0$: (i) $f''(\boldsymbol\xi)$ negative definite ⇒ local maximum; (ii) positive definite ⇒ local minimum.</p><p><b>Theorem 19.43.</b> If $f'(\boldsymbol\xi)=\mathbf 0$, $f''(\boldsymbol\xi)$ is neither positive nor negative definite, and $\det f''(\boldsymbol\xi)\ne0$, then $\boldsymbol\xi$ is a saddle point.</p></must>
+<der id="d-class"/>
+<p>Theorem 19.43's proof: $\det\ne0$ and not definite force $\lambda_1\lt0\lt\lambda_n$; the same estimate gives $f(\boldsymbol\xi+\mathbf h)-f(\boldsymbol\xi)\lt\tfrac14\lambda_1\|\mathbf h\|^2$ along $\mathbf u^1$ and $\gt\tfrac14\lambda_n\|\mathbf h\|^2$ along $\mathbf u^n$. (The book prints the condition as "$\det f(\boldsymbol\xi)\ne0$"; it means $\det f''(\boldsymbol\xi)$.)</p>
+<p><b>Note 19.44.</b> A zero eigenvalue tells you nothing: along $\mathbf u^j$ the difference is $\tfrac12\mathbf h^T(f''(\boldsymbol\eta)-f''(\boldsymbol\xi))\mathbf h$, of unknown sign.</p>
+<must><p><b>The $n=2$ recipe.</b> At a stationary point compute $\det f''=f_{11}f_{22}-f_{12}^2$.<br>$\det\gt0$, $f_{11}\gt0$: local minimum. $\det\gt0$, $f_{11}\lt0$: local maximum. $\det\lt0$: saddle. $\det=0$: no conclusion. ($\det\gt0$ with $f_{11}=0$ cannot happen, since then $\det=-f_{12}^2$.)</p></must>
+<sim name="qform"/>
+
+<tp>Examples 19.45 and 19.46</tp>
+<der id="d-1945"/>
+<fig name="ex1945"><cap>Contours of example 19.45: the two minima and the degenerate origin, where $f=x_1^3$ along the $x_1$-axis changes sign.</cap></fig>
+<p><b>Example 19.46.</b> $f=x_1x_2+x_2x_3+x_3x_1$. Stationary: $x_2+x_3=0$, $x_1+x_3=0$, $x_1+x_2=0$, so only $(0,0,0)$. $f''=\begin{pmatrix}0&1&1\\1&0&1\\1&1&0\end{pmatrix}$, with leading principal minors $P_1=0$, $P_2=-1$, $P_3=2$. Not definite ($P_1=0$), and $\det f''=2\ne0$, so $(0,0,0)$ is a saddle. (Eigenvalues $2,-1,-1$.)</p>
+<trap><p>The book prints the minors as "2, −1 and 0" and writes "$f''(0,0,0)\ne0$"; the minors in order are $0,-1,2$, and the condition used is $\det f''(0,0,0)=2\ne0$.</p></trap>
+<chk><q>Classify the stationary points of $f=x_1^3+x_2^3-3x_1x_2$.</q><a><p>$f_1=3x_1^2-3x_2=0$, $f_2=3x_2^2-3x_1=0$ give $(0,0)$, $(1,1)$. $f''=\begin{pmatrix}6x_1&-3\\-3&6x_2\end{pmatrix}$. At $(0,0)$: $\det=-9\lt0$, saddle. At $(1,1)$: $\det=27\gt0$, $f_{11}=6\gt0$, local minimum.</p></a></chk>
+<chk><q>Why does $\det f''(\boldsymbol\xi)=0$ give no information? Give an example.</q><a><p>A zero eigenvalue leaves a direction where the second-order term vanishes, and the higher-order terms decide. $x_1^4+x_2^4$ (minimum), $-x_1^4-x_2^4$ (maximum) and $x_1^3+x_2^2$ (neither) all have $f''(0,0)$ singular.</p></a></chk>

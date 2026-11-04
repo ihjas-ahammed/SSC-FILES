@@ -95,3 +95,26 @@ Working files (scratch, extractions, drafts, the temp copies of the pool, the pa
 - Trigger: the user uploads a screenshot of the study plan and says "create model day paper". Method: `create-model-day-paper.md` (this folder). Builder: `build_model_paper.py`, which takes a JSON paper and writes the HTML and PDF. Each paper is a `model-paper-<N>.json` in this folder.
 - Scope is the syllabus's section list, checked against the book excerpt headings. A question whose section is not listed is out, even when the topic sounds right. Do not pad a paper with out-of-scope questions.
 - Layout: copy the university paper for this subject (under `GitHub/SSC-FILES/PYQ/` or `ssc-v3/fyug/`), including its marks, ceilings and time. No name or register-number block.
+- Model Paper 3 (2026-10-28): `model-papers/CONVEX-OPTIMIZATION-MODEL-PAPER-3.{html,pdf}`, 2 pages, mailed. Scope: Boyd §4.3–4.7 (items 19–22 and vector optimization). Verbatim from Boyd ch. 4 exercises: 4.8(a)–(c), 4.11(a),(b), 4.26, 4.32, 4.33(a),(b), 4.39(a),(b), 4.21(b); text results: linear-fractional to LP (4.3.2), GP convex form (4.5.3), SOC as LMI (4.6.3), scalarization (4.7.4).
+
+
+## Model Paper 4 — built and mailed 2026-10-28
+- Files: `model-papers/CONVEX-OPTIMIZATION-MODEL-PAPER-4.html` and `.pdf`; source JSON `model-papers/model-paper-4.json`; question provenance `model-papers/CONVEX-OPTIMIZATION-MODEL-PAPER-4-SOURCES.md`.
+- Scope: Module IV, Boyd §§5.1–5.5 and 5.8–5.9: Lagrange dual function, dual problem and geometry; saddle-point interpretation and optimality; alternatives and generalized inequalities.
+- Layout: Electrodynamics II Model Paper 1 reference; 2 hours, maximum 70; Section A 10×3 ceiling 24, Section B 8×6 ceiling 36, Section C 2×10 answer any one. Section B starts page 2; 2 A4 pages total.
+- Sources: LP November 2025 Q9 (paper Q5) and LP November 2023 Q16 (paper Q14), assigned 3 and 6 marks; Boyd Exercises 5.5, 5.22(b), 5.27, 5.42, and adapted 5.1(a)–(c); new questions from the cited in-scope theory. Sensitivity questions excluded. Papers 1–3 checked; no question reused. Offered marks across the three topic groups: 32/34/32 before section ceilings.
+- Checks: ceiling arithmetic, textbook scope, direct mathematical review, rational checks of numerical dual/saddle example and a KKT instance, both rendered PDF pages inspected, copies verified by SHA-256.
+- Mailing: `quickmail CONVEX-OPTIMIZATION-MODEL-PAPER-4.pdf ihjas.one@gmail.com` returned success on 2026-10-28. PDF only; no HTML or answer key emailed.
+
+
+### Model Paper 4 audit revision — resent 2026-10-28
+User requested an audit, removal of section page breaks, and resend. All 20 questions checked; Q18 now explicitly assumes finite primal optimum. Removed forced section breaks: A/B on page 1, C naturally on page 2, section titles kept with first questions. PDF and HTML replaced with audited versions; audit report in model-papers/CONVEX-OPTIMIZATION-MODEL-PAPER-4-AUDIT.md. Revised PDF sent via quickmail to ihjas.one@gmail.com; command returned success. Previous mailed version retained in /tmp/convex-model-paper-4-7xsanked/build/previous-mailed/.
+
+## Dynamic study page, Modules I–IV — built and deployed 2026-10-29
+- Live: https://ssc-data-science-qm.web.app/CONVEX_OPTIMIZATION_1234.html (offline copy: `CONVEX_OPTIMIZATION_1234_OFFLINE.html`). Both checked byte for byte against the local files after deploy.
+- Files: `SSC-V2/SEM5/MATH/apps/CONVEX_OPTIMIZATION_1234{,_OFFLINE}.html`. Build folder `SSC-V2/SEM5/MATH/apps/tools/co1234/` (copied from `PHY/apps/tools/ss12`; `python3 build.py [--check|--offline]`). Content: `stations/*.html` (42 sections incl. 3 model papers and a checklist), `derivs/m1–m4.dv` (30 stepped derivations), `figsco.js` (29 canvas figures), `sims/body.js` (4 sims: Hessian classifier, LP vertex, dual bound for Ex. 5.1, water-filling).
+- Deploy: added to `PHY/apps/tools/deploy.sh` (MATHAPPS block). Study plan: `SYSTEMS.CO` added in `SSC-V6/study-plan-v5.html` (plan units 1–25 → section ids).
+- Checks passed (desktop 1280 and phone 390, online and offline with network off): no page errors, no MathJax errors, no raw `$`, no `<sub>/<sup>` or Unicode maths, no NaN sizes, no horizontal overflow, no scrolling result boxes, zero external requests offline, folds slide to natural height.
+- Binmore misprints flagged on the page: 19.10 ($f(t,-t)$), 19.18(i) (points (1,2)/(2,1)), 19.22 ($2A\mathbf x$ as a row), 19.25(i) column, 19.25(ii) ($w=xy^2z^3$), 19.36 ($t$ for $\tau$), 19.43/19.46 ($\det f''$; minors $0,-1,2$), 19.47(1) ($\mathbf x$ is $n\times1$).
+- Coverage: every Binmore ch. 19 example and all 18 exercises (19.11, 19.26, 19.47). Boyd: every section of §2.1–2.6, 3.1–3.6, 4.1–4.7, 5.1–5.5, 5.8–5.9 with their examples; a selection of end-of-chapter exercises (ch. 2: 2.1–2.7, 2.10–2.12, 2.14, 2.15, 2.21, 2.28, 2.31, 2.32; ch. 3: 3.1, 3.7, 3.16, 3.21, 3.22(a), 3.32(a), 3.36(a,c,d), 3.49(a,b), 3.57; ch. 4: 4.1, 4.3, 4.8, 4.9, 4.11, 4.21, 4.26, 4.33, 4.43(a); ch. 5: 5.1, 5.2, 5.3, 5.5, 5.24, 5.27, 5.29, 5.36, 5.37, 5.42, 5.43). Open: the remaining Boyd exercises are not worked on the page.
+- Not mailed. Mail log: `co1234/mail-log.md`.

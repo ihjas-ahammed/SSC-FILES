@@ -1,5 +1,16 @@
 # START HERE — master prompt
 
+## Current format (2026-10-27): clear points, animated derivations, 3D explorers
+
+These three rules override older wording elsewhere in these skills:
+- **Clear points, not long descriptions** — `09-clear-points.md`. Concept cards are a title, at most one
+  sentence (`body`, required on definition cards) and 2–6 short `points`.
+- **Every syllabus derivation** is a `derivation` card with an animated figure — `10-figure-derivations.md`
+  (one idea per step; Snell's law and every trig ratio or identity get their own highlighted, asked steps;
+  apparatus is drawn first, then the light, then constructions).
+- **3D explorer** cards (`type: "scene"`) for physics that is truly 3D (polarisation states, Huygens'
+  wavelets in crystals, wave plates) — `11-scene3d.md`.
+
 ## Author the content directly
 
 Write every study card, explanation, derivation step, worked example, diagram and

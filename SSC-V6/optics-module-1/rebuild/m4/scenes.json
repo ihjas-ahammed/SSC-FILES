@@ -1,0 +1,1220 @@
+{
+ "cards": [
+  {
+   "unit": 17,
+   "type": "scene",
+   "label": "3D explorer",
+   "title": "How the E-vector moves",
+   "points": [
+    "Light travels along <b>x</b>; E vibrates in the <b>y-z</b> plane.",
+    "Press play: the amber arrow is E at the point x = 0 and the coral curve is the path of its tip.",
+    "Set <b>kind</b> to 0, 1, 2: the tip traces a line (plane), a circle (circular) or an ellipse (elliptical).",
+    "Turn the view to look along x and see the trace face-on; the green curve is E along the beam."
+   ],
+   "scene": {
+    "camera": {
+     "position": [
+      6,
+      3.4,
+      6.2
+     ],
+     "target": [
+      0,
+      0,
+      0
+     ]
+    },
+    "time": {
+     "duration": 4,
+     "loop": true,
+     "label": "Time"
+    },
+    "params": [
+     {
+      "name": "kind",
+      "label": "kind (0 plane, 1 circular, 2 elliptical)",
+      "min": 0,
+      "max": 2,
+      "value": 1,
+      "step": 1,
+      "unit": ""
+     }
+    ],
+    "axes": false,
+    "objects": [
+     {
+      "type": "line",
+      "points": [
+       [
+        -3,
+        0,
+        0
+       ],
+       [
+        3,
+        0,
+        0
+       ]
+      ],
+      "style": "axis"
+     },
+     {
+      "type": "label",
+      "at": [
+       2.7,
+       0.35,
+       0
+      ],
+      "text": "light  x",
+      "style": "ink"
+     },
+     {
+      "type": "plane",
+      "center": [
+       0,
+       0,
+       0
+      ],
+      "size": [
+       2.8,
+       2.8
+      ],
+      "rotate": [
+       0,
+       90,
+       0
+      ],
+      "style": "glass"
+     },
+     {
+      "type": "label",
+      "at": [
+       0,
+       1.65,
+       0
+      ],
+      "text": "y",
+      "style": "ink"
+     },
+     {
+      "type": "label",
+      "at": [
+       0,
+       0,
+       1.65
+      ],
+      "text": "z",
+      "style": "ink"
+     },
+     {
+      "type": "curve",
+      "s": [
+       -3,
+       3
+      ],
+      "x": "s",
+      "y": "(1-0.2*(kind==0))*cos((3.14159265*(s)-2*3.14159265*t))",
+      "z": "(1-0.2*(kind==0)-0.5*(kind==2))*cos((3.14159265*(s)-2*3.14159265*t)-((kind>0)*3.14159265/2))",
+      "style": "sage"
+     },
+     {
+      "type": "arrow",
+      "from": [
+       -1.5,
+       0,
+       0
+      ],
+      "to": [
+       -1.5,
+       "(1-0.2*(kind==0))*cos((3.14159265*(-1.5)-2*3.14159265*t))",
+       "(1-0.2*(kind==0)-0.5*(kind==2))*cos((3.14159265*(-1.5)-2*3.14159265*t)-((kind>0)*3.14159265/2))"
+      ],
+      "style": "ray"
+     },
+     {
+      "type": "arrow",
+      "from": [
+       1.5,
+       0,
+       0
+      ],
+      "to": [
+       1.5,
+       "(1-0.2*(kind==0))*cos((3.14159265*(1.5)-2*3.14159265*t))",
+       "(1-0.2*(kind==0)-0.5*(kind==2))*cos((3.14159265*(1.5)-2*3.14159265*t)-((kind>0)*3.14159265/2))"
+      ],
+      "style": "ray"
+     },
+     {
+      "type": "arrow",
+      "from": [
+       0,
+       0,
+       0
+      ],
+      "to": [
+       0,
+       "(1-0.2*(kind==0))*cos(2*3.14159265*t)",
+       "(1-0.2*(kind==0)-0.5*(kind==2))*cos(2*3.14159265*t+((kind>0)*3.14159265/2))"
+      ],
+      "style": "hl"
+     },
+     {
+      "type": "curve",
+      "s": [
+       0,
+       6.2832
+      ],
+      "x": 0,
+      "y": "(1-0.2*(kind==0))*cos(s)",
+      "z": "(1-0.2*(kind==0)-0.5*(kind==2))*cos(s+((kind>0)*3.14159265/2))",
+      "style": "coral"
+     },
+     {
+      "type": "label",
+      "at": [
+       0,
+       -1.8,
+       0
+      ],
+      "text": "plane polarised",
+      "style": "hl",
+      "show": "kind==0"
+     },
+     {
+      "type": "label",
+      "at": [
+       0,
+       -1.8,
+       0
+      ],
+      "text": "circular",
+      "style": "hl",
+      "show": "kind==1"
+     },
+     {
+      "type": "label",
+      "at": [
+       0,
+       -1.8,
+       0
+      ],
+      "text": "elliptical",
+      "style": "hl",
+      "show": "kind==2"
+     }
+    ]
+   }
+  },
+  {
+   "unit": 17,
+   "type": "scene",
+   "label": "3D explorer",
+   "title": "Unpolarised and plane polarised light",
+   "points": [
+    "Each arrow is the E-vector at one point along the beam (light along <b>x</b>).",
+    "Set <b>mode</b> to 0 (unpolarised) and press play: the arrows swing to random directions about the beam.",
+    "Set <b>mode</b> to 1 (plane polarised): every arrow lies in one plane (shaded) and only its length and sign change.",
+    "Turn the view to look along x: unpolarised E points all round, plane polarised E stays on one line."
+   ],
+   "scene": {
+    "camera": {
+     "position": [
+      5.5,
+      3.2,
+      6.5
+     ],
+     "target": [
+      0,
+      0,
+      0
+     ]
+    },
+    "time": {
+     "duration": 3,
+     "loop": true,
+     "label": "Time"
+    },
+    "params": [
+     {
+      "name": "mode",
+      "label": "mode (0 unpolarised, 1 plane polarised)",
+      "min": 0,
+      "max": 1,
+      "value": 0,
+      "step": 1,
+      "unit": ""
+     }
+    ],
+    "axes": false,
+    "objects": [
+     {
+      "type": "line",
+      "points": [
+       [
+        -3,
+        0,
+        0
+       ],
+       [
+        3,
+        0,
+        0
+       ]
+      ],
+      "style": "axis"
+     },
+     {
+      "type": "label",
+      "at": [
+       2.7,
+       0.35,
+       0
+      ],
+      "text": "light  x",
+      "style": "ink"
+     },
+     {
+      "type": "plane",
+      "center": [
+       0,
+       0,
+       0
+      ],
+      "size": [
+       5.8,
+       2.8
+      ],
+      "rotate": [
+       30,
+       0,
+       0
+      ],
+      "style": "glass",
+      "show": "mode==1"
+     },
+     {
+      "type": "arrow",
+      "from": [
+       -2.4,
+       0,
+       0
+      ],
+      "to": [
+       -2.4,
+       "(mode*cos(3.14159265*-2.4-2*3.14159265*t)+(1-mode))*cos((mode*30*deg+(1-mode)*(4*sin(2*3.14159265*3*t+2.03)+3*sin(2*3.14159265*7*t+0.95))))",
+       "(mode*cos(3.14159265*-2.4-2*3.14159265*t)+(1-mode))*sin((mode*30*deg+(1-mode)*(4*sin(2*3.14159265*3*t+2.03)+3*sin(2*3.14159265*7*t+0.95))))"
+      ],
+      "style": "ray"
+     },
+     {
+      "type": "arrow",
+      "from": [
+       -1.6,
+       0,
+       0
+      ],
+      "to": [
+       -1.6,
+       "(mode*cos(3.14159265*-1.6-2*3.14159265*t)+(1-mode))*cos((mode*30*deg+(1-mode)*(4*sin(2*3.14159265*5*t+4.09)+3*sin(2*3.14159265*11*t+0.45))))",
+       "(mode*cos(3.14159265*-1.6-2*3.14159265*t)+(1-mode))*sin((mode*30*deg+(1-mode)*(4*sin(2*3.14159265*5*t+4.09)+3*sin(2*3.14159265*11*t+0.45))))"
+      ],
+      "style": "ray"
+     },
+     {
+      "type": "arrow",
+      "from": [
+       -0.8,
+       0,
+       0
+      ],
+      "to": [
+       -0.8,
+       "(mode*cos(3.14159265*-0.8-2*3.14159265*t)+(1-mode))*cos((mode*30*deg+(1-mode)*(4*sin(2*3.14159265*4*t+3.37)+3*sin(2*3.14159265*9*t+2.3))))",
+       "(mode*cos(3.14159265*-0.8-2*3.14159265*t)+(1-mode))*sin((mode*30*deg+(1-mode)*(4*sin(2*3.14159265*4*t+3.37)+3*sin(2*3.14159265*9*t+2.3))))"
+      ],
+      "style": "ray"
+     },
+     {
+      "type": "arrow",
+      "from": [
+       0,
+       0,
+       0
+      ],
+      "to": [
+       0,
+       "(mode*cos(3.14159265*0-2*3.14159265*t)+(1-mode))*cos((mode*30*deg+(1-mode)*(4*sin(2*3.14159265*6*t+0.36)+3*sin(2*3.14159265*13*t+3.19))))",
+       "(mode*cos(3.14159265*0-2*3.14159265*t)+(1-mode))*sin((mode*30*deg+(1-mode)*(4*sin(2*3.14159265*6*t+0.36)+3*sin(2*3.14159265*13*t+3.19))))"
+      ],
+      "style": "hl"
+     },
+     {
+      "type": "arrow",
+      "from": [
+       0.8,
+       0,
+       0
+      ],
+      "to": [
+       0.8,
+       "(mode*cos(3.14159265*0.8-2*3.14159265*t)+(1-mode))*cos((mode*30*deg+(1-mode)*(4*sin(2*3.14159265*7*t+0.24)+3*sin(2*3.14159265*10*t+2.72))))",
+       "(mode*cos(3.14159265*0.8-2*3.14159265*t)+(1-mode))*sin((mode*30*deg+(1-mode)*(4*sin(2*3.14159265*7*t+0.24)+3*sin(2*3.14159265*10*t+2.72))))"
+      ],
+      "style": "ray"
+     },
+     {
+      "type": "arrow",
+      "from": [
+       1.6,
+       0,
+       0
+      ],
+      "to": [
+       1.6,
+       "(mode*cos(3.14159265*1.6-2*3.14159265*t)+(1-mode))*cos((mode*30*deg+(1-mode)*(4*sin(2*3.14159265*2*t+0.44)+3*sin(2*3.14159265*8*t+0.57))))",
+       "(mode*cos(3.14159265*1.6-2*3.14159265*t)+(1-mode))*sin((mode*30*deg+(1-mode)*(4*sin(2*3.14159265*2*t+0.44)+3*sin(2*3.14159265*8*t+0.57))))"
+      ],
+      "style": "ray"
+     },
+     {
+      "type": "arrow",
+      "from": [
+       2.4,
+       0,
+       0
+      ],
+      "to": [
+       2.4,
+       "(mode*cos(3.14159265*2.4-2*3.14159265*t)+(1-mode))*cos((mode*30*deg+(1-mode)*(4*sin(2*3.14159265*5*t+2.67)+3*sin(2*3.14159265*12*t+5.19))))",
+       "(mode*cos(3.14159265*2.4-2*3.14159265*t)+(1-mode))*sin((mode*30*deg+(1-mode)*(4*sin(2*3.14159265*5*t+2.67)+3*sin(2*3.14159265*12*t+5.19))))"
+      ],
+      "style": "ray"
+     },
+     {
+      "type": "label",
+      "at": [
+       0,
+       -1.8,
+       0
+      ],
+      "text": "unpolarised",
+      "style": "coral",
+      "show": "mode==0"
+     },
+     {
+      "type": "label",
+      "at": [
+       0,
+       -1.8,
+       0
+      ],
+      "text": "plane polarised",
+      "style": "sage",
+      "show": "mode==1"
+     }
+    ]
+   }
+  },
+  {
+   "unit": 20,
+   "type": "scene",
+   "label": "3D explorer",
+   "title": "Huygens' wavelets inside calcite",
+   "points": [
+    "A point source at the centre sends out two wavelets: the <b>o</b> sphere (violet) and the <b>e</b> spheroid (coral).",
+    "In calcite (negative) the e-wave is faster except along the optic axis, so the spheroid lies outside the sphere and touches it at the two amber dots.",
+    "Radii are drawn in the calcite ratio 1.66 : 1.486 (v<sub>e</sub> : v<sub>o</sub> across the axis).",
+    "Move <b>Optic axis tilt</b>: the spheroid turns with the axis and the touching points stay on it."
+   ],
+   "scene": {
+    "camera": {
+     "position": [
+      5,
+      3.4,
+      7.4
+     ],
+     "target": [
+      0,
+      0,
+      0
+     ]
+    },
+    "time": {
+     "duration": 5,
+     "loop": true,
+     "label": "Time",
+     "start": 0.75
+    },
+    "params": [
+     {
+      "name": "phi",
+      "label": "Optic axis tilt",
+      "min": 0,
+      "max": 90,
+      "value": 35,
+      "step": 1,
+      "unit": "°"
+     }
+    ],
+    "axes": false,
+    "objects": [
+     {
+      "type": "box",
+      "center": [
+       0,
+       0,
+       0
+      ],
+      "size": [
+       5.8,
+       4.6,
+       4.6
+      ],
+      "style": "glass"
+     },
+     {
+      "type": "line",
+      "points": [
+       [
+        "-2.8*cos(phi*deg)",
+        "-2.8*sin(phi*deg)",
+        0
+       ],
+       [
+        "2.8*cos(phi*deg)",
+        "2.8*sin(phi*deg)",
+        0
+       ]
+      ],
+      "style": "hl",
+      "dash": true
+     },
+     {
+      "type": "label",
+      "at": [
+       "3.0*cos(phi*deg)",
+       "3.0*sin(phi*deg)+0.3",
+       0
+      ],
+      "text": "optic axis",
+      "style": "hl"
+     },
+     {
+      "type": "sphere",
+      "center": [
+       0,
+       0,
+       0
+      ],
+      "r": "(1.8*t+0.02)",
+      "style": "wave"
+     },
+     {
+      "type": "ellipsoid",
+      "center": [
+       0,
+       0,
+       0
+      ],
+      "radii": [
+       "(1.8*t+0.02)",
+       "(2.01*t+0.02)",
+       "(2.01*t+0.02)"
+      ],
+      "rotate": [
+       0,
+       0,
+       "phi"
+      ],
+      "style": "coral"
+     },
+     {
+      "type": "point",
+      "at": [
+       "(1.8*t+0.02)*cos(phi*deg)",
+       "(1.8*t+0.02)*sin(phi*deg)",
+       0
+      ],
+      "style": "hl"
+     },
+     {
+      "type": "point",
+      "at": [
+       "-(1.8*t+0.02)*cos(phi*deg)",
+       "-(1.8*t+0.02)*sin(phi*deg)",
+       0
+      ],
+      "style": "hl"
+     },
+     {
+      "type": "point",
+      "at": [
+       0,
+       0,
+       0
+      ],
+      "style": "ink"
+     },
+     {
+      "type": "label",
+      "at": [
+       0,
+       0,
+       "(1.8*t+0.02)-0.15"
+      ],
+      "text": "o",
+      "style": "ray"
+     },
+     {
+      "type": "label",
+      "at": [
+       0,
+       0,
+       "(2.01*t+0.02)+0.3"
+      ],
+      "text": "e",
+      "style": "coral"
+     }
+    ]
+   }
+  },
+  {
+   "unit": 20,
+   "type": "scene",
+   "label": "3D explorer",
+   "title": "Double refraction through a calcite slab",
+   "points": [
+    "A ray falls normally on the slab. The <b>o-ray</b> (violet) goes straight on; the <b>e-ray</b> (coral) is bent inside and leaves parallel, shifted sideways.",
+    "The green plane is the principal section (ray + optic axis). The e-ray stays in it; its vibration (coral arrow) lies in it, the o-vibration (violet arrow) is perpendicular to it.",
+    "Drag <b>Crystal turned about the ray</b>: the o-image stays on the ray and the e-image goes round it in a circle (dashed).",
+    "The sideways shift is drawn about 5 times larger than the true size so that it can be seen."
+   ],
+   "scene": {
+    "camera": {
+     "position": [
+      5.5,
+      3.2,
+      5.5
+     ],
+     "target": [
+      0.5,
+      0,
+      0
+     ]
+    },
+    "params": [
+     {
+      "name": "psi",
+      "label": "Crystal turned about the ray",
+      "min": 0,
+      "max": 360,
+      "value": 40,
+      "step": 1,
+      "unit": "°"
+     },
+     {
+      "name": "tilt",
+      "label": "Angle between optic axis and ray",
+      "min": 15,
+      "max": 75,
+      "value": 45,
+      "step": 1,
+      "unit": "°"
+     }
+    ],
+    "axes": false,
+    "objects": [
+     {
+      "type": "box",
+      "center": [
+       0,
+       0,
+       0
+      ],
+      "size": [
+       1.6,
+       2.6,
+       2.6
+      ],
+      "style": "glass"
+     },
+     {
+      "type": "plane",
+      "center": [
+       0,
+       0,
+       0
+      ],
+      "size": [
+       5.6,
+       2.6
+      ],
+      "rotate": [
+       "psi",
+       0,
+       0
+      ],
+      "style": "sage"
+     },
+     {
+      "type": "line",
+      "points": [
+       [
+        -3,
+        0,
+        0
+       ],
+       [
+        -0.8,
+        0,
+        0
+       ]
+      ],
+      "style": "ink"
+     },
+     {
+      "type": "line",
+      "points": [
+       [
+        -0.8,
+        0,
+        0
+       ],
+       [
+        3,
+        0,
+        0
+       ]
+      ],
+      "style": "ray"
+     },
+     {
+      "type": "line",
+      "points": [
+       [
+        -0.8,
+        0,
+        0
+       ],
+       [
+        0.8,
+        "(-(8*0.2479*tan(tilt*deg)/(1+1.2479*pow(tan(tilt*deg),2)))*cos(psi*deg))",
+        "(-(8*0.2479*tan(tilt*deg)/(1+1.2479*pow(tan(tilt*deg),2)))*sin(psi*deg))"
+       ],
+       [
+        3,
+        "(-(8*0.2479*tan(tilt*deg)/(1+1.2479*pow(tan(tilt*deg),2)))*cos(psi*deg))",
+        "(-(8*0.2479*tan(tilt*deg)/(1+1.2479*pow(tan(tilt*deg),2)))*sin(psi*deg))"
+       ]
+      ],
+      "style": "coral"
+     },
+     {
+      "type": "line",
+      "points": [
+       [
+        "-0.78*cos(tilt*deg)",
+        "-0.78*sin(tilt*deg)*cos(psi*deg)",
+        "-0.78*sin(tilt*deg)*sin(psi*deg)"
+       ],
+       [
+        "0.78*cos(tilt*deg)",
+        "0.78*sin(tilt*deg)*cos(psi*deg)",
+        "0.78*sin(tilt*deg)*sin(psi*deg)"
+       ]
+      ],
+      "style": "hl",
+      "dash": true
+     },
+     {
+      "type": "label",
+      "at": [
+       "0.78*cos(tilt*deg)",
+       "0.78*sin(tilt*deg)*cos(psi*deg)+0.2",
+       "0.78*sin(tilt*deg)*sin(psi*deg)"
+      ],
+      "text": "optic axis",
+      "style": "hl"
+     },
+     {
+      "type": "arrow",
+      "from": [
+       2.0,
+       "-0.35*(-sin(psi*deg))",
+       "-0.35*cos(psi*deg)"
+      ],
+      "to": [
+       2.0,
+       "0.35*(-sin(psi*deg))",
+       "0.35*cos(psi*deg)"
+      ],
+      "style": "ray"
+     },
+     {
+      "type": "arrow",
+      "from": [
+       2.0,
+       "(-(8*0.2479*tan(tilt*deg)/(1+1.2479*pow(tan(tilt*deg),2)))*cos(psi*deg))-0.35*cos(psi*deg)",
+       "(-(8*0.2479*tan(tilt*deg)/(1+1.2479*pow(tan(tilt*deg),2)))*sin(psi*deg))-0.35*sin(psi*deg)"
+      ],
+      "to": [
+       2.0,
+       "(-(8*0.2479*tan(tilt*deg)/(1+1.2479*pow(tan(tilt*deg),2)))*cos(psi*deg))+0.35*cos(psi*deg)",
+       "(-(8*0.2479*tan(tilt*deg)/(1+1.2479*pow(tan(tilt*deg),2)))*sin(psi*deg))+0.35*sin(psi*deg)"
+      ],
+      "style": "coral"
+     },
+     {
+      "type": "label",
+      "at": [
+       2.8,
+       0.3,
+       0
+      ],
+      "text": "o",
+      "style": "ray"
+     },
+     {
+      "type": "label",
+      "at": [
+       2.8,
+       "(-(8*0.2479*tan(tilt*deg)/(1+1.2479*pow(tan(tilt*deg),2)))*cos(psi*deg))+0.3",
+       "(-(8*0.2479*tan(tilt*deg)/(1+1.2479*pow(tan(tilt*deg),2)))*sin(psi*deg))"
+      ],
+      "text": "e",
+      "style": "coral"
+     },
+     {
+      "type": "curve",
+      "s": [
+       0,
+       6.2832
+      ],
+      "x": 2.8,
+      "y": "(8*0.2479*tan(tilt*deg)/(1+1.2479*pow(tan(tilt*deg),2)))*cos(s)",
+      "z": "(8*0.2479*tan(tilt*deg)/(1+1.2479*pow(tan(tilt*deg),2)))*sin(s)",
+      "style": "hl",
+      "dash": true
+     }
+    ]
+   }
+  },
+  {
+   "unit": 21,
+   "type": "scene",
+   "label": "3D explorer",
+   "title": "Wave plate: the two components drift apart",
+   "points": [
+    "Plane-polarised light (E at angle <b>θ</b> to the optic axis, which is along y) enters the plate. It splits into e (along y, green) and o (along z, coral).",
+    "Set <b>phase difference δ</b>: a thicker plate lets the o component lag more. The amber curve at the right is the path of the emerging E-vector.",
+    "Try θ = 45°: δ = 90° gives a circle (quarter-wave plate), δ = 180° gives a line turned through 2θ (half-wave plate).",
+    "Other θ at δ = 90° gives an ellipse; δ = 0 or 360° leaves the light unchanged."
+   ],
+   "scene": {
+    "camera": {
+     "position": [
+      6.5,
+      2.6,
+      5.2
+     ],
+     "target": [
+      0,
+      0,
+      0
+     ]
+    },
+    "time": {
+     "duration": 4,
+     "loop": true,
+     "label": "Time"
+    },
+    "params": [
+     {
+      "name": "delta",
+      "label": "Phase difference δ (plate thickness)",
+      "min": 0,
+      "max": 360,
+      "value": 90,
+      "step": 1,
+      "unit": "°"
+     },
+     {
+      "name": "theta",
+      "label": "Angle θ of incident E to optic axis",
+      "min": 0,
+      "max": 90,
+      "value": 45,
+      "step": 1,
+      "unit": "°"
+     }
+    ],
+    "axes": false,
+    "objects": [
+     {
+      "type": "box",
+      "center": [
+       "-1+(0.05+1.95*delta/360)/2",
+       0,
+       0
+      ],
+      "size": [
+       "(0.05+1.95*delta/360)",
+       2.4,
+       2.4
+      ],
+      "style": "glass"
+     },
+     {
+      "type": "line",
+      "points": [
+       [
+        "-1+(0.05+1.95*delta/360)/2",
+        -1.1,
+        0
+       ],
+       [
+        "-1+(0.05+1.95*delta/360)/2",
+        1.1,
+        0
+       ]
+      ],
+      "style": "hl",
+      "dash": true
+     },
+     {
+      "type": "label",
+      "at": [
+       "-1+(0.05+1.95*delta/360)/2",
+       1.35,
+       0
+      ],
+      "text": "optic axis",
+      "style": "hl"
+     },
+     {
+      "type": "curve",
+      "s": [
+       -3,
+       3
+      ],
+      "x": "s",
+      "y": "cos(theta*deg)*cos((3.14159265*s-2*3.14159265*t))",
+      "z": 0,
+      "style": "sage"
+     },
+     {
+      "type": "curve",
+      "s": [
+       -3,
+       3
+      ],
+      "x": "s",
+      "y": 0,
+      "z": "sin(theta*deg)*cos((3.14159265*s-2*3.14159265*t)+(delta*deg*min(1,max(0,((s)+1)/(0.05+1.95*delta/360)))))",
+      "style": "coral"
+     },
+     {
+      "type": "curve",
+      "s": [
+       -3,
+       3
+      ],
+      "x": "s",
+      "y": "cos(theta*deg)*cos((3.14159265*s-2*3.14159265*t))",
+      "z": "sin(theta*deg)*cos((3.14159265*s-2*3.14159265*t)+(delta*deg*min(1,max(0,((s)+1)/(0.05+1.95*delta/360)))))",
+      "style": "ray"
+     },
+     {
+      "type": "plane",
+      "center": [
+       2.5,
+       0,
+       0
+      ],
+      "size": [
+       2.4,
+       2.4
+      ],
+      "rotate": [
+       0,
+       90,
+       0
+      ],
+      "style": "glass"
+     },
+     {
+      "type": "curve",
+      "s": [
+       0,
+       6.2832
+      ],
+      "x": 2.5,
+      "y": "cos(theta*deg)*cos(s)",
+      "z": "sin(theta*deg)*cos(s+delta*deg)",
+      "style": "hl"
+     },
+     {
+      "type": "arrow",
+      "from": [
+       2.5,
+       0,
+       0
+      ],
+      "to": [
+       2.5,
+       "cos(theta*deg)*cos(3.14159265*2.5-2*3.14159265*t)",
+       "sin(theta*deg)*cos(3.14159265*2.5-2*3.14159265*t+delta*deg)"
+      ],
+      "style": "hl"
+     },
+     {
+      "type": "label",
+      "at": [
+       -2.6,
+       1.3,
+       0
+      ],
+      "text": "e",
+      "style": "sage"
+     },
+     {
+      "type": "label",
+      "at": [
+       -2.6,
+       0,
+       1.3
+      ],
+      "text": "o",
+      "style": "coral"
+     }
+    ]
+   }
+  },
+  {
+   "unit": 19,
+   "type": "scene",
+   "label": "3D explorer",
+   "title": "Malus' law with a rotating analyser",
+   "points": [
+    "The polariser (dashed black axis) lets only E along y through: amplitude A<sub>0</sub> (violet).",
+    "Turn the <b>Analyser angle θ</b>: the analyser (green plate, amber axis) passes only the component of E along its axis, amplitude <b>A<sub>0</sub> cos θ</b> (coral).",
+    "The amber bar at the side is the intensity <b>I = I<sub>0</sub> cos²θ</b>; the grey line is the full length I<sub>0</sub>.",
+    "At θ = 90° nothing is transmitted (crossed); at 0° and 180° the full intensity passes."
+   ],
+   "scene": {
+    "camera": {
+     "position": [
+      6,
+      2.6,
+      5.2
+     ],
+     "target": [
+      0.3,
+      0,
+      0.5
+     ]
+    },
+    "time": {
+     "duration": 4,
+     "loop": true,
+     "label": "Time"
+    },
+    "params": [
+     {
+      "name": "theta",
+      "label": "Analyser angle θ",
+      "min": 0,
+      "max": 180,
+      "value": 30,
+      "step": 1,
+      "unit": "°"
+     }
+    ],
+    "axes": false,
+    "objects": [
+     {
+      "type": "plane",
+      "center": [
+       -1.8,
+       0,
+       0
+      ],
+      "size": [
+       2.6,
+       2.6
+      ],
+      "rotate": [
+       0,
+       90,
+       0
+      ],
+      "style": "glass"
+     },
+     {
+      "type": "line",
+      "points": [
+       [
+        -1.8,
+        -1.2,
+        0
+       ],
+       [
+        -1.8,
+        1.2,
+        0
+       ]
+      ],
+      "style": "ink",
+      "dash": true
+     },
+     {
+      "type": "label",
+      "at": [
+       -1.8,
+       1.6,
+       0
+      ],
+      "text": "polariser",
+      "style": "ink"
+     },
+     {
+      "type": "plane",
+      "center": [
+       0.8,
+       0,
+       0
+      ],
+      "size": [
+       2.6,
+       2.6
+      ],
+      "rotate": [
+       0,
+       90,
+       0
+      ],
+      "style": "sage"
+     },
+     {
+      "type": "line",
+      "points": [
+       [
+        0.8,
+        "-1.2*cos(theta*deg)",
+        "-1.2*sin(theta*deg)"
+       ],
+       [
+        0.8,
+        "1.2*cos(theta*deg)",
+        "1.2*sin(theta*deg)"
+       ]
+      ],
+      "style": "hl",
+      "dash": true
+     },
+     {
+      "type": "label",
+      "at": [
+       0.8,
+       1.6,
+       0
+      ],
+      "text": "analyser",
+      "style": "hl"
+     },
+     {
+      "type": "curve",
+      "s": [
+       -1.8,
+       0.8
+      ],
+      "x": "s",
+      "y": "cos((3.14159265*s-2*3.14159265*t))",
+      "z": 0,
+      "style": "ray"
+     },
+     {
+      "type": "curve",
+      "s": [
+       0.8,
+       3
+      ],
+      "x": "s",
+      "y": "cos(theta*deg)*cos(theta*deg)*cos((3.14159265*s-2*3.14159265*t))",
+      "z": "cos(theta*deg)*sin(theta*deg)*cos((3.14159265*s-2*3.14159265*t))",
+      "style": "coral"
+     },
+     {
+      "type": "arrow",
+      "from": [
+       0.1,
+       0,
+       0
+      ],
+      "to": [
+       0.1,
+       "cos(3.14159265*0.1-2*3.14159265*t)",
+       0
+      ],
+      "style": "ray"
+     },
+     {
+      "type": "arrow",
+      "from": [
+       1.8,
+       0,
+       0
+      ],
+      "to": [
+       1.8,
+       "cos(theta*deg)*cos(theta*deg)*cos(3.14159265*1.8-2*3.14159265*t)",
+       "cos(theta*deg)*sin(theta*deg)*cos(3.14159265*1.8-2*3.14159265*t)"
+      ],
+      "style": "coral"
+     },
+     {
+      "type": "line",
+      "points": [
+       [
+        0.8,
+        -1.2,
+        2.3
+       ],
+       [
+        0.8,
+        1.2,
+        2.3
+       ]
+      ],
+      "style": "axis"
+     },
+     {
+      "type": "arrow",
+      "from": [
+       0.8,
+       -1.2,
+       2.3
+      ],
+      "to": [
+       0.8,
+       "-1.2+2.4*cos(theta*deg)*cos(theta*deg)",
+       2.3
+      ],
+      "style": "hl"
+     },
+     {
+      "type": "label",
+      "at": [
+       0.8,
+       1.5,
+       2.3
+      ],
+      "text": "I0",
+      "style": "axis"
+     }
+    ]
+   }
+  }
+ ]
+}

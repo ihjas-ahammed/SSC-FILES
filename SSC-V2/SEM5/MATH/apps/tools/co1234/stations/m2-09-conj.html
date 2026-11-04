@@ -1,0 +1,26 @@
+<!-- id: m2-conj | mod: Module II | modName: Convex sets and functions | modClass: m2 | title: The conjugate function | short: Conjugate function (3.3) | est: ~25 min -->
+<gist>$f^*(\mathbf y)=\sup_{\mathbf x}(\mathbf y^T\mathbf x-f(\mathbf x))$: the largest gap between the linear function $\mathbf y^T\mathbf x$ and $f$. It is always convex (a supremum of affine functions of $\mathbf y$), gives Fenchel's inequality, and is the bridge to the dual function in Module IV.</gist>
+
+<tp>Definition (§3.3.1)</tp>
+<must><p>$f^*(\mathbf y)=\sup_{\mathbf x\in\dom f}\left(\mathbf y^T\mathbf x-f(\mathbf x)\right)$, $\dom f^*$ = the $\mathbf y$ where the supremum is finite. $f^*$ is convex whether or not $f$ is.</p></must>
+<fig name="conj"><cap>For differentiable convex $f$ the supremum is where $f'(x)=y$; the gap there is $f^*(y)$.</cap></fig>
+<p><b>Example 3.21 (functions on $\mathbf R$).</b></p>
+<ul>
+<li>Affine $f=ax+b$: $yx-ax-b$ is bounded only for $y=a$: $f^*(a)=-b$, $\dom f^*=\{a\}$.</li>
+<li>$f=-\log x$ ($x\gt0$): $xy+\log x$ is unbounded for $y\ge0$; for $y\lt0$ the maximum is at $x=-1/y$: $f^*(y)=-\log(-y)-1$, $y\lt0$.</li>
+<li>$f=e^x$: maximum at $x=\log y$ for $y\gt0$: $f^*(y)=y\log y-y$ ($f^*(0)=0$; $y\lt0$ unbounded).</li>
+<li>$f=x\log x$: $f^*(y)=e^{y-1}$ on $\mathbf R$.</li>
+<li>$f=1/x$ ($x\gt0$): $f^*(y)=-2(-y)^{1/2}$ for $y\le0$.</li>
+</ul>
+<der id="d-conjq"/>
+<p><b>Example 3.23.</b> $f(X)=\log\det X^{-1}$ on $\mathbf S^n_{++}$: $f^*(Y)=\log\det(-Y)^{-1}-n$ on $-\mathbf S^n_{++}$ (stationarity $Y+X^{-1}=0$).</p>
+<p><b>Example 3.24.</b> Indicator $I_S$: $I_S^*(\mathbf y)=\sup_{\mathbf x\in S}\mathbf y^T\mathbf x$, the support function of $S$.</p>
+<p><b>Example 3.25.</b> Log-sum-exp: setting the gradient to zero, $y_i=e^{x_i}/\sum_je^{x_j}$, so $\mathbf y\succeq0$, $\mathbf 1^T\mathbf y=1$, and $f^*(\mathbf y)=\sum_iy_i\log y_i$ on the probability simplex ($\infty$ elsewhere): the negative entropy.</p>
+<der id="d-conjnorm"/>
+<p><b>Example 3.27.</b> $f=\tfrac12\|\mathbf x\|^2$: $f^*(\mathbf y)=\tfrac12\|\mathbf y\|_*^2$. (Upper bound: $\mathbf y^T\mathbf x-\tfrac12\|\mathbf x\|^2\le\|\mathbf y\|_*\|\mathbf x\|-\tfrac12\|\mathbf x\|^2\le\tfrac12\|\mathbf y\|_*^2$; equality by choosing $\mathbf x$ aligned with $\mathbf y$ and $\|\mathbf x\|=\|\mathbf y\|_*$.)</p>
+<p><b>Example 3.28 (revenue and profit).</b> With resource vector $\mathbf r$, cost $S(\mathbf r)$ and prices $\mathbf p$, the maximum profit $M(\mathbf p)=\sup_{\mathbf r}(\mathbf p^T\mathbf r-S(\mathbf r))=S^*(\mathbf p)$.</p>
+
+<tp>Basic properties (§3.3.2)</tp>
+<must><p><b>Fenchel's inequality:</b> $f(\mathbf x)+f^*(\mathbf y)\ge\mathbf x^T\mathbf y$ for all $\mathbf x,\mathbf y$ (directly from the definition).<br><b>Conjugate of the conjugate:</b> if $f$ is convex and closed, $f^{**}=f$.<br><b>Differentiable $f$:</b> the maximiser satisfies $\mathbf y=\nabla f(\mathbf x^*)$, so $f^*(\mathbf y)=\nabla f(\mathbf z)^T\mathbf z-f(\mathbf z)$ at $\mathbf y=\nabla f(\mathbf z)$ (the Legendre transform).<br><b>Scaling and affine change:</b> $g(\mathbf x)=af(\mathbf x)+b$ ($a\gt0$): $g^*(\mathbf y)=af^*(\mathbf y/a)-b$. $g(\mathbf x)=f(A\mathbf x+\mathbf b)$, $A$ non-singular: $g^*(\mathbf y)=f^*(A^{-T}\mathbf y)-\mathbf b^TA^{-T}\mathbf y$.<br><b>Sums of independent functions:</b> $f(\mathbf u,\mathbf v)=f_1(\mathbf u)+f_2(\mathbf v)$ ⇒ $f^*(\mathbf w,\mathbf z)=f_1^*(\mathbf w)+f_2^*(\mathbf z)$.</p></must>
+<chk><q>Find the conjugate of $f(x)=|x|$.</q><a><p>A norm on $\mathbf R$ with dual norm $|\cdot|$: $f^*(y)=0$ for $|y|\le1$, $\infty$ otherwise.</p></a></chk>
+<chk><q>Why is $f^*$ convex even for non-convex $f$?</q><a><p>For each fixed $\mathbf x$, $\mathbf y\mapsto\mathbf y^T\mathbf x-f(\mathbf x)$ is affine in $\mathbf y$; a pointwise supremum of affine functions is convex.</p></a></chk>

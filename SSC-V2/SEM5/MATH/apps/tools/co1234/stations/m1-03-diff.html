@@ -1,0 +1,36 @@
+<!-- id: m1-diff | mod: Module I | modName: Multivariable calculus | modClass: m1 | title: Differentiable functions, the total derivative and its matrix | short: Total derivative and its matrix (19.12–19.18) | est: ~30 min -->
+<gist>$f$ is differentiable at $\boldsymbol\xi$ when an affine function $g$ is tangent to it there: $f(\mathbf x)-g(\mathbf x)=o(\mathbf x-\boldsymbol\xi)$. The matrix of $g$ is the derivative $f'(\boldsymbol\xi)$, an $m\times n$ matrix whose entries are the partial derivatives of the components. Continuous partials guarantee differentiability; mere existence of partials does not.</gist>
+
+<tp>Definition (§19.12)</tp>
+<p>For $m=n=1$, $f'(\xi)=l$ means $f(x)-f(\xi)-l(x-\xi)=o(x-\xi)$: the error, divided by $x-\xi$, tends to $0$. Equivalently, the affine $g(x)=lx+c$ with $g(\xi)=f(\xi)$ is tangent to $f$.</p>
+<fig name="tangent"><cap>Only the tangent slope makes the gap $f-g$ vanish faster than $x-\xi$.</cap></fig>
+<must><p>$f:A\to\mathbf R^m$ ($A\supseteq\{\|\mathbf x-\boldsymbol\xi\|\lt\Delta\}$) is <b>differentiable at $\boldsymbol\xi$</b> if there is an affine $g:\mathbf R^n\to\mathbf R^m$ with $g(\boldsymbol\xi)=f(\boldsymbol\xi)$ and $$\lim_{\mathbf x\to\boldsymbol\xi}\frac{\|f(\mathbf x)-g(\mathbf x)\|}{\|\mathbf x-\boldsymbol\xi\|}=0.$$ The graph of $g$ is the <b>tangent flat</b>: a line when $m=n=1$, a plane when $m=1,n=2$, a line in $\mathbf R^3$ when $m=2,n=1$.</p></must>
+<p>Why this is the right definition for $m=1$, $n=2$ (the $P,Q,R,S$ picture): $P=(\boldsymbol\xi,f(\boldsymbol\xi))$, $Q$ on the surface above $\mathbf x$, $S$ on the plane above $\mathbf x$, $R$ at the height of $P$. Tangency means $QR/PR-SR/PR\to0$. Since $PR=\|\mathbf x-\boldsymbol\xi\|$ and $|QR-SR|=|f(\mathbf x)-g(\mathbf x)|$ this is exactly the definition.</p>
+
+<tp>Differentiable ⇒ continuous (theorem 19.13)</tp>
+<p><b>Proof.</b> From the definition $\|f(\mathbf x)-g(\mathbf x)\|\to0$ (the ratio tends to $0$ and the denominator does too). An affine $g$ is continuous. So</p>
+$$\|f(\mathbf x)-f(\boldsymbol\xi)\|=\|f(\mathbf x)-g(\mathbf x)+g(\mathbf x)-g(\boldsymbol\xi)\|\le\|f(\mathbf x)-g(\mathbf x)\|+\|g(\mathbf x)-g(\boldsymbol\xi)\|\to0+0.$$
+
+<tp>The derivative as a matrix (§19.14–19.16)</tp>
+<p>With column vectors, an affine $g$ is $g(\mathbf x)=L(\mathbf x-\boldsymbol\xi)+f(\boldsymbol\xi)$ with $L$ an $m\times n$ matrix. So $f$ is differentiable at $\boldsymbol\xi$ iff there is $L$ with $$f(\boldsymbol\xi+\mathbf h)-f(\boldsymbol\xi)-L\mathbf h=o(\mathbf h)\quad(\mathbf h\to\mathbf 0),$$ and we define the <strong>(total) derivative</strong> $f'(\boldsymbol\xi)=Df(\boldsymbol\xi)=L$. The tangent flat is $\mathbf y=f(\boldsymbol\xi)+f'(\boldsymbol\xi)(\mathbf x-\boldsymbol\xi)$, exactly as for $m=n=1$.</p>
+<der id="d-tfr"/>
+<must><p><b>Theorem 19.16 (matrix representation).</b> $$f'(\boldsymbol\xi)=\begin{pmatrix}f^1_1(\boldsymbol\xi)&\cdots&f^1_n(\boldsymbol\xi)\\\vdots&&\vdots\\f^m_1(\boldsymbol\xi)&\cdots&f^m_n(\boldsymbol\xi)\end{pmatrix}=\frac{d\mathbf y}{d\mathbf x}=\left(\frac{\partial y_i}{\partial x_j}\right).$$ Row $i$: component $f^i$; column $j$: variable $x_j$. Proof: take $\mathbf u=\mathbf e_j$ in theorem 19.15; by exercise 19.11(5) $D_{\mathbf u}f$ is the column of $D_{\mathbf u}f^i=f^i_j$, while $f'(\boldsymbol\xi)\mathbf e_j$ is column $j$ of $L$. Incidentally the derivative is unique.</p></must>
+<trap><p>The matrix of partials can exist without $f$ being differentiable. Exercise 19.11(6): $f=x_1^2x_2/(x_1^4+x_2^2)$ has every directional derivative at $\mathbf 0$ but equals $\tfrac12$ along $x_2=x_1^2$, so it is not even continuous at $\mathbf 0$, hence not differentiable (19.13).</p></trap>
+
+<tp>A criterion: continuous partials (theorem 19.17)</tp>
+<must><p>If all partial derivatives of $f$ are continuous at $\boldsymbol\xi$, then $f$ is differentiable at $\boldsymbol\xi$.</p></must>
+<p><b>Proof ($m=1,n=2$).</b> Go from $\boldsymbol\xi$ to $\mathbf x$ one coordinate at a time and use the one-variable mean value theorem on each leg:</p>
+$$f(x_1,x_2)-f(\xi_1,\xi_2)=\{f(x_1,x_2)-f(\xi_1,x_2)\}+\{f(\xi_1,x_2)-f(\xi_1,\xi_2)\}=f_1(u_1,x_2)(x_1-\xi_1)+f_2(\xi_1,u_2)(x_2-\xi_2)$$
+<p>with $u_1$ between $x_1,\xi_1$ and $u_2$ between $x_2,\xi_2$. As $\mathbf x\to\boldsymbol\xi$ both $(u_1,x_2)$ and $(\xi_1,u_2)$ tend to $\boldsymbol\xi$, so by continuity $f_1(u_1,x_2)\to f_1(\boldsymbol\xi)$, $f_2(\xi_1,u_2)\to f_2(\boldsymbol\xi)$. With $L=(f_1(\boldsymbol\xi),f_2(\boldsymbol\xi))$,</p>
+$$|f(\mathbf x)-f(\boldsymbol\xi)-L(\mathbf x-\boldsymbol\xi)|=|(f_1(u_1,x_2)-f_1(\boldsymbol\xi))(x_1-\xi_1)+(f_2(\xi_1,u_2)-f_2(\boldsymbol\xi))(x_2-\xi_2)|\le E\|\mathbf x-\boldsymbol\xi\|$$
+<p>by Cauchy–Schwarz, where $E=\{(f_1(u_1,x_2)-f_1(\boldsymbol\xi))^2+(f_2(\xi_1,u_2)-f_2(\boldsymbol\xi))^2\}^{1/2}\to0$. That is $o(\mathbf x-\boldsymbol\xi)$.</p>
+
+<tp>Examples 19.18</tp>
+<p><b>(i)</b> $f=x_1^2x_2+x_2^3x_1$: $f_1=2x_1x_2+x_2^3$, $f_2=x_1^2+3x_2^2x_1$, polynomials, so $f$ is differentiable everywhere. $f'(2,1)=(5,10)$. Slope at $(2,1)$ in the direction $(4,3)$: $(5,10)\cdot(\tfrac45,\tfrac35)=4+6=10$. Tangent plane at $(2,1)$, where $f(2,1)=6$:</p>
+$$y-6=5(x_1-2)+10(x_2-1).$$
+<trap><p>The book's example 19.18(i) is misprinted: it writes $D_{\mathbf u}f(1,2)$ and builds the tangent plane "where $(x_1,x_2)=(1,2)$" as $y-6=5(x_1-1)+10(x_2-2)$. But $f(1,2)=10$ and $f'(1,2)=(12,13)$. The numbers $6$ and $(5,10)$ belong to $(2,1)$, so the plane is $y-6=5(x_1-2)+10(x_2-1)$. At $(1,2)$ it would be $y-10=12(x_1-1)+13(x_2-2)$.</p></trap>
+<p><b>(ii)</b> $f=x_1x_2^2+x_2x_3^3+x_3x_1^4$: $f'(1,1,1)=(x_2^2+4x_3x_1^3,\;2x_1x_2+x_3^3,\;3x_2x_3^2+x_1^4)=(5,3,4)$. Slope in the direction $(2,1,2)$: $(5,3,4)\cdot(\tfrac23,\tfrac13,\tfrac23)=7$. Tangent hyperplane: $y-3=5(x_1-1)+3(x_2-1)+4(x_3-1)$.</p>
+<p><b>(iii)</b> $f(x)=(x,x^2,x^3)^T$, $\mathbf R\to\mathbf R^3$: $f'(-1)=(1,-2,3)^T$, a $3\times1$ matrix. Tangent flat at $-1$: $(y_1,y_2,y_3)=(-1,1,-1)+(1,-2,3)(x+1)$, the line $y_1=x$, $y_2=-2x-1$, $y_3=3x+2$.</p>
+<p><b>(iv)</b> $f=(x_1^2+x_2^2,\,x_1^2-x_2^2)^T$: $f'(1,1)=\begin{pmatrix}2&2\\2&-2\end{pmatrix}$; tangent flat $y_1-2=2(x_1-1)+2(x_2-1)$, $y_2=2(x_1-1)-2(x_2-1)$.</p>
+<chk><q>Find the derivative of $f(x_1,x_2)=(x_1x_2,\;x_1+x_2^2)^T$ at $(1,1)$ and the tangent flat.</q><a><p>$f'=\begin{pmatrix}x_2&x_1\\1&2x_2\end{pmatrix}$, so $f'(1,1)=\begin{pmatrix}1&1\\1&2\end{pmatrix}$; $f(1,1)=(1,2)$. Tangent flat: $y_1-1=(x_1-1)+(x_2-1)$, $y_2-2=(x_1-1)+2(x_2-1)$.</p></a></chk>
+<chk><q>State the theorem that gives a practical test for differentiability and say why the converse question needs care.</q><a><p>If all partials are continuous at $\boldsymbol\xi$, $f$ is differentiable there (19.17). Existence of the partials alone is not enough (19.11(6)): the function need not even be continuous.</p></a></chk>

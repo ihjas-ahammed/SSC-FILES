@@ -33,3 +33,15 @@ Notes
 - Units 10 and 11 share §3.3 and are one file.
 - Syllabus: `syllabus.pdf` (copied from `SEM5-PYQ/MACHINE-LEARNING/`).
 - The CLAUDE.md unit map in `SEM5-PYQ/MACHINE-LEARNING/index.md` lists §4.1 as printed 181; that is the chapter opener.
+
+## Exercise pages (added 2026-10-27)
+
+Bishop puts all exercises at the end of each chapter, numbered by section (e.g. 2.x exercises on §2.3 are the Gaussian ones). None were in a unit cut. They are now separate files. The unit files are unchanged.
+
+| Chapter | Exercises | PDF pp | File |
+|---|---|---|---|
+| 1 | 1.1–1.41 | 76–84 | module-1/exercises-chapter-1.pdf |
+| 2 | 2.1–2.61 | 145–154 | module-1/exercises-chapter-2.pdf |
+| 3 | 3.1–3.24 | 191–195 | module-2/exercises-chapter-3.pdf |
+| 4 | 4.1–4.26 | 237–241 | module-3/exercises-chapter-4.pdf |
+| 5 | 5.1–5.41 | 301–307 | module-4/exercises-chapter-5.pdf |

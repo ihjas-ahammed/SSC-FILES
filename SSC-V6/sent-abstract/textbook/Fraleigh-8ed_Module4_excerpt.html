@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fraleigh, A First Course in Abstract Algebra (8th ed.), Module 4 excerpt</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+  :root {
+    --page-bg: #d9d9d4;
+    --paper: #fdfdfb;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --page-bg: #2b2b2b;
+      --paper: #f4f3ee;
+      --ink: #111;
+      --rule: #444;
+      --note: #555;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page-bg: #2b2b2b;
+    --paper: #f4f3ee;
+    --ink: #111;
+    --rule: #444;
+    --note: #555;
+  }
+  body {
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--ink);
+    font-family: "Times New Roman", Times, "Liberation Serif", serif;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .sheet {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 12mm auto;
+    padding: 14mm 18mm 16mm;
+    box-sizing: border-box;
+    background: var(--paper);
+    box-shadow: 0 1px 6px rgba(0,0,0,.25);
+    position: relative;
+  }
+  .sheet + .sheet { margin-top: 0; }
+  .hdr {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: start;
+    font-size: 14px;
+  }
+  .code { font-size: 22px; font-weight: bold; letter-spacing: .5px; }
+  .pages { text-align: center; padding-top: 14px; }
+  .name { text-align: right; line-height: 2; }
+  .title { text-align: center; margin-top: 22px; }
+  .title .exam { font-size: 19px; font-weight: bold; letter-spacing: .3px; }
+  .title .sch { margin-top: 2px; }
+  .title .course { margin-top: 10px; font-size: 16px; }
+  .title .subject { margin-top: 6px; font-size: 16px; font-weight: bold; }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 16px;
+    font-size: 15px;
+  }
+  .sec { margin-top: 14px; }
+  .sec-head {
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    font-weight: bold;
+  }
+  .sec-head .num { font-weight: bold; }
+  .sec-head .body { font-weight: normal; }
+  .sec-head .body b { font-weight: bold; }
+  .sec-head .body i { font-style: italic; }
+  .sec-total { text-align: right; font-weight: normal; margin-top: 4px; }
+  .qs { margin-top: 6px; }
+  .q {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    margin-bottom: 7px;
+  }
+  .q .n { text-align: right; padding-right: 10px; }
+  .q p { margin: 0; }
+  .sub { margin-left: 22px; }
+  .cut { color: var(--note); }
+  .turn { text-align: right; font-weight: bold; margin-top: 26px; }
+  .fig {
+    display: block;
+    margin: 8px auto 2px 36px;
+    width: 230px;
+    height: auto;
+  }
+  .fig-cap { margin-left: 36px; font-size: 13px; color: var(--note); font-style: italic; }
+  .foot-note {
+    margin-top: 26px;
+    border-top: 1px solid var(--rule);
+    padding-top: 6px;
+    font-size: 12px;
+    color: var(--note);
+  }
+  .pno { text-align: center; font-size: 15px; margin-bottom: 4px; }
+  .pno-hdr { position: absolute; top: 10mm; right: 18mm; font-weight: bold; font-size: 14px; }
+  @media print {
+    @page { size: A4; margin: 0; }
+    body { background: #fff; }
+    .sheet { margin: 0; box-shadow: none; width: 210mm; height: 297mm; min-height: 0; page-break-after: always; }
+    .sheet:last-child { page-break-after: auto; }
+  }
+  @media (max-width: 720px) {
+    .sheet { width: auto; margin: 0; padding: 14px 16px; min-height: 0; }
+    .hdr { grid-template-columns: 1fr; gap: 6px; }
+    .name { text-align: left; }
+    .pages { text-align: left; padding-top: 0; }
+  }
+</style>
+<style>
+  .sheet.book { height: auto; min-height: 297mm; text-align: justify; hyphens: auto; }
+  .sheet.book p { margin: 6px 0; }
+  .rh { display: flex; justify-content: space-between; font-size: 12px; color: var(--note);
+        border-bottom: 1px solid var(--rule); padding-bottom: 3px; margin-bottom: 12px; }
+  .chap { display: flex; background: #8a8a86; color: #fff; margin: 4px 0 16px; }
+  .chap .cn { background: #b4b4ae; padding: 10px 18px; font-size: 26px; }
+  .chap .ct { padding: 12px 16px; font-size: 22px; font-weight: bold; }
+  h2.sec { font-size: 20px; margin: 18px 0 8px; border-bottom: 2px solid var(--rule); padding-bottom: 3px; }
+  h3.sub { font-size: 16px; margin: 14px 0 6px; border-bottom: 1px solid var(--rule); padding-bottom: 2px; }
+  .eq { margin: 10px 0; text-align: center; overflow: visible; }
+  mjx-container[display="true"], mjx-container { overflow: visible !important; max-width: 100%; }
+  .sheet.book, .sheet.book .eq { overflow: visible; }
+  .eq.boxed { border: 1px solid var(--ink); display: block; padding: 4px 8px; }
+  .prob { background: #ecece7; border: 1px solid var(--rule); padding: 8px 12px; margin: 10px 0; text-align: left; }
+  .prob p { margin: 5px 0; }
+  .ex, .ex-cont { border: 1px solid var(--rule); padding: 8px 12px; margin: 10px 0; text-align: left; }
+  .ex p, .ex-cont p { margin: 5px 0; }
+  .figbox { border: 1px dashed var(--rule); padding: 10px; color: var(--note); font-size: 13px; text-align: center; margin: 8px 0; font-style: italic; }
+  figure { margin: 8px 0; text-align: center; }
+  figure > svg { width: 100%; max-width: 230px; height: auto; }
+  figure.single > svg { max-width: 260px; }
+  figure figcaption { font-size: 12px; font-style: italic; color: var(--note); }
+  .figrow { display: flex; flex-wrap: wrap; justify-content: space-around; gap: 8px; }
+  .figrow > figure { flex: 1 1 180px; max-width: 240px; }
+  .fn { font-size: 12.5px; color: var(--note); margin: 6px 0; text-align: left; }
+  .cont { font-size: 12.5px; color: var(--note); font-style: italic; }
+  .gapnote { font-size: 13px; color: var(--note); font-style: italic; border-left: 3px solid var(--rule); padding: 2px 8px; margin: 4px 0 10px; }
+  .flag { color: #8a1c1c; font-weight: bold; }
+  .answer { font-size: 14px; }
+  .tbl { border-collapse: collapse; width: 100%; font-size: 13px; margin: 6px 0; }
+  .tbl td, .tbl th { border: 1px solid var(--rule); padding: 3px 6px; text-align: center; }
+  .tbl th { background: #ebebe6; }
+  .tblcap { font-size: 13px; margin-top: 8px; text-align: left; }
+  .pno { text-align: center; font-size: 14px; margin-top: 14px; }
+  .intro p, .intro li { font-size: 14px; text-align: left; }
+  .intro table { border-collapse: collapse; width: 100%; font-size: 14px; margin: 6px 0; }
+  .intro td, .intro th { border: 1px solid var(--rule); padding: 4px 8px; text-align: left; }
+  @media print {
+    .sheet.book { height: auto !important; min-height: 0 !important; page-break-after: always; }
+  }
+  @media (max-width: 720px) {
+    .sheet.book .eq { overflow-x: auto; max-width: 100%; }
+    .sheet.book mjx-container[display="true"] { font-size: 85% !important; }
+    .sheet.book .figrow > figure { flex: 1 1 100%; max-width: 100%; }
+    .sheet.book { padding-left: 14px; padding-right: 14px; }
+  }
+</style>
+<style>
+  /* additions for the Fraleigh excerpt */
+  .sheet.book .rh span:first-child { font-style: normal; }
+  .num { font-weight: bold; margin-right: 4px; }
+  .secno { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--note); margin-right: 8px; }
+  .sec-rule { border-top: 1px solid var(--rule); margin: 14px 0 6px; }
+  .axiom { margin: 6px 0 2px; }
+  .toc-part { margin: 14px 0 18px; font-size: 14px; line-height: 1.6; }
+  .chap .cn { font-weight: bold; margin-right: 12px; letter-spacing: .1em; }
+  .tbl { border-collapse: collapse; margin: 8px auto 10px; font-size: 14px; }
+  .tbl th, .tbl td { border: 1px solid var(--rule); padding: 3px 9px; text-align: center; min-width: 26px; }
+  .tbl th { font-weight: bold; background: rgba(0,0,0,.03); }
+  .tbl.small th, .tbl.small td { padding: 2px 7px; font-size: 13px; }
+  .tbl.center { margin-left: auto; margin-right: auto; }
+  .tbl.float-r { float: right; margin: 4px 0 8px 18px; }
+  .tbl-row { display: flex; flex-wrap: wrap; gap: 18px; justify-content: center; align-items: flex-start; margin: 8px 0; }
+  .tbl caption { caption-side: top; text-align: center; margin-bottom: 4px; font-size: 13px; }
+  .exl { margin: 6px 0 6px 26px; padding-left: 4px; }
+  .exl > li { margin-bottom: 6px; }
+  .exl-plain, .conds { margin: 6px 0 6px 26px; }
+  ol.alpha { list-style: lower-alpha; margin: 4px 0 4px 22px; }
+  ol.tf { list-style: none; margin: 6px 0 6px 6px; }
+  ol.tf > li::before { content: "____ "; }
+  ul.bul, ul.plain { margin: 4px 0 4px 24px; }
+  ul.plain { list-style: none; margin-left: 12px; }
+  .indent { text-indent: 22px; }
+  .center { text-align: center; }
+  .hbox { border: 2px double var(--rule); padding: 8px 12px 10px; margin: 12px 0 14px; clear: both; }
+  .hbox-title { font-weight: bold; margin-bottom: 4px; }
+  .hbox-cols { columns: 2; column-gap: 22px; font-size: 14px; line-height: 1.42; text-align: justify; }
+  .hbox-cols p { margin: 0 0 6px; }
+  .fn { font-size: 12px; color: var(--note); border-top: 1px solid var(--rule); margin-top: 18px; padding-top: 6px; }
+  sup { font-size: 75%; }
+  @media (max-width: 720px) { .hbox-cols { columns: 1; } }
+</style>
+</head>
+<body>
+<style>
+  .exl { margin: 4px 0 4px 0; text-align: left; }
+  .exl.sub { margin-left: 22px; }
+  .center { text-align: center; }
+  .printed { color: #8a1c1c; font-style: italic; font-size: 12px; }
+  .trim, .module3 { color: var(--note); font-style: italic; font-size: 13px; border-left: 3px solid var(--rule); padding: 2px 8px; margin: 8px 0; }
+  .cont { font-size: 12.5px; color: var(--note); font-style: italic; }
+  .tblrow { display: flex; flex-wrap: wrap; gap: 24px; justify-content: space-around; align-items: flex-start; }
+  .tcap { font-size: 13px; text-align: center; margin: 6px 0 2px; }
+  .figrow11 { display: flex; flex-wrap: wrap; gap: 24px; justify-content: space-around; }
+  .figrow11 > div { flex: 1 1 200px; text-align: center; }
+  .fig10, .fig527, .fig529, .fig63, .fig619, .fig820, .fig821, .fig826, .fig827 { margin: 8px 0; text-align: center; }
+  .fig527, .fig529, .fig820, .fig821, .fig826 { font-size: 13px; }
+  .hist { border: 1px solid var(--ink); padding: 8px 10px; margin: 8px 0; font-size: 13.5px; }
+  .hist-h { font-weight: bold; letter-spacing: .5px; margin-bottom: 4px; }
+  ol.cond { margin: 4px 0 4px 24px; padding: 0; }
+  .part { border: 1px solid var(--rule); padding: 10px 12px; margin: 10px 0; }
+  .part .pn { font-weight: bold; margin-right: 12px; letter-spacing: 1px; }
+  .part .pt { font-size: 18px; font-weight: bold; }
+  .part .pl { margin: 6px 0 0 0; padding-left: 18px; font-size: 14px; }
+  table.tbl td, table.tbl th { border: 1px solid var(--rule); padding: 2px 6px; }
+  table.tbl { border-collapse: collapse; margin: 6px auto; font-size: 13.5px; }
+  table.tbl th { font-weight: bold; }
+  .sheet.book h2.sec { font-size: 20px; }
+  .chap .cn { font-size: 26px; }
+  .sheet.book .sub-title { font-weight: bold; }
+  .sheet.book td { vertical-align: middle; }
+</style>
+<style>.hist{border:1px solid var(--ink);padding:8px 10px;margin:8px 0;font-size:13.5px}.hist-h{font-weight:bold;letter-spacing:.5px}.part .pt{font-size:18px}</style>
+<main>
+<div class="sheet book intro" id="contents">
+  <div class="rh"><span>Contents</span><span>Fraleigh, <i>A First Course in Abstract Algebra</i> (8th ed.)</span></div>
+  <h2 class="sec">Module 4 excerpt, page by page</h2>
+  <p>This file converts the 8th edition copy on disk (<i>A First Course in Abstract Algebra</i>, John B. Fraleigh, 449 PDF pages) for Module IV. Printed pages 145&ndash;149 (Section 16, isomorphism theorems), 185&ndash;200 (Section 22, rings and fields; Section 23, integral domains). The printed page is the PDF page minus 17 (PDF 162 = printed 145; PDF 217 = printed 200). Each sheet is headed with the printed page number. Only printed text is transcribed; the Section 24 opener at the foot of printed 200 is trimmed and marked.</p>
+  <p><b>Edition warning.</b> The syllabus (MAT5CJ302) names the <b>7th edition</b> and cites its numbers for Module IV: item 17 Section 13 (homomorphisms, 13.1&ndash;13.10), item 18 Section 13 (13.11&ndash;13.20), item 19 Section 18 (rings and fields, 18.1&ndash;18.13), item 20 Section 18 (18.14&ndash;18.18), item 21 Section 19 (integral domains, 19.1&ndash;19.8), item 22 Section 19 (19.9&ndash;19.15). The 8th edition has no Section 13 of the same content. Items are matched by content:</p>
+  <table>
+    <tr><th>Syllabus item (7th ed.)</th><th>8th-ed content</th><th>Printed pages</th></tr>
+    <tr><td>17 Homomorphisms (13.1&ndash;13.10)</td><td>Group homomorphisms, kernels: 8.1&ndash;8.6 (Module 2); kernel cosets 10.17&ndash;10.19 (Module 3). Also ring homomorphisms 22.9&ndash;22.11</td><td>77&ndash;79, 243 (not in this excerpt), 145, 185&ndash;190</td></tr>
+    <tr><td>18 Homomorphisms, isomorphism theorems (13.11&ndash;13.20)</td><td>First isomorphism theorem 16.2; second and third 16.5, 16.8 (with 16.3, 16.4, 16.6, 16.7, 16.10); ring isomorphism 22.12&ndash;22.13</td><td>145&ndash;148, 188&ndash;189</td></tr>
+    <tr><td>19 Rings and fields (18.1&ndash;18.13)</td><td>Rings 22.1&ndash;22.8, examples 22.2&ndash;22.7, units and fields 22.14&ndash;22.18</td><td>185&ndash;191</td></tr>
+    <tr><td>20 Rings and fields (18.14&ndash;18.18)</td><td>Remaining ring examples 22.10&ndash;22.11; direct products; the rest of Section 22 exercises</td><td>189&ndash;194</td></tr>
+    <tr><td>21 Integral domains (19.1&ndash;19.8)</td><td>Zero divisors 23.1&ndash;23.2, units and divisors in Z_n 23.3&ndash;23.5, cancellation 23.6, integral domains 23.7&ndash;23.8</td><td>194&ndash;196</td></tr>
+    <tr><td>22 Integral domains (19.9&ndash;19.15)</td><td>23.9&ndash;23.11 (examples, finite integral domains are fields), characteristic 23.12&ndash;23.14</td><td>197&ndash;198</td></tr>
+  </table>
+  <p><b>Not in Module IV (kept for the record):</b> printed 150&ndash;184 (Sections 17&ndash;21: Sylow theorems, series, free groups; later modules or not in the syllabus); printed 200&ndash;201 after Exercise 36 (Section 24, Fermat&rsquo;s and Euler&rsquo;s theorems; not in the syllabus module list); Section 12 and 13 factor groups (used by the isomorphism theorems, Module V). <b>Gap flagged:</b> the isomorphism theorems of Section 16 use factor groups, which are Module V; the notes recall them in one paragraph.</p>
+  <p><b>Conventions.</b></p>
+  <ul>
+    <li>Numbers are the book&rsquo;s own (16.2, 22.9, 23.11, Exercise 36).</li>
+    <li>Each exercise is printed once, at its printed position. The notes place the exercises the text names directly after the sentence that names them.</li>
+    <li>Tables are HTML tables with MathJax entries. Figures 16.1, 16.9, 23.10 are described with their labels; not redrawn.</li>
+    <li>Maths is in MathJax. Notation is kept as printed.</li>
+  </ul>
+  <p>This is a personal study excerpt. It is not for distribution.</p>
+  <div class="pno">1</div>
+</div>
+<div class="sheet book" id="pdf-p162">
+  <div class="rh"><span>Part IV &middot; Advanced Group Theory</span><span>145</span></div>
+  <div class="part"><span class="pn">PART IV</span><span class="pt">Advanced Group Theory</span>
+    <ul class="pl"><li>Section 16 &nbsp; Isomorphism Theorems</li><li>Section 17 &nbsp; Sylow Theorems</li><li>Section 18 &nbsp; Series of Groups</li><li>Section 19 &nbsp; Free Abelian Groups</li><li>Section 20 &nbsp; Free Groups</li><li>Section 21 &nbsp; Group Presentations</li></ul></div>
+  <div class="chap"><span class="cn">16</span><span class="ct">ISOMORPHISM THEOREMS</span></div>
+  <p>There are several theorems concerning isomorphic factor groups that are known as the <i>isomorphism theorems</i> of group theory. The first of these is Theorem 12.14, which we restate for easy reference. The theorem is diagrammed in Fig. 16.1.</p>
+  <p class="cont"><b>16.1 Figure.</b> Triangle diagram: $\phi$ from $G$ across the top to $\phi[G]$; $\gamma_K$ from $G$ down to $G/K$; a dashed arrow labelled $\mu$ (isomorphism) from $G/K$ up to $\phi[G]$. Labels as printed; not redrawn.</p>
+  <p><span class="num">16.2 Theorem</span> <b>(First Isomorphism Theorem)</b> Let $\phi : G \to G'$ be a homomorphism with kernel $K$, and let $\gamma_K : G \to G/K$ be the canonical homomorphism. There is a unique isomorphism $\mu : G/K \to \phi[G]$ such that $\phi(x) = \mu(\gamma_K(x))$ for each $x \in G$.</p>
+  <p>The lemma that follows will be of great aid in our proof and intuitive understanding of the other two isomorphism theorems.</p>
+  <p><span class="num">16.3 Lemma</span> Let $N$ be a normal subgroup of a group $G$ and let $\gamma : G \to G/N$ be the canonical homomorphism. Then the map $\phi$ from the set of normal subgroups of $G$ containing $N$ to the set of normal subgroups of $G/N$ given by $\phi(L) = \gamma[L]$ is one-to-one and onto.</p>
+  <p><i>Proof.</i> Theorem 13.18 shows that if $L$ is a normal subgroup of $G$ containing $N$, then $\phi(L) = \gamma[L]$ is a normal subgroup of $G/N$. Because $N \le L$, for each $x \in L$ the entire coset $xN$ in $G$ is contained in $L$. Thus by Theorem 10.17, $\gamma^{-1}[\phi(L)] = L$. Consequently, if $L$ and $M$ are normal subgroups of $G$, both containing $N$, and if $\phi(L) = \phi(M) = H$, then $L = \gamma^{-1}[H] = M$. Therefore $\phi$ is one-to-one. If $H$ is a normal subgroup of $G/N$, then $\gamma^{-1}[H]$ is a normal subgroup of $G$ by Theorem 13.18. Because $N \in H$ and $\gamma^{-1}[\{N\}] = N$, we see that $N \le \gamma^{-1}[H]$. Then $\phi(\gamma^{-1}[H]) = \gamma[\gamma^{-1}[H]] = H$. This shows that $\phi$ is onto the set of normal subgroups of $G/N$. &#9632;</p>
+</div>
+
+<div class="sheet book" id="pdf-p163">
+  <div class="rh"><span>Section 16 &middot; Isomorphism Theorems</span><span>146</span></div>
+  <p>If $H$ and $N$ are subgroups of a group $G$, then we let $HN = \{hn \mid h \in H, n \in N\}$.</p>
+  <p>We define the <b>join</b> $H \vee N$ of $H$ and $N$ as the intersection of all subgroups of $G$ that contain $HN$; thus $H \vee N$ is the smallest subgroup of $G$ containing $HN$. Of course $H \vee N$ is also the smallest subgroup of $G$ containing both $H$ and $N$, since any such subgroup must contain $HN$. In general, $HN$ need not be a subgroup of $G$. However, we have the following lemma.</p>
+  <p><span class="num">16.4 Lemma</span> If $N$ is a normal subgroup of $G$, and if $H$ is any subgroup of $G$, then $H \vee N = HN = NH$. Furthermore, if $H$ is also normal in $G$, then $HN$ is normal in $G$.</p>
+  <p><i>Proof.</i> We show that $HN$ is a subgroup of $G$, from which $H \vee N = HN$ follows at once. Let $h_1, h_2 \in H$ and $n_1, n_2 \in N$. Since $N$ is a normal subgroup, we have $n_1h_2 = h_2n_3$ for some $n_3 \in N$. Then $(h_1n_1)(h_2n_2) = h_1(n_1h_2)n_2 = h_1(h_2n_3)n_2 = (h_1h_2)(n_3n_2) \in HN$, so $HN$ is closed under the induced operation in $G$. Clearly $e = ee$ is in $HN$. For $h \in H$ and $n \in N$, we have $(hn)^{-1} = n^{-1}h^{-1} = h^{-1}n_4$ for some $n_4 \in N$, since $N$ is a normal subgroup. Thus $(hn)^{-1} \in HN$, so $HN \le G$. A similar argument shows that $NH$ is a subgroup, so $NH = H \vee N = HN$. &#9670;</p>
+  <p><i>Proof (normality).</i> Now suppose that $H$ is also normal in $G$, and let $h \in H$, $n \in N$, and $g \in G$. Then $ghng^{-1} = (ghg^{-1})(gng^{-1}) \in HN$, so $HN$ is normal in $G$. &#9632;</p>
+  <p><span class="num">16.5 Theorem</span> <b>(Second Isomorphism Theorem)</b> Let $H$ be a subgroup of $G$ and let $N$ be a normal subgroup of $G$. Then $(HN)/N \simeq H/(H \cap N)$.</p>
+  <p><i>Proof.</i> Since $N \le HN \le G$ and $N$ is a normal subgroup of $G$, $N$ is a normal subgroup of $HN$, which allows us to form the group $HN/N$. We define a map $\phi : H \to HN/N$ by $\phi(h) = hN$. The map $\phi$ is a homomorphism since for any $h_1, h_2 \in H$, $\phi(h_1h_2) = (h_1h_2)N = (h_1N)(h_2N) = \phi(h_1)\phi(h_2)$. The map $\phi$ maps onto $HN/N$ since any element of $HN/N$ can be written as $hnN$ for some $h \in H$ and $n \in N$ and $hnN = hN = \phi(h)$. We now compute the kernel of $\phi$. $\operatorname{Ker}(\phi) = \{h \in H \mid hN = N\} = \{h \in H \mid h \in N\} = H \cap N$. By the First Isomorphism Theorem, Theorem 16.2, the map $\mu : H/(H \cap N) \to HN/N$ defined by $\mu(h(H \cap N)) = hN$ is an isomorphism. &#9670;</p>
+  <p><span class="num">16.6 Example</span> Let $G = \mathbb{Z} \times \mathbb{Z} \times \mathbb{Z}$, $H = \mathbb{Z} \times \mathbb{Z} \times \{0\}$, and $N = \{0\} \times \mathbb{Z} \times \mathbb{Z}$. Then clearly $HN = \mathbb{Z} \times \mathbb{Z} \times \mathbb{Z}$ and $H \cap N = \{0\} \times \mathbb{Z} \times \{0\}$. We have $(HN)/N \simeq \mathbb{Z}$ and we also have $H/(H \cap N) \simeq \mathbb{Z}$. &#9650;</p>
+  <p><span class="num">16.7 Example</span> Let $G = \mathbb{Z}$, $N = \langle n \rangle$, and $H = \langle h \rangle$ where $n$ and $h$ are positive. The group $\mathbb{Z}$ is abelian, so $N$ is a normal subgroup of $\mathbb{Z}$. Since $\mathbb{Z}$ is an additive group, we write $N + H$ instead of $NH$ to avoid confusion. The group $N + H = \langle \gcd(n, h) \rangle$ since anything in $N + H$ is a multiple of $\gcd(n, h)$ and $\gcd(n, h) = xn + yh \in N + H$ for some integers $x$ and $y$. Also, $N \cap H = \langle \operatorname{lcm}(n, h) \rangle$ since $a \in N \cap H$ if and only if $a$ is a multiple of both $n$ and $h$. The Second Isomorphism Theorem states that $(N + H)/N = \langle \gcd(n, h) \rangle / \langle n \rangle$</p>
+  <p class="cont">(continued on printed page 147)</p>
+</div>
+
+<div class="sheet book" id="pdf-p164">
+  <div class="rh"><span>Section 16 &middot; Isomorphism Theorems</span><span>147</span></div>
+  <p>is isomorphic with $H/(N \cap H) = \langle h \rangle / \langle \operatorname{lcm}(n, h) \rangle$. In Exercise 10, you will be asked to prove that if $a, b \in \mathbb{Z}^+$ and $a$ divides $b$, then $|\langle a \rangle / \langle b \rangle| = b/a$. Since $\langle \gcd(n, h) \rangle / \langle n \rangle \simeq \langle h \rangle / \langle \operatorname{lcm}(n, h) \rangle$, we have</p>
+  <div class="eq">$$\frac{n}{\gcd(n,h)} = \frac{\operatorname{lcm}(n,h)}{h}, \qquad nh = \gcd(n,h)\operatorname{lcm}(n,h),$$</div>
+  <p>which provides a complicated way of proving a basic number theory fact! We conclude that $\langle \gcd(n,h) \rangle / \langle n \rangle \simeq \langle h \rangle / \langle \operatorname{lcm}(n,h) \rangle \simeq \mathbb{Z}_{\frac{n}{\gcd(n,h)}}$ since a factor group of a cyclic group is cyclic. &#9650;</p>
+  <p>If $H$ and $K$ are two normal subgroups of $G$ and $K \le H$, then $H/K$ is a normal subgroup of $G/K$. The third isomorphism theorem concerns these groups.</p>
+  <p><span class="num">16.8 Theorem</span> <b>(Third Isomorphism Theorem)</b> Let $H$ and $K$ be normal subgroups of a group $G$ with $K \le H$. Then $G/H \simeq (G/K)/(H/K)$.</p>
+  <p><i>Proof.</i> Since $K$ is a subgroup of $H$, for any $g \in G$, $gK \subseteq gH$. That is, each left coset of $K$ is completely contained in one coset of $H$. We define $\phi : G/K \to G/H$ by $\phi(gK) = gH$. That is, we map a coset of $K$ to the coset of $H$ that contains it. Again, our strategy is to use the First Isomorphism Theorem. The map $\phi$ is a homomorphism since for any $g_1, g_2 \in G$,</p>
+  <div class="eq">$$\phi((g_1K)(g_2K)) = \phi((g_1g_2)K) = (g_1g_2)H = (g_1H)(g_2H) = \phi(g_1K)\phi(g_2K).$$</div>
+  <p>The map $\phi$ maps onto $G/H$ since for any coset $gH \in G/H$, $\phi(gK) = gH$. We now compute the kernel of $\phi$. $\operatorname{Ker}(\phi) = \{gK \in G/K \mid gH = H\} = \{gK \in G/K \mid g \in H\} = H/K$. By the First Isomorphism Theorem $(G/K)/(H/K)$ is isomorphic with $G/H$ and a formula for an isomorphism $\mu : (G/K)/(H/K) \to G/H$ is $\mu((gK)H/K) = gH$. &#9670;</p>
+  <p>The formula for the isomorphism in the previous proof says that if we collapse the subgroup $K$ in $G$ to form $G/K$ and then collapse all the $K$ cosets inside of $H$ we have the same group as collapsing the subgroup $H$. Figure 16.9 illustrates the situation (printed on page 148). Think of the large ellipse as being the group $G$. The cosets of $H$ are the sets bounded by the thick solid lines. The cosets of $K$ are the smaller sets inside the cosets of $H$. The set $G/H$ consists of the cosets of $H$, which are represented by the four larger areas, each of which is one point in $G/H$. On the other hand, $G/K$ is represented by the twelve smaller sets each collapsed to a point. Then $(G/K)/(H/K)$ collapses each of the three small areas in the same $H$ coset to their common $H$ coset. Either way, we end up collapsing each $H$ coset to a point.</p>
+  <p>It is sometimes difficult to think about what groups look like when they contain more than one factor group in their definition. Example 16.10 is intended to clarify what the group $(G/K)/(H/K)$ looks like and to explicitly show what the isomorphism of Theorem 16.8 looks like.</p>
+</div>
+<div class="sheet book" id="pdf-p165">
+  <div class="rh"><span>Section 16 &middot; Isomorphism Theorems</span><span>148</span></div>
+  <p class="cont"><b>16.9 Figure.</b> An ellipse for $G$ with the cosets of $H$ drawn as thick-line regions and the cosets of $K$ as smaller dashed regions inside them. No labels on the page. Not redrawn.</p>
+  <p><span class="num">16.10 Example</span> Let $G = \mathbb{Z}_8$, $H = \langle 2 \rangle = \{0, 2, 4, 6\} &lt; G$, and $K = \langle 4 \rangle = \{0, 4\} &lt; H$. We list the elements of each of the factor groups used in Theorem 16.8.</p>
+  <p class="center">$G/K = \{\{0, 4\}, \{1, 5\}, \{2, 6\}, \{3, 7\}\}$<br>$G/H = \{\{0, 2, 4, 6\}, \{1, 3, 5, 7\}\}$<br>$H/K = \{\{0, 4\}, \{2, 6\}\}$</p>
+  <p>Before listing the elements of $(G/K)/(H/K)$ we note that any element of this group would be a coset of the subgroup $H/K &lt; G/K$. So each element is a set whose elements are sets.</p>
+  <p class="center">$(G/K)/(H/K) = \{\{\{0, 4\}, \{2, 6\}\}, \{\{1, 5\}, \{3, 7\}\}\}$</p>
+  <p>Comparing $G/H$ and $(G/K)/(H/K)$, we see that each element in $G/H$ is the union of two cosets of $K$ in $G/K$. Also, the isomorphism in Theorem 16.8 is the map $\phi : (G/K)/(H/K) \to G/H$ defined by</p>
+  <p class="center">$\phi(\{\{0, 4\}, \{2, 6\}\}) = \{0, 4, 2, 6\}$ &nbsp; and &nbsp; $\phi(\{\{1, 5\}, \{3, 7\}\}) = \{1, 5, 3, 7\}$.</p>
+  <p>So as illustrated in Figure 16.9, collapsing $H$ to form $G/H$ can be accomplished by first collapsing $K$ and then collapsing $H/K$. &#9650;</p>
+  <h2 class="sec">Exercises 16</h2>
+  <h3 class="sub">Computations</h3>
+  <p>In using the three isomorphism theorems, it is often necessary to know the actual correspondence given by the isomorphism and not just the fact that the groups are isomorphic. The first six exercises give us training for this.</p>
+  <p class="exl"><b>1.</b> Let $\phi : \mathbb{Z}_{12} \to \mathbb{Z}_3$ be the homomorphism such that $\phi(1) = 2$.</p>
+  <p class="exl sub"><b>a.</b> Find the kernel $K$ of $\phi$. &nbsp; <b>b.</b> List the cosets in $\mathbb{Z}_{12}/K$, showing the elements in each coset. &nbsp; <b>c.</b> Give the correspondence between $\mathbb{Z}_{12}/K$ and $\mathbb{Z}_3$ given by the map $\mu$ described in Theorem 16.2.</p>
+  <p class="exl"><b>2.</b> Let $\phi : \mathbb{Z}_{18} \to \mathbb{Z}_{12}$ be the homomorphism where $\phi(1) = 10$.</p>
+  <p class="exl sub"><b>a.</b> Find the kernel $K$ of $\phi$. &nbsp; <b>b.</b> List the cosets in $\mathbb{Z}_{18}/K$, showing the elements in each coset. &nbsp; <b>c.</b> Find the group $\phi[\mathbb{Z}_{18}]$. &nbsp; <b>d.</b> Give the correspondence between $\mathbb{Z}_{18}/K$ and $\phi[\mathbb{Z}_{18}]$ given by the map $\mu$ described in Theorem 16.2.</p>
+</div>
+
+<div class="sheet book" id="pdf-p166">
+  <div class="rh"><span>Section 16 &middot; Exercises</span><span>149</span></div>
+  <p class="exl"><b>3.</b> In the group $\mathbb{Z}_{24}$, let $H = \langle 4 \rangle$ and $N = \langle 6 \rangle$.</p>
+  <p class="exl sub"><b>a.</b> List the elements in $HN$ (which we might write $H + N$ for these additive groups) and in $H \cap N$. &nbsp; <b>b.</b> List the cosets in $HN/N$, showing the elements in each coset. &nbsp; <b>c.</b> List the cosets in $H/(H \cap N)$, showing the elements in each coset. &nbsp; <b>d.</b> Give the correspondence between $H/(H \cap N)$ and $HN/N$ described in the proof of Theorem 16.5.</p>
+  <p class="exl"><b>4.</b> Repeat Exercise 3 for the dihedral group $D_6$ with $N = \{\iota, \mu, \rho^2, \mu\rho^2, \rho^4, \mu\rho^4\}$ and $H = \langle \rho \rangle$.</p>
+  <p class="exl"><b>5.</b> In the group $G = \mathbb{Z}_{24}$, let $H = \langle 4 \rangle$ and $K = \langle 8 \rangle$.</p>
+  <p class="exl sub"><b>a.</b> List the cosets in $G/H$, showing the elements in each coset. &nbsp; <b>b.</b> List the cosets in $G/K$. &nbsp; <b>c.</b> List the cosets in $H/K$. &nbsp; <b>d.</b> List the cosets in $(G/K)/(H/K)$. &nbsp; <b>e.</b> Give the correspondence between $(G/K)/(H/K)$ and $G/H$ described in the proof of Theorem 16.8.</p>
+  <p class="exl"><b>6.</b> Repeat Exercise 5 for the dihedral group $G = D_8$, $H = \langle \rho^2 \rangle = \{\iota, \rho^2, \rho^4, \rho^6\}$, and $K = \langle \rho^4 \rangle = \{\iota, \rho^4\}$.</p>
+  <h3 class="sub">Theory</h3>
+  <p class="exl"><b>7.</b> Show directly from the definition of a normal subgroup that if $H$ and $N$ are subgroups of a group $G$, and $N$ is normal in $G$, then $H \cap N$ is normal in $H$.</p>
+  <p class="exl"><b>8.</b> Let $H$, $K$, and $L$ be normal subgroups of $G$ with $H &lt; K &lt; L$. Let $A = G/H$, $B = K/H$, and $C = L/H$.</p>
+  <p class="exl sub"><b>a.</b> Show that $B$ and $C$ are normal subgroups of $A$, and $B &lt; C$. &nbsp; <b>b.</b> To what factor group of $G$ is $(A/B)/(C/B)$ isomorphic?</p>
+  <p class="exl"><b>9.</b> Let $K$ and $L$ be normal subgroups of $G$ with $K \vee L = G$, and $K \cap L = \{e\}$. Show that $G/K \simeq L$ and $G/L \simeq K$.</p>
+  <p class="exl"><b>10.</b> Use one of the Isomorphism Theorems to prove that if $a, b \in \mathbb{Z}^+$ and $a$ divides $b$, then $|a\mathbb{Z}/b\mathbb{Z}| = b/a$.</p>
+  <p class="exl"><b>11.</b> Let $G$ be a group with subgroups $H^* \le H \le G$ and $K^* \le K \le G$. Prove that the sets $H^*(H \cap K^*) \cap (H \cap K)$ and $(H^* \cap K)(H \cap K^*)$ are equal.</p>
+</div>
+<div class="sheet book" id="pdf-p202">
+  <div class="rh"><span>Part V &middot; Rings and Fields</span><span>185</span></div>
+  <div class="part"><span class="pn">PART V</span><span class="pt">Rings and Fields</span>
+    <ul class="pl"><li>Section 22 &nbsp; Rings and Fields</li><li>Section 23 &nbsp; Integral Domains</li><li>Section 24 &nbsp; Fermat&rsquo;s and Euler&rsquo;s Theorems</li><li>Section 25 &nbsp; Encryption</li></ul></div>
+  <div class="chap"><span class="cn">22</span><span class="ct">RINGS AND FIELDS</span></div>
+  <p>All our work thus far has been concerned with sets on which a single binary operation has been defined. Our years of work with the integers and real numbers show that a study of sets on which two binary operations have been defined should be of great importance. Algebraic structures of this type are introduced in this section. In one sense, this section seems more intuitive than those that precede it, for the structures studied are closely related to those we have worked with for many years. However, we will be continuing with our axiomatic approach. So, from another viewpoint this study is more complicated than group theory, for we now have two binary operations and more axioms to deal with.</p>
+  <h3 class="sub">Definitions and Basic Properties</h3>
+  <p>The most general algebraic structure with two binary operations that we shall study is called a <i>ring</i>. As Example 22.2 following Definition 22.1 indicates, we have all worked with rings since elementary school.</p>
+  <p><span class="num">22.1 Definition</span> A <b>ring</b> $\langle R, +, \cdot \rangle$ is a set $R$ together with two binary operations $+$ and $\cdot$, which we call <i>addition</i> and <i>multiplication</i>, defined on $R$ such that the following axioms are satisfied:</p>
+  <ol class="cond" type="R"><li>$\langle R, + \rangle$ is an abelian group.</li><li>Multiplication is associative.</li><li>For all $a, b, c \in R$, the <b>left distributive law</b>, $a \cdot (b + c) = (a \cdot b) + (a \cdot c)$ and the <b>right distributive law</b> $(a + b) \cdot c = (a \cdot c) + (b \cdot c)$ hold.</li></ol>
+  <p><span class="num">22.2 Example</span> We are well aware that axioms $\mathcal{R}_1$, $\mathcal{R}_2$, and $\mathcal{R}_3$ for a ring hold in any subset of the complex numbers that is a group under addition and that is closed under multiplication. For example, $\langle \mathbb{Z}, +, \cdot \rangle$, $\langle \mathbb{Q}, +, \cdot \rangle$, $\langle \mathbb{R}, +, \cdot \rangle$, and $\langle \mathbb{C}, +, \cdot \rangle$ are rings. &#9650;</p>
+</div>
+
+<div class="sheet book" id="pdf-p203">
+  <div class="rh"><span>Part V &middot; Rings and Fields</span><span>186</span></div>
+  <div class="hist"><div class="hist-h">HISTORICAL NOTE</div>
+  <p>The theory of rings grew out of the study of two particular classes of rings, polynomial rings in $n$ variables over the real or complex numbers (Section 27) and the &ldquo;integers&rdquo; of an algebraic number field. It was David Hilbert (1862&ndash;1943) who first introduced the term <i>ring</i>, in connection with the latter example, but it was not until the second decade of the twentieth century that a fully abstract definition appeared. The theory of commutative rings was given a firm axiomatic foundation by Emmy Noether (1882&ndash;1935) in her monumental paper &ldquo;Ideal Theory in Rings,&rdquo; which appeared in 1921. A major concept of this paper is the ascending chain condition for ideals. Noether proved that in any ring in which every ascending chain of ideals has a maximal element, every ideal is finitely generated. Emmy Noether received her doctorate from the University of Erlangen, Germany, in 1907. Hilbert invited her to G&ouml;ttingen in 1915, but his efforts to secure her a paid position were blocked because of her sex. Hilbert complained, &ldquo;I do not see that the sex of the candidate is an argument against her admission [to the faculty]. After all, we are a university, not a bathing establishment.&rdquo; Noether was, however, able to lecture under Hilbert&rsquo;s name. Ultimately, after the political changes accompanying the end of the First World War reached G&ouml;ttingen, she was given in 1923 a paid position at the University. For the next decade, she was very influential in the development of the basic concepts of modern algebra. Along with other Jewish faculty members, however, she was forced to leave G&ouml;ttingen in 1933. She spent the final two years of her life at Bryn Mawr College near Philadelphia.</p></div>
+  <p>It is customary to denote multiplication in a ring by juxtaposition, using $ab$ in place of $a \cdot b$. We shall also observe the usual convention that multiplication is performed before addition in the absence of parentheses, so the left distributive law, for example, becomes $a(b + c) = ab + ac$, without the parentheses on the right side of the equation. Also, as a convenience analogous to our notation in group theory, we shall somewhat incorrectly refer to a <i>ring</i> $R$ in place of a <i>ring</i> $\langle R, +, \cdot \rangle$, provided that no confusion will result. In particular, from now on $\mathbb{Z}$ will always be $\langle \mathbb{Z}, +, \cdot \rangle$, and $\mathbb{Q}$, $\mathbb{R}$, and $\mathbb{C}$ will also be the rings in Example 22.2. We may on occasion refer to $\langle R, + \rangle$ as <i>the additive group of the ring $R$</i>.</p>
+  <p><span class="num">22.3 Example</span> Let $R$ be any ring and let $M_n(R)$ be the collection of all $n \times n$ matrices having elements of $R$ as entries. The operations of addition and multiplication in $R$ allow us to add and multiply matrices in the usual fashion, explained in the appendix. We can quickly check that $\langle M_n(R), + \rangle$ is an abelian group. The associativity of matrix multiplication and the two distributive laws in $M_n(R)$ are more tedious to demonstrate, but straightforward calculations indicate that they follow from the same properties in $R$. We will assume from now on that we know that $M_n(R)$ is a ring. In particular, we have the rings $M_n(\mathbb{Z}), M_n(\mathbb{Q}), M_n(\mathbb{R})$, and $M_n(\mathbb{C})$. Note that multiplication is not a commutative operation in any of these rings for $n \ge 2$. &#9650;</p>
+  <p><span class="num">22.4 Example</span> Let $F$ be the set of all functions $f : \mathbb{R} \to \mathbb{R}$. We know that $\langle F, + \rangle$ is an abelian group under the usual function addition,</p>
+  <p class="center">$(f + g)(x) = f(x) + g(x).$</p>
+  <p>We define multiplication on $F$ by $(fg)(x) = f(x)g(x)$. That is, $fg$ is the function whose value at $x$ is $f(x)g(x)$. It is readily checked that $F$ is a ring; we leave the demonstration to Exercise 36. We have used this juxtaposition notation $\sigma\mu$ for the composite function $\sigma(\mu(x))$ when discussing permutation multiplication. If we were to use both function multiplication and function composition in $F$, we would use the notation $f \circ g$ for the composite function. However, we will use composition of functions almost exclusively with homomorphisms, which we will denote by Greek letters, and the usual product defined in this example chiefly when multiplying polynomial function&rsquo;s $f(x)g(x)$, so no confusion should result. &#9650;</p>
+</div>
+<div class="sheet book" id="pdf-p204">
+  <div class="rh"><span>Section 22 &middot; Rings and Fields</span><span>187</span></div>
+  <p>notation $\sigma\mu$ for the composite function $\sigma(\mu(x))$ when discussing permutation multiplication. If we were to use both function multiplication and function composition in $F$, we would use the notation $f \circ g$ for the composite function. However, we will use composition of functions almost exclusively with homomorphisms, which we will denote by Greek letters, and the usual product defined in this example chiefly when multiplying polynomial function&rsquo;s $f(x)g(x)$, so no confusion should result. &#9650;</p>
+  <p><span class="num">22.5 Example</span> Recall that in group theory, $n\mathbb{Z}$ is the cyclic subgroup of $\mathbb{Z}$ under addition consisting of all integer multiples of the integer $n$. Since $(nr)(ns) = n(nrs)$, we see that $n\mathbb{Z}$ is closed under multiplication. The associative and distributive laws that hold in $\mathbb{Z}$ then assure us that $\langle n\mathbb{Z}, +, \cdot \rangle$ is a ring. From now on in the text, we will consider $n\mathbb{Z}$ to be this ring. &#9650;</p>
+  <p><span class="num">22.6 Example</span> Consider the cyclic group $\langle \mathbb{Z}_n, + \rangle$. If we define for $a, b \in \mathbb{Z}_n$ the product $ab$ as the remainder of the usual product of integers when divided by $n$, it can be shown that $\langle \mathbb{Z}_n, +, \cdot \rangle$ is a ring. We shall feel free to use this fact. For example, in $\mathbb{Z}_{10}$ we have $(3)(7) = 1$. This operation on $\mathbb{Z}_n$ is <b>multiplication modulo $n$</b>. We do not check the ring axioms here, for they will follow in Section 30 from some of the theory we develop there. From now on, $\mathbb{Z}_n$ will always be the ring $\langle \mathbb{Z}_n, +, \cdot \rangle$. &#9650;</p>
+  <p><span class="num">22.7 Example</span> If $R_1, R_2, \dots, R_n$ are rings, we can form the set $R_1 \times R_2 \times \cdots \times R_n$ of all ordered $n$-tuples $(r_1, r_2, \dots, r_n)$, where $r_i \in R_i$. Defining addition and multiplication of $n$-tuples by components (just as for groups), we see at once from the ring axioms in each component that the set of all these $n$-tuples forms a ring under addition and multiplication by components. The ring $R_1 \times R_2 \times \cdots \times R_n$ is the <b>direct product</b> of the rings $R_i$. &#9650;</p>
+  <p>Continuing matters of notation, we shall always let $0$ be the additive identity of a ring. The additive inverse of an element $a$ of a ring is $-a$. We shall frequently have occasion to refer to a sum $a + a + \cdots + a$ having $n$ summands. We shall let this sum be $n \cdot a$, always using the dot. However, $n \cdot a$ <i>is not to be interpreted as a multiplication of $n$ and $a$ in the ring, for the integer $n$ may not be in the ring at all</i>. If $n &lt; 0$, we let $n \cdot a = (-a) + (-a) + \cdots + (-a)$ for $|n|$ summands. Finally, we define $0 \cdot a = 0$ for $0 \in \mathbb{Z}$ on the left side of the equations and $0 \in R$ on the right side. Actually, the equation $0a = 0$ holds also for $0 \in R$ on both sides. The following theorem proves this and various other elementary but important facts. Note the strong use of the distributive laws in the proof of this theorem. Axiom $\mathcal{R}_1$ for a ring concerns only addition, and axiom $\mathcal{R}_2$ concerns only multiplication. This shows that in order to prove anything that gives a relationship between these two operations, we are going to have to use axiom $\mathcal{R}_3$. For example, the first thing that we will show in Theorem 22.8 is that $0a = 0$ for any element $a$ in a ring $R$. Now this relation involves both addition and multiplication. The multiplication $0a$ stares us in the face, and $0$ is an <i>additive</i> concept. Thus we will have to come up with an argument that uses a distributive law to prove this.</p>
+  <p><span class="num">22.8 Theorem</span> If $R$ is a ring with additive identity $0$, then for any $a, b \in R$ we have</p>
+  <ol class="cond" type="1"><li>$0a = a0 = 0$,</li><li>$a(-b) = (-a)b = -(ab)$,</li><li>$(-a)(-b) = ab$.</li></ol>
+</div>
+
+<div class="sheet book" id="pdf-p205">
+  <div class="rh"><span>Part V &middot; Rings and Fields</span><span>188</span></div>
+  <p><i>Proof.</i> For Property 1, note that by axioms $\mathcal{R}_1$ and $\mathcal{R}_2$, $a0 + a0 = a(0 + 0) = a0 = 0 + a0$. Then by the cancellation law for the additive group $\langle R, + \rangle$, we have $a0 = 0$. Likewise, $0a + 0a = (0 + 0)a = 0a = 0 + 0a$ implies that $0a = 0$. This proves Property 1.</p>
+  <p>In order to understand the proof of Property 2, we must remember that, by <i>definition</i>, $-(ab)$ is the element that when added to $ab$ gives $0$. Thus to show that $a(-b) = -(ab)$, we must show precisely that $a(-b) + ab = 0$. By the left distributive law,</p>
+  <p class="center">$a(-b) + ab = a(-b + b) = a0 = 0$,</p>
+  <p>since $a0 = 0$ by Property 1. Likewise,</p>
+  <p class="center">$(-a)b + ab = (-a + a)b = 0b = 0$.</p>
+  <p>For Property 3, note that $(-a)(-b) = -(a(-b))$ by Property 2. Again by Property 2, $-(a(-b)) = -(-(ab))$, and $-(-(ab))$ is the element that when added to $-(ab)$ gives $0$. This is $ab$ by definition of $-(ab)$ and by the uniqueness of an inverse in a group. Thus, $(-a)(-b) = ab$. &#9670;</p>
+  <p>Based on high school algebra it seems natural to begin a proof of Property 2 in Theorem 22.8 by writing $(-a)b = ((-1)a)b$. In Exercise 30 you will be asked to find an error in a &ldquo;proof&rdquo; of this sort. It is important that you <i>understand</i> the preceding proof. The theorem allows us to use our usual rules for signs.</p>
+  <h3 class="sub">Homomorphisms and Isomorphisms</h3>
+  <p>From our work in group theory, it is quite clear how a structure-relating map of a ring $R$ into a ring $R'$ should be defined.</p>
+  <p><span class="num">22.9 Definition</span> For rings $R$ and $R'$, a map $\phi : R \to R'$ is a <b>homomorphism</b> if the following two conditions are satisfied for all $a, b \in R$:</p>
+  <ol class="cond" type="1"><li>$\phi(a + b) = \phi(a) + \phi(b)$,</li><li>$\phi(ab) = \phi(a)\phi(b)$.</li></ol>
+  <p>In the preceding definition, Condition 1 is the statement that $\phi$ is a group homomorphism mapping the abelian group $\langle R, + \rangle$ into $\langle R', + \rangle$. Condition 2 requires that $\phi$ relate the multiplicative structures of the rings $R$ and $R'$ in the same way. Since $\phi$ is also a group homomorphism, all the results concerning group homomorphisms are valid for the additive structure of the rings. In particular, $\phi$ is one-to-one if and only if its <b>kernel</b> $\operatorname{Ker}(\phi) = \{a \in R \mid \phi(a) = 0'\}$ is just the subset $\{0\}$ of $R$. The homomorphism $\phi$ of the group $\langle R, + \rangle$ gives rise to a factor group. We expect that a ring homomorphism will give rise to a factor ring. This is indeed the case. We delay discussion of this to Section 30, where the treatment will parallel our treatment of factor groups in Section 12.</p>
+</div>
+<div class="sheet book" id="pdf-p206">
+  <div class="rh"><span>Section 22 &middot; Rings and Fields</span><span>189</span></div>
+  <p><span class="num">22.10 Example</span> Let $F$ be the ring of all functions mapping $\mathbb{R}$ into $\mathbb{R}$ defined in Example 22.4. For each $a \in \mathbb{R}$, we have the <b>evaluation homomorphism</b> $\phi_a : F \to \mathbb{R}$, where $\phi_a(f) = f(a)$ for $f \in F$. We will work a great deal with this homomorphism in the rest of this text, for finding a real solution of a polynomial equation $p(x) = 0$ amounts precisely to finding $a \in \mathbb{R}$ such that $\phi_a(p) = 0$. Much of the remainder of this text deals with solving polynomial equations. We leave the demonstration of the homomorphism properties for $\phi_a$ to Exercise 37. &#9650;</p>
+  <p><span class="num">22.11 Example</span> The map $\phi : \mathbb{Z} \to \mathbb{Z}_n$ where $\phi(a)$ is the remainder of $a$ modulo $n$ is a ring homomorphism for each positive integer $n$. We know $\phi(a + b) = \phi(a) + \phi(b)$ by group theory. To show the multiplicative property, write $a = q_1n + r_1$ and $b = q_2n + r_2$ according to the division algorithm. Then $ab = n(q_1q_2n + r_1q_2 + q_1r_2) + r_1r_2$. Thus $\phi(ab)$ is the remainder of $r_1r_2$ when divided by $n$. Since $\phi(a) = r_1$ and $\phi(b) = r_2$, Example 22.6 indicates that $\phi(a)\phi(b)$ is also this same remainder, so $\phi(ab) = \phi(a)\phi(b)$. From group theory, we anticipate that the ring $\mathbb{Z}_n$ might be isomorphic to a factor ring $\mathbb{Z}/n\mathbb{Z}$. This is indeed the case; factor rings will be discussed in Section 30. &#9650;</p>
+  <p>We realize that in the study of any sort of mathematical structure, an idea of basic importance is the concept of two systems being <i>structurally identical</i>, that is, one being just like the other except for names. In algebra this concept is always called <i>isomorphism</i>. The concept of two things being just alike except for names of elements leads us, just as it did for groups, to the following definition.</p>
+  <p><span class="num">22.12 Definition</span> An <b>isomorphism</b> $\phi : R \to R'$ from a ring $R$ to a ring $R'$ is a homomorphism that is one-to-one and onto $R'$. The rings $R$ and $R'$ are then <b>isomorphic</b>.</p>
+  <p>From our work in group theory, we expect that isomorphism gives an equivalence relation on any collection of rings. We need to check that the multiplicative property of an isomorphism is satisfied for the inverse map $\phi^{-1} : R' \to R$ (to complete the symmetry argument). Similarly, we check that if $\mu : R' \to R''$ is also a ring isomorphism, then the multiplicative requirement holds for the composite map $\mu\phi : R \to R''$ (to complete the transitivity argument). We ask you to do this in Exercise 38.</p>
+  <p><span class="num">22.13 Example</span> As abelian groups, $\langle \mathbb{Z}, + \rangle$ and $\langle 2\mathbb{Z}, + \rangle$ are isomorphic under the map $\phi : \mathbb{Z} \to 2\mathbb{Z}$, with $\phi(x) = 2x$ for $x \in \mathbb{Z}$. Here $\phi$ is <i>not</i> a ring isomorphism, for $\phi(xy) = 2xy$, while $\phi(x)\phi(y) = 2x2y = 4xy$. &#9650;</p>
+  <h3 class="sub">Multiplicative Questions: Fields</h3>
+  <p>Many of the rings we have mentioned, such as $\mathbb{Z}$, $\mathbb{Q}$, and $\mathbb{R}$, have a multiplicative identity element $1$. However, $2\mathbb{Z}$ does not have an identity element for multiplication. Note also that multiplication is not commutative in the matrix rings described in Example 22.3.</p>
+  <p>It is evident that $\{0\}$, with $0 + 0 = 0$ and $(0)(0) = 0$, gives a ring, the <b>zero ring</b>. Here $0$ acts as multiplicative as well as additive identity element. By Theorem 22.8, this is the only case in which $0$ could act as a multiplicative identity element, for from $0a = 0$, we can then deduce that $a = 0$. Theorem 1.15 shows that if a ring has a multiplicative identity element, it is unique. We denote a multiplicative identity element in a ring by $1$.</p>
+  <p><span class="num">22.14 Definition</span> A ring in which the multiplication is commutative is a <b>commutative ring</b>. A ring with a multiplicative identity element is a <b>ring with unity</b>; the multiplicative identity element $1$ is called &ldquo;<b>unity</b>.&rdquo;</p>
+</div>
+
+<div class="sheet book" id="pdf-p207">
+  <div class="rh"><span>Section 22 &middot; Rings and Fields</span><span>190</span></div>
+  <p>In a ring with unity $1$ the distributive laws show that</p>
+  <p class="center">$(1 + 1 + \cdots + 1)(1 + 1 + \cdots + 1) = (1 + 1 + \cdots + 1)$, with $n$, $m$ and $nm$ summands respectively,</p>
+  <p>that is, $(n \cdot 1)(m \cdot 1) = (nm) \cdot 1$. The next example gives an application of this observation.</p>
+  <p><span class="num">22.15 Example</span> We claim that for integers $r$ and $s$ where $\gcd(r, s) = 1$, the rings $\mathbb{Z}_{rs}$ and $\mathbb{Z}_r \times \mathbb{Z}_s$ are isomorphic. Additively, they are both cyclic abelian groups of order $rs$ with generators $1$ and $(1, 1)$ respectively. Thus $\phi : \mathbb{Z}_{rs} \to \mathbb{Z}_r \times \mathbb{Z}_s$ defined by $\phi(n \cdot 1) = n \cdot (1, 1)$ is an additive group isomorphism. To check the multiplicative Condition 2 of Definition 22.9, we use the observation preceding this example for the unity $(1, 1)$ in the ring $\mathbb{Z}_r \times \mathbb{Z}_s$, and compute</p>
+  <p class="center">$\phi(nm) = (nm) \cdot (1, 1) = [n \cdot (1, 1)][m \cdot (1, 1)] = \phi(n)\phi(m)$. &#9650;</p>
+  <p>Note that a direct product $R = R_1 \times R_2 \times \cdots \times R_n$ of rings is commutative if and only if each ring $R_i$ is commutative. Furthermore, $R$ has a unity if and only if each $R_i$ has a unity.</p>
+  <p>The set $\mathbb{R}^*$ of nonzero real numbers forms a group under multiplication. However, the nonzero integers do not form a group under multiplication since only the integers $1$ and $-1$ have multiplicative inverses in $\mathbb{Z}$. In general, a <b>multiplicative inverse</b> of an element $a$ in a ring $R$ with unity $1 \ne 0$ is an element $a^{-1} \in R$ such that $aa^{-1} = a^{-1}a = 1$. Precisely as for groups, a multiplicative inverse for an element $a$ in $R$ is unique, if it exists at all (see Exercise 45). Theorem 22.8 shows that it would be hopeless to have a multiplicative inverse for $0$ except for the ring $\{0\}$, where $0 + 0 = 0$ and $(0)(0) = 0$, with $0$ as both additive and multiplicative identity element. We are thus led to discuss the existence of multiplicative inverses for nonzero elements in a ring with nonzero unity. There is unavoidably a lot of terminology to be defined in this introductory section on rings. We are almost done.</p>
+  <p><span class="num">22.16 Definition</span> Let $R$ be a ring with unity $1 \ne 0$. An element $u$ in $R$ is a <b>unit</b> of $R$ if it has a multiplicative inverse in $R$. If every nonzero element of $R$ is a unit, then $R$ is a <b>division ring</b> (or <b>skew field</b>). A <b>field</b> is a commutative division ring. A noncommutative division ring is called a &ldquo;<b>strictly skew field.</b>&rdquo;</p>
+  <p><span class="num">22.17 Example</span> Let us find the units in $\mathbb{Z}_{14}$. Of course, $1$ and $-1 = 13$ are units. Since $(3)(5) = 1$ we see that $3$ and $5$ are units; therefore $-3 = 11$ and $-5 = 9$ are also units. None of the remaining elements of $\mathbb{Z}_{14}$ can be units, since no multiple of $2$, $4$, $6$, $7$, $8$, or $10$ can be one more than a multiple of $14$; they all have a common factor, either $2$ or $7$, with $14$. Section 24 will show that the units in $\mathbb{Z}_n$ are precisely those $m \in \mathbb{Z}_n$ such that $\gcd(m, n) = 1$. &#9650;</p>
+  <p><span class="num">22.18 Example</span> $\mathbb{Z}$ is not a field, because $2$, for example, has no multiplicative inverse, so $2$ is not a unit in $\mathbb{Z}$. The only units in $\mathbb{Z}$ are $1$ and $-1$. However, $\mathbb{Q}$ and $\mathbb{R}$ are fields. An example of a strictly skew field is given in Section 32.</p>
+  <p>We have the natural concepts of a subring of a ring and a subfield of a field. A <b>subring of a ring</b> is a subset of the ring that is a ring under induced operations from the whole ring; a <b>subfield</b> is defined similarly for a subset of a field. In fact, let us say here once and for all that if we have a set, together with a certain specified type of <i>algebraic structure</i> (group, ring, field, integral domain, vector space, and so on), then any subset of this set, together with a natural induced algebraic structure <i>that yields an algebraic structure of the same type</i>, is a <i>substructure</i>. If $K$ and $L$ are both structures, we shall let $K \le L$ denote that $K$ is a substructure of $L$ and $K &lt; L$ denote that $K \le L$ but $K \ne L$. Exercise 50 gives criteria for a subset $S$ of a ring $R$ to form a subring of $R$.</p>
+</div>
+
+<div class="sheet book" id="pdf-p208">
+  <div class="rh"><span>Section 22 &middot; Exercises</span><span>191</span></div>
+  <div class="hist"><div class="hist-h">HISTORICAL NOTE</div>
+  <p>Although fields were implicit in the early work on the solvability of equations by Abel and Galois, it was Leopold Kronecker (1823&ndash;1891) who in connection with his own work on this subject first published in 1881 a definition of what he called a &ldquo;domain of rationality&rdquo;: &ldquo;The domain of rationality $(R', R'', R''', \cdots)$ contains $\cdots$ every one of those quantities which are rational functions of the quantities $R', R'', R''', \cdots$ with integral coefficients.&rdquo; Kronecker, however, who insisted that any mathematical subject must be constructible in finitely many steps, did not view the domain of rationality as a complete entity, but merely as a region in which took place various operations on its elements. Richard Dedekind (1831&ndash;1916), the inventor of the Dedekind cut definition of a real number, considered a field as a completed entity. In 1871, he published the following definition in his supplement to the second edition of Dirichlet&rsquo;s text on number theory: &ldquo;By a field we mean any system of infinitely many real or complex numbers, which in itself is so closed and complete, that the addition, subtraction, multiplication, and division of any two numbers always produces a number of the same system.&rdquo; Both Kronecker and Dedekind had, however, dealt with their varying ideas of this notion as early as the 1850s in their university lectures. A more abstract definition of a field, similar to the one in the text, was given by Heinrich Weber (1842&ndash;1913) in a paper of 1893. Weber&rsquo;s definition, unlike that of Dedekind, specifically included fields with finitely many elements as well as other fields, such as function fields, which were not subfields of the field of complex numbers.</p></div>
+  <p>Finally, be careful not to confuse our use of the words <i>unit</i> and <i>unity</i>. <i>Unity</i> is the multiplicative identity element, while a <i>unit</i> is any element having a multiplicative inverse. Thus the multiplicative identity element or unity is a unit, but not every unit is unity. For example, $-1$ is a unit in $\mathbb{Z}$, but $-1$ is not unity, that is, $-1 \ne 1$.</p>
+  <h2 class="sec">Exercises 22</h2>
+  <h3 class="sub">Computations</h3>
+  <p>In Exercises 1 through 6, compute the product in the given ring.</p>
+  <p class="exl"><b>1.</b> $(12)(16)$ in $\mathbb{Z}_{24}$ &nbsp;&nbsp; <b>2.</b> $(16)(3)$ in $\mathbb{Z}_{32}$ &nbsp;&nbsp; <b>3.</b> $(11)(-4)$ in $\mathbb{Z}_{15}$ &nbsp;&nbsp; <b>4.</b> $(20)(-8)$ in $\mathbb{Z}_{26}$</p>
+  <p class="exl"><b>5.</b> $(2,3)(3,5)$ in $\mathbb{Z}_5 \times \mathbb{Z}_9$ &nbsp;&nbsp; <b>6.</b> $(-3,5)(2,-4)$ in $\mathbb{Z}_4 \times \mathbb{Z}_{11}$</p>
+  <p>In Exercises 7 through 13, decide whether the indicated operations of addition and multiplication are defined (closed) on the set, and give a ring structure. If a ring is not formed, tell why this is the case. If a ring is formed, state whether the ring is commutative, whether it has unity, and whether it is a field.</p>
+  <p class="exl"><b>7.</b> $n\mathbb{Z}$ with the usual addition and multiplication &nbsp; <b>8.</b> $\mathbb{Z}^+$ with the usual addition and multiplication</p>
+  <p class="exl"><b>9.</b> $\mathbb{Z} \times \mathbb{Z}$ with addition and multiplication by components &nbsp; <b>10.</b> $2\mathbb{Z} \times \mathbb{Z}$ with addition and multiplication by components</p>
+  <p class="exl"><b>11.</b> $\{a + b\sqrt{2} \mid a, b \in \mathbb{Z}\}$ with the usual addition and multiplication &nbsp; <b>12.</b> $\{a + b\sqrt{2} \mid a, b \in \mathbb{Q}\}$ with the usual addition and multiplication</p>
+  <p class="exl"><b>13.</b> The set of all pure imaginary complex numbers $ri$ for $r \in \mathbb{R}$ with the usual addition and multiplication</p>
+</div>
+
+<div class="sheet book" id="pdf-p209">
+  <div class="rh"><span>Section 22 &middot; Exercises</span><span>192</span></div>
+  <p>In Exercises 14 through 19, describe all units in the given ring.</p>
+  <p class="exl"><b>14.</b> $\mathbb{Z}$ &nbsp;&nbsp;&nbsp; <b>15.</b> $\mathbb{Z} \times \mathbb{Z}$ &nbsp;&nbsp;&nbsp; <b>16.</b> $\mathbb{Z}_5$ &nbsp;&nbsp;&nbsp; <b>17.</b> $\mathbb{Q}$ &nbsp;&nbsp;&nbsp; <b>18.</b> $\mathbb{Z} \times \mathbb{Q} \times \mathbb{Z}$ &nbsp;&nbsp;&nbsp; <b>19.</b> $\mathbb{Z}_4$</p>
+  <p class="exl"><b>20.</b> Consider the matrix ring $M_2(\mathbb{Z}_2)$.</p>
+  <p class="exl sub"><b>a.</b> Find the <b>order</b> of the ring, that is, the number of elements in it. &nbsp; <b>b.</b> List all units in the ring.</p>
+  <p class="exl"><b>21.</b> If possible, give an example of a homomorphism $\phi : R \to R'$ where $R$ and $R'$ are rings with unity $1 \ne 0$ and $1' \ne 0'$, and where $\phi(1) \ne 0'$ and $\phi(1) \ne 1'$.</p>
+  <p class="exl"><b>22.</b> (Linear algebra) Consider the map $\det$ of $M_n(\mathbb{R})$ into $\mathbb{R}$ where $\det(A)$ is the determinant of the matrix $A$ for $A \in M_n(\mathbb{R})$. Is $\det$ a ring homomorphism? Why or why not?</p>
+  <p class="exl"><b>23.</b> Describe all ring homomorphisms of $\mathbb{Z}$ into $\mathbb{Z}$.</p>
+  <p class="exl"><b>24.</b> Describe all ring homomorphisms of $\mathbb{Z}$ into $\mathbb{Z} \times \mathbb{Z}$.</p>
+  <p class="exl"><b>25.</b> Describe all ring homomorphisms of $\mathbb{Z} \times \mathbb{Z}$ into $\mathbb{Z}$.</p>
+  <p class="exl"><b>26.</b> How many homomorphisms are there of $\mathbb{Z} \times \mathbb{Z} \times \mathbb{Z}$ into $\mathbb{Z}$?</p>
+  <p class="exl"><b>27.</b> Consider this solution of the equation $X^2 = I_3$ in the ring $M_3(\mathbb{R})$.</p>
+  <p class="exl sub">$X^2 = I_3$ implies $X^2 - I_3 = 0$, the zero matrix, so factoring, we have $(X - I_3)(X + I_3) = 0$ whence either $X = I_3$ or $X = -I_3$.</p>
+  <p class="exl">Is this reasoning correct? If not, point out the error, and if possible, give a counterexample to the conclusion.</p>
+  <p class="exl"><b>28.</b> Find all solutions of the equation $x^2 + x - 6 = 0$ in the ring $\mathbb{Z}_{14}$ by factoring the quadratic polynomial. Compare with Exercise 27.</p>
+  <p class="exl"><b>29.</b> Find all solutions to the equations $x^2 + x - 6 = 0$ in the ring $\mathbb{Z}_{13}$ by factoring the quadratic polynomial. Why are there not the same number of solutions in Exercise 28?</p>
+  <p class="exl"><b>30.</b> What is wrong with the following attempt at a proof of Property 2 in Theorem 22.8?</p>
+  <p class="exl sub">$(-a)b = ((-1)a)b = (-1)(ab) = -(ab)$.</p>
+  <h3 class="sub">Concepts</h3>
+  <p>In Exercises 31 and 32, correct the definition of the italicized term without reference to the text, if correction is needed, so that it is in a form acceptable for publication.</p>
+  <p class="exl"><b>31.</b> A <i>field $F$</i> is a ring with nonzero unity such that the set of nonzero elements of $F$ is a group under multiplication.</p>
+  <p class="exl"><b>32.</b> A <i>unit</i> in a ring is an element of magnitude $1$.</p>
+  <p class="exl"><b>33.</b> Give an example of a ring having two elements $a$ and $b$ such that $ab = 0$ but neither $a$ nor $b$ is zero.</p>
+  <p class="exl"><b>34.</b> Give an example of a ring with unity $1 \ne 0$ that has a subring with nonzero unity $1' \ne 1$. [<i>Hint:</i> Consider a direct product, or a subring of $\mathbb{Z}_6$.]</p>
+  <p class="exl"><b>35.</b> Determine whether each of the following is true or false.</p>
+  <p class="exl sub"><b>a.</b> Every field is also a ring. &nbsp; <b>b.</b> Every ring has a multiplicative identity. &nbsp; <b>c.</b> Every ring with unity has at least two units. &nbsp; <b>d.</b> Every ring with unity has at most two units.<br><b>e.</b> It is possible for a subset of some field to be a ring but not a subfield, under the induced operations. &nbsp; <b>f.</b> The distributive laws for a ring are not very important.<br><b>g.</b> Multiplication in a field is commutative. &nbsp; <b>h.</b> The nonzero elements of a field form a group under the multiplication in the field.<br><b>i.</b> Addition in every ring is commutative. &nbsp; <b>j.</b> Every element in a ring has an additive inverse.</p>
+</div>
+
+<div class="sheet book" id="pdf-p210">
+  <div class="rh"><span>Section 22 &middot; Exercises</span><span>193</span></div>
+  <h3 class="sub">Theory</h3>
+  <p class="exl"><b>36.</b> Show that the multiplication defined on the set $F$ of functions in Example 22.4 satisfies axioms $\mathcal{R}_2$ and $\mathcal{R}_3$ for a ring.</p>
+  <p class="exl"><b>37.</b> Show that the evaluation map $\phi_a$ of Example 22.10 is a ring homomorphism.</p>
+  <p class="exl"><b>38.</b> Complete the argument outlined after Definitions 22.12 to show that isomorphism gives an equivalence relation on a collection of rings.</p>
+  <p class="exl"><b>39.</b> Show that if $U$ is the collection of all units in a ring $\langle R, +, \cdot \rangle$ with unity, then $\langle U, \cdot \rangle$ is a group. [<i>Warning:</i> Be sure to show that $U$ is closed under multiplication.]</p>
+  <p class="exl"><b>40.</b> Show that $a^2 - b^2 = (a + b)(a - b)$ for all $a$ and $b$ in a ring $R$ if and only if $R$ is commutative.</p>
+  <p class="exl"><b>41.</b> Let $(R, +)$ be an abelian group. Show that $(R, +, \cdot)$ is a ring if we define $ab = 0$ for all $a, b \in R$.</p>
+  <p class="exl"><b>42.</b> Show that the rings $2\mathbb{Z}$ and $3\mathbb{Z}$ are not isomorphic. Show that the fields $\mathbb{R}$ and $\mathbb{C}$ are not isomorphic.</p>
+  <p class="exl"><b>43.</b> (Freshman exponentiation) Let $p$ be a prime. Show that in the ring $\mathbb{Z}_p$ we have $(a + b)^p = a^p + b^p$ for all $a, b \in \mathbb{Z}_p$. [<i>Hint:</i> Observe that the usual binomial expansion for $(a + b)^n$ is valid in a <i>commutative</i> ring.]</p>
+  <p class="exl"><b>44.</b> Show that the unity element in a subfield of a field must be the unity of the whole field, in contrast to Exercise 34 for rings.</p>
+  <p class="exl"><b>45.</b> Show that the multiplicative inverse of a unit in a ring with unity is unique.</p>
+  <p class="exl"><b>46.</b> An element $a$ of a ring $R$ is <b>idempotent</b> if $a^2 = a$.</p>
+  <p class="exl sub"><b>a.</b> Show that the set of all idempotent elements of a commutative ring is closed under multiplication. &nbsp; <b>b.</b> Find all idempotents in the ring $\mathbb{Z}_6 \times \mathbb{Z}_{12}$.</p>
+  <p class="exl"><b>47.</b> (Linear algebra) Recall that for an $m \times n$ matrix $A$, the <i>transpose</i> $A^T$ of $A$ is the matrix whose $j$th column is the $j$th row of $A$. Show that if $A$ is an $m \times n$ matrix such that $A^TA$ is invertible, then the <i>projection matrix</i> $P = A(A^TA)^{-1}A^T$ is an idempotent in the ring of $n \times n$ matrices.</p>
+  <p class="exl"><b>48.</b> An element $a$ of a ring $R$ is <b>nilpotent</b> if $a^n = 0$ for some $n \in \mathbb{Z}^+$. Show that if $a$ and $b$ are nilpotent elements of a <i>commutative</i> ring, then $a + b$ is also nilpotent.</p>
+  <p class="exl"><b>49.</b> Show that a ring $R$ has no nonzero nilpotent element if and only if $0$ is the only solution of $x^2 = 0$ in $R$.</p>
+  <p class="exl"><b>50.</b> Show that a subset $S$ of a ring $R$ gives a subring of $R$ if and only if the following hold:</p>
+  <p class="center">$0 \in S$; &nbsp;&nbsp; $(a - b) \in S$ for all $a, b \in S$; &nbsp;&nbsp; $ab \in S$ for all $a, b \in S$.</p>
+  <p class="exl"><b>51.</b> <b>a.</b> Show that an intersection of subrings of a ring $R$ is again a subring of $R$. &nbsp; <b>b.</b> Show that an intersection of subfields of a field $F$ is again a subfield of $F$.</p>
+  <p class="exl"><b>52.</b> Let $R$ be a ring, and let $a$ be a fixed element of $R$. Let $I_a = \{x \in R \mid ax = 0\}$. Show that $I_a$ is a subring of $R$.</p>
+  <p class="exl"><b>53.</b> Let $R$ be a ring, and let $a$ be a fixed element of $R$. Let $R_a$ be the subring of $R$ that is the intersection of all subrings of $R$ containing $a$ (see Exercise 51). The ring $R_a$ is the <b>subring of $R$ generated by $a$</b>. Show that the abelian group $\langle R_a, + \rangle$ is generated (in the sense of Section 7) by $\{a^n \mid n \in \mathbb{Z}^+\}$.</p>
+  <p class="exl"><b>54.</b> (Chinese Remainder Theorem for two congruences) Let $r$ and $s$ be positive integers such that $\gcd(r, s) = 1$. Use the isomorphism in Example 22.15 to show that for $m, n \in \mathbb{Z}$, there exists an integer $x$ such that $x \equiv m \pmod{r}$ and $x \equiv n \pmod{s}$.</p>
+  <p class="exl"><b>55.</b> <b>a.</b> State and prove the generalization of Example 22.15 for a direct product with $n$ factors. &nbsp; <b>b.</b> Prove the Chinese Remainder Theorem: Let $a_i, b_i \in \mathbb{Z}^+$ for $i = 1, 2, \dots, n$ and let $\gcd(b_i, b_j) = 1$ for $i \ne j$. Then there exists $x \in \mathbb{Z}^+$ such that $x \equiv a_i \pmod{b_i}$ for $i = 1, 2, \dots, n$.</p>
+  <p class="exl"><b>56.</b> Consider $\langle S, +, \cdot \rangle$, where $S$ is a set and $+$ and $\cdot$ are binary operations on $S$ such that</p>
+  <p class="exl sub">$\langle S, + \rangle$ is a group, &nbsp; $\langle S^*, \cdot \rangle$ is a group where $S^*$ consists of all elements of $S$ except the additive identity element, &nbsp; and $a(b + c) = (ab) + (ac)$ and $(a + b)c = (ac) + (bc)$ for all $a, b, c \in S$.</p>
+</div>
+
+<div class="sheet book" id="pdf-p211">
+  <div class="rh"><span>Section 22 &middot; Exercises</span><span>194</span></div>
+  <p class="exl sub">Show that $\langle S, +, \cdot \rangle$ is a division ring. [<i>Hint:</i> Apply the distributive laws to $(1 + 1)(a + b)$ to prove the commutativity of addition.]</p>
+  <p class="exl"><b>57.</b> A ring $R$ is a <b>Boolean ring</b> if $a^2 = a$ for all $a \in R$, so that every element is idempotent. Show that every Boolean ring is commutative.</p>
+  <p class="exl"><b>58.</b> (For students having some knowledge of the laws of set theory) For a set $S$, let $\mathcal{P}(S)$ be the collection of all subsets of $S$. Let binary operations $+$ and $\cdot$ on $\mathcal{P}(S)$ be defined by</p>
+  <p class="center">$A + B = (A \cup B) - (A \cap B) = \{x \mid x \in A \text{ or } x \in B \text{ but } x \notin (A \cap B)\}$</p>
+  <p class="center">and &nbsp; $A \cdot B = A \cap B$ &nbsp; for $A, B \in \mathcal{P}(S)$.</p>
+  <p class="exl sub"><b>a.</b> Give the tables for $+$ and $\cdot$ for $\mathcal{P}(S)$, where $S = \{a, b\}$. [<i>Hint:</i> $\mathcal{P}(S)$ has four elements.] &nbsp; <b>b.</b> Show that for <i>any</i> set $S$, $\langle \mathcal{P}(S), +, \cdot \rangle$ is a Boolean ring (see Exercise 57).</p>
+  <div class="chap"><span class="cn">23</span><span class="ct">INTEGRAL DOMAINS</span></div>
+    <p>While a careful treatment of polynomials is not given until Section 27, for purposes of motivation we shall make intuitive use of them in this section.</p>
+    <h3 class="sub">Divisors of Zero and Cancellation</h3>
+    <p>One of the most important algebraic properties of our usual number system is that a product of two numbers can be $0$ only if at least one of the factors is $0$. We have used this fact many times in solving equations, perhaps without realizing that we were using it. Suppose, for example, we are asked to solve the equation</p>
+    <p class="center">$x^2 - 5x + 6 = 0.$</p>
+    <p>The first thing we do is factor the left side:</p>
+    <p class="center">$x^2 - 5x + 6 = (x - 2)(x - 3).$</p>
+    <p>Then we conclude that the only possible values for $x$ are $2$ and $3$. Why? The reason is that if $x$ is replaced by any number $a$, the product $(a - 2)(a - 3)$ of the resulting numbers is $0$ if and only if either $a - 2 = 0$ or $a - 3 = 0$.</p>
+    <p><span class="num">23.1 Example</span> Solve the equation $x^2 - 5x + 6 = 0$ in $\mathbb{Z}_{12}$.</p>
+    <p><i>Solution.</i> The factorization $x^2 - 5x + 6 = (x - 2)(x - 3)$ is still valid if we think of $x$ as standing for any number in $\mathbb{Z}_{12}$. But in $\mathbb{Z}_{12}$, not only is $0a = a0 = 0$ for all $a \in \mathbb{Z}_{12}$, but also</p>
+    <p class="center">$(2)(6) = (6)(2) = (3)(4) = (4)(3) = (3)(8) = (8)(3)$<br>$= (4)(6) = (6)(4) = (4)(9) = (9)(4) = (6)(6) = (6)(8)$<br>$= (8)(6) = (6)(10) = (10)(6) = (8)(9) = (9)(8) = 0.$</p>
+    <p>We find, in fact, that our equation has not only $2$ and $3$ as solutions, but also $6$ and $11$, for $(6 - 2)(6 - 3) = (4)(3) = 0$ and $(11 - 2)(11 - 3) = (9)(8) = 0$ in $\mathbb{Z}_{12}$. &#9650;</p>
+    <p>These ideas are of such importance that we formalize them in a definition.</p>
+    <p><span class="num">23.2 Definition</span> If $a$ and $b$ are two nonzero elements of a ring $R$ such that $ab = 0$, then $a$ and $b$ are <b>divisors of $0$</b> (or <b>$0$ divisors</b>).</p>
+</div>
+<div class="sheet book" id="pdf-p212">
+  <div class="rh"><span>Section 23 &middot; Integral Domains</span><span>195</span></div>
+  <p>Example 23.1 shows that in $\mathbb{Z}_{12}$ the elements $2, 3, 4, 6, 8, 9$, and $10$ are divisors of $0$. Note that these are exactly the numbers in $\mathbb{Z}_{12}$ that are not relatively prime to $12$, that is, whose gcd with $12$ is not $1$.</p>
+  <p>If $R$ is a ring with unity and $a$ is a unit in $R$, then $a$ is not a divisor of $0$. To see this, note that if $ab = 0$, then $a^{-1}ab = 0$, so $b = 0$. Similarly, if $ba = 0$, then $baa^{-1} = 0$, so $b = 0$. Theorem 23.3 shows that in the ring $\mathbb{Z}_n$ every element is either $0$, a unit, or a $0$ divisor.</p>
+  <p><span class="num">23.3 Theorem</span> Let $m \in \mathbb{Z}_n$. Either $m = 0$, $m$ is relatively prime to $n$, in which case $m$ is a unit in $\mathbb{Z}_n$, or $m$ is not relatively prime to $n$, in which case $m$ is a $0$ divisor in $\mathbb{Z}_n$.</p>
+  <p><i>Proof.</i> We first suppose that $m \ne 0$ and $\gcd(m, n) = d \ne 1$. Then, using integer multiplication $m\left(\frac{n}{d}\right) = \left(\frac{m}{d}\right)n$ is a multiple of $n$, so in $\mathbb{Z}_n$, $m\left(\frac{n}{d}\right) = 0 \in \mathbb{Z}_n$. Neither $m$ nor $n/d$ is $0$ in $\mathbb{Z}_n$. Thus $m$ is a divisor of $0$. Now suppose that $\gcd(m, n) = 1$. Then there are integers $a$ and $b$ such that $an + bm = 1$. By the division algorithm, there are integers $q$ and $r$ such that $0 \le r \le n - 1$ and $b = nq + r$. We can write</p>
+  <p class="center">$rm = (b - nq)m = bm - nqm = (1 - an) - nqm = 1 - n(a + qm).$</p>
+  <p>So in $\mathbb{Z}_n$, $rm = mr = 1$ and $m$ is a unit. &#9632;</p>
+  <p><span class="num">23.4 Example</span> Classify each nonzero element of $\mathbb{Z}_{20}$ as a unit or a $0$ divisor.</p>
+  <p><i>Solution.</i> The greatest common divisor of $m$ and $20$ is $1$ if $m = 1, 3, 7, 9, 11, 13, 17, 19$, so these are all units. For $m = 2, 4, 5, 6, 8, 10, 12, 14, 15, 16, 18$, $\gcd(m, 20) &gt; 1$, so these are all $0$ divisors. We see that</p>
+  <p class="center">$1 \cdot 1 = 3 \cdot 7 = 9 \cdot 9 = 11 \cdot 11 = 13 \cdot 17 = 19 \cdot 19 = 1 \in \mathbb{Z}_{20}$</p>
+  <p>which verifies that each is a unit. We also see that</p>
+  <p class="center">$2 \cdot 10 = 4 \cdot 5 = 6 \cdot 10 = 8 \cdot 15 = 12 \cdot 5 = 14 \cdot 10 = 16 \cdot 5 = 18 \cdot 10 = 0 \in \mathbb{Z}_{20}$</p>
+  <p>which verifies that each of these is a $0$ divisor in $\mathbb{Z}_{20}$. &#9650;</p>
+  <p><span class="num">23.5 Corollary</span> If $p$ is a prime number, then every nonzero element of $\mathbb{Z}_p$ is a unit, which means that $\mathbb{Z}_p$ is a field and it has no divisors of $0$.</p>
+  <p><i>Proof.</i> For any $0 &lt; m \le p - 1$, $\gcd(m, p) = 1$. So $m$ is a unit in $\mathbb{Z}_p$ by Theorem 23.3. &#9632;</p>
+</div>
+
+<div class="sheet book" id="pdf-p213">
+  <div class="rh"><span>Section 23 &middot; Integral Domains</span><span>196</span></div>
+  <p>The preceding corollary shows that when we consider the ring $M_n(\mathbb{Z}_p)$, we are talking about a ring of matrices over a <i>field</i>. In the typical undergraduate linear algebra course, only the field properties of the real or complex numbers are used in much of the work. Such notions as matrix reduction to solve linear systems, determinants, Cramer&rsquo;s rule, eigenvalues and eigenvectors, and similarity transformations to try to diagonalize a matrix are valid using matrices over any field; they depend only on the arithmetic properties of a field. Considerations of linear algebra involving notions of magnitude, such as least-squares approximate solutions or orthonormal bases, make sense only when using fields where we have an idea of magnitude. The relation</p>
+  <p class="center">$p \cdot 1 = 1 + 1 + \cdots + 1 = 0$, with $p$ summands,</p>
+  <p>indicates that there can be no very natural notion of magnitude in the field $\mathbb{Z}_p$.</p>
+  <p>Another indication of the importance of the concept of $0$ divisors is shown in the following theorem. Let $R$ be a ring, and let $a, b, c \in R$. The <b>cancellation laws</b> hold in $R$ if $ab = ac$ with $a \ne 0$ implies $b = c$, and $ba = ca$ with $a \ne 0$ implies $b = c$. These are multiplicative cancellation laws. Of course, the additive cancellation laws hold in $R$, since $\langle R, + \rangle$ is a group.</p>
+  <p><span class="num">23.6 Theorem</span> The cancellation laws hold in a ring $R$ if and only if $R$ has no divisors of $0$.</p>
+  <p><i>Proof.</i> Let $R$ be a ring in which the cancellation laws hold, and suppose $ab = 0$ for some $a, b \in R$. We must show that either $a$ or $b$ is $0$. If $a \ne 0$, then $ab = a0$ implies that $b = 0$ by cancellation laws. Therefore, either $a = 0$ or $b = 0$.</p>
+  <p>Conversely, suppose that $R$ has no divisors of $0$, and suppose that $ab = ac$ with $a \ne 0$. Then</p>
+  <p class="center">$ab - ac = a(b - c) = 0.$</p>
+  <p>Since $a \ne 0$, and since $R$ has no divisors of $0$, we must have $b - c = 0$, so $b = c$. A similar argument shows that $ba = ca$ with $a \ne 0$ implies $b = c$. &#9670;</p>
+  <p>Suppose that $R$ is a ring with no divisors of $0$. Then an equation $ax = b$, with $a \ne 0$, in $R$ can have at most one solution $x$ in $R$, for if $ax_1 = b$ and $ax_2 = b$, then $ax_1 = ax_2$, and by Theorem 23.6 $x_1 = x_2$, since $R$ has no divisors of $0$. If $R$ has unity $1 \ne 0$ and $a$ is a unit in $R$ with multiplicative inverse $a^{-1}$, then the solution $x$ of $ax = b$ is $a^{-1}b$. In the case that $R$ is commutative, in particular if $R$ is a field, it is customary to denote $a^{-1}b$ and $ba^{-1}$ (they are equal by commutativity) by the formal quotient $b/a$. This quotient notation must not be used in the event that $R$ is not commutative, for then we do not know whether $b/a$ denotes $a^{-1}b$ or $ba^{-1}$. In particular, the multiplicative inverse $a^{-1}$ of a nonzero element $a$ of a field may be written $1/a$.</p>
+  <h3 class="sub">Integral Domains</h3>
+  <p>The integers are really our most familiar number system. In terms of the algebraic properties we are discussing, $\mathbb{Z}$ is a commutative ring with unity and no divisors of $0$. Surely this is responsible for the name that the next definition gives to such a structure.</p>
+  <p><span class="num">23.7 Definition</span> An <b>integral domain</b> $D$ is a commutative ring with unity $1 \ne 0$ that contains no divisors of $0$.</p>
+  <p>Thus, if the coefficients of a polynomial are from an integral domain, one can solve a polynomial equation in which the polynomial can be factored into linear factors in the usual fashion by setting each factor equal to $0$.</p>
+  <p>In our hierarchy of algebraic structures, an integral domain belongs between a commutative ring with unity and a field, as we shall show. Theorem 23.6 shows that the cancellation laws for multiplication hold in an integral domain.</p>
+  <p><span class="num">23.8 Example</span> We have seen that $\mathbb{Z}$ and $\mathbb{Z}_p$ for any prime $p$ are integral domains, but $\mathbb{Z}_n$ is not an integral domain if $n$ is not prime. A moment of thought shows that the direct product $R \times S$ of two nonzero rings $R$ and $S$ is not an integral domain. Just observe that for $r \in R$ and $s \in S$ both nonzero, we have $(r, 0)(0, s) = (0, 0)$. &#9650;</p>
+</div>
+
+<div class="sheet book" id="pdf-p214">
+  <div class="rh"><span>Section 23 &middot; Integral Domains</span><span>197</span></div>
+  <p><span class="num">23.9 Example</span> Show that although $\mathbb{Z}_2$ is an integral domain, the matrix ring $M_2(\mathbb{Z}_2)$ has divisors of zero.</p>
+  <p><i>Solution.</i> We need only observe that</p>
+  <p class="center">$\begin{pmatrix}1&0\\0&0\end{pmatrix}\begin{pmatrix}0&0\\1&0\end{pmatrix} = \begin{pmatrix}0&0\\0&0\end{pmatrix}.$</p>
+  <p>In a field, every nonzero element is a unit. We saw that units cannot be divisors of $0$, so in a field there are no divisors of $0$. Since multiplication in a field is commutative, every field is an integral domain.</p>
+  <p>Figure 23.10 gives a Venn diagram view of containment for the algebraic structures having two binary operations with which we will be chiefly concerned. In Exercise 26 we ask you to redraw this figure to include strictly skew fields as well.</p>
+  <p class="cont"><b>23.10 Figure</b> A collection of rings. Labels as printed: "Commutative rings" (left circle), "Rings with unity" (right circle), "Integral Domains" (inner ring), "Fields 1" (innermost), and the regions numbered 2 to 6. Not redrawn.</p>
+  <p>We have seen that $\mathbb{Q}$, $\mathbb{R}$, $\mathbb{C}$, and $\mathbb{Z}_p$ for $p$ a prime number are all fields. Theorem 23.3 implies that if $\mathbb{Z}_n$ is an integral domain, then $\mathbb{Z}_n$ is a field. In fact, the next theorem says that any finite integral domain is a field. The proof of this theorem is a personal favorite of both authors. It is done by counting, one of the most powerful techniques in mathematics.</p>
+  <p><span class="num">23.11 Theorem</span> Every finite integral domain is a field.</p>
+  <p><i>Proof.</i> Let $R$ be a finite integral domain and $a$ a nonzero element of $R$. We wish to show there is an element $b \in R$ such that $ab = 1$. To this end, we define a function $f : R \to R$ by $f(x) = ax$. We first show that $f$ is a one-to-one function. Suppose that $f(x_1) = f(x_2)$, then $ax_1 = ax_2$, $x_1 = x_2$, since $a \ne 0$ and cancellation holds in an integral domain. Thus $f$ is one-to-one. Since $R$ is finite and $f : R \to R$ is one-to-one, $f$ must also map onto $R$. Therefore, there is a $b \in R$ such that $1 = f(a) = ab = ba$, which verifies that $a$ is a unit. &#9632;</p>
+</div>
+
+<div class="sheet book" id="pdf-p215">
+  <div class="rh"><span>Section 23 &middot; Integral Domains</span><span>198</span></div>
+  <p>The finite condition in Theorem 23.11 is necessary since $\mathbb{Z}$ is an infinite integral domain, which is not a field. The counting argument fails in the case where the integral domain is infinite since there are one-to-one functions from an infinite set to itself that are not onto. For example, multiplication by $2$ is a one-to-one function mapping $\mathbb{Z}$ to $\mathbb{Z}$, but $1$ is not in the range of the function.</p>
+  <p>In Section 39 we will see that other than $\mathbb{Z}_p$ there are many finite integral domains and therefore fields.</p>
+  <h3 class="sub">The Characteristic of a Ring</h3>
+  <p>Let $R$ be any ring. We might ask whether there is a positive integer $n$ such that $n \cdot a = 0$ for all $a \in R$, where $n \cdot a$ means $a + a + \cdots + a$ for $n$ summands, as explained in Section 22. For example, the integer $m$ has this property for the ring $\mathbb{Z}_m$.</p>
+  <p><span class="num">23.12 Definition</span> If for a ring $R$ a positive integer $n$ exists such that $n \cdot a = 0$ for all $a \in R$, then the least such positive integer is the <b>characteristic of the ring $R$</b>. If no such positive integer exists, then $R$ is of <b>characteristic $0$</b>.</p>
+  <p>We shall use the concept of a characteristic chiefly for fields. Exercise 35 asks us to show that the characteristic of an integral domain is either $0$ or a prime $p$.</p>
+  <p><span class="num">23.13 Example</span> The ring $\mathbb{Z}_n$ is of characteristic $n$, while $\mathbb{Z}$, $\mathbb{Q}$, $\mathbb{R}$, and $\mathbb{C}$ all have characteristic $0$. &#9650;</p>
+  <p>At first glance, determination of the characteristic of a ring seems to be a tough job, unless the ring is obviously of characteristic $0$. Do we have to examine <i>every</i> element $a$ of the ring in accordance with Definition 23.12? Our final theorem of this section shows that if the ring has unity, it suffices to examine only $a = 1$.</p>
+  <p><span class="num">23.14 Theorem</span> Let $R$ be a ring with unity. If $n \cdot 1 \ne 0$ for all $n \in \mathbb{Z}^+$, then $R$ has characteristic $0$. If $n \cdot 1 = 0$ for some $n \in \mathbb{Z}^+$, then the smallest such integer $n$ is the characteristic of $R$.</p>
+  <p><i>Proof.</i> If $n \cdot 1 \ne 0$ for all $n \in \mathbb{Z}^+$, then surely we cannot have $n \cdot a = 0$ for all $a \in R$ for some positive integer $n$, so by Definition 23.12, $R$ has characteristic $0$. Suppose that $n$ is a positive integer such that $n \cdot 1 = 0$. Then for any $a \in R$, we have</p>
+  <p class="center">$n \cdot a = a + a + \cdots + a = a(1 + 1 + \cdots + 1) = a(n \cdot 1) = a0 = 0.$</p>
+  <p>Our theorem follows directly. &#9632;</p>
+  <h2 class="sec">Exercises 23</h2>
+  <h3 class="sub">Computations</h3>
+  <p class="exl"><b>1.</b> Find all solutions of the equation $x^3 - 2x^2 - 3x = 0$ in $\mathbb{Z}_{12}$.</p>
+  <p class="exl"><b>2.</b> Solve the equation $3x = 2$ in the field $\mathbb{Z}_7$; in the field $\mathbb{Z}_{23}$.</p>
+  <p class="exl"><b>3.</b> Find all solutions of the equation $x^2 + 2x + 2 = 0$ in $\mathbb{Z}_6$.</p>
+  <p class="exl"><b>4.</b> Find all solutions of $x^2 + 2x + 4 = 0$ in $\mathbb{Z}_6$.</p>
+  <p>In Exercises 5 through 10, find the characteristic of the given ring.</p>
+  <p class="exl"><b>5.</b> $2\mathbb{Z}$ &nbsp;&nbsp; <b>6.</b> $\mathbb{Z} \times \mathbb{Z}$ &nbsp;&nbsp; <b>7.</b> $\mathbb{Z}_3 \times 3\mathbb{Z}$ &nbsp;&nbsp; <b>8.</b> $\mathbb{Z}_3 \times \mathbb{Z}_3$ &nbsp;&nbsp; <b>9.</b> $\mathbb{Z}_3 \times \mathbb{Z}_4$ &nbsp;&nbsp; <b>10.</b> $\mathbb{Z}_6 \times \mathbb{Z}_{15}$</p>
+</div>
+
+<div class="sheet book" id="pdf-p216">
+  <div class="rh"><span>Section 23 &middot; Exercises</span><span>199</span></div>
+  <p>In Exercises 11 through 16, classify each nonzero element of the ring as a unit, a divisor of $0$, or neither.</p>
+  <p class="exl"><b>11.</b> $\mathbb{Z}_6$ &nbsp;&nbsp; <b>12.</b> $\mathbb{Z}_8$ &nbsp;&nbsp; <b>13.</b> $\mathbb{Z}_{15}$ &nbsp;&nbsp; <b>14.</b> $\mathbb{Z}$ &nbsp;&nbsp; <b>15.</b> $\mathbb{Z}_3 \times \mathbb{Z}_3$ &nbsp;&nbsp; <b>16.</b> $\mathbb{Z}_4 \times \mathbb{Z}_5$</p>
+  <p class="exl"><b>17.</b> Let $R$ be a commutative ring with unity of characteristic $4$. Compute and simplify $(a + b)^4$ for $a, b \in R$.</p>
+  <p class="exl"><b>18.</b> Let $R$ be a commutative ring with unity of characteristic $3$. Compute and simplify $(a + b)^9$ for $a, b \in R$.</p>
+  <p class="exl"><b>19.</b> Let $R$ be a commutative ring with unity of characteristic $3$. Compute and simplify $(a + b)^6$ for $a, b \in R$.</p>
+  <p class="exl"><b>20.</b> Show that the matrix $\begin{bmatrix}1&2\\2&4\end{bmatrix}$ is a divisor of zero in $M_2(\mathbb{Z})$.</p>
+  <h3 class="sub">Concepts</h3>
+  <p>In Exercises 21 and 22, correct the definition of the italicized term without reference to the text, if correction is needed, so that it is in a form acceptable for publication.</p>
+  <p class="exl"><b>21.</b> If $ab = 0$, then $a$ and $b$ are <i>divisors of zero</i>.</p>
+  <p class="exl"><b>22.</b> If $n \cdot a = 0$ for all elements $a$ in a ring $R$, then $n$ is the <i>characteristic of $R$</i>.</p>
+  <p class="exl"><b>23.</b> Determine whether each of the following is true or false.</p>
+  <p class="exl sub"><b>a.</b> $n\mathbb{Z}$ has zero divisors if $n$ is not prime. &nbsp; <b>b.</b> Every field is an integral domain. &nbsp; <b>c.</b> The characteristic of $n\mathbb{Z}$ is $n$. &nbsp; <b>d.</b> As a ring, $\mathbb{Z}$ is isomorphic to $n\mathbb{Z}$ for all $n \ge 1$.<br><b>e.</b> The cancellation law holds in any ring that is isomorphic to an integral domain. &nbsp; <b>f.</b> Every integral domain of characteristic $0$ is infinite.<br><b>g.</b> The direct product of two integral domains is again an integral domain. &nbsp; <b>h.</b> A divisor of zero in a commutative ring with unity can have no multiplicative inverse.<br><b>i.</b> $n\mathbb{Z}$ is a subdomain of $\mathbb{Z}$. &nbsp; <b>j.</b> $\mathbb{Z}$ is a subfield of $\mathbb{Q}$.</p>
+  <p class="exl"><b>24.</b> Each of the six numbered regions in Fig. 23.10 corresponds to a certain type of a ring. Give an example of a ring in each of the six cells. For example, a ring in the region numbered 3 must be commutative (it is inside the commutative circle), have unity, but not be an integral domain.</p>
+  <p class="exl"><b>25.</b> (For students who have had a semester of linear algebra) Let $F$ be a field. Give five different characterizations of the elements $A$ of $M_n(F)$ that are divisors of $0$.</p>
+  <p class="exl"><b>26.</b> Redraw Fig. 23.10 to include a subset corresponding to strictly skew fields.</p>
+  <h3 class="sub">Proof Synopsis</h3>
+  <p class="exl"><b>27.</b> Give a one-sentence synopsis of the proof of the &ldquo;if&rdquo; part of Theorem 23.6.</p>
+  <p class="exl"><b>28.</b> Give a two-sentence synopsis of the proof of Theorem 23.11.</p>
+  <h3 class="sub">Theory</h3>
+  <p class="exl"><b>29.</b> An element $a$ of a ring $R$ is idempotent if $a^2 = a$. Show that a division ring contains exactly two idempotent elements.</p>
+  <p class="exl"><b>30.</b> Show that an intersection of subdomains of an integral domain $D$ is again a subdomain of $D$.</p>
+  <p class="exl"><b>31.</b> Show that a finite ring $R$ with unity $1 \ne 0$ and no divisors of $0$ is a division ring. (It is actually a field, although commutativity is not easy to prove. See Theorem 32.10.) [<i>Note:</i> In your proof, to show that $a \ne 0$ is a unit, you must show that a &ldquo;left multiplicative inverse&rdquo; of $a \ne 0$ in $R$ is also a &ldquo;right multiplicative inverse.&rdquo;]</p>
+</div>
+
+<div class="sheet book" id="pdf-p217">
+  <div class="rh"><span>Section 23 &middot; Exercises</span><span>200</span></div>
+  <p class="exl"><b>32.</b> Let $R$ be a ring that contains at least two elements. Suppose for each nonzero $a \in R$, there exists a unique $b \in R$ such that $aba = a$.</p>
+  <p class="exl sub"><b>a.</b> Show that $R$ has no divisors of $0$. &nbsp; <b>b.</b> Show that $bab = b$. &nbsp; <b>c.</b> Show that $R$ has unity. &nbsp; <b>d.</b> Show that $R$ is a division ring.</p>
+  <p class="exl"><b>33.</b> Show that the characteristic of a subdomain of an integral domain $D$ is equal to the characteristic of $D$.</p>
+  <p class="exl"><b>34.</b> Show that if $D$ is an integral domain, then $\{n \cdot 1 \mid n \in \mathbb{Z}\}$ is a subdomain of $D$ contained in every subdomain of $D$.</p>
+  <p class="exl"><b>35.</b> Show that the characteristic of an integral domain $D$ must be either $0$ or a prime $p$. [<i>Hint:</i> If the characteristic of $D$ is $mn$, consider $(m \cdot 1)(n \cdot 1)$ in $D$.]</p>
+  <p class="exl"><b>36.</b> This exercise shows that every ring $R$ can be enlarged (if necessary) to a ring $S$ with unity, having the same characteristic as $R$. Let $S = R \times \mathbb{Z}$ if $R$ has characteristic $0$, and $R \times \mathbb{Z}_n$ if $R$ has characteristic $n$. Let addition in $S$ be the usual addition by components, and let multiplication be defined by</p>
+  <p class="center">$(r_1, n_1)(r_2, n_2) = (r_1r_2 + n_1 \cdot r_2 + n_2 \cdot r_1, n_1n_2)$</p>
+  <p class="exl sub">where $n \cdot r$ has the meaning explained in Section 22. &nbsp; <b>a.</b> Show that $S$ is a ring. &nbsp; <b>b.</b> Show that $S$ has unity. &nbsp; <b>c.</b> Show that $S$ and $R$ have the same characteristic. &nbsp; <b>d.</b> Show that the map $\phi : R \to S$ given by $\phi(r) = (r, 0)$ for $r \in R$ maps $R$ isomorphically onto a subring of $S$.</p>
+  <p class="trim">[Section 24, <i>Fermat&rsquo;s and Euler&rsquo;s Theorems</i>, begins at the foot of this page (Fermat&rsquo;s Theorem, 24.1 onwards). It is outside Module IV and is not transcribed here.]</p>
+</div>
+</main>
+</body>
+</html>

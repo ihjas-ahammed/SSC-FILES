@@ -1,0 +1,23 @@
+<!-- id: m1-chain | mod: Module I | modName: Multivariable calculus | modClass: m1 | title: The chain rule in matrix form; the Jacobian | short: Chain rule and Jacobian (19.23–19.25) | est: ~20 min -->
+<gist>The derivative of a composite is the product of the derivative matrices: $(f\circ g)'(\boldsymbol\xi)=f'(g(\boldsymbol\xi))\,g'(\boldsymbol\xi)$. Written entry by entry this is the familiar chain rule for partial derivatives. For an inverse function the derivative is the inverse matrix, which needs a non-zero Jacobian $\det f'(\boldsymbol\xi)$.</gist>
+
+<tp>Proposition 19.24 (chain rule)</tp>
+<must><p>If $g$ is differentiable at $\boldsymbol\xi$ and $f$ is differentiable at $\boldsymbol\eta=g(\boldsymbol\xi)$, then $f\circ g$ is differentiable at $\boldsymbol\xi$ and $$(f\circ g)'(\boldsymbol\xi)=f'(\boldsymbol\eta)\,g'(\boldsymbol\xi),\qquad\text{i.e.}\quad\frac{d\mathbf z}{d\mathbf x}=\frac{d\mathbf z}{d\mathbf y}\frac{d\mathbf y}{d\mathbf x}.$$</p></must>
+<p><b>Proof sketch (as in the book).</b> We have $f(\mathbf y)-f(\boldsymbol\eta)-f'(\boldsymbol\eta)(\mathbf y-\boldsymbol\eta)=o(\mathbf y-\boldsymbol\eta)$ and $g(\mathbf x)-g(\boldsymbol\xi)-g'(\boldsymbol\xi)(\mathbf x-\boldsymbol\xi)=o(\mathbf x-\boldsymbol\xi)$. Put $\mathbf y=g(\mathbf x)$ in the first and replace $g(\mathbf x)-g(\boldsymbol\xi)$ by $g'(\boldsymbol\xi)(\mathbf x-\boldsymbol\xi)+o(\mathbf x-\boldsymbol\xi)$:</p>
+$$f(g(\mathbf x))-f(g(\boldsymbol\xi))-f'(\boldsymbol\eta)\{g'(\boldsymbol\xi)(\mathbf x-\boldsymbol\xi)+o(\mathbf x-\boldsymbol\xi)\}=o\{g'(\boldsymbol\xi)(\mathbf x-\boldsymbol\xi)+o(\mathbf x-\boldsymbol\xi)\},$$
+<p>so $f(g(\mathbf x))-f(g(\boldsymbol\xi))-f'(\boldsymbol\eta)g'(\boldsymbol\xi)(\mathbf x-\boldsymbol\xi)=o(\mathbf x-\boldsymbol\xi)$. (The last step, that $o$ of something of order $\|\mathbf x-\boldsymbol\xi\|$ is $o(\mathbf x-\boldsymbol\xi)$, is the part the book does not fully justify.)</p>
+<p>Comparing entries of $\dfrac{d\mathbf z}{d\mathbf x}=\dfrac{d\mathbf z}{d\mathbf y}\dfrac{d\mathbf y}{d\mathbf x}$ ($m\times n=(m\times p)(p\times n)$):</p>
+<must><p>$$\frac{\partial z_i}{\partial x_j}=\frac{\partial z_i}{\partial y_1}\frac{\partial y_1}{\partial x_j}+\frac{\partial z_i}{\partial y_2}\frac{\partial y_2}{\partial x_j}+\dots+\frac{\partial z_i}{\partial y_p}\frac{\partial y_p}{\partial x_j}.$$</p></must>
+
+<tp>Examples 19.25</tp>
+<der id="d-chain"/>
+<p><b>(ii)</b> $w=xy^2z^3$ with $x=r+2s+3t$, $y=2r+3s+t$, $z=3r+s+t$:</p>
+$$\left(\frac{\partial w}{\partial s}\right)_{r,t}=\frac{\partial w}{\partial x}\frac{\partial x}{\partial s}+\frac{\partial w}{\partial y}\frac{\partial y}{\partial s}+\frac{\partial w}{\partial z}\frac{\partial z}{\partial s}=y^2z^3\cdot2+2xyz^3\cdot3+3xy^2z^2\cdot1,$$
+<p>then substitute $x,y,z$ in terms of $r,s,t$: $2(2r+3s+t)^2(3r+s+t)^3+6(r+2s+3t)(2r+3s+t)(3r+s+t)^3+3(r+2s+3t)(2r+3s+t)^2(3r+s+t)^2$.</p>
+<trap><p>The book states $w=xy^2z$, but its working (the factors $z^3$ and $3xy^2z^2$) is for $w=xy^2z^3$. Use $w=xy^2z^3$. In every chain-rule answer say what is held constant.</p></trap>
+
+<tp>Inverse functions and the Jacobian</tp>
+<p>If $f$ has an inverse and both are differentiable, differentiating $f\circ f^{-1}(\mathbf x)=\mathbf x$ by the chain rule gives $f'(\boldsymbol\xi)(f^{-1})'(\boldsymbol\eta)=I$, i.e. formula (VI): $\dfrac{d\mathbf y}{d\mathbf x}=\left(\dfrac{d\mathbf x}{d\mathbf y}\right)^{-1}$.</p>
+<must><p>The <b>Jacobian</b> of $f:\mathbf R^n\to\mathbf R^n$ at $\boldsymbol\xi$ is $\det f'(\boldsymbol\xi)$. If the first partials are continuous at $\boldsymbol\xi$ and $\det f'(\boldsymbol\xi)\ne0$, a suitable differentiable inverse exists (the inverse function theorem, quoted without proof). This is the vector form of "$f'(\xi)\ne0$".</p></must>
+<chk><q>Polar coordinates $x_1=r\cos\theta$, $x_2=r\sin\theta$. Find the Jacobian $\partial(x_1,x_2)/\partial(r,\theta)$. Where is the inverse not guaranteed?</q><a><p>$\begin{vmatrix}\cos\theta&-r\sin\theta\\\sin\theta&r\cos\theta\end{vmatrix}=r$. Non-zero except at $r=0$, the origin.</p></a></chk>
+<chk><q>$z=f(y_1,y_2)$ with $y_1=x_1x_2$, $y_2=x_1+x_2$. Write $\partial z/\partial x_1$.</q><a><p>$\dfrac{\partial z}{\partial x_1}=\dfrac{\partial z}{\partial y_1}x_2+\dfrac{\partial z}{\partial y_2}\cdot1$.</p></a></chk>

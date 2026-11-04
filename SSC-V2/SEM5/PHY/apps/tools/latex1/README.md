@@ -1,11 +1,11 @@
-# LATEX_1 — build sources
+# LATEX_1234 — build sources (Modules I–IV)
 
 `python3 build.py` writes two files into `apps/`:
 
 | file | what it is |
 |---|---|
-| `LATEX_1.html` | online app: latex.js + preview fonts from jsDelivr, Google Fonts, **Real PDF** tab (texlive.net), Firebase progress sync, ⤓ downloads the offline copy |
-| `LATEX_12_OFFLINE.html` | self-contained (~3.5 MB): every library, stylesheet and font inlined; no network requests at all; the PDF tab points to the online app |
+| `LATEX_1234.html` | online app: latex.js + preview fonts from jsDelivr, Google Fonts, **Real PDF** tab (texlive.net), Firebase progress sync, ⤓ downloads the offline copy |
+| `LATEX_1234_OFFLINE.html` | self-contained (~3.5 MB): every library, stylesheet and font inlined; no network requests at all; the PDF tab points to the online app |
 
 Deploy both with `bash ../deploy.sh` (site `ssc-data-science-qm`).
 
@@ -21,9 +21,9 @@ src/ui.js          engine: tree + focus accordion + width melting, live editor, 
                    (omr, cards, match, fill, parsons, predict, challenge), sync, theme
 src/data.head.js   authoring helpers (ex, editor, omr, cards, match, fill, parsons, predict, fix, build, qa …)
 src/data.start.js  orientation + playground
-src/data.m1.js     Module I  — Tutorials I–V
-src/data.m2.js     Module II — Tutorials VI–VII
-src/data.tests.js  two model papers + last pass
+src/emu.js         spliced into tex.js at //@@EMU@@: amsmath displays + numbering, amsthm, natbib, boxes, colour, footnotes, longtable, enumerate package, beamer slide emulator
+src/data.m1.js … data.m4.js  Modules I–IV (STE100 style, from the book cuts)
+src/data.tests.js  four model papers (each covers all modules) + last pass
 src/data.tail.js   MODULES (the module → section map)
 vendor/            lxshiki.js (Shiki core + VS Code LaTeX/BibTeX grammars + Light+/Dark+, JS regex engine),
                    latex.js 0.12.6, its base.js, preview CSS, subset Computer Modern + KaTeX fonts,

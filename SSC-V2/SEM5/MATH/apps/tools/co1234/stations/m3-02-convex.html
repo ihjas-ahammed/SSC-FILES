@@ -1,0 +1,24 @@
+<!-- id: m3-convex | mod: Module III | modName: Convex optimization problems | modClass: m3 | title: Convex optimization problems | short: Convex optimization (4.2) | est: ~35 min -->
+<gist>A convex problem has a convex objective, convex inequality constraints and affine equality constraints. Then the feasible set is convex, every local optimum is global, and a differentiable optimum is characterised by a single inequality: $-\nabla f_0(\mathbf x)$ supports the feasible set.</gist>
+
+<tp>Convex problems in standard form (§4.2.1)</tp>
+<must><p>$$\begin{array}{ll}\text{minimize}&f_0(\mathbf x)\\\text{subject to}&f_i(\mathbf x)\le0,\ i=1,\dots,m\\&\mathbf a_i^T\mathbf x=b_i,\ i=1,\dots,p\end{array}$$ with $f_0,\dots,f_m$ <b>convex</b> and the equality constraints <b>affine</b>. The feasible set $\bigcap\dom f_i\cap\{\mathbf x\mid f_i(\mathbf x)\le0\}\cap\{\mathbf x\mid A\mathbf x=\mathbf b\}$ is convex (sublevel sets ∩ hyperplanes). Concave maximisation problems are convex problems after negation.</p></must>
+<p><b>Abstract vs standard form.</b> "Minimise a convex function over a convex set" is not enough by Boyd's definition: e.g. $f_1=x_1/(1+x_2^2)\le0$ and $h_1=(x_1+x_2)^2=0$ define the convex set $\{x_1\le0,\ x_1=-x_2\}$ but $f_1$ is not convex and $h_1$ is not affine. The equivalent convex problem uses $x_1\le0$, $x_1+x_2=0$.</p>
+
+<tp>Local and global optima (§4.2.2)</tp>
+<must><p>In a convex problem every locally optimal point is globally optimal.</p></must>
+<p><b>Proof.</b> Let $\mathbf x$ be locally optimal (optimal within radius $R$) and suppose a feasible $\mathbf y$ has $f_0(\mathbf y)\lt f_0(\mathbf x)$; then $\|\mathbf y-\mathbf x\|_2\gt R$. Take $\mathbf z=(1-\theta)\mathbf x+\theta\mathbf y$ with $\theta=\dfrac{R}{2\|\mathbf y-\mathbf x\|_2}$. Then $\|\mathbf z-\mathbf x\|_2=R/2$, $\mathbf z$ is feasible (convex feasible set), and $f_0(\mathbf z)\le(1-\theta)f_0(\mathbf x)+\theta f_0(\mathbf y)\lt f_0(\mathbf x)$: contradiction.</p>
+
+<tp>Optimality criterion for differentiable $f_0$ (§4.2.3)</tp>
+<fig name="optcrit"><cap>Geometric meaning: if $\nabla f_0(\mathbf x)\ne\mathbf 0$, it defines a supporting hyperplane to $X$ at $\mathbf x$.</cap></fig>
+<der id="d-optcrit"/>
+<p><b>Example 4.5 (unconstrained QP).</b> $f_0=\tfrac12\mathbf x^TP\mathbf x+\mathbf q^T\mathbf x+r$, $P\succeq0$: optimal iff $P\mathbf x+\mathbf q=\mathbf 0$. If $\mathbf q\notin\mathcal R(P)$ there is no solution and $f_0$ is unbounded below; if $P\succ0$ the unique solution is $-P^{-1}\mathbf q$; otherwise the solutions form an affine set.</p>
+<p><b>Example 4.6 (analytic centring).</b> Minimise $-\sum\log(b_i-\mathbf a_i^T\mathbf x)$: optimality $\sum\dfrac{\mathbf a_i}{b_i-\mathbf a_i^T\mathbf x}=\mathbf 0$. There may be none (unbounded polyhedron), one, or infinitely many solutions.</p>
+<p><b>Minimisation over the nonnegative orthant</b> ($\mathbf x\succeq0$): optimality ⇔ $\mathbf x\succeq0$, $\nabla f_0(\mathbf x)\succeq0$, $x_i(\nabla f_0(\mathbf x))_i=0$ for every $i$.</p>
+
+<tp>Equivalent convex problems and quasiconvex optimization (§4.2.4–4.2.5)</tp>
+<p>Eliminating equality constraints, introducing equalities, slack variables (for linear $f_i$ only), the epigraph form and minimising over some variables all preserve convexity.</p>
+<must><p><b>Quasiconvex problem:</b> $f_0$ quasiconvex, $f_i$ convex, equalities affine. Local optima need not be global, but the problem can be solved by <b>bisection</b>: write $f_0(\mathbf x)\le t\iff\phi_t(\mathbf x)\le0$ with $\phi_t$ convex. For fixed $t$, the <b>convex feasibility problem</b> "find $\mathbf x$ with $\phi_t(\mathbf x)\le0$, $f_i(\mathbf x)\le0$, $A\mathbf x=\mathbf b$" decides whether $p^\star\le t$. Start with $[l,u]\ni p^\star$, test $t=(l+u)/2$, keep the half containing $p^\star$; $\lceil\log_2((u-l)/\epsilon)\rceil$ steps give accuracy $\epsilon$.</p></must>
+<trap><p>A convex problem may have no optimal point, or many. Uniqueness needs e.g. strict convexity of $f_0$. And "convex feasible set + convex objective" written with non-convex $f_i$ is not in Boyd's standard form.</p></trap>
+<chk><q>Prove the feasible set of a convex problem is convex.</q><a><p>Each $\{f_i\le0\}$ is a sublevel set of a convex function, hence convex; $\{A\mathbf x=\mathbf b\}$ is affine; $\dom f_i$ is convex. An intersection of convex sets is convex.</p></a></chk>
+<chk><q>Minimise $f_0$ (convex, differentiable) subject to $A\mathbf x=\mathbf b$. State the optimality condition.</q><a><p>$A\mathbf x=\mathbf b$ and $\nabla f_0(\mathbf x)+A^T\boldsymbol\nu=\mathbf 0$ for some $\boldsymbol\nu\in\mathbf R^p$.</p></a></chk>

@@ -1,0 +1,1003 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Optics revision · Module 4</title><style>
+*{box-sizing:border-box}body{margin:0;font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#0f1220;color:#e8eaf3}
+header{position:sticky;top:0;z-index:5;background:#151a2e;border-bottom:1px solid #2a3150;padding:10px 14px}
+header h1{font-size:17px;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}header .sub{font-size:12px;color:#9aa3c7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+nav{display:flex;gap:6px;overflow-x:auto;padding:8px 14px;background:#121628;border-bottom:1px solid #222944;position:sticky;top:52px;z-index:4}
+nav a{flex:none;color:#c9cff0;text-decoration:none;font-size:12px;padding:4px 9px;border:1px solid #2f3760;border-radius:14px}
+main{max-width:760px;margin:0 auto;padding:12px}
+.unit{margin:18px 0 26px}.unit>h2{font-size:15px;color:#ffd37a;margin:0 0 8px;letter-spacing:.2px}
+.card{background:#181d33;border:1px solid #2b3358;border-radius:14px;padding:14px 14px 10px;margin:0 0 12px;box-shadow:0 2px 10px #0006}
+.card h3{margin:0 0 8px;font-size:14px;text-transform:uppercase;letter-spacing:.8px}
+.th h3{color:#7fd3ff}.dv h3{color:#b7a2ff}
+.card .t{font-size:16px;font-weight:600;margin-bottom:8px;color:#fff}
+ul{margin:0;padding-left:18px}li{margin:0 0 6px}li b{color:#ffe7a8}
+.key{margin-top:10px;padding:8px 10px;border-radius:10px;background:#20284a;border-left:3px solid #ffd37a}
+.key .k{font-size:11px;color:#ffd37a;text-transform:uppercase;letter-spacing:.8px}
+.legend{font-size:13px;color:#b9c0e0;margin-bottom:8px}
+.phase{margin:10px 0 4px;font-size:12.5px;color:#cbbcff}.phase b{color:#e2d8ff}
+.st{border-left:2px solid #3b4478;padding:2px 0 4px 10px;margin:0 0 4px}
+.st.final{border-left-color:#ffd37a;background:#252b4f;border-radius:0 8px 8px 0}
+.tex{overflow-x:auto;overflow-y:hidden}.tex mjx-container{margin:4px 0!important}
+.mv{font-size:11.5px;color:#9ad6a6}.nt{font-size:12px;color:#99a0c4}
+details.dv summary{cursor:pointer;list-style:none}details.dv summary::-webkit-details-marker{display:none}
+details.dv summary h3:after{content:" ▸ tap to open";font-size:11px;color:#8088b8;text-transform:none;letter-spacing:0}
+details.dv[open] summary h3:after{content:" ▾"}
+.figwrap{position:sticky;top:var(--stick,92px);z-index:3;background:#181d33;padding:4px 0 6px;margin:0 -4px 8px}
+.fgbox{width:100%;max-height:300px;border-radius:12px}
+.figctl{display:flex;gap:6px;align-items:center;margin-top:6px}.figctl button{background:#2b3360;color:#fff;border:0;border-radius:8px;padding:5px 10px;font-size:13px}
+.figctl .play{background:#6a55d8}.fighint{font-size:11px;color:#8088b8}
+.st{cursor:pointer}.st.on{background:#2c2a55;border-left-color:#f7c04f;border-radius:0 8px 8px 0}
+footer{text-align:center;font-size:11px;color:#6d75a0;padding:20px}
+</style>
+<script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},chtml:{scale:0.95}};</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script><style>:root{--paper:#111326;--card:#181d33;--ink:#ECEAFB;--ink-2:#B7B9D8;--muted:#7D82A6;--line:rgba(255,255,255,.09);--lav:#232748;--lav-2:#343A6E;--violet:#A898FF;--on-violet:#15172C;--amber:#F7C04F;--orange:#F59A55;--hl:#F7C04F;--sage:#5BC48E;--coral:#FF7B68}
+/* =====================================================================
+   Focused derivation card (.mf-v2) and animated figure (.fg-*)
+   A derivation card gets .mf-v2 when its setup has a "figure" (see 02-figure.js).
+   The back keeps three things on screen together: the figure, the equation
+   board and the instruction for the current move. Nothing here touches other cards.
+   ===================================================================== */
+
+/* ---------- Figure ---------- */
+.fg-host {
+  position: relative; display: block; padding: 0; overflow: hidden;
+  --fg-pad: 10px; --fg-pad-top: 34px;
+  background: color-mix(in srgb, var(--lav) 62%, var(--card));
+}
+.fg-host > .fg-svg {
+  position: absolute; inset: 0; width: 100%; height: 100%; max-height: none; overflow: visible;
+  font-size: var(--fg-fs, 14px); pointer-events: none;
+}
+.fg-svg path, .fg-svg circle { vector-effect: non-scaling-stroke; }
+
+/* every part fades between off, on, dim and focus; draw-in is done in JS */
+.fg-part { transition: opacity 0.45s ease; }
+.fg-part.is-off { opacity: 0; }
+.fg-part.is-dim { opacity: 0.22; }
+.fg-instant .fg-part, .fg-instant .fg-part * { transition: none !important; }
+
+.fg-stroke { fill: none; stroke: var(--violet); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: stroke 0.4s ease, stroke-width 0.4s ease; }
+.fg-head { fill: var(--violet); stroke: none; transition: fill 0.4s ease; }
+.fg-fill { fill: var(--violet); fill-opacity: 0.1; stroke: none; transition: fill 0.4s ease, fill-opacity 0.4s ease; }
+.fg-dot { fill: var(--violet); stroke: var(--card); stroke-width: 1.6; transition: fill 0.4s ease; }
+.fg-hatch { fill: none; stroke: var(--ink-2); stroke-width: 1.1; stroke-linecap: round; opacity: 0.55; }
+.fg-ext { fill: none; stroke: var(--ink-2); stroke-width: 1.3; stroke-linecap: round; }
+
+.fg-axis .fg-stroke { stroke: var(--ink-2); stroke-width: 1.3; }
+.fg-axis .fg-head { fill: var(--ink-2); }
+.fg-mirror .fg-stroke { stroke: var(--ink); stroke-width: 2.8; }
+.fg-ray .fg-stroke { stroke-width: 2.2; }
+.fg-normal .fg-stroke { stroke: var(--ink-2); stroke-width: 1.4; stroke-dasharray: 5 4; }
+.fg-guide .fg-stroke { stroke: var(--ink-2); stroke-width: 1.4; stroke-dasharray: 3 3; }
+.fg-dim .fg-stroke { stroke: var(--ink-2); stroke-width: 1.3; }
+.fg-dim .fg-head { fill: var(--ink-2); }
+.fg-angle .fg-stroke { stroke-width: 1.7; }
+.fg-angle .fg-fill { fill-opacity: 0.14; }
+.fg-polygon .fg-stroke { stroke: var(--hl); stroke-width: 2.2; }
+.fg-polygon .fg-fill { fill: var(--amber); fill-opacity: 0.2; }
+
+/* focus: the accent colour, a little heavier */
+.fg-part.is-focus .fg-stroke { stroke: var(--hl); }
+.fg-part.is-focus.fg-line .fg-stroke, .fg-part.is-focus.fg-dim .fg-stroke { stroke-width: 2.4; }
+.fg-part.is-focus .fg-head, .fg-part.is-focus .fg-dot { fill: var(--hl); }
+.fg-part.is-focus .fg-ext { stroke: var(--hl); }
+.fg-part.is-focus.fg-angle .fg-stroke { stroke-width: 2.2; }
+.fg-part.is-focus.fg-angle .fg-fill { fill: var(--amber); fill-opacity: 0.32; }
+
+/* labels: fixed pixel size, italic like the symbols on the board, with a halo so lines never cut them */
+.fg-label {
+  font-family: "STIX Two Text", "Cambria Math", "Times New Roman", "Noto Serif", "DejaVu Serif", serif;
+  font-style: italic; font-weight: 600; fill: var(--ink);
+  paint-order: stroke; stroke: color-mix(in srgb, var(--lav) 62%, var(--card)); stroke-width: 4px; stroke-linejoin: round;
+  transition: fill 0.4s ease;
+}
+.fg-label .fg-sub, .fg-label .fg-sup { font-size: 70%; }
+.fg-plate { fill: color-mix(in srgb, var(--lav) 62%, var(--card)); stroke: none; }
+.fg-point .fg-label { font-style: normal; font-weight: 700; }
+.fg-dim .fg-label { font-size: 92%; }
+.fg-part.is-focus .fg-label { fill: var(--hl); font-weight: 800; }
+
+/* caption: one line in the top-left corner, says what the figure is showing now */
+.fg-cap {
+  position: absolute; left: 8px; top: 7px; max-width: calc(100% - 16px); z-index: 1;
+  font-size: 12.5px; line-height: 1.3; font-weight: 700; color: var(--ink);
+  padding: 4px 10px; border-radius: 999px; background: var(--card); box-shadow: inset 0 0 0 1px var(--line);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  opacity: 0; transform: translateY(-4px); transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.fg-cap.is-on { opacity: 1; transform: none; }
+.fg-cap.is-on.is-swap { opacity: 0; transform: translateY(-3px); }
+.fg-cap sub, .fg-cap sup { font-size: 72%; line-height: 0; }
+
+/* the old phone rule forces 15px on every setup label; the figure sizes its own labels */
+.mf-v2 .mf-setup .fg-svg text, .mf-v2 .mf-front-art .fg-svg text { font-size: inherit !important; font-weight: 600; }
+.mf-v2 .mf-setup .fg-svg .fg-point text { font-weight: 700; }
+
+/* ---------- Card: front ---------- */
+.mf-v2 .mf-front-art.fg-host { flex: 0 0 auto; height: clamp(170px, calc(var(--sheet-h, 620px) * 0.36), 250px); padding: 0; border-radius: 16px; }
+.mf-v2 .mf-route-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.mf-v2 .mf-route-pair .route-eq { min-width: 0; overflow-x: auto; }
+.mf-v2 .mf-front-route .math { font-size: 16px; }
+
+/* ---------- Card: back ---------- */
+.mf-v2 { --mf-size: 17px; --mf-ghosts: 1; --fg-fs: 14px; }
+.mf-v2 .mf-back { gap: 8px; padding: 10px 12px; }
+.mf-v2 .mf-back .mf-top { min-height: 36px; }
+.mf-v2 .mf-back-title { flex: 1 1 auto; min-width: 0; margin: 0; font-size: 15px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mf-v2 .mf-count { font-size: 12.5px; }
+.mf-v2 button.chip.mf-icon { width: 36px; height: 36px; min-width: 36px; min-height: 36px; padding: 0; border-radius: 50%; font-size: 17px; }
+
+/* phases: a segmented progress line; the current phase shows its name */
+.mf-v2 .mf-back .mf-phases { display: flex; flex-wrap: nowrap; gap: 4px; align-items: center; overflow: hidden; min-height: 22px; }
+.mf-v2 .mf-ph { flex: 1 1 0; min-width: 8px; height: 5px; padding: 0; font-size: 0; border-radius: 3px; background: var(--lav-2); box-shadow: none; overflow: hidden; white-space: nowrap; }
+.mf-v2 .mf-ph::before { content: none; }
+.mf-v2 .mf-ph.is-past { background: var(--violet); opacity: 0.45; box-shadow: none; }
+.mf-v2 .mf-ph.is-now { flex: 0 0 auto; max-width: 62%; height: auto; padding: 3px 10px; font-size: 12px; line-height: 16px; background: var(--violet); color: var(--on-violet); text-overflow: ellipsis; }
+
+/* work area: figure on top (takes the spare height), then board, then instruction and controls */
+.mf-v2 .mf-work, .mf-v2 .mf-work.has-setup { display: flex; flex-direction: column; gap: 8px; flex: 1 1 auto; min-height: 0; overflow: hidden; }
+.mf-v2 .mf-back .mf-setup, .mf-v2 .mf-work.has-setup .mf-setup {
+  display: block; flex: 1 1 auto; height: auto; min-height: 150px; padding: 0; border-radius: 16px;
+}
+.mf-v2 .mf-right { flex: 0 0 auto; min-height: 0; gap: 8px; }
+.mf-v2 .mf-board { flex: 0 0 auto; min-height: 0; padding: 4px 6px; border-radius: 14px; overflow-x: auto; overflow-y: hidden; }
+
+/* instruction: the move on its own line, the reason under it; fixed height so nothing above it jumps */
+.mf-v2 .mf-panel { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto auto; align-items: center; gap: 8px; }
+.mf-v2 .mf-panel[hidden], .mf-v2 .mf-ask[hidden] { display: none; }
+.mf-v2 .mf-note {
+  grid-column: 1 / -1; margin: 0; min-height: calc(1.4em * 4 + 16px); max-height: calc(1.4em * 4 + 16px); overflow-y: auto;
+  font-size: 14px; line-height: 1.4; font-weight: 600; color: var(--ink-2);
+  padding: 8px 10px 8px 12px; border-radius: 12px; background: var(--lav); box-shadow: inset 3px 0 0 var(--violet);
+}
+.mf-v2 .mf-note > b:first-child { display: block; color: var(--violet); font-weight: 800; }
+.mf-v2 .mf-ctrl { display: contents; }
+.mf-v2 .mf-dots { justify-content: center; flex-wrap: nowrap; gap: 4px; min-width: 0; overflow: hidden; min-height: 0; padding: 4px 2px; }
+.mf-v2 .mf-dot { flex: 0 0 6px; width: 6px; height: 6px; }
+.mf-v2 .mf-dot.is-now { flex: 0 0 16px; width: 16px; }
+.mf-v2 .mf-dot.is-ask { box-shadow: none; background: transparent; outline: 1.5px solid var(--violet); outline-offset: 0; }
+.mf-v2 .mf-dot.is-ask.is-done, .mf-v2 .mf-dot.is-ask.is-now { background: var(--violet); }
+.mf-v2 .mf-ctrl .chip { min-height: 44px; min-width: 44px; padding: 0 12px; }
+.mf-v2 .mf-ctrl .chip.mf-next { background: var(--violet); color: var(--on-violet); padding: 0 16px; font-weight: 800; }
+
+/* a checkpoint question replaces the instruction; the figure and the current line stay in view */
+.mf-v2 .mf-ask { padding: 9px 10px; gap: 7px; }
+.mf-v2 .mf-ask-q { font-size: 14.5px; margin: 0; }
+.mf-v2 .mf-ask-opts { grid-template-columns: 1fr 1fr; gap: 6px; }
+.mf-v2 .mf-ask-opts button { min-height: 44px; padding: 6px 9px; font-size: 14px; }
+.mf-v2 .mf-ask-why { margin: 0; font-size: 13.5px; }
+.mf-v2 .mf-work:has(.mf-ask:not([hidden])) .mf-setup { min-height: 120px; }
+.mf-v2 .mf-right:has(.mf-ask:not([hidden])) .mf-board { height: 66px; min-height: 0; justify-content: flex-end; overflow: hidden; }
+/* once answered, only the right option (and a wrong pick) stay, so the reason and Continue fit */
+.mf-v2 .mf-ask-opts:has(button:disabled) button:not(.is-correct):not(.is-wrong) { display: none; }
+
+/* all steps open: the list replaces the board, the figure shrinks to make room */
+.mf-v2 .mf-work:has(.mf-summary:not([hidden])) { overflow-y: auto; }
+.mf-v2 .mf-work:has(.mf-summary:not([hidden])) .mf-setup { flex: 0 0 auto; height: 160px; min-height: 0; }
+
+/* phone: the old rules hid the figure on the back; here it stays */
+@media (max-width: 899px) {
+  .mf-v2 .mf-back .mf-setup { display: block; }
+  .mf-v2 .mf-back .mf-phases { display: flex; }
+}
+
+/* very short phones: a little less of everything */
+@media (max-width: 899px) and (max-height: 700px) {
+  .mf-v2 { --mf-size: 16px; --fg-fs: 13px; }
+  .mf-v2 .mf-back .mf-setup { min-height: 120px; }
+  .mf-v2 .mf-note { font-size: 13.5px; }
+}
+
+/* ---------- Desktop: figure left, board, instruction and controls right ---------- */
+@media (min-width: 900px) {
+  .mf-v2 { --mf-size: 21px; --mf-ghosts: 2; --fg-fs: 16px; }
+  .mf-v2 .fg-host { --fg-pad: 14px; --fg-pad-top: 40px; }
+  .mf-v2 .fg-cap { font-size: 13.5px; top: 9px; left: 10px; }
+  .mf-v2 .mf-back { gap: 10px; padding: 16px 18px; }
+  .mf-v2 .mf-back-title { font-size: 17px; }
+  .mf-v2 .mf-back .mf-phases { gap: 6px; }
+  .mf-v2 .mf-ph { flex: 0 1 auto; height: auto; padding: 4px 10px; font-size: 12px; line-height: 16px; background: var(--lav); color: var(--ink-2); text-overflow: ellipsis; }
+  .mf-v2 .mf-ph.is-past { opacity: 1; background: var(--lav); color: var(--ink-2); box-shadow: inset 0 0 0 1.5px var(--sage); }
+  .mf-v2 .mf-ph.is-past::before { content: "\2713\00a0"; }
+  .mf-v2 .mf-ph.is-now { max-width: none; }
+  .mf-v2 .mf-work.has-setup { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 16px; align-items: stretch; }
+  .mf-v2 .mf-work.has-setup .mf-setup { height: 100%; min-height: 0; }
+  .mf-v2 .mf-right { height: 100%; display: flex; flex-direction: column; gap: 10px; }
+  .mf-v2 .mf-board { flex: 1 1 auto; justify-content: flex-end; padding: 10px; overflow-y: auto; }
+  .mf-v2 .mf-note { font-size: 15px; }
+  .mf-v2 .mf-front { grid-template-columns: minmax(300px, 52%) minmax(0, 1fr); }
+  .mf-v2 .mf-front-art.fg-host { height: 100%; }
+  .mf-v2 .mf-route-pair { grid-template-columns: 1fr; }
+  .mf-v2 .mf-right:has(.mf-ask:not([hidden])) .mf-board { height: auto; flex: 0 0 auto; }
+  .mf-v2 .mf-work:has(.mf-ask:not([hidden])) .mf-setup { min-height: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fg-part, .fg-cap, .fg-stroke, .fg-label { transition: none; }
+}
+
+/* phone: the focused card is almost full width (07-mathflow.css means to do this for every derivation,
+   but a comment nested inside its header comment swallows that @media rule) */
+@media (max-width: 699px) {
+  .sheet:has(.mf-v2), .card.mf-v2 { --card-w: min(calc(var(--view) - 24px), 560px); }
+}
+
+/* light: the tip of a ray glows while the ray is being drawn */
+.fg-glow { fill: var(--amber); stroke: none; filter: drop-shadow(0 0 3px var(--amber)) drop-shadow(0 0 6px var(--orange)); pointer-events: none; }
+
+/* record: plays the derivation by itself and saves it as a video */
+.mf-v2 button.chip.mf-rec i { display: block; width: 12px; height: 12px; border-radius: 50%; background: var(--coral); transition: border-radius 0.2s ease; }
+.mf-v2.is-recording button.chip.mf-rec i { border-radius: 2px; animation: mf-rec-pulse 1.2s ease-in-out infinite; }
+@keyframes mf-rec-pulse { 50% { opacity: 0.35; } }
+.mf-v2.is-presenting .mf-ask-opts button { cursor: default; }
+@media (prefers-reduced-motion: reduce) { .mf-v2.is-recording button.chip.mf-rec i { animation: none; } }
+
+/* glass: prisms, lenses, plates drawn as apparatus (a polygon with "style": "glass") */
+.fg-glass .fg-fill { fill: var(--violet); fill-opacity: 0.13; }
+.fg-glass .fg-stroke { stroke: var(--ink-2); stroke-width: 1.6; }
+.fg-part.is-focus.fg-glass .fg-fill { fill: var(--amber); fill-opacity: 0.3; }
+</style></head><body>
+<header><h1>Optics · Module 4 revision cards</h1><div class="sub">Polarisation · two cards per unit: theory points + key derivation</div></header>
+<nav><a href="#u17">U17</a><a href="#u18">U18</a><a href="#u19">U19</a><a href="#u20">U20</a><a href="#u21">U21</a><a href="#u22">U22</a><a href="../1/">M1</a><a href="../2/">M2</a><a href="../3/">M3</a></nav><main><section class="unit" id="u17"><h2>Unit 17 · Polarisation: types of polarised light</h2>
+<div class="card th"><h3>① Theory — points</h3><ul><li><b>Polarisation</b>: removing the symmetry of a light wave about its direction of propagation; describes the orientation of the electric vector \(\vec E\).</li><li>Only <b>transverse</b> waves can be polarised → polarisation proves light is transverse (E ⟂ B ⟂ direction).</li><li><b>Unpolarised light</b>: E vibrates in all planes ⟂ to the beam; equivalent to two incoherent perpendicular components of equal intensity.</li><li><b>Plane (linearly) polarised</b>: E in a single plane; two coherent perpendicular components in phase or 180° out of phase.</li><li><b>Circularly polarised</b>: two coherent perpendicular components, <b>equal amplitudes</b>, phase difference 90°; E has constant magnitude and rotates.</li><li><b>Elliptically polarised</b>: unequal amplitudes and/or phase difference other than 0, π; E-tip traces an ellipse.</li><li>Right-handed: E rotates clockwise as seen by an observer looking back towards the source; left-handed: anticlockwise.</li><li><b>Partially polarised</b>: mixture of plane-polarised and unpolarised light.</li><li>Plane of vibration (contains E) ⟂ plane of polarisation. Diagrams: dots = E ⟂ paper, arrows = E in the paper.</li><li>Two waves polarised at right angles do not interfere (Fresnel–Arago).</li></ul><div class="key"><div class="k">Must remember</div><div>\(E_y = E_1\cos\omega t,\quad  E_z = E_2\cos(\omega t + \delta)\)</div><div>\(\delta = \tfrac{\pi}{2},\quad  E_1 = E_2 \Rightarrow \text{circular}\)</div></div></div>
+<details class="card dv" open><summary><h3>② Key derivation</h3></summary><div class="t">Linear, circular and elliptical polarisation from two perpendicular waves</div><div class="legend">Light travels toward you along \(x\). \(z\) and \(y\) are the two perpendicular directions in which \(\vec E\) can vibrate; \(E_z\), \(E_y\) are its components, \(\delta\) their phase difference, \(\omega\) the angular frequency. Amplitudes are drawn at convenient lengths. The book describes these cases in words (Figs 20.5 to 20.12); the equations make the same argument exact.</div>
+<div class="figwrap"><div class="fgbox" data-fig="0" style="aspect-ratio:240/198"></div><div class="figctl"><button class="play">▶ Play</button><button class="prev">◀</button><button class="next">▶|</button><span class="fighint">tap any step to show it on the figure</span></div></div>
+<div class="phase"><b>Two waves</b> — two coherent perpendicular waves</div>
+<div class="st" data-i="0"><div class="tex">\[E_z = E_1\cos\omega t\]</div><div class="nt">Resolve the light into two coherent waves along \(z\) and \(y\). The \(z\)-wave has amplitude \(E_1\).</div></div>
+<div class="st" data-i="1"><div class="tex">\[E_y = E_2\cos(\omega t+\delta)\]</div><div class="mv">Add the \(y\)-wave with phase difference \(\delta\)</div><div class="nt">The \(y\)-wave has amplitude \(E_2\) and runs a phase \(\delta\) ahead of the \(z\)-wave.</div></div>
+<div class="phase"><b>In phase: line</b> — in phase or 180° apart gives a fixed direction</div>
+<div class="st" data-i="2"><div class="tex">\[E_y = \frac{E_2}{E_1}E_z\]</div><div class="mv">substitute by \(\delta = 0\)</div><div class="nt">With \(\delta=0\) both waves carry the same \(\cos\omega t\), so \(E_y\) is a fixed multiple of \(E_z\).</div></div>
+<div class="st" data-i="3"><div class="tex">\[\tan\theta = \frac{E_2}{E_1}\]</div><div class="mv">Tangent in the right triangle with legs \(E_1\), \(E_2\)</div><div class="nt">In the right triangle the angle \(\theta\) of \(\vec E\) from the \(z\)-axis has opposite side \(E_2\) and adjacent side \(E_1\). It never changes.</div></div>
+<div class="st" data-i="4"><div class="tex">\[E_y = -\frac{E_2}{E_1}E_z\]</div><div class="mv">substitute by \(\delta = \pi\)</div><div class="nt">For \(\delta=\pi\) (\(180^\circ\) out of phase) \(\cos(\omega t+\pi)=-\cos\omega t\). The line tilts the other way, still plane polarised.</div></div>
+<div class="phase"><b>Equal, 90° apart: circle</b> — equal amplitudes, 90° apart: constant size, turning direction</div>
+<div class="st" data-i="5"><div class="tex">\[E_z = E_0\cos\omega t\]</div><div class="mv">substitute by \(E_1 = E_0\)</div><div class="nt">Now take equal amplitudes: \(E_1=E_0\).</div></div>
+<div class="st" data-i="6"><div class="tex">\[E_y = E_0\cos(\omega t-90^\circ)\]</div><div class="mv">substitute by \(E_2 = E_0,\ \delta = -90^\circ\)</div><div class="nt">Take \(E_2=E_0\) and put the \(y\)-wave \(90^\circ\) out of phase (\(\delta=-90^\circ\)).</div></div>
+<div class="st" data-i="7"><div class="tex">\[E_y = E_0\sin\omega t\]</div><div class="mv">identity by \(\cos(x-90^\circ)=\sin x\)</div><div class="nt">A cosine delayed by a quarter cycle is a sine: when \(E_z\) is largest, \(E_y\) is zero.</div></div>
+<div class="st" data-i="8"><div class="tex">\[E^2 = E_z^2 + E_y^2\]</div><div class="mv">Pythagoras in the right triangle \(E_z\), \(E_y\), \(E\)</div><div class="nt">The two components are the legs of a right triangle and the resultant \(E\) is its hypotenuse.</div></div>
+<div class="st" data-i="9"><div class="tex">\[E^2 = E_0^2\cos^2\omega t + E_0^2\sin^2\omega t\]</div><div class="mv">substitute by \(E_z = E_0\cos\omega t,\ E_y = E_0\sin\omega t\)</div><div class="nt">Put in the two components.</div></div>
+<div class="st" data-i="10"><div class="tex">\[E^2 = E_0^2\]</div><div class="mv">identity by \(\cos^2\omega t+\sin^2\omega t = 1\)</div><div class="nt">\(\cos^2+\sin^2=1\): the size of \(\vec E\) is constant, so its tip lies on a circle of radius \(E_0\).</div></div>
+<div class="st" data-i="11"><div class="tex">\[\tan\varphi = \frac{E_y}{E_z}\]</div><div class="mv">Tangent in the right triangle with legs \(E_z\), \(E_y\)</div><div class="nt">Let \(\varphi\) be the angle of \(\vec E\) from the \(z\)-axis: opposite side \(E_y\), adjacent side \(E_z\).</div></div>
+<div class="st" data-i="12"><div class="tex">\[\tan\varphi = \tan\omega t\]</div><div class="mv">substitute by \(\frac{E_y}{E_z} = \frac{\sin\omega t}{\cos\omega t}\)</div><div class="nt">\(E_y/E_z=\sin\omega t/\cos\omega t=\tan\omega t\).</div></div>
+<div class="st" data-i="13"><div class="tex">\[\varphi = \omega t\]</div><div class="mv">apply</div><div class="nt">The angle grows steadily with time: \(\vec E\) turns at constant rate \(\omega\), a full turn per period. This is circular polarisation.</div></div>
+<div class="phase"><b>Unequal: ellipse</b> — unequal amplitudes: elliptical</div>
+<div class="st final" data-i="14"><div class="tex">\[\left(\frac{E_z}{E_1}\right)^2 + \left(\frac{E_y}{E_2}\right)^2 = 1\]</div><div class="mv">identity by \(\cos^2\omega t+\sin^2\omega t = 1\)</div><div class="nt">If \(E_1\neq E_2\) (and \(\delta=-90^\circ\)), divide each component by its own amplitude: the tip traces an ellipse. Other phases \(\delta\) also give ellipses.</div></div></details></section>
+<section class="unit" id="u18"><h2>Unit 18 · Production of plane polarised light: pile of plates, scattering</h2>
+<div class="card th"><h3>① Theory — points</h3><ul><li><b>Brewster's law</b>: at the polarising angle \(\tan\theta_B = \mu\); reflected and refracted rays are then perpendicular (\(\theta_B + \theta_r = 90^\circ\)).</li><li>At \(\theta_B\) the reflected light is completely plane polarised (E ⟂ plane of incidence); the transmitted light is only partially polarised.</li><li><b>Pile of plates</b>: ~15 glass plates in a tube, at Brewster's angle to the beam (plates inclined ≈ 33° to the tube axis for glass, since \(\theta_B \approx 57^\circ\)).</li><li>Each surface reflects away part of the s-component (⟂ plane of incidence); after many plates the transmitted beam is nearly pure p-component — polarised <b>parallel to the plane of incidence</b>.</li><li><b>Polarisation by scattering</b>: natural light scattered by ultramicroscopic particles is partially polarised.</li><li>An oscillating electron radiates most perpendicular to its vibration and nothing along it → light scattered at <b>90°</b> is plane polarised.</li><li>Its E-vector is perpendicular to the plane containing the incident and the scattered directions.</li><li><b>Blue sky</b> light is strongly polarised at 90° from the sun, but not completely because of <b>multiple scattering</b>.</li></ul><div class="key"><div class="k">Must remember</div><div>\(\tan\theta_B = \mu\)</div><div>\(\theta_B + \theta_r = 90^\circ\)</div><div>\(90^\circ - \theta_B \approx 33^\circ\)</div></div></div>
+<details class="card dv" open><summary><h3>② Key derivation</h3></summary><div class="t">Pile of plates: why the plates are tilted about 33°</div><div class="legend">A beam of unpolarised light travels along the tube axis through a stack of glass plates. \(\theta_B\) is the angle of incidence (from the normal), \(\alpha\) the angle between a plate and the axis, \(\mu\) the refractive index. One plate is drawn; the stack repeats it. The small sideways shift of the transmitted beam inside the glass is ignored.</div>
+<div class="figwrap"><div class="fgbox" data-fig="1" style="aspect-ratio:240/182"></div><div class="figctl"><button class="play">▶ Play</button><button class="prev">◀</button><button class="next">▶|</button><span class="fighint">tap any step to show it on the figure</span></div></div>
+<div class="phase"><b>Brewster angle</b> — find the polarising angle of glass</div>
+<div class="st" data-i="0"><div class="tex">\[\tan\theta_B = \mu\]</div><div class="nt">Brewster\'s law (Eq. 20.6): at \(\theta_B\) the reflected light is fully polarised. \(\mu\) is the index of the glass.</div></div>
+<div class="st" data-i="1"><div class="tex">\[\theta_B = \tan^{-1}\mu\]</div><div class="mv">apply</div><div class="nt">Take the inverse tangent of both sides.</div></div>
+<div class="st" data-i="2"><div class="tex">\[\theta_B = \tan^{-1}(1.54)\]</div><div class="mv">substitute by \(\mu = 1.54\)</div><div class="nt">For glass take \(\mu=1.54\), chosen so the numbers match the book\'s Fig. 20.16.</div></div>
+<div class="st" data-i="3"><div class="tex">\[\theta_B \approx 57^\circ\]</div><div class="mv">evaluate by \(\tan^{-1}(1.54)\)</div><div class="nt">\(\tan 57^\circ\approx 1.54\), so the beam must meet each plate at \(57^\circ\) to its normal.</div></div>
+<div class="phase"><b>Tilt of the plates</b> — tilt the plates so axial light meets them at θ_B</div>
+<div class="st" data-i="4"><div class="tex">\[\alpha + \theta_B = 90^\circ\]</div><div class="mv">The normal is \(\perp\) to the plate: \(\alpha\) and \(\theta_B\) fill a right angle</div><div class="nt">The normal is perpendicular to the plate. The beam (along the axis) splits this right angle into \(\theta_B\) and \(\alpha\), the angle between plate and axis.</div></div>
+<div class="st" data-i="5"><div class="tex">\[\alpha = 90^\circ - \theta_B\]</div><div class="mv">subtract by \(\theta_B\)</div><div class="nt">Subtract \(\theta_B\).</div></div>
+<div class="st" data-i="6"><div class="tex">\[\alpha = 90^\circ - 57^\circ\]</div><div class="mv">substitute by \(\theta_B \approx 57^\circ\)</div><div class="nt">Put in \(\theta_B\approx57^\circ\).</div></div>
+<div class="st" data-i="7"><div class="tex">\[\alpha \approx 33^\circ\]</div><div class="mv">evaluate by \(90^\circ-57^\circ\)</div><div class="nt">So the plates are inclined at about \(33^\circ\) to the tube axis, as the book states.</div></div>
+<div class="phase"><b>Filtering</b> — each surface removes s-light</div>
+<div class="st final" data-i="8"><div class="tex">\[\theta_{\text{inc}} = \theta_B\]</div><div class="mv">evaluate by \(\alpha = 33^\circ\)</div><div class="nt">Light along the axis then meets every plate at \(\theta_B\). Each surface reflects only the \(s\)-component and none of the \(p\)-component, so the \(s\)-part is filtered out. After about 15 plates only the \(p\)-component (parallel to the plane of incidence) is left.</div></div></details></section>
+<section class="unit" id="u19"><h2>Unit 19 · Polariser, analyser and Malus&#x27; law</h2>
+<div class="card th"><h3>① Theory — points</h3><ul><li><b>Polariser</b>: converts unpolarised light into plane polarised light (Polaroid by selective absorption; Nicol prism by double refraction).</li><li><b>Analyser</b>: identical device used to examine the light; characterised by its <b>transmission axis</b>.</li><li>Unpolarised light through an ideal polariser: \(I_1 = I_0/2\), whatever the orientation.</li><li><b>Malus' law</b> (1809): \(I = I_1\cos^2\theta\), θ = angle between plane of vibration and analyser axis. Amplitude passed = \(E\cos\theta\).</li><li>\(\theta = 0^\circ, 180^\circ\): maximum; \(\theta = 90^\circ, 270^\circ\): zero (<b>crossed polarisers</b>).</li><li>Rotating an analyser: <b>plane polarised</b> → two maxima and two zeros per turn; <b>partially polarised / elliptical</b> → max and min, never zero; <b>unpolarised / circular</b> → constant.</li><li>Three polarisers: crossed pair with a third at 45° between them pass \(I_0/8\).</li><li>Degree of polarisation \(P = \frac{I_{max} - I_{min}}{I_{max} + I_{min}}\).</li></ul><div class="key"><div class="k">Must remember</div><div>\(I = I_1\cos^2\theta\)</div><div>\(I = \frac{I_0}{2}\cos^2\theta \quad (\text{unpolarised input})\)</div></div></div>
+<details class="card dv" open><summary><h3>② Key derivation</h3></summary><div class="t">Malus&#x27;s law for intensity transmitted by an analyser</div><div class="legend">Incident linearly polarised wave of amplitude \(E_0\) along \(x\) (intensity \(I_0 = K E_0^2\)) incident on analyser \(P_2\) at angle \(\theta\) (Eq. 22.9, Fig. 22.6).</div>
+<div class="figwrap"><div class="fgbox" data-fig="2" style="aspect-ratio:122/120"></div><div class="figctl"><button class="play">▶ Play</button><button class="prev">◀</button><button class="next">▶|</button><span class="fighint">tap any step to show it on the figure</span></div></div>
+<div class="phase"><b>Resolve field</b> — resolve incident amplitude E₀ along and perpendicular to P₂&#x27;s pass axis</div>
+<div class="st" data-i="0"><div class="tex">\[E_\parallel = E_0\cos\theta\]</div><div class="nt">Resolve the incident electric field \(E_0\) along the pass axis of analyser \(P_2\) at angle \(\theta\).</div></div>
+<div class="st" data-i="1"><div class="tex">\[E_\perp = E_0\sin\theta\]</div><div class="mv">Write perpendicular component absorbed by analyser P₂</div><div class="nt">The perpendicular component \(E_0\sin\theta\) is absorbed by \(P_2\), so only \(E_\parallel\) emerges.</div></div>
+<div class="phase"><b>Square amplitude</b> — square the transmitted electric field component E_∥</div>
+<div class="st" data-i="2"><div class="tex">\[E_\parallel^2 = E_0^2\cos^2\theta\]</div><div class="mv">Square both sides of E_∥ = E₀ cos θ</div><div class="nt">Square the emergent amplitude \(E_\parallel\) since intensity is proportional to amplitude squared.</div></div>
+<div class="phase"><b>Intensity ratio</b> — multiply by proportionality constant K so I = K E_∥²</div>
+<div class="st" data-i="3"><div class="tex">\[K E_\parallel^2 = K E_0^2\cos^2\theta\]</div><div class="mv">multiply by \(K\)</div><div class="nt">Multiply both sides by the intensity proportionality constant \(K\).</div></div>
+<div class="st" data-i="4"><div class="tex">\[I = K E_0^2\cos^2\theta\]</div><div class="mv">substitute by \(I = K E_\parallel^2\)</div><div class="nt">Replace \(K E_\parallel^2\) on the left with emergent intensity \(I\).</div></div>
+<div class="phase"><b>Malus&#x27;s law</b> — substitute I₀ = K E₀² to obtain I = I₀ cos²θ</div>
+<div class="st final" data-i="5"><div class="tex">\[I = I_0\cos^2\theta\]</div><div class="mv">substitute by \(I_0 = K E_0^2\)</div><div class="nt">Substitute \(I_0 = K E_0^2\) to obtain Malus's law (Eq. 22.9).</div></div></details></section>
+<section class="unit" id="u20"><h2>Unit 20 · Double refraction and Huygens&#x27; theory</h2>
+<div class="card th"><h3>① Theory — points</h3><ul><li><b>Anisotropic crystal</b>: refractive index depends on direction. Uniaxial: calcite, quartz, tourmaline; biaxial: mica, topaz.</li><li><b>Double refraction</b>: an incident ray splits into an <b>ordinary (o)</b> ray obeying Snell's law and an <b>extraordinary (e)</b> ray that does not.</li><li>Both rays are plane polarised in mutually perpendicular planes: o vibrates ⟂ its principal section, e vibrates in it.</li><li><b>Optic axis</b>: direction along which o and e travel with the same speed — no double refraction. In calcite it bisects a blunt corner.</li><li><b>Principal section</b>: plane containing the optic axis and ⟂ to a pair of opposite faces. <b>Principal plane</b>: contains the optic axis and the o- or e-ray.</li><li><b>Huygens</b>: o-wavelet = sphere (speed \(v_o\) all directions); e-wavelet = ellipsoid of revolution about the optic axis; they touch along the optic axis.</li><li><b>Negative crystal</b> (calcite): \(\mu_e < \mu_o\), \(v_e > v_o\), ellipsoid outside sphere; \(\mu_e = c/(v_e)_{max}\).</li><li><b>Positive crystal</b> (quartz): \(\mu_e > \mu_o\), \(v_e < v_o\), ellipsoid inside sphere; \(\mu_e = c/(v_e)_{min}\).</li><li>Wavefronts: common tangents to the wavelets. Optic axis ⟂ to the face (normal incidence): o and e travel together with the same speed — no separation.</li><li>Optic axis parallel to the face: both travel along the same direction but with different speeds → phase difference (basis of wave plates).</li></ul><div class="key"><div class="k">Must remember</div><div>\(\mu_o = \frac{c}{v_o}\)</div><div>\(\text{negative: } \mu_e = \frac{c}{(v_e)_{max}}\)</div><div>\(\text{positive: } \mu_e = \frac{c}{(v_e)_{min}}\)</div></div></div>
+<details class="card dv" open><summary><h3>② Key derivation</h3></summary><div class="t">Extraordinary ray velocity surface and refractive index</div><div class="legend">This calculation describes the ray velocity surface used in Huygens' construction, not the phase-index surface. The optic axis is z. θ is the angle of the extraordinary energy ray to z, and ρ = v_re is its speed. The velocity ellipsoid has semiaxes a = c/n_o along z and b = c/n_e along x. Its section has coordinates z = ρ cos θ and x = ρ sin θ. Define ray index n_re = c/v_re. The starting velocity law is the textbook's material relation; the steps show why it gives an ellipsoid and how to obtain n_re.</div>
+<div class="figwrap"><div class="fgbox" data-fig="3" style="aspect-ratio:138/140"></div><div class="figctl"><button class="play">▶ Play</button><button class="prev">◀</button><button class="next">▶|</button><span class="fighint">tap any step to show it on the figure</span></div></div>
+<div class="phase"><b>Velocity law</b> — start from the extraordinary ray velocity equation at angle θ</div>
+<div class="st" data-i="0"><div class="tex">\[\frac{1}{v_{re}^2} = \frac{\sin^2\theta}{(c / n_e)^2} + \frac{\cos^2\theta}{(c / n_o)^2}\]</div><div class="nt">Start from the extraordinary ray velocity equation at angle \(\theta\) to the optic axis (Eq. 22.37).</div></div>
+<div class="phase"><b>Polar ellipse</b> — set a = c/n_o, b = c/n_e, ρ = v_{re} and convert to Cartesian (z, x)</div>
+<div class="st" data-i="1"><div class="tex">\[\frac{1}{\rho^2} = \frac{\cos^2\theta}{a^2} + \frac{\sin^2\theta}{b^2}\]</div><div class="mv">substitute by \(a = \frac{c}{n_o},\,b = \frac{c}{n_e},\,\rho = v_{re}\)</div><div class="nt">Set semi-axes \(a = c/n_o\), \(b = c/n_e\), and polar radius \(\rho = v_{re}\) (Eq. 22.39).</div></div>
+<div class="st" data-i="2"><div class="tex">\[1 = \frac{\rho^2\cos^2\theta}{a^2} + \frac{\rho^2\sin^2\theta}{b^2}\]</div><div class="mv">multiply by \(\rho^2\)</div><div class="nt">Multiply both sides by \(\rho^2\).</div></div>
+<div class="st" data-i="3"><div class="tex">\[1 = \frac{z^2}{a^2} + \frac{x^2}{b^2}\]</div><div class="mv">substitute by \(z = \rho\cos\theta,\,x = \rho\sin\theta\)</div><div class="nt">Thus plotting \(v_{re}(\theta)\) in 3D gives an ellipsoid of revolution (Eq. 22.38).</div></div>
+<div class="phase"><b>Ray index</b> — multiply Eq. (22.37) by c² and substitute n_{re} = c / v_{re}</div>
+<div class="st" data-i="4"><div class="tex">\[\frac{c^2}{v_{re}^2} = n_o^2\cos^2\theta + n_e^2\sin^2\theta\]</div><div class="mv">Multiply Eq. (22.37) by c²</div><div class="nt">Multiply both sides of Eq. (22.37) by \(c^2\) to express \((c/v_{re})^2\).</div></div>
+<div class="st" data-i="5"><div class="tex">\[n_{re}^2 = n_o^2\cos^2\theta + n_e^2\sin^2\theta\]</div><div class="mv">substitute by \(n_{re} = \frac{c}{v_{re}}\)</div><div class="nt">Substitute \(n_{re} = c / v_{re}\) on the left-hand side.</div></div>
+<div class="phase"><b>Result</b> — take the square root to obtain the extraordinary ray refractive index</div>
+<div class="st final" data-i="6"><div class="tex">\[n_{re} = \sqrt{n_o^2\cos^2\theta + n_e^2\sin^2\theta}\]</div><div class="mv">root</div><div class="nt">Take the positive square root to get the extraordinary ray refractive index (Eq. 22.45).</div></div></details></section>
+<section class="unit" id="u21"><h2>Unit 21 · Retarders: quarter- and half-wave plates; superposition of perpendicular waves</h2>
+<div class="card th"><h3>① Theory — points</h3><ul><li><b>Retarder</b>: uniform birefringent plate with optic axis parallel to its faces; o and e travel normally through it with different speeds.</li><li>Optical path difference \((\mu_o - \mu_e)d\); phase difference \(\delta = \frac{2\pi}{\lambda}(\mu_o - \mu_e)d\).</li><li><b>Quarter-wave plate</b>: \((\mu_o - \mu_e)d = \lambda/4\), \(\delta = \pi/2\) → \(d = \frac{\lambda}{4(\mu_o - \mu_e)}\). Makes elliptical/circular light from plane light.</li><li><b>Half-wave plate</b>: \((\mu_o - \mu_e)d = \lambda/2\), \(\delta = \pi\) → \(d = \frac{\lambda}{2(\mu_o - \mu_e)}\). Rotates the plane of plane light by \(2\theta\); reverses handedness.</li><li>The e and o waves are polarised at right angles → they do <b>not</b> form fringes; they combine into a polarisation state.</li><li>Superposition \(E_y = E_1\cos\phi\), \(E_z = E_2\cos(\phi + \delta)\) gives the <b>general ellipse</b>: \(\frac{y^2}{E_1^2} + \frac{z^2}{E_2^2} - \frac{2yz}{E_1E_2}\cos\delta = \sin^2\delta\).</li><li>\(\delta = 0\): \(z = \frac{E_2}{E_1}y\); \(\delta = \pi\): \(z = -\frac{E_2}{E_1}y\) — straight lines → plane polarised.</li><li>\(\delta = \pi/2\): \(\frac{y^2}{E_1^2} + \frac{z^2}{E_2^2} = 1\) — ellipse on the axes; circle if \(E_1 = E_2\).</li><li>Any other δ: oblique ellipse → elliptically polarised.</li></ul><div class="key"><div class="k">Must remember</div><div>\(\delta = \frac{2\pi}{\lambda}(\mu_o - \mu_e)d\)</div><div>\(d_{QWP} = \frac{\lambda}{4(\mu_o - \mu_e)}\)</div><div>\(\frac{y^2}{E_1^2} + \frac{z^2}{E_2^2} - \frac{2yz}{E_1E_2}\cos\delta = \sin^2\delta\)</div></div></div>
+<details class="card dv" open><summary><h3>② Key derivation</h3></summary><div class="t">General ellipse from two perpendicular waves: eliminating t</div><div class="legend">Two plane waves travel along x, one vibrating along y and one along z, with amplitudes E_1 and E_2 and phase difference δ. φ stands for kx − ωt. On the right a phase circle of radius 1: its angle φ gives cos φ = E_y/E_1, and the angle φ + δ gives the second wave. Left: the path of the tip of E in the y–z plane, drawn here for E_1 = 55, E_2 = 40, δ = 60°, with the tilted major axis at angle α to the y-axis.</div>
+<div class="figwrap"><div class="fgbox" data-fig="4" style="aspect-ratio:250/154"></div><div class="figctl"><button class="play">▶ Play</button><button class="prev">◀</button><button class="next">▶|</button><span class="fighint">tap any step to show it on the figure</span></div></div>
+<div class="phase"><b>Two waves</b> — write E_y and E_z for the two perpendicular waves</div>
+<div class="st" data-i="0"><div class="tex">\[E_y = E_1\cos\phi\]</div><div class="nt">Write the two waves with \(\phi = kx-\omega t\) (Eqs. 20.37, 20.38). The wave polarised along \(y\) has amplitude \(E_1\).</div></div>
+<div class="st" data-i="1"><div class="tex">\[E_z = E_2\cos(\phi+\delta)\]</div><div class="mv">Second wave, phase shifted by \(\delta\)</div><div class="nt">The wave polarised along \(z\) has amplitude \(E_2\) and is ahead by the phase difference \(\delta\).</div></div>
+<div class="phase"><b>Remove time</b> — expand cos(φ + δ), write cos φ and sin φ with E_y</div>
+<div class="st" data-i="2"><div class="tex">\[E_z = E_2\cos\phi\cos\delta - E_2\sin\phi\sin\delta\]</div><div class="mv">Cosine of a sum: \(\cos(\phi+\delta)\)</div><div class="nt">Expand the cosine of a sum, \(\cos(\phi+\delta) = \cos\phi\cos\delta-\sin\phi\sin\delta\), so that \(E_z\) is written with \(\cos\phi\) and \(\sin\phi\) (Eq. 20.40).</div></div>
+<div class="st" data-i="3"><div class="tex">\[\cos\phi = \frac{E_y}{E_1}\]</div><div class="mv">Divide \(E_y = E_1\cos\phi\) by \(E_1\)</div><div class="nt">From the first wave, \(E_y = E_1\cos\phi\). Divide by \(E_1\) to get \(\cos\phi\) alone, so that \(t\) can be eliminated.</div></div>
+<div class="st" data-i="4"><div class="tex">\[\sin^2\phi + \cos^2\phi = 1\]</div><div class="mv">Pythagoras in the right triangle</div><div class="nt">In the right triangle on the phase circle the hypotenuse is 1, the leg next to \(\phi\) is \(\cos\phi\) and the leg opposite is \(\sin\phi\). Pythagoras gives \(\sin^2\phi+\cos^2\phi=1\).</div></div>
+<div class="st" data-i="5"><div class="tex">\[\sin\phi = \pm\sqrt{1-\cos^2\phi}\]</div><div class="mv">Solve for \(\sin\phi\)</div><div class="nt">Rearrange: move \(\cos^2\phi\) across and take the square root. The sign is either one, as the wave goes up or down.</div></div>
+<div class="st" data-i="6"><div class="tex">\[\sin\phi = \pm\sqrt{1-\frac{E_y^2}{E_1^2}}\]</div><div class="mv">substitute by \(\cos\phi = E_y/E_1\)</div><div class="nt">Put \(\cos\phi = E_y/E_1\) inside the root.</div></div>
+<div class="st" data-i="7"><div class="tex">\[E_z = E_2\frac{E_y}{E_1}\cos\delta \pm E_2\sin\delta\sqrt{1-\frac{E_y^2}{E_1^2}}\]</div><div class="mv">substitute by \(\cos\phi = E_y/E_1,\; \sin\phi = \pm\sqrt{1-E_y^2/E_1^2}\)</div><div class="nt">Replace \(\cos\phi\) and \(\sin\phi\) in the expanded \(E_z\) (Eq. 20.41). Time now appears nowhere. (The two signs are written \(\pm\), as in the book.)</div></div>
+<div class="phase"><b>Clear the root</b> — isolate the root, square, and use cos² δ + sin² δ = 1</div>
+<div class="st" data-i="8"><div class="tex">\[E_z - \frac{E_2}{E_1}E_y\cos\delta = \pm E_2\sin\delta\sqrt{1-\frac{E_y^2}{E_1^2}}\]</div><div class="mv">Isolate the root</div><div class="nt">Move the \(\cos\delta\) term to the left so that the square root stands alone on the right.</div></div>
+<div class="st" data-i="9"><div class="tex">\[\left(E_z - \frac{E_2}{E_1}E_y\cos\delta\right)^2 = E_2^2\sin^2\delta\left(1-\frac{E_y^2}{E_1^2}\right)\]</div><div class="mv">power by \(2\)</div><div class="nt">Square both sides. This removes the root and the \(\pm\).</div></div>
+<div class="st" data-i="10"><div class="tex">\[E_z^2 - \frac{2E_2}{E_1}E_yE_z\cos\delta + \frac{E_2^2E_y^2}{E_1^2}\cos^2\delta = E_2^2\sin^2\delta - \frac{E_2^2E_y^2}{E_1^2}\sin^2\delta\]</div><div class="mv">expand</div><div class="nt">Expand the square on the left and multiply out the bracket on the right.</div></div>
+<div class="st" data-i="11"><div class="tex">\[E_z^2 + \frac{E_2^2E_y^2}{E_1^2}\left(\cos^2\delta + \sin^2\delta\right) - \frac{2E_2}{E_1}E_yE_z\cos\delta = E_2^2\sin^2\delta\]</div><div class="mv">Collect \(E_y^2\) terms</div><div class="nt">Bring the \(\sin^2\delta\) term from the right to the left and collect the two \(E_y^2\) terms (Eq. 20.42).</div></div>
+<div class="st" data-i="12"><div class="tex">\[\cos^2\delta + \sin^2\delta = 1\]</div><div class="mv">Pythagoras again, for \(\delta\)</div><div class="nt">The same right-triangle identity as before, now for the angle \(\delta\): hypotenuse 1, adjacent leg \(\cos\delta\), opposite leg \(\sin\delta\).</div></div>
+<div class="st" data-i="13"><div class="tex">\[E_z^2 + \frac{E_2^2E_y^2}{E_1^2} - \frac{2E_2}{E_1}E_yE_z\cos\delta = E_2^2\sin^2\delta\]</div><div class="mv">substitute by \(\cos^2\delta+\sin^2\delta = 1\)</div><div class="nt">Replace the bracket by 1.</div></div>
+<div class="phase"><b>Ellipse</b> — divide by E_2² to get the general ellipse equation</div>
+<div class="st" data-i="14"><div class="tex">\[\frac{E_y^2}{E_1^2} + \frac{E_z^2}{E_2^2} - \frac{2E_yE_z}{E_1E_2}\cos\delta = \sin^2\delta\]</div><div class="mv">divide by \(E_2^2\)</div><div class="nt">Divide every term by \(E_2^2\) (Eq. 20.43). This is the general equation of an ellipse: the tip of the resultant \(E\) traces an ellipse in the \(y\)–\(z\) plane, inside a box of sides \(2E_1\) and \(2E_2\).</div></div>
+<div class="st final" data-i="15"><div class="tex">\[\tan 2\alpha = \frac{2E_1E_2\cos\delta}{E_1^2-E_2^2}\]</div><div class="mv">Tilt of the major axis (quoted by the book)</div><div class="nt">The book also quotes the tilt of the major axis: it makes angle \(\alpha\) with the \(y\)-axis. The same ellipse equation gives this tilt; the book states it without a derivation.</div></div></details></section>
+<section class="unit" id="u22"><h2>Unit 22 · Production and analysis of polarised light</h2>
+<div class="card th"><h3>① Theory — points</h3><ul><li><b>Elliptical light</b>: polariser + QWP with E at \(\theta \neq 45^\circ\) to the optic axis; amplitudes \(E\cos\theta\) (e) and \(E\sin\theta\) (o) unequal, phase 90°.</li><li><b>Circular light</b>: polariser + QWP with E at <b>45°</b> to the optic axis → equal amplitudes, phase 90°.</li><li><b>Step 1</b>: rotate an analyser in the beam.</li><li>• Two extinctions per turn → <b>plane polarised</b>. • Max and min, never zero → elliptical or partially polarised. • Constant → circular or unpolarised.</li><li><b>Step 2</b>: put a QWP before the analyser and rotate the analyser again.</li><li><b>Elliptical</b> (QWP axes along the ellipse axes): QWP adds 90° → total 0 or 180° → plane light → two extinctions. <b>Partially polarised</b>: still max and min, no zero.</li><li><b>Circular</b>: QWP converts it into plane light → two complete extinctions. <b>Unpolarised</b>: intensity stays constant.</li><li>Analyser alone cannot distinguish circular from unpolarised, or elliptical from partially polarised — the QWP is essential.</li></ul><div class="key"><div class="k">Must remember</div><div>\(\theta = 45^\circ \Rightarrow E_o = E_e \Rightarrow \text{circular}\)</div><div>\(\theta \neq 45^\circ \Rightarrow \text{elliptical}\)</div></div></div>
+<details class="card dv" open><summary><h3>② Key derivation</h3></summary><div class="t">Special case δ = π/2: elliptical and circular polarisation</div><div class="legend">Quarter-wave phase difference δ = π/2 (or ±(2m+1)π/2) between the y- and z-vibrations, amplitudes E_1 (along y) and E_2 (along z); E_1 = 60, E_2 = 40 here. The ellipse has its axes along y and z. When E_1 = E_2 = E_0 the box becomes a square and the ellipse a circle of radius E_0 (drawn with E_0 = E_2).</div>
+<div class="figwrap"><div class="fgbox" data-fig="5" style="aspect-ratio:164/146"></div><div class="figctl"><button class="play">▶ Play</button><button class="prev">◀</button><button class="next">▶|</button><span class="fighint">tap any step to show it on the figure</span></div></div>
+<div class="phase"><b>Ellipse, δ = π/2</b> — put cos δ = 0, sin δ = 1 in the ellipse equation</div>
+<div class="st" data-i="0"><div class="tex">\[\frac{E_y^2}{E_1^2}+\frac{E_z^2}{E_2^2}-\frac{2E_yE_z}{E_1E_2}\cos\delta = \sin^2\delta\]</div><div class="nt">Start from the general ellipse equation (20.43).</div></div>
+<div class="st" data-i="1"><div class="tex">\[\frac{E_y^2}{E_1^2}+\frac{E_z^2}{E_2^2} = 1\]</div><div class="mv">substitute by \(\cos\delta = 0,\; \sin\delta = 1\)</div><div class="nt">For \(\delta = \pi/2\) or \(\pm(2m+1)\pi/2\), \(\cos\delta = 0\) and \(\sin\delta = 1\). The cross term vanishes and the right side becomes 1 (Eq. 20.46).</div></div>
+<div class="st" data-i="2"><div class="tex">\[E_y = \pm E_1\]</div><div class="mv">substitute by \(E_z = 0\)</div><div class="nt">Where does the curve cross the \(y\)-axis? Put \(E_z = 0\): then \(E_y^2/E_1^2 = 1\).</div></div>
+<div class="st" data-i="3"><div class="tex">\[E_z = \pm E_2\]</div><div class="mv">substitute by \(E_y = 0\)</div><div class="nt">Put \(E_y = 0\): then \(E_z^2/E_2^2 = 1\). The curve crosses the \(z\)-axis at \(\pm E_2\).</div></div>
+<div class="st" data-i="4"><div class="tex">\[\tan 2\alpha = 0\]</div><div class="mv">substitute by \(\cos\delta = 0 \text{ in } \tan 2\alpha = \frac{2E_1E_2\cos\delta}{E_1^2-E_2^2}\)</div><div class="nt">The book's tilt formula \(\tan 2\alpha = 2E_1E_2\cos\delta/(E_1^2-E_2^2)\) also gives zero when \(\cos\delta = 0\), so \(\alpha = 0\). The major and minor axes coincide with the \(y\)- and \(z\)-axes: the light is elliptically polarised.</div></div>
+<div class="phase"><b>Circle, E_1 = E_2</b> — set the amplitudes equal to get a circle</div>
+<div class="st" data-i="5"><div class="tex">\[E_1 = E_2\]</div><div class="mv">Equal amplitudes, each \(E_0\)</div><div class="nt">Now take equal amplitudes and call each one \(E_0\), with \(\delta = \pi/2\) still.</div></div>
+<div class="st" data-i="6"><div class="tex">\[\frac{E_y^2}{E_0^2}+\frac{E_z^2}{E_0^2} = 1\]</div><div class="mv">substitute by \(E_1 = E_2 = E_0\)</div><div class="nt">Put \(E_1 = E_2 = E_0\) into the ellipse equation (20.46).</div></div>
+<div class="st final" data-i="7"><div class="tex">\[E_y^2 + E_z^2 = E_0^2\]</div><div class="mv">multiply by \(E_0^2\)</div><div class="nt">Multiply both sides by \(E_0^2\) (Eq. 20.47). This is a circle of radius \(E_0\), so the resultant light is circularly polarised.</div></div></details></section></main><footer>PHY5B08 Optics · revision · built from the study-match deck</footer>
+<script>/* ==========================================================================
+   Figure: animated SVG diagram for derivation cards (setup.figure)
+   --------------------------------------------------------------------------
+   A derivation card opts in by giving its setup a "figure". The JSXGraph
+   "steps" stay in the data as the fallback; they are not drawn when a figure exists.
+
+     "setup": { ..., "figure": {
+       "box":    [left, bottom, right, top],             figure units, y up
+       "points": { "O": { "at": [-230, 0], "label": "O", "side": "s" }, ... },
+       "parts":  { "OS": { "type": "line", "from": "O", "to": "S", "style": "ray", "arrow": true }, ... },
+       "draw":   [ { "parts": ["axis"], "caption": "Principal axis" }, ... ]
+     } }
+
+   and on any derivation step:
+
+     "figure": { "focus": ["triOSC", "alpha1"], "keep": ["OS"], "caption": "..." }
+
+   draw     the order in which the figure is drawn when the card starts. Its parts are the base figure.
+   focus    parts drawn in the accent colour for that step. Parts outside the base draw in.
+   keep     base parts left at full strength. While a step has focus or keep, the other base parts dim.
+            The points a focused part is built on are kept automatically.
+   caption  one line shown in the corner of the figure ("α_1" gives a subscript).
+
+   Part types: line (from, to, style, arrow), arc (center, r, from, to in degrees, hatch),
+   polygon (points), angle (at, from, to, r in px), dim (from, to, offset in px, arrow), text (at).
+   Styles: axis, mirror, ray, normal, guide.
+
+   Labels are placed once per layout, in screen pixels, at a fixed font size. Two labels that can be on
+   screen at the same time never overlap, labels keep clear of lines and points, and a label keeps its
+   place from step to step.
+   ========================================================================== */
+(function () {
+  var SM = window.SM = window.SM || {};
+  var NS = 'http://www.w3.org/2000/svg';
+  var REDUCE = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var DIRS = { e: [1, 0], ne: [1, -1], n: [0, -1], nw: [-1, -1], w: [-1, 0], sw: [-1, 1], s: [0, 1], se: [1, 1] };
+  var RING = ['e', 'ne', 'n', 'nw', 'w', 'sw', 's', 'se'];
+  var DRAW_MS = { line: 620, arc: 820, polygon: 900, angle: 560, dim: 620, point: 280, text: 300 };
+  var RANK = { point: 0, angle: 1, line: 2, dim: 3, arc: 4, polygon: 5, text: 6 };
+
+  function mk(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    if (attrs) Object.keys(attrs).forEach(function (k) { if (attrs[k] != null) e.setAttribute(k, attrs[k]); });
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function ease(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+  function clamp01(t) { return t < 0 ? 0 : t > 1 ? 1 : t; }
+  function f2(v) { return (Math.round(v * 100) / 100).toString(); }
+  function xy(p) { return f2(p[0]) + ' ' + f2(p[1]); }
+  function lerp(a, b, t) { return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]; }
+  function unit(a, b) { var dx = b[0] - a[0], dy = b[1] - a[1], l = Math.sqrt(dx * dx + dy * dy) || 1; return [dx / l, dy / l]; }
+
+  /* "α_1" -> α with a subscript 1, "x^2" -> superscript; "_{ab}" takes several characters */
+  var MARK = /([_^])(\{[^}]*\}|[^\s])/g;
+  function pieces(s) {
+    var out = [], last = 0, m;
+    s = String(s);
+    MARK.lastIndex = 0;
+    while ((m = MARK.exec(s))) {
+      if (m.index > last) out.push({ t: s.slice(last, m.index) });
+      out.push({ t: m[2].replace(/^\{|\}$/g, ''), k: m[1] === '_' ? 'sub' : 'sup' });
+      last = MARK.lastIndex;
+    }
+    if (last < s.length) out.push({ t: s.slice(last) });
+    return out;
+  }
+  function svgText(el, s) {
+    el.textContent = '';
+    var shift = 0;
+    pieces(s).forEach(function (p) {
+      var ts = mk('tspan', null, el);
+      var want = p.k === 'sub' ? 0.32 : p.k === 'sup' ? -0.42 : 0;
+      if (want !== shift) ts.setAttribute('dy', (want - shift) + 'em');
+      shift = want;
+      if (p.k) ts.setAttribute('class', 'fg-' + p.k);
+      ts.textContent = p.t;
+    });
+  }
+  function htmlText(s) {
+    return pieces(s).map(function (p) {
+      var t = SM.esc ? SM.esc(p.t) : p.t;
+      return p.k ? '<' + p.k + '>' + t + '</' + p.k + '>' : t;
+    }).join('');
+  }
+
+  /* ---------- box and segment tests for label placement ---------- */
+  function overlap(a, b) {
+    var w = Math.min(a.x1, b.x1) - Math.max(a.x0, b.x0), h = Math.min(a.y1, b.y1) - Math.max(a.y0, b.y0);
+    return w > 0 && h > 0 ? w * h : 0;
+  }
+  function segHitsBox(a, b, r) {
+    // Liang-Barsky clip of segment ab against box r
+    var x0 = a[0], y0 = a[1], dx = b[0] - x0, dy = b[1] - y0, t0 = 0, t1 = 1;
+    var p = [-dx, dx, -dy, dy], q = [x0 - r.x0, r.x1 - x0, y0 - r.y0, r.y1 - y0];
+    for (var i = 0; i < 4; i++) {
+      if (p[i] === 0) { if (q[i] < 0) return false; continue; }
+      var t = q[i] / p[i];
+      if (p[i] < 0) { if (t > t1) return false; if (t > t0) t0 = t; }
+      else { if (t < t0) return false; if (t < t1) t1 = t; }
+    }
+    return t0 <= t1;
+  }
+  function dotHitsBox(c, rad, r) {
+    var nx = Math.max(r.x0, Math.min(c[0], r.x1)), ny = Math.max(r.y0, Math.min(c[1], r.y1));
+    return (nx - c[0]) * (nx - c[0]) + (ny - c[1]) * (ny - c[1]) < rad * rad;
+  }
+
+  /* ======================================================================== */
+  function mount(host, spec, steps, opts) {
+    opts = opts || {};
+    host.innerHTML = '';
+    host.classList.add('fg-host');
+    if (opts.player) host.classList.add('fg-player');
+    var svg = mk('svg', { class: 'fg-svg', 'aria-hidden': 'true', focusable: 'false' }, host);
+    var layers = {
+      fill: mk('g', { class: 'fg-l-fill' }, svg), line: mk('g', { class: 'fg-l-line' }, svg),
+      dot: mk('g', { class: 'fg-l-dot' }, svg), text: mk('g', { class: 'fg-l-text' }, svg)
+    };
+    var cap = document.createElement('div');
+    cap.className = 'fg-cap';
+    cap.setAttribute('aria-live', 'polite');
+    cap.setAttribute('data-no-glossary', '');   // the glossary must not turn caption words into links
+    host.appendChild(cap);
+
+    var pts = {};
+    Object.keys(spec.points || {}).forEach(function (k) {
+      var p = spec.points[k];
+      pts[k] = Array.isArray(p) ? { at: p } : p;
+    });
+    function P(ref) { return Array.isArray(ref) ? ref : (pts[ref] ? pts[ref].at : [0, 0]); }
+
+    /* parts: one per point, then the named shapes */
+    var parts = {}, names = [];
+    function addPart(name, type, def) { parts[name] = { name: name, type: type, def: def, p: 0, mode: 'off', w: {} }; names.push(name); }
+    Object.keys(pts).forEach(function (k) { addPart(k, 'point', pts[k]); });
+    Object.keys(spec.parts || {}).forEach(function (k) { if (!parts[k]) addPart(k, spec.parts[k].type, spec.parts[k]); });
+
+    function wrap(pr, layer) {
+      if (!pr.w[layer]) pr.w[layer] = mk('g', { class: 'fg-part fg-' + pr.type + (pr.def.style ? ' fg-' + pr.def.style : '') + ' is-off' }, layers[layer]);
+      return pr.w[layer];
+    }
+    names.forEach(function (n) {
+      var pr = parts[n], d = pr.def, e = pr.el = {};
+      switch (pr.type) {
+        case 'point':
+          if (d.dot !== false) e.dot = mk('circle', { class: 'fg-dot', r: 0 }, wrap(pr, 'dot'));
+          break;
+        case 'line':
+          e.path = mk('path', { class: 'fg-stroke' }, wrap(pr, 'line'));
+          if (d.arrow) e.arrow = mk('path', { class: 'fg-head' }, wrap(pr, 'line'));
+          if (d.style === 'ray') e.glow = mk('circle', { class: 'fg-glow', r: 4.5 }, wrap(pr, 'line'));   // light: a bright tip travels along the ray as it draws
+          break;
+        case 'arc':
+          e.path = mk('path', { class: 'fg-stroke' }, wrap(pr, 'line'));
+          if (d.hatch) e.hatch = mk('path', { class: 'fg-hatch' }, wrap(pr, 'line'));
+          break;
+        case 'polygon':
+          e.fill = mk('path', { class: 'fg-fill' }, wrap(pr, 'fill'));
+          e.path = mk('path', { class: 'fg-stroke' }, wrap(pr, 'line'));
+          break;
+        case 'angle':
+          e.fill = mk('path', { class: 'fg-fill' }, wrap(pr, 'fill'));
+          e.path = mk('path', { class: 'fg-stroke' }, wrap(pr, 'line'));
+          break;
+        case 'dim':
+          e.ext = mk('path', { class: 'fg-ext' }, wrap(pr, 'line'));
+          e.path = mk('path', { class: 'fg-stroke' }, wrap(pr, 'line'));
+          e.arrow = mk('path', { class: 'fg-head' }, wrap(pr, 'line'));
+          break;
+      }
+      var text = pr.type === 'point' ? (d.label === false ? '' : (d.label || n)) : (d.label || d.text || '');
+      if (text) {
+        // a length's label sits on its line: a plate behind it hides the line in the gaps between words
+        if (pr.type === 'dim') e.plate = mk('rect', { class: 'fg-plate', rx: 4 }, wrap(pr, 'text'));
+        e.label = mk('text', { class: 'fg-label' + (d.labelClass ? ' ' + d.labelClass : ''), 'text-anchor': 'middle', 'dominant-baseline': 'central' }, wrap(pr, 'text'));
+        svgText(e.label, text);
+      }
+    });
+
+    /* base figure = everything the draw list draws; one state per step */
+    var base = {};
+    (spec.draw || []).forEach(function (st) { (st.parts || []).forEach(function (n) { if (parts[n]) base[n] = 1; }); });
+    function refsOf(pr) {
+      var d = pr.def, out = [];
+      ['from', 'to', 'at', 'center'].forEach(function (k) { if (typeof d[k] === 'string') out.push(d[k]); });
+      (d.points || []).forEach(function (r) { if (typeof r === 'string') out.push(r); });
+      return out;
+    }
+    function stateFor(si) {
+      var f = (si != null && steps[si] && steps[si].figure) || null;
+      var focus = (f && f.focus) || [], keep = ((f && f.keep) || []).slice();
+      focus.forEach(function (n) { if (parts[n]) refsOf(parts[n]).forEach(function (r) { if (base[r] && keep.indexOf(r) < 0) keep.push(r); }); });
+      var dimOthers = focus.length > 0 || keep.length > 0, mode = {};
+      names.forEach(function (n) {
+        mode[n] = focus.indexOf(n) >= 0 ? 'focus' : keep.indexOf(n) >= 0 ? 'on' : base[n] ? (dimOthers ? 'dim' : 'on') : 'off';
+      });
+      return { mode: mode, order: focus, caption: (f && f.caption) || '' };
+    }
+    // which parts can be on screen together: labels only have to avoid what they can be seen with
+    var states = [stateFor(null)];
+    steps.forEach(function (st, i) { if (st && st.figure) states.push(stateFor(i)); });
+    names.forEach(function (n) { parts[n].seen = states.map(function (s) { return s.mode[n] !== 'off'; }); });
+    function together(a, b) {
+      for (var i = 0; i < a.seen.length; i++) if (a.seen[i] && b.seen[i]) return true;
+      return false;
+    }
+
+    /* ---------- layout: figure units -> screen pixels ---------- */
+    var T = null, W = 0, H = 0;
+    // captions sit in the top-left corner: the figure keeps clear of that strip
+    var hasCaptions = (spec.draw || []).some(function (s) { return s.caption; }) ||
+      steps.some(function (s) { return s && s.figure && s.figure.caption; });
+    function geometry(pr) {
+      var d = pr.def, g = pr.g = {}, segs = pr.segs = [];
+      switch (pr.type) {
+        case 'point': g.c = T(P(n0(pr))); break;
+        case 'text': g.c = T(P(d.at)); break;
+        case 'line': g.a = T(P(d.from)); g.b = T(P(d.to)); segs.push([g.a, g.b]); break;
+        case 'arc': {
+          var c = T(P(d.center)), R = d.r * T.s, a0 = d.from * Math.PI / 180, a1 = d.to * Math.PI / 180, list = [];
+          for (var i = 0; i <= 48; i++) { var t = a0 + (a1 - a0) * i / 48; list.push([c[0] + R * Math.cos(t), c[1] - R * Math.sin(t)]); }
+          g.list = list; g.c = c; g.R = R;
+          for (var j = 0; j < list.length - 1; j++) segs.push([list[j], list[j + 1]]);
+          if (d.hatch) {   // the hatching behind the mirror is in the way of labels as well
+            var hs = d.hatch === 'in' ? -1 : 1, outer = list.map(function (q) { var u = unit(c, q); return [q[0] + hs * u[0] * 8, q[1] + hs * u[1] * 8]; });
+            for (var j2 = 0; j2 < outer.length - 1; j2 += 2) segs.push([outer[j2], outer[Math.min(j2 + 2, outer.length - 1)]]);
+          }
+          break;
+        }
+        case 'polygon': {
+          g.list = (d.points || []).map(function (r) { return T(P(r)); });
+          var cx = 0, cy = 0;
+          g.list.forEach(function (q) { cx += q[0]; cy += q[1]; });
+          g.c = [cx / g.list.length, cy / g.list.length];
+          for (var k = 0; k < g.list.length; k++) segs.push([g.list[k], g.list[(k + 1) % g.list.length]]);
+          break;
+        }
+        case 'angle': {
+          var v = T(P(d.at)), ua = unit(v, T(P(d.from))), ub = unit(v, T(P(d.to)));
+          var ta = Math.atan2(ua[1], ua[0]), span = Math.atan2(ub[1], ub[0]) - ta;
+          while (span > Math.PI) span -= 2 * Math.PI;
+          while (span <= -Math.PI) span += 2 * Math.PI;
+          g.v = v; g.ta = ta; g.span = span; g.r = d.r || 22;
+          var steps2 = 16, prev = null;
+          for (var s2 = 0; s2 <= steps2; s2++) {
+            var tt = ta + span * s2 / steps2, q2 = [v[0] + g.r * Math.cos(tt), v[1] + g.r * Math.sin(tt)];
+            if (prev) segs.push([prev, q2]);
+            prev = q2;
+          }
+          break;
+        }
+        case 'dim': {
+          var off = Array.isArray(d.offset) ? d.offset : [0, d.offset || 0];
+          g.a0 = T(P(d.from)); g.b0 = T(P(d.to));
+          g.a = [g.a0[0] + off[0], g.a0[1] + off[1]]; g.b = [g.b0[0] + off[0], g.b0[1] + off[1]];
+          segs.push([g.a, g.b]);
+          break;
+        }
+      }
+    }
+    function n0(pr) { return pr.name; }
+
+    function measure(el, fs) {
+      var bb = null;
+      try { bb = el.getBBox(); } catch (e) { bb = null; }
+      var txt = el.textContent || '';
+      if (!bb || bb.width < 0.5) bb = { width: txt.length * fs * 0.62, height: fs * 1.15 };
+      return { w: bb.width + 3, h: Math.max(bb.height, fs) + 1 };
+    }
+
+    function candidates(pr, w, h) {
+      var d = pr.def, g = pr.g, out = [];
+      function push(c) { out.push(c); }
+      if (pr.type === 'point') {
+        var first = RING.indexOf(d.side || 's'), gap = 6;
+        if (first < 0) first = 6;
+        [0, 1, 2].forEach(function (lvl) {
+          var order = [first];
+          for (var k = 1; k <= 4; k++) { order.push((first + k) % 8); order.push((first - k + 8) % 8); }
+          order.forEach(function (ix) {
+            var dv = DIRS[RING[ix]], gg = gap + lvl * 5;
+            push([g.c[0] + dv[0] * (w / 2 + gg), g.c[1] + dv[1] * (h / 2 + gg)]);
+          });
+        });
+      } else if (pr.type === 'angle') {
+        var mid = g.ta + g.span / 2, ux = Math.cos(mid), uy = Math.sin(mid), ext = Math.abs(ux) * w / 2 + Math.abs(uy) * h / 2;
+        // along the bisector, just outside the arc first; every step further out costs more (see placeLabels)
+        [0, -0.2, 0.2].forEach(function (tilt) {
+          for (var k2 = 0; k2 < 9; k2++) {
+            var m2 = mid + tilt * g.span, dd = g.r + 3 + ext + k2 * 4;
+            out.push({ c: [g.v[0] + Math.cos(m2) * dd, g.v[1] + Math.sin(m2) * dd], pen: k2 * k2 * 7 + (tilt ? 40 : 0) });
+          }
+        });
+      } else if (pr.type === 'line' || pr.type === 'dim') {
+        var u = unit(g.a, g.b), nx = -u[1], ny = u[0], e2 = Math.abs(nx) * w / 2 + Math.abs(ny) * h / 2 + 4;
+        var side = d.labelSide === 'left' ? -1 : 1;
+        [0.5, 0.4, 0.6, 0.3, 0.7, 0.2, 0.8].forEach(function (t) {
+          var q = lerp(g.a, g.b, t);
+          if (pr.type === 'dim') push(q);
+          push([q[0] + side * nx * e2, q[1] + side * ny * e2]);
+          push([q[0] - side * nx * e2, q[1] - side * ny * e2]);
+        });
+      } else if (pr.type === 'polygon' || pr.type === 'text' || pr.type === 'arc') {
+        var c = pr.type === 'arc' ? g.list[0] : (g.c || [0, 0]);
+        if (d.labelAt) c = T(d.labelAt);
+        push(c);
+        [6, 12, 18].forEach(function (r) { RING.forEach(function (k) { var dv = DIRS[k]; push([c[0] + dv[0] * r, c[1] + dv[1] * r]); }); });
+      }
+      return out;
+    }
+
+    function placeLabels() {
+      var fs = parseFloat(getComputedStyle(svg).fontSize) || 14;
+      var list = names.map(function (n) { return parts[n]; }).filter(function (pr) { return pr.el.label; });
+      list.forEach(function (pr) { var m = measure(pr.el.label, fs); pr.lw = m.w; pr.lh = m.h; });
+      list.sort(function (a, b) { return (RANK[a.type] - RANK[b.type]) || (names.indexOf(a.name) - names.indexOf(b.name)); });
+      var placed = [];
+      list.forEach(function (pr) {
+        var w = pr.lw, h = pr.lh, best = null, bc = Infinity;
+        if (pr.def.labelOffset) {
+          var anc = pr.g.c || pr.g.v || lerp(pr.g.a, pr.g.b, 0.5);
+          best = [anc[0] + pr.def.labelOffset[0], anc[1] + pr.def.labelOffset[1]];
+        } else candidates(pr, w, h).forEach(function (c, i) {
+          var pen = i * 4;
+          if (!Array.isArray(c)) { pen = c.pen; c = c.c; }
+          var box = { x0: c[0] - w / 2, y0: c[1] - h / 2, x1: c[0] + w / 2, y1: c[1] + h / 2 };
+          var cost = pen;
+          if (box.x0 < 2 || box.y0 < 2 || box.x1 > W - 2 || box.y1 > H - 2) cost += 6000;
+          if (opts.avoidTop && box.y0 < opts.avoidTop - 2) cost += 3000;   // the caption strip
+          placed.forEach(function (q) {
+            if (!together(pr, q)) return;
+            var ov = overlap(box, q.box);
+            if (ov > 0) cost += 4000 + ov * 30;
+          });
+          names.forEach(function (qn) {
+            var q = parts[qn];
+            if (!together(pr, q)) return;
+            if (q.type === 'point') {
+              if (q.el.dot && dotHitsBox(q.g.c, (q.def.size || 3.6) + 1.5, box)) cost += 2500;
+              return;
+            }
+            if (q === pr && pr.type === 'dim') return;   // a length's label sits on its own line, which breaks round it
+            var hits = 0, grown = { x0: box.x0 - 1.5, y0: box.y0 - 1.5, x1: box.x1 + 1.5, y1: box.y1 + 1.5 };
+            (q.segs || []).forEach(function (sg) { if (segHitsBox(sg[0], sg[1], grown)) hits++; });
+            if (hits) cost += (q.type === 'polygon' ? 150 : 500) + hits * 20;
+          });
+          if (cost < bc) { bc = cost; best = c; }
+        });
+        pr.box = { x0: best[0] - w / 2, y0: best[1] - h / 2, x1: best[0] + w / 2, y1: best[1] + h / 2 };
+        pr.el.label.setAttribute('x', f2(best[0]));
+        pr.el.label.setAttribute('y', f2(best[1]));
+        if (pr.el.plate) {
+          pr.el.plate.setAttribute('x', f2(pr.box.x0 - 2)); pr.el.plate.setAttribute('y', f2(pr.box.y0));
+          pr.el.plate.setAttribute('width', f2(w + 4)); pr.el.plate.setAttribute('height', f2(h));
+        }
+        placed.push(pr);
+      });
+    }
+
+    function layout() {
+      W = host.clientWidth; H = host.clientHeight;
+      if (W < 40 || H < 40) return false;
+      svg.setAttribute('width', W); svg.setAttribute('height', H); svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+      var cs = getComputedStyle(host), pad = parseFloat(cs.getPropertyValue('--fg-pad')) || 10;
+      var padTop = hasCaptions ? (parseFloat(cs.getPropertyValue('--fg-pad-top')) || pad) : pad;
+      var b = spec.box || [0, 0, 100, 100], bw = b[2] - b[0], bh = b[3] - b[1];
+      var s = Math.min((W - 2 * pad) / bw, (H - pad - padTop) / bh);
+      var ox = (W - s * bw) / 2 - s * b[0], oy = padTop + ((H - pad - padTop) - s * bh) / 2 + s * b[3];
+      T = function (p) { return [ox + s * p[0], oy - s * p[1]]; };
+      T.s = s;
+      opts.avoidTop = hasCaptions ? padTop : 0;
+      names.forEach(function (n) { geometry(parts[n]); });
+      placeLabels();
+      names.forEach(function (n) { render(parts[n]); });
+      return true;
+    }
+
+    /* ---------- draw one part at progress p (0 = not drawn, 1 = complete) ---------- */
+    function head(tip, u, size) {
+      var nx = -u[1], ny = u[0], bx = tip[0] - u[0] * size, by = tip[1] - u[1] * size;
+      return 'M' + xy(tip) + 'L' + xy([bx + nx * size * 0.5, by + ny * size * 0.5]) + 'L' + xy([bx - nx * size * 0.5, by - ny * size * 0.5]) + 'Z';
+    }
+    function polyD(list, p, closed) {
+      if (!list.length || p <= 0) return '';
+      var seg = [], total = 0, i;
+      var L = closed ? list.concat([list[0]]) : list;
+      for (i = 0; i < L.length - 1; i++) { var l = Math.hypot(L[i + 1][0] - L[i][0], L[i + 1][1] - L[i][1]); seg.push(l); total += l; }
+      var left = total * p, d = 'M' + xy(L[0]);
+      for (i = 0; i < seg.length; i++) {
+        if (left >= seg[i]) { d += 'L' + xy(L[i + 1]); left -= seg[i]; }
+        else { d += 'L' + xy(lerp(L[i], L[i + 1], seg[i] ? left / seg[i] : 0)); break; }
+      }
+      if (closed && p >= 1) d += 'Z';
+      return d;
+    }
+    function render(pr) {
+      if (!pr.g) return;
+      var e = pr.el, g = pr.g, d = pr.def, p = pr.p, labelIn = clamp01((p - 0.62) / 0.38);
+      switch (pr.type) {
+        case 'point':
+          if (e.dot) { e.dot.setAttribute('cx', f2(g.c[0])); e.dot.setAttribute('cy', f2(g.c[1])); var k = clamp01(p * 1.4); e.dot.setAttribute('r', f2((d.size || 3.6) * (k < 1 ? k * (1.25 - 0.25 * k) : 1))); }
+          labelIn = clamp01((p - 0.3) / 0.7);
+          break;
+        case 'line': {
+          var end = lerp(g.a, g.b, p);
+          e.path.setAttribute('d', p > 0 ? 'M' + xy(g.a) + 'L' + xy(end) : '');
+          if (e.glow) {
+            e.glow.setAttribute('cx', f2(end[0])); e.glow.setAttribute('cy', f2(end[1]));
+            e.glow.style.opacity = p > 0 && p < 1 ? Math.min(1, p / 0.05, (1 - p) / 0.06) : 0;
+          }
+          if (e.arrow) {
+            var at = typeof d.arrow === 'number' ? d.arrow : 0.56;
+            e.arrow.setAttribute('d', head(lerp(g.a, g.b, at), unit(g.a, g.b), 8));
+            e.arrow.style.opacity = clamp01((p - at) / 0.08 + 1);   // shows once the line has reached it
+          }
+          break;
+        }
+        case 'arc':
+          e.path.setAttribute('d', polyD(g.list, p, false));
+          if (e.hatch) {
+            var hd = '', n = 13, dir = d.hatch === 'in' ? -1 : 1;
+            for (var i = 1; i < n; i++) {
+              var q = g.list[Math.round(i * (g.list.length - 1) / n)], u = unit(g.c, q);
+              var tip = [q[0] + dir * u[0] * 7, q[1] + dir * u[1] * 7];
+              hd += 'M' + xy(q) + 'L' + xy([tip[0] + u[1] * 3, tip[1] - u[0] * 3]);
+            }
+            e.hatch.setAttribute('d', hd);
+            e.hatch.style.opacity = clamp01((p - 0.5) / 0.5);
+          }
+          break;
+        case 'polygon':
+          e.path.setAttribute('d', polyD(g.list, clamp01(p / 0.78), true));
+          e.fill.setAttribute('d', 'M' + g.list.map(xy).join('L') + 'Z');
+          e.fill.style.opacity = clamp01((p - 0.55) / 0.45);
+          labelIn = clamp01((p - 0.7) / 0.3);
+          break;
+        case 'angle': {
+          var sw = g.span * p, a0 = [g.v[0] + g.r * Math.cos(g.ta), g.v[1] + g.r * Math.sin(g.ta)];
+          var a1 = [g.v[0] + g.r * Math.cos(g.ta + sw), g.v[1] + g.r * Math.sin(g.ta + sw)];
+          var flag = Math.abs(sw) > Math.PI ? 1 : 0, sweep = sw > 0 ? 1 : 0;
+          var arcD = 'M' + xy(a0) + 'A' + f2(g.r) + ' ' + f2(g.r) + ' 0 ' + flag + ' ' + sweep + ' ' + xy(a1);
+          e.path.setAttribute('d', p > 0 ? arcD : '');
+          e.fill.setAttribute('d', p > 0 ? 'M' + xy(g.v) + 'L' + xy(a0) + arcD.replace(/^M[^A]*/, '') + 'Z' : '');
+          break;
+        }
+        case 'dim': {
+          var tipD = lerp(g.a, g.b, p);
+          e.path.setAttribute('d', p > 0 ? 'M' + xy(g.a) + 'L' + xy(tipD) : '');
+          // short end ticks across the length line (long extension lines would cut through the point labels)
+          var ud = unit(g.a, g.b), tx = -ud[1] * 5, ty = ud[0] * 5, extD = '';
+          [g.a, g.b].forEach(function (q, idx) {
+            if (idx === 1 && p < 0.98) return;
+            extD += 'M' + xy([q[0] - tx, q[1] - ty]) + 'L' + xy([q[0] + tx, q[1] + ty]);
+          });
+          e.ext.setAttribute('d', p > 0 ? extD : '');
+          e.arrow.setAttribute('d', p > 0.05 ? head(tipD, unit(g.a, g.b), 7) : '');
+          if (d.arrow === 'both' && p >= 1) e.arrow.setAttribute('d', head(g.b, unit(g.a, g.b), 7) + head(g.a, unit(g.b, g.a), 7));
+          break;
+        }
+      }
+      if (e.label) e.label.style.opacity = labelIn;
+      if (e.plate) e.plate.style.opacity = labelIn;
+    }
+
+    /* ---------- smooth progress tweens ---------- */
+    var tw = [], raf = 0;
+    function frame(now) {
+      raf = 0;
+      tw = tw.filter(function (t) {
+        if (now < t.t0) return true;
+        var k = clamp01((now - t.t0) / t.dur);
+        t.pr.p = t.from + (t.to - t.from) * ease(k);
+        render(t.pr);
+        return k < 1;
+      });
+      if (tw.length) raf = requestAnimationFrame(frame);
+    }
+    function tween(pr, to, dur, delay) {
+      tw = tw.filter(function (t) { return t.pr !== pr; });
+      if (REDUCE || !dur) { pr.p = to; render(pr); return; }
+      tw.push({ pr: pr, from: pr.p, to: to, t0: performance.now() + (delay || 0), dur: dur });
+      if (!raf) raf = requestAnimationFrame(frame);
+    }
+    function stopTweens(finish) {
+      tw.forEach(function (t) { if (finish) { t.pr.p = t.to; render(t.pr); } });
+      tw = [];
+      if (raf) { cancelAnimationFrame(raf); raf = 0; }
+    }
+
+    function setMode(pr, m) {
+      pr.mode = m;
+      Object.keys(pr.w).forEach(function (k) {
+        var c = pr.w[k].classList;
+        c.toggle('is-off', m === 'off'); c.toggle('is-on', m === 'on'); c.toggle('is-dim', m === 'dim'); c.toggle('is-focus', m === 'focus');
+      });
+    }
+    function instantly(fn) {
+      host.classList.add('fg-instant');
+      fn();
+      void host.offsetWidth;
+      host.classList.remove('fg-instant');
+    }
+    var capT = null;
+    function setCaption(text, instant) {
+      clearTimeout(capT);
+      if (!text) { cap.classList.remove('is-on'); return; }
+      var html = htmlText(text);
+      if (cap.classList.contains('is-on') && cap._html === html) return;
+      cap._html = html;
+      if (instant || REDUCE || !cap.classList.contains('is-on')) { cap.innerHTML = html; cap.classList.add('is-on'); return; }
+      cap.classList.add('is-swap');
+      capT = setTimeout(function () { cap.innerHTML = html; cap.classList.remove('is-swap'); }, 180);
+    }
+
+    /* ---------- apply a step: highlight, draw in what is new, dim the rest ---------- */
+    var cur = null, introOn = false, introTimers = [], pending = null, introEnd = 0;
+    function apply(si, animate) {
+      var st = stateFor(si);
+      cur = si;
+      var n = 0;
+      var run = function () {
+        names.forEach(function (name) {
+          var pr = parts[name], m = st.mode[name], was = pr.mode;
+          if (m === was) return;
+          if (was === 'off') {
+            var k = st.order.indexOf(name);
+            if (animate) { pr.p = 0; render(pr); tween(pr, 1, DRAW_MS[pr.type], 120 + (k >= 0 ? k : n++) * 240); }
+            else { stopTweensFor(pr); pr.p = 1; render(pr); }
+          }
+          setMode(pr, m);
+        });
+      };
+      if (animate) run(); else instantly(run);
+      setCaption(st.caption, !animate);
+    }
+    function stopTweensFor(pr) { tw = tw.filter(function (t) { return t.pr !== pr; }); }
+
+    function clearIntro() { introTimers.forEach(clearTimeout); introTimers = []; }
+    function intro() {
+      if (!T && !layout()) { pending = cur; return; }
+      clearIntro(); stopTweens(false);
+      introOn = true; pending = null;
+      instantly(function () { names.forEach(function (n) { setMode(parts[n], 'off'); parts[n].p = 0; render(parts[n]); }); });
+      setCaption('', true);
+      if (REDUCE) { finishIntro(); return; }
+      var t = 200;
+      (spec.draw || []).forEach(function (stage) {
+        var list = (stage.parts || []).filter(function (n) { return parts[n]; }), longest = 0;
+        introTimers.push(setTimeout(function () {
+          list.forEach(function (n, j) {
+            var pr = parts[n];
+            setMode(pr, 'on'); pr.p = 0; render(pr);
+            tween(pr, 1, DRAW_MS[pr.type], j * 140);
+          });
+          if (stage.caption) setCaption(stage.caption);
+        }, t));
+        list.forEach(function (n, j) { longest = Math.max(longest, DRAW_MS[parts[n].type] + j * 140); });
+        t += Math.max(560, longest * 0.8) + (stage.caption ? 240 : 0);
+      });
+      introTimers.push(setTimeout(function () { finishIntro(); }, t + 380));
+      introEnd = performance.now() + t + 380;
+    }
+    function finishIntro(fast) {
+      clearIntro();
+      var was = introOn;
+      introOn = false;
+      names.forEach(function (n) {
+        var pr = parts[n];
+        if (!base[n]) return;
+        if (pr.mode === 'off') setMode(pr, 'on');
+        if (pr.p < 1) tween(pr, 1, fast ? 220 : DRAW_MS[pr.type]);
+      });
+      if (!was) return;
+      if (pending != null) { var s = pending; pending = null; apply(s, true); }
+      else if (opts.player) apply(cur, true);
+      else setCaption('');
+    }
+
+    /* the derivation moves to step si. The first call after the intro waits for the intro to end;
+       a later call (Next pressed during the intro) finishes the intro at once. */
+    var firstWait = false;
+    function step(si, instant) {
+      if (!T && !layout()) { cur = si; pending = si; return; }
+      if (instant) { clearIntro(); introOn = false; stopTweens(true); apply(si, false); return; }
+      if (introOn) {
+        if (!firstWait || pending === si) { firstWait = true; pending = si; return; }
+        pending = si;
+        finishIntro(true);
+        return;
+      }
+      if (si === cur) return;
+      apply(si, true);
+    }
+
+    var api = {
+      layout: function () {
+        var was = !!T;
+        if (!layout()) return;
+        if (!was) {
+          if (pending != null) { var s = pending; pending = null; apply(s, false); }
+          else if (!opts.player) { if (opts.autoIntro) watchIntro(); else apply(null, false); }
+        }
+      },
+      intro: function () { firstWait = false; intro(); },
+      introLeft: function () { return introOn ? Math.max(0, introEnd - performance.now()) : 0; },   // ms of the drawing intro still to run
+      step: step,
+      isFigure: true
+    };
+
+    /* the front figure draws itself the first time it comes into view */
+    var watched = false;
+    function watchIntro() {
+      if (watched) return;
+      watched = true;
+      if (!('IntersectionObserver' in window)) { apply(null, false); return; }
+      var io = new IntersectionObserver(function (en) {
+        en.forEach(function (x) {
+          if (!x.isIntersecting || x.intersectionRatio < 0.55) return;
+          io.disconnect();
+          intro();
+        });
+      }, { threshold: [0, 0.55, 0.8] });
+      io.observe(host);
+    }
+
+    api.layout();
+    return api;
+  }
+
+  SM.Figure = { mount: mount, has: function (diag) { return !!(diag && diag.figure && diag.figure.parts); } };
+})();
+</script><script>var FIGS = [{"figure": {"box": [-120, -84, 120, 84], "points": {"O": {"at": [0.0, 0.0], "side": "sw"}, "Zp": {"at": [108.0, 0.0], "side": "n", "label": "z", "dot": false}, "Zn": {"at": [-108.0, 0.0], "label": false, "dot": false}, "Yp": {"at": [0.0, 74.0], "side": "e", "label": "y", "dot": false}, "Yn": {"at": [0.0, -74.0], "label": false, "dot": false}, "Tc": {"at": [39.83, 33.42], "label": false}, "Pz": {"at": [39.83, 0.0], "label": false, "dot": false}, "Lp": {"at": [55.7, 39.0], "label": false, "dot": false}, "Ln": {"at": [-55.7, -39.0], "label": false, "dot": false}, "Lz": {"at": [55.7, 0.0], "label": false, "dot": false}, "Lq": {"at": [-55.7, 39.0], "label": false, "dot": false}, "Lr": {"at": [55.7, -39.0], "label": false, "dot": false}, "Ea": {"at": [64.0, 0.0], "label": false, "dot": false}, "Eb": {"at": [0.0, 36.0], "label": false, "dot": false}}, "parts": {"axZ": {"type": "line", "from": "Zn", "to": "Zp", "style": "axis", "arrow": true}, "axY": {"type": "line", "from": "Yn", "to": "Yp", "style": "axis", "arrow": true}, "Evec": {"type": "line", "from": "O", "to": "Tc", "arrow": true, "label": "E"}, "Ezd": {"type": "dim", "from": "O", "to": "Pz", "offset": [0.0, 13.0], "arrow": "both", "label": "E_z"}, "Eyd": {"type": "dim", "from": "Pz", "to": "Tc", "offset": [15.0, 0.0], "arrow": "both", "label": "E_y"}, "circ": {"type": "arc", "center": "O", "r": 52.0, "from": 0.0, "to": 360.0}, "triC": {"type": "polygon", "points": ["O", "Pz", "Tc"]}, "rtC": {"type": "polygon", "points": [[39.83, 0.0], [33.83, 0.0], [33.83, 6.0], [39.83, 6.0]]}, "phi": {"type": "angle", "at": "O", "from": "Zp", "to": "Tc", "r": 20, "label": "φ"}, "lin": {"type": "line", "from": "Ln", "to": "Lp"}, "triL": {"type": "polygon", "points": ["O", "Lz", "Lp"]}, "rtL": {"type": "polygon", "points": [[55.7, 0.0], [49.7, 0.0], [49.7, 6.0], [55.7, 6.0]]}, "thL": {"type": "angle", "at": "O", "from": "Zp", "to": "Lp", "r": 28, "label": "θ"}, "E1d": {"type": "dim", "from": "O", "to": "Lz", "offset": [0.0, 13.0], "arrow": "both", "label": "E_1"}, "E2d": {"type": "dim", "from": "Lz", "to": "Lp", "offset": [15.0, 0.0], "arrow": "both", "label": "E_2"}, "lin2": {"type": "line", "from": "Lq", "to": "Lr"}, "ell": {"type": "polygon", "points": [[64.0, 0.0], [63.69, 3.53], [62.77, 7.02], [61.24, 10.45], [59.13, 13.78], [56.44, 16.97], [53.21, 20.0], [49.47, 22.84], [45.25, 25.46], [40.6, 27.83], [35.56, 29.93], [30.17, 31.75], [24.49, 33.26], [18.58, 34.45], [12.49, 35.31], [6.27, 35.83], [0.0, 36.0], [-6.27, 35.83], [-12.49, 35.31], [-18.58, 34.45], [-24.49, 33.26], [-30.17, 31.75], [-35.56, 29.93], [-40.6, 27.83], [-45.25, 25.46], [-49.47, 22.84], [-53.21, 20.0], [-56.44, 16.97], [-59.13, 13.78], [-61.24, 10.45], [-62.77, 7.02], [-63.69, 3.53], [-64.0, 0.0], [-63.69, -3.53], [-62.77, -7.02], [-61.24, -10.45], [-59.13, -13.78], [-56.44, -16.97], [-53.21, -20.0], [-49.47, -22.84], [-45.25, -25.46], [-40.6, -27.83], [-35.56, -29.93], [-30.17, -31.75], [-24.49, -33.26], [-18.58, -34.45], [-12.49, -35.31], [-6.27, -35.83], [-0.0, -36.0], [6.27, -35.83], [12.49, -35.31], [18.58, -34.45], [24.49, -33.26], [30.17, -31.75], [35.56, -29.93], [40.6, -27.83], [45.25, -25.46], [49.47, -22.84], [53.21, -20.0], [56.44, -16.97], [59.13, -13.78], [61.24, -10.45], [62.77, -7.02], [63.69, -3.53]], "style": "glass"}, "Ead": {"type": "dim", "from": "O", "to": "Ea", "offset": [0.0, 13.0], "arrow": "both", "label": "E_1"}, "Ebd": {"type": "dim", "from": "O", "to": "Eb", "offset": [-15.0, 0.0], "arrow": "both", "label": "E_2"}}, "draw": [{"parts": ["axZ", "axY", "O", "Zp", "Yp"], "caption": "E-plane seen head on: axes z and y"}]}, "steps": [{"figure": {"focus": ["axZ"], "keep": ["axY"], "caption": "z-wave: E_z = E_1 cos ωt"}}, {"figure": {"focus": ["axY"], "keep": ["axZ"], "caption": "y-wave: E_y = E_2 cos(ωt + δ)"}}, {"figure": {"focus": ["lin"], "keep": ["axZ", "axY"], "caption": "δ = 0: the tip moves along a line"}}, {"figure": {"focus": ["triL", "rtL", "thL", "E1d", "E2d"], "keep": ["lin"], "caption": "tan θ = opposite / adjacent = E_2/E_1"}}, {"figure": {"focus": ["lin2"], "keep": ["lin", "axZ", "axY"], "caption": "δ = 180°: line tilts the other way"}}, {"figure": {"focus": ["Ezd", "Evec"], "keep": ["axZ", "axY"], "caption": "Equal amplitudes: E_1 = E_2 = E_0"}}, {"figure": {"focus": ["Eyd"], "keep": ["Ezd", "Evec"], "caption": "y-wave a quarter cycle out of phase"}}, {"figure": {"focus": ["Eyd"], "keep": ["Ezd", "Evec"], "caption": "E_y = E_0 sin ωt"}}, {"figure": {"focus": ["triC", "rtC", "Ezd", "Eyd", "Evec"], "keep": ["axZ", "axY"], "caption": "Pythagoras: E² = E_z² + E_y²"}}, {"figure": {"focus": ["Evec"], "keep": ["Ezd", "Eyd", "axZ", "axY"], "caption": "Insert E_z and E_y"}}, {"figure": {"focus": ["circ"], "keep": ["Evec", "axZ", "axY"], "caption": "|E| constant: tip on a circle"}}, {"figure": {"focus": ["triC", "rtC", "phi", "Eyd", "Ezd"], "keep": ["Evec", "circ"], "caption": "tan φ = opposite / adjacent"}}, {"figure": {"focus": ["phi"], "keep": ["Evec", "circ"], "caption": "E_y/E_z = tan ωt"}}, {"figure": {"focus": ["phi", "Evec"], "keep": ["circ", "axZ", "axY"], "caption": "φ = ωt: E rotates at constant rate"}}, {"figure": {"focus": ["ell", "Ead", "Ebd"], "keep": ["axZ", "axY"], "caption": "Unequal amplitudes: elliptical"}}]}, {"figure": {"box": [-120, -72, 120, 80], "points": {"O": {"at": [0.0, 0.0], "side": "se", "size": 3.2}, "Ax0": {"at": [-116.0, 0.0], "label": false, "dot": false}, "Ax1": {"at": [116.0, 0.0], "label": false, "dot": false}, "Li": {"at": [-104.0, 0.0], "label": false, "dot": false}, "Rr": {"at": [30.91, 69.43], "label": false, "dot": false}, "Tr": {"at": [104.0, 0.0], "label": false, "dot": false}, "Nu": {"at": [-33.77, 52.0], "label": false, "dot": false}, "Nd": {"at": [18.52, -28.51], "label": false, "dot": false}, "Lm": {"at": [-52.0, 0.0], "label": false, "dot": false}, "Dm": {"at": [-50.32, -32.68], "label": false, "dot": false}, "Nq": {"at": [-22.87, 35.22], "label": false, "dot": false}}, "parts": {"tube": {"type": "line", "from": "Ax0", "to": "Ax1", "style": "axis", "label": "tube axis"}, "plate": {"type": "polygon", "points": [[56.53, 41.48], [60.89, 34.77], [-56.53, -41.48], [-60.89, -34.77]], "style": "glass"}, "plateT": {"type": "text", "at": [92.0, 52.0], "text": "glass plate"}, "inc": {"type": "line", "from": "Li", "to": "O", "style": "ray", "arrow": true}, "refl": {"type": "line", "from": "O", "to": "Rr", "style": "ray", "arrow": true, "label": "reflected: s only"}, "trans": {"type": "line", "from": "O", "to": "Tr", "style": "ray", "arrow": true}, "normal": {"type": "line", "from": "Nd", "to": "Nu", "style": "normal"}, "thB": {"type": "angle", "at": "O", "from": "Nu", "to": "Lm", "r": 30, "label": "θ_B"}, "alpha": {"type": "angle", "at": "O", "from": "Lm", "to": "Dm", "r": 40, "label": "α"}, "quarter": {"type": "polygon", "points": ["O", "Nq", "Dm"]}, "rtQ": {"type": "polygon", "points": [[0.0, 0.0], [-3.81, 5.87], [-9.68, 2.06], [-5.87, -3.81]]}}, "draw": [{"parts": ["tube", "plate", "plateT"], "caption": "Plate tilted to the tube axis"}, {"parts": ["inc", "O", "refl", "trans"], "caption": "Light travels along the axis"}]}, "steps": [{"figure": {"focus": ["normal", "inc", "thB"], "keep": ["plate", "O"], "caption": "Incidence at θ_B from the normal"}}, {"figure": {"focus": ["thB"], "keep": ["normal", "inc", "plate"], "caption": "θ_B = tan⁻¹ μ"}}, {"figure": {"focus": ["thB"], "keep": ["normal", "inc", "plate"], "caption": "Glass: μ = 1.54"}}, {"figure": {"focus": ["thB"], "keep": ["normal", "inc", "plate"], "caption": "θ_B ≈ 57°"}}, {"figure": {"focus": ["quarter", "rtQ", "thB", "alpha"], "keep": ["normal", "inc", "plate"], "caption": "Right angle = θ_B + α"}}, {"figure": {"focus": ["alpha", "thB"], "keep": ["quarter", "inc", "plate"], "caption": "α = 90° − θ_B"}}, {"figure": {"focus": ["alpha"], "keep": ["quarter", "inc", "plate"], "caption": "Put in θ_B = 57°"}}, {"figure": {"focus": ["alpha", "plate", "tube"], "keep": ["inc", "O"], "caption": "Plates inclined about 33° to the axis"}}, {"figure": {"focus": ["refl", "trans", "thB"], "keep": ["inc", "plate", "normal"], "caption": "Every surface: reflect s, pass p"}}]}, {"figure": {"box": [-30, -24, 92, 66], "points": {"O": {"at": [0, 0], "side": "sw"}, "T": {"at": [72, 0], "side": "s", "label": false}, "A": {"at": [48.31, 33.83], "side": "nw", "label": false, "size": 2.5}}, "parts": {"pol": {"type": "line", "from": [-26, 0], "to": [88, 0], "style": "normal", "label": "polariser axis"}, "ana": {"type": "line", "from": [-21.3, -14.91], "to": [70.45, 49.33], "style": "mirror", "label": "analyser axis"}, "E0": {"type": "line", "from": "O", "to": "T", "style": "ray", "arrow": true, "label": "E_0"}, "th": {"type": "angle", "at": "O", "from": "T", "to": "A", "r": 28, "label": "θ"}, "Epar": {"type": "line", "from": "O", "to": "A", "arrow": true, "label": "E_0cos θ"}, "Eperp": {"type": "line", "from": "A", "to": "T", "style": "guide", "label": "E_0sin θ"}, "ra": {"type": "polygon", "points": [[44.21, 30.96], [47.08, 26.87], [51.18, 29.73], [48.31, 33.83]]}, "tri": {"type": "polygon", "points": ["O", "A", "T"]}}, "draw": [{"parts": ["pol", "O"], "caption": "Plane-polarised light leaves the polariser"}, {"parts": ["E0", "T"], "caption": "Its field amplitude E_0"}, {"parts": ["ana", "th"], "caption": "Analyser axis at angle θ"}]}, "steps": [{"figure": {"focus": ["Epar", "th", "tri", "ra", "A"], "caption": "Resolve E_0 along the analyser axis: E_0cos θ", "keep": ["E0", "ana"]}}, {"figure": {"focus": ["Eperp", "ra"], "caption": "E_0sin θ is absorbed", "keep": ["E0", "Epar"]}}, {"figure": {"focus": ["Epar"], "caption": "Intensity ∝ amplitude²", "keep": ["ana"]}}, {"figure": {"focus": ["Epar"], "caption": "Multiply by K", "keep": ["ana"]}}, {"figure": {"focus": ["Epar", "th"], "caption": "I = KE_0²cos²θ", "keep": ["ana", "E0"]}}, {"figure": {"focus": ["Epar", "E0", "th"], "caption": "I = I_0cos²θ", "keep": ["ana"]}}]}, {"figure": {"box": [-66, -52, 72, 58], "points": {"O": {"at": [0, 0], "side": "sw"}, "Q": {"at": [28.79, 34.31], "side": "ne"}, "Qx": {"at": [28.79, 0], "side": "s", "label": false, "size": 2.5}, "Qz": {"at": [0, 34.31], "side": "w", "label": false, "size": 2.5}}, "parts": {"zax": {"type": "line", "from": [0, -50], "to": [0, 56], "style": "axis", "arrow": true, "label": "z (optic axis)"}, "xax": {"type": "line", "from": [-64, 0], "to": [70, 0], "style": "axis", "arrow": true, "label": "x"}, "ell": {"type": "polygon", "points": [[56.0, 0.0], [55.15, 6.95], [52.62, 13.68], [48.5, 20.0], [42.9, 25.71], [36.0, 30.64], [28.0, 34.64], [19.15, 37.59], [9.72, 39.39], [0.0, 40.0], [-9.72, 39.39], [-19.15, 37.59], [-28.0, 34.64], [-36.0, 30.64], [-42.9, 25.71], [-48.5, 20.0], [-52.62, 13.68], [-55.15, 6.95], [-56.0, 0.0], [-55.15, -6.95], [-52.62, -13.68], [-48.5, -20.0], [-42.9, -25.71], [-36.0, -30.64], [-28.0, -34.64], [-19.15, -37.59], [-9.72, -39.39], [-0.0, -40.0], [9.72, -39.39], [19.15, -37.59], [28.0, -34.64], [36.0, -30.64], [42.9, -25.71], [48.5, -20.0], [52.62, -13.68], [55.15, -6.95]], "label": "e-wave"}, "circ": {"type": "arc", "center": "O", "r": 40, "from": 0, "to": 360, "style": "normal"}, "ray": {"type": "line", "from": "O", "to": "Q", "style": "ray", "arrow": true, "label": "ρ = v_re"}, "th": {"type": "angle", "at": "O", "from": [0, 30], "to": "Q", "r": 24, "label": "θ"}, "da": {"type": "dim", "from": "O", "to": [0, 40], "offset": -14, "arrow": "both", "label": "a = c/n_o"}, "db": {"type": "dim", "from": "O", "to": [56, 0], "offset": -14, "arrow": "both", "label": "b = c/n_e"}, "gx": {"type": "line", "from": "Q", "to": "Qx", "style": "guide", "label": "z = ρcos θ"}, "gz": {"type": "line", "from": "Q", "to": "Qz", "style": "guide", "label": "x = ρsin θ"}}, "draw": [{"parts": ["zax", "xax", "O"], "caption": "Optic axis z"}, {"parts": ["circ"], "caption": "o-wavelet: sphere, speed c/n_o"}, {"parts": ["ell"], "caption": "e-wavelet: ellipsoid of revolution about z"}, {"parts": ["ray", "Q", "th"], "caption": "e-ray at angle θ to the optic axis"}]}, "steps": [{"figure": {"focus": ["ray", "th"], "caption": "Ray speed v_re at angle θ", "keep": ["ell", "zax"]}}, {"figure": {"focus": ["da", "db", "ray"], "caption": "Semi-axes a = c/n_o, b = c/n_e; ρ = v_re", "keep": ["ell"]}}, {"figure": {"focus": ["ray"], "caption": "Multiply by ρ²", "keep": ["ell", "th"]}}, {"figure": {"focus": ["gx", "gz", "ell"], "caption": "z = ρcos θ, x = ρsin θ: an ellipse", "keep": ["Q"]}}, {"figure": {"focus": ["ray", "th"], "caption": "Multiply by c²", "keep": ["ell"]}}, {"figure": {"focus": ["ray", "th"], "caption": "n_re = c / v_re", "keep": ["ell"]}}, {"figure": {"focus": ["ray", "th", "ell"], "caption": "n_re = √(n_o²cos²θ + n_e²sin²θ)"}}]}, {"figure": {"box": [-135, -62, 115, 62], "points": {"O": {"at": [-70.0, 0.0], "side": "n", "label": false, "size": 2.4}, "Fy": {"at": [-34.65, 0.0], "side": "n", "label": false, "dot": false}, "E": {"at": [-34.65, -13.68], "side": "ne", "size": 3}, "C": {"at": [65.0, 0.0], "side": "n", "label": false, "size": 2.4}, "A": {"at": [93.93, 34.47], "side": "ne", "label": "φ", "size": 2.6}, "B": {"at": [49.61, 42.29], "side": "nw", "label": "φ+δ", "size": 2.6}, "Ax": {"at": [93.93, 0.0], "side": "n", "label": false, "dot": false}, "D": {"at": [42.5, -38.97], "side": "n", "label": false, "size": 2.4}, "Dx": {"at": [42.5, 0.0], "side": "n", "label": false, "dot": false}}, "parts": {"axY": {"type": "line", "from": [-132.0, 0.0], "to": [-8.0, 0.0], "style": "axis", "arrow": 1}, "axZ": {"type": "line", "from": [-70.0, -52.0], "to": [-70.0, 52.0], "style": "axis", "arrow": 1}, "tY": {"type": "text", "at": [-4.0, -9.0], "text": "y"}, "tZ": {"type": "text", "at": [-63.0, 54.0], "text": "z"}, "rect": {"type": "polygon", "points": [[-125.0, -40.0], [-15.0, -40.0], [-15.0, 40.0], [-125.0, 40.0]], "style": "glass"}, "d1": {"type": "dim", "from": [-125.0, -40.0], "to": [-15.0, -40.0], "offset": [0, 10], "arrow": "both", "label": "2E_1"}, "d2": {"type": "dim", "from": [-125.0, -40.0], "to": [-125.0, 40.0], "offset": [-10, 0], "arrow": "both", "label": "2E_2"}, "ell": {"type": "polygon", "points": [[-15.0, 20.0], [-15.21, 16.9], [-15.84, 13.68], [-16.87, 10.35], [-18.32, 6.95], [-20.15, 3.49], [-22.37, 0.0], [-24.95, -3.49], [-27.87, -6.95], [-31.11, -10.35], [-34.65, -13.68], [-38.45, -16.9], [-42.5, -20.0], [-46.76, -22.94], [-51.19, -25.71], [-55.76, -28.28], [-60.45, -30.64], [-65.21, -32.77], [-70.0, -34.64], [-74.79, -36.25], [-79.55, -37.59], [-84.24, -38.64], [-88.81, -39.39], [-93.24, -39.85], [-97.5, -40.0], [-101.55, -39.85], [-105.35, -39.39], [-108.89, -38.64], [-112.13, -37.59], [-115.05, -36.25], [-117.63, -34.64], [-119.85, -32.77], [-121.68, -30.64], [-123.13, -28.28], [-124.16, -25.71], [-124.79, -22.94], [-125.0, -20.0], [-124.79, -16.9], [-124.16, -13.68], [-123.13, -10.35], [-121.68, -6.95], [-119.85, -3.49], [-117.63, -0.0], [-115.05, 3.49], [-112.13, 6.95], [-108.89, 10.35], [-105.35, 13.68], [-101.55, 16.9], [-97.5, 20.0], [-93.24, 22.94], [-88.81, 25.71], [-84.24, 28.28], [-79.55, 30.64], [-74.79, 32.77], [-70.0, 34.64], [-65.21, 36.25], [-60.45, 37.59], [-55.76, 38.64], [-51.19, 39.39], [-46.76, 39.85], [-42.5, 40.0], [-38.45, 39.85], [-34.65, 39.39], [-31.11, 38.64], [-27.87, 37.59], [-24.95, 36.25], [-22.37, 34.64], [-20.15, 32.77], [-18.32, 30.64], [-16.87, 28.28], [-15.84, 25.71], [-15.21, 22.94]], "style": "glass"}, "vecE": {"type": "line", "from": "O", "to": "E", "style": "ray", "arrow": true}, "cEy": {"type": "line", "from": "O", "to": "Fy", "style": "guide", "label": "E_y"}, "cEz": {"type": "line", "from": "Fy", "to": "E", "style": "guide", "label": "E_z"}, "major": {"type": "line", "from": [-122.88, -28.75], "to": [-17.12, 28.75], "style": "normal"}, "angAlpha": {"type": "angle", "at": "O", "from": [-32.0, 0.0], "to": [-36.62, 18.15], "r": 30, "label": "α"}, "circ": {"type": "arc", "center": "C", "r": 45.0, "from": 0, "to": 360, "style": "guide"}, "OA": {"type": "line", "from": "C", "to": "A", "style": "guide"}, "OB": {"type": "line", "from": "C", "to": "B", "style": "guide"}, "tc": {"type": "text", "at": [65.0, 54.0], "text": "phase circle"}, "triP": {"type": "polygon", "points": ["C", "Ax", "A"]}, "legCos": {"type": "line", "from": "C", "to": "Ax", "style": "guide", "label": "cos φ"}, "legSin": {"type": "line", "from": "Ax", "to": "A", "style": "guide", "label": "sin φ"}, "angPhi": {"type": "angle", "at": "C", "from": [110.0, 0.0], "to": "A", "r": 22, "label": "φ"}, "angDelta": {"type": "angle", "at": "C", "from": "A", "to": "B", "r": 30, "label": "δ"}, "tri2": {"type": "polygon", "points": ["C", "Dx", "D"]}, "legCosD": {"type": "line", "from": "C", "to": "Dx", "style": "guide", "label": "cos δ"}, "legSinD": {"type": "line", "from": "Dx", "to": "D", "style": "guide", "label": "sin δ"}, "angDelta2": {"type": "angle", "at": "C", "from": [20.0, 0.0], "to": "D", "r": 22, "label": "δ"}}, "draw": [{"parts": ["axY", "axZ", "tY", "tZ"], "caption": "Light travels along x; E lies in the y–z plane"}, {"parts": ["rect", "d1", "d2"], "caption": "Box of sides 2E_1 and 2E_2"}, {"parts": ["ell"], "caption": "The tip of E traces a closed curve"}, {"parts": ["O", "vecE", "E", "cEy", "Fy", "cEz"], "caption": "E at one instant: E_y along y, E_z along z"}, {"parts": ["C", "circ", "OA", "A", "OB", "B", "tc"], "caption": "Phase circle: angle φ and φ + δ"}]}, "steps": [{"figure": {"focus": ["cEy", "Fy", "OA"], "keep": ["O", "axY", "axZ", "rect"], "caption": "Wave 1: E_y = E_1 cos φ"}}, {"figure": {"focus": ["cEz", "angDelta", "OB"], "keep": ["O", "Fy", "axY", "axZ", "rect", "A", "angPhi"], "caption": "Wave 2: E_z = E_2 cos(φ + δ)"}}, {"figure": {"focus": ["angPhi", "angDelta", "OA", "OB"], "keep": ["A", "B", "circ", "C"], "caption": "cos(φ + δ): angles φ and δ add"}}, {"figure": {"focus": ["triP", "angPhi", "legCos", "OA", "cEy"], "keep": ["C", "A", "Ax", "circ"], "caption": "cos φ = E_y/E_1 (first wave)"}}, {"figure": {"focus": ["triP", "angPhi", "legCos", "legSin"], "keep": ["C", "A", "Ax", "circ", "OA"], "caption": "△: hypotenuse 1, legs cos φ and sin φ"}}, {"figure": {"focus": ["legSin", "triP"], "keep": ["legCos", "angPhi", "C", "A", "Ax", "circ", "OA"], "caption": "sin φ = ±√(1 − cos² φ)"}}, {"figure": {"focus": ["legSin", "legCos", "cEy"], "keep": ["triP", "C", "A", "Ax", "circ", "OA"], "caption": "Use cos φ = E_y/E_1 under the root"}}, {"figure": {"focus": ["cEz", "cEy"], "keep": ["O", "Fy", "E", "axY", "axZ", "rect"], "caption": "t is gone: E_z written with E_y only"}}, {"figure": {"focus": ["cEz", "cEy"], "keep": ["O", "Fy", "E", "axY", "axZ", "rect"], "caption": "Square root alone on the right"}}, {"figure": {"focus": ["ell"], "keep": ["O", "E", "axY", "axZ", "rect"], "caption": "Squaring removes the root and ±"}}, {"figure": {"focus": ["ell"], "keep": ["O", "E", "axY", "axZ", "rect"], "caption": "Expand both sides"}}, {"figure": {"focus": ["ell"], "keep": ["O", "E", "axY", "axZ", "rect"], "caption": "Collect the E_y² terms"}}, {"figure": {"focus": ["tri2", "angDelta2", "legCosD", "legSinD"], "keep": ["C", "D", "Dx", "circ"], "caption": "△: hypotenuse 1, legs cos δ and sin δ"}}, {"figure": {"focus": ["ell"], "keep": ["O", "E", "axY", "axZ", "rect"], "caption": "Bracket = 1"}}, {"figure": {"focus": ["ell", "rect", "d1", "d2"], "keep": ["O", "E", "axY", "axZ"], "caption": "Ellipse inside the 2E_1 × 2E_2 box"}}, {"figure": {"focus": ["major", "angAlpha"], "keep": ["ell", "rect", "O", "axY", "axZ"], "caption": "Major axis tilted by α to the y-axis"}}]}, {"figure": {"box": [-82, -58, 82, 58], "points": {"O": {"at": [0.0, 0.0], "side": "n", "label": false, "size": 2.4}, "V1": {"at": [60.0, 0.0], "side": "se", "label": "E_1", "size": 3}, "V2": {"at": [0.0, 40.0], "side": "ne", "label": "E_2", "size": 3}}, "parts": {"axY": {"type": "line", "from": [-76.0, 0.0], "to": [76.0, 0.0], "style": "axis", "arrow": 1}, "axZ": {"type": "line", "from": [0.0, -52.0], "to": [0.0, 52.0], "style": "axis", "arrow": 1}, "tY": {"type": "text", "at": [79.0, -8.0], "text": "y"}, "tZ": {"type": "text", "at": [8.0, 54.0], "text": "z"}, "rect": {"type": "polygon", "points": [[-60.0, -40.0], [60.0, -40.0], [60.0, 40.0], [-60.0, 40.0]], "style": "glass"}, "d1": {"type": "dim", "from": [-60.0, -40.0], "to": [60.0, -40.0], "offset": [0, 9], "arrow": "both", "label": "2E_1"}, "d2": {"type": "dim", "from": [60.0, -40.0], "to": [60.0, 40.0], "offset": [9, 0], "arrow": "both", "label": "2E_2"}, "ell": {"type": "polygon", "points": [[60.0, 0.0], [59.77, -3.49], [59.09, -6.95], [57.96, -10.35], [56.38, -13.68], [54.38, -16.9], [51.96, -20.0], [49.15, -22.94], [45.96, -25.71], [42.43, -28.28], [38.57, -30.64], [34.41, -32.77], [30.0, -34.64], [25.36, -36.25], [20.52, -37.59], [15.53, -38.64], [10.42, -39.39], [5.23, -39.85], [0.0, -40.0], [-5.23, -39.85], [-10.42, -39.39], [-15.53, -38.64], [-20.52, -37.59], [-25.36, -36.25], [-30.0, -34.64], [-34.41, -32.77], [-38.57, -30.64], [-42.43, -28.28], [-45.96, -25.71], [-49.15, -22.94], [-51.96, -20.0], [-54.38, -16.9], [-56.38, -13.68], [-57.96, -10.35], [-59.09, -6.95], [-59.77, -3.49], [-60.0, -0.0], [-59.77, 3.49], [-59.09, 6.95], [-57.96, 10.35], [-56.38, 13.68], [-54.38, 16.9], [-51.96, 20.0], [-49.15, 22.94], [-45.96, 25.71], [-42.43, 28.28], [-38.57, 30.64], [-34.41, 32.77], [-30.0, 34.64], [-25.36, 36.25], [-20.52, 37.59], [-15.53, 38.64], [-10.42, 39.39], [-5.23, 39.85], [-0.0, 40.0], [5.23, 39.85], [10.42, 39.39], [15.53, 38.64], [20.52, 37.59], [25.36, 36.25], [30.0, 34.64], [34.41, 32.77], [38.57, 30.64], [42.43, 28.28], [45.96, 25.71], [49.15, 22.94], [51.96, 20.0], [54.38, 16.9], [56.38, 13.68], [57.96, 10.35], [59.09, 6.95], [59.77, 3.49]], "style": "glass"}, "circ": {"type": "arc", "center": "O", "r": 40.0, "from": 0, "to": 360, "style": "ray"}, "rad": {"type": "line", "from": "O", "to": [30.64, 25.71], "style": "guide", "label": "E_0"}}, "draw": [{"parts": ["axY", "axZ", "tY", "tZ"], "caption": "Axes y and z"}, {"parts": ["rect", "d1", "d2"], "caption": "Box of sides 2E_1 and 2E_2"}]}, "steps": [{"figure": {"focus": ["rect", "d1", "d2"], "keep": ["axY", "axZ"], "caption": "General ellipse equation"}}, {"figure": {"focus": ["ell"], "keep": ["rect", "axY", "axZ"], "caption": "δ = π/2: cos δ = 0, sin δ = 1"}}, {"figure": {"focus": ["V1", "ell"], "keep": ["rect", "axY", "axZ"], "caption": "E_z = 0: the curve meets the y-axis at ±E_1"}}, {"figure": {"focus": ["V2", "ell"], "keep": ["rect", "axY", "axZ"], "caption": "E_y = 0: the curve meets the z-axis at ±E_2"}}, {"figure": {"focus": ["ell", "axY", "axZ"], "keep": ["rect"], "caption": "α = 0: ellipse axes lie along y and z"}}, {"figure": {"focus": ["rect"], "keep": ["axY", "axZ"], "caption": "Equal amplitudes E_1 = E_2 = E_0"}}, {"figure": {"focus": ["circ", "rad"], "keep": ["rect", "axY", "axZ"], "caption": "Put E_1 = E_2 = E_0"}}, {"figure": {"focus": ["circ", "rad"], "keep": ["rect", "axY", "axZ"], "caption": "Circle of radius E_0"}}]}];
+(function(){var h=document.querySelector('header').offsetHeight+document.querySelector('nav').offsetHeight;document.documentElement.style.setProperty('--stick',h+'px');})();
+document.querySelectorAll('.fgbox').forEach(function (host) {
+  var d = FIGS[+host.dataset.fig], card = host.closest('.card'), rows = [].slice.call(card.querySelectorAll('.st'));
+  var api = SM.Figure.mount(host, d.figure, d.steps, { autoIntro: true }), cur = -1, timer = null;
+  function show(i, scroll) {
+    cur = Math.max(-1, Math.min(rows.length - 1, i));
+    rows.forEach(function (r, k) { r.classList.toggle('on', k === cur); });
+    if (cur >= 0) { api.step(cur); if (scroll) rows[cur].scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+  }
+  function stop() { clearInterval(timer); timer = null; btn.textContent = '\u25B6 Play'; }
+  var btn = card.querySelector('.play');
+  btn.onclick = function () {
+    if (timer) return stop();
+    btn.textContent = '\u275A\u275A Pause';
+    if (cur >= rows.length - 1 || cur < 0) { api.intro(); cur = -1; setTimeout(function () { show(0, true); }, (api.introLeft ? api.introLeft() : 0) + 300); }
+    timer = setInterval(function () { if (cur >= rows.length - 1) return stop(); show(cur + 1, true); }, 3200);
+  };
+  card.querySelector('.next').onclick = function () { stop(); show(cur + 1, true); };
+  card.querySelector('.prev').onclick = function () { stop(); show(cur - 1, true); };
+  rows.forEach(function (r, k) { r.onclick = function () { stop(); show(k, false); }; });
+  window.addEventListener('resize', function () { api.layout(); });
+});
+</script></body></html>

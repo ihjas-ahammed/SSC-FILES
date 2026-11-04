@@ -51,3 +51,20 @@ Offset: **PDF page = printed page + 15** (checked: §5.1 printed 125 = PDF 140; 
 - Unit 5 runs up to printed 152, before §5.6 (printed 153). §5.5 falls inside that range; check it against the syllabus wording.
 - The syllabus Module V (open-ended, §5.2, 5.6, 6.1 inverse functions, 6.3, 6.4, 8.2, 9.1–9.4) is not cut.
 - Syllabus: `syllabus.pdf` (copied from `SEM5-PYQ/REAL-ANALYSIS-II/`).
+
+## Exercise pages (added 2026-10-27)
+
+Units 6, 11 and 18 ("Selected problems") were not cut. The "Exercises for Section" sets are now separate files (PDF pages; the last page also opens the next section). The §5.4 and §7.1 sets were already inside unit 5 and unit 13; the others were missing or cut short. Files are made for all ten so each module folder has its full problem sets. The unit files are unchanged.
+
+| Section | Exercises PDF pp (printed) | File |
+|---|---|---|
+| 5.1 | 144–145 (129–130) | module-1/exercises-section-5-1.pdf |
+| 5.3 | 155–156 (140–141) | module-1/exercises-section-5-3.pdf |
+| 5.4 | 163–164 (148–149) | module-1/exercises-section-5-4.pdf |
+| 6.1 | 185–186 (170–171) | module-2/exercises-section-6-1.pdf |
+| 6.2 | 194–195 (179–180) | module-2/exercises-section-6-2.pdf |
+| 7.1 | 221–222 (206–207) | module-3/exercises-section-7-1.pdf |
+| 7.2 | 230–231 (215–216) | module-3/exercises-section-7-2.pdf |
+| 7.3 | 238–240 (223–225) | module-3/exercises-section-7-3.pdf |
+| 8.1 | 261–262 (246–247) | module-4/exercises-section-8-1.pdf |
+| 8.2 | 267–268 (252–253) | module-4/exercises-section-8-2.pdf |

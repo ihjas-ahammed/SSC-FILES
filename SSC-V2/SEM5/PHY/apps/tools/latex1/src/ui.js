@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════════════════
-   LaTeX · Modules I–II — study engine
+   LaTeX · Modules I–IV — study engine
    tree · focus accordion · live editor · practice widgets · sync
    ══════════════════════════════════════════════════════════════════ */
 (function(){
@@ -64,6 +64,39 @@ p.lx-hasfill{display:flex;align-items:baseline}.lx-hfill{flex:1}
 .lx-url{font-family:"Computer Modern Typewriter",monospace;color:inherit;text-decoration:none}
 .lx-img{display:inline-block;border:1px dashed #999;padding:1.5em 2em;color:#777;font-family:sans-serif;font-size:.8em}
 .lx-addr{text-align:left;margin-bottom:1em}.lx-close{margin-top:1.5em}
+.lx-mini,.lx-parbox{display:inline-block;vertical-align:top;text-align:left}.lx-mini p,.lx-parbox p{margin:0 0 .4em;text-indent:0}
+.lx-qed{float:right}
+/* beamer: every overlay is a page of its own */
+.bm-deck{--bm-s:#3333b2;--bm-s2:#6a6ad0;--bm-s3:#e4e4f4;font-family:"Computer Modern Sans","Source Sans 3",Helvetica,Arial,sans-serif;display:flex;flex-direction:column;gap:14px;align-items:center;padding:6px}
+.bm-slide{position:relative;width:480px;max-width:100%;aspect-ratio:4/3;background:#fff;color:#111;border:1px solid #bbb;box-shadow:0 1px 6px rgba(0,0,0,.18);overflow:hidden;display:flex;flex-direction:column;font-size:14.4px;line-height:1.3}
+.bm-slide *{font-family:inherit}
+.bm-wrap{flex:1;display:flex;min-height:0}
+.bm-main{flex:1;display:flex;flex-direction:column;min-width:0}
+.bm-ft{background:var(--bm-s3);color:var(--bm-s);padding:.5em .9em;font-size:1.25em;border-bottom:2px solid var(--bm-s)}
+.bm-ft small{display:block;font-size:.7em;color:#444}
+.bm-body{flex:1;padding:.7em .9em;overflow:hidden}
+.bm-body p{margin:.35em 0;text-indent:0;text-align:left}
+.bm-body ul.list,.bm-body ol.list{margin:.3em 0;padding-left:1.4em}
+.bm-body .katex{font-size:1.05em}
+.is-title .bm-body{display:flex;align-items:center;justify-content:center;text-align:center}
+.bm-titlepage{text-align:center}.bm-tt{font-size:1.5em;color:var(--bm-s);font-weight:600;margin-bottom:.4em}.bm-st{margin-bottom:.4em}
+.bm-au{font-size:1.1em;margin:.5em 0 .2em}.bm-in{font-size:.8em;margin:.2em 0}.bm-dt{font-size:.8em;margin-top:.7em}
+.bm-toc{list-style:none;margin:.4em 0;padding:0}.bm-toc li{margin:.35em 0;font-size:1.1em}.bm-tn{display:inline-block;min-width:1.4em;color:var(--bm-s);font-weight:700}
+.bm-hid,.bm-hid *{visibility:hidden!important}
+.bm-block{margin:.5em 0;border-radius:3px;overflow:hidden;background:var(--bm-s3)}
+.bm-bt{background:var(--bm-s);color:#fff;font-weight:600;padding:.25em .7em}.bm-bb{padding:.3em .7em}.bm-bb p{margin:.25em 0}
+.bm-block.alert .bm-bt{background:#b22222}.bm-block.alert{background:#f6e0e0}
+.bm-block.ex .bm-bt{background:#2e7d32}.bm-block.ex{background:#e1f1e2}
+.bm-block.notitle .bm-bt{display:none}
+.bm-cols{display:flex;gap:.8em;margin:.3em 0}.bm-cols.al-t{align-items:flex-start}.bm-cols.al-c{align-items:center}.bm-cols.al-b{align-items:flex-end}.bm-col{min-width:0}
+.bm-side{width:28%;background:var(--bm-s);color:#fff;padding:.7em .6em;font-size:.82em}
+.bm-sh{font-weight:600;margin-bottom:.3em}.bm-sa{opacity:.85;margin-bottom:.9em}.bm-side ul{list-style:none;margin:0;padding:0}
+.bm-side li{padding:.15em 0;opacity:.7}.bm-side li.cur{opacity:1;font-weight:700}
+.th-sidebar .is-title .bm-wrap{display:block}
+.bm-top{background:var(--bm-s);color:#fff;padding:.3em .6em;font-size:.78em}.bm-nav{display:flex;gap:1em;flex-wrap:wrap}.bm-nav .cur{font-weight:700;text-decoration:underline}
+.bm-dots{font-size:.6em;letter-spacing:.2em;opacity:.8}.bm-dots .cur{color:#fff;opacity:1}.bm-dots span{opacity:.5}
+.bm-foot{display:flex;font-size:.72em;color:#fff;background:var(--bm-s)}.bm-foot span{padding:.3em .6em;flex:1}.bm-foot .t{background:var(--bm-s2);text-align:center;flex:2}.bm-foot .n{text-align:right;flex:.7}
+.bm-num{position:absolute;right:8px;bottom:5px;font-size:.7em;color:#666}.bm-ov{position:absolute;left:8px;bottom:5px;font-size:.62em;color:#888}
 `;
 let previewHead=null;
 function previewHeadHTML(){
@@ -1552,8 +1585,8 @@ function initDownload(){
   const btn=$('#dl');if(location.protocol==='file:'||!CFG.online)return;btn.hidden=false;
   btn.title='Download the offline copy (works without internet)';
   btn.onclick=async()=>{btn.textContent='…';
-    try{const r=await fetch(new URL('LATEX_12_OFFLINE.html',location.href),{cache:'no-store'});if(!r.ok)throw 0;
-      const b=await r.blob();const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='LATEX_12_OFFLINE.html';
+    try{const r=await fetch(new URL('LATEX_1234_OFFLINE.html',location.href),{cache:'no-store'});if(!r.ok)throw 0;
+      const b=await r.blob();const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='LATEX_1234_OFFLINE.html';
       document.body.appendChild(a);a.click();a.remove();toast('Downloaded the offline copy');}
     catch(e){toast('Download failed — try again online');}
     btn.textContent='⤓';};
@@ -1566,7 +1599,7 @@ function boot(){
   if(h==='ide')v='ide';else if(h==='bookmarks')v='bm';
   else if(h){const t=document.getElementById(h);if(t){v='learn';showView(v);openCard(t.closest('.tunit,.unit,.mod')||t);}}
   showView(v);
-  window.LXAPP={openCard,openInIDE,openCode,showView,compileProject,submitPDF,state:()=>state,ide:()=>ide};
+  window.LXAPP={openCard,openInIDE,openCode,showView,compileProject,submitPDF,previewBlock,docSpec,state:()=>state,ide:()=>ide};
 }
 if(document.readyState!=='loading')boot();else document.addEventListener('DOMContentLoaded',boot);
 })();

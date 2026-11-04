@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Study Match · Choose topics</title>
+<meta name="theme-color" content="#FAF8F3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Theme tokens. Calm study palette: paper, navy ink, lavender, one warm amber accent.
+   Green and coral are kept only for right / wrong so they stay meaningful. */
+:root {
+  --paper: #FAF8F3; --grid: rgba(27, 37, 89, 0.055); --card: #FFFFFF;
+  --ink: #1B2559; --ink-2: #4A5480; --muted: #8C92B0; --line: rgba(27, 37, 89, 0.10);
+  --lav: #F1EDFB; --lav-2: #DED6F6; --violet: #6A55D8; --on-violet: #FFFFFF;
+  --amber: #F6B72B; --orange: #F08A3C; --hl: #C98200; --amber-bg: #FFF3D6;
+  --sage: #2F9466; --sage-bg: #DDF2E6; --coral: #D9533F; --coral-bg: #FBE3DE;
+  --shadow: 0 10px 26px rgba(27, 37, 89, 0.08), 0 1px 0 rgba(27, 37, 89, 0.04);
+  --score-bg: #1B2559; --score-ink: #FFFFFF;
+  color-scheme: light;
+
+  --view: min(100vw, 440px);
+  --card-w: clamp(250px, calc(var(--view) * 0.78), 318px);
+  --gap: 12px;
+  --top: 140px;
+  --sheet-h: min(calc(100dvh - var(--top) - 22px), 640px);
+
+  --fs-title: 18px;
+  --fs-body: 13.5px;
+  --fs-small: 12px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #111326; --grid: rgba(255, 255, 255, 0.035); --card: #1A1D36;
+    --ink: #ECEAFB; --ink-2: #B7B9D8; --muted: #7D82A6; --line: rgba(255, 255, 255, 0.09);
+    --lav: #232748; --lav-2: #343A6E; --violet: #A898FF; --on-violet: #15172C;
+    --amber: #F7C04F; --orange: #F59A55; --hl: #F7C04F; --amber-bg: rgba(247, 192, 79, 0.14);
+    --sage: #5BC48E; --sage-bg: rgba(91, 196, 142, 0.16); --coral: #FF7B68; --coral-bg: rgba(255, 123, 104, 0.16);
+    --shadow: 0 10px 26px rgba(0, 0, 0, 0.35);
+    --score-bg: #ECEAFB; --score-ink: #15172C;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #111326; --grid: rgba(255, 255, 255, 0.035); --card: #1A1D36;
+  --ink: #ECEAFB; --ink-2: #B7B9D8; --muted: #7D82A6; --line: rgba(255, 255, 255, 0.09);
+  --lav: #232748; --lav-2: #343A6E; --violet: #A898FF; --on-violet: #15172C;
+  --amber: #F7C04F; --orange: #F59A55; --hl: #F7C04F; --amber-bg: rgba(247, 192, 79, 0.14);
+  --sage: #5BC48E; --sage-bg: rgba(91, 196, 142, 0.16); --coral: #FF7B68; --coral-bg: rgba(255, 123, 104, 0.16);
+  --shadow: 0 10px 26px rgba(0, 0, 0, 0.35);
+  --score-bg: #ECEAFB; --score-ink: #15172C;
+  color-scheme: dark;
+}
+@media (min-width: 700px) {
+  :root { --fs-title: 19px; --fs-body: 14px; }
+}
+
+html, body { margin: 0; background: var(--paper); color: var(--ink); font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
+body { min-height: 100dvh; background-color: var(--paper); }
+.wrap { max-width: 560px; margin: 0 auto; padding: 22px 16px 36px; box-sizing: border-box; }
+h1 { font-size: 22px; margin: 4px 0 4px; }
+.lede { font-size: 13.5px; color: var(--ink-2); margin: 0 0 16px; line-height: 1.45; }
+label.field { display: block; font-size: 12px; font-weight: 700; color: var(--muted); margin-bottom: 6px; }
+select { width: 100%; font: inherit; font-size: 15px; font-weight: 600; color: var(--ink); background: var(--card);
+  border: 1.5px solid var(--line); border-radius: 12px; padding: 11px 12px; box-sizing: border-box; }
+.tools { display: flex; gap: 8px; margin: 14px 0 6px; align-items: center; flex-wrap: wrap; }
+.tools button { font: inherit; font-size: 12.5px; font-weight: 700; border: 0; border-radius: 999px; padding: 7px 12px;
+  background: var(--lav); color: var(--violet); cursor: pointer; }
+.count { margin-left: auto; font-size: 12.5px; font-weight: 700; color: var(--ink-2); }
+.unit-sec { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; margin: 10px 0;
+  box-shadow: var(--shadow); }
+.unit-sec h2 { font-size: 13px; margin: 0 0 6px; color: var(--violet); letter-spacing: 0.02em; }
+label.unit { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; font-size: 14px; font-weight: 600; cursor: pointer; line-height: 1.35; }
+label.unit + label.unit { border-top: 1px solid var(--line); }
+label.unit input { margin-top: 2px; width: 18px; height: 18px; accent-color: var(--violet); flex: 0 0 auto; }
+.start { position: sticky; bottom: 0; margin-top: 18px; }
+.start button { width: 100%; font: inherit; font-size: 16px; font-weight: 800; border: 0; border-radius: 14px; padding: 14px;
+  background: var(--violet); color: var(--on-violet); cursor: pointer; box-shadow: var(--shadow); }
+.start button:disabled { opacity: 0.45; cursor: not-allowed; }
+.note { font-size: 12px; color: var(--muted); margin-top: 10px; line-height: 1.4; }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <h1>Choose your topics</h1>
+  <p class="lede">Pick a module, tick the topics you need, then start the match. You can switch modules and keep your ticks.</p>
+
+  <label class="field" for="module">Module</label>
+  <select id="module"></select>
+
+  <div class="tools">
+    <button type="button" id="all">Tick all in this module</button>
+    <button type="button" id="none">Clear this module</button>
+    <span class="count" id="count"></span>
+  </div>
+
+  <div id="list"></div>
+
+  <div class="start">
+    <button type="button" id="start">Start match</button>
+  </div>
+  <p class="note">Progress is saved on this device per topic, the same as in the match page.</p>
+</main>
+
+<script id="units" type="application/json">{"1":{"label":"Module 1","sections":[{"title":"N23","sheets":[{"id":"opt-pyq-n23-q1","title":"Q1 · Law of refraction (2 marks)","cards":8},{"id":"opt-pyq-n23-q2","title":"Q2 · Distance measurement in sign convention (2 marks)","cards":8},{"id":"opt-pyq-n23-q3","title":"Q3 · Definition of thin lens (2 marks)","cards":8},{"id":"opt-pyq-n23-q4","title":"Q4 · First focal length (2 marks)","cards":8},{"id":"opt-pyq-n23-q5","title":"Q5 · Lateral magnification (2 marks)","cards":8},{"id":"opt-pyq-n23-q6","title":"Q6 · Bragg wavelength (2 marks)","cards":8},{"id":"opt-pyq-n23-q7","title":"Q7 · Angular divergence of circular aperture (2 marks)","cards":8},{"id":"opt-pyq-n23-q8","title":"Q8 · Fresnel vs Fraunhofer diffraction (2 marks)","cards":8},{"id":"opt-pyq-n23-q9","title":"Q9 · Resolving power (2 marks)","cards":8},{"id":"opt-pyq-n23-q10","title":"Q10 · Polaroid (2 marks)","cards":8},{"id":"opt-pyq-n23-q11","title":"Q11 · Analyser (2 marks)","cards":8},{"id":"opt-pyq-n23-q12","title":"Q12 · Requirements of holography (2 marks)","cards":8},{"id":"opt-pyq-n23-q13","title":"Q13 · Postulates of sign convention (5 marks)","cards":8},{"id":"opt-pyq-n23-q14","title":"Q14 · Intensity ratio for path difference lambda/3 (5 marks)","cards":8},{"id":"opt-pyq-n23-q15","title":"Q15 · Fringe width in Young's double-hole experiment (5 marks)","cards":8},{"id":"opt-pyq-n23-q16","title":"Q16 · Maxima and minima in N-slit Fraunhofer diffraction (5 marks)","cards":8},{"id":"opt-pyq-n23-q17","title":"Q17 · Zone plate principle and construction (5 marks)","cards":8},{"id":"opt-pyq-n23-q18","title":"Q18 · Huygens' explanation of double refraction (5 marks)","cards":8},{"id":"opt-pyq-n23-q19","title":"Q19 · Applications of holography in diverse fields (5 marks)","cards":8},{"id":"opt-pyq-n23-q20","title":"Q20 · Gaussian formula and reflection at a single spherical surface (10 marks)","cards":10},{"id":"opt-pyq-n23-q21","title":"Q21 · Reflected waves and reflectivity in thin-film interference (10 marks)","cards":10}]},{"title":"N22-O","sheets":[{"id":"opt-pyq-n22o-q1","title":"Q1 · Laws of reflection (2 marks)","cards":8},{"id":"opt-pyq-n22o-q2","title":"Q2 · Cosine-square law for interference intensity (2 marks)","cards":8},{"id":"opt-pyq-n22o-q5","title":"Q5 · Intensity distribution in N-slit Fraunhofer diffraction (2 marks)","cards":8},{"id":"opt-pyq-n22o-q6","title":"Q6 · Grating equation and terms (2 marks)","cards":8},{"id":"opt-pyq-n22o-q7","title":"Q7 · Resolving power of a grating (2 marks)","cards":8},{"id":"opt-pyq-n22o-q8","title":"Q8 · Huygens wave surfaces in a negative uniaxial crystal (2 marks)","cards":8},{"id":"opt-pyq-n22o-q9","title":"Q9 · Optical activity and examples (2 marks)","cards":8},{"id":"opt-pyq-n22o-q11","title":"Q11 · Graded index fiber and refractive index profile (2 marks)","cards":8},{"id":"opt-pyq-n22o-q12","title":"Q12 · Pulse dispersion in optical fiber (2 marks)","cards":8},{"id":"opt-pyq-n22o-q13","title":"Q13 · Thin lens and thin lens formula (5 marks)","cards":8},{"id":"opt-pyq-n22o-q14","title":"Q14 · Fringe width in Fresnel's biprism (5 marks)","cards":8},{"id":"opt-pyq-n22o-q16","title":"Q16 · Angular separation of sodium D lines in second order (5 marks)","cards":8},{"id":"opt-pyq-n22o-q17","title":"Q17 · Radius of first zone in a zone plate (5 marks)","cards":8},{"id":"opt-pyq-n22o-q18","title":"Q18 · Reconstruction of image in holography (5 marks)","cards":8},{"id":"opt-pyq-n22o-q19","title":"Q19 · Numerical aperture of step-index fiber (5 marks)","cards":8},{"id":"opt-pyq-n22o-q20","title":"Q20 · Michelson interferometer and circular ring brightness (10 marks)","cards":10},{"id":"opt-pyq-n22o-q21","title":"Q21 · Optical activity and Fresnel's explanation of optical rotation (10 marks)","cards":10}]},{"title":"N22-P1","sheets":[{"id":"opt-pyq-n22p1-q1","title":"Q1 · Paraxial approximation rays (1 mark)","cards":8},{"id":"opt-pyq-n22p1-q3","title":"Q3 · Discoverer of holography (1 mark)","cards":8},{"id":"opt-pyq-n22p1-q4","title":"Q4 · Purpose of non-reflecting film coating (1 mark)","cards":8},{"id":"opt-pyq-n22p1-q7","title":"Q7 · Screen distance for good interference pattern (1 mark)","cards":8},{"id":"opt-pyq-n22p1-q10","title":"Q10 · Sharpness of N-slit principal maximum as N increases (1 mark)","cards":8},{"id":"opt-pyq-n22p1-q12","title":"Q12 · Optical direction cosine (2 marks)","cards":8},{"id":"opt-pyq-n22p1-q17","title":"Q17 · Acceptance angle and critical angle (2 marks)","cards":8}]},{"title":"N22-P2","sheets":[{"id":"opt-pyq-n22p2-q2","title":"Q2 · Mechanism of light propagation in optical fiber (1 mark)","cards":8},{"id":"opt-pyq-n22p2-q19","title":"Q19 · Superposition of two sinusoidal waves and interference conditions (4 marks)","cards":10},{"id":"opt-pyq-n22p2-q24","title":"Q24 · Construction and advantages of hologram (4 marks)","cards":9},{"id":"opt-pyq-n22p2-q25","title":"Q25 · Focal length of two coaxial thin lenses (4 marks)","cards":8},{"id":"opt-pyq-n22p2-q26","title":"Q26 · Fringe width in Lloyd's mirror experiment (4 marks)","cards":8},{"id":"opt-pyq-n22p2-q29","title":"Q29 · First-order resolving power of a grating (4 marks)","cards":8},{"id":"opt-pyq-n22p2-q35","title":"Q35 · Optical fiber transmission and numerical aperture derivation (10 marks)","cards":10}]},{"title":"N21-O","sheets":[{"id":"opt-pyq-n21o-q1","title":"Q1 · Fermat's principle of stationary time (3 marks)","cards":8},{"id":"opt-pyq-n21o-q2","title":"Q2 · Principle of superposition of waves (3 marks)","cards":8},{"id":"opt-pyq-n21o-q3","title":"Q3 · Coherence time and coherence length (3 marks)","cards":8},{"id":"opt-pyq-n21o-q4","title":"Q4 · Rayleigh criterion of resolution (3 marks)","cards":8},{"id":"opt-pyq-n21o-q5","title":"Q5 · Maxima and minima conditions for Newton's rings (3 marks)","cards":8},{"id":"opt-pyq-n21o-q7","title":"Q7 · Huygens wave surfaces in a positive doubly refracting crystal (3 marks)","cards":8},{"id":"opt-pyq-n21o-q8","title":"Q8 · Production of elliptically polarized light (3 marks)","cards":8},{"id":"opt-pyq-n21o-q9","title":"Q9 · Dextrorotatory vs laevorotatory substances (3 marks)","cards":8},{"id":"opt-pyq-n21o-q10","title":"Q10 · Basic steps in holography (3 marks)","cards":8},{"id":"opt-pyq-n21o-q11","title":"Q11 · Step-index vs graded-index optical fibers (3 marks)","cards":8},{"id":"opt-pyq-n21o-q12","title":"Q12 · Basic parts of a fiber optic sensor (3 marks)","cards":8},{"id":"opt-pyq-n21o-q13","title":"Q13 · Derivation of Newtonian lens formula (5 marks)","cards":9},{"id":"opt-pyq-n21o-q14","title":"Q14 · Separation between coherent sources in a biprism (5 marks)","cards":8},{"id":"opt-pyq-n21o-q15","title":"Q15 · Radius of first dark ring in circular aperture diffraction (5 marks)","cards":8},{"id":"opt-pyq-n21o-q16","title":"Q16 · Positions of foci of a Fresnel zone plate (5 marks)","cards":8},{"id":"opt-pyq-n21o-q17","title":"Q17 · Thickness of quartz half-wave plate (5 marks)","cards":8},{"id":"opt-pyq-n21o-q19","title":"Q19 · Numerical aperture and acceptance angle of optical fiber (5 marks)","cards":8},{"id":"opt-pyq-n21o-q20","title":"Q20 · Interference by a plane parallel film and conditions for maxima and minima (11 marks)","cards":10}]},{"title":"N21-P","sheets":[{"id":"opt-pyq-n21p-q1","title":"Q1 · Focal length from system matrix (1 mark)","cards":8},{"id":"opt-pyq-n21p-q2","title":"Q2 · Inner part of optical fiber (1 mark)","cards":8},{"id":"opt-pyq-n21p-q3","title":"Q3 · Principle used in construction of hologram (1 mark)","cards":8},{"id":"opt-pyq-n21p-q4","title":"Q4 · Waves maintaining constant phase difference (1 mark)","cards":8},{"id":"opt-pyq-n21p-q5","title":"Q5 · Principal focal length equation of a zone plate (1 mark)","cards":8},{"id":"opt-pyq-n21p-q7","title":"Q7 · Ray incident at angle greater than acceptance angle (1 mark)","cards":8},{"id":"opt-pyq-n21p-q9","title":"Q9 · Cause of colours on a thin film and soap bubble (1 mark)","cards":8},{"id":"opt-pyq-n21p-q10","title":"Q10 · Velocity of O-ray and E-ray in a negative uniaxial crystal (1 mark)","cards":8},{"id":"opt-pyq-n21p-q12","title":"Q12 · Advantages of matrix method in paraxial optics (2 marks)","cards":8},{"id":"opt-pyq-n21p-q13","title":"Q13 · Conditions for sustained interference pattern (2 marks)","cards":8},{"id":"opt-pyq-n21p-q15","title":"Q15 · Overlapping spectra in a diffraction grating (2 marks)","cards":8},{"id":"opt-pyq-n21p-q18","title":"Q18 · System matrix for thin lens and thin lens formula (4 marks)","cards":10},{"id":"opt-pyq-n21p-q19","title":"Q19 · Fresnel's biprism and determination of wavelength (4 marks)","cards":9},{"id":"opt-pyq-n21p-q20","title":"Q20 · Michelson interferometer and wavelength difference of two waves (4 marks)","cards":9},{"id":"opt-pyq-n21p-q22","title":"Q22 · Intensity distribution of Fresnel diffraction at a straight edge (4 marks)","cards":8},{"id":"opt-pyq-n21p-q23","title":"Q23 · Quarter-wave plate and half-wave plate (4 marks)","cards":9},{"id":"opt-pyq-n21p-q24","title":"Q24 · Necessity of cladding and applications of optical fiber (4 marks)","cards":9},{"id":"opt-pyq-n21p-q25","title":"Q25 · System matrix and focal length of a glass lens (4 marks)","cards":8},{"id":"opt-pyq-n21p-q26","title":"Q26 · Wavelength from fourth bright fringe position (4 marks)","cards":8},{"id":"opt-pyq-n21p-q27","title":"Q27 · Least thickness of soap bubble bright by reflection (4 marks)","cards":8},{"id":"opt-pyq-n21p-q28","title":"Q28 · Radius of curvature and 30th Newton's ring radius (4 marks)","cards":8},{"id":"opt-pyq-n21p-q29","title":"Q29 · Maximum resolving power of a plane transmission grating (4 marks)","cards":8},{"id":"opt-pyq-n21p-q30","title":"Q30 · Thickness of quarter-wave and half-wave plates (4 marks)","cards":8},{"id":"opt-pyq-n21p-q31","title":"Q31 · Number of propagating modes in a step-index fiber (4 marks)","cards":8},{"id":"opt-pyq-n21p-q32","title":"Q32 · Theory of Newton's rings in reflected light and wavelength determination (10 marks)","cards":10},{"id":"opt-pyq-n21p-q33","title":"Q33 · Construction and theory of plane transmission grating and absent spectra (10 marks)","cards":10},{"id":"opt-pyq-n21p-q34","title":"Q34 · Rectilinear propagation of light from Fresnel's half-period zones (10 marks)","cards":10},{"id":"opt-pyq-n21p-q35","title":"Q35 · Principle, recording and reconstruction of holography (10 marks)","cards":10}]},{"title":"N20","sheets":[{"id":"opt-pyq-n20-q1","title":"Q1 · Definition of optical path (1 mark)","cards":8},{"id":"opt-pyq-n20-q2","title":"Q2 · Matrix for straight-line motion in homogeneous medium (1 mark)","cards":8},{"id":"opt-pyq-n20-q3","title":"Q3 · Central ring of Newton's rings in transmitted light (1 mark)","cards":8},{"id":"opt-pyq-n20-q4","title":"Q4 · Class of diffraction at finite distances (1 mark)","cards":8},{"id":"opt-pyq-n20-q5","title":"Q5 · Definition of specific rotation (1 mark)","cards":8},{"id":"opt-pyq-n20-q6","title":"Q6 · Refraction through spherical surface as 2x2 matrix (1 mark)","cards":8},{"id":"opt-pyq-n20-q7","title":"Q7 · Purity of grating spectra compared to prism spectra (1 mark)","cards":8},{"id":"opt-pyq-n20-q8","title":"Q8 · Information storage capacity of a hologram vs photographic plate (1 mark)","cards":8},{"id":"opt-pyq-n20-q9","title":"Q9 · Need for repeaters in long-distance fiber communication (1 mark)","cards":8},{"id":"opt-pyq-n20-q10","title":"Q10 · Fringes obtained from two perfectly plane surfaces (1 mark)","cards":8},{"id":"opt-pyq-n20-q11","title":"Q11 · Three results obtained from Fermat's principle (2 marks)","cards":8},{"id":"opt-pyq-n20-q12","title":"Q12 · System matrix for a ray travelling through an optical system (2 marks)","cards":8},{"id":"opt-pyq-n20-q13","title":"Q13 · Interference by division of wavefront and division of amplitude (2 marks)","cards":8},{"id":"opt-pyq-n20-q14","title":"Q14 · Definition of numerical aperture for optical fiber (2 marks)","cards":8},{"id":"opt-pyq-n20-q15","title":"Q15 · Explanation of a diffraction grating (2 marks)","cards":8},{"id":"opt-pyq-n20-q17","title":"Q17 · Brewster's law and Brewster window (2 marks)","cards":8},{"id":"opt-pyq-n20-q18","title":"Q18 · System matrix for a thick lens (4 marks)","cards":10},{"id":"opt-pyq-n20-q20","title":"Q20 · Haidinger's fringes vs Newton's rings (4 marks)","cards":9},{"id":"opt-pyq-n20-q21","title":"Q21 · Fraunhofer diffraction at a circular aperture (4 marks)","cards":8},{"id":"opt-pyq-n20-q23","title":"Q23 · Method of producing plane, circularly and elliptically polarized light (4 marks)","cards":9},{"id":"opt-pyq-n20-q25","title":"Q25 · Mirror equation from Fermat's principle (4 marks)","cards":10},{"id":"opt-pyq-n20-q26","title":"Q26 · Radii of 9th and 10th bright Newton's rings (4 marks)","cards":8},{"id":"opt-pyq-n20-q27","title":"Q27 · Linear separation between sodium D1 and D2 lines in focal plane (4 marks)","cards":8},{"id":"opt-pyq-n20-q29","title":"Q29 · Numerical aperture, acceptance angle, and cutoff wavelength of step-index fiber (4 marks)","cards":8},{"id":"opt-pyq-n20-q30","title":"Q30 · Radius of first half-period zone of a zone plate (4 marks)","cards":8},{"id":"opt-pyq-n20-q31","title":"Q31 · Wedge angle of a thin air wedge from fringe density (4 marks)","cards":8},{"id":"opt-pyq-n20-q32","title":"Q32 · Michelson interferometer: standardization of meter and circular, straight, white-light fringes (10 marks)","cards":9},{"id":"opt-pyq-n20-q33","title":"Q33 · Fraunhofer diffraction due to a single narrow slit (10 marks)","cards":10},{"id":"opt-pyq-n20-q34","title":"Q34 · Plane, circular, and elliptical polarization; reflection/refraction polarization; circular production & detection (10 marks)","cards":10}]},{"title":"N19","sheets":[{"id":"opt-pyq-n19-q1","title":"Q1 · Determinant of translation matrix (1 mark)","cards":8},{"id":"opt-pyq-n19-q4","title":"Q4 · Recording several images in a single medium (1 mark)","cards":8},{"id":"opt-pyq-n19-q5","title":"Q5 · Change in optical path with refractive index of thin film (1 mark)","cards":8},{"id":"opt-pyq-n19-q7","title":"Q7 · Circular aperture diffraction pattern shape (1 mark)","cards":8},{"id":"opt-pyq-n19-q8","title":"Q8 · Polarization of ordinary and extraordinary rays (1 mark)","cards":8},{"id":"opt-pyq-n19-q9","title":"Q9 · Effect of grating element on angular dispersion (1 mark)","cards":8},{"id":"opt-pyq-n19-q10","title":"Q10 · Hologram recording both intensity and phase (1 mark)","cards":8},{"id":"opt-pyq-n19-q11","title":"Q11 · Fermat's principle of stationary time and elliptical reflector (2 marks)","cards":8},{"id":"opt-pyq-n19-q12","title":"Q12 · Selecting loudspeaker diameter for sound directionality (2 marks)","cards":8},{"id":"opt-pyq-n19-q13","title":"Q13 · Constructive and destructive interference conditions for normal incidence on a thin film (2 marks)","cards":8},{"id":"opt-pyq-n19-q14","title":"Q14 · Explanation of colour of thin films (2 marks)","cards":8},{"id":"opt-pyq-n19-q17","title":"Q17 · Why interference colours are not observed in thick plates (2 marks)","cards":8},{"id":"opt-pyq-n19-q18","title":"Q18 · Condition for image plane with respect to a refracting surface (4 marks)","cards":9},{"id":"opt-pyq-n19-q19","title":"Q19 · Resolving power of a microscope and oil immersion objectives (4 marks)","cards":9},{"id":"opt-pyq-n19-q20","title":"Q20 · Construction of Fresnel's half-period zones and area of each zone (4 marks)","cards":9},{"id":"opt-pyq-n19-q22","title":"Q22 · Application of thin-film interference in reducing lens reflectivity (4 marks)","cards":8},{"id":"opt-pyq-n19-q23","title":"Q23 · Translation matrix of a ray through distance D in medium mu (4 marks)","cards":8},{"id":"opt-pyq-n19-q24","title":"Q24 · Theory of holography (4 marks)","cards":8},{"id":"opt-pyq-n19-q26","title":"Q26 · Fringe width in a biprism experiment (4 marks)","cards":8},{"id":"opt-pyq-n19-q27","title":"Q27 · Air-film thickness and lens radius of curvature from 10th dark Newton's ring (4 marks)","cards":8},{"id":"opt-pyq-n19-q28","title":"Q28 · Minimum separation between two points resolved by the eye (4 marks)","cards":8},{"id":"opt-pyq-n19-q29","title":"Q29 · Positions of foci of a zone plate with r_n = 0.001 sqrt(n) m (4 marks)","cards":8},{"id":"opt-pyq-n19-q30","title":"Q30 · Thickness of double refracting plate for path difference lambda/4 (4 marks)","cards":8},{"id":"opt-pyq-n19-q31","title":"Q31 · Temporal broadening in a step-index fiber after 1 km (4 marks)","cards":8},{"id":"opt-pyq-n19-q32","title":"Q32 · Coherent sources, resultant intensity of two coherent beams, and incoherent superposition (10 marks)","cards":10},{"id":"opt-pyq-n19-q34","title":"Q34 · Production of circularly and elliptically polarized light and analysis of polarization (10 marks)","cards":9},{"id":"opt-pyq-n19-q35","title":"Q35 · Propagation through optical fiber and pulse dispersion in step-index vs graded-index fibers (10 marks)","cards":11}]},{"title":"N18","sheets":[{"id":"opt-pyq-n18-q1","title":"Q1 · Instrument to determine optical rotation of solutions (1 mark)","cards":8},{"id":"opt-pyq-n18-q2","title":"Q2 · Meaning of wide separation of spectral lines (1 mark)","cards":8},{"id":"opt-pyq-n18-q3","title":"Q3 · Number of fringes with wavelength lambda2 in a biprism (1 mark)","cards":8},{"id":"opt-pyq-n18-q4","title":"Q4 · Device used to invert circularly polarized light (1 mark)","cards":8},{"id":"opt-pyq-n18-q5","title":"Q5 · Field of view when focal length of a lens decreases (1 mark)","cards":8},{"id":"opt-pyq-n18-q7","title":"Q7 · Device not used to produce interference pattern (1 mark)","cards":8},{"id":"opt-pyq-n18-q8","title":"Q8 · Phenomenon causing colours on a compact disc in white light (1 mark)","cards":8},{"id":"opt-pyq-n18-q9","title":"Q9 · Radius of 6th zone of a zone plate of focal length 10 cm (1 mark)","cards":8},{"id":"opt-pyq-n18-q11","title":"Q11 · Fresnel's two-mirror arrangement (2 marks)","cards":8},{"id":"opt-pyq-n18-q13","title":"Q13 · Meaning of double refraction (2 marks)","cards":8},{"id":"opt-pyq-n18-q15","title":"Q15 · Comparison of a zone plate and a convex lens (2 marks)","cards":8},{"id":"opt-pyq-n18-q16","title":"Q16 · Newton's rings and their uses (2 marks)","cards":8},{"id":"opt-pyq-n18-q17","title":"Q17 · Classification of holograms (2 marks)","cards":8},{"id":"opt-pyq-n18-q18","title":"Q18 · Fermat's principle and deduction of laws of reflection and refraction (4 marks)","cards":10},{"id":"opt-pyq-n18-q19","title":"Q19 · System matrix of two thin lenses separated by a distance and equivalent focal length (4 marks)","cards":10},{"id":"opt-pyq-n18-q22","title":"Q22 · Definition and explanation of polarization (4 marks)","cards":8},{"id":"opt-pyq-n18-q23","title":"Q23 · Distinction between positive and negative uniaxial crystals (4 marks)","cards":8},{"id":"opt-pyq-n18-q24","title":"Q24 · Critical angle of an optical fiber and its expression (4 marks)","cards":10},{"id":"opt-pyq-n18-q25","title":"Q25 · Wavelength absent in reflected light from a soap film (4 marks)","cards":8},{"id":"opt-pyq-n18-q27","title":"Q27 · Thickness of quarter-wave and half-wave plates for lambda = 590 nm (4 marks)","cards":8},{"id":"opt-pyq-n18-q29","title":"Q29 · Acceptance angle of an optical fiber from core and cladding indices (4 marks)","cards":8},{"id":"opt-pyq-n18-q30","title":"Q30 · Polarization angle and angle of refraction of water from critical angle (4 marks)","cards":8},{"id":"opt-pyq-n18-q31","title":"Q31 · Wavelength from single-slit Fraunhofer first minimum (4 marks)","cards":8}]}]}}</script>
+<script>
+(function () {
+  var MODS = JSON.parse(document.getElementById('units').textContent);
+  var modSelect = document.getElementById('module');
+  var list = document.getElementById('list');
+  var countEl = document.getElementById('count');
+  var startBtn = document.getElementById('start');
+  var keys = Object.keys(MODS);
+  var chosen = {};
+
+  keys.forEach(function (k) {
+    var o = document.createElement('option');
+    o.value = k; o.textContent = MODS[k].label;
+    modSelect.appendChild(o);
+    MODS[k].sections.forEach(function (sec) {
+      sec.sheets.forEach(function (sh) { chosen[sh.id] = true; });
+    });
+  });
+
+  function sheetsOfCurrent() {
+    var out = [];
+    MODS[modSelect.value].sections.forEach(function (sec) {
+      sec.sheets.forEach(function (sh) { out.push(sh); });
+    });
+    return out;
+  }
+
+  function update() {
+    var ids = allChosen();
+    countEl.textContent = ids.length + (ids.length === 1 ? ' topic' : ' topics') + ' selected';
+    startBtn.disabled = ids.length === 0;
+  }
+
+  function allChosen() {
+    var ids = [];
+    keys.forEach(function (k) {
+      MODS[k].sections.forEach(function (sec) {
+        sec.sheets.forEach(function (sh) { if (chosen[sh.id]) ids.push(sh.id); });
+      });
+    });
+    return ids;
+  }
+
+  function draw() {
+    list.innerHTML = '';
+    MODS[modSelect.value].sections.forEach(function (sec) {
+      var box = document.createElement('section');
+      box.className = 'unit-sec';
+      var h = document.createElement('h2');
+      h.textContent = sec.title;
+      box.appendChild(h);
+      sec.sheets.forEach(function (sh) {
+        var lab = document.createElement('label');
+        lab.className = 'unit';
+        var cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.checked = !!chosen[sh.id];
+        cb.value = sh.id;
+        cb.addEventListener('change', function () { chosen[sh.id] = cb.checked; update(); });
+        var span = document.createElement('span');
+        span.textContent = sh.title + ' · ' + sh.cards + ' cards';
+        lab.appendChild(cb);
+        lab.appendChild(span);
+        box.appendChild(lab);
+      });
+      list.appendChild(box);
+    });
+    update();
+  }
+
+  document.getElementById('all').addEventListener('click', function () {
+    sheetsOfCurrent().forEach(function (sh) { chosen[sh.id] = true; });
+    draw();
+  });
+  document.getElementById('none').addEventListener('click', function () {
+    sheetsOfCurrent().forEach(function (sh) { chosen[sh.id] = false; });
+    draw();
+  });
+  modSelect.addEventListener('change', draw);
+  startBtn.addEventListener('click', function () {
+    var ids = allChosen();
+    if (!ids.length) return;
+    window.location.href = "study-match.html" + '?sheets=' + encodeURIComponent(ids.join(','));
+  });
+
+  draw();
+})();
+</script>
+</body>
+</html>

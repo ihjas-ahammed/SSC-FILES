@@ -34,13 +34,23 @@ stage_from_git() {
 # --- SEM5 physics study apps ---
 cp "$APPS/QM_1.html" "$TMP/public/QM_1.html"
 cp "$APPS/SOLID_STATE_1.html" "$TMP/public/SOLID_STATE_1.html"
+cp "$APPS/SOLID_STATE_1234.html" "$TMP/public/SOLID_STATE_1234.html"
 cp "$APPS/LATEX_1.html" "$TMP/public/LATEX_1.html"
 cp "$APPS/LATEX_12_OFFLINE.html" "$TMP/public/LATEX_12_OFFLINE.html"
+cp "$APPS/LATEX_1234.html" "$TMP/public/LATEX_1234.html"
+cp "$APPS/LATEX_1234_OFFLINE.html" "$TMP/public/LATEX_1234_OFFLINE.html"
+cp "$APPS/PYTHON_1234.html" "$TMP/public/PYTHON_1234.html"
+cp "$APPS/PYTHON_1234_OFFLINE.html" "$TMP/public/PYTHON_1234_OFFLINE.html"
 cp "$APPS/PYTHON_12.html" "$TMP/public/PYTHON_12.html"
 cp "$APPS/PYTHON_12_OFFLINE.html" "$TMP/public/PYTHON_12_OFFLINE.html"
 cp "$APPS/MATERIAL_SCIENCE_12.html" "$TMP/public/MATERIAL_SCIENCE_12.html"
 cp "$APPS/MATERIAL_SCIENCE_12_OFFLINE.html" "$TMP/public/MATERIAL_SCIENCE_12_OFFLINE.html"
 cp "$APPS/QM_1.html" "$TMP/public/index.html"
+
+# --- SEM5 maths study apps (built in SSC-V2/SEM5/MATH/apps/tools/) ---
+MATHAPPS="$(cd "$APPS/../../MATH/apps" && pwd)"
+cp "$MATHAPPS/CONVEX_OPTIMIZATION_1234.html" "$TMP/public/CONVEX_OPTIMIZATION_1234.html"
+cp "$MATHAPPS/CONVEX_OPTIMIZATION_1234_OFFLINE.html" "$TMP/public/CONVEX_OPTIMIZATION_1234_OFFLINE.html"
 
 # --- SSC-V4 Real Analysis study system ---
 #   /math/real-analysis       the real thing, built from the validated data/ pool
@@ -366,6 +376,36 @@ else
   echo "WARNING: $V6 missing — deploying without the SSC-V6 study days." >&2
 fi
 
+# --- Study plan v5 (SSC-V6/study-plan-v5.html) and its install files ---
+#   /study-plan-v5/                  the study plan (index.html)
+#   Study match pages are no longer published (removed from the deploy).
+#   (resource PDFs stay on GitHub; the Resources tab links there)
+#   install as app: manifest.webmanifest, sw.js and icons at /study-plan-v5/
+# The study plan opens these paths relative to its own page, so the tree is copied as it is in the repo.
+PLAN_DIR="$V6/study-plan-v5.html"
+if [ -f "$PLAN_DIR" ]; then
+  mkdir -p "$TMP/public/study-plan-v5"
+  cp "$PLAN_DIR" "$TMP/public/study-plan-v5/index.html"
+  # resource PDFs are not hosted: the Resources tab links to the GitHub branch
+  # install as app: manifest, service worker and icons sit beside the page (the page registers sw.js)
+  APP="$V6/study-plan-app"
+  for F in icon.svg icon-192.png icon-512.png manifest.webmanifest sw.js; do
+    if [ ! -f "$APP/$F" ]; then echo "ERROR: $APP/$F missing; the study plan cannot be installed." >&2; exit 1; fi
+    cp "$APP/$F" "$TMP/public/study-plan-v5/$F"
+  done
+else
+  echo "WARNING: $PLAN_DIR missing — deploying without the study plan." >&2
+fi
+
+# --- SSC-V6 revision cards (SSC-V6/revision/<subject>/<module>/index.html) ---
+#   /revision/optics/1/ … built by SSC-V6/revision/src/build.py (src/ stays out of the site)
+if [ -d "$V6/revision" ]; then
+  while IFS= read -r REL; do
+    mkdir -p "$TMP/public/revision/$(dirname "$REL")"
+    cp "$V6/revision/$REL" "$TMP/public/revision/$REL"
+  done < <(cd "$V6/revision" && find . -type f -name '*.html' -not -path './src/*' | sed 's|^\./||')
+fi
+
 # --- exam trackers and checklists (repo trackers/) ---
 if compgen -G "$REPO/trackers/*.html" > /dev/null; then
   cp "$REPO"/trackers/*.html "$TMP/public/"
@@ -401,8 +441,13 @@ firebase deploy --only hosting:ssc-data-science-qm --project data-science-ef878
 BASE="https://ssc-data-science-qm.web.app"
 echo ""
 echo "Physics apps:"
-for f in QM_1 SOLID_STATE_1 LATEX_1 LATEX_12_OFFLINE PYTHON_12 PYTHON_12_OFFLINE \
+for f in QM_1 SOLID_STATE_1 SOLID_STATE_1234 LATEX_1 LATEX_12_OFFLINE LATEX_1234 LATEX_1234_OFFLINE PYTHON_1234 PYTHON_1234_OFFLINE PYTHON_12 PYTHON_12_OFFLINE \
          MATERIAL_SCIENCE_12 MATERIAL_SCIENCE_12_OFFLINE; do
+  echo "  → $BASE/$f.html"
+done
+echo ""
+echo "Maths apps:"
+for f in CONVEX_OPTIMIZATION_1234 CONVEX_OPTIMIZATION_1234_OFFLINE; do
   echo "  → $BASE/$f.html"
 done
 echo ""
@@ -438,6 +483,9 @@ echo "Trackers & checklists:"
 for f in "$REPO"/trackers/*.html; do
   echo "  → $BASE/$(basename "$f")"
 done
+echo ""
+echo "Study plan v5 (with study match, practice and resources):"
+echo "  → $BASE/study-plan-v5/"
 echo ""
 echo "SSC-V6 study days:"
 (cd "$TMP/public/ssc-v6" 2>/dev/null && find . -name '*.html' | sed 's|^\./|  → '"$BASE"'/ssc-v6/|' | sort) || true

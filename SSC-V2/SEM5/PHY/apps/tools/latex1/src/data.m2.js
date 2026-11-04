@@ -1,417 +1,510 @@
-/* ═══════════════════ MODULE II — Styling pages (Text 1, Tutorials VI–VII) ═══════════════════ */
+/* ═══════════════════ MODULE II — Styling pages (Text 1, Tutorials VI–VII) ═══════════════════
+   Written from the book cuts in ASD-STE100 style. */
 
 /* ───────────── Unit 5 · Displayed text (Tutorial VI) ───────────── */
 STATIONS.push({id:'m2-display',title:'Displayed text',short:'5 · Displayed text',est:'~45 min',body:H`
-${gist('Anything set apart from the running text — a quotation, a poem, a list, a block of code — is “displayed”, and each kind has its own environment.')}
+${gist('To display a piece of text, put it in an environment. Use quote and verse for borrowed words and poems. Use itemize, enumerate and description for lists.')}
 
-${tp('Borrowed words: quote, quotation and verse')}
-<p>Three environments set other people’s words apart, indented from both margins.</p>
-<div class="scroll-x"><table class="ref"><tr><th>Environment</th><th>Use for</th><th>Layout</th></tr>
-<tr><td><code>quote</code></td><td>short quotations, one paragraph or a few lines</td><td>no paragraph indentation; space between paragraphs</td></tr>
-<tr><td><code>quotation</code></td><td>longer quotations of several paragraphs</td><td>each paragraph’s first line is indented</td></tr>
-<tr><td><code>verse</code></td><td>poetry</td><td>lines end with <code>\\</code>; stanzas are separated by a blank line; long lines hang</td></tr></table></div>
-${ex(L`As Knuth put it:
+${tp('Displaying')}
+<p>Sometimes you must separate a piece of text from the text around it. One method is to typeset it with an extra indent. This is <b>displaying</b>. LaTeX has different constructs for different kinds of displayed text.</p>
+<p>An <b>environment</b> marks the start and the end of a passage that needs special treatment. Its general form is:</p>
+<p style="text-align:center"><code>\begin{name} ... \end{name}</code></p>
+<p>The name tells LaTeX which treatment to use.</p>
+
+${tp('Borrowed words')}
+<p>Authors use quotations to support an argument or to use the words of another person. A quotation of one line goes in double quotes. A quotation of several lines is better when displayed.</p>
+<ul>
+  <li><code>quote</code> displays a quotation of one paragraph. LaTeX adds an indent on both sides.</li>
+  <li><code>quotation</code> displays a quotation of several paragraphs. Separate the paragraphs with blank lines.</li>
+</ul>
+${ex(L`Some mathematicians elevate the spirit of Mathematics to a kind of
+intellectual aesthetics. It is best voiced by Bertrand Russell in the
+following lines.
 \begin{quote}
-Premature optimization is the root of all evil.
+The true spirit of delight, the exaltation, the sense of being more than man, which is the touchstone of the highest excellence, is to be found in Mathematics as surely as in poetry.
 \end{quote}
-The talk continued for an hour.`,{title:'quote'})}
+Yes, to men like Russell, Mathematics is more of an art than science.`,{title:'the quote environment'})}
 ${ex(L`\begin{quotation}
-The first paragraph of a long passage is indented,
-just like running text.
+The first paragraph of a long quotation.
 
-So is the second, which is how quotation differs
-from quote.
-\end{quotation}`,{title:'quotation'})}
-${ex(L`\begin{verse}
-The woods are lovely, dark and deep,\\
-But I have promises to keep,\\
-And miles to go before I sleep.
+The second paragraph of the quotation.
+\end{quotation}`,{title:'the quotation environment'})}
+${think('Which environment?',L`A quotation of three paragraphs`,['quote','quotation','verse','center'],1,'Use quotation for a quotation of several paragraphs.')}
 
-And miles to go before I sleep.
-\end{verse}`,{title:'verse: \\\\ ends a line, a blank line ends a stanza'})}
-${match('Environment ↔ best for',[[L`<code>quote</code>`,'a short quotation'],[L`<code>quotation</code>`,'a long, multi-paragraph quotation'],[L`<code>verse</code>`,'poetry']],{left:'Environment',right:'Best for'})}
-${predict('Line breaks in verse',L`\begin{verse}
-Twinkle, twinkle, little star,
-How I wonder what you are!
-\end{verse}`,[L`\begin{verse}Twinkle, twinkle, little star,\\ How I wonder what you are!\end{verse}`,L`\begin{verse}Twinkle, twinkle, little star, How I wonder what you are!\end{verse}`,L`\begin{center}Twinkle, twinkle, little star,\\ How I wonder what you are!\end{center}`],1,'Without \\\\ at the end of the first line, the two lines run together — a line break in the source is just a space.')}
+${tp('Poetry in typesetting')}
+<p>The <code>verse</code> environment typesets poems.</p>
+<ul>
+  <li><code>\\</code> breaks a line.</li>
+  <li>A blank line separates two stanzas.</li>
+  <li>Use <code>\\*</code> in place of <code>\\</code> to stop a page break at that line. This keeps rhyming couplets on one page.</li>
+  <li>Use <code>\\[5pt]</code> to add 5 points of vertical space between lines. <code>\\*[5pt]</code> does both.</li>
+</ul>
+${ex(L`Contrary to popular belief, limericks are not always ribald. Some of them contain mathematical concepts:
+\begin{verse}
+A mathematician once confided\\
+That a M\"obius band is one sided\\
+You'll get quite a laugh\\
+If you cut it in half\\
+For it stays in one piece when divided
+\end{verse}
+There is an extension of this to Klein's bottle also.`,{title:'the verse environment'})}
+${match('Environment and use',[
+ ['quote','one paragraph of borrowed words'],['quotation','several paragraphs of borrowed words'],['verse','poetry'],['center','text at the center of the page']],{left:'Environment',right:'Use'})}
 
-${tp('Centring and alignment')}
-<p>Three environments align whole blocks; three declarations do the same job inside another environment (such as a table float).</p>
-${reftable([
- [L`\begin{center} … \end{center}`,'centre each line (adds space above and below)',L`\begin{center}
-A centred title\\ on two lines
-\end{center}`],
- [L`\begin{flushleft} … \end{flushleft}`,'align left, ragged right edge',L`\begin{flushleft}
-Aligned to the left margin, with an uneven right edge.
-\end{flushleft}`],
- [L`\begin{flushright} … \end{flushright}`,'align right',L`\begin{flushright}
-Kochi, 12 March 2026
-\end{flushright}`],
- [L`\centering`,'declaration form of center (no extra space)',L`{\centering Centred by a declaration.\par}`],
- [L`\raggedright`,'declaration form of flushleft',L`{\raggedright Left-aligned by a declaration, ragged on the right side of the text block.\par}`],
- [L`\raggedleft`,'declaration form of flushright',L`{\raggedleft Right-aligned by a declaration.\par}`]
-],{h1:'Command',h2:'Effect'})}
-${trap(H`<p>The declarations act on whole paragraphs, so the paragraph must end (<code>\par</code> or a blank line) <i>inside</i> the group — <code>{\centering text}</code> without the <code>\par</code> is not centred.</p>`)}
-${fill('Align three blocks',L`\begin{[[center]]}
-Annual Report
-\end{center}
-\begin{[[flushright]]}
-Date: 1 April 2026
-\end{flushright}`,{code:true,strict:true})}
-
-${tp('Bulleted lists: itemize')}
-<p>Each <code>\item</code> starts a new entry. Lists nest up to four levels deep, and each level has its own bullet.</p>
-${ex(L`\begin{itemize}
-  \item Fruits
-  \begin{itemize}
-    \item Mango
-    \item Jackfruit
-    \begin{itemize}
-      \item Varikka
-      \begin{itemize}
-        \item fourth level
-      \end{itemize}
-    \end{itemize}
-  \end{itemize}
-  \item[$\star$] A custom label for one item
-\end{itemize}`,{title:'itemize, four levels deep'})}
-${must(H`<p>Default bullets by level: <b>•</b> (bullet), <b>–</b> (en dash), <b>∗</b> (asterisk), <b>·</b> (centred dot). <code>\item[text]</code> replaces the label of one item.</p>`)}
-
-${tp('Numbered lists: enumerate')}
-<p><code>enumerate</code> numbers its items automatically. Each level uses its own counter — <code>enumi</code>, <code>enumii</code>, <code>enumiii</code>, <code>enumiv</code> — and its own style.</p>
-${ex(L`\begin{enumerate}
-  \item Prepare the document
-  \begin{enumerate}
-    \item Choose a class
-    \begin{enumerate}
-      \item article or report
-      \begin{enumerate}
-        \item fourth level
-      \end{enumerate}
-    \end{enumerate}
-  \end{enumerate}
-  \item Compile it
-\end{enumerate}`,{title:'enumerate: 1. (a) i. A.'})}
-${match('Level ↔ default label',[['level 1','1.  2.  3.'],['level 2','(a)  (b)  (c)'],['level 3','i.  ii.  iii.'],['level 4','A.  B.  C.']],{left:'enumerate level',right:'Labels'})}
-${ex(L`\begin{enumerate}
-  \item Wash the rice.
-  \item Soak it for thirty minutes. \label{step:soak}
-  \item Cook it.
-\end{enumerate}
-Do not skip step~\ref{step:soak}.`,{title:'refer to an item with \\label and \\ref'})}
-
-${tp('Description lists')}
-<p>A <code>description</code> list is for terms and their meanings: the text in the optional argument of <code>\item[…]</code> is set in bold as the label.</p>
-${ex(L`\begin{description}
-  \item[article] for short documents and papers.
-  \item[report] for longer documents with chapters.
-  \item[book] for books, two-sided by default.
-\end{description}`,{title:'description'})}
-${omr('Lists',[
- {q:'Which environment gives numbered items?',o:['itemize','enumerate','description','numbered'],a:1},
- {q:L`In a <code>description</code> list, the term is written`,o:[L`as <code>\item{term}</code>`,L`as <code>\item[term]</code>`,L`as <code>\term{…}</code>`,L`as <code>\begin{term}</code>`],a:1},
- {q:'How many levels can standard lists nest?',o:['2','3','4','unlimited'],a:2,why:'Four levels; a fifth gives “Too deeply nested”.'},
- {q:'The default second-level label in enumerate is',o:['2.','(b)','ii.','B.'],a:1},
- {q:'The default first-level bullet in itemize is',o:['–','•','∗','·'],a:1}
-])}
-${parsons('A shopping list',[L`\begin{itemize}`,L`  \item Rice`,L`  \item Coconut oil`,L`\end{itemize}`],{extra:[L`\begin{list}`,L`  \item{Salt}`]})}
-${fix('Lonely item',L`\documentclass{article}
-\begin{document}
-Things to bring:
-\item a pen
-\item the hall ticket
-\end{document}`,{brief:'LaTeX refuses: “Lonely \\item--perhaps a missing list environment.” Make it a proper bulleted list.',
- checks:[{re:'\\\\begin\\{itemize\\}[\\s\\S]*\\\\item[\\s\\S]*\\\\end\\{itemize\\}',msg:'the items are inside itemize'}]})}
-
-${tp('Changing the labels')}
-<p>Labels are produced by commands you can redefine with <code>\renewcommand</code>. For <code>itemize</code> they are <code>\labelitemi</code> to <code>\labelitemiv</code>; for <code>enumerate</code>, the counter’s appearance is <code>\theenumi</code> and the label built from it is <code>\labelenumi</code>.</p>
-${ex(L`\renewcommand{\labelitemi}{$\star$}
+${tp('Lists')}
+<p>LaTeX has three kinds of lists: <code>itemize</code>, <code>enumerate</code> and <code>description</code>. Each list item starts with <code>\item</code>.</p>
+<h5>Bullets: itemize</h5>
+<p>The <code>itemize</code> environment makes a list with bullets. A list can be inside another list. LaTeX supports four levels.</p>
+${ex(L`One should keep the following in mind when using \TeX
 \begin{itemize}
-  \item a star instead of a bullet
-  \item for every first-level item
-\end{itemize}`,{title:'new itemize bullet'})}
-${ex(L`\renewcommand{\theenumi}{\Roman{enumi}}
-\renewcommand{\labelenumi}{(\theenumi)}
+\item \TeX\ is a typesetting language and not a word processor
+\item \TeX\ is a program and not an application
+\item \TeX\ is the natural choice in one of these situations
+\begin{itemize}
+\item If we want to typeset a document containing a lot of Mathematics
+\item If we want our typed document to look beautiful
+\end{itemize}
+\end{itemize}
+Being a program, \TeX\ offers a high degree of flexibility.`,{title:'itemize with a nested list'})}
+<p>The default labels are: bullet (level 1), dash (level 2), asterisk (level 3) and centered dot (level 4). The commands <code>\labelitemi</code>, <code>\labelitemii</code>, <code>\labelitemiii</code> and <code>\labelitemiv</code> hold the labels. Use <code>\renewcommand</code> to change one.</p>
+${ex(L`{\renewcommand{\labelitemi}{$\triangleright$}
+\begin{itemize}
+\item First item of a new list
+\item Second item
+\end{itemize}}
+\begin{itemize}
+\item The labels are bullets again
+\end{itemize}`,{title:'change the label of level 1'})}
+<p>The braces around the input make the change local. After the closing brace, the labels return to bullets. Remove the braces to change the labels in the whole document.</p>
+<p>To use the symbols of the ZapfDingbats font, load the package <code>pifont</code> and use <code>\ding{42}</code>.</p>
+${trap(H`<p>If you omit the braces around <code>\renewcommand</code>, all the lists that follow use the new label.</p>`)}
+<h5>Numbers: enumerate</h5>
+<p>Use <code>enumerate</code> when the order of the items is important. It also has four levels. The default labels are: 1. 2. (level 1), (a) (b) (level 2), i. ii. (level 3) and A. B. (level 4).</p>
+${ex(L`The three basic steps in producing a printed document using \LaTeX\ are as follows
 \begin{enumerate}
-  \item Introduction
-  \item Method
-  \item Results
-\end{enumerate}`,{title:'enumerate as (I) (II) (III)'})}
-${reftable([
- [L`\arabic{enumi}`,'1, 2, 3',L`\renewcommand{\theenumi}{\arabic{enumi}}
-\begin{enumerate}\item a\item b\end{enumerate}`],
- [L`\roman{enumi}`,'i, ii, iii',L`\renewcommand{\theenumi}{\roman{enumi}}
-\begin{enumerate}\item a\item b\end{enumerate}`],
- [L`\Roman{enumi}`,'I, II, III',L`\renewcommand{\theenumi}{\Roman{enumi}}
-\begin{enumerate}\item a\item b\end{enumerate}`],
- [L`\alph{enumi}`,'a, b, c',L`\renewcommand{\theenumi}{\alph{enumi}}
-\begin{enumerate}\item a\item b\end{enumerate}`],
- [L`\Alph{enumi}`,'A, B, C',L`\renewcommand{\theenumi}{\Alph{enumi}}
-\begin{enumerate}\item a\item b\end{enumerate}`]
-],{h1:'Counter style',h2:'Gives'})}
-${fill('Make items numbered (a), (b), (c)',L`\renewcommand{\theenumi}{\[[alph]]{enumi}}
-\renewcommand{\[[labelenumi]]}{([[\theenumi]])}
+\item Prepare a source file with the extension ｀｀tex''
+\item Compile it with \LaTeX\ to produce a ｀｀dvi'' file
+\item Print the document using a ｀｀dvi'' driver
+\end{enumerate}`,{title:'enumerate'})}
+<p>The labels of one level must follow a sequence. So the change of labels needs more work. The package <code>enumerate</code> by David Carlisle makes it easy. Give the label in square brackets after <code>\begin{enumerate}</code>.</p>
+${ex(L`\documentclass{article}
+\usepackage{enumerate}
+\begin{document}
+The three basic steps in producing a printed document using \LaTeX\ are as follows:
+\begin{enumerate}[\hspace{0.5cm}Step 1.]
+\item Prepare a source file with the extension ｀｀tex''
+\item Compile it with \LaTeX\ to produce a ｀｀dvi'' file
+\begin{enumerate}[i.]
+\item Use a previewer to view the output
+\item Edit the source if needed
+\item Recompile
+\end{enumerate}
+\item Print the document using a ｀｀dvi'' driver
+\end{enumerate}
+\end{document}`,{title:'the enumerate package',run:true})}
+<ul>
+  <li>The text <code>Step 1.</code> in the option makes the labels Step 1, Step 2, Step 3.</li>
+  <li><code>\hspace{0.5cm}</code> adds an indent at the left margin. The environment does not add one.</li>
+  <li>Add <code>\bfseries</code> in the option for bold labels: <code>[\hspace{0.5cm}\bfseries Step 1]</code>.</li>
+</ul>
+<p>In the option, the characters <code>1</code>, <code>a</code>, <code>A</code>, <code>i</code> and <code>I</code> mean a counter style. <code>1</code> is Arabic numerals. <code>a</code> and <code>A</code> are lowercase and uppercase letters. <code>i</code> and <code>I</code> are lowercase and uppercase Roman numerals. If you want one of these characters as plain text, put it in braces.</p>
+${ex(L`\documentclass{article}
+\usepackage{enumerate}
+\begin{document}
+Addition of numbers satisfies the following conditions:
+\begin{enumerate}[\hspace{1cm}({A}1)]
+\item It is commutative
+\item It is associative
+\item There is an additive identity
+\item Each number has an additive inverse
+\end{enumerate}
+\end{document}`,{title:'the label (A1), (A2)'})}
+${trap(H`<p>The option <code>[\hspace{1cm}(A1)]</code> does not give (A1), (A2). The letter <code>A</code> is a counter style, so the output is (11), (22). Write <code>({A}1)</code>.</p>`)}
+<h5>Descriptions: description</h5>
+<p>The <code>description</code> environment makes no label. It prints the text in square brackets after each <code>\item</code> as the label. The labels are in boldface roman. The first level has no indent.</p>
+${ex(L`Let us take stock of what we have learnt
+\begin{description}
+\item[\TeX] A typesetting program
+\item[Emacs] A text editor and also
+\begin{description}
+\item a programming environment
+\item a mailer
+\item and a lot else besides
+\end{description}
+\item[AbiWord] A word processor
+\end{description}`,{title:'description'})}
+<p>Change the label font and the indent with <code>\descriptionlabel</code>:</p>
+<pre class="lx-verb">\renewcommand{\descriptionlabel}[1]{\hspace{1cm}\textsf{#1}}</pre>
+<h5>Your own label on any item</h5>
+<p>In all three lists, text in square brackets after <code>\item</code> replaces the label.</p>
+${ex(L`The real number $l$ is the least upper bound of the set $A$ if it satisfies the following conditions
 \begin{enumerate}
-  \item first
-  \item second
-\end{enumerate}`,{code:true,strict:true})}
-${match('Label command ↔ controls',[[L`<code>\labelitemi</code>`,'first-level itemize bullet'],[L`<code>\labelitemii</code>`,'second-level itemize bullet'],[L`<code>\theenumi</code>`,'how the first-level counter prints'],[L`<code>\labelenumi</code>`,'the whole first-level enumerate label']],{left:'Command',right:'Controls'})}
+\item[(1)] $l$ is an upper bound of $A$
+\item[(2)] if $u$ is an upper bound of $A$, then $l\le u$
+\end{enumerate}`,{title:'\\item[(1)]'})}
+${trap(H`<p>An item that starts with a square bracket makes LaTeX read the bracket as a label. <code>\item [0,1] is a closed interval</code> loses the text "0,1". Put mathematics in dollar signs: <code>\item $[0,1]$ is a closed interval</code>.</p>`)}
+${ex(L`Let's review the notation
+\begin{itemize}
+\item $(0,1)$ is an \emph{open} interval
+\item $[0,1]$ is a \emph{closed} interval
+\end{itemize}`,{title:'mathematics in dollar signs'})}
+${parsons('A shopping list',[L`\begin{itemize}`,L`  \item Rice`,L`  \item Coconut oil`,L`\end{itemize}`],{extra:[L`\begin{list}`,L`  \item{Salt}`]})}
+${fill('Choose the environment',L`Poetry uses [[verse]]. A list with numbers uses [[enumerate]]. A list with bullets uses [[itemize]]. A list of terms with a label uses [[description]].`,{strict:false})}
 ${build('Exam instructions',L`\documentclass{article}
 \begin{document}
-Instructions
-
-\end{document}`,{brief:'Make a numbered list of three instructions whose labels print as <b>Q1.</b>, <b>Q2.</b>, <b>Q3.</b> — redefine \\labelenumi.',
- checks:[{re:'\\\\renewcommand\\{\\\\labelenumi\\}\\{Q\\\\theenumi\\.?\\}',msg:'\\labelenumi redefined to Q\\theenumi.'},{re:'\\\\begin\\{enumerate\\}([\\s\\S]*?\\\\item){3}',msg:'three items'}]})}
-
-${tp('Displaying code: verbatim')}
-<p>Inside <code>verbatim</code>, nothing is a command: backslashes, braces and percent signs are printed exactly as typed, in a typewriter font, line breaks and spaces included. For a short piece inside a sentence, use <code>\verb</code> with any delimiter character that does not appear in the text.</p>
-${ex(L`\begin{verbatim}
-\section{Introduction}   % printed, not obeyed
-Spaces     are    kept.
-\end{verbatim}
-In text: \verb|\textbf{bold}| or \verb+50% off+.`,{title:'verbatim and \\verb'})}
-${ex(L`\begin{verbatim*}
-two  spaces  here
-\end{verbatim*}
-and \verb*|a b|`,{title:'the starred forms show spaces as ␣'})}
-${trap(H`<p><code>\verb</code> cannot be used inside the argument of another command — <code>\textbf{\verb|x|}</code> or <code>\section{\verb|x|}</code> fails with “\verb illegal in command argument”. And the delimiter must not occur inside: <code>\verb|a|b|</code> ends at the second <code>|</code>.</p>`)}
-${predict('verbatim vs text',L`\begin{verbatim}
-\textbf{hello}
-\end{verbatim}`,[L`\textbf{hello}`,L`\begin{verbatim}
-\textbf{hello}
-\end{verbatim}`,L`\texttt{hello}`],1,'Inside verbatim the command is printed, not obeyed.')}
+Rules of the exam
+Bring a pen.
+Read all questions.
+Write your number on each page.
+\end{document}`,{brief:'Put the three rules in a numbered list under the title.',checks:[{re:'\\\\begin\\{enumerate\\}',msg:'an enumerate environment'},{re:'\\\\item',msg:'\\item for each rule'}]})}
+${omr('Displayed text',[
+ {q:'Which environment is for poetry?',o:['quote','quotation','verse','poem'],a:2,why:'The verse environment typesets poetry.'},
+ {q:'Which command stops a page break at a line break?',o:['\\\\','\\\\*','\\\\[5pt]','\\newline'],a:1,why:'\\\\* is a line break where no page break occurs.'},
+ {q:'How many levels of nesting does itemize support?',o:['Two','Three','Four','Six'],a:2,why:'itemize and enumerate support four levels.'},
+ {q:'Which command holds the label of level 1 in itemize?',o:['\\labelitem','\\labelitemi','\\itemlabel','\\theitem'],a:1,why:'\\labelitemi holds the label of the first level.'},
+ {q:'Why do braces surround \\renewcommand in the book example?',o:['They are required','They make the change local to one list','They make it bold','They hide the label'],a:1,why:'The braces limit the change to that list.'},
+ {q:'Which package gives easy labels for enumerate?',o:['pifont','array','enumerate','multirow'],a:2,why:'The package enumerate by David Carlisle does this.'},
+ {q:'What does \\item[(2)] do?',o:['Starts a new list','Replaces the label with (2)','Makes the item bold','Is an error'],a:1,why:'Text in square brackets replaces the label.'},
+ {q:'Which environment makes no label by itself?',o:['itemize','enumerate','description','quote'],a:2,why:'description prints only the labels that you give.'}
+])}
+${must(H`<ol>
+<li>quote (one paragraph), quotation (several paragraphs), verse (<code>\\</code>, <code>\\*</code>, blank line for a stanza).</li>
+<li>itemize, enumerate, description. Four levels. <code>\item</code>.</li>
+<li><code>\renewcommand{\labelitemi}{…}</code>. Braces make it local. <code>pifont</code> and <code>\ding</code>.</li>
+<li>Package <code>enumerate</code>: <code>[Step 1.]</code>. Put counter characters in braces: <code>{A}</code>.</li>
+<li><code>\descriptionlabel</code>. <code>\item[label]</code>. Put <code>[0,1]</code> in dollar signs.</li>
+</ol>`)}
 `});
 
 /* ───────────── Unit 6 · Rows and columns: tabbing (Tutorial VII.1) ───────────── */
 STATIONS.push({id:'m2-tabbing',title:'Rows and columns — keeping tabs',short:'6 · Tabbing',est:'~20 min',body:H`
-${gist('tabbing works like the tab key on a typewriter: set stops with \\=, jump to them with \\>, end each line with \\\\.')}
+${gist('The tabbing environment sets tab stops. \\= sets a stop. \\> goes to the next stop. \\kill sets the stops without printing a line.')}
 
-${tp('Tab stops with tabbing')}
-<p>The <code>tabbing</code> environment lines text up in columns without drawing a table. The first line usually just <i>sets</i> the tab stops and is thrown away with <code>\kill</code>.</p>
+${tp('Why tabbing')}
+<p>The list environments make rows. Sometimes the rows must have vertical columns also. The <code>tabbing</code> environment aligns text in columns. It works like the tab key of a typewriter.</p>
+
+${tp('The basics')}
+${ex(L`Let's take stock of what we have learnt
+\begin{tabbing}
+\hspace{1cm}\= \textbf{AbiWord}\quad\= A word processor\\[5pt]
+\> \textbf{Emacs}  \> A text editor\\[5pt]
+\> \textbf{\TeX}  \> A typesetting program
+\end{tabbing}`,{title:'two tab stops'})}
+<p>Read the example line by line:</p>
+<ul>
+  <li>In line 1, the first <code>\=</code> sets tab 1 at 1 cm from the left margin. The text "AbiWord" starts at this tab.</li>
+  <li>The second <code>\=</code> sets tab 2 one <code>\quad</code> after "AbiWord". A <code>\quad</code> is a TeX length, about one space. The text "A word processor" starts at tab 2.</li>
+  <li><code>\\[5pt]</code> ends the line and adds 5 points of space.</li>
+  <li>In line 2, <code>\></code> moves to the next tab stop that is already set. The first <code>\></code> goes to tab 1. The second <code>\></code> goes to tab 2.</li>
+</ul>
+<h5>Set the stops with \kill</h5>
+<p>A tab stop is set by the first line. If the first line is a data line, the stops can be in the wrong place. In the book, the stop is set after "TeX" and the other lines overprint. To avoid this, use a dummy line. The command <code>\kill</code> at the end of a line makes TeX set the stops of that line and not print it.</p>
 ${ex(L`\begin{tabbing}
-Name\hspace{3cm} \= Age\hspace{1cm} \= City \kill
-Anu            \> 19             \> Kochi\\
-Balu           \> 21             \> Thrissur\\
-Chitra         \> 20             \> Kozhikode
-\end{tabbing}`,{title:'set stops on a \\kill line, then use them'})}
-${reftable([
- [L`\=`,'set a tab stop here',L`\begin{tabbing}
-Short \= Longer column \= End\\
-a \> b \> c
-\end{tabbing}`],
- [L`\>`,'jump to the next tab stop',L`\begin{tabbing}
-X\hspace{2cm}\=Y\kill
-left \> right
-\end{tabbing}`],
- [L`\\`,'end the line',L`\begin{tabbing}
-A \= B\\
-one \> two\\
-three \> four
-\end{tabbing}`],
- [L`\kill`,'end a line that only sets stops — it is not printed',L`\begin{tabbing}
-Widest item here \= next\kill
-short \> text
-\end{tabbing}`],
- [L`\+`,'indent all following lines by one stop',L`\begin{tabbing}
-if \= condition\\
-\> then\+\\
-action one\\
-action two\-\\
-end
-\end{tabbing}`],
- [L`\-`,'undo one \\+',L`\begin{tabbing}
-a \= b\+\\
-indented\-\\
-back
-\end{tabbing}`]
-],{h1:'Command',h2:'Meaning'})}
-${must(H`<p>A stop is set at the position where <code>\=</code> is typed, so a <b>template line</b> — the widest entries plus <code>\kill</code> — is the reliable way to set the columns. <code>\\</code> ends every line except the last.</p>`)}
-${fill('Complete the tabbing',L`\begin{tabbing}
-Subject\hspace{2cm} [[\=]] Marks [[\kill]]
-Physics [[\>]] 88\\
-Maths   \> 91
-\end{tabbing}`,{code:true,strict:true})}
-${predict('What does \\kill do?',L`\begin{tabbing}
-Item \= Price \kill
-Pen \> 10
-\end{tabbing}`,[L`\begin{tabbing}Item \= Price\\ Pen \> 10\end{tabbing}`,L`\begin{tabbing}Item \= Price \kill Pen \> 10\end{tabbing}`,L`Item Price Pen 10`],1,'The \\kill line sets the stops and is not printed — only “Pen … 10” appears.')}
+\textbf{AbiWord}\quad\= A word processor\kill
+\textbf{\TeX}\quad  \> A typesetting program\\[5pt]
+\textbf{Emacs}\quad \> A text editor\\[5pt]
+\textbf{AbiWord}\quad\> A word processor
+\end{tabbing}`,{title:'a dummy line with \\kill'})}
+${trap(H`<p>If the first line is not a \kill line, the stop comes after the first word. Longer words in the next lines then overprint the text.</p>`)}
+<p>You can set new tabs in any later line. The new tabs are added after the tabs already set. To replace the old tabs, set a new <code>\=</code> in a line.</p>
+${ex(L`\begin{tabbing}
+\textbf{AbiWord}\quad\= : \= A word processor\kill
+\textbf{\TeX}\quad  \> : \> A typesetting program\\[5pt]
+\textbf{Emacs}\quad  \> : \> A text editor\\[5pt]
+\>  \> \quad\= a programming environment\\[5pt]
+\>  \>  \> a mail reader\\[5pt]
+\textbf{AbiWord}\quad\> : \> A word processor
+\end{tabbing}`,{title:'a third tab set later'})}
 
-${tp('tabbing or tabular?')}
-<div class="scroll-x"><table class="ref"><tr><th></th><th><code>tabbing</code></th><th><code>tabular</code> (next unit)</th></tr>
-<tr><td>Column widths</td><td>fixed by where you set the stops</td><td>computed from the widest entry</td></tr>
-<tr><td>Rules and boxes</td><td>none</td><td><code>|</code>, <code>\hline</code>, <code>\cline</code></td></tr>
-<tr><td>Across a page break</td><td>can break across pages</td><td>cannot — it is one unbreakable box</td></tr>
-<tr><td>Alignment inside a column</td><td>left only</td><td>l, c, r, p{…}</td></tr>
-<tr><td>Can sit inside a sentence</td><td>no — always its own paragraph</td><td>yes</td></tr></table></div>
-${omr('tabbing',[
- {q:'Which command sets a tab stop?',o:[L`<code>\></code>`,L`<code>\=</code>`,L`<code>\\</code>`,L`<code>\kill</code>`],a:1},
- {q:L`A line ending in <code>\kill</code> is`,o:['printed in bold','used to set stops, then discarded','the last line','an error'],a:1},
- {q:L`<code>\+</code> in tabbing means`,o:['add a column','indent following lines by one stop','bold the line','end the line'],a:1},
- {q:'An advantage of tabbing over tabular is that it',o:['draws rules','centres columns','can break across pages','computes widths automatically'],a:2}
-])}
+${tp('Pushing and popping')}
+<p>To go back to the old tabs after you set new tabs, use a pair of commands:</p>
+<ul>
+  <li><code>\pushtabs</code> stores the current tabs and removes them. You can then set a new scheme.</li>
+  <li><code>\poptabs</code> makes the stored tabs active again.</li>
+</ul>
+<p>You can nest these commands.</p>
+${ex(L`\begin{tabbing}
+Program\quad \= : \= \TeX\\[5pt]
+Author  \> : \> Donald Knuth\\[5pt]
+Manuals  \> :\\
+\pushtabs
+\quad\= The Advanced \TeX\ Book\quad\= David Salomon\quad
+\= Springer-Verlag\kill\\
+\>\textsf{Title}  \>\textsf{Author} \>\textsf{Publisher}\\[8pt]
+\>The \TeX Book  \>Donald Knuth  \>Addison-Wesley\\[5pt]
+\>The Advanced \TeX\ Book  \>David Salomon  \> Springer-Verlag\\[8pt]
+\poptabs
+Tutorial  \> :  \> tug.org.in/tutorial
+\end{tabbing}`,{title:'\\pushtabs and \\poptabs'})}
+
+${tp('More commands')}
+<div class="scroll-x"><table class="ref"><tr><th>Command</th><th>Effect</th></tr>
+<tr><td><code>\=</code></td><td>sets a tab stop</td></tr>
+<tr><td><code>\&gt;</code></td><td>goes to the next tab stop</td></tr>
+<tr><td><code>\kill</code></td><td>sets the stops of the line and does not print it</td></tr>
+<tr><td><code>\+</code></td><td>at the end of a line: all next lines start at the first tab. <code>\+\+</code>: the second tab, and so on</td></tr>
+<tr><td><code>\-</code></td><td>at the end of a line: cancels one <code>\+</code></td></tr>
+<tr><td><code>\&lt;</code></td><td>at the start of a line: cancels one <code>\+</code> for that line only</td></tr>
+<tr><td><code>\｀</code></td><td>puts the text that follows against the right margin. Do not use <code>\=</code> or <code>\&gt;</code> after it in the line</td></tr>
+<tr><td><code>\'</code></td><td>puts the text before it just left of the current tab, and the text after it at the tab. The space is set by <code>\tabbingsep</code></td></tr>
+<tr><td><code>\pushtabs</code> / <code>\poptabs</code></td><td>store / restore the tab scheme</td></tr>
+<tr><td><code>\a=</code>, <code>\a｀</code>, <code>\a'</code></td><td>the accents (macron, grave, acute) inside tabbing</td></tr>
+</table></div>
+${ex(L`\begin{tabbing}
+Row 1 Column 1\hspace{2cm}
+\= Row 1 Column 2\\[5pt]
+\> Row 2 Column 2\hspace{1.5cm}\=Row 2 Column 3\+\+\\[5pt]
+Row 3 Column 3\-\\[5pt]
+Row 4 Column 2  \>Row 4 Column 3\\[5pt]
+Row 8 Column 1  \｀Right\\[5pt]
+Row 9 Column 1  \> and\'Row 9 Column 2
+\end{tabbing}`,{title:'several tabbing commands'})}
+<p>LaTeX does not need a tidy source. The output is the same if you remove the extra spaces. But a tidy source is easier for people to read and edit. Keep the source readable.</p>
+${think('The missing \\kill',L`\begin{tabbing}
+\TeX\quad\= A typesetting program\\
+Emacs\quad\> A text editor
+\end{tabbing}`,['Two columns, aligned','The second line text starts just after "Emacs" and overprints, or is too close','An error','Nothing is printed'],1,'The tab stop is after "TeX" and a quad. A longer word in the next line passes the stop.')}
+${match('Tabbing command and effect',[
+ [L`<code>\=</code>`,'sets a tab stop'],[L`<code>\></code>`,'goes to the next stop'],[L`<code>\kill</code>`,'sets stops without printing the line'],[L`<code>\pushtabs</code>`,'stores the current stops'],[L`<code>\poptabs</code>`,'restores the stored stops']],{left:'Command',right:'Effect'})}
 ${build('A small timetable with tabbing',L`\documentclass{article}
 \begin{document}
-
-\end{document}`,{brief:'Using tabbing, set a template line with \\kill, then list three periods: Time, Subject and Room for each.',
- checks:[{re:'\\\\begin\\{tabbing\\}',msg:'a tabbing environment'},{re:'\\\\=[\\s\\S]*\\\\kill',msg:'a template line with \\= and \\kill'},{re:'(\\\\>[\\s\\S]*){6}',msg:'at least six \\> jumps (three rows)'}]})}
+Monday 9:00 Physics
+Tuesday 10:00 Maths
+Friday 11:00 LaTeX
+\end{document}`,{brief:'Use a tabbing environment with three columns: the day, the time and the subject. Set the stops with a \\kill line.',checks:[{re:'\\\\begin\\{tabbing\\}',msg:'a tabbing environment'},{re:'\\\\kill',msg:'a \\kill line'},{re:'\\\\>',msg:'\\> between the columns'}]})}
+${omr('Tabbing',[
+ {q:'Which command sets a tab stop?',o:['\\>','\\=','\\kill','\\+'],a:1,why:'\\= sets a tab stop. \\> moves to the next stop.'},
+ {q:'What does \\kill do?',o:['Deletes the table','Sets the stops of the line but does not print it','Ends the environment','Removes all stops'],a:1,why:'A \\kill line sets stops without printing.'},
+ {q:'Which pair stores and restores a tab scheme?',o:['\\kill and \\=','\\pushtabs and \\poptabs','\\+ and \\-','\\< and \\>'],a:1,why:'\\pushtabs stores the stops. \\poptabs restores them.'},
+ {q:'What does \\+ at the end of a line do?',o:['Starts a new page','Makes the next lines start at the first tab','Adds a line','Cancels a tab'],a:1,why:'\\+ moves the start of all next lines to the first tab. \\- cancels it.'},
+ {q:'Which command puts text against the right margin?',o:['\\｀','\\\'','\\<','\\-'],a:0,why:'\\｀ (left quote) puts the text flush right.'}
+])}
 `});
 
 /* ───────────── Unit 7 · Tables (Tutorial VII.2) ───────────── */
 STATIONS.push({id:'m2-tables',title:'Tables',short:'7 · Tables',est:'~55 min',body:H`
-${gist('A tabular has a column spec (l c r p{…} and | for rules), cells separated by &, rows ended by \\\\, and \\hline for horizontal rules. Wrap it in table to give it a caption and a number.')}
+${gist('The tabular environment sets rows and columns. The column specification tells LaTeX the alignment and the lines. & separates the columns. \\\\ ends a row.')}
 
-${tp('Columns and rows')}
-<p><code>\begin{tabular}{spec}</code> takes one letter per column: <code>l</code> left, <code>c</code> centred, <code>r</code> right. In the body, <code>&amp;</code> separates cells and <code>\\</code> ends each row.</p>
-${ex(L`\begin{tabular}{lcr}
-Name   & Class & Marks \\
-Anu    & II    & 88    \\
-Balu   & III   & 9     \\
-\end{tabular}`,{title:'l c r'})}
-${must(H`<p>Every row must have <b>exactly</b> as many cells as the spec has columns (or fewer). One <code>&amp;</code> too many gives “Extra alignment tab has been changed to \cr”.</p>`)}
-${parsons('A two-column table',[L`\begin{tabular}{ll}`,L`Language & Year \\`,L`\TeX & 1978 \\`,L`\LaTeX & 1985 \\`,L`\end{tabular}`],{extra:[L`\begin{table}{ll}`]})}
-${fix('Too many cells',L`\documentclass{article}
-\begin{document}
-\begin{tabular}{ll}
-Item & Qty \\
-Pens & 10 & boxes \\
+${tp('The tabular environment')}
+${ex(L`The table below shows the sizes of the planets of our solar system.
+\begin{center}
+\begin{tabular}{lr}
+Planet & Diameter(km)\\[5pt]
+Mercury & 4878\\
+Venus  & 12104\\
+Earth  & 12756\\
+Mars  & 6794\\
+Jupiter & 142984\\
+Saturn  & 120536\\
+Uranus  & 51118\\
+Neptune & 49532\\
+Pluto  & 2274
 \end{tabular}
-\end{document}`,{brief:'The second row has three cells but the spec declares two columns. Fix it either way.',checks:[]})}
-
-${tp('Rules: |, \\hline and \\cline')}
-${reftable([
- [L`|`,'in the spec: a vertical rule between columns (|| for a double rule)',L`\begin{tabular}{|l|r|}
-a & 1\\
-b & 2\\
-\end{tabular}`],
- [L`\hline`,'a horizontal rule across the whole table (after \\\\ or at the start)',L`\begin{tabular}{lr}
+\end{center}
+As can be seen, Pluto is the smallest and Jupiter the largest.`,{title:'the planets'})}
+<ul>
+  <li><code>\begin{center}</code> puts the table at the center.</li>
+  <li>The specification <code>{lr}</code> gives two columns. The first column is aligned left. The second column is aligned right.</li>
+  <li><code>&amp;</code> separates the entries of a row. <code>\\</code> ends a row.</li>
+  <li><code>\\[5pt]</code> adds 5 points of space after the row.</li>
+</ul>
+<h5>Column specifiers</h5>
+<div class="scroll-x"><table class="ref"><tr><th>Specifier</th><th>Meaning</th></tr>
+<tr><td><code>l</code></td><td>left aligned</td></tr>
+<tr><td><code>r</code></td><td>right aligned</td></tr>
+<tr><td><code>c</code></td><td>centered</td></tr>
+<tr><td><code>p{width}</code></td><td>a paragraph box of the given width. Text wraps. The top line aligns with the other columns</td></tr>
+<tr><td><code>|</code></td><td>a vertical line. Two in a row make a double line</td></tr>
+<tr><td><code>@{text}</code></td><td>puts the text between the columns and removes the normal column space</td></tr>
+<tr><td><code>m{width}</code></td><td>(array package) as <code>p</code>, but vertically in the middle</td></tr>
+<tr><td><code>&gt;{decl}</code></td><td>(array package) inserts the declaration before the column</td></tr>
+<tr><td><code>!{text}</code></td><td>(array package) as <code>@</code>, but keeps the column space</td></tr>
+</table></div>
+${ex(L`\begin{tabular}{cr}
+Planet & Diameter(km)\\[5pt]
+Mercury & 4878\\
+Pluto  & 2274
+\end{tabular}`,{title:'centered first column'})}
+<h5>Paragraph columns</h5>
+<p>Use <code>p{6cm}</code> for a column of text that wraps. If you use <code>\raggedright</code> or <code>\centering</code> in a <code>p</code> column, you can put line breaks with <code>\\</code> in it. In the last column of a row, end the row with <code>\tabularnewline</code>.</p>
+${ex(L`\begin{tabular}{lp{6cm}}
+Planet & Features\tabularnewline[8pt]
+Mercury & \raggedright Lunar like crust\\
+Crustal faulting\\
+Small magnetic fields\tabularnewline[3pt]
+Venus  & \raggedright Shrouded in clouds\\
+Undulating surface\tabularnewline[3pt]
+Neptune &  Unable to detect from earth\tabularnewline[3pt]
+\end{tabular}`,{title:'p column with line breaks'})}
+${trap(H`<p>In a <code>p</code> column with <code>\raggedright</code>, the command <code>\\</code> breaks the line in the cell. It does not end the row. Use <code>\tabularnewline</code> for the end of a row in the last column.</p>`)}
+<h5>Lines</h5>
+<p>The character <code>|</code> in the specification draws a vertical line for the full height of the table. The command <code>\hline</code> after a row draws a horizontal line for the full width. Use <code>\hline</code> at the start for a line above the first row. If you put <code>\hline</code> after the last row, end that row with <code>\\</code>.</p>
+${ex(L`\begin{tabular}{|l|r|}
 \hline
-a & 1\\ \hline
-b & 2\\ \hline
-\end{tabular}`],
- [L`\hline\hline`,'a double horizontal rule',L`\begin{tabular}{lr}
-Head & 1\\ \hline\hline
-b & 2
-\end{tabular}`],
- [L`\cline{2-3}`,'a rule under columns 2 to 3 only',L`\begin{tabular}{|c|c|c|}
+Planet  & Diameter(km)\\
 \hline
-a & b & c\\ \cline{2-3}
-d & e & f\\ \hline
-\end{tabular}`],
- [L`||`,'a double vertical rule',L`\begin{tabular}{l||r}
-a & 1\\ b & 2
-\end{tabular}`]
-],{h1:'Syntax',h2:'Draws'})}
-${ex(L`\begin{tabular}{|l|c|r|}
+Mercury & 4878\\
+Venus   & 12104\\
+Pluto   & 2274\\
 \hline
-Subject & Credits & Marks \\ \hline\hline
-Physics & 4       & 88    \\ \hline
-Maths   & 4       & 91    \\ \hline
-LaTeX   & 3       & 95    \\ \hline
-\end{tabular}`,{title:'a fully ruled table'})}
-${predict('Where does the rule go?',L`\begin{tabular}{|c|c|c|}
-\hline
-1 & 2 & 3 \\ \cline{1-2}
-4 & 5 & 6 \\ \hline
-\end{tabular}`,[L`\begin{tabular}{|c|c|c|}\hline 1 & 2 & 3 \\ \hline 4 & 5 & 6 \\ \hline\end{tabular}`,L`\begin{tabular}{|c|c|c|}\hline 1 & 2 & 3 \\ \cline{1-2} 4 & 5 & 6 \\ \hline\end{tabular}`,L`\begin{tabular}{|c|c|c|}\hline 1 & 2 & 3 \\ \cline{2-3} 4 & 5 & 6 \\ \hline\end{tabular}`],1,'\\cline{1-2} draws the middle rule under columns 1 and 2 only.')}
-${fill('Rule the table',L`\begin{tabular}{[[|l|r|]]}
-[[\hline]]
-Fruit & Price \\ \hline
-Mango & 40 \\ [[\hline]]
-\end{tabular}`,{code:true,strict:true})}
-
-${tp('Paragraph columns: p{width}')}
-<p><code>l</code>, <code>c</code> and <code>r</code> columns never wrap — a long entry just makes the column wider, even off the page. A <code>p{width}</code> column has a fixed width, and its text wraps inside it like a paragraph (top-aligned).</p>
-${ex(L`\begin{tabular}{|l|p{5cm}|}
-\hline
-Term   & Meaning \\ \hline
-Preamble & Everything between \verb|\documentclass| and
-           \verb|\begin{document}|: settings and packages. \\ \hline
-Body   & The printed content of the document. \\ \hline
-\end{tabular}`,{title:'p{5cm} wraps long text'})}
-${trap(H`<p>A <code>p</code> column needs a width with a unit: <code>p{4cm}</code>, <code>p{0.3\textwidth}</code>. <code>p{4}</code> is an error.</p>`)}
+\end{tabular}`,{title:'lines'})}
+${think('Double lines',L`\begin{tabular}{||l||}`,['A single line on each side','A double line on each side','An error','No lines'],1,'Two vertical bars in a row make a double line.')}
 
 ${tp('Spanning columns: \\multicolumn')}
-<p><code>\multicolumn{n}{spec}{text}</code> makes one cell span <i>n</i> columns, with its own alignment (and rules) given by <i>spec</i>. It replaces those <i>n</i> cells in the row.</p>
-${ex(L`\begin{tabular}{|l|c|c|}
+<p>The general form is <code>\multicolumn{num}{pos}{item}</code>. <code>num</code> is the number of columns to span. <code>pos</code> is the position of the item. <code>item</code> is the text.</p>
+${ex(L`\begin{tabular}{lrr}
+Planet & \multicolumn{2}{c}{Distance from sun (km)}\\
+& Maximum  & Minimum\\
+Mercury & 69400000  & 46800000\\
+Venus  & 109000000  & 107600000\\
+Earth  & 152600000  & 147400000
+\end{tabular}`,{title:'a heading over two columns'})}
+<p>The second row starts with <code>&amp;</code>. The first column of that row has no entry.</p>
+<h5>Lines with \multicolumn</h5>
+<p>LaTeX splits the specification <code>|l|r|r|</code> into <code>|l|</code>, <code>r|</code> and <code>r|</code>. The command <code>\multicolumn{2}</code> resets the last two columns. The last <code>|</code> is lost. So write <code>c|</code> in the position argument.</p>
+<p>The command <code>\cline{i-j}</code> draws a line from column i to column j.</p>
+${ex(L`\begin{tabular}{|l|r|r|}
 \hline
-\multicolumn{3}{|c|}{\textbf{Semester V results}} \\ \hline
-Name & Physics & Maths \\ \hline
-Anu  & 88      & 91    \\ \hline
-\multicolumn{2}{|r|}{Class average} & 89.5 \\ \hline
-\end{tabular}`,{title:'a title row and a label row'})}
-${must(H`<p>The spec of a <code>\multicolumn</code> must restate its own rules: in a <code>{|l|c|c|}</code> table a full-width span is <code>\multicolumn{3}{|c|}{…}</code>, not <code>{c}</code>. It is also the standard way to change the alignment of <i>one</i> cell: <code>\multicolumn{1}{c}{…}</code>.</p>`)}
-${fill('Span the heading',L`\begin{tabular}{|c|c|c|}
+Planet & \multicolumn{2}{c|}{Distance from sun (km)}\\
+\cline{2-3}
+& Maximum  & Minimum\\
 \hline
-\[[multicolumn]]{[[3]]}{|c|}{Marks} \\ \hline
-I & II & III \\ \hline
-\end{tabular}`,{code:true,strict:true})}
-
-${tp('@-expressions and repeated columns')}
-<p><code>@{text}</code> in the spec replaces the space between two columns with <i>text</i> — useful for lining up decimal points, and <code>@{}</code> removes the padding at a table’s edge. <code>*{n}{spec}</code> repeats a spec <i>n</i> times.</p>
-${ex(L`\begin{tabular}{r@{.}l}
-3   & 14159 \\
-2   & 718   \\
-100 & 5     \\
-\end{tabular}`,{title:'r@{.}l lines up the decimal points'})}
-${ex(L`\begin{tabular}{|*{5}{c|}}
+Mercury & 69400000  & 46800000\\
+Venus  & 109000000  & 107600000\\
 \hline
-1 & 2 & 3 & 4 & 5 \\ \hline
-\end{tabular}`,{title:'*{5}{c|} = c|c|c|c|c|'})}
-${match('Column spec ↔ meaning',[[L`<code>l</code> <code>c</code> <code>r</code>`,'left, centred, right — no wrapping'],[L`<code>p{3cm}</code>`,'fixed width, text wraps'],[L`<code>|</code>`,'vertical rule'],[L`<code>@{.}</code>`,'a “.” instead of the gap between columns'],[L`<code>*{3}{c}</code>`,'the same as ccc']],{left:'Spec',right:'Means'})}
-
-${tp('Spacing inside a table')}
-<p>Two lengths control the look: <code>\arraystretch</code> scales the row height (a command, so it is changed with <code>\renewcommand</code>), and <code>\tabcolsep</code> is half the space between columns (a length, changed with <code>\setlength</code>).</p>
-${ex(L`\renewcommand{\arraystretch}{1.6}   % rows 60% taller
-\setlength{\tabcolsep}{14pt}         % wider gaps between columns
-\begin{tabular}{|c|c|}
+\end{tabular}`,{title:'\\cline{2-3}'})}
+<p>You can use <code>\multicolumn{1}{…}{…}</code> to change the position of one entry. The scope of <code>\centering</code> in a <code>\multicolumn</code> cell ends with the cell, so you do not need <code>\tabularnewline</code> there.</p>
+${ex(L`\begin{tabular}{|l|r|r|}
 \hline
-airy & rows \\ \hline
-more & space \\ \hline
-\end{tabular}`,{title:'\\arraystretch and \\tabcolsep'})}
-${trap(H`<p><code>\setlength{\arraystretch}{1.5}</code> is wrong — <code>\arraystretch</code> is a command, not a length. Use <code>\renewcommand{\arraystretch}{1.5}</code>.</p>`)}
+& \multicolumn{2}{p{3.5cm}|}%
+{\centering Distance from sun \\ (million km)}\\
+\cline{2-3}
+\multicolumn{1}{|c|}{Planet}
+& \multicolumn{1}{c|}{Maximum}
+& \multicolumn{1}{c|}{Minimum}\\
+\hline
+Mercury & 69.4  & 46.8\\
+Venus  & 109.0  & 107.6\\
+\hline
+\end{tabular}`,{title:'\\multicolumn{1}'})}
+<h5>Row space: \arraystretch</h5>
+<p>The default value of <code>\arraystretch</code> is 1. If you set it to k, the space between the rows is k times larger.</p>
+${ex(L`\begin{center}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{|l|r|}
+\hline
+Mercury & 69.4\\ \hline
+Venus  & 109.0\\ \hline
+\end{tabular}
+\end{center}`,{title:'\\arraystretch'})}
+<h5>The @ specification</h5>
+<p><code>r@{--}l</code> makes a right column and a left column with "–" between them. The dashes line up. LaTeX removes the normal space between these two columns. You do not type the dash in each row.</p>
+${ex(L`\begin{tabular}{|c|r@{--}l|}
+\hline
+Height & \multicolumn{2}{c|}{Ideal weight}\\
+(cm)  & \multicolumn{2}{c|}{(kg)}\\
+\hline
+155 & 53.5 & 64\\
+160 & 56  & 67\\
+165 & 59  & 71\\
+\hline
+\end{tabular}`,{title:'r@{--}l'})}
 
-${tp('The table float: caption, label, placement')}
-<p><code>tabular</code> is only the grid. To give it a number and a caption, and let LaTeX place it sensibly on the page, wrap it in the <code>table</code> <b>float</b>.</p>
-${ex(L`Table~\ref{tab:marks} lists the marks.
+${tp('Packages that enhance tabular')}
+<h5>array</h5>
+<p>Load it with <code>\usepackage{array}</code>.</p>
+<ul>
+  <li><code>m{wd}</code> makes a column of width wd as <code>p</code> does, but the text is vertically in the middle.</li>
+  <li><code>&gt;{decl}</code> inserts decl in front of the column. For example, <code>&gt;{\bfseries}l</code> makes the whole column bold.</li>
+  <li><code>!{text}</code> works as <code>@</code>, but keeps the column space.</li>
+</ul>
+${ex(L`\documentclass{article}
+\usepackage{array}
+\begin{document}
+\begin{tabular}{|>{\bfseries}l|r|}
+\hline
+\multicolumn{1}{|m{1.5cm}|}{\centering Planet}
+&\multicolumn{1}{m{2.3cm}|}{\centering Mean distance from sun \\ (km)}\\
+\hline
+Mercury & 58100000\\
+Venus  & 108300000\\
+\hline
+\end{tabular}
+\end{document}`,{title:'array: m and >{}',run:true})}
+<h5>multirow</h5>
+<p>Load it with <code>\usepackage{multirow}</code>. The command <code>\multirow{num}{wd}{item}</code> spans num rows. wd is the width of the column. The command <code>\multirowsetup</code> sets the horizontal alignment. The default is <code>\raggedright</code>. Use <code>\renewcommand{\multirowsetup}{\centering}</code> to center the text.</p>
+${ex(L`\documentclass{article}
+\usepackage{multirow}
+\begin{document}
+\renewcommand{\multirowsetup}{\centering}
+\begin{tabular}{|l|r|r|}
+\hline
+\multirow{2}{1.5cm}{Planet}
+& \multicolumn{2}{p{3.5cm}|}{\centering Distance from sun \\ (million km)}\\
+\cline{2-3}
+& \multicolumn{1}{c|}{Maximum}
+& \multicolumn{1}{c|}{Minimum}\\
+\hline
+Mercury & 69.4  & 46.8\\
+Venus  & 109.0  & 107.6\\
+\hline
+\end{tabular}
+\end{document}`,{title:'multirow',run:true})}
+<h5>longtable</h5>
+<p>A <code>tabular</code> cannot go over more than one page. The package <code>longtable</code> by David Carlisle can. Load it, and use <code>\begin{longtable}</code> in place of <code>\begin{tabular}</code>. Footnotes and <code>\newpage</code> work inside it. These commands set the rows at the top and bottom of each page:</p>
+<div class="scroll-x"><table class="ref"><tr><th>Command</th><th>Rows that it ends</th></tr>
+<tr><td><code>\endfirsthead</code></td><td>rows at the top of the first page</td></tr>
+<tr><td><code>\endhead</code></td><td>rows at the top of each next page</td></tr>
+<tr><td><code>\endfoot</code></td><td>rows at the bottom of each page</td></tr>
+<tr><td><code>\endlastfoot</code></td><td>rows at the very end of the table</td></tr>
+</table></div>
+<p>Other packages for tables: <code>tabularx</code>, <code>delarray</code>, <code>dcolumn</code> and <code>hhline</code>.</p>
+<h5>tabbing and tabular</h5>
+<div class="scroll-x"><table class="ref"><tr><th>tabbing</th><th>tabular</th></tr>
+<tr><td>Only as a separate paragraph</td><td>Anywhere in the text, also in mathematics</td></tr>
+<tr><td>Can go over many pages</td><td>Cannot go over many pages</td></tr>
+<tr><td>Cannot be nested</td><td>Can be nested to any level</td></tr>
+</table></div>
 
-\begin{table}[htbp]
-  \centering
-  \caption{Marks in Semester V}
-  \label{tab:marks}
-  \begin{tabular}{|l|c|}
-    \hline
-    Name & Marks \\ \hline
-    Anu  & 88    \\
-    Balu & 91    \\ \hline
-  \end{tabular}
-\end{table}`,{title:'table + \\caption + \\label + \\ref'})}
-<div class="scroll-x"><table class="ref"><tr><th>Placement letter</th><th>Means</th></tr>
-<tr><td><code>h</code></td><td><i>here</i> — about where it is written</td></tr>
-<tr><td><code>t</code></td><td>at the <i>top</i> of a page</td></tr>
-<tr><td><code>b</code></td><td>at the <i>bottom</i> of a page</td></tr>
-<tr><td><code>p</code></td><td>on a separate <i>page</i> of floats</td></tr>
-<tr><td><code>!</code></td><td>try harder — relax LaTeX’s usual limits</td></tr></table></div>
-${must(H`<p>Put <code>\label</code> <b>after</b> <code>\caption</code> — the label records the most recent number, and the caption is what creates it. <code>\caption</code> before the tabular puts the caption above (the usual convention for tables).</p>`)}
-${match('tabular or table?',[['draws the grid of rows and columns',L`<code>tabular</code>`],['gives a number and a caption',L`<code>table</code>`],['can float to the top of the page',L`<code>table</code>`],['takes a column spec such as {lcr}',L`<code>tabular</code>`]],{left:'Job',right:'Environment'})}
-${omr('Tables',[
- {q:'Which column type wraps long text?',o:['l','c','r','p{…}'],a:3},
- {q:L`<code>\cline{2-4}</code> draws a rule`,o:['under every column','under columns 2 to 4','down columns 2 to 4','nowhere'],a:1},
- {q:L`To give a table a numbered caption you need`,o:[L`<code>\caption</code> inside tabular`,L`the <code>table</code> environment with <code>\caption</code>`,L`<code>\hline</code>`,L`<code>\multicolumn</code>`],a:1},
- {q:L`<code>\label</code> must come`,o:[L`before <code>\caption</code>`,L`after <code>\caption</code>`,'anywhere in the document','in the preamble'],a:1},
- {q:L`The placement option <code>[t]</code> asks for`,o:['here','top of a page','bottom of a page','a page of floats'],a:1},
- {q:L`In <code>{|l|c|c|}</code>, a heading across all columns is`,o:[L`<code>\multicolumn{3}{c}{…}</code>`,L`<code>\multicolumn{3}{|c|}{…}</code>`,L`<code>\multicolumn{2}{|c|}{…}</code>`,L`<code>\span{3}{…}</code>`],a:1},
- {q:'Row height is scaled with',o:[L`<code>\setlength{\arraystretch}{2}</code>`,L`<code>\renewcommand{\arraystretch}{2}</code>`,L`<code>\rowheight{2}</code>`,L`<code>\tabcolsep</code>`],a:1}
-])}
-${cards('Table commands',[
- {f:'Column separator',b:{code:'&'}},{f:'End a row',b:{code:'\\\\'}},{f:'Full-width horizontal rule',b:{code:'\\hline'}},
- {f:'Rule under columns 2–3 only',b:{code:'\\cline{2-3}'}},{f:'One cell across 3 columns, centred, ruled',b:{code:'\\multicolumn{3}{|c|}{text}'}},
- {f:'A wrapping 4 cm column',b:{code:'p{4cm}'}},{f:'Line up decimal points',b:{code:'r@{.}l'}},{f:'Taller rows',b:{code:'\\renewcommand{\\arraystretch}{1.5}'}},
- {f:'Caption + number for a table',b:{code:'\\begin{table}\n\\caption{…}\\label{…}\n…\n\\end{table}'}}
-])}
+${tp('Table as a float')}
+<p>A <code>table</code> environment holds a table, a caption and a label. LaTeX numbers the caption automatically. Put <code>\label</code> after <code>\caption</code>.</p>
+${ex(L`\begin{table}[h]
+\centering
+\caption{Sizes of the planets}\label{planets}
+\begin{tabular}{|l|r|}
+\hline
+Planet & Diameter(km)\\ \hline
+Mercury & 4878\\ \hline
+\end{tabular}
+\end{table}
+See Table~\ref{planets}.`,{title:'table, caption and label'})}
+${parsons('A two-column table',[L`\begin{tabular}{ll}`,L`Language & Year \\`,L`\TeX & 1978 \\`,L`\LaTeX & 1985 \\`,L`\end{tabular}`],{extra:[L`\begin{table}{ll}`]})}
+${fill('Column specifications',L`The specification [[|l|r|]] gives a left column and a right column with lines. The command [[\multicolumn]]{2}{c}{Title} spans two columns. The command [[\cline]]{2-3} draws a line under columns 2 and 3.`,{code:true,strict:false})}
+${match('Package and use',[
+ ['array','the m column and >{decl}'],['multirow','a cell that spans rows'],['longtable','a table that goes over many pages'],['enumerate','labels of a list']],{left:'Package',right:'Use'})}
 ${build('Build a mark sheet',L`\documentclass{article}
 \begin{document}
-
-\end{document}`,{brief:'Make a ruled table in a table float with the caption “Mark sheet”: a title row spanning all columns, a header row (Name, Paper I, Paper II, Total) and two students.',
- checks:[{re:'\\\\begin\\{table\\}',msg:'a table float'},{re:'\\\\caption\\{Mark sheet\\}',msg:'caption “Mark sheet”'},{re:'\\\\begin\\{tabular\\}\\{[^}]*\\|[^}]*\\}',msg:'vertical rules in the spec'},
- {re:'\\\\hline',msg:'horizontal rules'},{re:'\\\\multicolumn\\{4\\}',msg:'a \\multicolumn{4} title row'},{re:'Name\\s*&\\s*Paper I\\s*&\\s*Paper II\\s*&\\s*Total',msg:'the header row'}]})}
+Name Maths Physics
+Asha 80 75
+Ravi 72 88
+\end{document}`,{brief:'Make a table with three columns and lines. Put the name column on the left. Put the marks on the right. Put a line after each row.',checks:[{re:'\\\\begin\\{tabular\\}',msg:'a tabular environment'},{re:'\\\\hline',msg:'\\hline'},{re:'\\|',msg:'a vertical line in the specification'}]})}
+${omr('Tables',[
+ {q:'What does the specification {lr} give?',o:['Two left columns','A left column and a right column','A list and a row','Two lines'],a:1,why:'l is left. r is right.'},
+ {q:'What does & do in a tabular?',o:['Ends a row','Separates the entries of a row','Draws a line','Starts a table'],a:1,why:'& separates the columns. \\\\ ends the row.'},
+ {q:'Which specifier makes a column of fixed width with wrapped text?',o:['l','c','p{…}','|'],a:2,why:'p{width} makes a paragraph box.'},
+ {q:'Which command draws a line from column 2 to column 3?',o:['\\hline','\\cline{2-3}','\\line{2-3}','\\multicolumn{2}{c}{}'],a:1,why:'\\cline{i-j} draws a line from column i to column j.'},
+ {q:'Why is c| used in \\multicolumn{2}{c|}{…} in a table with |l|r|r|?',o:['To center the text twice','To put back the last vertical line','To draw a horizontal line','For the font'],a:1,why:'\\multicolumn resets the last columns. The final | is lost, so you supply it.'},
+ {q:'What does r@{--}l do?',o:['Two columns with a dash between them and no column space','A rule','A comment','A merged cell'],a:0,why:'The text in @{…} replaces the space between the columns.'},
+ {q:'Which package gives m{wd} columns?',o:['array','multirow','longtable','enumerate'],a:0,why:'The array package has m, > and !.'},
+ {q:'Which environment makes a table that goes over many pages?',o:['tabular','tabbing','longtable','table'],a:2,why:'longtable allows many pages. tabular does not.'},
+ {q:'What is the default value of \\arraystretch?',o:['0','1','1.5','2'],a:1,why:'The default is 1. A larger value gives more space between the rows.'}
+])}
+${must(H`<ol>
+<li><code>tabular</code>: specification, <code>&amp;</code>, <code>\\</code>, <code>\\[5pt]</code>.</li>
+<li>Specifiers: l, r, c, p{}, |, @{}; array: m{}, &gt;{}, !{}.</li>
+<li><code>\hline</code>, <code>\cline{i-j}</code>, <code>\multicolumn{n}{pos}{text}</code>. Use <code>c|</code> to keep the last line.</li>
+<li><code>\tabularnewline</code> in the last <code>p</code> column.</li>
+<li><code>\arraystretch</code>. multirow: <code>\multirow</code>, <code>\multirowsetup</code>. longtable: <code>\endfirsthead</code> <code>\endhead</code> <code>\endfoot</code> <code>\endlastfoot</code>.</li>
+<li>tabbing and tabular: three differences.</li>
+</ol>`)}
 `});

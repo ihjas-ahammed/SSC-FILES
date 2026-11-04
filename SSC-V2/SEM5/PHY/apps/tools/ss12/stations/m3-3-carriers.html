@@ -1,0 +1,34 @@
+<!-- id: m3-carriers | mod: Module III | modName: Semiconductors | modClass: m3 | title: Carrier concentrations, Fermi level and mass action | short: $n$, $p$, $E_F$, $n_i$ | est: ~30 min -->
+<gist>Count the states in each band ($D(E)$) times the chance they are filled ($f(E)$). Because $E_F$ sits in the gap, $f$ becomes a simple exponential and the counts come out as $n=N_ce^{-(E_c-E_F)/kT}$ and $p=N_ve^{-(E_F-E_v)/kT}$. Multiply them and $E_F$ drops out: $np=n_i^2$.</gist>
+
+<tp>The recipe: states $\times$ occupation</tp>
+<p>Every carrier count in this module is the same two-step recipe from Module II. How many places are there at energy $E$ (the density of states $D(E)$), and what is the chance each is occupied (the Fermi function $f(E)$)? Multiply and add up over the band:</p>
+$$n=\int_{E_c}^{\infty}D_c(E)f(E)\,dE,\qquad p=\int_{-\infty}^{E_v}D_v(E)\left[1-f(E)\right]dE$$
+<fig name="carriers"><cap>The three graphs drawn side by side. Left: no states in the gap, $\sqrt{E}$-shaped bands either side. Middle: the Fermi function, $\tfrac12$ at $E_F$. Right: their product, the carriers per unit energy. Only the far tails of $f$ reach into the bands, so the lobes hug the band edges. Move $E_F$ with the chips and one lobe grows while the other shrinks by the same factor.</cap></fig>
+<p>Two simplifications make the integrals easy. Near a band edge the band is parabolic, so $D(E)$ is the free-electron $\sqrt{E}$ with the effective mass. And because $E_F$ is several $kT$ inside the gap, $E-E_F\gg kT$ everywhere in the conduction band, so $f(E)\approx e^{-(E-E_F)/kT}$: the Fermi tail is a Maxwell–Boltzmann tail. Such a semiconductor is called <strong>non-degenerate</strong>.</p>
+
+<tp>Electrons in the conduction band</tp>
+<p>An electron at energy $E$ in the conduction band has kinetic energy $E-E_c$. So the free-electron density of states applies with $E\to E-E_c$ and $m\to m_n^*$. Near room temperature $kT=0.026$ eV, much smaller than $E_c-E_F$, so the Fermi function's tail is exponential.</p>
+<der id="ncb"/>
+<p>Read the answer as "the band behaves like $N_c$ states all sitting at $E_c$". $N_c$ is the <strong>effective density of states</strong>: for silicon $N_c=2.8\times10^{25}\left(\dfrac{T}{300}\right)^{3/2}\ \mathrm{m^{-3}}$, and the Boltzmann factor says what fraction of those are filled.</p>
+
+<tp>Holes in the valence band</tp>
+<p>A hole is a state left empty, so count $D(E)[1-f(E)]$. Holes become exponentially rarer deeper in the valence band, the mirror image of the electrons.</p>
+<der id="pvb"/>
+<must><p>$$n=N_ce^{-(E_c-E_F)/kT},\qquad p=N_ve^{-(E_F-E_v)/kT}$$ $$N_c=2\left(\frac{2\pi m_n^*kT}{h^2}\right)^{3/2},\qquad N_v=2\left(\frac{2\pi m_p^*kT}{h^2}\right)^{3/2}$$ These hold for intrinsic <em>and</em> doped samples (as long as $E_F$ is a few $kT$ inside the gap). For an intrinsic sample write $E_F=E_i$, the intrinsic level: $n_i=N_ce^{-(E_c-E_i)/kT}$, $p_i=N_ve^{-(E_i-E_v)/kT}$.</p></must>
+
+<tp>Where the Fermi level sits in a pure sample</tp>
+<p>In a pure sample every electron in the conduction band left a hole behind, so $n=p$. Set the two formulas equal and solve for $E_F$:</p>
+<der id="efint"/>
+<p>The second term is small: $\tfrac34kT\ln(m_p^*/m_n^*)$ is a few meV for Si at room temperature, so $E_F$ is effectively at mid-gap, rising slightly with $T$ when holes are heavier. At 0 K it is exactly mid-gap.</p>
+<sim name="fermilevel"/>
+
+<tp>Law of mass action and $n_i$</tp>
+<p>Multiply $n$ by $p$. The $E_F$ in the two exponents cancels, so the product depends only on the material and the temperature, never on the doping:</p>
+<der id="massaction"/>
+<must><p>$$np=n_i^2=N_cN_ve^{-E_g/kT},\qquad n_i=2\left(\frac{2\pi kT}{h^2}\right)^{3/2}\left(m_n^*m_p^*\right)^{3/4}e^{-E_g/2kT}$$ Valid for intrinsic and extrinsic samples alike (non-degenerate).</p></must>
+<p>For pure Ge at 300 K, $n_i\approx2.4\times10^{19}\ \mathrm{m^{-3}}$ against $4.4\times10^{28}$ Ge atoms per $\mathrm{m}^{3}$: only about 5 bonds in $10^{10}$ are broken. Copper has about $10^{28}$ free electrons per $\mathrm{m}^{3}$.</p>
+<trap><p>$n_i\propto e^{-E_g/2kT}$ but $np=n_i^2\propto e^{-E_g/kT}$. Keep the two exponents apart. And $N_c$, $N_v$ depend on temperature ($\propto T^{3/2}$): use the value at the temperature you are working at.</p></trap>
+
+<chk><q>Why does the product $np$ not depend on where the Fermi level is, while $n$ and $p$ separately do?</q><a><p>$n\propto e^{-(E_c-E_F)/kT}$ grows as $E_F$ rises; $p\propto e^{-(E_F-E_v)/kT}$ shrinks by exactly the same factor. In the product the exponents add to $-(E_c-E_v)/kT=-E_g/kT$: no $E_F$ left. Doping moves $E_F$, so it moves $n$ and $p$ in opposite directions but leaves $np=n_i^2$ unchanged.</p></a></chk>
+<chk><q>The band gaps of diamond and Si are 5.4 and 1.1 eV. Roughly what temperature would diamond need to reach the $n_i$ that Si has at 300 K? (take $n_i\propto e^{-E_g/2kT}$ and ignore the $T^{3/2}$.)</q><a><p>Equal exponents: $\dfrac{5.4}{T}=\dfrac{1.1}{300}$, so $T=300\times5.4/1.1\approx1470$ K, about 1200 °C. Ignoring the slowly varying $T^{3/2}$ factor is fine because the exponential dominates.</p></a></chk>

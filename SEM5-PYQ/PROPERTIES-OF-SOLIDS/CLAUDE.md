@@ -121,3 +121,14 @@ Nothing is outstanding. Check this list before sending anything new.
 - Trigger: the user uploads a screenshot of the study plan and says "create model day paper". Method: `create-model-day-paper.md` (this folder). Builder: `build_model_paper.py`, which takes a JSON paper and writes the HTML and PDF. Each paper is a `model-paper-<N>.json` in this folder.
 - Scope is the syllabus's section list, checked against the book excerpt headings. A question whose section is not listed is out, even when the topic sounds right. Do not pad a paper with out-of-scope questions.
 - Layout: copy the university paper for this subject (under `GitHub/SSC-FILES/PYQ/` or `ssc-v3/fyug/`), including its marks, ceilings and time. No name or register-number block.
+18. `model-papers/PROPERTIES-OF-SOLIDS-MODEL-PAPER-2.pdf` (sent 2026-10-28; FYUGP layout 10/8/2, 2 pages; Module II items 6–11 and item 12; Book 1 §5.1–5.3, 6.1–6.5, 7.1–7.3)
+19. `model-papers/PROPERTIES-OF-SOLIDS-MODEL-PAPER-3.pdf` (sent 2026-10-28; 10/8/2, 2 pages; Module III items 13–16 (Book 1 §7.4–7.6) and item 17 (§8.1–8.2))
+
+
+## SSP / Properties of Solids Model Paper 4 — built and mailed 2026-10-28
+- Output: `model-papers/PROPERTIES-OF-SOLIDS-MODEL-PAPER-4.{html,pdf}`; JSON `model-papers/model-paper-4.json`; provenance and checks `model-papers/PROPERTIES-OF-SOLIDS-MODEL-PAPER-4-SOURCES-AND-AUDIT.md`. Copies of PDF, HTML and source/audit report are in local Downloads.
+- User topics: classical diamagnetism/paramagnetism and Weiss ferromagnetism; antiferromagnetism/ferrimagnetism; polarisation/susceptibility/local field; dielectric constant/polarisability/sources; ferroelectricity/piezoelectricity. Four questions per topic group. Syllabus items 18–22; Puri–Babbar §§8.3.1, 8.4.1, 8.5.1, 8.6–8.7 and 9.1–9.7. Antiferro/ferrimagnetism and ferro/piezoelectricity kept qualitative; no quantum dia/paramagnetic calculations.
+- Layout: Electrodynamics II Model Paper 1 reference; 2 hours, 70 marks, A 10×3 ceiling 24; B 8×6 ceiling 36; C 2×10 answer one. One A4 page, no forced section page breaks, compact 9 pt print text. All rows fit without clipping.
+- Source pool: related-course Module IV PYQs and model-missed-topics questions, plus new questions. Original source weightage is recorded in the source/audit report; model marks assigned as 3/6/10. No verbatim question from earlier Papers 1–3 reused. Paper 3's broad magnetic classification is background; this paper tests detailed classical theory and dielectrics.
+- Checks: scope, every question's provenance, two numerical answers, mark arithmetic, natural pagination, complete 20-question count, visual inspection of final PDF, SHA-256 verification of output copies.
+- Mailing: final PDF sent with quickmail to ihjas.one@gmail.com on 2026-10-28; command returned success. PDF only; no answer key or HTML emailed.

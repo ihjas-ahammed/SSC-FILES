@@ -1,0 +1,21 @@
+<!-- id: m3-conic | mod: Module III | modName: Convex optimization problems | modClass: m3 | title: Generalized inequality constraints: conic programs and SDP | short: Generalized inequality constraints (4.6) | est: ~30 min -->
+<gist>Allow vector-valued constraints $f_i(\mathbf x)\preceq_{K_i}0$ with $K_i$-convex $f_i$. The simplest case, a linear objective with an affine conic constraint, is a conic program; with $K=\mathbf S^k_+$ it is a semidefinite program (SDP), which contains LP, QP, QCQP and SOCP.</gist>
+
+<tp>Convex problems with generalized inequality constraints (§4.6)</tp>
+<must><p>Minimise $f_0(\mathbf x)$ s.t. $f_i(\mathbf x)\preceq_{K_i}0$, $A\mathbf x=\mathbf b$, with $f_0$ convex, $K_i$ proper cones, $f_i$ $K_i$-convex. The feasible set is convex, local optima are global, and the optimality criterion of §4.2.3 holds unchanged.</p></must>
+
+<tp>Conic form problems (§4.6.1)</tp>
+<must><p><b>Conic form:</b> minimise $\mathbf c^T\mathbf x$ s.t. $F\mathbf x+\mathbf g\preceq_K0$, $A\mathbf x=\mathbf b$. <b>Standard form:</b> minimise $\mathbf c^T\mathbf x$ s.t. $A\mathbf x=\mathbf b$, $\mathbf x\succeq_K0$. <b>Inequality form:</b> minimise $\mathbf c^T\mathbf x$ s.t. $F\mathbf x+\mathbf g\preceq_K0$. With $K=\mathbf R^m_+$ these are LPs.</p></must>
+
+<tp>Semidefinite programming (§4.6.2)</tp>
+<must><p><b>SDP (inequality form):</b> minimise $\mathbf c^T\mathbf x$ s.t. $x_1F_1+\dots+x_nF_n+G\preceq0$ (an LMI, $F_i,G\in\mathbf S^k$), $A\mathbf x=\mathbf b$. <b>Standard form:</b> minimise $\tr(CX)$ s.t. $\tr(A_iX)=b_i$, $i=1,\dots,p$, $X\succeq0$. Several LMIs combine into one block-diagonal LMI.</p></must>
+<p><b>Embedding the others.</b> LP: $A\mathbf x\preceq\mathbf b$ ⇔ $\diag(A\mathbf x-\mathbf b)\preceq0$. SOCP: $\|A\mathbf x+\mathbf b\|_2\le\mathbf c^T\mathbf x+d$ ⇔ $\begin{pmatrix}(\mathbf c^T\mathbf x+d)I&A\mathbf x+\mathbf b\\(A\mathbf x+\mathbf b)^T&\mathbf c^T\mathbf x+d\end{pmatrix}\succeq0$ (Schur complement).</p>
+
+<tp>Examples (§4.6.3)</tp>
+<p><b>Second-order cone programming</b> as a conic program over a product of second-order cones $K=K_1\times\dots\times K_m$.</p>
+<p><b>Matrix norm minimisation.</b> Minimise $\|A(\mathbf x)\|_2$ (largest singular value) with $A(\mathbf x)=A_0+x_1A_1+\dots+x_nA_n$: $\|A\|_2\le s\iff A^TA\preceq s^2I\iff\begin{pmatrix}sI&A\\A^T&sI\end{pmatrix}\succeq0$. So: minimise $s$ subject to that LMI — an SDP.</p>
+<p><b>Moment problems.</b> $(\mathbf E t^k)_{k\le2n}$ of a random variable on $\mathbf R$ are exactly the vectors whose Hankel matrix $H(x_0,\dots,x_{2n})\succeq0$; bounds on $\mathbf E p(t)$ given moment bounds are SDPs.</p>
+<p><b>Bounding portfolio risk</b> with incomplete covariance information: maximise $\mathbf x^T\Sigma\mathbf x$ over $\Sigma\succeq0$ with known entry bounds — an SDP in $\Sigma$.</p>
+<p><b>Fastest mixing Markov chain on a graph</b>: minimise the second largest eigenvalue modulus of a symmetric stochastic matrix with the graph's sparsity, an SDP.</p>
+<chk><q>Write minimise $\lambda_{\max}(A(\mathbf x))$, $A(\mathbf x)=A_0+\sum x_iA_i$, as an SDP.</q><a><p>Minimise $t$ s.t. $A(\mathbf x)\preceq tI$. (Exercise 4.43.)</p></a></chk>
+<chk><q>Why is an LP a special case of an SDP?</q><a><p>A diagonal matrix is PSD iff its diagonal is nonnegative, so $A\mathbf x\preceq\mathbf b$ is the LMI $\diag(\mathbf b-A\mathbf x)\succeq0$.</p></a></chk>

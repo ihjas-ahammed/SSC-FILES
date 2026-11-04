@@ -1,0 +1,995 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Optics revision · Module 3</title><style>
+*{box-sizing:border-box}body{margin:0;font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#0f1220;color:#e8eaf3}
+header{position:sticky;top:0;z-index:5;background:#151a2e;border-bottom:1px solid #2a3150;padding:10px 14px}
+header h1{font-size:17px;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}header .sub{font-size:12px;color:#9aa3c7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+nav{display:flex;gap:6px;overflow-x:auto;padding:8px 14px;background:#121628;border-bottom:1px solid #222944;position:sticky;top:52px;z-index:4}
+nav a{flex:none;color:#c9cff0;text-decoration:none;font-size:12px;padding:4px 9px;border:1px solid #2f3760;border-radius:14px}
+main{max-width:760px;margin:0 auto;padding:12px}
+.unit{margin:18px 0 26px}.unit>h2{font-size:15px;color:#ffd37a;margin:0 0 8px;letter-spacing:.2px}
+.card{background:#181d33;border:1px solid #2b3358;border-radius:14px;padding:14px 14px 10px;margin:0 0 12px;box-shadow:0 2px 10px #0006}
+.card h3{margin:0 0 8px;font-size:14px;text-transform:uppercase;letter-spacing:.8px}
+.th h3{color:#7fd3ff}.dv h3{color:#b7a2ff}
+.card .t{font-size:16px;font-weight:600;margin-bottom:8px;color:#fff}
+ul{margin:0;padding-left:18px}li{margin:0 0 6px}li b{color:#ffe7a8}
+.key{margin-top:10px;padding:8px 10px;border-radius:10px;background:#20284a;border-left:3px solid #ffd37a}
+.key .k{font-size:11px;color:#ffd37a;text-transform:uppercase;letter-spacing:.8px}
+.legend{font-size:13px;color:#b9c0e0;margin-bottom:8px}
+.phase{margin:10px 0 4px;font-size:12.5px;color:#cbbcff}.phase b{color:#e2d8ff}
+.st{border-left:2px solid #3b4478;padding:2px 0 4px 10px;margin:0 0 4px}
+.st.final{border-left-color:#ffd37a;background:#252b4f;border-radius:0 8px 8px 0}
+.tex{overflow-x:auto;overflow-y:hidden}.tex mjx-container{margin:4px 0!important}
+.mv{font-size:11.5px;color:#9ad6a6}.nt{font-size:12px;color:#99a0c4}
+details.dv summary{cursor:pointer;list-style:none}details.dv summary::-webkit-details-marker{display:none}
+details.dv summary h3:after{content:" ▸ tap to open";font-size:11px;color:#8088b8;text-transform:none;letter-spacing:0}
+details.dv[open] summary h3:after{content:" ▾"}
+.figwrap{position:sticky;top:var(--stick,92px);z-index:3;background:#181d33;padding:4px 0 6px;margin:0 -4px 8px}
+.fgbox{width:100%;max-height:300px;border-radius:12px}
+.figctl{display:flex;gap:6px;align-items:center;margin-top:6px}.figctl button{background:#2b3360;color:#fff;border:0;border-radius:8px;padding:5px 10px;font-size:13px}
+.figctl .play{background:#6a55d8}.fighint{font-size:11px;color:#8088b8}
+.st{cursor:pointer}.st.on{background:#2c2a55;border-left-color:#f7c04f;border-radius:0 8px 8px 0}
+footer{text-align:center;font-size:11px;color:#6d75a0;padding:20px}
+</style>
+<script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},chtml:{scale:0.95}};</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script><style>:root{--paper:#111326;--card:#181d33;--ink:#ECEAFB;--ink-2:#B7B9D8;--muted:#7D82A6;--line:rgba(255,255,255,.09);--lav:#232748;--lav-2:#343A6E;--violet:#A898FF;--on-violet:#15172C;--amber:#F7C04F;--orange:#F59A55;--hl:#F7C04F;--sage:#5BC48E;--coral:#FF7B68}
+/* =====================================================================
+   Focused derivation card (.mf-v2) and animated figure (.fg-*)
+   A derivation card gets .mf-v2 when its setup has a "figure" (see 02-figure.js).
+   The back keeps three things on screen together: the figure, the equation
+   board and the instruction for the current move. Nothing here touches other cards.
+   ===================================================================== */
+
+/* ---------- Figure ---------- */
+.fg-host {
+  position: relative; display: block; padding: 0; overflow: hidden;
+  --fg-pad: 10px; --fg-pad-top: 34px;
+  background: color-mix(in srgb, var(--lav) 62%, var(--card));
+}
+.fg-host > .fg-svg {
+  position: absolute; inset: 0; width: 100%; height: 100%; max-height: none; overflow: visible;
+  font-size: var(--fg-fs, 14px); pointer-events: none;
+}
+.fg-svg path, .fg-svg circle { vector-effect: non-scaling-stroke; }
+
+/* every part fades between off, on, dim and focus; draw-in is done in JS */
+.fg-part { transition: opacity 0.45s ease; }
+.fg-part.is-off { opacity: 0; }
+.fg-part.is-dim { opacity: 0.22; }
+.fg-instant .fg-part, .fg-instant .fg-part * { transition: none !important; }
+
+.fg-stroke { fill: none; stroke: var(--violet); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: stroke 0.4s ease, stroke-width 0.4s ease; }
+.fg-head { fill: var(--violet); stroke: none; transition: fill 0.4s ease; }
+.fg-fill { fill: var(--violet); fill-opacity: 0.1; stroke: none; transition: fill 0.4s ease, fill-opacity 0.4s ease; }
+.fg-dot { fill: var(--violet); stroke: var(--card); stroke-width: 1.6; transition: fill 0.4s ease; }
+.fg-hatch { fill: none; stroke: var(--ink-2); stroke-width: 1.1; stroke-linecap: round; opacity: 0.55; }
+.fg-ext { fill: none; stroke: var(--ink-2); stroke-width: 1.3; stroke-linecap: round; }
+
+.fg-axis .fg-stroke { stroke: var(--ink-2); stroke-width: 1.3; }
+.fg-axis .fg-head { fill: var(--ink-2); }
+.fg-mirror .fg-stroke { stroke: var(--ink); stroke-width: 2.8; }
+.fg-ray .fg-stroke { stroke-width: 2.2; }
+.fg-normal .fg-stroke { stroke: var(--ink-2); stroke-width: 1.4; stroke-dasharray: 5 4; }
+.fg-guide .fg-stroke { stroke: var(--ink-2); stroke-width: 1.4; stroke-dasharray: 3 3; }
+.fg-dim .fg-stroke { stroke: var(--ink-2); stroke-width: 1.3; }
+.fg-dim .fg-head { fill: var(--ink-2); }
+.fg-angle .fg-stroke { stroke-width: 1.7; }
+.fg-angle .fg-fill { fill-opacity: 0.14; }
+.fg-polygon .fg-stroke { stroke: var(--hl); stroke-width: 2.2; }
+.fg-polygon .fg-fill { fill: var(--amber); fill-opacity: 0.2; }
+
+/* focus: the accent colour, a little heavier */
+.fg-part.is-focus .fg-stroke { stroke: var(--hl); }
+.fg-part.is-focus.fg-line .fg-stroke, .fg-part.is-focus.fg-dim .fg-stroke { stroke-width: 2.4; }
+.fg-part.is-focus .fg-head, .fg-part.is-focus .fg-dot { fill: var(--hl); }
+.fg-part.is-focus .fg-ext { stroke: var(--hl); }
+.fg-part.is-focus.fg-angle .fg-stroke { stroke-width: 2.2; }
+.fg-part.is-focus.fg-angle .fg-fill { fill: var(--amber); fill-opacity: 0.32; }
+
+/* labels: fixed pixel size, italic like the symbols on the board, with a halo so lines never cut them */
+.fg-label {
+  font-family: "STIX Two Text", "Cambria Math", "Times New Roman", "Noto Serif", "DejaVu Serif", serif;
+  font-style: italic; font-weight: 600; fill: var(--ink);
+  paint-order: stroke; stroke: color-mix(in srgb, var(--lav) 62%, var(--card)); stroke-width: 4px; stroke-linejoin: round;
+  transition: fill 0.4s ease;
+}
+.fg-label .fg-sub, .fg-label .fg-sup { font-size: 70%; }
+.fg-plate { fill: color-mix(in srgb, var(--lav) 62%, var(--card)); stroke: none; }
+.fg-point .fg-label { font-style: normal; font-weight: 700; }
+.fg-dim .fg-label { font-size: 92%; }
+.fg-part.is-focus .fg-label { fill: var(--hl); font-weight: 800; }
+
+/* caption: one line in the top-left corner, says what the figure is showing now */
+.fg-cap {
+  position: absolute; left: 8px; top: 7px; max-width: calc(100% - 16px); z-index: 1;
+  font-size: 12.5px; line-height: 1.3; font-weight: 700; color: var(--ink);
+  padding: 4px 10px; border-radius: 999px; background: var(--card); box-shadow: inset 0 0 0 1px var(--line);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  opacity: 0; transform: translateY(-4px); transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.fg-cap.is-on { opacity: 1; transform: none; }
+.fg-cap.is-on.is-swap { opacity: 0; transform: translateY(-3px); }
+.fg-cap sub, .fg-cap sup { font-size: 72%; line-height: 0; }
+
+/* the old phone rule forces 15px on every setup label; the figure sizes its own labels */
+.mf-v2 .mf-setup .fg-svg text, .mf-v2 .mf-front-art .fg-svg text { font-size: inherit !important; font-weight: 600; }
+.mf-v2 .mf-setup .fg-svg .fg-point text { font-weight: 700; }
+
+/* ---------- Card: front ---------- */
+.mf-v2 .mf-front-art.fg-host { flex: 0 0 auto; height: clamp(170px, calc(var(--sheet-h, 620px) * 0.36), 250px); padding: 0; border-radius: 16px; }
+.mf-v2 .mf-route-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.mf-v2 .mf-route-pair .route-eq { min-width: 0; overflow-x: auto; }
+.mf-v2 .mf-front-route .math { font-size: 16px; }
+
+/* ---------- Card: back ---------- */
+.mf-v2 { --mf-size: 17px; --mf-ghosts: 1; --fg-fs: 14px; }
+.mf-v2 .mf-back { gap: 8px; padding: 10px 12px; }
+.mf-v2 .mf-back .mf-top { min-height: 36px; }
+.mf-v2 .mf-back-title { flex: 1 1 auto; min-width: 0; margin: 0; font-size: 15px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mf-v2 .mf-count { font-size: 12.5px; }
+.mf-v2 button.chip.mf-icon { width: 36px; height: 36px; min-width: 36px; min-height: 36px; padding: 0; border-radius: 50%; font-size: 17px; }
+
+/* phases: a segmented progress line; the current phase shows its name */
+.mf-v2 .mf-back .mf-phases { display: flex; flex-wrap: nowrap; gap: 4px; align-items: center; overflow: hidden; min-height: 22px; }
+.mf-v2 .mf-ph { flex: 1 1 0; min-width: 8px; height: 5px; padding: 0; font-size: 0; border-radius: 3px; background: var(--lav-2); box-shadow: none; overflow: hidden; white-space: nowrap; }
+.mf-v2 .mf-ph::before { content: none; }
+.mf-v2 .mf-ph.is-past { background: var(--violet); opacity: 0.45; box-shadow: none; }
+.mf-v2 .mf-ph.is-now { flex: 0 0 auto; max-width: 62%; height: auto; padding: 3px 10px; font-size: 12px; line-height: 16px; background: var(--violet); color: var(--on-violet); text-overflow: ellipsis; }
+
+/* work area: figure on top (takes the spare height), then board, then instruction and controls */
+.mf-v2 .mf-work, .mf-v2 .mf-work.has-setup { display: flex; flex-direction: column; gap: 8px; flex: 1 1 auto; min-height: 0; overflow: hidden; }
+.mf-v2 .mf-back .mf-setup, .mf-v2 .mf-work.has-setup .mf-setup {
+  display: block; flex: 1 1 auto; height: auto; min-height: 150px; padding: 0; border-radius: 16px;
+}
+.mf-v2 .mf-right { flex: 0 0 auto; min-height: 0; gap: 8px; }
+.mf-v2 .mf-board { flex: 0 0 auto; min-height: 0; padding: 4px 6px; border-radius: 14px; overflow-x: auto; overflow-y: hidden; }
+
+/* instruction: the move on its own line, the reason under it; fixed height so nothing above it jumps */
+.mf-v2 .mf-panel { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto auto; align-items: center; gap: 8px; }
+.mf-v2 .mf-panel[hidden], .mf-v2 .mf-ask[hidden] { display: none; }
+.mf-v2 .mf-note {
+  grid-column: 1 / -1; margin: 0; min-height: calc(1.4em * 4 + 16px); max-height: calc(1.4em * 4 + 16px); overflow-y: auto;
+  font-size: 14px; line-height: 1.4; font-weight: 600; color: var(--ink-2);
+  padding: 8px 10px 8px 12px; border-radius: 12px; background: var(--lav); box-shadow: inset 3px 0 0 var(--violet);
+}
+.mf-v2 .mf-note > b:first-child { display: block; color: var(--violet); font-weight: 800; }
+.mf-v2 .mf-ctrl { display: contents; }
+.mf-v2 .mf-dots { justify-content: center; flex-wrap: nowrap; gap: 4px; min-width: 0; overflow: hidden; min-height: 0; padding: 4px 2px; }
+.mf-v2 .mf-dot { flex: 0 0 6px; width: 6px; height: 6px; }
+.mf-v2 .mf-dot.is-now { flex: 0 0 16px; width: 16px; }
+.mf-v2 .mf-dot.is-ask { box-shadow: none; background: transparent; outline: 1.5px solid var(--violet); outline-offset: 0; }
+.mf-v2 .mf-dot.is-ask.is-done, .mf-v2 .mf-dot.is-ask.is-now { background: var(--violet); }
+.mf-v2 .mf-ctrl .chip { min-height: 44px; min-width: 44px; padding: 0 12px; }
+.mf-v2 .mf-ctrl .chip.mf-next { background: var(--violet); color: var(--on-violet); padding: 0 16px; font-weight: 800; }
+
+/* a checkpoint question replaces the instruction; the figure and the current line stay in view */
+.mf-v2 .mf-ask { padding: 9px 10px; gap: 7px; }
+.mf-v2 .mf-ask-q { font-size: 14.5px; margin: 0; }
+.mf-v2 .mf-ask-opts { grid-template-columns: 1fr 1fr; gap: 6px; }
+.mf-v2 .mf-ask-opts button { min-height: 44px; padding: 6px 9px; font-size: 14px; }
+.mf-v2 .mf-ask-why { margin: 0; font-size: 13.5px; }
+.mf-v2 .mf-work:has(.mf-ask:not([hidden])) .mf-setup { min-height: 120px; }
+.mf-v2 .mf-right:has(.mf-ask:not([hidden])) .mf-board { height: 66px; min-height: 0; justify-content: flex-end; overflow: hidden; }
+/* once answered, only the right option (and a wrong pick) stay, so the reason and Continue fit */
+.mf-v2 .mf-ask-opts:has(button:disabled) button:not(.is-correct):not(.is-wrong) { display: none; }
+
+/* all steps open: the list replaces the board, the figure shrinks to make room */
+.mf-v2 .mf-work:has(.mf-summary:not([hidden])) { overflow-y: auto; }
+.mf-v2 .mf-work:has(.mf-summary:not([hidden])) .mf-setup { flex: 0 0 auto; height: 160px; min-height: 0; }
+
+/* phone: the old rules hid the figure on the back; here it stays */
+@media (max-width: 899px) {
+  .mf-v2 .mf-back .mf-setup { display: block; }
+  .mf-v2 .mf-back .mf-phases { display: flex; }
+}
+
+/* very short phones: a little less of everything */
+@media (max-width: 899px) and (max-height: 700px) {
+  .mf-v2 { --mf-size: 16px; --fg-fs: 13px; }
+  .mf-v2 .mf-back .mf-setup { min-height: 120px; }
+  .mf-v2 .mf-note { font-size: 13.5px; }
+}
+
+/* ---------- Desktop: figure left, board, instruction and controls right ---------- */
+@media (min-width: 900px) {
+  .mf-v2 { --mf-size: 21px; --mf-ghosts: 2; --fg-fs: 16px; }
+  .mf-v2 .fg-host { --fg-pad: 14px; --fg-pad-top: 40px; }
+  .mf-v2 .fg-cap { font-size: 13.5px; top: 9px; left: 10px; }
+  .mf-v2 .mf-back { gap: 10px; padding: 16px 18px; }
+  .mf-v2 .mf-back-title { font-size: 17px; }
+  .mf-v2 .mf-back .mf-phases { gap: 6px; }
+  .mf-v2 .mf-ph { flex: 0 1 auto; height: auto; padding: 4px 10px; font-size: 12px; line-height: 16px; background: var(--lav); color: var(--ink-2); text-overflow: ellipsis; }
+  .mf-v2 .mf-ph.is-past { opacity: 1; background: var(--lav); color: var(--ink-2); box-shadow: inset 0 0 0 1.5px var(--sage); }
+  .mf-v2 .mf-ph.is-past::before { content: "\2713\00a0"; }
+  .mf-v2 .mf-ph.is-now { max-width: none; }
+  .mf-v2 .mf-work.has-setup { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 16px; align-items: stretch; }
+  .mf-v2 .mf-work.has-setup .mf-setup { height: 100%; min-height: 0; }
+  .mf-v2 .mf-right { height: 100%; display: flex; flex-direction: column; gap: 10px; }
+  .mf-v2 .mf-board { flex: 1 1 auto; justify-content: flex-end; padding: 10px; overflow-y: auto; }
+  .mf-v2 .mf-note { font-size: 15px; }
+  .mf-v2 .mf-front { grid-template-columns: minmax(300px, 52%) minmax(0, 1fr); }
+  .mf-v2 .mf-front-art.fg-host { height: 100%; }
+  .mf-v2 .mf-route-pair { grid-template-columns: 1fr; }
+  .mf-v2 .mf-right:has(.mf-ask:not([hidden])) .mf-board { height: auto; flex: 0 0 auto; }
+  .mf-v2 .mf-work:has(.mf-ask:not([hidden])) .mf-setup { min-height: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fg-part, .fg-cap, .fg-stroke, .fg-label { transition: none; }
+}
+
+/* phone: the focused card is almost full width (07-mathflow.css means to do this for every derivation,
+   but a comment nested inside its header comment swallows that @media rule) */
+@media (max-width: 699px) {
+  .sheet:has(.mf-v2), .card.mf-v2 { --card-w: min(calc(var(--view) - 24px), 560px); }
+}
+
+/* light: the tip of a ray glows while the ray is being drawn */
+.fg-glow { fill: var(--amber); stroke: none; filter: drop-shadow(0 0 3px var(--amber)) drop-shadow(0 0 6px var(--orange)); pointer-events: none; }
+
+/* record: plays the derivation by itself and saves it as a video */
+.mf-v2 button.chip.mf-rec i { display: block; width: 12px; height: 12px; border-radius: 50%; background: var(--coral); transition: border-radius 0.2s ease; }
+.mf-v2.is-recording button.chip.mf-rec i { border-radius: 2px; animation: mf-rec-pulse 1.2s ease-in-out infinite; }
+@keyframes mf-rec-pulse { 50% { opacity: 0.35; } }
+.mf-v2.is-presenting .mf-ask-opts button { cursor: default; }
+@media (prefers-reduced-motion: reduce) { .mf-v2.is-recording button.chip.mf-rec i { animation: none; } }
+
+/* glass: prisms, lenses, plates drawn as apparatus (a polygon with "style": "glass") */
+.fg-glass .fg-fill { fill: var(--violet); fill-opacity: 0.13; }
+.fg-glass .fg-stroke { stroke: var(--ink-2); stroke-width: 1.6; }
+.fg-part.is-focus.fg-glass .fg-fill { fill: var(--amber); fill-opacity: 0.3; }
+</style></head><body>
+<header><h1>Optics · Module 3 revision cards</h1><div class="sub">Fraunhofer and Fresnel diffraction · two cards per unit: theory points + key derivation</div></header>
+<nav><a href="#u12">U12</a><a href="#u13">U13</a><a href="#u14">U14</a><a href="#u15">U15</a><a href="#u16">U16</a><a href="../1/">M1</a><a href="../2/">M2</a><a href="../4/">M4</a></nav><main><section class="unit" id="u12"><h2>Unit 12 · Fraunhofer diffraction by a single slit</h2>
+<div class="card th"><h3>① Theory — points</h3><ul><li><b>Diffraction</b>: bending/spreading of waves round obstacles and apertures\quad explained by Huygens–Fresnel: every point of a wavefront is a source of secondary wavelets that interfere.</li><li><b>Fraunhofer</b>: source and screen effectively at infinity (plane wavefronts, lenses used). <b>Fresnel</b>: source and/or screen at finite distance (curved wavefronts).</li><li>Single slit of width \(b\): divide into strips, add with phase\quad \(\beta = \frac{\pi b\sin\theta}{\lambda}\).</li><li><b>Intensity</b>: \(I = I_0\frac{\sin^2\beta}{\beta^2}\).</li><li><b>Minima</b>: \(\beta = m\pi\) → \(b\sin\theta = m\lambda\), \(m = \pm1, \pm2, \dots\) (not \(m = 0\)).</li><li><b>Central maximum</b> at \(\theta = 0\)\quad secondary maxima where \(\tan\beta = \beta\): \(\beta \approx 1.43\pi, 2.46\pi, \dots\)</li><li>Secondary maxima intensities ≈ 4.5 %, 1.6 %, 0.8 % of the central one.</li><li>Central maximum is twice as wide as the others\quad angular half-width \(\sin\theta = \lambda/b\) — narrower slit → wider pattern.</li><li>Linear half-width on the focal plane of a lens of focal length \(f\): \(x = f\lambda/b\).</li></ul><div class="key"><div class="k">Must remember</div><div>\(I = I_0\frac{\sin^2\beta}{\beta^2},\quad \beta = \frac{\pi b\sin\theta}{\lambda}\)</div><div>\(b\sin\theta = m\lambda\quad(\text{minima})\)</div><div>\(\tan\beta = \beta\)</div></div></div>
+<details class="card dv" open><summary><h3>② Key derivation</h3></summary><div class="t">Single-slit Fraunhofer amplitude and intensity</div><div class="legend">Uniform light of wavelength λ falls normally on slit width b. Replace the slit by n points separated by Δ, so b = (n-1)Δ. Each contributes field amplitude a at P. The lens brings rays leaving at angle θ to the same point P. Their adjacent phase step is φ. Define β = πb sin θ/λ, half the phase difference across the slit. In the continuous limit a tends to zero while A = na stays finite. I₀ is the on-axis intensity of this one slit.</div>
+<div class="figwrap"><div class="fgbox" data-fig="0" style="aspect-ratio:256/214"></div><div class="figctl"><button class="play">▶ Play</button><button class="prev">◀</button><button class="next">▶|</button><span class="fighint">tap any step to show it on the figure</span></div></div>
+<div class="phase"><b>Phase step</b> — right triangle A₁A₂K gives the path difference Δ sin θ, then the phase step φ</div>
+<div class="st" data-i="0"><div class="tex">\[\sin\theta = \frac{A_2K}{\Delta}\]</div><div class="nt"><b>Sine in right triangle \(A_1A_2K\).</b> \(K\) is the foot of the perpendicular from \(A_1\) on the ray from \(A_2\). \(A_1K\) is a wavefront across the parallel rays, so the angle at \(A_1\) equals \(\theta\). The side opposite \(\theta\) is \(A_2K\), the hypotenuse is \(A_1A_2 = \Delta\).</div></div>
+<div class="st" data-i="1"><div class="tex">\[A_2K = \Delta\sin\theta\]</div><div class="mv">Rearrange: multiply by \(\Delta\)</div><div class="nt">Multiply by \(\Delta\). Beyond the wavefront \(A_1K\) the two rays travel equal optical paths to \(P\) (the lens adds no path difference), so \(A_2K\) is the whole path difference.</div></div>
+<div class="st" data-i="2"><div class="tex">\[\phi = \frac{2\pi}{\lambda}\Delta\sin\theta\]</div><div class="mv">Path difference to phase: multiply by \(2\pi/\lambda\)</div><div class="nt">A path difference of \(\lambda\) is a phase of \(2\pi\), so adjacent sources differ in phase by \(\phi = \frac{2\pi}{\lambda}\Delta\sin\theta\) (Eq. 18.2).</div></div>
+<div class="phase"><b>Sum wavelets</b> — add the n cosine waves and sum the trigonometric series</div>
+<div class="st" data-i="3"><div class="tex">\[E = a[\cos\omega t + \cos(\omega t - \phi) + \dots + \cos(\omega t - (n - 1)\phi)]\]</div><div class="mv">Superpose the n secondary wavelets at P (Eq. 18.3)</div><div class="nt">Each point source sends a wave of amplitude \(a\) shifted in phase by \(\phi\) from its neighbour (Eq. 18.3).</div></div>
+<div class="st" data-i="4"><div class="tex">\[E_\theta = a\frac{\sin(n\phi / 2)}{\sin(\phi / 2)}\]</div><div class="mv">identity by \(\sum_{k=0}^{n-1}\cos(\omega t - k\phi) = \frac{\sin(n\phi/2)}{\sin(\phi/2)}\cos(\omega t - \tfrac{1}{2}(n-1)\phi)\)</div><div class="nt">Write the resultant amplitude \(E_\theta\) of the \(n\) interfering point sources (Eq. 18.6).</div></div>
+<div class="phase"><b>Continuous limit</b> — let n → ∞ and Δ → 0 with nΔ → b so nφ/2 → β</div>
+<div class="st" data-i="5"><div class="tex">\[\frac{n\phi}{2}\longrightarrow\frac{\pi b\sin\theta}{\lambda}\]</div><div class="mv">substitute by \(n\Delta \to b\)</div><div class="nt">This is a limiting relation: finite n gives nΔ rather than exactly b.</div></div>
+<div class="st" data-i="6"><div class="tex">\[\beta = \frac{\pi b\sin\theta}{\lambda}\]</div><div class="mv">define by \(\beta = \frac{\pi b\sin\theta}{\lambda}\)</div><div class="nt">Define the dimensionless diffraction variable \(\beta\) as half the phase difference across the whole slit (Eq. 18.8).</div></div>
+<div class="st" data-i="7"><div class="tex">\[E_\theta = A\frac{\sin\beta}{\beta}\]</div><div class="mv">substitute by \(\sin(\phi / 2) \approx \frac{\beta}{n},\,A = na\)</div><div class="nt">Replace \(\sin(\phi/2)\) by \(\beta/n\) and set \(A = na\) for the central amplitude at \(\theta = 0\) (Eq. 18.7).</div></div>
+<div class="st" data-i="8"><div class="tex">\[E = A\frac{\sin\beta}{\beta}\cos(\omega t - \beta)\]</div><div class="mv">Include the harmonic time factor cos(ωt - β) (Eq. 18.9)</div><div class="nt">Since \(\frac{1}{2}(n-1)\phi \to \beta\), the resultant electric field at \(P\) is Eq. (18.9).</div></div>
+<div class="phase"><b>Intensity law</b> — square the field amplitude to obtain the sinc-squared intensity</div>
+<div class="st" data-i="9"><div class="tex">\[I = I_0\frac{\sin^2\beta}{\beta^2}\]</div><div class="mv">Square the amplitude and set I₀ ∝ A² (Eq. 18.10)</div><div class="nt">This is the single-slit Fraunhofer intensity distribution, where \(I_0\) is the intensity at \(\theta = 0\) (Eq. 18.10).</div></div>
+<div class="st" data-i="10"><div class="tex">\[\beta = m\pi\]</div><div class="mv">Zeros of intensity</div><div class="nt">\(I = 0\) where \(\sin\beta = 0\) but \(\beta \neq 0\) (at \(\beta = 0\) the ratio \(\sin\beta/\beta \to 1\): the central maximum). So \(\beta = m\pi\), \(m = \pm1, \pm2, \ldots\)</div></div>
+<div class="st" data-i="11"><div class="tex">\[b\sin\theta = m\lambda\]</div><div class="mv">substitute by \(\beta = \frac{\pi b\sin\theta}{\lambda}\)</div><div class="nt">Put in \(\beta\) and multiply by \(\lambda/\pi\): the minima of the single-slit pattern.</div></div>
+<div class="st" data-i="12"><div class="tex">\[\frac{dI}{d\beta}=2I_0\frac{\sin\beta(\beta\cos\beta-\sin\beta)}{\beta^3}\]</div><div class="mv">Differentiate \(I = I_0\sin^2\beta/\beta^2\) with respect to \(\beta\)</div><div class="nt">Differentiate the intensity using the product and quotient rules, away from β = 0.</div></div>
+<div class="st" data-i="13"><div class="tex">\[\beta\cos\beta-\sin\beta=0\]</div><div class="mv">rearrange</div><div class="nt">For a nonzero side maximum, sin β is not zero, so set the other factor to zero.</div></div>
+<div class="st final" data-i="14"><div class="tex">\[\tan\beta=\beta\]</div><div class="mv">Divide by \(\cos\beta\)</div><div class="nt">Divide by cos β to locate the side peaks; the central value is found separately by a limit.</div></div></details></section>
+<section class="unit" id="u13"><h2>Unit 13 · Fraunhofer diffraction by two slits</h2>
+<div class="card th"><h3>① Theory — points</h3><ul><li>Two slits each of width \(b\), centre-to-centre separation \(d\).</li><li><b>Intensity</b>: \(I = 4I_0\frac{\sin^2\beta}{\beta^2}\cos^2\gamma\), with \(\beta = \frac{\pi b\sin\theta}{\lambda}\), \(\gamma = \frac{\pi d\sin\theta}{\lambda}\).</li><li>\(\frac{\sin^2\beta}{\beta^2}\): <b>diffraction</b> term (single slit envelope). \(\cos^2\gamma\): <b>interference</b> term (two-slit fringes).</li><li>Interference maxima: \(d\sin\theta = n\lambda\)\quad interference minima: \(d\sin\theta = (n + \tfrac12)\lambda\).</li><li>Diffraction minima: \(b\sin\theta = m\lambda\).</li><li><b>Missing orders</b>: an interference maximum falls on a diffraction minimum when \(\frac{d}{b} = \frac{n}{m}\)\quad e.g. \(d = 2b\) → orders 2, 4, 6 … missing.</li><li>Number of interference fringes inside the central diffraction maximum ≈ \(2d/b\) (minus missing orders at the edges).</li><li>As \(b \to 0\): pattern → Young's \(\cos^2\) fringes of equal intensity.</li></ul><div class="key"><div class="k">Must remember</div><div>\(I = 4I_0\frac{\sin^2\beta}{\beta^2}\cos^2\gamma\)</div><div>\(\gamma = \frac{\pi d\sin\theta}{\lambda}\)</div><div>\(\frac{d}{b} = \frac{n}{m}\quad(\text{missing orders})\)</div></div></div>
+<details class="card dv" open><summary><h3>② Key derivation</h3></summary><div class="t">Two-slit Fraunhofer field and intensity distribution</div><div class="legend">Two slits of width \(b\) separated by distance \(d\), phase lag \(\Phi_1 = 2\gamma = \frac{2\pi}{\lambda}d\sin\theta\) between corresponding points \((A_1, B_1)\) (Eqs. 18.44–18.45, Fig. 18.29).</div>
+<div class="figwrap"><div class="fgbox" data-fig="1" style="aspect-ratio:246/202"></div><div class="figctl"><button class="play">▶ Play</button><button class="prev">◀</button><button class="next">▶|</button><span class="fighint">tap any step to show it on the figure</span></div></div>
+<div class="phase"><b>Slit fields</b> — write the diffracted field E₁ from the first slit of width b</div>
+<div class="st" data-i="0"><div class="tex">\[E_1 = A\frac{\sin\beta}{\beta}\cos(\omega t - \beta)\]</div><div class="nt">The first slit of width \(b\) produces the single-slit field \(E_1\) at point \(P\) (Eq. 18.9).</div></div>
+<div class="phase"><b>Phase lag</b> — right triangle A₁B₁K gives d sin θ, so slit 2 lags by Φ₁</div>
+<div class="st" data-i="1"><div class="tex">\[\sin\theta = \frac{B_1K}{d}\]</div><div class="mv">Sine in right triangle \(A_1B_1K\)</div><div class="nt">\(A_1\) and \(B_1\) are corresponding points (the same place in each slit), \(d\) apart. \(K\) is the foot of the perpendicular from \(A_1\) on the ray from \(B_1\), so \(A_1K\) is a wavefront and the angle at \(A_1\) is \(\theta\). Opposite \(\theta\): \(B_1K\); hypotenuse: \(d\).</div></div>
+<div class="st" data-i="2"><div class="tex">\[B_1K = d\sin\theta\]</div><div class="mv">Rearrange: multiply by \(d\)</div><div class="nt">Multiply by \(d\). Past the wavefront \(A_1K\) both rays have equal paths to \(P\), so \(B_1K\) is the path difference between corresponding points.</div></div>
+<div class="st" data-i="3"><div class="tex">\[\Phi_1 = \frac{2\pi}{\lambda}d\sin\theta\]</div><div class="mv">Path difference to phase: multiply by \(2\pi/\lambda\)</div><div class="nt">Every point of slit 2 lags its corresponding point in slit 1 by the same phase \(\Phi_1 = \frac{2\pi}{\lambda}d\sin\theta\).</div></div>
+<div class="st" data-i="4"><div class="tex">\[E_2 = A\frac{\sin\beta}{\beta}\cos(\omega t - \beta - \Phi_1)\]</div><div class="mv">Slit 2: the same field, delayed by \(\Phi_1\)</div><div class="nt">Slit 2 has the same width \(b\), so it gives the same single-slit amplitude, only \(\Phi_1\) behind.</div></div>
+<div class="phase"><b>Superpose</b> — add E₁ + E₂ and factor with the cosine sum identity</div>
+<div class="st" data-i="5"><div class="tex">\[E = A\frac{\sin\beta}{\beta}[\cos(\omega t - \beta) + \cos(\omega t - \beta - \Phi_1)]\]</div><div class="mv">Add the two fields: \(E = E_1 + E_2\)</div><div class="nt">Superpose \(E_1\) and \(E_2\) and factor out the common single-slit amplitude \(A(\sin\beta/\beta)\).</div></div>
+<div class="st" data-i="6"><div class="tex">\[E = 2A\frac{\sin\beta}{\beta}\cos\left(\frac{\Phi_1}{2}\right)\cos\left(\omega t - \beta - \frac{1}{2}\Phi_1\right)\]</div><div class="mv">identity by \(\cos C + \cos D = 2\cos\tfrac{C-D}{2}\cos\tfrac{C+D}{2}\)</div><div class="nt">Combine the two cosines using half the phase difference \(\Phi_1 / 2\).</div></div>
+<div class="phase"><b>Product law</b> — define γ = Φ₁/2 and square the amplitude to get intensity</div>
+<div class="st" data-i="7"><div class="tex">\[\gamma = \frac{\pi}{\lambda}d\sin\theta\]</div><div class="mv">define by \(\gamma = \frac{\Phi_1}{2} = \frac{\pi}{\lambda}d\sin\theta\)</div><div class="nt">Define the interference phase parameter \(\gamma = \Phi_1 / 2\) (Eq. 18.44).</div></div>
+<div class="st" data-i="8"><div class="tex">\[E = 2A\frac{\sin\beta}{\beta}\cos\gamma\cos(\omega t - \beta - \gamma)\]</div><div class="mv">substitute by \(\frac{\Phi_1}{2} = \gamma\)</div><div class="nt">Substitute \(\gamma = \Phi_1 / 2\) into the resultant electric field.</div></div>
+<div class="st final" data-i="9"><div class="tex">\[I = 4I_0\frac{\sin^2\beta}{\beta^2}\cos^2\gamma\]</div><div class="mv">Square the amplitude and set I₀ ∝ A² (Eq. 18.45)</div><div class="nt">The resultant intensity is the product of the single-slit diffraction pattern and two-slit interference pattern (Eq. 18.45).</div></div></details></section>
+<section class="unit" id="u14"><h2>Unit 14 · N-slit diffraction and the plane grating</h2>
+<div class="card th"><h3>① Theory — points</h3><ul><li>N parallel slits (width \(b\), spacing \(d\)): \(I = I_0\frac{\sin^2\beta}{\beta^2}\frac{\sin^2 N\gamma}{\sin^2\gamma}\).</li><li><b>Principal maxima</b>: \(\gamma = n\pi\) → \(d\sin\theta = n\lambda\) (grating equation)\quad intensity \(\propto N^2\).</li><li><b>Minima</b>: \(N\gamma = p\pi\), \(p \neq 0, N, 2N, \dots\) → \(N - 1\) minima and \(N - 2\) secondary maxima between principal maxima.</li><li>Larger N → principal maxima sharper and brighter\quad angular half-width \(\Delta\theta = \frac{\lambda}{Nd\cos\theta}\).</li><li><b>Plane diffraction grating</b>: many equidistant slits\quad \(d = (a + b)\) = grating element\quad lines per unit length \(= 1/d\).</li><li>Maximum order: \(n_{max} < d/\lambda\) (since \(\sin\theta \le 1\)). Oblique incidence: \(d(\sin\theta + \sin i) = n\lambda\).</li><li><b>Angular dispersion</b>: \(\frac{d\theta}{d\lambda} = \frac{n}{d\cos\theta}\) — greater in higher order, finer grating.</li><li><b>Resolving power</b>: \(R = \frac{\lambda}{\Delta\lambda} = nN\) (Rayleigh criterion: max of one on first min of the other).</li><li>Grating spectra: violet deviated least, red most (opposite to prism)\quad several orders formed.</li></ul><div class="key"><div class="k">Must remember</div><div>\(d\sin\theta = n\lambda\)</div><div>\(\frac{d\theta}{d\lambda} = \frac{n}{d\cos\theta}\)</div><div>\(\frac{\lambda}{\Delta\lambda} = nN\)</div></div></div>
+<details class="card dv" open><summary><h3>② Key derivation</h3></summary><div class="t">N-slit intensity, principal maxima, and angular half-width</div><div class="legend">N identical slits of width b and centre spacing d are illuminated equally and in phase at normal incidence. A is the on-axis amplitude from one slit and I₀ its intensity. Define β = πb sin θ/λ, γ = πd sin θ/λ and Φ₁ = 2γ. At order m, d sin θ_m = mλ. The half-width Δθ_m is the angular distance from the narrow principal peak to its nearest zero, assuming large N; it is not the width at half peak intensity.</div>
+<div class="figwrap"><div class="fgbox" data-fig="2" style="aspect-ratio:240/222"></div><div class="figctl"><button class="play">▶ Play</button><button class="prev">◀</button><button class="next">▶|</button><span class="fighint">tap any step to show it on the figure</span></div></div>
+<div class="phase"><b>Sum N slits</b> — right triangle S₁S₂K gives the lag d sin θ; add the N fields</div>
+<div class="st" data-i="0"><div class="tex">\[\sin\theta = \frac{S_2K}{d}\]</div><div class="nt"><b>Sine in right triangle \(S_1S_2K\).</b> Neighbouring slits are \(d\) apart. \(K\) is the foot of the perpendicular from \(S_1\) on the ray from \(S_2\), so the angle at \(S_1\) is \(\theta\): \(S_2K\) is opposite it and \(d\) is the hypotenuse.</div></div>
+<div class="st" data-i="1"><div class="tex">\[\Phi_1 = \frac{2\pi}{\lambda}d\sin\theta\]</div><div class="mv">Path difference \(S_2K = d\sin\theta\), times \(2\pi/\lambda\)</div><div class="nt">Each slit lags the one above by the path \(d\sin\theta\), that is by the phase \(\Phi_1 = 2\gamma\).</div></div>
+<div class="st" data-i="2"><div class="tex">\[E = A\frac{\sin\beta}{\beta}[\cos(\omega t - \beta) + \cos(\omega t - \beta - \Phi_1) + \dots + \cos(\omega t - \beta - (N - 1)\Phi_1)]\]</div><div class="mv">Add the \(N\) slit fields at \(P\) (Eq. 18.48)</div><div class="nt">Sum the diffracted fields from all \(N\) parallel slits at screen point \(P\) (Eq. 18.48).</div></div>
+<div class="st" data-i="3"><div class="tex">\[E = A\frac{\sin\beta}{\beta}\frac{\sin N\gamma}{\sin\gamma}\cos\left[\omega t - \beta - \frac{1}{2}(N - 1)\Phi_1\right]\]</div><div class="mv">identity by \(\sum_{k=0}^{N-1}\cos(\alpha - 2k\gamma) = \frac{\sin N\gamma}{\sin\gamma}\cos(\alpha - (N-1)\gamma)\)</div><div class="nt">With \(\gamma = \Phi_1 / 2 = (\pi d\sin\theta)/\lambda\), sum the \(N\) cosines into closed form (Eq. 18.49).</div></div>
+<div class="st" data-i="4"><div class="tex">\[I = I_0\frac{\sin^2\beta}{\beta^2}\frac{\sin^2 N\gamma}{\sin^2\gamma}\]</div><div class="mv">Square the amplitude to obtain intensity I (Eq. 18.50)</div><div class="nt">This reduces to Eq. (18.10) for \(N = 1\) and to Eq. (18.45) for \(N = 2\) (Eq. 18.50).</div></div>
+<div class="phase"><b>Principal maxima</b> — take the limit γ → mπ using L&#x27;Hôpital&#x27;s rule to find peak intensity</div>
+<div class="st" data-i="5"><div class="tex">\[I_{\max} = N^2 I_0\frac{\sin^2\beta}{\beta^2}\]</div><div class="mv">evaluate by \(\gamma \to m\pi\)</div><div class="nt">At \(\gamma = m\pi\) (\(d\sin\theta_m = m\lambda\)), \(\lim_{\gamma\to m\pi}\frac{\sin N\gamma}{\sin\gamma} = \pm N\), so peak intensity scales as \(N^2\) (Eq. 18.53).</div></div>
+<div class="phase"><b>Adjacent minimum</b> — write the condition for the first minimum at θ_m ± Δθ_m</div>
+<div class="st" data-i="6"><div class="tex">\[d\sin(\theta_m \pm \Delta\theta_m) = m\lambda \pm \frac{\lambda}{N}\]</div><div class="mv">First minimum beside the \(m\)-th maximum (Eq. 18.61)</div><div class="nt">The first secondary minimum beside \(d\sin\theta_m = m\lambda\) occurs at path difference \(m\lambda \pm \lambda/N\) (Eq. 18.61).</div></div>
+<div class="phase"><b>Angular half-width</b> — expand sin(θ_m ± Δθ_m) for small Δθ_m and solve for Δθ_m</div>
+<div class="st" data-i="7"><div class="tex">\[\sin(\theta_m \pm \Delta\theta_m) = \sin\theta_m\cos\Delta\theta_m \pm \cos\theta_m\sin\Delta\theta_m\]</div><div class="mv">Sine of a sum</div><div class="nt">Expand the sine of \(\theta_m \pm \Delta\theta_m\) before making any approximation.</div></div>
+<div class="st" data-i="8"><div class="tex">\[\sin(\theta_m \pm \Delta\theta_m) \approx \sin\theta_m \pm \Delta\theta_m\cos\theta_m\]</div><div class="mv">substitute by \(\cos\Delta\theta_m \approx 1,\; \sin\Delta\theta_m \approx \Delta\theta_m\)</div><div class="nt">\(\Delta\theta_m\) is very small for large \(N\), so \(\cos\Delta\theta_m \approx 1\) and \(\sin\Delta\theta_m \approx \Delta\theta_m\) (Eq. 18.62).</div></div>
+<div class="st" data-i="9"><div class="tex">\[d\sin\theta_m \pm d\Delta\theta_m\cos\theta_m = m\lambda \pm \frac{\lambda}{N}\]</div><div class="mv">Apply it to the minimum condition</div><div class="nt">Substitute the small-angle expansion Eq. (18.62) into Eq. (18.61).</div></div>
+<div class="st" data-i="10"><div class="tex">\[d\Delta\theta_m\cos\theta_m = \frac{\lambda}{N}\]</div><div class="mv">subtract by \(d\sin\theta_m = m\lambda\)</div><div class="nt">Cancel \(d\sin\theta_m = m\lambda\) from both sides and take the positive sign.</div></div>
+<div class="st final" data-i="11"><div class="tex">\[\Delta\theta_m = \frac{\lambda}{Nd\cos\theta_m}\]</div><div class="mv">divide by \(d\cos\theta_m\)</div><div class="nt">Divide by d cos θ_m; the factor N was already in the denominator on the right, giving the half-width to the first zero, not the half-intensity width.</div></div></details></section>
+<section class="unit" id="u15"><h2>Unit 15 · Fresnel half-period zones and the zone plate</h2>
+<div class="card th"><h3>① Theory — points</h3><ul><li><b>Fresnel half-period zones</b>: wavefront divided into annular zones whose distances from P differ successively by \(\lambda/2\)\quad adjacent zones contribute in opposite phase.</li><li>Radius of n-th zone: \(r_n = \sqrt{n\lambda d}\) (plane wave, P at distance d)\quad \(r_n \propto \sqrt{n}\).</li><li><b>Area</b> of each zone \(\approx \pi\lambda d\): nearly equal, so amplitudes fall only slowly (obliquity).</li><li>Resultant amplitude: \(A = a_1 - a_2 + a_3 - \dots \approx \frac{a_1}{2}\) — the whole wavefront gives half the first zone's amplitude (Schuster's method).</li><li>Rectilinear propagation explained: \(\lambda\) small → zones tiny, obstacle blocks many zones.</li><li><b>Zone plate</b>: alternate zones blackened\quad transparent zones add in phase → bright focus.</li><li>Zone plate acts like a converging lens: \(\frac{1}{a} + \frac{1}{b} = \frac{n\lambda}{r_n^2}\); principal focal length \(f = \frac{r_n^2}{n\lambda} = \frac{r_1^2}{\lambda}\).</li><li>Unlike a lens it has multiple foci at \(f/3, f/5, \dots\)\quad focal length \(\propto 1/\lambda\) (violet focuses farther — opposite to a lens).</li><li>Circular aperture/disc: centre bright or dark depending on whether an odd or even number of zones is exposed\quad centre of a disc's shadow always bright (Poisson spot).</li></ul><div class="key"><div class="k">Must remember</div><div>\(r_n = \sqrt{n\lambda d}\)</div><div>\(A_n \approx \pi\lambda d\)</div><div>\(f = \frac{r_1^2}{\lambda}\)</div></div></div>
+<details class="card dv" open><summary><h3>② Key derivation</h3></summary><div class="t">Radius, equal area, and Schuster sum of Fresnel half-period zones</div><div class="legend">A normally incident plane wave meets wavefront WW′. O is its point nearest the on-axis observer P, with OP = d. Draw circles whose rim distances to P are d+nλ/2. Their radii are r_n, with r₀ = 0. Assume nλ ≪ d, so the zones have nearly equal areas A_n. Adjacent zone contributions alternate in phase; u_n denotes their positive amplitude magnitude. The Schuster sum below is an approximation using slowly decreasing u_n, not an exact equality of every neighbouring contribution.</div>
+<div class="figwrap"><div class="fgbox" data-fig="3" style="aspect-ratio:156/160"></div><div class="figctl"><button class="play">▶ Play</button><button class="prev">◀</button><button class="next">▶|</button><span class="fighint">tap any step to show it on the figure</span></div></div>
+<div class="phase"><b>Zone radius</b> — use right triangle POQ_n with d ≫ λ to find r_n ≈ √(nλd)</div>
+<div class="st" data-i="0"><div class="tex">\[r_n^2 = \left(d + \frac{n\lambda}{2}\right)^2 - d^2\]</div><div class="nt">In right triangle \(POQ_n\), the outer radius \(r_n\) of the \(n\)-th zone satisfies Pythagoras' theorem (Fig. 20.2).</div></div>
+<div class="st" data-i="1"><div class="tex">\[r_n^2 = n\lambda d + \frac{n^2\lambda^2}{4}\]</div><div class="mv">expand</div><div class="nt">Expand \((d + n\lambda/2)^2\) and cancel \(d^2 - d^2\).</div></div>
+<div class="st" data-i="2"><div class="tex">\[r_n\approx\sqrt{n\lambda d}\]</div><div class="mv">Neglect n²λ²/4 for d ≫ λ and take the square root (Eq. 20.1)</div><div class="nt">For nλ ≪ d, neglect n²λ²/4 compared with nλd, then take the positive root.</div></div>
+<div class="phase"><b>Zone area</b> — subtract πr_{n-1}² from πr_n² to show all zones have area πλd</div>
+<div class="st" data-i="3"><div class="tex">\[A_n = \pi r_n^2 - \pi r_{n-1}^2\]</div><div class="mv">Write area A_n of the n-th annular ring (Eq. 20.2)</div><div class="nt">The \(n\)-th half-period zone is the annular region between the \(n\)-th and \((n-1)\)-th circles.</div></div>
+<div class="st" data-i="4"><div class="tex">\[A_n\approx\pi\lambda d\]</div><div class="mv">substitute by \(r_n^2 = n\lambda d\)</div><div class="nt">Substitute r_n² ≈ nλd and r_(n-1)² ≈ (n-1)λd; the areas are approximately equal.</div></div>
+<div class="phase"><b>Alternating sum</b> — sum consecutive zone amplitudes with alternating signs</div>
+<div class="st" data-i="5"><div class="tex">\[u(P) = u_1 - u_2 + u_3 - u_4 + \dots\]</div><div class="mv">Sum zone amplitudes with alternating signs at P (Eq. 20.3)</div><div class="nt">Due to increased obliquity \(\chi\), amplitudes decrease slowly: \(u_1 > u_2 > u_3 > \dots\) (Eqs. 20.3–20.5).</div></div>
+<div class="phase"><b>Schuster sum</b> — pair half-amplitudes to show the whole wavefront gives u₁/2</div>
+<div class="st" data-i="6"><div class="tex">\[u(P) = \frac{u_1}{2} + \left(\frac{u_1}{2} - u_2 + \frac{u_3}{2}\right) + \left(\frac{u_3}{2} - u_4 + \frac{u_5}{2}\right) + \dots\]</div><div class="mv">Group terms by Schuster's method (Eq. 20.6)</div><div class="nt">Rewrite Eq. (20.3) by splitting odd terms into halves and bracketing around each even term (Eq. 20.6).</div></div>
+<div class="st final" data-i="7"><div class="tex">\[u(P)\approx\frac{u_1}{2}\]</div><div class="mv">Use u_n ≈ (u_{n-1} + u_{n+1})/2 and u_m → 0 (Eq. 20.12)</div><div class="nt">For a full wavefront the distant-zone contribution tends to zero; the nearly cancelling brackets leave approximately u₁/2.</div></div></details></section>
+<section class="unit" id="u16"><h2>Unit 16 · Fresnel diffraction by a straight edge</h2>
+<div class="card th"><h3>① Theory — points</h3><ul><li>Straight edge: a plane wave partly blocked by an opaque edge\quad observed at finite distance — Fresnel diffraction.</li><li>Use the dimensionless variable \(v = x\sqrt{\frac{2}{\lambda d}}\) (x = distance from geometrical shadow edge, d = edge-to-screen distance).</li><li><b>Fresnel integrals</b> \(C(v) = \int_0^v\cos\frac{\pi u^2}{2}du\), \(S(v) = \int_0^v\sin\frac{\pi u^2}{2}du\)\quad \(C(\infty) = S(\infty) = \tfrac12\).</li><li>Intensity: \(I = \frac{I_0}{2}\left\{\left[\tfrac12 - C(v_0)\right]^2 + \left[\tfrac12 - S(v_0)\right]^2\right\}\) (Ghatak's form).</li><li><b>Cornu spiral</b>: plot of \(S\) vs \(C\)\quad amplitude ∝ length of the chord from the point \(v_0\) to the spiral's end \((\tfrac12, \tfrac12)\).</li><li>At the geometrical shadow edge (\(v = 0\)): \(I = I_0/4\) (amplitude half).</li><li><b>Inside the shadow</b>: intensity falls off smoothly and monotonically — no fringes.</li><li><b>Illuminated side</b>: fringes of decreasing contrast\quad maximum ≈ \(1.37I_0\) just outside the edge\quad fringes get closer away from the edge.</li><li>Fringe positions scale with \(\sqrt{\lambda d}\).</li></ul><div class="key"><div class="k">Must remember</div><div>\(v = x\sqrt{\frac{2}{\lambda d}}\)</div><div>\(I(0) = \frac{I_0}{4}\)</div><div>\(I_{max} \approx 1.37 I_0\)</div></div></div>
+<details class="card dv" open><summary><h3>② Key derivation</h3></summary><div class="t">Straight-edge Fresnel diffraction field and intensity</div><div class="legend">A plane wave of wavelength λ meets an opaque half-plane; only η ≥ 0 is open. M has coordinates (ξ,η) in that plane. The screen is distance d away, and P is height y above the geometric shadow boundary O. Thus y > 0 is the lit side. Use k = 2π/λ and i² = -1. The complex field u(P) encodes amplitude and phase; intensity is proportional to |u(P)|². Do not confuse this field with the dimensionless integration variable u. Define u = √(2/(λd))ξ and v = √(2/(λd))(η-y); the lower limit v₀ is at η = 0.</div>
+<div class="figwrap"><div class="fgbox" data-fig="4" style="aspect-ratio:278/200"></div><div class="figctl"><button class="play">▶ Play</button><button class="prev">◀</button><button class="next">▶|</button><span class="fighint">tap any step to show it on the figure</span></div></div>
+<div class="phase"><b>Paraxial distance</b> — Pythagoras for r = MP, then the binomial approximation for d ≫ ξ, η − y</div>
+<div class="st" data-i="0"><div class="tex">\[r = \left[\xi^2 + (\eta - y)^2 + d^2\right]^{1/2}\]</div><div class="nt"><b>Pythagoras for \(r = MP\).</b> In the figure plane \(M\) is \(d\) across and \(\eta - y\) above \(P\) (right triangle \(MQP\)); \(\xi\) is the third, perpendicular offset, out of the page. So \(r^2 = \xi^2 + (\eta - y)^2 + d^2\).</div></div>
+<div class="st" data-i="1"><div class="tex">\[r = d\left[1 + \frac{\xi^2 + (\eta - y)^2}{d^2}\right]^{1/2}\]</div><div class="mv">Take \(d^2\) out of the bracket</div><div class="nt">Factor \(d^2\) out of the square root, so the bracket is \(1\) plus a small quantity \(x = [\xi^2 + (\eta - y)^2]/d^2\).</div></div>
+<div class="st" data-i="2"><div class="tex">\[(1 + x)^{1/2} \approx 1 + \frac{x}{2}\]</div><div class="mv">Binomial approximation for small \(x\)</div><div class="nt">For \(|x| \ll 1\), keep the first two terms of the binomial series. Here \(x \ll 1\) because \(d \gg \xi, \eta - y\).</div></div>
+<div class="st" data-i="3"><div class="tex">\[r\approx d+\frac{\xi^2+(\eta-y)^2}{2d}\]</div><div class="mv">substitute by \((1 + x)^{1/2} \approx 1 + \tfrac{x}{2}\)</div><div class="nt">Apply it and multiply out the \(d\) (Eq. 20.49).</div></div>
+<div class="st" data-i="4"><div class="tex">\[u(P)\approx-\frac{iA}{\lambda d}e^{ikd}\int_{-\infty}^{\infty}d\xi\int_0^{\infty}d\eta\;e^{ik[\xi^2+(\eta-y)^2]/(2d)}\]</div><div class="mv">Add the wavelets from the open half-plane</div><div class="nt">The Fresnel diffraction integral adds the phase contributions from the open half-plane; replace the slow amplitude factor 1/r by 1/d.</div></div>
+<div class="phase"><b>Fresnel variables</b> — define dimensionless variables u, v and lower limit v₀ at η = 0</div>
+<div class="st" data-i="5"><div class="tex">\[v = \sqrt{\frac{2}{\lambda d}}\,(\eta - y)\]</div><div class="mv">define by \(u = \sqrt{\frac{2}{\lambda d}}\,\xi\)</div><div class="nt">Dimensionless variables make the phase \(k[\xi^2 + (\eta - y)^2]/2d\) equal to \(\pi(u^2 + v^2)/2\) (Eq. 20.51).</div></div>
+<div class="st" data-i="6"><div class="tex">\[v_0 = -\sqrt{\frac{2}{\lambda d}}\,y\]</div><div class="mv">substitute by \(\eta = 0\)</div><div class="nt">At the straight edge \(\eta = 0\), the lower limit of \(v\) is \(v_0 = -\sqrt{2/(\lambda d)}\,y\) (Eqs. 20.51, 20.53).</div></div>
+<div class="st" data-i="7"><div class="tex">\[d\xi\,d\eta=\frac{\lambda d}{2}\,du\,dv\]</div><div class="mv">Change of variables in the area element</div><div class="nt">Each coordinate substitution contributes √(λd/2), giving this area factor.</div></div>
+<div class="st" data-i="8"><div class="tex">\[u(P) = -\frac{i}{2}u_0\int_{-\infty}^{+\infty}\exp\left(\frac{i\pi u^2}{2}\right)du\int_{v_0}^{\infty}\exp\left(\frac{i\pi v^2}{2}\right)dv\]</div><div class="mv">Write the Fresnel diffraction integral over u and v (Eq. 20.52)</div><div class="nt">Here \(u_0 = Ae^{ikd}\) is the unobstructed field at \(P\) (Eq. 20.52).</div></div>
+<div class="phase"><b>Evaluate integrals</b> — express the u and v integrals using C(∞)=S(∞)=1/2 and C(v₀), S(v₀)</div>
+<div class="st" data-i="9"><div class="tex">\[\int_{-\infty}^{+\infty}\exp\left(\frac{i\pi u^2}{2}\right)du = 1 + i\]</div><div class="mv">substitute by \(C(\infty) = S(\infty) = \frac{1}{2}\)</div><div class="nt">Since \(2[C(\infty) + iS(\infty)] = 2(1/2 + i/2) = 1 + i\), the \(u\)-integral equals \(1 + i\) (Eq. 20.54).</div></div>
+<div class="st" data-i="10"><div class="tex">\[u(P) = \frac{1 - i}{2}u_0\left\{\left[\frac{1}{2} - C(v_0)\right] + i\left[\frac{1}{2} - S(v_0)\right]\right\}\]</div><div class="mv">substitute by \(\int_{v_0}^{\infty}\exp\left(\frac{i\pi v^2}{2}\right)dv = \left[\frac{1}{2}-C(v_0)\right] + i\left[\frac{1}{2}-S(v_0)\right]\)</div><div class="nt">Substitute both integrals and use \(-\frac{i}{2}(1 + i) = \frac{1 - i}{2}\) (Eq. 20.56).</div></div>
+<div class="phase"><b>Intensity &amp; shadow edge</b> — take the squared modulus for I(P) and evaluate at y = 0</div>
+<div class="st" data-i="11"><div class="tex">\[I(P) = \frac{1}{2}I_0\left\{\left[\frac{1}{2} - C(v_0)\right]^2 + \left[\frac{1}{2} - S(v_0)\right]^2\right\}\]</div><div class="mv">Take the squared modulus |u(P)|² to obtain intensity I(P) (Eq. 20.58)</div><div class="nt">This gives the intensity at any point \(P\) in terms of the chord length \(PC\) on Cornu's spiral (Eq. 20.58).</div></div>
+<div class="st final" data-i="12"><div class="tex">\[I(0) = \frac{1}{4}I_0\]</div><div class="mv">evaluate by \(v_0 = 0,\,C(0) = S(0) = 0\)</div><div class="nt">Right on the edge of the geometrical shadow, the intensity is one-fourth of the unobstructed intensity \(I_0\) (Eq. 20.59).</div></div></details></section></main><footer>PHY5B08 Optics · revision · built from the study-match deck</footer>
+<script>/* ==========================================================================
+   Figure: animated SVG diagram for derivation cards (setup.figure)
+   --------------------------------------------------------------------------
+   A derivation card opts in by giving its setup a "figure". The JSXGraph
+   "steps" stay in the data as the fallback; they are not drawn when a figure exists.
+
+     "setup": { ..., "figure": {
+       "box":    [left, bottom, right, top],             figure units, y up
+       "points": { "O": { "at": [-230, 0], "label": "O", "side": "s" }, ... },
+       "parts":  { "OS": { "type": "line", "from": "O", "to": "S", "style": "ray", "arrow": true }, ... },
+       "draw":   [ { "parts": ["axis"], "caption": "Principal axis" }, ... ]
+     } }
+
+   and on any derivation step:
+
+     "figure": { "focus": ["triOSC", "alpha1"], "keep": ["OS"], "caption": "..." }
+
+   draw     the order in which the figure is drawn when the card starts. Its parts are the base figure.
+   focus    parts drawn in the accent colour for that step. Parts outside the base draw in.
+   keep     base parts left at full strength. While a step has focus or keep, the other base parts dim.
+            The points a focused part is built on are kept automatically.
+   caption  one line shown in the corner of the figure ("α_1" gives a subscript).
+
+   Part types: line (from, to, style, arrow), arc (center, r, from, to in degrees, hatch),
+   polygon (points), angle (at, from, to, r in px), dim (from, to, offset in px, arrow), text (at).
+   Styles: axis, mirror, ray, normal, guide.
+
+   Labels are placed once per layout, in screen pixels, at a fixed font size. Two labels that can be on
+   screen at the same time never overlap, labels keep clear of lines and points, and a label keeps its
+   place from step to step.
+   ========================================================================== */
+(function () {
+  var SM = window.SM = window.SM || {};
+  var NS = 'http://www.w3.org/2000/svg';
+  var REDUCE = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var DIRS = { e: [1, 0], ne: [1, -1], n: [0, -1], nw: [-1, -1], w: [-1, 0], sw: [-1, 1], s: [0, 1], se: [1, 1] };
+  var RING = ['e', 'ne', 'n', 'nw', 'w', 'sw', 's', 'se'];
+  var DRAW_MS = { line: 620, arc: 820, polygon: 900, angle: 560, dim: 620, point: 280, text: 300 };
+  var RANK = { point: 0, angle: 1, line: 2, dim: 3, arc: 4, polygon: 5, text: 6 };
+
+  function mk(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    if (attrs) Object.keys(attrs).forEach(function (k) { if (attrs[k] != null) e.setAttribute(k, attrs[k]); });
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function ease(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+  function clamp01(t) { return t < 0 ? 0 : t > 1 ? 1 : t; }
+  function f2(v) { return (Math.round(v * 100) / 100).toString(); }
+  function xy(p) { return f2(p[0]) + ' ' + f2(p[1]); }
+  function lerp(a, b, t) { return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]; }
+  function unit(a, b) { var dx = b[0] - a[0], dy = b[1] - a[1], l = Math.sqrt(dx * dx + dy * dy) || 1; return [dx / l, dy / l]; }
+
+  /* "α_1" -> α with a subscript 1, "x^2" -> superscript; "_{ab}" takes several characters */
+  var MARK = /([_^])(\{[^}]*\}|[^\s])/g;
+  function pieces(s) {
+    var out = [], last = 0, m;
+    s = String(s);
+    MARK.lastIndex = 0;
+    while ((m = MARK.exec(s))) {
+      if (m.index > last) out.push({ t: s.slice(last, m.index) });
+      out.push({ t: m[2].replace(/^\{|\}$/g, ''), k: m[1] === '_' ? 'sub' : 'sup' });
+      last = MARK.lastIndex;
+    }
+    if (last < s.length) out.push({ t: s.slice(last) });
+    return out;
+  }
+  function svgText(el, s) {
+    el.textContent = '';
+    var shift = 0;
+    pieces(s).forEach(function (p) {
+      var ts = mk('tspan', null, el);
+      var want = p.k === 'sub' ? 0.32 : p.k === 'sup' ? -0.42 : 0;
+      if (want !== shift) ts.setAttribute('dy', (want - shift) + 'em');
+      shift = want;
+      if (p.k) ts.setAttribute('class', 'fg-' + p.k);
+      ts.textContent = p.t;
+    });
+  }
+  function htmlText(s) {
+    return pieces(s).map(function (p) {
+      var t = SM.esc ? SM.esc(p.t) : p.t;
+      return p.k ? '<' + p.k + '>' + t + '</' + p.k + '>' : t;
+    }).join('');
+  }
+
+  /* ---------- box and segment tests for label placement ---------- */
+  function overlap(a, b) {
+    var w = Math.min(a.x1, b.x1) - Math.max(a.x0, b.x0), h = Math.min(a.y1, b.y1) - Math.max(a.y0, b.y0);
+    return w > 0 && h > 0 ? w * h : 0;
+  }
+  function segHitsBox(a, b, r) {
+    // Liang-Barsky clip of segment ab against box r
+    var x0 = a[0], y0 = a[1], dx = b[0] - x0, dy = b[1] - y0, t0 = 0, t1 = 1;
+    var p = [-dx, dx, -dy, dy], q = [x0 - r.x0, r.x1 - x0, y0 - r.y0, r.y1 - y0];
+    for (var i = 0; i < 4; i++) {
+      if (p[i] === 0) { if (q[i] < 0) return false; continue; }
+      var t = q[i] / p[i];
+      if (p[i] < 0) { if (t > t1) return false; if (t > t0) t0 = t; }
+      else { if (t < t0) return false; if (t < t1) t1 = t; }
+    }
+    return t0 <= t1;
+  }
+  function dotHitsBox(c, rad, r) {
+    var nx = Math.max(r.x0, Math.min(c[0], r.x1)), ny = Math.max(r.y0, Math.min(c[1], r.y1));
+    return (nx - c[0]) * (nx - c[0]) + (ny - c[1]) * (ny - c[1]) < rad * rad;
+  }
+
+  /* ======================================================================== */
+  function mount(host, spec, steps, opts) {
+    opts = opts || {};
+    host.innerHTML = '';
+    host.classList.add('fg-host');
+    if (opts.player) host.classList.add('fg-player');
+    var svg = mk('svg', { class: 'fg-svg', 'aria-hidden': 'true', focusable: 'false' }, host);
+    var layers = {
+      fill: mk('g', { class: 'fg-l-fill' }, svg), line: mk('g', { class: 'fg-l-line' }, svg),
+      dot: mk('g', { class: 'fg-l-dot' }, svg), text: mk('g', { class: 'fg-l-text' }, svg)
+    };
+    var cap = document.createElement('div');
+    cap.className = 'fg-cap';
+    cap.setAttribute('aria-live', 'polite');
+    cap.setAttribute('data-no-glossary', '');   // the glossary must not turn caption words into links
+    host.appendChild(cap);
+
+    var pts = {};
+    Object.keys(spec.points || {}).forEach(function (k) {
+      var p = spec.points[k];
+      pts[k] = Array.isArray(p) ? { at: p } : p;
+    });
+    function P(ref) { return Array.isArray(ref) ? ref : (pts[ref] ? pts[ref].at : [0, 0]); }
+
+    /* parts: one per point, then the named shapes */
+    var parts = {}, names = [];
+    function addPart(name, type, def) { parts[name] = { name: name, type: type, def: def, p: 0, mode: 'off', w: {} }; names.push(name); }
+    Object.keys(pts).forEach(function (k) { addPart(k, 'point', pts[k]); });
+    Object.keys(spec.parts || {}).forEach(function (k) { if (!parts[k]) addPart(k, spec.parts[k].type, spec.parts[k]); });
+
+    function wrap(pr, layer) {
+      if (!pr.w[layer]) pr.w[layer] = mk('g', { class: 'fg-part fg-' + pr.type + (pr.def.style ? ' fg-' + pr.def.style : '') + ' is-off' }, layers[layer]);
+      return pr.w[layer];
+    }
+    names.forEach(function (n) {
+      var pr = parts[n], d = pr.def, e = pr.el = {};
+      switch (pr.type) {
+        case 'point':
+          if (d.dot !== false) e.dot = mk('circle', { class: 'fg-dot', r: 0 }, wrap(pr, 'dot'));
+          break;
+        case 'line':
+          e.path = mk('path', { class: 'fg-stroke' }, wrap(pr, 'line'));
+          if (d.arrow) e.arrow = mk('path', { class: 'fg-head' }, wrap(pr, 'line'));
+          if (d.style === 'ray') e.glow = mk('circle', { class: 'fg-glow', r: 4.5 }, wrap(pr, 'line'));   // light: a bright tip travels along the ray as it draws
+          break;
+        case 'arc':
+          e.path = mk('path', { class: 'fg-stroke' }, wrap(pr, 'line'));
+          if (d.hatch) e.hatch = mk('path', { class: 'fg-hatch' }, wrap(pr, 'line'));
+          break;
+        case 'polygon':
+          e.fill = mk('path', { class: 'fg-fill' }, wrap(pr, 'fill'));
+          e.path = mk('path', { class: 'fg-stroke' }, wrap(pr, 'line'));
+          break;
+        case 'angle':
+          e.fill = mk('path', { class: 'fg-fill' }, wrap(pr, 'fill'));
+          e.path = mk('path', { class: 'fg-stroke' }, wrap(pr, 'line'));
+          break;
+        case 'dim':
+          e.ext = mk('path', { class: 'fg-ext' }, wrap(pr, 'line'));
+          e.path = mk('path', { class: 'fg-stroke' }, wrap(pr, 'line'));
+          e.arrow = mk('path', { class: 'fg-head' }, wrap(pr, 'line'));
+          break;
+      }
+      var text = pr.type === 'point' ? (d.label === false ? '' : (d.label || n)) : (d.label || d.text || '');
+      if (text) {
+        // a length's label sits on its line: a plate behind it hides the line in the gaps between words
+        if (pr.type === 'dim') e.plate = mk('rect', { class: 'fg-plate', rx: 4 }, wrap(pr, 'text'));
+        e.label = mk('text', { class: 'fg-label' + (d.labelClass ? ' ' + d.labelClass : ''), 'text-anchor': 'middle', 'dominant-baseline': 'central' }, wrap(pr, 'text'));
+        svgText(e.label, text);
+      }
+    });
+
+    /* base figure = everything the draw list draws; one state per step */
+    var base = {};
+    (spec.draw || []).forEach(function (st) { (st.parts || []).forEach(function (n) { if (parts[n]) base[n] = 1; }); });
+    function refsOf(pr) {
+      var d = pr.def, out = [];
+      ['from', 'to', 'at', 'center'].forEach(function (k) { if (typeof d[k] === 'string') out.push(d[k]); });
+      (d.points || []).forEach(function (r) { if (typeof r === 'string') out.push(r); });
+      return out;
+    }
+    function stateFor(si) {
+      var f = (si != null && steps[si] && steps[si].figure) || null;
+      var focus = (f && f.focus) || [], keep = ((f && f.keep) || []).slice();
+      focus.forEach(function (n) { if (parts[n]) refsOf(parts[n]).forEach(function (r) { if (base[r] && keep.indexOf(r) < 0) keep.push(r); }); });
+      var dimOthers = focus.length > 0 || keep.length > 0, mode = {};
+      names.forEach(function (n) {
+        mode[n] = focus.indexOf(n) >= 0 ? 'focus' : keep.indexOf(n) >= 0 ? 'on' : base[n] ? (dimOthers ? 'dim' : 'on') : 'off';
+      });
+      return { mode: mode, order: focus, caption: (f && f.caption) || '' };
+    }
+    // which parts can be on screen together: labels only have to avoid what they can be seen with
+    var states = [stateFor(null)];
+    steps.forEach(function (st, i) { if (st && st.figure) states.push(stateFor(i)); });
+    names.forEach(function (n) { parts[n].seen = states.map(function (s) { return s.mode[n] !== 'off'; }); });
+    function together(a, b) {
+      for (var i = 0; i < a.seen.length; i++) if (a.seen[i] && b.seen[i]) return true;
+      return false;
+    }
+
+    /* ---------- layout: figure units -> screen pixels ---------- */
+    var T = null, W = 0, H = 0;
+    // captions sit in the top-left corner: the figure keeps clear of that strip
+    var hasCaptions = (spec.draw || []).some(function (s) { return s.caption; }) ||
+      steps.some(function (s) { return s && s.figure && s.figure.caption; });
+    function geometry(pr) {
+      var d = pr.def, g = pr.g = {}, segs = pr.segs = [];
+      switch (pr.type) {
+        case 'point': g.c = T(P(n0(pr))); break;
+        case 'text': g.c = T(P(d.at)); break;
+        case 'line': g.a = T(P(d.from)); g.b = T(P(d.to)); segs.push([g.a, g.b]); break;
+        case 'arc': {
+          var c = T(P(d.center)), R = d.r * T.s, a0 = d.from * Math.PI / 180, a1 = d.to * Math.PI / 180, list = [];
+          for (var i = 0; i <= 48; i++) { var t = a0 + (a1 - a0) * i / 48; list.push([c[0] + R * Math.cos(t), c[1] - R * Math.sin(t)]); }
+          g.list = list; g.c = c; g.R = R;
+          for (var j = 0; j < list.length - 1; j++) segs.push([list[j], list[j + 1]]);
+          if (d.hatch) {   // the hatching behind the mirror is in the way of labels as well
+            var hs = d.hatch === 'in' ? -1 : 1, outer = list.map(function (q) { var u = unit(c, q); return [q[0] + hs * u[0] * 8, q[1] + hs * u[1] * 8]; });
+            for (var j2 = 0; j2 < outer.length - 1; j2 += 2) segs.push([outer[j2], outer[Math.min(j2 + 2, outer.length - 1)]]);
+          }
+          break;
+        }
+        case 'polygon': {
+          g.list = (d.points || []).map(function (r) { return T(P(r)); });
+          var cx = 0, cy = 0;
+          g.list.forEach(function (q) { cx += q[0]; cy += q[1]; });
+          g.c = [cx / g.list.length, cy / g.list.length];
+          for (var k = 0; k < g.list.length; k++) segs.push([g.list[k], g.list[(k + 1) % g.list.length]]);
+          break;
+        }
+        case 'angle': {
+          var v = T(P(d.at)), ua = unit(v, T(P(d.from))), ub = unit(v, T(P(d.to)));
+          var ta = Math.atan2(ua[1], ua[0]), span = Math.atan2(ub[1], ub[0]) - ta;
+          while (span > Math.PI) span -= 2 * Math.PI;
+          while (span <= -Math.PI) span += 2 * Math.PI;
+          g.v = v; g.ta = ta; g.span = span; g.r = d.r || 22;
+          var steps2 = 16, prev = null;
+          for (var s2 = 0; s2 <= steps2; s2++) {
+            var tt = ta + span * s2 / steps2, q2 = [v[0] + g.r * Math.cos(tt), v[1] + g.r * Math.sin(tt)];
+            if (prev) segs.push([prev, q2]);
+            prev = q2;
+          }
+          break;
+        }
+        case 'dim': {
+          var off = Array.isArray(d.offset) ? d.offset : [0, d.offset || 0];
+          g.a0 = T(P(d.from)); g.b0 = T(P(d.to));
+          g.a = [g.a0[0] + off[0], g.a0[1] + off[1]]; g.b = [g.b0[0] + off[0], g.b0[1] + off[1]];
+          segs.push([g.a, g.b]);
+          break;
+        }
+      }
+    }
+    function n0(pr) { return pr.name; }
+
+    function measure(el, fs) {
+      var bb = null;
+      try { bb = el.getBBox(); } catch (e) { bb = null; }
+      var txt = el.textContent || '';
+      if (!bb || bb.width < 0.5) bb = { width: txt.length * fs * 0.62, height: fs * 1.15 };
+      return { w: bb.width + 3, h: Math.max(bb.height, fs) + 1 };
+    }
+
+    function candidates(pr, w, h) {
+      var d = pr.def, g = pr.g, out = [];
+      function push(c) { out.push(c); }
+      if (pr.type === 'point') {
+        var first = RING.indexOf(d.side || 's'), gap = 6;
+        if (first < 0) first = 6;
+        [0, 1, 2].forEach(function (lvl) {
+          var order = [first];
+          for (var k = 1; k <= 4; k++) { order.push((first + k) % 8); order.push((first - k + 8) % 8); }
+          order.forEach(function (ix) {
+            var dv = DIRS[RING[ix]], gg = gap + lvl * 5;
+            push([g.c[0] + dv[0] * (w / 2 + gg), g.c[1] + dv[1] * (h / 2 + gg)]);
+          });
+        });
+      } else if (pr.type === 'angle') {
+        var mid = g.ta + g.span / 2, ux = Math.cos(mid), uy = Math.sin(mid), ext = Math.abs(ux) * w / 2 + Math.abs(uy) * h / 2;
+        // along the bisector, just outside the arc first; every step further out costs more (see placeLabels)
+        [0, -0.2, 0.2].forEach(function (tilt) {
+          for (var k2 = 0; k2 < 9; k2++) {
+            var m2 = mid + tilt * g.span, dd = g.r + 3 + ext + k2 * 4;
+            out.push({ c: [g.v[0] + Math.cos(m2) * dd, g.v[1] + Math.sin(m2) * dd], pen: k2 * k2 * 7 + (tilt ? 40 : 0) });
+          }
+        });
+      } else if (pr.type === 'line' || pr.type === 'dim') {
+        var u = unit(g.a, g.b), nx = -u[1], ny = u[0], e2 = Math.abs(nx) * w / 2 + Math.abs(ny) * h / 2 + 4;
+        var side = d.labelSide === 'left' ? -1 : 1;
+        [0.5, 0.4, 0.6, 0.3, 0.7, 0.2, 0.8].forEach(function (t) {
+          var q = lerp(g.a, g.b, t);
+          if (pr.type === 'dim') push(q);
+          push([q[0] + side * nx * e2, q[1] + side * ny * e2]);
+          push([q[0] - side * nx * e2, q[1] - side * ny * e2]);
+        });
+      } else if (pr.type === 'polygon' || pr.type === 'text' || pr.type === 'arc') {
+        var c = pr.type === 'arc' ? g.list[0] : (g.c || [0, 0]);
+        if (d.labelAt) c = T(d.labelAt);
+        push(c);
+        [6, 12, 18].forEach(function (r) { RING.forEach(function (k) { var dv = DIRS[k]; push([c[0] + dv[0] * r, c[1] + dv[1] * r]); }); });
+      }
+      return out;
+    }
+
+    function placeLabels() {
+      var fs = parseFloat(getComputedStyle(svg).fontSize) || 14;
+      var list = names.map(function (n) { return parts[n]; }).filter(function (pr) { return pr.el.label; });
+      list.forEach(function (pr) { var m = measure(pr.el.label, fs); pr.lw = m.w; pr.lh = m.h; });
+      list.sort(function (a, b) { return (RANK[a.type] - RANK[b.type]) || (names.indexOf(a.name) - names.indexOf(b.name)); });
+      var placed = [];
+      list.forEach(function (pr) {
+        var w = pr.lw, h = pr.lh, best = null, bc = Infinity;
+        if (pr.def.labelOffset) {
+          var anc = pr.g.c || pr.g.v || lerp(pr.g.a, pr.g.b, 0.5);
+          best = [anc[0] + pr.def.labelOffset[0], anc[1] + pr.def.labelOffset[1]];
+        } else candidates(pr, w, h).forEach(function (c, i) {
+          var pen = i * 4;
+          if (!Array.isArray(c)) { pen = c.pen; c = c.c; }
+          var box = { x0: c[0] - w / 2, y0: c[1] - h / 2, x1: c[0] + w / 2, y1: c[1] + h / 2 };
+          var cost = pen;
+          if (box.x0 < 2 || box.y0 < 2 || box.x1 > W - 2 || box.y1 > H - 2) cost += 6000;
+          if (opts.avoidTop && box.y0 < opts.avoidTop - 2) cost += 3000;   // the caption strip
+          placed.forEach(function (q) {
+            if (!together(pr, q)) return;
+            var ov = overlap(box, q.box);
+            if (ov > 0) cost += 4000 + ov * 30;
+          });
+          names.forEach(function (qn) {
+            var q = parts[qn];
+            if (!together(pr, q)) return;
+            if (q.type === 'point') {
+              if (q.el.dot && dotHitsBox(q.g.c, (q.def.size || 3.6) + 1.5, box)) cost += 2500;
+              return;
+            }
+            if (q === pr && pr.type === 'dim') return;   // a length's label sits on its own line, which breaks round it
+            var hits = 0, grown = { x0: box.x0 - 1.5, y0: box.y0 - 1.5, x1: box.x1 + 1.5, y1: box.y1 + 1.5 };
+            (q.segs || []).forEach(function (sg) { if (segHitsBox(sg[0], sg[1], grown)) hits++; });
+            if (hits) cost += (q.type === 'polygon' ? 150 : 500) + hits * 20;
+          });
+          if (cost < bc) { bc = cost; best = c; }
+        });
+        pr.box = { x0: best[0] - w / 2, y0: best[1] - h / 2, x1: best[0] + w / 2, y1: best[1] + h / 2 };
+        pr.el.label.setAttribute('x', f2(best[0]));
+        pr.el.label.setAttribute('y', f2(best[1]));
+        if (pr.el.plate) {
+          pr.el.plate.setAttribute('x', f2(pr.box.x0 - 2)); pr.el.plate.setAttribute('y', f2(pr.box.y0));
+          pr.el.plate.setAttribute('width', f2(w + 4)); pr.el.plate.setAttribute('height', f2(h));
+        }
+        placed.push(pr);
+      });
+    }
+
+    function layout() {
+      W = host.clientWidth; H = host.clientHeight;
+      if (W < 40 || H < 40) return false;
+      svg.setAttribute('width', W); svg.setAttribute('height', H); svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+      var cs = getComputedStyle(host), pad = parseFloat(cs.getPropertyValue('--fg-pad')) || 10;
+      var padTop = hasCaptions ? (parseFloat(cs.getPropertyValue('--fg-pad-top')) || pad) : pad;
+      var b = spec.box || [0, 0, 100, 100], bw = b[2] - b[0], bh = b[3] - b[1];
+      var s = Math.min((W - 2 * pad) / bw, (H - pad - padTop) / bh);
+      var ox = (W - s * bw) / 2 - s * b[0], oy = padTop + ((H - pad - padTop) - s * bh) / 2 + s * b[3];
+      T = function (p) { return [ox + s * p[0], oy - s * p[1]]; };
+      T.s = s;
+      opts.avoidTop = hasCaptions ? padTop : 0;
+      names.forEach(function (n) { geometry(parts[n]); });
+      placeLabels();
+      names.forEach(function (n) { render(parts[n]); });
+      return true;
+    }
+
+    /* ---------- draw one part at progress p (0 = not drawn, 1 = complete) ---------- */
+    function head(tip, u, size) {
+      var nx = -u[1], ny = u[0], bx = tip[0] - u[0] * size, by = tip[1] - u[1] * size;
+      return 'M' + xy(tip) + 'L' + xy([bx + nx * size * 0.5, by + ny * size * 0.5]) + 'L' + xy([bx - nx * size * 0.5, by - ny * size * 0.5]) + 'Z';
+    }
+    function polyD(list, p, closed) {
+      if (!list.length || p <= 0) return '';
+      var seg = [], total = 0, i;
+      var L = closed ? list.concat([list[0]]) : list;
+      for (i = 0; i < L.length - 1; i++) { var l = Math.hypot(L[i + 1][0] - L[i][0], L[i + 1][1] - L[i][1]); seg.push(l); total += l; }
+      var left = total * p, d = 'M' + xy(L[0]);
+      for (i = 0; i < seg.length; i++) {
+        if (left >= seg[i]) { d += 'L' + xy(L[i + 1]); left -= seg[i]; }
+        else { d += 'L' + xy(lerp(L[i], L[i + 1], seg[i] ? left / seg[i] : 0)); break; }
+      }
+      if (closed && p >= 1) d += 'Z';
+      return d;
+    }
+    function render(pr) {
+      if (!pr.g) return;
+      var e = pr.el, g = pr.g, d = pr.def, p = pr.p, labelIn = clamp01((p - 0.62) / 0.38);
+      switch (pr.type) {
+        case 'point':
+          if (e.dot) { e.dot.setAttribute('cx', f2(g.c[0])); e.dot.setAttribute('cy', f2(g.c[1])); var k = clamp01(p * 1.4); e.dot.setAttribute('r', f2((d.size || 3.6) * (k < 1 ? k * (1.25 - 0.25 * k) : 1))); }
+          labelIn = clamp01((p - 0.3) / 0.7);
+          break;
+        case 'line': {
+          var end = lerp(g.a, g.b, p);
+          e.path.setAttribute('d', p > 0 ? 'M' + xy(g.a) + 'L' + xy(end) : '');
+          if (e.glow) {
+            e.glow.setAttribute('cx', f2(end[0])); e.glow.setAttribute('cy', f2(end[1]));
+            e.glow.style.opacity = p > 0 && p < 1 ? Math.min(1, p / 0.05, (1 - p) / 0.06) : 0;
+          }
+          if (e.arrow) {
+            var at = typeof d.arrow === 'number' ? d.arrow : 0.56;
+            e.arrow.setAttribute('d', head(lerp(g.a, g.b, at), unit(g.a, g.b), 8));
+            e.arrow.style.opacity = clamp01((p - at) / 0.08 + 1);   // shows once the line has reached it
+          }
+          break;
+        }
+        case 'arc':
+          e.path.setAttribute('d', polyD(g.list, p, false));
+          if (e.hatch) {
+            var hd = '', n = 13, dir = d.hatch === 'in' ? -1 : 1;
+            for (var i = 1; i < n; i++) {
+              var q = g.list[Math.round(i * (g.list.length - 1) / n)], u = unit(g.c, q);
+              var tip = [q[0] + dir * u[0] * 7, q[1] + dir * u[1] * 7];
+              hd += 'M' + xy(q) + 'L' + xy([tip[0] + u[1] * 3, tip[1] - u[0] * 3]);
+            }
+            e.hatch.setAttribute('d', hd);
+            e.hatch.style.opacity = clamp01((p - 0.5) / 0.5);
+          }
+          break;
+        case 'polygon':
+          e.path.setAttribute('d', polyD(g.list, clamp01(p / 0.78), true));
+          e.fill.setAttribute('d', 'M' + g.list.map(xy).join('L') + 'Z');
+          e.fill.style.opacity = clamp01((p - 0.55) / 0.45);
+          labelIn = clamp01((p - 0.7) / 0.3);
+          break;
+        case 'angle': {
+          var sw = g.span * p, a0 = [g.v[0] + g.r * Math.cos(g.ta), g.v[1] + g.r * Math.sin(g.ta)];
+          var a1 = [g.v[0] + g.r * Math.cos(g.ta + sw), g.v[1] + g.r * Math.sin(g.ta + sw)];
+          var flag = Math.abs(sw) > Math.PI ? 1 : 0, sweep = sw > 0 ? 1 : 0;
+          var arcD = 'M' + xy(a0) + 'A' + f2(g.r) + ' ' + f2(g.r) + ' 0 ' + flag + ' ' + sweep + ' ' + xy(a1);
+          e.path.setAttribute('d', p > 0 ? arcD : '');
+          e.fill.setAttribute('d', p > 0 ? 'M' + xy(g.v) + 'L' + xy(a0) + arcD.replace(/^M[^A]*/, '') + 'Z' : '');
+          break;
+        }
+        case 'dim': {
+          var tipD = lerp(g.a, g.b, p);
+          e.path.setAttribute('d', p > 0 ? 'M' + xy(g.a) + 'L' + xy(tipD) : '');
+          // short end ticks across the length line (long extension lines would cut through the point labels)
+          var ud = unit(g.a, g.b), tx = -ud[1] * 5, ty = ud[0] * 5, extD = '';
+          [g.a, g.b].forEach(function (q, idx) {
+            if (idx === 1 && p < 0.98) return;
+            extD += 'M' + xy([q[0] - tx, q[1] - ty]) + 'L' + xy([q[0] + tx, q[1] + ty]);
+          });
+          e.ext.setAttribute('d', p > 0 ? extD : '');
+          e.arrow.setAttribute('d', p > 0.05 ? head(tipD, unit(g.a, g.b), 7) : '');
+          if (d.arrow === 'both' && p >= 1) e.arrow.setAttribute('d', head(g.b, unit(g.a, g.b), 7) + head(g.a, unit(g.b, g.a), 7));
+          break;
+        }
+      }
+      if (e.label) e.label.style.opacity = labelIn;
+      if (e.plate) e.plate.style.opacity = labelIn;
+    }
+
+    /* ---------- smooth progress tweens ---------- */
+    var tw = [], raf = 0;
+    function frame(now) {
+      raf = 0;
+      tw = tw.filter(function (t) {
+        if (now < t.t0) return true;
+        var k = clamp01((now - t.t0) / t.dur);
+        t.pr.p = t.from + (t.to - t.from) * ease(k);
+        render(t.pr);
+        return k < 1;
+      });
+      if (tw.length) raf = requestAnimationFrame(frame);
+    }
+    function tween(pr, to, dur, delay) {
+      tw = tw.filter(function (t) { return t.pr !== pr; });
+      if (REDUCE || !dur) { pr.p = to; render(pr); return; }
+      tw.push({ pr: pr, from: pr.p, to: to, t0: performance.now() + (delay || 0), dur: dur });
+      if (!raf) raf = requestAnimationFrame(frame);
+    }
+    function stopTweens(finish) {
+      tw.forEach(function (t) { if (finish) { t.pr.p = t.to; render(t.pr); } });
+      tw = [];
+      if (raf) { cancelAnimationFrame(raf); raf = 0; }
+    }
+
+    function setMode(pr, m) {
+      pr.mode = m;
+      Object.keys(pr.w).forEach(function (k) {
+        var c = pr.w[k].classList;
+        c.toggle('is-off', m === 'off'); c.toggle('is-on', m === 'on'); c.toggle('is-dim', m === 'dim'); c.toggle('is-focus', m === 'focus');
+      });
+    }
+    function instantly(fn) {
+      host.classList.add('fg-instant');
+      fn();
+      void host.offsetWidth;
+      host.classList.remove('fg-instant');
+    }
+    var capT = null;
+    function setCaption(text, instant) {
+      clearTimeout(capT);
+      if (!text) { cap.classList.remove('is-on'); return; }
+      var html = htmlText(text);
+      if (cap.classList.contains('is-on') && cap._html === html) return;
+      cap._html = html;
+      if (instant || REDUCE || !cap.classList.contains('is-on')) { cap.innerHTML = html; cap.classList.add('is-on'); return; }
+      cap.classList.add('is-swap');
+      capT = setTimeout(function () { cap.innerHTML = html; cap.classList.remove('is-swap'); }, 180);
+    }
+
+    /* ---------- apply a step: highlight, draw in what is new, dim the rest ---------- */
+    var cur = null, introOn = false, introTimers = [], pending = null, introEnd = 0;
+    function apply(si, animate) {
+      var st = stateFor(si);
+      cur = si;
+      var n = 0;
+      var run = function () {
+        names.forEach(function (name) {
+          var pr = parts[name], m = st.mode[name], was = pr.mode;
+          if (m === was) return;
+          if (was === 'off') {
+            var k = st.order.indexOf(name);
+            if (animate) { pr.p = 0; render(pr); tween(pr, 1, DRAW_MS[pr.type], 120 + (k >= 0 ? k : n++) * 240); }
+            else { stopTweensFor(pr); pr.p = 1; render(pr); }
+          }
+          setMode(pr, m);
+        });
+      };
+      if (animate) run(); else instantly(run);
+      setCaption(st.caption, !animate);
+    }
+    function stopTweensFor(pr) { tw = tw.filter(function (t) { return t.pr !== pr; }); }
+
+    function clearIntro() { introTimers.forEach(clearTimeout); introTimers = []; }
+    function intro() {
+      if (!T && !layout()) { pending = cur; return; }
+      clearIntro(); stopTweens(false);
+      introOn = true; pending = null;
+      instantly(function () { names.forEach(function (n) { setMode(parts[n], 'off'); parts[n].p = 0; render(parts[n]); }); });
+      setCaption('', true);
+      if (REDUCE) { finishIntro(); return; }
+      var t = 200;
+      (spec.draw || []).forEach(function (stage) {
+        var list = (stage.parts || []).filter(function (n) { return parts[n]; }), longest = 0;
+        introTimers.push(setTimeout(function () {
+          list.forEach(function (n, j) {
+            var pr = parts[n];
+            setMode(pr, 'on'); pr.p = 0; render(pr);
+            tween(pr, 1, DRAW_MS[pr.type], j * 140);
+          });
+          if (stage.caption) setCaption(stage.caption);
+        }, t));
+        list.forEach(function (n, j) { longest = Math.max(longest, DRAW_MS[parts[n].type] + j * 140); });
+        t += Math.max(560, longest * 0.8) + (stage.caption ? 240 : 0);
+      });
+      introTimers.push(setTimeout(function () { finishIntro(); }, t + 380));
+      introEnd = performance.now() + t + 380;
+    }
+    function finishIntro(fast) {
+      clearIntro();
+      var was = introOn;
+      introOn = false;
+      names.forEach(function (n) {
+        var pr = parts[n];
+        if (!base[n]) return;
+        if (pr.mode === 'off') setMode(pr, 'on');
+        if (pr.p < 1) tween(pr, 1, fast ? 220 : DRAW_MS[pr.type]);
+      });
+      if (!was) return;
+      if (pending != null) { var s = pending; pending = null; apply(s, true); }
+      else if (opts.player) apply(cur, true);
+      else setCaption('');
+    }
+
+    /* the derivation moves to step si. The first call after the intro waits for the intro to end;
+       a later call (Next pressed during the intro) finishes the intro at once. */
+    var firstWait = false;
+    function step(si, instant) {
+      if (!T && !layout()) { cur = si; pending = si; return; }
+      if (instant) { clearIntro(); introOn = false; stopTweens(true); apply(si, false); return; }
+      if (introOn) {
+        if (!firstWait || pending === si) { firstWait = true; pending = si; return; }
+        pending = si;
+        finishIntro(true);
+        return;
+      }
+      if (si === cur) return;
+      apply(si, true);
+    }
+
+    var api = {
+      layout: function () {
+        var was = !!T;
+        if (!layout()) return;
+        if (!was) {
+          if (pending != null) { var s = pending; pending = null; apply(s, false); }
+          else if (!opts.player) { if (opts.autoIntro) watchIntro(); else apply(null, false); }
+        }
+      },
+      intro: function () { firstWait = false; intro(); },
+      introLeft: function () { return introOn ? Math.max(0, introEnd - performance.now()) : 0; },   // ms of the drawing intro still to run
+      step: step,
+      isFigure: true
+    };
+
+    /* the front figure draws itself the first time it comes into view */
+    var watched = false;
+    function watchIntro() {
+      if (watched) return;
+      watched = true;
+      if (!('IntersectionObserver' in window)) { apply(null, false); return; }
+      var io = new IntersectionObserver(function (en) {
+        en.forEach(function (x) {
+          if (!x.isIntersecting || x.intersectionRatio < 0.55) return;
+          io.disconnect();
+          intro();
+        });
+      }, { threshold: [0, 0.55, 0.8] });
+      io.observe(host);
+    }
+
+    api.layout();
+    return api;
+  }
+
+  SM.Figure = { mount: mount, has: function (diag) { return !!(diag && diag.figure && diag.figure.parts); } };
+})();
+</script><script>var FIGS = [{"figure": {"box": [-70, -92, 186, 92], "points": {"A₁": {"at": [0, 45], "side": "w"}, "A₂": {"at": [0, 0], "side": "sw"}, "Aₙ": {"at": [0, -45], "side": "w"}, "P": {"at": [150, 35.62], "side": "e"}, "O": {"at": [150, 0], "side": "e"}, "K": {"at": [16.72, 7.44], "side": "se", "size": 2.6}, "Lc": {"at": [70, 0], "label": false, "size": 2.4}, "T": {"at": [36.54, 16.27], "label": false, "dot": false}}, "parts": {"barTop": {"type": "line", "from": [0, 82], "to": [0, 52], "style": "mirror"}, "barBot": {"type": "line", "from": [0, -52], "to": [0, -82], "style": "mirror"}, "lens": {"type": "polygon", "points": [[76.0, 0.0], [75.85, 18.69], [75.41, 36.45], [74.69, 52.37], [73.74, 65.67], [72.6, 75.68], [71.34, 81.89], [70.0, 84.0], [68.66, 81.89], [67.4, 75.68], [66.26, 65.67], [65.31, 52.37], [64.59, 36.45], [64.15, 18.69], [64.0, 0.0], [64.15, -18.69], [64.59, -36.45], [65.31, -52.37], [66.26, -65.67], [67.4, -75.68], [68.66, -81.89], [70.0, -84.0], [71.34, -81.89], [72.6, -75.68], [73.74, -65.67], [74.69, -52.37], [75.41, -36.45], [75.85, -18.69]], "style": "glass"}, "screen": {"type": "line", "from": [150, 84], "to": [150, -40], "style": "axis"}, "axis": {"type": "line", "from": [-64, 0], "to": "O", "style": "guide"}, "bdim": {"type": "dim", "from": "Aₙ", "to": "A₁", "offset": [-26, 0], "arrow": "both", "label": "b"}, "Ddim": {"type": "dim", "from": "A₂", "to": "A₁", "offset": [-10, 0], "arrow": "both", "label": "Δ"}, "theta": {"type": "angle", "at": "A₂", "from": "O", "to": "T", "r": 26, "label": "θ"}, "tri": {"type": "polygon", "points": ["A₁", "A₂", "K"]}, "thA1": {"type": "angle", "at": "A₁", "from": "A₂", "to": "K", "r": 16, "label": "θ"}, "A2K": {"type": "line", "from": "A₂", "to": "K", "style": "guide", "label": "Δ sin θ", "labelSide": "left"}, "A1K": {"type": "line", "from": "A₁", "to": "K", "style": "guide"}, "rightK": {"type": "polygon", "points": [[16.72, 7.44], [13.07, 5.82], [11.44, 9.47], [15.09, 11.1]]}, "in0": {"type": "line", "from": [-64, 60], "to": [-2, 60], "style": "ray", "arrow": 0.6}, "in1": {"type": "line", "from": [-64, 30], "to": [-2, 30], "style": "ray", "arrow": 0.6}, "in2": {"type": "line", "from": [-64, -30], "to": [-2, -30], "style": "ray", "arrow": 0.6}, "in3": {"type": "line", "from": [-64, -60], "to": [-2, -60], "style": "ray", "arrow": 0.6}, "r0": {"type": "line", "from": "A₁", "to": [70, 76.17], "style": "ray", "arrow": 0.55}, "q0": {"type": "line", "from": [70, 76.17], "to": "P", "style": "ray"}, "r1": {"type": "line", "from": "A₂", "to": [70, 31.17], "style": "ray", "arrow": 0.55}, "q1": {"type": "line", "from": [70, 31.17], "to": "P", "style": "ray"}, "r2": {"type": "line", "from": "Aₙ", "to": [70, -13.83], "style": "ray", "arrow": 0.55}, "q2": {"type": "line", "from": [70, -13.83], "to": "P", "style": "ray"}}, "draw": [{"parts": ["barTop", "barBot"], "caption": "A long narrow slit of width b"}, {"parts": ["lens", "Lc"], "caption": "Convex lens beyond the slit"}, {"parts": ["screen", "O", "axis"], "caption": "Screen in the focal plane; O on the axis"}, {"parts": ["in0", "in1", "in2", "in3"], "caption": "A plane wave falls normally on the slit"}, {"parts": ["A₁", "A₂", "Aₙ", "bdim"], "caption": "Replace the slit by n point sources A_1, A_2, …, A_n"}, {"parts": ["r0", "r1", "r2", "theta"], "caption": "Each sends light at angle θ to the axis"}, {"parts": ["q0", "q1", "q2", "P"], "caption": "The lens brings all rays at θ to one point P"}]}, "steps": [{"figure": {"focus": ["tri", "thA1", "A2K", "A1K", "rightK", "Ddim"], "keep": ["A₁", "A₂", "K", "r1", "r0"], "caption": "△A_1A_2K: θ at A_1; A_2K opposite, Δ hypotenuse"}}, {"figure": {"focus": ["A2K", "thA1"], "keep": ["A₁", "A₂", "K", "r1", "r0", "q0", "q1", "P"], "caption": "Path difference A_2K = Δ sin θ"}}, {"figure": {"focus": ["A2K", "r0", "r1"], "keep": ["A₁", "A₂", "P"], "caption": "Phase step between neighbours: φ"}}, {"figure": {"focus": ["r0", "r1", "r2", "q0", "q1", "q2", "P"], "keep": ["A₁", "A₂", "Aₙ", "lens"], "caption": "n waves of amplitude a, each φ behind the last"}}, {"figure": {"focus": ["P", "q0", "q1", "q2"], "keep": ["lens"], "caption": "Resultant amplitude at P"}}, {"figure": {"focus": ["bdim", "A₁", "A₂", "Aₙ"], "keep": ["Ddim"], "caption": "n → ∞, Δ → 0 with nΔ → b"}}, {"figure": {"focus": ["bdim", "theta"], "keep": ["r0"], "caption": "β: half the phase difference across the slit"}}, {"figure": {"focus": ["P"], "keep": ["q0", "q1", "q2"], "caption": "E_θ = A sin β / β"}}, {"figure": {"focus": ["P", "O"], "keep": ["screen"], "caption": "Field at P"}}, {"figure": {"focus": ["screen", "P", "O"], "caption": "I = I_0 sin²β / β²"}}, {"figure": {"focus": ["theta", "bdim"], "keep": ["P", "O"], "caption": "Minima where sin β = 0, β ≠ 0"}}, {"figure": {"focus": ["theta", "bdim"], "keep": ["P"], "caption": "Minima: b sin θ = mλ"}}, {"figure": {"focus": ["P", "screen"], "caption": "Secondary maxima: set dI/dβ = 0"}}, {"figure": {"focus": ["P"], "keep": ["screen"], "caption": "β cos β − sin β = 0"}}, {"figure": {"focus": ["P"], "keep": ["screen", "O"], "caption": "Side peaks where tan β = β"}}]}, {"figure": {"box": [-70, -86, 176, 86], "points": {"P": {"at": [140, 29.12], "side": "e"}, "O": {"at": [140, 0], "side": "e"}, "Lc": {"at": [60, 0], "label": false, "size": 2.4}, "T": {"at": [31.95, 11.63], "label": false, "dot": false}, "C0": {"at": [0, 0], "label": false, "dot": false}, "A₁": {"at": [0, 50], "side": "w"}, "A₁′": {"at": [0, 30], "label": false, "size": 2.6}, "B₁": {"at": [0, -30], "side": "w"}, "B₁′": {"at": [0, -50], "label": false, "size": 2.6}, "K": {"at": [25.71, -20.64], "side": "se", "size": 2.6}}, "parts": {"lens": {"type": "polygon", "points": [[66.0, 0.0], [65.85, 17.8], [65.41, 34.71], [64.69, 49.88], [63.74, 62.55], [62.6, 72.08], [61.34, 77.99], [60.0, 80.0], [58.66, 77.99], [57.4, 72.08], [56.26, 62.55], [55.31, 49.88], [54.59, 34.71], [54.15, 17.8], [54.0, 0.0], [54.15, -17.8], [54.59, -34.71], [55.31, -49.88], [56.26, -62.55], [57.4, -72.08], [58.66, -77.99], [60.0, -80.0], [61.34, -77.99], [62.6, -72.08], [63.74, -62.55], [64.69, -49.88], [65.41, -34.71], [65.85, -17.8]], "style": "glass"}, "screen": {"type": "line", "from": [140, 80], "to": [140, -40], "style": "axis"}, "axis": {"type": "line", "from": [-64, 0], "to": "O", "style": "guide"}, "theta": {"type": "angle", "at": "C0", "from": "O", "to": "T", "r": 24, "label": "θ"}, "bar0": {"type": "line", "from": [0, 82], "to": [0, 50], "style": "mirror"}, "bar2": {"type": "line", "from": [0, 30], "to": [0, -30], "style": "mirror"}, "bar4": {"type": "line", "from": [0, -50], "to": [0, -82], "style": "mirror"}, "in0": {"type": "line", "from": [-64, 40.0], "to": [-2, 40.0], "style": "ray", "arrow": 0.6}, "in1": {"type": "line", "from": [-64, -40.0], "to": [-2, -40.0], "style": "ray", "arrow": 0.6}, "r0": {"type": "line", "from": "A₁", "to": [60, 71.84], "style": "ray", "arrow": 0.55}, "q0": {"type": "line", "from": [60, 71.84], "to": "P", "style": "ray"}, "r1": {"type": "line", "from": "A₁′", "to": [60, 51.84], "style": "ray", "arrow": 0.55}, "q1": {"type": "line", "from": [60, 51.84], "to": "P", "style": "ray"}, "r2": {"type": "line", "from": "B₁", "to": [60, -8.16], "style": "ray", "arrow": 0.55}, "q2": {"type": "line", "from": [60, -8.16], "to": "P", "style": "ray"}, "r3": {"type": "line", "from": "B₁′", "to": [60, -28.16], "style": "ray", "arrow": 0.55}, "q3": {"type": "line", "from": [60, -28.16], "to": "P", "style": "ray"}, "ddim": {"type": "dim", "from": "B₁", "to": "A₁", "offset": [-30, 0], "arrow": "both", "label": "d"}, "bdim": {"type": "dim", "from": "A₁′", "to": "A₁", "offset": [-12, 0], "arrow": "both", "label": "b"}, "tri": {"type": "polygon", "points": ["A₁", "B₁", "K"]}, "thA": {"type": "angle", "at": "A₁", "from": "B₁", "to": "K", "r": 18, "label": "θ"}, "B1K": {"type": "line", "from": "B₁", "to": "K", "style": "guide", "label": "d sin θ", "labelSide": "left"}, "A1K": {"type": "line", "from": "A₁", "to": "K", "style": "guide"}, "rightK": {"type": "polygon", "points": [[25.71, -20.64], [21.95, -22.01], [20.58, -18.25], [24.34, -16.88]]}}, "draw": [{"parts": ["bar0", "bar2", "bar4"], "caption": "Two slits, each of width b"}, {"parts": ["lens", "Lc"], "caption": "Convex lens beyond the slits"}, {"parts": ["screen", "O", "axis"], "caption": "Screen in the focal plane; O on the axis"}, {"parts": ["in0", "in1"], "caption": "A plane wave falls normally on the slits"}, {"parts": ["A₁", "A₁′", "B₁", "B₁′", "ddim", "bdim"], "caption": "Corresponding points A_1 and B_1 are d apart"}, {"parts": ["r0", "r1", "r2", "r3", "theta"], "caption": "Light leaves every slit at angle θ"}, {"parts": ["q0", "q1", "q2", "q3", "P"], "caption": "The lens brings all rays at θ to one point P"}]}, "steps": [{"figure": {"focus": ["r0", "r1", "bdim"], "keep": ["A₁", "A₁′", "P", "q0", "q1"], "caption": "Slit 1 alone: the single-slit field E_1"}}, {"figure": {"focus": ["tri", "thA", "B1K", "A1K", "rightK", "ddim"], "keep": ["A₁", "B₁", "K", "r0", "r2"], "caption": "△A_1B_1K: θ at A_1; B_1K opposite, d hypotenuse"}}, {"figure": {"focus": ["B1K", "thA"], "keep": ["A₁", "B₁", "K", "r0", "r2", "q0", "q2", "P"], "caption": "Path difference B_1K = d sin θ"}}, {"figure": {"focus": ["B1K", "r0", "r2"], "keep": ["A₁", "B₁", "P"], "caption": "Phase lag Φ_1 between the two slits"}}, {"figure": {"focus": ["r2", "r3", "q2", "q3"], "keep": ["B₁", "B₁′", "P"], "caption": "Slit 2: same field, Φ_1 behind"}}, {"figure": {"focus": ["q0", "q1", "q2", "q3", "P"], "keep": ["lens"], "caption": "Both slits' light meets at P: E = E_1 + E_2"}}, {"figure": {"focus": ["P"], "keep": ["q0", "q2"], "caption": "Sum to product: cos C + cos D"}}, {"figure": {"focus": ["ddim", "theta"], "keep": ["bdim"], "caption": "γ = Φ_1/2 = πd sin θ/λ"}}, {"figure": {"focus": ["P"], "keep": ["q0", "q1", "q2", "q3"], "caption": "E = 2A (sin β/β) cos γ cos(ωt − β − γ)"}}, {"figure": {"focus": ["screen", "P", "O"], "keep": ["ddim", "bdim"], "caption": "Diffraction (β) × interference (γ)"}}]}, {"figure": {"box": [-70, -96, 170, 96], "points": {"P": {"at": [135, 32.32], "side": "e"}, "O": {"at": [135, 0], "side": "e"}, "Lc": {"at": [55, 0], "label": false, "size": 2.4}, "T": {"at": [31.52, 12.74], "label": false, "dot": false}, "C0": {"at": [0, 0], "label": false, "dot": false}, "S₁": {"at": [0, 60], "side": "w", "size": 2.8}, "S₂": {"at": [0, 20], "side": "w", "size": 2.8}, "S₃": {"at": [0, -20], "side": "w", "size": 2.8, "label": false}, "Sₙ": {"at": [0, -60], "side": "w", "size": 2.8}, "K": {"at": [13.89, 25.61], "side": "se", "size": 2.6}, "P′": {"at": [135, 40.76], "side": "e", "size": 2.8}, "T2": {"at": [39.2, 19.98], "label": false, "dot": false}, "T1": {"at": [40.8, 16.48], "label": false, "dot": false}}, "parts": {"lens": {"type": "polygon", "points": [[61.0, 0.0], [60.85, 20.03], [60.41, 39.05], [59.69, 56.11], [58.74, 70.36], [57.6, 81.09], [56.34, 87.74], [55.0, 90.0], [53.66, 87.74], [52.4, 81.09], [51.26, 70.36], [50.31, 56.11], [49.59, 39.05], [49.15, 20.03], [49.0, 0.0], [49.15, -20.03], [49.59, -39.05], [50.31, -56.11], [51.26, -70.36], [52.4, -81.09], [53.66, -87.74], [55.0, -90.0], [56.34, -87.74], [57.6, -81.09], [58.74, -70.36], [59.69, -56.11], [60.41, -39.05], [60.85, -20.03]], "style": "glass"}, "screen": {"type": "line", "from": [135, 90], "to": [135, -40], "style": "axis"}, "axis": {"type": "line", "from": [-64, 0], "to": "O", "style": "guide"}, "theta": {"type": "angle", "at": "C0", "from": "O", "to": "T", "r": 24, "label": "θ_m"}, "bar0": {"type": "line", "from": [0, 92], "to": [0, 66], "style": "mirror"}, "bar2": {"type": "line", "from": [0, 54], "to": [0, 26], "style": "mirror"}, "bar4": {"type": "line", "from": [0, 14], "to": [0, -14], "style": "mirror"}, "bar6": {"type": "line", "from": [0, -26], "to": [0, -54], "style": "mirror"}, "bar8": {"type": "line", "from": [0, -66], "to": [0, -92], "style": "mirror"}, "in0": {"type": "line", "from": [-64, 60.0], "to": [-2, 60.0], "style": "ray", "arrow": 0.6}, "in1": {"type": "line", "from": [-64, 20.0], "to": [-2, 20.0], "style": "ray", "arrow": 0.6}, "in2": {"type": "line", "from": [-64, -20.0], "to": [-2, -20.0], "style": "ray", "arrow": 0.6}, "in3": {"type": "line", "from": [-64, -60.0], "to": [-2, -60.0], "style": "ray", "arrow": 0.6}, "r0": {"type": "line", "from": "S₁", "to": [55, 82.22], "style": "ray", "arrow": 0.55}, "q0": {"type": "line", "from": [55, 82.22], "to": "P", "style": "ray"}, "r1": {"type": "line", "from": "S₂", "to": [55, 42.22], "style": "ray", "arrow": 0.55}, "q1": {"type": "line", "from": [55, 42.22], "to": "P", "style": "ray"}, "r2": {"type": "line", "from": "S₃", "to": [55, 2.22], "style": "ray", "arrow": 0.55}, "q2": {"type": "line", "from": [55, 2.22], "to": "P", "style": "ray"}, "r3": {"type": "line", "from": "Sₙ", "to": [55, -37.78], "style": "ray", "arrow": 0.55}, "q3": {"type": "line", "from": [55, -37.78], "to": "P", "style": "ray"}, "ddim": {"type": "dim", "from": "S₂", "to": "S₁", "offset": [-24, 0], "arrow": "both", "label": "d"}, "tri": {"type": "polygon", "points": ["S₁", "S₂", "K"]}, "thA": {"type": "angle", "at": "S₁", "from": "S₂", "to": "K", "r": 16, "label": "θ"}, "S2K": {"type": "line", "from": "S₂", "to": "K", "style": "guide", "label": "d sin θ", "labelSide": "left"}, "S1K": {"type": "line", "from": "S₁", "to": "K", "style": "guide"}, "rightK": {"type": "polygon", "points": [[13.89, 25.61], [10.18, 24.11], [8.69, 27.82], [12.39, 29.32]]}, "dir2": {"type": "line", "from": "C0", "to": "T2", "style": "guide"}, "zray": {"type": "line", "from": [55, 28.02], "to": "P′", "style": "guide"}, "dth": {"type": "angle", "at": "C0", "from": "T1", "to": "T2", "r": 40, "label": "Δθ_m"}}, "draw": [{"parts": ["bar0", "bar2", "bar4", "bar6", "bar8"], "caption": "N equal slits, centres d apart"}, {"parts": ["lens", "Lc"], "caption": "Convex lens beyond the slits"}, {"parts": ["screen", "O", "axis"], "caption": "Screen in the focal plane; O on the axis"}, {"parts": ["in0", "in1", "in2", "in3"], "caption": "A plane wave falls normally on the slits"}, {"parts": ["S₁", "S₂", "S₃", "Sₙ", "ddim"], "caption": "Slit centres S_1, S_2, …, S_N"}, {"parts": ["r0", "r1", "r2", "r3", "theta"], "caption": "Light leaves every slit at angle θ"}, {"parts": ["q0", "q1", "q2", "q3", "P"], "caption": "The lens brings all rays at θ to one point P"}]}, "steps": [{"figure": {"focus": ["tri", "thA", "S2K", "S1K", "rightK", "ddim"], "keep": ["S₁", "S₂", "K", "r0", "r1"], "caption": "△S_1S_2K: θ at S_1; S_2K opposite, d hypotenuse"}}, {"figure": {"focus": ["S2K", "r0", "r1", "r2", "r3"], "keep": ["S₁", "S₂", "K"], "caption": "Each slit lags the one above by Φ_1 = 2γ"}}, {"figure": {"focus": ["q0", "q1", "q2", "q3", "P"], "keep": ["lens"], "caption": "N single-slit fields, each Φ_1 behind the last"}}, {"figure": {"focus": ["P"], "keep": ["q0", "q1", "q2", "q3"], "caption": "Sum of the cosine progression"}}, {"figure": {"focus": ["screen", "P", "O"], "caption": "I = I_0 (sin²β/β²)(sin²Nγ/sin²γ)"}}, {"figure": {"focus": ["theta", "P"], "keep": ["r0", "r1", "r2", "r3"], "caption": "Principal maximum at d sin θ_m = mλ"}}, {"figure": {"focus": ["dth", "dir2", "zray", "P′"], "keep": ["theta", "P"], "caption": "Nearest zero at θ_m + Δθ_m"}}, {"figure": {"focus": ["theta", "dth"], "keep": ["dir2", "P", "P′"], "caption": "sin(θ_m ± Δθ_m): expand first"}}, {"figure": {"focus": ["dth"], "keep": ["theta", "dir2"], "caption": "Small Δθ_m: cos ≈ 1, sin ≈ Δθ_m"}}, {"figure": {"focus": ["dth", "theta"], "keep": ["P", "P′"], "caption": "Into d sin(θ_m ± Δθ_m) = mλ ± λ/N"}}, {"figure": {"focus": ["dth"], "keep": ["P", "P′"], "caption": "d sin θ_m = mλ cancels"}}, {"figure": {"focus": ["dth", "P", "P′"], "keep": ["ddim"], "caption": "Δθ_m = λ/(Nd cos θ_m): sharper for more slits"}}]}, {"figure": {"box": [-44, -64, 112, 66], "points": {"O": {"at": [0, 0], "side": "sw"}, "P": {"at": [100, 0], "side": "se"}, "Q1": {"at": [0, 30], "side": "w", "label": "Q_1", "size": 3}, "Q2": {"at": [0, 43], "side": "w", "label": "Q_2", "size": 3}, "Q3": {"at": [0, 53], "side": "w", "label": "Q_3", "size": 3}}, "parts": {"wf": {"type": "line", "from": [0, -62], "to": [0, 62], "style": "mirror", "label": "W"}, "OP": {"type": "line", "from": "O", "to": "P", "style": "axis", "label": "d"}, "in1": {"type": "line", "from": [-40, 40], "to": [-4, 40], "style": "ray", "arrow": true}, "in2": {"type": "line", "from": [-40, 0], "to": [-4, 0], "style": "ray", "arrow": true}, "in3": {"type": "line", "from": [-40, -40], "to": [-4, -40], "style": "ray", "arrow": true}, "PQ1": {"type": "line", "from": "P", "to": "Q1", "style": "guide", "label": "d + λ/2"}, "PQ2": {"type": "line", "from": "P", "to": "Q2", "style": "guide", "label": "d + 2λ/2"}, "PQ3": {"type": "line", "from": "P", "to": "Q3", "style": "guide", "label": "d + 3λ/2"}, "zone3": {"type": "line", "from": "Q2", "to": "Q3", "style": "ray"}, "zone3b": {"type": "line", "from": [0, -43], "to": [0, -53], "style": "ray"}, "r3": {"type": "dim", "from": "O", "to": "Q3", "offset": -14, "arrow": "both", "label": "r_n"}, "tri": {"type": "polygon", "points": ["P", "O", "Q3"]}, "ro": {"type": "polygon", "points": [[0, 0], [5, 0], [5, 5], [0, 5]]}}, "draw": [{"parts": ["in1", "in2", "in3"], "caption": "Plane wave"}, {"parts": ["wf", "O"], "caption": "Wavefront WW′"}, {"parts": ["OP", "P"], "caption": "Observer P on the axis, OP = d"}, {"parts": ["PQ1", "Q1", "PQ2", "Q2", "PQ3", "Q3"], "caption": "Rim distances grow by λ/2: half-period zones"}]}, "steps": [{"figure": {"focus": ["tri", "ro", "r3", "PQ3", "OP"], "caption": "Pythagoras in △POQ_n", "keep": ["Q3"]}}, {"figure": {"focus": ["r3", "PQ3"], "caption": "Expand (d + nλ/2)²", "keep": ["tri"]}}, {"figure": {"focus": ["r3"], "caption": "nλ ≪ d: r_n ≈ √(nλd)", "keep": ["OP"]}}, {"figure": {"focus": ["zone3", "zone3b"], "caption": "Zone n: ring between r_(n−1) and r_n", "keep": ["Q2", "Q3"]}}, {"figure": {"focus": ["zone3", "zone3b"], "caption": "Area ≈ πλd, nearly equal", "keep": ["r3"]}}, {"figure": {"focus": ["PQ1", "PQ2", "PQ3"], "caption": "Neighbouring zones arrive out of phase", "keep": ["P"]}}, {"figure": {"focus": ["PQ1", "PQ2", "PQ3"], "caption": "Group the terms in brackets", "keep": ["wf"]}}, {"figure": {"focus": ["PQ1"], "caption": "u(P) ≈ u_1/2: half the first zone", "keep": ["P", "Q1"]}}]}, {"figure": {"box": [-66, -82, 212, 88], "points": {"E": {"at": [0, 0], "side": "w", "size": 3}, "M": {"at": [0, 52], "side": "w"}, "P": {"at": [170, 26], "side": "e"}, "O": {"at": [170, 0], "side": "e"}, "Q": {"at": [170, 52], "side": "e", "size": 2.6}}, "parts": {"edge": {"type": "line", "from": [0, 0], "to": [0, -78], "style": "mirror"}, "screen": {"type": "line", "from": [170, 84], "to": [170, -78], "style": "axis"}, "boundary": {"type": "line", "from": "E", "to": "O", "style": "guide"}, "shadow": {"type": "text", "at": [130, -40], "text": "geometrical shadow"}, "lit": {"type": "text", "at": [130, 70], "text": "lit side"}, "MP": {"type": "line", "from": "M", "to": "P", "style": "ray", "label": "r", "arrow": 0.5}, "MQ": {"type": "line", "from": "M", "to": "Q", "style": "guide"}, "QP": {"type": "dim", "from": "P", "to": "Q", "offset": [14, 0], "arrow": "both", "label": "η − y"}, "tri": {"type": "polygon", "points": ["M", "Q", "P"]}, "rightQ": {"type": "polygon", "points": [[170, 52], [165, 52], [165, 47], [170, 47]]}, "ddim": {"type": "dim", "from": [0, -72], "to": [170, -72], "arrow": "both", "label": "d"}, "ydim": {"type": "dim", "from": "O", "to": "P", "offset": [14, 0], "arrow": "both", "label": "y"}, "etadim": {"type": "dim", "from": "E", "to": "M", "offset": [-16, 0], "arrow": "both", "label": "η"}, "open": {"type": "polygon", "points": [[0, 0], [6, 0], [6, 84], [0, 84]], "style": "glass"}, "in0": {"type": "line", "from": [-60, 70], "to": [-3, 70], "style": "ray", "arrow": 0.6}, "in1": {"type": "line", "from": [-60, 40], "to": [-3, 40], "style": "ray", "arrow": 0.6}, "in2": {"type": "line", "from": [-60, 12], "to": [-3, 12], "style": "ray", "arrow": 0.6}, "in3": {"type": "line", "from": [-60, -30], "to": [-3, -30], "style": "ray", "arrow": 0.6}, "in4": {"type": "line", "from": [-60, -60], "to": [-3, -60], "style": "ray", "arrow": 0.6}, "w0": {"type": "line", "from": [0, 8], "to": "P", "style": "ray"}, "w1": {"type": "line", "from": [0, 30], "to": "P", "style": "ray"}, "w2": {"type": "line", "from": [0, 74], "to": "P", "style": "ray"}}, "draw": [{"parts": ["edge", "E"], "caption": "Opaque half-plane with a straight edge at E"}, {"parts": ["screen", "O", "boundary"], "caption": "Screen a distance d away; O on the shadow boundary"}, {"parts": ["in0", "in1", "in2", "in3", "in4"], "caption": "A plane wave falls on the edge"}, {"parts": ["open"], "caption": "Only the part above the edge (η ≥ 0) is open"}, {"parts": ["w0", "w1", "w2", "P"], "caption": "Wavelets from every open point reach P"}, {"parts": ["shadow", "lit"], "caption": "Below O lies the geometrical shadow"}, {"parts": ["M", "MP"], "caption": "A typical open point M(ξ, η), a distance r from P"}]}, "steps": [{"figure": {"focus": ["tri", "rightQ", "MP", "MQ", "QP", "ddim"], "keep": ["M", "Q", "P"], "caption": "Right triangle MQP: legs d and η − y (ξ out of the page)"}}, {"figure": {"focus": ["ddim", "MP"], "keep": ["M", "P"], "caption": "r = d(1 + x)^{1/2}, x small"}}, {"figure": {"focus": ["ddim", "QP"], "keep": ["MP"], "caption": "d ≫ ξ, η − y, so x ≪ 1"}}, {"figure": {"focus": ["MP"], "keep": ["M", "P", "ddim"], "caption": "r ≈ d + [ξ² + (η − y)²]/2d"}}, {"figure": {"focus": ["open", "w0", "w1", "w2", "MP"], "keep": ["P", "E"], "caption": "Sum over the open part η ≥ 0"}}, {"figure": {"focus": ["etadim", "ydim", "QP"], "keep": ["M", "P", "E", "O"], "caption": "v measures η − y in units of √(λd/2)"}}, {"figure": {"focus": ["E", "ydim", "boundary"], "keep": ["P", "O"], "caption": "At the edge η = 0: lower limit v_0"}}, {"figure": {"focus": ["open"], "keep": ["E"], "caption": "dξ dη = (λd/2) du dv"}}, {"figure": {"focus": ["w0", "w1", "w2", "P"], "keep": ["open"], "caption": "Fresnel integral over u and v (Eq. 20.52)"}}, {"figure": {"focus": ["open"], "keep": ["P"], "caption": "u runs over the whole edge: C(∞) = S(∞) = ½"}}, {"figure": {"focus": ["P", "ydim"], "keep": ["open"], "caption": "v runs from v_0 up: ½ − C(v_0), ½ − S(v_0)"}}, {"figure": {"focus": ["P", "screen"], "keep": ["shadow", "lit"], "caption": "I(P) from the squared modulus"}}, {"figure": {"focus": ["O", "boundary"], "keep": ["shadow", "lit", "screen"], "caption": "On the shadow edge: I = I_0/4"}}]}];
+(function(){var h=document.querySelector('header').offsetHeight+document.querySelector('nav').offsetHeight;document.documentElement.style.setProperty('--stick',h+'px');})();
+document.querySelectorAll('.fgbox').forEach(function (host) {
+  var d = FIGS[+host.dataset.fig], card = host.closest('.card'), rows = [].slice.call(card.querySelectorAll('.st'));
+  var api = SM.Figure.mount(host, d.figure, d.steps, { autoIntro: true }), cur = -1, timer = null;
+  function show(i, scroll) {
+    cur = Math.max(-1, Math.min(rows.length - 1, i));
+    rows.forEach(function (r, k) { r.classList.toggle('on', k === cur); });
+    if (cur >= 0) { api.step(cur); if (scroll) rows[cur].scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+  }
+  function stop() { clearInterval(timer); timer = null; btn.textContent = '\u25B6 Play'; }
+  var btn = card.querySelector('.play');
+  btn.onclick = function () {
+    if (timer) return stop();
+    btn.textContent = '\u275A\u275A Pause';
+    if (cur >= rows.length - 1 || cur < 0) { api.intro(); cur = -1; setTimeout(function () { show(0, true); }, (api.introLeft ? api.introLeft() : 0) + 300); }
+    timer = setInterval(function () { if (cur >= rows.length - 1) return stop(); show(cur + 1, true); }, 3200);
+  };
+  card.querySelector('.next').onclick = function () { stop(); show(cur + 1, true); };
+  card.querySelector('.prev').onclick = function () { stop(); show(cur - 1, true); };
+  rows.forEach(function (r, k) { r.onclick = function () { stop(); show(k, false); }; });
+  window.addEventListener('resize', function () { api.layout(); });
+});
+</script></body></html>

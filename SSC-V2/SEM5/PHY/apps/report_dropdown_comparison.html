@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Comprehensive Architectural Comparison: Dropdown & Navigation Systems (Solid State vs. LaTeX)</title>
+<style>
+  @page {
+    size: A4 portrait;
+    margin: 18mm 16mm 18mm 16mm;
+    @bottom-right {
+      content: counter(page) " / " counter(pages);
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 8pt;
+      color: #71717a;
+    }
+  }
+
+  :root {
+    --text: #18181b;
+    --text-muted: #52525b;
+    --text-faint: #71717a;
+    --bg: #ffffff;
+    --panel: #f8fafc;
+    --panel-border: #e2e8f0;
+    --rule: #e4e4e7;
+    --ss-copper: #c25e1a;
+    --ss-copper-bg: #fff7ed;
+    --ss-copper-border: #fed7aa;
+    --lx-blue: #2563eb;
+    --lx-blue-bg: #eff6ff;
+    --lx-blue-border: #bfdbfe;
+    --green: #16a34a;
+    --green-bg: #f0fdf4;
+    --amber: #d97706;
+    --code-bg: #0f172a;
+    --code-text: #f8fafc;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.55;
+    font-size: 10pt;
+    margin: 0;
+    padding: 0;
+  }
+
+  header {
+    border-bottom: 2px solid var(--rule);
+    padding-bottom: 14pt;
+    margin-bottom: 18pt;
+  }
+  .doc-badge {
+    display: inline-block;
+    font-size: 7.5pt;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: #0f172a;
+    color: #ffffff;
+    padding: 3pt 7pt;
+    border-radius: 4pt;
+    margin-bottom: 8pt;
+  }
+  h1 {
+    font-size: 18pt;
+    font-weight: 800;
+    line-height: 1.25;
+    margin: 0 0 6pt 0;
+    color: #09090b;
+  }
+  .meta-grid {
+    display: flex;
+    justify-content: space-between;
+    font-size: 8.5pt;
+    color: var(--text-muted);
+    margin-top: 6pt;
+    border-top: 1px dashed var(--rule);
+    padding-top: 6pt;
+  }
+  .meta-grid strong { color: var(--text); }
+
+  h2 {
+    font-size: 13pt;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 18pt 0 8pt 0;
+    border-left: 4px solid var(--text);
+    padding-left: 8pt;
+    page-break-after: avoid;
+  }
+  h3 {
+    font-size: 11pt;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 12pt 0 5pt 0;
+    page-break-after: avoid;
+  }
+  p { margin: 0 0 8pt 0; }
+
+  /* Comparison Pills & Boxes */
+  .system-duo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12pt;
+    margin: 10pt 0 14pt 0;
+  }
+  .sys-card {
+    border-radius: 6pt;
+    padding: 10pt 12pt;
+    border: 1px solid var(--panel-border);
+    page-break-inside: avoid;
+  }
+  .sys-card.ss {
+    background: var(--ss-copper-bg);
+    border-color: var(--ss-copper-border);
+  }
+  .sys-card.lx {
+    background: var(--lx-blue-bg);
+    border-color: var(--lx-blue-border);
+  }
+  .sys-card .tag {
+    font-size: 7.5pt;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    display: inline-block;
+    margin-bottom: 4pt;
+  }
+  .sys-card.ss .tag { color: var(--ss-copper); }
+  .sys-card.lx .tag { color: var(--lx-blue); }
+  .sys-card h4 {
+    margin: 0 0 4pt 0;
+    font-size: 10.5pt;
+    font-weight: 700;
+  }
+  .sys-card p {
+    font-size: 8.8pt;
+    color: var(--text-muted);
+    margin-bottom: 0;
+  }
+
+  /* Table styling */
+  table.comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12pt 0 16pt 0;
+    font-size: 8.8pt;
+    page-break-inside: auto;
+  }
+  table.comp-table tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+  table.comp-table th {
+    background: #0f172a;
+    color: #ffffff;
+    font-weight: 600;
+    text-align: left;
+    padding: 7pt 9pt;
+    border: 1px solid #0f172a;
+    font-size: 8.5pt;
+  }
+  table.comp-table td {
+    padding: 6.5pt 9pt;
+    border: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  table.comp-table tr:nth-child(even) td {
+    background: #fbfcfe;
+  }
+  table.comp-table td.dim-header {
+    font-weight: 700;
+    background: #f1f5f9;
+    color: #1e293b;
+    width: 18%;
+  }
+
+  /* Feature callouts */
+  .callout {
+    background: #f8fafc;
+    border-left: 3.5px solid #0284c7;
+    padding: 8pt 10pt;
+    margin: 10pt 0;
+    border-radius: 0 5pt 5pt 0;
+    font-size: 8.8pt;
+    page-break-inside: avoid;
+  }
+  .callout.amber {
+    border-left-color: var(--amber);
+    background: #fffbeb;
+  }
+  .callout.green {
+    border-left-color: var(--green);
+    background: var(--green-bg);
+  }
+
+  /* Code Blocks */
+  pre {
+    background: var(--code-bg);
+    color: var(--code-text);
+    padding: 8pt 10pt;
+    border-radius: 5pt;
+    font-family: "JetBrains Mono", Consolas, Monaco, monospace;
+    font-size: 7.8pt;
+    line-height: 1.45;
+    margin: 6pt 0 10pt 0;
+    overflow: hidden;
+    page-break-inside: avoid;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 1.5pt 4.5pt;
+    font-size: 7pt;
+    font-weight: 700;
+    border-radius: 3pt;
+    text-transform: uppercase;
+  }
+  .badge-ss { background: #fed7aa; color: #9a3412; }
+  .badge-lx { background: #bfdbfe; color: #1e40af; }
+
+  ul, ol {
+    margin: 0 0 8pt 0;
+    padding-left: 18pt;
+  }
+  li {
+    margin-bottom: 3.5pt;
+    font-size: 9pt;
+  }
+
+  .page-break {
+    page-break-before: always;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="doc-badge">Engineering & Architecture Deep Dive</div>
+  <h1>Comparative Analysis: Dropdown & Navigation Hierarchy Systems</h1>
+  <p style="margin: 0; font-size: 10.5pt; color: var(--text-muted); font-weight: 500;">
+    Comprehensive evaluation of collapsible trees, tri-state ticking, completion cascade, viewport handling, and persistence in <strong>Solid State Physics</strong> vs. <strong>LaTeX Interactive</strong>.
+  </p>
+  <div class="meta-grid">
+    <div><strong>Target Systems:</strong> SOLID_STATE_1234.html vs. LATEX_1.html</div>
+    <div><strong>Source Engines:</strong> tools/ss12/engine.js vs. tools/latex1/src/ui.js</div>
+    <div><strong>Author/Recipient:</strong> ihjas.one@gmail.com</div>
+    <div><strong>Date:</strong> October 2026</div>
+  </div>
+</header>
+
+<h2>1. Executive Summary & Philosophy Matrix</h2>
+<p>
+Both applications implement a three-tiered hierarchical structure (<strong>Module ▸ Section / Unit ▸ Topic</strong>) with tri-state completion ticks and Firebase synchronization. However, their interaction models and UX philosophies diverge completely based on subject matter requirements:
+</p>
+
+<div class="system-duo">
+  <div class="sys-card ss">
+    <div class="tag">Solid State Physics (tools/ss12)</div>
+    <h4>Multi-Open Exploratory Workbench</h4>
+    <p>
+      Designed for deep analytical physics. Users frequently need to cross-reference multiple derivations, band gap figures, and 3D crystal structures simultaneously. Ticking a section <strong>preserves viewport position</strong> and keeps the card open. Open/closed states are persisted across browser reloads.
+    </p>
+  </div>
+  <div class="sys-card lx">
+    <div class="tag">LaTeX Interactive (tools/latex1)</div>
+    <h4>Focus Accordion & Mastery Sprint</h4>
+    <p>
+      Designed for sequential tutorial learning and code editing. Enforces a <strong>strict single-open focus accordion</strong> per level. Marking a topic or section as completed <strong>automatically collapses the card</strong> and smoothly centers the header, giving students immediate psychological closure and a clear desk.
+    </p>
+  </div>
+</div>
+
+<h2>2. Comprehensive Technical Feature Matrix</h2>
+
+<table class="comp-table">
+  <thead>
+    <tr>
+      <th style="width: 22%;">System Dimension</th>
+      <th style="width: 39%;">Solid State Physics (<span class="badge badge-ss">SS12</span>)</th>
+      <th style="width: 39%;">LaTeX Interactive (<span class="badge badge-lx">LX1</span>)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="dim-header">Accordion Strategy</td>
+      <td>
+        <strong>Multi-card independent toggle</strong>.<br>
+        Opening card <em>A</em> leaves cards <em>B</em> and <em>C</em> untouched. Multiple modules and units can be open simultaneously.
+      </td>
+      <td>
+        <strong>Strict single-open focus accordion</strong>.<br>
+        Opening card <em>A</em> immediately queries sibling nodes at that level and closes them (<code>$$('.'+lv+'.open').forEach(c=>setOpen(c,false))</code>).
+      </td>
+    </tr>
+    <tr>
+      <td class="dim-header">Tick Click Action</td>
+      <td>
+        <strong>Toggle state only</strong>.<br>
+        Ticking <code>✓</code> toggles <code>state.done[id]</code>. The dropdown stays completely open. Title color dims to <code>var(--dim)</code>.
+      </td>
+      <td>
+        <strong>Toggle state + Auto-collapse + Scroll</strong>.<br>
+        If marked done, the dropdown <strong>instantly closes</strong>, saves state, and triggers smooth auto-scroll to center the header.
+      </td>
+    </tr>
+    <tr>
+      <td class="dim-header">Dedicated Footer Done Button</td>
+      <td>
+        Modules III & IV contain a <code>.donebar</code> with a checkbox, but clicking it keeps the station in place without closing.
+      </td>
+      <td>
+        <strong>Explicit <code>✓ Mark as completed</code> CTA</strong>.<br>
+        Located at the bottom of every topic. Closes the dropdown, scrolls to header, and displays a toast (<code>Completed ✓</code>).
+      </td>
+    </tr>
+    <tr>
+      <td class="dim-header">Initial Load State</td>
+      <td>
+        <strong>Modules open, sections closed</strong>.<br>
+        On first visit, top-level modules default to open. Subsequent visits restore whatever the user had opened.
+      </td>
+      <td>
+        <strong>Everything collapsed by default</strong>.<br>
+        Starts in a pristine zero-clutter state so the student actively chooses where to begin.
+      </td>
+    </tr>
+    <tr>
+      <td class="dim-header">Open State Persistence</td>
+      <td>
+        <strong>Persisted in LocalStorage</strong>.<br>
+        <code>state.open = { [cardId]: 1 }</code> is stored in <code>ss12_progress_v1</code>. Exactly restores open cards on page reload.
+      </td>
+      <td>
+        <strong>Intentionally Ephemeral</strong>.<br>
+        <code>state.open</code> is <em>never</em> persisted. Reloading the page returns to clean collapsed state.
+      </td>
+    </tr>
+    <tr>
+      <td class="dim-header">Expand / Collapse All</td>
+      <td>
+        <strong>Global button available</strong>.<br>
+        Header icon button (<code>⇕</code> / <code>⇡</code>) expands or collapses all modules, sections, and topics simultaneously.
+      </td>
+      <td>
+        <strong>Omitted by Design</strong>.<br>
+        An "Expand All" command conflicts with the single-card focus accordion model.
+      </td>
+    </tr>
+    <tr>
+      <td class="dim-header">Viewport & Scrolling</td>
+      <td>
+        <strong>Manual scrolling</strong>.<br>
+        Opening a card does not shift viewport scroll position.
+      </td>
+      <td>
+        <strong>Intelligent smooth auto-scroll</strong>.<br>
+        Calculates <code>getBoundingClientRect().top</code>. If off-screen (< 60px or > 45vh), smoothly centers the target.
+      </td>
+    </tr>
+    <tr>
+      <td class="dim-header">Container Width Melting</td>
+      <td>
+        <strong>Fixed reading column</strong>.<br>
+        Uses standard responsive column widths (<code>--col: 52rem</code>).
+      </td>
+      <td>
+        <strong>Depth-aware width melting</strong>.<br>
+        When an inner card is open, parents shed padding via <code>.has-open</code>. Wide code blocks trigger <code>document.body.classList.add('wide')</code>.
+      </td>
+    </tr>
+    <tr>
+      <td class="dim-header">Canvas / Widget Lifecycle</td>
+      <td>
+        <strong>Canvas re-measuring hook</strong>.<br>
+        Since collapsed cards have 0-width canvases, opening triggers <code>resizeFigsIn(card)</code> after 30ms to redraw 2D/3D plots.
+      </td>
+      <td>
+        <strong>Lazy widget hydration</strong>.<br>
+        Code snippets, Shiki syntax highlighters, and live editors (<code>[data-ex]</code>, <code>[data-w]</code>) hydrate only on open.
+      </td>
+    </tr>
+    <tr>
+      <td class="dim-header">Bookmarks Integration</td>
+      <td>
+        None. All navigation is bound directly to the course tree.
+      </td>
+      <td>
+        <strong>Full Bookmarks mirror system</strong>.<br>
+        Every dropdown has a <code>☆</code>/<code>★</code> toggle. Starred items dynamically populate a dedicated <strong>Bookmarks Tab</strong>.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="page-break"></div>
+
+<h2>3. In-Depth Architectural Comparison</h2>
+
+<h3>3.1 Ticking Mechanism & Completion Cascades</h3>
+<p>
+Both implementations calculate progress via hierarchical leaf nodes. However, their reaction to completion is radically different:
+</p>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10pt;">
+  <div>
+    <strong>Solid State (tools/ss12/engine.js):</strong>
+    <pre><code>function toggleNode(id) {
+  const mod = TREE.find(m => m.id === id);
+  if (mod) {
+    const L = leavesOfMod(mod);
+    setLeaves(L, !stateOf(L).all);
+  } else {
+    const sec = SEC[id];
+    if (sec) {
+      const L = leavesOfSec(sec);
+      setLeaves(L, !stateOf(L).all);
+    } else {
+      setLeaves([id], !state.done[id]);
+    }
+  }
+  persist();
+  paintAll();
+  // Card remains open! View does not shift.
+}</code></pre>
+  </div>
+  <div>
+    <strong>LaTeX (tools/latex1/src/ui.js):</strong>
+    <pre><code>function toggleNode(id, src) {
+  const L = leavesOf(id);
+  const nowDone = !stateOf(L).all;
+  setLeaves(L, nowDone);
+  persist();
+
+  // If marked done: close card & center header
+  if (nowDone) {
+    const c = cardOf(src, id);
+    if (c) {
+      setOpen(c, false);
+      saveLocal();
+      const h = c.firstElementChild || c;
+      setTimeout(() => h.scrollIntoView({
+        behavior: 'smooth', block: 'center'
+      }), 50);
+    }
+  }
+}</code></pre>
+  </div>
+</div>
+
+<div class="callout green">
+  <strong>Key Observation on User Experience:</strong>
+  In <strong>LaTeX</strong>, when a student finishes working through Tutorial III and taps <em>"✓ Mark as completed"</em>, the tutorial smoothly folds up, removing the cognitive load of that completed section, and highlights the next task. In <strong>Solid State</strong>, students frequently refer back to equations, Bragg planes, and Fermi velocity values while tackling subsequent derivations, so keeping cards open avoids disruptive re-clicks.
+</div>
+
+<h3>3.2 Focus Accordion vs. Multi-Open Tree</h3>
+<p>
+LaTeX enforces strict single-element activation using the <code>openCard</code> coordinator:
+</p>
+<pre><code>function openCard(card, opt) {
+  opt = opt || {};
+  const lv = levelOf(card);
+  const root = card.closest('.view') || document;
+  
+  // 1. Close all sibling cards at the same hierarchy level
+  $$('.' + lv + '.open', root).forEach(c => {
+    if (c !== card) setOpen(c, false);
+  });
+
+  // 2. Ensure all ancestor levels (module, section) are open
+  let p = card.parentElement && card.parentElement.closest('.mod,.unit');
+  while (p) {
+    if (!p.classList.contains('open')) {
+      $$('.' + levelOf(p) + '.open', root).forEach(c => {
+        if (c !== p) setOpen(c, false);
+      });
+      setOpen(p, true);
+    }
+    p = p.parentElement && p.parentElement.closest('.mod,.unit');
+  }
+
+  // 3. Open the target card
+  setOpen(card, true);
+  saveLocal();
+
+  // 4. Smooth scroll header into clear view
+  if (opt.scroll !== false) {
+    const h = card.firstElementChild;
+    setTimeout(() => {
+      const top = h.getBoundingClientRect().top;
+      if (top < 60 || top > innerHeight * 0.45) {
+        h.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 340);
+  }
+}</code></pre>
+
+<h3>3.3 Depth-Aware Layout & Width Melting</h3>
+<p>
+A standout architectural feature in LaTeX's dropdown engine that does not exist in Solid State is <strong>Width Melting</strong>. In deeply nested documentation trees, nested borders and paddings normally eat away mobile horizontal space. LaTeX solves this dynamically:
+</p>
+<ul>
+  <li><strong><code>.has-open</code> Class:</strong> When a child section or topic opens, its parent <code>.mod</code> or <code>.unit</code> sheds its internal padding so the child can expand edge-to-edge.</li>
+  <li><strong><code>body.wide</code> Toggle:</strong> When an opened dropdown contains wide interactive code widgets (<code>.wg</code>) or editable Shiki playgrounds (<code>.ex</code>), <code>markDepth()</code> adds <code>.wide</code> to <code>&lt;body&gt;</code>, instantly widening the main layout container from 54rem to 76rem.</li>
+</ul>
+
+<div class="page-break"></div>
+
+<h3>3.4 Visual Style & Component Anatomy</h3>
+
+<table class="comp-table">
+  <thead>
+    <tr>
+      <th>Component Element</th>
+      <th>Solid State Physics Implementation</th>
+      <th>LaTeX Interactive Implementation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Tick Box (.tick)</strong></td>
+      <td>
+        Border <code>1.8px solid var(--rule)</code>, radius <code>0.36rem</code>.<br>
+        Partial state: 45° diagonal slice via <code>linear-gradient(135deg, ...)</code>.<br>
+        Full state: Solid fill with theme copper/teal/crimson accent.
+      </td>
+      <td>
+        Border <code>1.5px solid var(--rule)</code>, radius <code>0.4rem</code>.<br>
+        Partial state: CSS pseudo-element <code>::after { content: '–'; }</code>.<br>
+        Full state: CSS pseudo-element <code>::after { content: '✓'; }</code> in accent color.
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Caret / Chevron</strong></td>
+      <td>
+        Character <code>▶</code> rotated via CSS <code>transform: rotate(90deg)</code> when parent has <code>.open</code> class.
+      </td>
+      <td>
+        Character <code>▶</code> in headers, plus dedicated smooth SVG rotating chevron (<code>.chev</code>) inside <code>details.qa</code> question accordions.
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Exam Q&A Dropdowns</strong></td>
+      <td>
+        Custom <code>.check</code> retrieval boxes with 1-5 confidence rating chips + reveal button; native <code>&lt;details class="prob"&gt;</code>.
+      </td>
+      <td>
+        Standardized <code>&lt;details class="qa"&gt;</code> with question badge (<code>.pn</code>), title (<code>.pt</code>), animated chevron, and bookmark star.
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Completed Header Style</strong></td>
+      <td>
+        Header text color shifts to muted gray (<code>.unit.done &gt; .uh h3 { color: var(--dim); }</code>).
+      </td>
+      <td>
+        Header text dims to <code>var(--dim)</code>, plus footer CTA transitions to a soft green pill (<code>.btn.completed</code> with green border & background).
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>4. Synthesis & Recommendations</h2>
+
+<div class="callout amber">
+  <strong>Can these systems be cross-pollinated?</strong><br>
+  Yes. The two designs have evolved to suit their specific subject matter, but several high-value features can be transferred between them.
+</div>
+
+<ol>
+  <li>
+    <strong>What Solid State could adopt from LaTeX:</strong>
+    <ul>
+      <li><strong>Smooth Auto-Scroll on Open:</strong> Long topics in Module I and II (e.g. <em>Brillouin Zones</em>) often open with the header scrolled half out of view. Adding LaTeX's <code>scrollIntoView({ behavior: 'smooth', block: 'start' })</code> would improve navigation.</li>
+      <li><strong>Footer "Mark as Done" CTA:</strong> Adding an explicit completion button at the end of long derivations helps students signal completion without having to scroll all the way back to the top of the card.</li>
+      <li><strong>Bookmarks Tab:</strong> Solid State physics has 37 extensive derivations; allowing students to star difficult ones (e.g. <em>Kronig-Penney</em>, <em>Curie-Weiss Law</em>) into a quick-access tab would be valuable for revision.</li>
+    </ul>
+  </li>
+  <li>
+    <strong>What LaTeX could adopt from Solid State:</strong>
+    <ul>
+      <li><strong>Optional "Expand All" / Review Mode:</strong> For rapid pre-exam cramming, a toggle to view all cheat-sheet notes simultaneously without auto-closing would be useful.</li>
+      <li><strong>Canvas / Dynamic Element Resize Handling:</strong> Solid State's <code>resizeFigsIn()</code> delayed re-measure pattern is the gold standard for preventing zero-width SVG or canvas rendering bugs in collapsible layouts.</li>
+    </ul>
+  </li>
+</ol>
+
+<div style="margin-top: 24pt; border-top: 1px solid var(--rule); padding-top: 8pt; font-size: 8pt; color: var(--text-faint); display: flex; justify-content: space-between;">
+  <span>Report compiled automatically via Antigravity CLI</span>
+  <span>Delivered via Quickmail to ihjas.one@gmail.com</span>
+</div>
+
+</body>
+</html>
