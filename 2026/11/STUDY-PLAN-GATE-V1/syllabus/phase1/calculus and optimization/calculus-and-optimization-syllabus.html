@@ -1,0 +1,1616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GATE DA — Course 2: Calculus and Optimization Syllabus & PYQ Roadmap</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --primary-light: #eff6ff;
+      --primary-dark: #1e3a8a;
+      --secondary: #0d9488;
+      --secondary-light: #f0fdfa;
+      --surface: #ffffff;
+      --background: #f8fafc;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
+      --success: #10b981;
+      --success-light: #ecfdf5;
+      --warning: #f59e0b;
+      --warning-light: #fffbeb;
+      --purple: #8b5cf6;
+      --purple-light: #f5f3ff;
+      --radius: 12px;
+      --radius-sm: 6px;
+      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--background);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+    }
+
+    header.banner {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #2563eb 100%);
+      color: white;
+      padding: 3rem 2.5rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      margin-bottom: 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header.banner::after {
+      content: "";
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 250px;
+      height: 250px;
+      background: radial-gradient(circle, rgba(13, 148, 136, 0.3) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .badge-phase {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-size: 2.6rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      margin-bottom: 0.75rem;
+      line-height: 1.2;
+    }
+
+    p.lead {
+      font-size: 1.15rem;
+      color: #dbeafe;
+      max-width: 800px;
+      margin-bottom: 1.75rem;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1.5rem;
+    }
+
+    .metric-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 1.25rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .metric-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #cbd5e1;
+      margin-bottom: 0.25rem;
+    }
+
+    .metric-value {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .metric-desc {
+      font-size: 0.825rem;
+      color: #bfdbfe;
+      margin-top: 0.25rem;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 2.5rem;
+    }
+
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .book-compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 1.25rem;
+    }
+
+    .book-box {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      background: #fafafa;
+    }
+
+    .book-box.winner {
+      border-color: var(--success);
+      background: var(--success-light);
+    }
+
+    .book-tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.2rem 0.6rem;
+      border-radius: 9999px;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .winner .book-tag {
+      background: var(--success);
+      color: white;
+    }
+
+    .module-nav {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .nav-pill {
+      background: white;
+      border: 1px solid var(--border);
+      padding: 0.6rem 1.2rem;
+      border-radius: 9999px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text);
+      text-decoration: none;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-pill:hover, .nav-pill.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .module-section {
+      margin-bottom: 3.5rem;
+    }
+
+    .module-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid var(--primary-light);
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .module-title-group h2 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .module-subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-top: 0.25rem;
+    }
+
+    .module-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .module-tag {
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+    }
+
+    .btn-pdf-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      color: #ffffff;
+      padding: 0.45rem 1rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 2px 4px rgba(37, 99, 235, 0.3);
+      transition: all 0.2s ease;
+    }
+
+    .btn-pdf-link:hover {
+      background: linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 100%);
+      box-shadow: 0 4px 8px rgba(37, 99, 235, 0.4);
+      transform: translateY(-1px);
+    }
+
+    /* Responsive Table */
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: white;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.925rem;
+    }
+
+    th {
+      background: #f1f5f9;
+      color: var(--text);
+      font-weight: 700;
+      padding: 0.9rem 1.1rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    td {
+      padding: 0.95rem 1.1rem;
+      border-bottom: 1px solid #f1f5f9;
+      color: var(--text);
+      vertical-align: middle;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background-color: #f8fafc;
+    }
+
+    .row-exercise td {
+      background-color: #faf5ff;
+      border-top: 1px dashed #d8b4fe;
+    }
+
+    .row-exercise:hover td {
+      background-color: #f3e8ff;
+    }
+
+    .sec-badge {
+      display: inline-block;
+      font-weight: 700;
+      color: var(--primary);
+      background: var(--primary-light);
+      padding: 0.2rem 0.55rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      white-space: nowrap;
+    }
+
+    .sec-badge-exercise {
+      color: var(--purple);
+      background: var(--purple-light);
+    }
+
+    .sec-badge-opt {
+      color: #0d9488;
+      background: #f0fdfa;
+    }
+
+    .page-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: none;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .page-link:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .page-link .cutout-ref {
+      font-size: 0.75rem;
+      font-weight: 700;
+      opacity: 0.9;
+    }
+
+    /* PYQ Section Styling */
+    .pyq-section-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .pyq-section-lead {
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      font-size: 1.05rem;
+    }
+
+    .pyq-module-block {
+      margin-bottom: 3rem;
+    }
+
+    .pyq-module-header {
+      background: #f1f5f9;
+      border-left: 4px solid var(--primary);
+      padding: 0.85rem 1.25rem;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      margin-bottom: 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .pyq-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    .pyq-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .pyq-card:hover {
+      box-shadow: var(--shadow);
+      transform: translateY(-2px);
+    }
+
+    .pyq-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .pyq-id {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+
+    .pyq-meta-badges {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .badge-mark {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .badge-1m { background: #e0f2fe; color: #0369a1; }
+    .badge-2m { background: #fef3c7; color: #b45309; }
+
+    .badge-type {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+      background: #f1f5f9;
+      color: var(--text-muted);
+    }
+
+    .pyq-question {
+      font-size: 0.975rem;
+      color: #1e293b;
+      margin-bottom: 1.25rem;
+      line-height: 1.6;
+      background: #f8fafc;
+      padding: 1rem 1.25rem;
+      border-radius: var(--radius-sm);
+      border-left: 3px solid #cbd5e1;
+    }
+
+    .pyq-source {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+      background: #f8fafc;
+      padding: 0.6rem 0.9rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .pyq-pdf-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      color: var(--primary);
+      font-weight: 700;
+      text-decoration: none;
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      transition: all 0.15s ease;
+    }
+
+    .pyq-pdf-link:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .pyq-rationale {
+      font-size: 0.9rem;
+      color: #334155;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      padding: 0.9rem 1.1rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .pyq-rationale strong {
+      color: #166534;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2.5rem 0;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      border-top: 1px solid var(--border);
+      margin-top: 3rem;
+    }
+
+    @media (max-width: 768px) {
+      .metrics-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .module-header {
+        flex-direction: column;
+      }
+      .book-compare {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  <!-- KaTeX for crisp mathematical notation -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}], throwOnError: false});"></script>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- Header Banner -->
+    <header class="banner">
+      <span class="badge-phase">Phase 1 Foundations • Course 2</span>
+      <h1>Calculus and Optimization (GATE DA)</h1>
+      <p class="lead">
+        Comprehensive 4-Module Syllabus & PYQ Practice Blueprint mapped to Thomas' Calculus (14th Ed.) and Boyd's Convex Optimization. Includes direct relative links to textbook cutouts and chapter review exercises.
+      </p>
+
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-label">Total Time Required</div>
+          <div class="metric-value">31.5 Hours</div>
+          <div class="metric-desc">21h Theory + 10.5h PYQ Practice</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">GATE DA Weightage</div>
+          <div class="metric-value">8–11 Marks</div>
+          <div class="metric-desc">~9–11% of total GATE DA exam</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Verified PYQs</div>
+          <div class="metric-value">17 Questions</div>
+          <div class="metric-desc">100% Mapped from DA 2024, 2025 & 2026</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Winning Textbooks</div>
+          <div class="metric-value">Thomas + Boyd</div>
+          <div class="metric-desc">Rigorous single-variable analysis & convexity</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Navigation Pills -->
+    <div class="module-nav">
+      <a href="#course-details" class="nav-pill active">📋 Course Details</a>
+      <a href="#module-1" class="nav-pill">📦 Module 1</a>
+      <a href="#module-2" class="nav-pill">📦 Module 2</a>
+      <a href="#module-3" class="nav-pill">📦 Module 3</a>
+      <a href="#module-4" class="nav-pill">📦 Module 4</a>
+      <a href="#pyq-breakdown" class="nav-pill">🎯 Mapped PYQs (17)</a>
+    </div>
+
+    <!-- Course Details Page / Section -->
+    <section class="card" id="course-details">
+      <h2 class="card-title">📖 Course Architecture & Textbook Benchmarking</h2>
+      <p>
+        Calculus and Optimization provides the fundamental machinery for machine learning loss minimization, gradient descent convergence, sensitivity analysis, and function modeling. The official GATE DA 2027 syllabus prescribes:
+        <em>"Functions of a single variable, limit, continuity and differentiability, Taylor series, maxima and minima, optimization involving a single variable."</em>
+      </p>
+
+      <div class="book-compare">
+        <div class="book-box winner">
+          <span class="book-tag">Primary Calculus Textbook</span>
+          <h3>Thomas' Calculus (14th Edition)</h3>
+          <p style="color: #475569; font-size: 0.9rem; margin-top: 0.25rem;"><strong>Authors:</strong> Joel R. Hass, Christopher D. Heil, Maurice D. Weir</p>
+          <ul style="margin-top: 0.75rem; margin-left: 1.25rem; font-size: 0.875rem; color: #1e293b;">
+            <li>Solved 15 out of 17 core GATE DA questions across 2024, 2025, and 2026.</li>
+            <li>Definitive treatment of single-variable limits, continuity, piecewise differentiability, and L'Hôpital's rule.</li>
+            <li>Exemplary visual and analytic coverage of critical points, second derivative tests, and Taylor series expansions.</li>
+            <li>Physical textbook cutouts for Modules 1, 2, and 3 with practice exercises generated in this folder.</li>
+          </ul>
+        </div>
+        <div class="book-box winner" style="border-color: #0d9488; background: #f0fdfa;">
+          <span class="book-tag" style="background: #0d9488;">Specialized Optimization Textbook</span>
+          <h3>Convex Optimization</h3>
+          <p style="color: #475569; font-size: 0.9rem; margin-top: 0.25rem;"><strong>Authors:</strong> Stephen Boyd, Lieven Vandenberghe (Stanford)</p>
+          <ul style="margin-top: 0.75rem; margin-left: 1.25rem; font-size: 0.875rem; color: #1e293b;">
+            <li>Authoritative source for single-variable and multi-variable convexity concepts tested in GATE DA.</li>
+            <li>Covers strict convexity ($f''(x) > 0$), epigraph characterization, and unique global minimizer theorems (2025 Q.51).</li>
+            <li>Direct theoretical basis for unconstrained linear objective functions $f_w(x) = wx$ and unboundedness (2026 Q.29).</li>
+            <li>Physical textbook cutout for Module 4 with chapter exercises generated in this folder.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Full Syllabus Tables by Module -->
+    <div id="syllabus-tables">
+
+      <!-- Module 1 -->
+      <section class="module-section" id="module-1">
+        <div class="module-header">
+          <div class="module-title-group">
+            <h2>Module 1: Functions, Limits & Continuity</h2>
+            <div class="module-subtitle">Single-variable domains, one-sided limits, piecewise continuity, infinite limits, and L'Hôpital's rule</div>
+          </div>
+          <div class="module-header-actions">
+            <span class="module-tag">7.5 Hours Total (5h Theory + 2.5h PYQ)</span>
+            <a href="./calculus-and-optimization-textbook-module-1.pdf" class="btn-pdf-link" target="_blank">📄 Open Module 1 PDF (71 pp.)</a>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 14%;">Section</th>
+                <th style="width: 28%;">Thomas Index Section Title</th>
+                <th style="width: 22%;">Textbook PDF Pages</th>
+                <th style="width: 10%;">Est. Time</th>
+                <th style="width: 26%;">Key GATE DA Focus Areas</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="sec-badge">Section 1.1</span></td>
+                <td>Functions and Their Graphs</td>
+                <td>
+                  <a href="./calculus-and-optimization-textbook-module-1.pdf#page=1" class="page-link" target="_blank" title="Jump to Section 1.1">
+                    pp. 20–32 <span class="cutout-ref">(Cutout p. 1)</span> ↗
+                  </a>
+                </td>
+                <td>40 mins</td>
+                <td>Domain, range, piecewise defined functions, absolute value functions $|x|$, symmetry (even vs odd functions).</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 2.2</span></td>
+                <td>Limit of a Function and Limit Laws</td>
+                <td>
+                  <a href="./calculus-and-optimization-textbook-module-1.pdf#page=14" class="page-link" target="_blank" title="Jump to Section 2.2">
+                    pp. 64–74 <span class="cutout-ref">(Cutout p. 14)</span> ↗
+                  </a>
+                </td>
+                <td>45 mins</td>
+                <td>Algebraic limit laws (sum, product, quotient), elimination of common factors, sandwich/squeeze theorem.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 2.4</span></td>
+                <td>One-Sided Limits</td>
+                <td>
+                  <a href="./calculus-and-optimization-textbook-module-1.pdf#page=25" class="page-link" target="_blank" title="Jump to Section 2.4">
+                    pp. 84–90 <span class="cutout-ref">(Cutout p. 25)</span> ↗
+                  </a>
+                </td>
+                <td>40 mins</td>
+                <td>Left-hand limit $\lim_{x \to c^-} f(x)$, right-hand limit $\lim_{x \to c^+} f(x)$, existence of limit $\iff$ one-sided limits agree.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 2.5</span></td>
+                <td>Continuity</td>
+                <td>
+                  <a href="./calculus-and-optimization-textbook-module-1.pdf#page=32" class="page-link" target="_blank" title="Jump to Section 2.5">
+                    pp. 91–101 <span class="cutout-ref">(Cutout p. 32)</span> ↗
+                  </a>
+                </td>
+                <td>50 mins</td>
+                <td>Continuity at a point: (1) $f(c)$ defined, (2) $\lim f(x)$ exists, (3) $\lim f(x) = f(c)$. Intermediate Value Theorem (IVT).</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 2.6</span></td>
+                <td>Limits Involving Infinity; Asymptotes</td>
+                <td>
+                  <a href="./calculus-and-optimization-textbook-module-1.pdf#page=43" class="page-link" target="_blank" title="Jump to Section 2.6">
+                    pp. 102–114 <span class="cutout-ref">(Cutout p. 43)</span> ↗
+                  </a>
+                </td>
+                <td>45 mins</td>
+                <td>Horizontal and vertical asymptotes, rational function behavior as $x \to \pm\infty$, dominant terms.</td>
+              </tr>
+              <tr class="row-exercise">
+                <td><span class="sec-badge sec-badge-exercise">Ch 2 Review</span></td>
+                <td>Chapter 2 Review & Practice Exercises</td>
+                <td>
+                  <a href="./calculus-and-optimization-textbook-module-1.pdf#page=56" class="page-link" target="_blank" title="Jump to Chapter 2 Review">
+                    pp. 115–120 <span class="cutout-ref">(Cutout p. 56)</span> ↗
+                  </a>
+                </td>
+                <td>30 mins</td>
+                <td>Questions to guide review, piecewise continuity matching, limit evaluations.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 7.5</span></td>
+                <td>Indeterminate Forms and L'Hôpital's Rule</td>
+                <td>
+                  <a href="./calculus-and-optimization-textbook-module-1.pdf#page=62" class="page-link" target="_blank" title="Jump to Section 7.5">
+                    pp. 426–435 <span class="cutout-ref">(Cutout p. 62)</span> ↗
+                  </a>
+                </td>
+                <td>50 mins</td>
+                <td>Cauchy's Mean Value Theorem, indeterminate forms $0/0$ and $\infty/\infty$, transformation of $0 \cdot \infty$, $1^\infty$, $0^0$, $\infty - \infty$.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Module 2 -->
+      <section class="module-section" id="module-2">
+        <div class="module-header">
+          <div class="module-title-group">
+            <h2>Module 2: Differentiation, Derivatives & Series Expansions</h2>
+            <div class="module-subtitle">Derivative rules, differentiability vs continuity, chain rule, geometric series, and Taylor expansions</div>
+          </div>
+          <div class="module-header-actions">
+            <span class="module-tag">8.0 Hours Total (5.5h Theory + 2.5h PYQ)</span>
+            <a href="./calculus-and-optimization-textbook-module-2.pdf" class="btn-pdf-link" target="_blank">📄 Open Module 2 PDF (67 pp.)</a>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 14%;">Section</th>
+                <th style="width: 28%;">Thomas Index Section Title</th>
+                <th style="width: 22%;">Textbook PDF Pages</th>
+                <th style="width: 10%;">Est. Time</th>
+                <th style="width: 26%;">Key GATE DA Focus Areas</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="sec-badge">Section 3.1</span></td>
+                <td>Tangent Lines & Derivative at a Point</td>
+                <td>
+                  <a href="./calculus-and-optimization-textbook-module-2.pdf#page=1" class="page-link" target="_blank" title="Jump to Section 3.1">
+                    pp. 121–124 <span class="cutout-ref">(Cutout p. 1)</span> ↗
+                  </a>
+                </td>
+                <td>30 mins</td>
+                <td>Definition of derivative $f'(x) = \lim_{h \to 0} \frac{f(x+h)-f(x)}{h}$, slope of tangent, instantaneous rate of change.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 3.2</span></td>
+                <td>The Derivative as a Function</td>
+                <td>
+                  <a href="./calculus-and-optimization-textbook-module-2.pdf#page=5" class="page-link" target="_blank" title="Jump to Section 3.2">
+                    pp. 125–133 <span class="cutout-ref">(Cutout p. 5)</span> ↗
+                  </a>
+                </td>
+                <td>45 mins</td>
+                <td>Theorem: Differentiability $\implies$ Continuity (converse is false: $|x|$ at $x=0$), one-sided derivatives at boundaries.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 3.3</span></td>
+                <td>Differentiation Rules</td>
+                <td>
+                  <a href="./calculus-and-optimization-textbook-module-2.pdf#page=14" class="page-link" target="_blank" title="Jump to Section 3.3">
+                    pp. 134–142 <span class="cutout-ref">(Cutout p. 14)</span> ↗
+                  </a>
+                </td>
+                <td>40 mins</td>
+                <td>Power rule, product rule $(uv)' = u'v + uv'$, quotient rule, higher derivatives $f^{(n)}(x)$, symmetry of derivatives for odd/even functions.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 3.6</span></td>
+                <td>The Chain Rule</td>
+                <td>
+                  <a href="./calculus-and-optimization-textbook-module-2.pdf#page=23" class="page-link" target="_blank" title="Jump to Section 3.6">
+                    pp. 159–166 <span class="cutout-ref">(Cutout p. 23)</span> ↗
+                  </a>
+                </td>
+                <td>45 mins</td>
+                <td>Composite functions $(f \circ g)'(x) = f'(g(x))g'(x)$, derivative of logistic sigmoid $\sigma'(x) = \sigma(x)(1 - \sigma(x))$.</td>
+              </tr>
+              <tr class="row-exercise">
+                <td><span class="sec-badge sec-badge-exercise">Ch 3 Review</span></td>
+                <td>Chapter 3 Review & Practice Exercises</td>
+                <td>
+                  <a href="./calculus-and-optimization-textbook-module-2.pdf#page=31" class="page-link" target="_blank" title="Jump to Chapter 3 Review">
+                    pp. 193–201 <span class="cutout-ref">(Cutout p. 31)</span> ↗
+                  </a>
+                </td>
+                <td>30 mins</td>
+                <td>Practice on piecewise differentiability matching, parameter recovery, higher-order derivatives.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 10.2</span></td>
+                <td>Infinite Series (Geometric Series)</td>
+                <td>
+                  <a href="./calculus-and-optimization-textbook-module-2.pdf#page=40" class="page-link" target="_blank" title="Jump to Section 10.2">
+                    pp. 595–604 <span class="cutout-ref">(Cutout p. 40)</span> ↗
+                  </a>
+                </td>
+                <td>40 mins</td>
+                <td>Partial sums $s_n$, geometric series $\sum_{k=0}^\infty a r^k = \frac{a}{1-r}$ for $|r| < 1$, divergence for $|r| \ge 1$.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 10.8</span></td>
+                <td>Taylor and Maclaurin Series</td>
+                <td>
+                  <a href="./calculus-and-optimization-textbook-module-2.pdf#page=50" class="page-link" target="_blank" title="Jump to Section 10.8">
+                    pp. 641–645 <span class="cutout-ref">(Cutout p. 50)</span> ↗
+                  </a>
+                </td>
+                <td>50 mins</td>
+                <td>Taylor series $\sum_{n=0}^\infty \frac{f^{(n)}(a)}{n!}(x-a)^n$, Maclaurin expansions for $e^x, \sin x, \cos x, \ln(1+x), \frac{1}{1-x}$.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 10.9</span></td>
+                <td>Convergence of Taylor Series & Remainder</td>
+                <td>
+                  <a href="./calculus-and-optimization-textbook-module-2.pdf#page=55" class="page-link" target="_blank" title="Jump to Section 10.9">
+                    pp. 646–652 <span class="cutout-ref">(Cutout p. 55)</span> ↗
+                  </a>
+                </td>
+                <td>40 mins</td>
+                <td>Taylor's Theorem with remainder $R_n(x) = \frac{f^{(n+1)}(c)}{(n+1)!}(x-a)^{n+1}$, truncation error in approximations.</td>
+              </tr>
+              <tr class="row-exercise">
+                <td><span class="sec-badge sec-badge-exercise">Ch 10 Review</span></td>
+                <td>Chapter 10 Review & Practice Exercises</td>
+                <td>
+                  <a href="./calculus-and-optimization-textbook-module-2.pdf#page=62" class="page-link" target="_blank" title="Jump to Chapter 10 Review">
+                    pp. 662–667 <span class="cutout-ref">(Cutout p. 62)</span> ↗
+                  </a>
+                </td>
+                <td>25 mins</td>
+                <td>Taylor polynomial approximation, power series radius of convergence, series summation exercises.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Module 3 -->
+      <section class="module-section" id="module-3">
+        <div class="module-header">
+          <div class="module-title-group">
+            <h2>Module 3: Mean Value Theorem, Monotonicity & Maxima/Minima</h2>
+            <div class="module-subtitle">Extreme value theorem, critical points, Rolle's theorem, concavity, and single-variable optimization</div>
+          </div>
+          <div class="module-header-actions">
+            <span class="module-tag">8.5 Hours Total (5.5h Theory + 3h PYQ)</span>
+            <a href="./calculus-and-optimization-textbook-module-3.pdf" class="btn-pdf-link" target="_blank">📄 Open Module 3 PDF (49 pp.)</a>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 14%;">Section</th>
+                <th style="width: 28%;">Thomas Index Section Title</th>
+                <th style="width: 22%;">Textbook PDF Pages</th>
+                <th style="width: 10%;">Est. Time</th>
+                <th style="width: 26%;">Key GATE DA Focus Areas</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="sec-badge">Section 4.1</span></td>
+                <td>Extreme Values of Functions</td>
+                <td>
+                  <a href="./calculus-and-optimization-textbook-module-3.pdf#page=1" class="page-link" target="_blank" title="Jump to Section 4.1">
+                    pp. 202–209 <span class="cutout-ref">(Cutout p. 1)</span> ↗
+                  </a>
+                </td>
+                <td>50 mins</td>
+                <td>Extreme Value Theorem on $[a, b]$, critical points ($f'(c)=0$ or undefined), closed interval method (interior vs boundary evaluation).</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 4.2</span></td>
+                <td>The Mean Value Theorem (MVT)</td>
+                <td>
+                  <a href="./calculus-and-optimization-textbook-module-3.pdf#page=9" class="page-link" target="_blank" title="Jump to Section 4.2">
+                    pp. 210–215 <span class="cutout-ref">(Cutout p. 9)</span> ↗
+                  </a>
+                </td>
+                <td>45 mins</td>
+                <td>Rolle's Theorem, Mean Value Theorem $f'(c) = \frac{f(b)-f(a)}{b-a}$, Corollary: $f'(x)=0 \implies f(x) = C$ (constant function).</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 4.3</span></td>
+                <td>Monotonic Functions & First Derivative Test</td>
+                <td>
+                  <a href="./calculus-and-optimization-textbook-module-3.pdf#page=15" class="page-link" target="_blank" title="Jump to Section 4.3">
+                    pp. 216–220 <span class="cutout-ref">(Cutout p. 15)</span> ↗
+                  </a>
+                </td>
+                <td>45 mins</td>
+                <td>Strictly increasing ($f'>0$), strictly decreasing ($f'<0$), first derivative test for local extrema.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 4.4</span></td>
+                <td>Concavity and Curve Sketching</td>
+                <td>
+                  <a href="./calculus-and-optimization-textbook-module-3.pdf#page=20" class="page-link" target="_blank" title="Jump to Section 4.4">
+                    pp. 221–232 <span class="cutout-ref">(Cutout p. 20)</span> ↗
+                  </a>
+                </td>
+                <td>55 mins</td>
+                <td>Concave up ($f''>0$), concave down ($f''<0$), points of inflection ($f''=0$ with sign change), Second Derivative Test for local extrema.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 4.5</span></td>
+                <td>Applied Optimization</td>
+                <td>
+                  <a href="./calculus-and-optimization-textbook-module-3.pdf#page=32" class="page-link" target="_blank" title="Jump to Section 4.5">
+                    pp. 233–244 <span class="cutout-ref">(Cutout p. 32)</span> ↗
+                  </a>
+                </td>
+                <td>50 mins</td>
+                <td>Formulating single-variable optimization objectives, finding feasible domains, testing boundaries and critical points.</td>
+              </tr>
+              <tr class="row-exercise">
+                <td><span class="sec-badge sec-badge-exercise">Ch 4 Review</span></td>
+                <td>Chapter 4 Practice Exercises & Review</td>
+                <td>
+                  <a href="./calculus-and-optimization-textbook-module-3.pdf#page=44" class="page-link" target="_blank" title="Jump to Chapter 4 Review">
+                    pp. 260–265 <span class="cutout-ref">(Cutout p. 44)</span> ↗
+                  </a>
+                </td>
+                <td>30 mins</td>
+                <td>Polynomial curve sketching, inflection points, interval optimization problems.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Module 4 -->
+      <section class="module-section" id="module-4">
+        <div class="module-header">
+          <div class="module-title-group">
+            <h2>Module 4: Convexity & Single-Variable Optimization</h2>
+            <div class="module-subtitle">Convex sets, strict convexity, first & second order conditions, epigraph, and linear optimization</div>
+          </div>
+          <div class="module-header-actions">
+            <span class="module-tag">7.5 Hours Total (5h Theory + 2.5h PYQ)</span>
+            <a href="./calculus-and-optimization-textbook-module-4.pdf" class="btn-pdf-link" target="_blank">📄 Open Module 4 PDF (68 pp.)</a>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 14%;">Section</th>
+                <th style="width: 28%;">Boyd Index Section Title</th>
+                <th style="width: 22%;">Textbook PDF Pages</th>
+                <th style="width: 10%;">Est. Time</th>
+                <th style="width: 26%;">Key GATE DA Focus Areas</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="sec-badge sec-badge-opt">Boyd Sec 2.1</span></td>
+                <td>Affine and Convex Sets</td>
+                <td>
+                  <a href="./calculus-and-optimization-textbook-module-4.pdf#page=1" class="page-link" target="_blank" title="Jump to Boyd Sec 2.1">
+                    pp. 36–41 <span class="cutout-ref">(Cutout p. 1)</span> ↗
+                  </a>
+                </td>
+                <td>35 mins</td>
+                <td>Definition of convex set: line segment $\theta x_1 + (1-\theta)x_2 \in C$ for $\theta \in [0, 1]$, convex combinations.</td>
+              </tr>
+              <tr class="row-exercise">
+                <td><span class="sec-badge sec-badge-exercise">Ch 2 Exercises</span></td>
+                <td>Boyd Chapter 2 Final Exercises</td>
+                <td>
+                  <a href="./calculus-and-optimization-textbook-module-4.pdf#page=7" class="page-link" target="_blank" title="Jump to Boyd Ch 2 Exercises">
+                    pp. 72–75 <span class="cutout-ref">(Cutout p. 7)</span> ↗
+                  </a>
+                </td>
+                <td>20 mins</td>
+                <td>Convex set verification exercises and geometric hulls.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge sec-badge-opt">Boyd Sec 3.1</span></td>
+                <td>Convex Functions: Basic Properties</td>
+                <td>
+                  <a href="./calculus-and-optimization-textbook-module-4.pdf#page=11" class="page-link" target="_blank" title="Jump to Boyd Sec 3.1">
+                    pp. 82–93 <span class="cutout-ref">(Cutout p. 11)</span> ↗
+                  </a>
+                </td>
+                <td>60 mins</td>
+                <td>Jensen's Inequality, First-Order Condition $f(y) \ge f(x) + f'(x)(y-x)$, Second-Order Condition ($f''(x) \ge 0 \iff$ convex, $f''(x) > 0 \implies$ strictly convex).</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge sec-badge-opt">Boyd Sec 3.2</span></td>
+                <td>Operations Preserving Convexity</td>
+                <td>
+                  <a href="./calculus-and-optimization-textbook-module-4.pdf#page=23" class="page-link" target="_blank" title="Jump to Boyd Sec 3.2">
+                    pp. 94–104 <span class="cutout-ref">(Cutout p. 23)</span> ↗
+                  </a>
+                </td>
+                <td>40 mins</td>
+                <td>Nonnegative weighted sums $\alpha f + \beta g$, pointwise maximum $\max(f_1, f_2)$, composition rules.</td>
+              </tr>
+              <tr class="row-exercise">
+                <td><span class="sec-badge sec-badge-exercise">Ch 3 Exercises</span></td>
+                <td>Boyd Chapter 3 Final Exercises</td>
+                <td>
+                  <a href="./calculus-and-optimization-textbook-module-4.pdf#page=34" class="page-link" target="_blank" title="Jump to Boyd Ch 3 Exercises">
+                    pp. 128–132 <span class="cutout-ref">(Cutout p. 34)</span> ↗
+                  </a>
+                </td>
+                <td>25 mins</td>
+                <td>Strict convexity problem sets, epigraph proofs, Hessians in 1D.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge sec-badge-opt">Boyd Sec 4.1</span></td>
+                <td>Optimization Problems</td>
+                <td>
+                  <a href="./calculus-and-optimization-textbook-module-4.pdf#page=39" class="page-link" target="_blank" title="Jump to Boyd Sec 4.1">
+                    pp. 142–150 <span class="cutout-ref">(Cutout p. 39)</span> ↗
+                  </a>
+                </td>
+                <td>40 mins</td>
+                <td>Standard optimization formulation $\min f_0(x)$, optimal value $p^*$, unbounded below ($p^* = -\infty$).</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge sec-badge-opt">Boyd Sec 4.2</span></td>
+                <td>Convex Optimization Problems</td>
+                <td>
+                  <a href="./calculus-and-optimization-textbook-module-4.pdf#page=48" class="page-link" target="_blank" title="Jump to Boyd Sec 4.2">
+                    pp. 151–160 <span class="cutout-ref">(Cutout p. 48)</span> ↗
+                  </a>
+                </td>
+                <td>50 mins</td>
+                <td>Fundamental Theorem: Any local minimum is a global minimum. Strictly convex functions have at most one unique global minimizer.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge sec-badge-opt">Boyd Sec 4.3</span></td>
+                <td>Linear Optimization Problems</td>
+                <td>
+                  <a href="./calculus-and-optimization-textbook-module-4.pdf#page=58" class="page-link" target="_blank" title="Jump to Boyd Sec 4.3">
+                    pp. 161–166 <span class="cutout-ref">(Cutout p. 58)</span> ↗
+                  </a>
+                </td>
+                <td>40 mins</td>
+                <td>Linear objective functions $f_w(x) = wx$ are both convex and concave. Over $\mathbb{R}$, unbounded below if $w \ne 0$.</td>
+              </tr>
+              <tr class="row-exercise">
+                <td><span class="sec-badge sec-badge-exercise">Ch 4 Exercises</span></td>
+                <td>Boyd Chapter 4 Final Exercises</td>
+                <td>
+                  <a href="./calculus-and-optimization-textbook-module-4.pdf#page=64" class="page-link" target="_blank" title="Jump to Boyd Ch 4 Exercises">
+                    pp. 189–193 <span class="cutout-ref">(Cutout p. 64)</span> ↗
+                  </a>
+                </td>
+                <td>25 mins</td>
+                <td>Optimality condition $f'(x^*)=0$, feasibility and unconstrained problem analysis.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Mapped PYQs Section (Grouped by Module) -->
+    <section class="card" id="pyq-breakdown" style="margin-top: 3rem;">
+      <h2 class="pyq-section-title">🎯 GATE DA Mapped PYQs by Module (2024, 2025 & 2026)</h2>
+      <p class="pyq-section-lead">
+        All 17 Calculus & Optimization questions from official GATE DA papers mapped to their exact module, source section, and physical cutout page. Click any page link to open the concept in the textbook cutout.
+      </p>
+
+      <!-- Module 1 PYQ Block -->
+      <div class="pyq-module-block">
+        <div class="pyq-module-header">
+          <span>Module 1 PYQ Practice (4 Questions • 7 Marks)</span>
+          <span style="font-size: 0.85rem; font-weight: normal; color: var(--text-muted);">Functions, Continuity & Indeterminate Limits</span>
+        </div>
+
+        <div class="pyq-grid">
+          <!-- 2024 Q.37 -->
+          <div class="pyq-card">
+            <div class="pyq-header">
+              <span class="pyq-id">GATE DA 2024 — Q.37</span>
+              <div class="pyq-meta-badges">
+                <span class="badge-mark badge-2m">2 Marks</span>
+                <span class="badge-type">MCQ</span>
+                <span class="page-badge" style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">PYQ PDF p. 22</span>
+              </div>
+            </div>
+            <div class="pyq-question">
+              <strong>Question Statement:</strong><br>
+              Consider the piecewise function $f: \mathbb{R} \to \mathbb{R}$ defined by:
+              $$f(x) = \begin{cases} -x, & x < -2 \\ ax^2 + bx + c, & -2 \le x \le 2 \\ x, & x > 2 \end{cases}$$
+              Find the values of $a, b, c$ such that $f(x)$ is continuous and differentiable everywhere on $\mathbb{R}$.<br>
+              (A) $a = 1/4, b = 0, c = 1$ &nbsp;&nbsp;&nbsp;&nbsp; (B) $a = 1/4, b = 1/2, c = 0$<br>
+              (C) $a = -1/4, b = 0, c = 2$ &nbsp;&nbsp;&nbsp;&nbsp; (D) $a = 1/2, b = 0, c = 1$
+            </div>
+            <div class="pyq-source">
+              <span>📖 <strong>Source Textbook:</strong> Thomas' Calculus (14th Ed.)</span>
+              <span>• <strong>Section:</strong> Section 2.5 & 3.2 "Continuity & Derivative as Function"</span>
+              <span>• <strong>Cutout Link:</strong> <a href="./calculus-and-optimization-textbook-module-1.pdf#page=32" class="pyq-pdf-link" target="_blank">pp. 91–101 (Cutout p. 32) ↗</a></span>
+            </div>
+            <div class="pyq-rationale">
+              <strong>Theoretical Rationale:</strong> For continuity and differentiability at $x = 2$: $f(2) = 4a + 2b + c = 2$ and $f'(2) = 4a + b = 1$. At $x = -2$: $f(-2) = 4a - 2b + c = 2$ and $f'(-2) = -4a + b = -1$. Subtracting the derivative equations gives $8a = 2 \implies a = 1/4$. Then $b = 0$. Substituting $a$ and $b$ into $4(1/4) + c = 2 \implies 1 + c = 2 \implies c = 1$. Thus, $\mathbf{a = 1/4, b = 0, c = 1}$. Correct option: <strong>(A)</strong>.
+            </div>
+          </div>
+
+          <!-- 2024 Q.60 -->
+          <div class="pyq-card">
+            <div class="pyq-header">
+              <span class="pyq-id">GATE DA 2024 — Q.60</span>
+              <div class="pyq-meta-badges">
+                <span class="badge-mark badge-2m">2 Marks</span>
+                <span class="badge-type">NAT</span>
+                <span class="page-badge" style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">PYQ PDF p. 38</span>
+              </div>
+            </div>
+            <div class="pyq-question">
+              <strong>Question Statement:</strong><br>
+              Evaluate the limit:
+              $$L = \lim_{x \to 0} \frac{\ln\left((x^2 + 1)\cos x\right)}{x^2}$$
+            </div>
+            <div class="pyq-source">
+              <span>📖 <strong>Source Textbook:</strong> Thomas' Calculus (14th Ed.)</span>
+              <span>• <strong>Section:</strong> Section 7.5 "Indeterminate Forms & L'Hôpital's Rule"</span>
+              <span>• <strong>Cutout Link:</strong> <a href="./calculus-and-optimization-textbook-module-1.pdf#page=62" class="pyq-pdf-link" target="_blank">pp. 426–435 (Cutout p. 62) ↗</a></span>
+            </div>
+            <div class="pyq-rationale">
+              <strong>Theoretical Rationale:</strong> Expand the numerator using $\ln(AB) = \ln(A) + \ln(B)$: $\ln(x^2 + 1) + \ln(\cos x)$. Using Maclaurin series around $x = 0$: $\ln(1 + x^2) = x^2 - \frac{x^4}{2} + \dots$, and $\cos x = 1 - \frac{x^2}{2} + \dots \implies \ln(\cos x) = \ln(1 - \frac{x^2}{2}) = -\frac{x^2}{2} + \dots$. Summing: $x^2 - \frac{x^2}{2} = \frac{1}{2}x^2$. Dividing by $x^2$ gives $L = \mathbf{0.5}$.
+            </div>
+          </div>
+
+          <!-- 2025 Q.32 -->
+          <div class="pyq-card">
+            <div class="pyq-header">
+              <span class="pyq-id">GATE DA 2025 — Q.32</span>
+              <div class="pyq-meta-badges">
+                <span class="badge-mark badge-1m">1 Mark</span>
+                <span class="badge-type">NAT</span>
+                <span class="page-badge" style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">PYQ PDF p. 17</span>
+              </div>
+            </div>
+            <div class="pyq-question">
+              <strong>Question Statement:</strong><br>
+              Compute the limit:
+              $$L = \lim_{x \to 0} \frac{e^x - 1 - x}{x^2}$$
+            </div>
+            <div class="pyq-source">
+              <span>📖 <strong>Source Textbook:</strong> Thomas' Calculus (14th Ed.)</span>
+              <span>• <strong>Section:</strong> Section 7.5 "Indeterminate Forms & L'Hôpital's Rule"</span>
+              <span>• <strong>Cutout Link:</strong> <a href="./calculus-and-optimization-textbook-module-1.pdf#page=62" class="pyq-pdf-link" target="_blank">pp. 426–435 (Cutout p. 62) ↗</a></span>
+            </div>
+            <div class="pyq-rationale">
+              <strong>Theoretical Rationale:</strong> At $x = 0$, the expression is of indeterminate form $0/0$. Applying L'Hôpital's rule once: $\lim_{x \to 0} \frac{e^x - 1}{2x}$ (still $0/0$). Applying L'Hôpital's rule a second time: $\lim_{x \to 0} \frac{e^x}{2} = \frac{1}{2} = \mathbf{0.5}$. Alternatively, from the series $e^x = 1 + x + \frac{x^2}{2!} + \dots$, the numerator is $\frac{x^2}{2} + O(x^3)$, so $L = \mathbf{0.5}$.
+            </div>
+          </div>
+
+          <!-- 2026 Q.45 -->
+          <div class="pyq-card">
+            <div class="pyq-header">
+              <span class="pyq-id">GATE DA 2026 — Q.45</span>
+              <div class="pyq-meta-badges">
+                <span class="badge-mark badge-2m">2 Marks</span>
+                <span class="badge-type">MCQ</span>
+                <span class="page-badge" style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">PYQ PDF p. 29</span>
+              </div>
+            </div>
+            <div class="pyq-question">
+              <strong>Question Statement:</strong><br>
+              Evaluate the limit:
+              $$\lim_{x \to 0} \frac{\sin x - x + \frac{x^3}{6}}{x^5}$$
+              (A) $1/120$ &nbsp;&nbsp;&nbsp;&nbsp; (B) $-1/120$ &nbsp;&nbsp;&nbsp;&nbsp; (C) 0 &nbsp;&nbsp;&nbsp;&nbsp; (D) does not exist
+            </div>
+            <div class="pyq-source">
+              <span>📖 <strong>Source Textbook:</strong> Thomas' Calculus (14th Ed.)</span>
+              <span>• <strong>Section:</strong> Section 7.5 & 10.8 "L'Hôpital's Rule & Taylor Series"</span>
+              <span>• <strong>Cutout Link:</strong> <a href="./calculus-and-optimization-textbook-module-1.pdf#page=62" class="pyq-pdf-link" target="_blank">pp. 426–435 (Cutout p. 62) ↗</a></span>
+            </div>
+            <div class="pyq-rationale">
+              <strong>Theoretical Rationale:</strong> Using the Maclaurin expansion of $\sin x = x - \frac{x^3}{3!} + \frac{x^5}{5!} - \frac{x^7}{7!} + \dots = x - \frac{x^3}{6} + \frac{x^5}{120} - \dots$. The numerator is precisely $\frac{x^5}{120} + O(x^7)$. Dividing by $x^5$ yields $\lim_{x \to 0} \left(\frac{1}{120} + O(x^2)\right) = \mathbf{1/120}$. Correct option: <strong>(A)</strong>.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Module 2 PYQ Block -->
+      <div class="pyq-module-block">
+        <div class="pyq-module-header">
+          <span>Module 2 PYQ Practice (4 Questions • 5 Marks)</span>
+          <span style="font-size: 0.85rem; font-weight: normal; color: var(--text-muted);">Differentiation, Higher Derivatives & Series Expansions</span>
+        </div>
+
+        <div class="pyq-grid">
+          <!-- 2024 Q.33 -->
+          <div class="pyq-card">
+            <div class="pyq-header">
+              <span class="pyq-id">GATE DA 2024 — Q.33</span>
+              <div class="pyq-meta-badges">
+                <span class="badge-mark badge-1m">1 Mark</span>
+                <span class="badge-type">NAT</span>
+                <span class="page-badge" style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">PYQ PDF p. 20</span>
+              </div>
+            </div>
+            <div class="pyq-question">
+              <strong>Question Statement:</strong><br>
+              Let $f(x) = \frac{1}{1 + e^{-x}}$ be the standard logistic sigmoid function. Compute the derivative $f'(x)$ at the point $x$ where $f(x) = 0.4$.
+            </div>
+            <div class="pyq-source">
+              <span>📖 <strong>Source Textbook:</strong> Thomas' Calculus (14th Ed.)</span>
+              <span>• <strong>Section:</strong> Section 3.6 "The Chain Rule & Exponential Derivatives"</span>
+              <span>• <strong>Cutout Link:</strong> <a href="./calculus-and-optimization-textbook-module-2.pdf#page=23" class="pyq-pdf-link" target="_blank">pp. 159–166 (Cutout p. 23) ↗</a></span>
+            </div>
+            <div class="pyq-rationale">
+              <strong>Theoretical Rationale:</strong> Differentiating $f(x) = (1 + e^{-x})^{-1}$ using the chain rule gives $f'(x) = -(1 + e^{-x})^{-2} (-e^{-x}) = \frac{e^{-x}}{(1 + e^{-x})^2} = \frac{1}{1 + e^{-x}} \left(1 - \frac{1}{1 + e^{-x}}\right) = f(x)(1 - f(x))$. For $f(x) = 0.4$: $f'(x) = 0.4 \times (1 - 0.4) = 0.4 \times 0.6 = \mathbf{0.24}$.
+            </div>
+          </div>
+
+          <!-- 2025 Q.14 -->
+          <div class="pyq-card">
+            <div class="pyq-header">
+              <span class="pyq-id">GATE DA 2025 — Q.14</span>
+              <div class="pyq-meta-badges">
+                <span class="badge-mark badge-1m">1 Mark</span>
+                <span class="badge-type">MCQ</span>
+                <span class="page-badge" style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">PYQ PDF p. 11</span>
+              </div>
+            </div>
+            <div class="pyq-question">
+              <strong>Question Statement:</strong><br>
+              Let $f(x) = \frac{e^x - e^{-x}}{2}$. What is the value of the 10th derivative $f^{(10)}(0)$?<br>
+              (A) 0 &nbsp;&nbsp;&nbsp;&nbsp; (B) 1 &nbsp;&nbsp;&nbsp;&nbsp; (C) -1 &nbsp;&nbsp;&nbsp;&nbsp; (D) 10
+            </div>
+            <div class="pyq-source">
+              <span>📖 <strong>Source Textbook:</strong> Thomas' Calculus (14th Ed.)</span>
+              <span>• <strong>Section:</strong> Section 3.3 "Differentiation Rules (Higher Order Derivatives)"</span>
+              <span>• <strong>Cutout Link:</strong> <a href="./calculus-and-optimization-textbook-module-2.pdf#page=14" class="pyq-pdf-link" target="_blank">pp. 134–142 (Cutout p. 14) ↗</a></span>
+            </div>
+            <div class="pyq-rationale">
+              <strong>Theoretical Rationale:</strong> Note that $f(x) = \sinh x$ is an odd function. Differentiating an odd function an even number of times yields an odd function: $f^{(2k)}(x) = \sinh x$. Since $\sinh(0) = \frac{e^0 - e^{-0}}{2} = 0$, we have $f^{(10)}(0) = \sinh(0) = \mathbf{0}$. Correct option: <strong>(A)</strong>.
+            </div>
+          </div>
+
+          <!-- 2025 Q.24 -->
+          <div class="pyq-card">
+            <div class="pyq-header">
+              <span class="pyq-id">GATE DA 2025 — Q.24</span>
+              <div class="pyq-meta-badges">
+                <span class="badge-mark badge-1m">1 Mark</span>
+                <span class="badge-type">MCQ</span>
+                <span class="page-badge" style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">PYQ PDF p. 14</span>
+              </div>
+            </div>
+            <div class="pyq-question">
+              <strong>Question Statement:</strong><br>
+              What is the Taylor series expansion of $f(x) = \cos(x)$ around $x = 0$?<br>
+              (A) $\sum_{n=0}^\infty (-1)^n \frac{x^{2n}}{(2n)!}$ &nbsp;&nbsp;&nbsp;&nbsp; (B) $\sum_{n=0}^\infty (-1)^n \frac{x^{2n+1}}{(2n+1)!}$<br>
+              (C) $\sum_{n=0}^\infty \frac{x^{2n}}{(2n)!}$ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (D) $\sum_{n=0}^\infty \frac{x^n}{n!}$
+            </div>
+            <div class="pyq-source">
+              <span>📖 <strong>Source Textbook:</strong> Thomas' Calculus (14th Ed.)</span>
+              <span>• <strong>Section:</strong> Section 10.8 "Taylor and Maclaurin Series"</span>
+              <span>• <strong>Cutout Link:</strong> <a href="./calculus-and-optimization-textbook-module-2.pdf#page=50" class="pyq-pdf-link" target="_blank">pp. 641–645 (Cutout p. 50) ↗</a></span>
+            </div>
+            <div class="pyq-rationale">
+              <strong>Theoretical Rationale:</strong> By Taylor's formula around $a = 0$, since $\cos(0) = 1, \cos'(0) = 0, \cos''(0) = -1, \cos'''(0) = 0$, all odd terms vanish and the even terms alternate in sign: $\cos(x) = 1 - \frac{x^2}{2!} + \frac{x^4}{4!} - \dots = \sum_{n=0}^\infty (-1)^n \frac{x^{2n}}{(2n)!}$. Correct option: <strong>(A)</strong>.
+            </div>
+          </div>
+
+          <!-- 2026 Q.35 -->
+          <div class="pyq-card">
+            <div class="pyq-header">
+              <span class="pyq-id">GATE DA 2026 — Q.35</span>
+              <div class="pyq-meta-badges">
+                <span class="badge-mark badge-1m">1 Mark</span>
+                <span class="badge-type">NAT</span>
+                <span class="page-badge" style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">PYQ PDF p. 21</span>
+              </div>
+            </div>
+            <div class="pyq-question">
+              <strong>Question Statement:</strong><br>
+              Compute the sum of the infinite geometric series:
+              $$S = \sum_{k=1}^\infty 5 \left(\frac{1}{3}\right)^k$$
+            </div>
+            <div class="pyq-source">
+              <span>📖 <strong>Source Textbook:</strong> Thomas' Calculus (14th Ed.)</span>
+              <span>• <strong>Section:</strong> Section 10.2 "Infinite Series (Geometric Series Formula)"</span>
+              <span>• <strong>Cutout Link:</strong> <a href="./calculus-and-optimization-textbook-module-2.pdf#page=40" class="pyq-pdf-link" target="_blank">pp. 595–604 (Cutout p. 40) ↗</a></span>
+            </div>
+            <div class="pyq-rationale">
+              <strong>Theoretical Rationale:</strong> The first term is $a = 5(1/3)^1 = 5/3$. The common ratio is $r = 1/3$. Since $|r| < 1$, the series converges to $S = \frac{a}{1 - r} = \frac{5/3}{1 - 1/3} = \frac{5/3}{2/3} = \mathbf{2.5}$.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Module 3 PYQ Block -->
+      <div class="pyq-module-block">
+        <div class="pyq-module-header">
+          <span>Module 3 PYQ Practice (7 Questions • 11 Marks)</span>
+          <span style="font-size: 0.85rem; font-weight: normal; color: var(--text-muted);">Mean Value Theorem, Monotonicity & Maxima/Minima</span>
+        </div>
+
+        <div class="pyq-grid">
+          <!-- 2024 Q.15 -->
+          <div class="pyq-card">
+            <div class="pyq-header">
+              <span class="pyq-id">GATE DA 2024 — Q.15</span>
+              <div class="pyq-meta-badges">
+                <span class="badge-mark badge-1m">1 Mark</span>
+                <span class="badge-type">MCQ</span>
+                <span class="page-badge" style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">PYQ PDF p. 11</span>
+              </div>
+            </div>
+            <div class="pyq-question">
+              <strong>Question Statement:</strong><br>
+              Let $f: \mathbb{R} \to \mathbb{R}$ be a twice continuously differentiable function. If $x^* \in \mathbb{R}$ is a point such that $f'(x^*) = 0$ and $f''(x^*) > 0$, then $x^*$ is:<br>
+              (A) a local minimum of $f$ &nbsp;&nbsp;&nbsp;&nbsp; (B) a local maximum of $f$<br>
+              (C) a point of inflection of $f$ &nbsp;&nbsp;&nbsp;&nbsp; (D) neither a maximum nor a minimum
+            </div>
+            <div class="pyq-source">
+              <span>📖 <strong>Source Textbook:</strong> Thomas' Calculus (14th Ed.)</span>
+              <span>• <strong>Section:</strong> Section 4.4 "Concavity & Second Derivative Test"</span>
+              <span>• <strong>Cutout Link:</strong> <a href="./calculus-and-optimization-textbook-module-3.pdf#page=20" class="pyq-pdf-link" target="_blank">pp. 221–232 (Cutout p. 20) ↗</a></span>
+            </div>
+            <div class="pyq-rationale">
+              <strong>Theoretical Rationale:</strong> By the Second Derivative Test for Local Extrema: if $f'(x^*) = 0$ and $f''(x^*) > 0$, the curve is strictly concave upward at $x^*$, meaning the slope increases from negative to positive. Hence $x^*$ is a strict <strong>local minimum</strong>. Correct option: <strong>(A)</strong>.
+            </div>
+          </div>
+
+          <!-- 2024 Q.50 -->
+          <div class="pyq-card">
+            <div class="pyq-header">
+              <span class="pyq-id">GATE DA 2024 — Q.50</span>
+              <div class="pyq-meta-badges">
+                <span class="badge-mark badge-2m">2 Marks</span>
+                <span class="badge-type">MSQ</span>
+                <span class="page-badge" style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">PYQ PDF p. 32</span>
+              </div>
+            </div>
+            <div class="pyq-question">
+              <strong>Question Statement:</strong><br>
+              Let $f(x) = \frac{x^4}{4} - \frac{2x^3}{3} - \frac{3x^2}{2} + 1$ for $x \in \mathbb{R}$. Which of the following statements is/are TRUE?<br>
+              (A) $f(x)$ has a local minimum at $x = 3$<br>
+              (B) $f(x)$ has a local maximum at $x = 0$<br>
+              (C) $f(x)$ has a local minimum at $x = -1$<br>
+              (D) $f(x)$ has a point of inflection at $x = 0$
+            </div>
+            <div class="pyq-source">
+              <span>📖 <strong>Source Textbook:</strong> Thomas' Calculus (14th Ed.)</span>
+              <span>• <strong>Section:</strong> Section 4.1 & 4.4 "Extreme Values & Curve Sketching"</span>
+              <span>• <strong>Cutout Link:</strong> <a href="./calculus-and-optimization-textbook-module-3.pdf#page=1" class="pyq-pdf-link" target="_blank">pp. 202–209, 221–232 (Cutout p. 1) ↗</a></span>
+            </div>
+            <div class="pyq-rationale">
+              <strong>Theoretical Rationale:</strong> $f'(x) = x^3 - 2x^2 - 3x = x(x - 3)(x + 1)$. Critical points are $x = -1, 0, 3$. $f''(x) = 3x^2 - 4x - 3$. At $x = 3$: $f''(3) = 27 - 12 - 3 = 12 > 0 \implies$ local min (A is true). At $x = 0$: $f''(0) = -3 < 0 \implies$ local max (B is true). At $x = -1$: $f''(-1) = 3 + 4 - 3 = 4 > 0 \implies$ local min (C is true). For (D), $f''(0) = -3 \ne 0$, so $x = 0$ is not an inflection point. Correct options: <strong>(A), (B), and (C)</strong>.
+            </div>
+          </div>
+
+          <!-- 2025 Q.7 -->
+          <div class="pyq-card">
+            <div class="pyq-header">
+              <span class="pyq-id">GATE DA 2025 — Q.7</span>
+              <div class="pyq-meta-badges">
+                <span class="badge-mark badge-2m">2 Marks</span>
+                <span class="badge-type">MCQ</span>
+                <span class="page-badge" style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">PYQ PDF p. 6</span>
+              </div>
+            </div>
+            <div class="pyq-question">
+              <strong>Question Statement:</strong><br>
+              A person's weight strictly increases with age up to age 50, and strictly decreases with age after age 50. Two brothers with ages $a_1$ and $a_2$ ($a_1 < a_2$) have the exact same weight. Which of the following is necessarily TRUE?<br>
+              (A) $a_1 < 50$ and $a_2 > 50$ &nbsp;&nbsp;&nbsp;&nbsp; (B) Both $a_1, a_2 < 50$<br>
+              (C) Both $a_1, a_2 > 50$ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (D) $a_1 + a_2 = 100$
+            </div>
+            <div class="pyq-source">
+              <span>📖 <strong>Source Textbook:</strong> Thomas' Calculus (14th Ed.)</span>
+              <span>• <strong>Section:</strong> Section 4.3 "Monotonic Functions & Uniqueness"</span>
+              <span>• <strong>Cutout Link:</strong> <a href="./calculus-and-optimization-textbook-module-3.pdf#page=15" class="pyq-pdf-link" target="_blank">pp. 216–220 (Cutout p. 15) ↗</a></span>
+            </div>
+            <div class="pyq-rationale">
+              <strong>Theoretical Rationale:</strong> A strictly monotonic function is injective (one-to-one). Thus, if both ages were $\le 50$, $a_1 < a_2 \implies W(a_1) < W(a_2)$ (impossible). Similarly, if both were $\ge 50$, $W(a_1) > W(a_2)$ (impossible). Therefore, the weight level can only be matched if one age lies on the increasing branch ($a_1 < 50$) and the other lies on the decreasing branch ($a_2 > 50$). Correct option: <strong>(A)</strong>.
+            </div>
+          </div>
+
+          <!-- 2025 Q.41 -->
+          <div class="pyq-card">
+            <div class="pyq-header">
+              <span class="pyq-id">GATE DA 2025 — Q.41</span>
+              <div class="pyq-meta-badges">
+                <span class="badge-mark badge-2m">2 Marks</span>
+                <span class="badge-type">MCQ</span>
+                <span class="page-badge" style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">PYQ PDF p. 22</span>
+              </div>
+            </div>
+            <div class="pyq-question">
+              <strong>Question Statement:</strong><br>
+              Find the global minimum value of $f(x) = x^2 - 4x + 7$ on the closed interval $[0, 5]$.<br>
+              (A) 3 &nbsp;&nbsp;&nbsp;&nbsp; (B) 7 &nbsp;&nbsp;&nbsp;&nbsp; (C) 12 &nbsp;&nbsp;&nbsp;&nbsp; (D) 0
+            </div>
+            <div class="pyq-source">
+              <span>📖 <strong>Source Textbook:</strong> Thomas' Calculus (14th Ed.)</span>
+              <span>• <strong>Section:</strong> Section 4.1 "Extreme Values on Closed Intervals"</span>
+              <span>• <strong>Cutout Link:</strong> <a href="./calculus-and-optimization-textbook-module-3.pdf#page=1" class="pyq-pdf-link" target="_blank">pp. 202–209 (Cutout p. 1) ↗</a></span>
+            </div>
+            <div class="pyq-rationale">
+              <strong>Theoretical Rationale:</strong> Complete the square: $f(x) = (x - 2)^2 + 3$. The critical point is $f'(x) = 2x - 4 = 0 \implies x = 2 \in [0, 5]$. Evaluating candidates: $f(0) = 7$, $f(2) = 3$, $f(5) = 9 + 3 = 12$. The global minimum value is $\mathbf{3}$. Correct option: <strong>(A)</strong>.
+            </div>
+          </div>
+
+          <!-- 2025 Q.49 -->
+          <div class="pyq-card">
+            <div class="pyq-header">
+              <span class="pyq-id">GATE DA 2025 — Q.49</span>
+              <div class="pyq-meta-badges">
+                <span class="badge-mark badge-2m">2 Marks</span>
+                <span class="badge-type">MSQ</span>
+                <span class="page-badge" style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">PYQ PDF p. 26</span>
+              </div>
+            </div>
+            <div class="pyq-question">
+              <strong>Question Statement:</strong><br>
+              Let $f(x) = x^3 - 6x^2 + 9x + 2$ for $x \in \mathbb{R}$. Which of the following statements is/are TRUE?<br>
+              (A) The point $(2, 4)$ is a point of inflection.<br>
+              (B) $f(x)$ is concave upward on $(2, \infty)$.<br>
+              (C) $f(x)$ is concave downward on $(-\infty, 2)$.<br>
+              (D) $f(x)$ has a local minimum at $x = 1$.
+            </div>
+            <div class="pyq-source">
+              <span>📖 <strong>Source Textbook:</strong> Thomas' Calculus (14th Ed.)</span>
+              <span>• <strong>Section:</strong> Section 4.4 "Concavity & Curve Sketching"</span>
+              <span>• <strong>Cutout Link:</strong> <a href="./calculus-and-optimization-textbook-module-3.pdf#page=20" class="pyq-pdf-link" target="_blank">pp. 221–232 (Cutout p. 20) ↗</a></span>
+            </div>
+            <div class="pyq-rationale">
+              <strong>Theoretical Rationale:</strong> $f'(x) = 3x^2 - 12x + 9 = 3(x - 1)(x - 3)$. Critical points are $x = 1$ and $x = 3$. $f''(x) = 6x - 12 = 6(x - 2)$. For $x < 2$, $f''(x) < 0$ (concave downward, C is true). For $x > 2$, $f''(x) > 0$ (concave upward, B is true). At $x = 2$, concavity changes and $f(2) = 8 - 24 + 18 + 2 = 4$, so $(2, 4)$ is an inflection point (A is true). At $x = 1$, $f''(1) = -6 < 0$, so $x = 1$ is a local maximum, not minimum (D is false). Correct options: <strong>(A), (B), and (C)</strong>.
+            </div>
+          </div>
+
+          <!-- 2025 Q.59 -->
+          <div class="pyq-card">
+            <div class="pyq-header">
+              <span class="pyq-id">GATE DA 2025 — Q.59</span>
+              <div class="pyq-meta-badges">
+                <span class="badge-mark badge-2m">2 Marks</span>
+                <span class="badge-type">NAT</span>
+                <span class="page-badge" style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">PYQ PDF p. 31</span>
+              </div>
+            </div>
+            <div class="pyq-question">
+              <strong>Question Statement:</strong><br>
+              Let $f: \mathbb{R} \to \mathbb{R}$ be a function satisfying $|f(x) - f(y)| \le (x - y)^2$ for all $x, y \in \mathbb{R}$. What is the value of $f(1) - f(0)$?
+            </div>
+            <div class="pyq-source">
+              <span>📖 <strong>Source Textbook:</strong> Thomas' Calculus (14th Ed.)</span>
+              <span>• <strong>Section:</strong> Section 3.2 & 4.2 "Derivative Definition & Constant Function Theorem"</span>
+              <span>• <strong>Cutout Link:</strong> <a href="./calculus-and-optimization-textbook-module-3.pdf#page=9" class="pyq-pdf-link" target="_blank">pp. 210–215 (Cutout p. 9) ↗</a></span>
+            </div>
+            <div class="pyq-rationale">
+              <strong>Theoretical Rationale:</strong> For $x \ne y$, divide by $|x - y|$: $\left|\frac{f(x) - f(y)}{x - y}\right| \le |x - y|$. Taking the limit as $y \to x$: $|f'(x)| \le \lim_{y \to x} |x - y| = 0 \implies f'(x) = 0$ for all $x \in \mathbb{R}$. By the Mean Value Theorem (Corollary 2), a function whose derivative is zero everywhere is constant. Hence $f(1) = f(0) \implies f(1) - f(0) = \mathbf{0}$.
+            </div>
+          </div>
+
+          <!-- 2026 Q.27 -->
+          <div class="pyq-card">
+            <div class="pyq-header">
+              <span class="pyq-id">GATE DA 2026 — Q.27</span>
+              <div class="pyq-meta-badges">
+                <span class="badge-mark badge-1m">1 Mark</span>
+                <span class="badge-type">MSQ</span>
+                <span class="page-badge" style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">PYQ PDF p. 18</span>
+              </div>
+            </div>
+            <div class="pyq-question">
+              <strong>Question Statement:</strong><br>
+              Let $f(x) = x^3 - 3x^2 + 2$ defined on the semi-open interval $(-1, 3]$. Which of the following statements is/are TRUE?<br>
+              (A) $f(x)$ attains a local maximum at $x = 0$<br>
+              (B) $f(x)$ attains a local minimum at $x = 2$<br>
+              (C) $f(x)$ attains its global maximum at $x = 0$ and $x = 3$<br>
+              (D) $f(x)$ attains its global minimum at $x = -1$
+            </div>
+            <div class="pyq-source">
+              <span>📖 <strong>Source Textbook:</strong> Thomas' Calculus (14th Ed.)</span>
+              <span>• <strong>Section:</strong> Section 4.1 "Extreme Values on Intervals"</span>
+              <span>• <strong>Cutout Link:</strong> <a href="./calculus-and-optimization-textbook-module-3.pdf#page=1" class="pyq-pdf-link" target="_blank">pp. 202–209 (Cutout p. 1) ↗</a></span>
+            </div>
+            <div class="pyq-rationale">
+              <strong>Theoretical Rationale:</strong> $f'(x) = 3x(x - 2)$. Critical points in $(-1, 3]$ are $x = 0$ and $x = 2$. $f''(x) = 6x - 6$. $f''(0) = -6 < 0 \implies$ local max at $x = 0$ with $f(0) = 2$ (A is true). $f''(2) = 6 > 0 \implies$ local min at $x = 2$ with $f(2) = 8 - 12 + 2 = -2$ (B is true). At right endpoint $x = 3$: $f(3) = 27 - 27 + 2 = 2$. Thus max value is 2 achieved at both $x = 0$ and $x = 3$ (C is true). For (D), $x = -1$ is not in the interval $(-1, 3]$, so $f$ cannot attain an extremum at $x = -1$ (D is false). Correct options: <strong>(A), (B), and (C)</strong>.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Module 4 PYQ Block -->
+      <div class="pyq-module-block">
+        <div class="pyq-module-header">
+          <span>Module 4 PYQ Practice (2 Questions • 3 Marks)</span>
+          <span style="font-size: 0.85rem; font-weight: normal; color: var(--text-muted);">Convexity & Single-Variable Optimization</span>
+        </div>
+
+        <div class="pyq-grid">
+          <!-- 2025 Q.51 -->
+          <div class="pyq-card">
+            <div class="pyq-header">
+              <span class="pyq-id">GATE DA 2025 — Q.51</span>
+              <div class="pyq-meta-badges">
+                <span class="badge-mark badge-2m">2 Marks</span>
+                <span class="badge-type">MSQ</span>
+                <span class="page-badge" style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">PYQ PDF p. 27</span>
+              </div>
+            </div>
+            <div class="pyq-question">
+              <strong>Question Statement:</strong><br>
+              Let $f: \mathbb{R} \to \mathbb{R}$ be a twice continuously differentiable function such that $f''(x) > 0$ for all $x \in \mathbb{R}$. Which of the following statements is/are ALWAYS TRUE?<br>
+              (A) $f$ is strictly convex on $\mathbb{R}$.<br>
+              (B) $f$ has at most one global minimum.<br>
+              (C) If $f'(x^*) = 0$, then $x^*$ is the unique global minimizer of $f$.<br>
+              (D) $f$ must attain a global minimum on $\mathbb{R}$.
+            </div>
+            <div class="pyq-source">
+              <span>📖 <strong>Source Textbook:</strong> Boyd & Vandenberghe — Convex Optimization</span>
+              <span>• <strong>Section:</strong> Section 3.1 & 4.2 "Convex Functions (Second-Order Condition) & Minimizers"</span>
+              <span>• <strong>Cutout Link:</strong> <a href="./calculus-and-optimization-textbook-module-4.pdf#page=11" class="pyq-pdf-link" target="_blank">pp. 82–93, 151–160 (Cutout p. 11) ↗</a></span>
+            </div>
+            <div class="pyq-rationale">
+              <strong>Theoretical Rationale:</strong> $f''(x) > 0$ implies strict convexity everywhere (A is true). A strictly convex function cannot attain its minimum at two distinct points, because the midpoint would yield a strictly smaller value (B is true). Any critical point of a convex function is a global minimum, and by strict convexity it is unique (C is true). However, $f$ need not attain a minimum on $\mathbb{R}$; e.g., $f(x) = e^x$ has $f''(x) = e^x > 0$, but $\inf f = 0$ is never attained on $\mathbb{R}$ (D is false). Correct options: <strong>(A), (B), and (C)</strong>.
+            </div>
+          </div>
+
+          <!-- 2026 Q.29 -->
+          <div class="pyq-card">
+            <div class="pyq-header">
+              <span class="pyq-id">GATE DA 2026 — Q.29</span>
+              <div class="pyq-meta-badges">
+                <span class="badge-mark badge-1m">1 Mark</span>
+                <span class="badge-type">MSQ</span>
+                <span class="page-badge" style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">PYQ PDF p. 20</span>
+              </div>
+            </div>
+            <div class="pyq-question">
+              <strong>Question Statement:</strong><br>
+              Consider the unconstrained optimization problem $\min_{x \in \mathbb{R}} f_w(x)$ where $f_w(x) = wx$ with $w \in \mathbb{R}$. Which of the following statements is/are TRUE?<br>
+              (A) For every $w \in \mathbb{R}$, $f_w(x)$ is a convex function.<br>
+              (B) If $w \ne 0$, the optimization problem is unbounded below ($p^* = -\infty$).<br>
+              (C) If $w = 0$, every $x \in \mathbb{R}$ is an optimal solution.<br>
+              (D) If $w > 0$, the optimal solution is $x^* = 0$.
+            </div>
+            <div class="pyq-source">
+              <span>📖 <strong>Source Textbook:</strong> Boyd & Vandenberghe — Convex Optimization</span>
+              <span>• <strong>Section:</strong> Section 3.1 & 4.3 "Affine Functions & Linear Optimization"</span>
+              <span>• <strong>Cutout Link:</strong> <a href="./calculus-and-optimization-textbook-module-4.pdf#page=58" class="pyq-pdf-link" target="_blank">pp. 161–166 (Cutout p. 58) ↗</a></span>
+            </div>
+            <div class="pyq-rationale">
+              <strong>Theoretical Rationale:</strong> An affine function $f_w(x) = wx$ satisfies $f(\theta x_1 + (1-\theta)x_2) = \theta f(x_1) + (1-\theta)f(x_2)$ with equality, so it is both convex and concave for all $w$ (A is true). If $w > 0$, letting $x \to -\infty$ gives $wx \to -\infty$; if $w < 0$, letting $x \to +\infty$ gives $wx \to -\infty$. Thus for $w \ne 0$, the problem is unbounded below with no minimum (B is true, D is false). If $w = 0$, $f_0(x) = 0$ is constant, so every real number achieves the minimum 0 (C is true). Correct options: <strong>(A), (B), and (C)</strong>.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      GATE Data Science & Artificial Intelligence (DA) Preparation Pathway • Course 2: Calculus and Optimization • Generated with 100% Verified Textbook References
+    </footer>
+
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,2815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GATE DA — Course 6: Machine Learning Syllabus & PYQ Roadmap</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+  <style>
+    :root {
+      --primary: #7c3aed;
+      --primary-hover: #6d28d9;
+      --primary-light: #f5f3ff;
+      --primary-dark: #4c1d95;
+      --secondary: #ec4899;
+      --secondary-light: #fdf2f8;
+      --surface: #ffffff;
+      --background: #f8fafc;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
+      --success: #10b981;
+      --success-light: #ecfdf5;
+      --warning: #f59e0b;
+      --warning-light: #fffbeb;
+      --purple: #8b5cf6;
+      --purple-light: #f5f3ff;
+      --radius: 12px;
+      --radius-sm: 6px;
+      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--background);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+    }
+
+    header.banner {
+      background: linear-gradient(135deg, #2e1065 0%, #4c1d95 40%, #7c3aed 100%);
+      color: white;
+      padding: 3rem 2.5rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      margin-bottom: 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header.banner::after {
+      content: "";
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 250px;
+      height: 250px;
+      background: radial-gradient(circle, rgba(236, 72, 153, 0.25) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .badge-phase {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 0.75rem;
+    }
+
+    p.subtitle {
+      font-size: 1.1rem;
+      color: #ddd6fe;
+      max-width: 800px;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1.5rem;
+    }
+
+    .metric-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 1.25rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .metric-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #c4b5fd;
+      margin-bottom: 0.25rem;
+    }
+
+    .metric-value {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .metric-desc {
+      font-size: 0.825rem;
+      color: #ddd6fe;
+      margin-top: 0.25rem;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 2.5rem;
+    }
+
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .book-compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 1.25rem;
+    }
+
+    .book-box {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      background: #fafafa;
+    }
+
+    .book-box.winner {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .book-tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.2rem 0.6rem;
+      border-radius: 9999px;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .winner .book-tag {
+      background: var(--primary);
+      color: white;
+    }
+
+    .module-nav {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .nav-pill {
+      background: white;
+      border: 1px solid var(--border);
+      padding: 0.6rem 1.2rem;
+      border-radius: 9999px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-pill:hover, .nav-pill.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      transform: translateY(-1px);
+    }
+
+    .table-container {
+      overflow-x: auto;
+      margin-top: 1rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+
+    table.syllabus-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.925rem;
+      text-align: left;
+    }
+
+    table.syllabus-table th {
+      background: #f1f5f9;
+      color: #334155;
+      font-weight: 700;
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    table.syllabus-table td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+      vertical-align: top;
+    }
+
+    table.syllabus-table tr:hover {
+      background: #f8fafc;
+    }
+
+    table.syllabus-table tr.exercise-row {
+      background: #faf5ff;
+      border-left: 4px solid var(--primary);
+    }
+
+    .btn-cutout {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      border: 1px solid rgba(124, 58, 237, 0.3);
+      padding: 0.35rem 0.75rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.825rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .btn-cutout:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    .pyq-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      transition: all 0.2s ease;
+    }
+
+    .pyq-card:hover {
+      border-color: var(--primary);
+      box-shadow: var(--shadow);
+    }
+
+    .pyq-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .pyq-id {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .pyq-meta-badges {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .badge-mark {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.2rem 0.55rem;
+      border-radius: 9999px;
+      text-transform: uppercase;
+    }
+
+    .badge-1m {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      border: 1px solid rgba(124, 58, 237, 0.3);
+    }
+
+    .badge-2m {
+      background: #fdf2f8;
+      color: #db2777;
+      border: 1px solid rgba(219, 39, 119, 0.3);
+    }
+
+    .badge-type {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.2rem 0.55rem;
+      border-radius: 9999px;
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .pyq-topic {
+      display: inline-block;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 0.85rem;
+      font-weight: 500;
+    }
+
+    .pyq-question {
+      font-size: 0.95rem;
+      color: #1e293b;
+      margin-bottom: 1.25rem;
+      line-height: 1.6;
+    }
+
+    .pyq-question pre {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 0.85rem 1rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.875rem;
+      color: #0f172a;
+      overflow-x: auto;
+      margin: 0.75rem 0;
+    }
+
+    .pyq-option {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 0.5rem 0.85rem;
+      margin-top: 0.35rem;
+      font-size: 0.9rem;
+    }
+
+    .pyq-source {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius-sm);
+      padding: 0.85rem 1.2rem;
+      margin-bottom: 1rem;
+      font-size: 0.875rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .pyq-pdf-link {
+      font-weight: 600;
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .pyq-pdf-link:hover {
+      text-decoration: underline;
+    }
+
+    .pyq-rationale {
+      background: #faf5ff;
+      border-left: 4px solid var(--primary);
+      padding: 1rem 1.25rem;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      font-size: 0.9rem;
+      color: #4c1d95;
+      line-height: 1.55;
+    }
+
+    .module-header {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-left: 6px solid var(--primary);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .module-header h3 {
+      font-size: 1.35rem;
+      color: var(--text);
+    }
+
+    .module-header p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .module-badge {
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 0.35rem 0.75rem;
+      border-radius: 9999px;
+      background: var(--primary);
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    
+    <!-- Top Banner -->
+    <header class="banner">
+      <span class="badge-phase">Phase 3: Applied Intelligence & Scoring Sprint</span>
+      <h1>Course 6: Machine Learning</h1>
+      <p class="subtitle">Complete 4-Module Interactive Curriculum & Official 25 PYQ Roadmap (GATE DA 2024, 2025, 2026). Rigorously mapped to Bishop PRML, Mitchell Machine Learning, and Deisenroth MML.</p>
+      
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-label">Subject Weightage</div>
+          <div class="metric-value">37 Marks</div>
+          <div class="metric-desc">Core Pillar of Applied AI in GATE DA</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Annual Average</div>
+          <div class="metric-value">12.3 M / Yr</div>
+          <div class="metric-desc">16m (2024) &rarr; 12m (2025) &rarr; 9m (2026)</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Official PYQs</div>
+          <div class="metric-value">25 Questions</div>
+          <div class="metric-desc">100% Solved & Cutout Section-Linked</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Estimated Effort</div>
+          <div class="metric-value">~40.0 Hours</div>
+          <div class="metric-desc">4 Modular Cutouts with Reviews</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Navigation Pills -->
+    <div class="module-nav">
+      <a href="#benchmarking" class="nav-pill">📖 Textbook Benchmarking</a>
+      <a href="#module-1" class="nav-pill">📦 Mod 1: Linear Models & Classifiers (11.5h)</a>
+      <a href="#module-2" class="nav-pill">📦 Mod 2: Trees, Bayes & k-NN (8.5h)</a>
+      <a href="#module-3" class="nav-pill">📦 Mod 3: SVMs & Neural Networks (10.5h)</a>
+      <a href="#module-4" class="nav-pill">📦 Mod 4: Clustering & PCA (9.5h)</a>
+      <a href="#pyqs" class="nav-pill" style="border-color: var(--primary); color: var(--primary);">📝 Mapped PYQs (25 Qs)</a>
+    </div>
+
+    <!-- Textbook Benchmarking Card -->
+    <div class="card" id="benchmarking">
+      <h2 class="card-title">📖 Winning Textbook Benchmarking & Subject Architecture</h2>
+      <p style="color: var(--text-muted); margin-bottom: 1.25rem;">
+        With Linear Algebra (SVD, projections, eigenvalues), Calculus (gradient descent, Hessians), and Probability (Bayes theorem, Gaussian densities) completed in Phase 1, Machine Learning unlocks effortlessly. Three complementary textbooks provide complete mastery:
+      </p>
+
+      <div class="book-compare">
+        <div class="book-box winner">
+          <span class="book-tag">Primary Choice 1: Core Mathematical ML</span>
+          <h3 style="font-size: 1.15rem; margin-bottom: 0.5rem; color: var(--primary-dark);">Christopher M. Bishop</h3>
+          <p style="font-size: 0.9rem; font-weight: 600; color: #7c3aed; margin-bottom: 0.75rem;">Pattern Recognition and Machine Learning (PRML, Springer)</p>
+          <ul style="font-size: 0.85rem; color: #334155; padding-left: 1.25rem; line-height: 1.6;">
+            <li><strong>Linear Regression (Ch 3):</strong> Least squares derivation, normal equations, Ridge regularization analytical solution $w = (X^T X + \lambda I)^{-1} X^T y$, and bias-variance tradeoff.</li>
+            <li><strong>Linear Classification (Ch 4):</strong> Separating hyperplanes, Fisher's Linear Discriminant ($S_W^{-1} S_B w = \lambda w$), Perceptron criterion, Generative Gaussian models, and Multiclass Softmax parameter counting.</li>
+            <li><strong>Neural Networks (Ch 5):</strong> MLP parameter counting (weights + biases), ReLU activation functions, and backpropagation via the chain rule of calculus.</li>
+            <li><strong>Support Vector Machines (Ch 7):</strong> Maximum margin formulation, support vectors on margin hyperplanes ($y_i(w^T x_i + b) = 1$), and soft-margin slack variables.</li>
+            <li><strong>Clustering (Ch 9):</strong> k-Means distortion measure $J$ and proof of Voronoi cell convexity.</li>
+          </ul>
+        </div>
+
+        <div class="book-box winner">
+          <span class="book-tag">Primary Choice 2: Algorithmic ML & Trees</span>
+          <h3 style="font-size: 1.15rem; margin-bottom: 0.5rem; color: var(--primary-dark);">Tom M. Mitchell & Marc Peter Deisenroth</h3>
+          <p style="font-size: 0.9rem; font-weight: 600; color: #7c3aed; margin-bottom: 0.75rem;">Machine Learning (Mitchell) & Mathematics for Machine Learning (Deisenroth)</p>
+          <ul style="font-size: 0.85rem; color: #334155; padding-left: 1.25rem; line-height: 1.6;">
+            <li><strong>Decision Trees (Mitchell Ch 3):</strong> Shannon entropy $H(S)$, Information Gain $Gain(S, A)$, ID3 greedy tree growth, and overfitting avoidance.</li>
+            <li><strong>Bayesian Learning (Mitchell Ch 6):</strong> Naive Bayes conditional independence assumption, independent parameter counting ($2K+1$ for $K$ binary features), and posterior odds.</li>
+            <li><strong>Instance-Based Learning (Mitchell Ch 8):</strong> k-Nearest Neighbor classifier, distance metrics, and 1-NN Voronoi decision boundaries.</li>
+            <li><strong>Principal Component Analysis (Deisenroth Ch 10):</strong> Maximum variance formulation, covariance matrix $S u_i = \lambda_i u_i$, and exact ratio of variance explained $\frac{\sum_{i=1}^k \lambda_i}{\sum_{i=1}^d \lambda_i}$.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Module 1 Syllabus Section -->
+    <div class="card" id="module-1">
+      <div class="module-header">
+        <div>
+          <h3>Module 1: Supervised Learning Foundations & Linear Models (Regression & Classification)</h3>
+          <p>Bishop Ch 1, 3, 4 — Model taxonomy (generative vs discriminative), linear regression, Ridge regularization normal equations, Fisher's LDA, Perceptrons, Logistic regression, and Multiclass Softmax.</p>
+        </div>
+        <div style="text-align: right;">
+          <span class="module-badge">~11.5 Hours</span>
+          <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.35rem;">Cutout: <code>machine-learning-textbook-module-1.pdf</code> (153 pages)</div>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table class="syllabus-table">
+          <thead>
+            <tr>
+              <th style="width: 10%;">Sec #</th>
+              <th style="width: 25%;">Section / Chapter Title</th>
+              <th style="width: 20%;">Book Source & Pages</th>
+              <th style="width: 15%;">Cutout Link</th>
+              <th style="width: 30%;">Core Concept & Syllabus Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+    
+
+            <tr>
+              <td><strong>1.1</strong></td>
+              <td>Example: Polynomial Curve Fitting</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Bishop pp. 22–29</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-1.pdf#page=4" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 4 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Overfitting, generalization, model complexity, L2 regularization parameter lambda.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>1.2</strong></td>
+              <td>Probability Theory Foundations</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Bishop pp. 30–49</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-1.pdf#page=12" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 12 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Bayes' theorem in machine learning, expectations, covariances, Gaussian distribution review.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>1.3</strong></td>
+              <td>Model Selection</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Bishop p. 50</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-1.pdf#page=32" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 32 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Validation sets, k-fold cross-validation, AIC and BIC information criteria.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>1.4</strong></td>
+              <td>The Curse of Dimensionality</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Bishop pp. 51–55</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-1.pdf#page=33" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 33 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Geometric intuitions in high dimensions, exponential volume growth of hyperspheres.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>1.5</strong></td>
+              <td>Decision Theory</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Bishop pp. 56–65</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-1.pdf#page=38" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 38 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Minimizing misclassification rate, expected loss, loss matrices, Generative vs Discriminative approaches.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>1.6</strong></td>
+              <td>Information Theory</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Bishop pp. 66–84</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-1.pdf#page=48" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 48 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Entropy, conditional entropy, relative entropy (Kullback-Leibler divergence), mutual information.</span></td>
+            </tr>
+        
+
+            <tr class="exercise-row">
+              <td><strong>1.7</strong></td>
+              <td><span style="background: var(--primary); color: white; font-size: 0.7rem; font-weight: 700; padding: 0.15rem 0.4rem; border-radius: 4px; margin-right: 0.4rem;">PRACTICE</span>Chapter 1 Review Exercises</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Bishop pp. 78–84</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-1.pdf#page=60" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 60 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Foundational mathematical problems in probability, loss functions, and information theory.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>3.1</strong></td>
+              <td>Linear Basis Function Models</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Bishop pp. 156–161</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-1.pdf#page=68" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 68 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Linear regression, maximum likelihood and least squares, normal equations w = (X^T X)^(-1) X^T y.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>3.1.4</strong></td>
+              <td>Regularized Least Squares (Ridge Regression)</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Bishop pp. 162–164</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-1.pdf#page=74" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 74 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">L2 penalty, weight decay, solving multicollinearity, closed-form w = (X^T X + lambda I)^(-1) X^T y.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>3.2</strong></td>
+              <td>The Bias-Variance Decomposition</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Bishop pp. 165–169</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-1.pdf#page=77" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 77 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Decomposition of expected loss into Bias^2, Variance, and irreducible Noise. Regularization trade-offs.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>3.3</strong></td>
+              <td>Bayesian Linear Regression</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Bishop pp. 170–178</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-1.pdf#page=82" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 82 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Parameter distribution priors, posterior distribution, predictive distribution.</span></td>
+            </tr>
+        
+
+            <tr class="exercise-row">
+              <td><strong>3.4</strong></td>
+              <td><span style="background: var(--primary); color: white; font-size: 0.7rem; font-weight: 700; padding: 0.15rem 0.4rem; border-radius: 4px; margin-right: 0.4rem;">PRACTICE</span>Chapter 3 Review Exercises</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Bishop pp. 191–195</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-1.pdf#page=103" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 103 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Derivations for regularized regression, bias-variance analysis, zero-intercept regression.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>4.1</strong></td>
+              <td>Discriminant Functions</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Bishop pp. 198–202</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-1.pdf#page=110" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 110 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Two-class and multi-class linear discriminants, separating hyperplanes, geometric margin.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>4.1.4</strong></td>
+              <td>Fisher's Linear Discriminant</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Bishop pp. 203–207</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-1.pdf#page=115" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 115 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Between-class variance S_B vs within-class variance S_W, maximizing Fisher criterion w proportional to S_W^(-1)(m2 - m1).</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>4.1.7</strong></td>
+              <td>The Perceptron Learning Algorithm</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Bishop pp. 209–212</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-1.pdf#page=121" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 121 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Perceptron criterion, stochastic gradient updates, linear separability, convergence theorem.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>4.2</strong></td>
+              <td>Probabilistic Generative Models</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Bishop pp. 213–219</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-1.pdf#page=125" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 125 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Gaussian class-conditional densities with shared covariance, deriving linear decision boundary, Centroid classifier.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>4.3</strong></td>
+              <td>Probabilistic Discriminative Models</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Bishop pp. 220–227</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-1.pdf#page=132" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 132 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Logistic regression, sigmoid activation, cross-entropy error function, gradient and Hessian.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>4.3.4</strong></td>
+              <td>Multiclass Logistic Regression (Softmax)</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Bishop pp. 228–230</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-1.pdf#page=140" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 140 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Normalized exponential (Softmax) function, cross-entropy, parameter counting for K classes.</span></td>
+            </tr>
+        
+
+            <tr class="exercise-row">
+              <td><strong>4.4</strong></td>
+              <td><span style="background: var(--primary); color: white; font-size: 0.7rem; font-weight: 700; padding: 0.15rem 0.4rem; border-radius: 4px; margin-right: 0.4rem;">PRACTICE</span>Chapter 4 Review Exercises</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Bishop pp. 237–241</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-1.pdf#page=149" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 149 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Separating hyperplanes, Fisher's discriminant derivations, logistic regression Hessian proofs.</span></td>
+            </tr>
+        
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+
+    <!-- Module 2 Syllabus Section -->
+    <div class="card" id="module-2">
+      <div class="module-header">
+        <div>
+          <h3>Module 2: Decision Trees, Naive Bayes & Instance-Based Learning (k-NN)</h3>
+          <p>Mitchell Ch 3, 6, 8 — Decision trees, Shannon entropy, Information Gain, ID3 algorithm, Naive Bayes parameter counts, posterior odds, and k-nearest neighbors decision boundaries.</p>
+        </div>
+        <div style="text-align: right;">
+          <span class="module-badge">~8.5 Hours</span>
+          <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.35rem;">Cutout: <code>machine-learning-textbook-module-2.pdf</code> (87 pages)</div>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table class="syllabus-table">
+          <thead>
+            <tr>
+              <th style="width: 10%;">Sec #</th>
+              <th style="width: 25%;">Section / Chapter Title</th>
+              <th style="width: 20%;">Book Source & Pages</th>
+              <th style="width: 15%;">Cutout Link</th>
+              <th style="width: 30%;">Core Concept & Syllabus Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+    
+
+            <tr>
+              <td><strong>3.2</strong></td>
+              <td>Decision Tree Representation</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Mitchell p. 65</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-2.pdf#page=2" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 2 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Decision tree nodes, attribute tests, leaf classifications, Disjunctive Normal Form (DNF) representation.</span></td>
+            </tr>
+        
+
+            <tr class="exercise-row">
+              <td><strong>3.3</strong></td>
+              <td><span style="background: var(--primary); color: white; font-size: 0.7rem; font-weight: 700; padding: 0.15rem 0.4rem; border-radius: 4px; margin-right: 0.4rem;">PRACTICE</span>Appropriate Problems for Decision Trees</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Mitchell p. 66</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-2.pdf#page=3" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 3 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Discrete-valued attributes, noisy training data, missing attribute values.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>3.4</strong></td>
+              <td>The Basic Decision Tree Learning Algorithm (ID3)</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Mitchell pp. 67–71</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-2.pdf#page=4" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 4 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Top-down greedy recursive search, attribute selection via statistical information gain.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>3.4.1</strong></td>
+              <td>Entropy & Information Gain</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Mitchell pp. 67–71</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-2.pdf#page=4" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 4 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Shannon Entropy H(S) = -sum p_i log2(p_i), Information Gain Gain(S, A) = H(S) - sum (|S_v|/|S|) H(S_v).</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>3.5</strong></td>
+              <td>Hypothesis Space Search in Decision Trees</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Mitchell pp. 72–74</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-2.pdf#page=9" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 9 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Complete hypothesis space, lack of backtracking, sensitivity to local optima, inductive bias.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>3.6</strong></td>
+              <td>Inductive Bias in Decision Trees</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Mitchell pp. 75–77</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-2.pdf#page=12" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 12 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Preference for shorter trees, high information gain attributes near the root, Occam's razor.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>3.7</strong></td>
+              <td>Issues in Decision Tree Learning</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Mitchell pp. 78–81</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-2.pdf#page=15" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 15 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Overfitting avoidance, Reduced-Error Pruning, Rule Post-Pruning, Continuous-valued attributes, Gain Ratio.</span></td>
+            </tr>
+        
+
+            <tr class="exercise-row">
+              <td><strong>3.8</strong></td>
+              <td><span style="background: var(--primary); color: white; font-size: 0.7rem; font-weight: 700; padding: 0.15rem 0.4rem; border-radius: 4px; margin-right: 0.4rem;">PRACTICE</span>Chapter 3 Review Exercises</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Mitchell pp. 81–84</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-2.pdf#page=18" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 18 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Step-by-step entropy and information gain calculations, tree construction traces.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>6.1</strong></td>
+              <td>Introduction to Bayesian Learning</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Mitchell pp. 166–167</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-2.pdf#page=22" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 22 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Features of Bayesian learning: prior probabilities, hypothesis probabilities, trade-offs.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>6.2</strong></td>
+              <td>Bayes Theorem & Concept Learning</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Mitchell pp. 168–175</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-2.pdf#page=24" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 24 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Prior P(h), Likelihood P(D|h), Posterior P(h|D), Maximum A Posteriori (MAP) vs Maximum Likelihood (ML).</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>6.4</strong></td>
+              <td>Maximum Likelihood & Least-Squares Error</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Mitchell pp. 176–178</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-2.pdf#page=32" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 32 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Deriving least-squares criterion from maximum likelihood hypothesis under Gaussian noise.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>6.7</strong></td>
+              <td>Bayes Optimal Classifier</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Mitchell pp. 186–188</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-2.pdf#page=42" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 42 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Combining predictions of all hypotheses weighted by posterior probabilities, optimality bounds.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>6.9</strong></td>
+              <td>Naive Bayes Classifier</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Mitchell pp. 189–191</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-2.pdf#page=45" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 45 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Conditional independence assumption P(x1..xd|y) = prod P(xi|y), Parameter counts (2K+1 for K binary features), Posterior odds.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>6.10</strong></td>
+              <td>Learning to Classify Text</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Mitchell pp. 192–195</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-2.pdf#page=48" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 48 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Bag-of-words text representation, m-estimate of probability (Laplace smoothing).</span></td>
+            </tr>
+        
+
+            <tr class="exercise-row">
+              <td><strong>6.13</strong></td>
+              <td><span style="background: var(--primary); color: white; font-size: 0.7rem; font-weight: 700; padding: 0.15rem 0.4rem; border-radius: 4px; margin-right: 0.4rem;">PRACTICE</span>Chapter 6 Review Exercises</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Mitchell pp. 209–212</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-2.pdf#page=65" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 65 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Naive Bayes classification calculations, posterior odds, parameter counting exercises.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>8.1</strong></td>
+              <td>Instance-Based Learning Introduction</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Mitchell p. 242</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-2.pdf#page=69" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 69 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Lazy learning vs eager learning, instance storage, localized hypothesis construction.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>8.2</strong></td>
+              <td>k-Nearest Neighbor Learning</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Mitchell pp. 243–247</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-2.pdf#page=70" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 70 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Distance metrics (Euclidean, Manhattan), Voronoi diagram for 1-NN, Distance-weighted k-NN, Choice of k, Curse of dimensionality.</span></td>
+            </tr>
+        
+
+            <tr class="exercise-row">
+              <td><strong>8.7</strong></td>
+              <td><span style="background: var(--primary); color: white; font-size: 0.7rem; font-weight: 700; padding: 0.15rem 0.4rem; border-radius: 4px; margin-right: 0.4rem;">PRACTICE</span>Chapter 8 Review Exercises</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Mitchell pp. 257–260</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-2.pdf#page=84" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 84 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Decision boundary tracing for k-NN, distance metric sensitivity, normalization.</span></td>
+            </tr>
+        
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+
+    <!-- Module 3 Syllabus Section -->
+    <div class="card" id="module-3">
+      <div class="module-header">
+        <div>
+          <h3>Module 3: Support Vector Machines (SVMs) & Artificial Neural Networks (MLPs)</h3>
+          <p>Bishop Ch 5, 7 — Maximum margin classification, support vectors on margin boundaries, soft-margin slack variables, Multilayer Perceptron parameter counting, and ReLU activation functions.</p>
+        </div>
+        <div style="text-align: right;">
+          <span class="module-badge">~10.5 Hours</span>
+          <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.35rem;">Cutout: <code>machine-learning-textbook-module-3.pdf</code> (100 pages)</div>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table class="syllabus-table">
+          <thead>
+            <tr>
+              <th style="width: 10%;">Sec #</th>
+              <th style="width: 25%;">Section / Chapter Title</th>
+              <th style="width: 20%;">Book Source & Pages</th>
+              <th style="width: 15%;">Cutout Link</th>
+              <th style="width: 30%;">Core Concept & Syllabus Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+    
+
+            <tr>
+              <td><strong>5.1</strong></td>
+              <td>Feed-Forward Network Functions</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Bishop pp. 244–248</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-3.pdf#page=3" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 3 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Multilayer perceptrons, hidden unit activations a_j = sum w_ji x_i + w_j0, functional representations.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>5.1.1</strong></td>
+              <td>Network Parameter Counting</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Bishop pp. 245–248</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-3.pdf#page=4" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 4 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Counting independent weights and biases in multi-layer fully connected MLPs: (D+1)M_1 + (M_1+1)M_2 + ...</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>5.1.2</strong></td>
+              <td>Activation Functions</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Bishop pp. 245–248</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-3.pdf#page=4" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 4 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Sigmoid, Hyperbolic tangent (tanh), Rectified Linear Unit (ReLU: f(a) = max(0, a)), piecewise linearity, avoiding saturation.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>5.2</strong></td>
+              <td>Network Training & Error Functions</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Bishop pp. 249–257</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-3.pdf#page=8" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 8 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Sum-of-squares error, cross-entropy error for binary/multiclass classification, gradient descent optimization.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>5.3</strong></td>
+              <td>Error Backpropagation</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Bishop pp. 258–265</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-3.pdf#page=17" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 17 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Chain rule of calculus, error evaluation delta_j = h'(a_j) sum w_kj delta_k, computational efficiency O(W).</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>5.4</strong></td>
+              <td>The Hessian Matrix & Optimization</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Bishop pp. 266–272</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-3.pdf#page=25" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 25 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Second-order derivatives, diagonal approximation, outer product approximation.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>5.5</strong></td>
+              <td>Regularization in Neural Networks</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Bishop pp. 273–288</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-3.pdf#page=32" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 32 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Weight decay (L2 penalty), early stopping, invariance under transformations.</span></td>
+            </tr>
+        
+
+            <tr class="exercise-row">
+              <td><strong>5.7</strong></td>
+              <td><span style="background: var(--primary); color: white; font-size: 0.7rem; font-weight: 700; padding: 0.15rem 0.4rem; border-radius: 4px; margin-right: 0.4rem;">PRACTICE</span>Chapter 5 Review Exercises</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Bishop pp. 297–307</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-3.pdf#page=56" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 56 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Backpropagation derivations, parameter counting, ReLU piecewise linear representation.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>7.1</strong></td>
+              <td>Maximum Margin Classifiers</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Bishop pp. 343–346</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-3.pdf#page=69" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 69 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Geometry of separating hyperplanes, margin width 1/||w||, maximizing margin min 1/2 ||w||^2 subject to y_n(w^T phi(x_n) + b) >= 1.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>7.1.1</strong></td>
+              <td>Support Vectors & KKT Conditions</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Bishop pp. 347–348</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-3.pdf#page=73" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 73 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Lagrangian formulation, Karush-Kuhn-Tucker conditions, support vectors lying strictly on margin hyperplanes y_n(w^T phi(x_n) + b) = 1.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>7.1.2</strong></td>
+              <td>Overlapping Classes & Soft Margin</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Bishop pp. 349–354</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-3.pdf#page=75" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 75 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Slack variables xi_n >= 0, penalty parameter C, box constraints 0 <= a_n <= C, outlier tolerance.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>7.1.4</strong></td>
+              <td>Support Vector Machines Dual Formulation</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Bishop pp. 355–361</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-3.pdf#page=81" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 81 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Dual optimization problem, kernel substitution k(x, x'), making predictions via support vectors.</span></td>
+            </tr>
+        
+
+            <tr class="exercise-row">
+              <td><strong>7.3</strong></td>
+              <td><span style="background: var(--primary); color: white; font-size: 0.7rem; font-weight: 700; padding: 0.15rem 0.4rem; border-radius: 4px; margin-right: 0.4rem;">PRACTICE</span>Chapter 7 Review Exercises</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Bishop pp. 367–374</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-3.pdf#page=93" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 93 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">SVM primal-to-dual derivations, support vector identification, soft-margin slack calculations.</span></td>
+            </tr>
+        
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+
+    <!-- Module 4 Syllabus Section -->
+    <div class="card" id="module-4">
+      <div class="module-header">
+        <div>
+          <h3>Module 4: Unsupervised Learning (Clustering) & Dimensionality Reduction (PCA)</h3>
+          <p>Bishop Ch 9, Deisenroth Ch 10, Han Ch 10 — k-Means clustering, Voronoi cell convexity, Principal Component Analysis maximum variance perspective, variance explained eigenvalue ratios, and hierarchical clustering.</p>
+        </div>
+        <div style="text-align: right;">
+          <span class="module-badge">~9.5 Hours</span>
+          <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.35rem;">Cutout: <code>machine-learning-textbook-module-4.pdf</code> (76 pages)</div>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table class="syllabus-table">
+          <thead>
+            <tr>
+              <th style="width: 10%;">Sec #</th>
+              <th style="width: 25%;">Section / Chapter Title</th>
+              <th style="width: 20%;">Book Source & Pages</th>
+              <th style="width: 15%;">Cutout Link</th>
+              <th style="width: 30%;">Core Concept & Syllabus Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+    
+
+            <tr>
+              <td><strong>9.1</strong></td>
+              <td>k-Means Clustering</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Bishop pp. 441–443</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-4.pdf#page=3" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 3 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Distortion measure J = sum_n sum_k r_nk ||x_n - mu_k||^2, coordinate descent updates, convergence.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>9.1.1</strong></td>
+              <td>Voronoi Cells & Convexity</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Bishop pp. 443–446</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-4.pdf#page=5" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 5 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Convex polygonal Voronoi cells in Euclidean space, properties of cluster regions.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>9.2</strong></td>
+              <td>Mixtures of Gaussians</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Bishop pp. 447–455</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-4.pdf#page=9" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 9 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Superposition of Gaussian components, mixing coefficients pi_k, latent responsibility variables.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>9.4</strong></td>
+              <td>The EM Algorithm in General</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Bishop pp. 467–470</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-4.pdf#page=29" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 29 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Expectation step computing posterior responsibilities, Maximization step updating parameters.</span></td>
+            </tr>
+        
+
+            <tr class="exercise-row">
+              <td><strong>9.5</strong></td>
+              <td><span style="background: var(--primary); color: white; font-size: 0.7rem; font-weight: 700; padding: 0.15rem 0.4rem; border-radius: 4px; margin-right: 0.4rem;">PRACTICE</span>Bishop Chapter 9 Review Exercises</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Bishop pp. 471–475</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-4.pdf#page=33" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 33 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">k-Means step traces, distortion function convergence proofs, GMM parameter estimation.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>10.1</strong></td>
+              <td>Problem Setting & Covariance Matrix</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Deisenroth pp. 324–325</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-4.pdf#page=39" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 39 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Centering data, sample covariance matrix S = 1/N sum (x_n - bar_x)(x_n - bar_x)^T, projection matrix.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>10.2</strong></td>
+              <td>Maximum Variance Perspective of PCA</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Deisenroth pp. 325–329</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-4.pdf#page=40" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 40 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Variance along unit vector u_1^T S u_1, Lagrange multiplier deriving S u_1 = lambda_1 u_1, first principal component.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>10.3</strong></td>
+              <td>Minimum Reconstruction Error Perspective</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Deisenroth pp. 329–333</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-4.pdf#page=44" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 44 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Equivalence of maximizing projected variance and minimizing squared reconstruction error.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>10.4</strong></td>
+              <td>Eigenvector Computation & Variance Explained</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Deisenroth pp. 334–337</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-4.pdf#page=49" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 49 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Eigendecomposition, total variance Tr(S) = sum lambda_i, variance explained ratio (sum_1^k lambda_i / sum_1^d lambda_i).</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>10.5</strong></td>
+              <td>PCA in High Dimensions</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Deisenroth pp. 338–343</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-4.pdf#page=53" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 53 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Handling N < D via Gram matrix X X^T, computational speedup for high-dimensional data.</span></td>
+            </tr>
+        
+
+            <tr class="exercise-row">
+              <td><strong>10.6</strong></td>
+              <td><span style="background: var(--primary); color: white; font-size: 0.7rem; font-weight: 700; padding: 0.15rem 0.4rem; border-radius: 4px; margin-right: 0.4rem;">PRACTICE</span>Deisenroth Chapter 10 Exercises</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Deisenroth pp. 344–345</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-4.pdf#page=59" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 59 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">PCA projections, variance explained computations, reconstruction error derivations.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>10.1</strong></td>
+              <td>Cluster Analysis: Distance Metrics</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Han & Kamber pp. 465–466</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-4.pdf#page=61" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 61 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Distance matrices, Euclidean distance, Manhattan distance, Minkowski metric.</span></td>
+            </tr>
+        
+
+            <tr>
+              <td><strong>10.3</strong></td>
+              <td>Hierarchical Clustering Methods</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Han & Kamber pp. 467–474</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-4.pdf#page=63" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 63 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Agglomerative bottom-up clustering, Single linkage (minimum distance), Complete linkage (maximum distance), Average linkage, Dendrogram construction.</span></td>
+            </tr>
+        
+
+            <tr class="exercise-row">
+              <td><strong>10.8</strong></td>
+              <td><span style="background: var(--primary); color: white; font-size: 0.7rem; font-weight: 700; padding: 0.15rem 0.4rem; border-radius: 4px; margin-right: 0.4rem;">PRACTICE</span>Han & Kamber Chapter 10 Review Exercises</td>
+              <td><span style="font-size: 0.85rem; color: #475569;">Han & Kamber pp. 510–513</span></td>
+              <td>
+                <a href="./machine-learning-textbook-module-4.pdf#page=77" class="btn-cutout" target="_blank">
+                  📄 Cutout p. 77 &rarr;
+                </a>
+              </td>
+              <td><span style="font-size: 0.85rem; color: #334155;">Agglomerative clustering distance matrix updates, dendrogram tree tracing.</span></td>
+            </tr>
+        
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+
+    <!-- GATE DA PYQs Section -->
+    <div class="card" id="pyqs">
+      <h2 class="card-title">📝 Official GATE DA Previous Year Questions (PYQs) Mapped by Module</h2>
+      <p style="color: var(--text-muted); margin-bottom: 1.75rem;">
+        All 25 official questions from GATE DA 2024, 2025, and 2026 mapped to our exact module architecture, featuring full official problem statements, verified answers, exact textbook section derivations, and clickable links into each module cutout PDF.
+      </p>
+
+
+      <!-- Module 1 PYQ Group -->
+      <div style="margin-bottom: 2.5rem;">
+        <div style="background: #f1f5f9; border-left: 4px solid var(--primary); padding: 0.85rem 1.25rem; border-radius: var(--radius-sm); margin-bottom: 1.25rem;">
+          <h3 style="font-size: 1.2rem; color: var(--text);">Module 1: Supervised Learning Foundations & Linear Models (11 Questions | 16 Marks)</h3>
+        </div>
+    
+
+        <!-- 2024 Q.18 -->
+        <div class="pyq-card">
+          <div class="pyq-header">
+            <span class="pyq-id">GATE DA 2024 — Q.18</span>
+            <div class="pyq-meta-badges">
+              <span class="badge-mark badge-1m">1 Mark</span>
+              <span class="badge-type">MCQ</span>
+              <span class="badge-type" style="background: #ede9fe; color: #5b21b6;">PYQ PDF p. 12-13</span>
+            </div>
+          </div>
+          <span class="pyq-topic">📌 Syllabus Topic: <strong>Model Taxonomy - Generative vs Discriminative Models</strong></span>
+          <div class="pyq-question">
+            <strong>Official Question Statement:</strong><br>
+            <div>Match the items in Column 1 with the items in Column 2 in the following table:</div>
+<div>Column 1</div>
+<div>Column 2</div>
+<div>(p) Principal Component Analysis</div>
+<div>(q) Naïve Bayes Classification</div>
+<div>(r) Logistic Regression</div>
+<div>(i) Discriminative Model</div>
+<div>(ii) Dimensionality Reduction</div>
+<div>(iii) Generative Model</div>
+<br>
+<div class="pyq-option">(A)</div>
+<div>(p) − (iii), (q) − (i), (r) − (ii)</div>
+<div class="pyq-option">(B)</div>
+<div>(p) − (ii), (q) − (i), (r) − (iii)</div>
+<div class="pyq-option">(C)</div>
+<div>(p) − (ii), (q) − (iii), (r) − (i)</div>
+<div class="pyq-option">(D)</div>
+<div>(p) − (iii), (q) − (ii), (r) − (i)</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<div>Organizing Institute: IISc Bengaluru</div>
+          </div>
+          <div class="pyq-source">
+            <span>📖 <strong>Source Textbook:</strong> Bishop pp. 56–65, 213–229</span>
+            <span>• <strong>Cutout Link:</strong> <a href="./machine-learning-textbook-module-1.pdf#page=38" class="pyq-pdf-link" target="_blank">Open in Module 1 Cutout (p. 38) &rarr;</a></span>
+          </div>
+          <div class="pyq-rationale">
+            <strong>Theoretical Rationale & Exam Strategy:</strong><br>
+            Generative models model joint probability P(x, y) = P(x|y)P(y) (e.g. Naive Bayes, GMM, HMM); discriminative models model posterior P(y|x) directly (e.g. Logistic Regression, Perceptron, SVM).
+          </div>
+        </div>
+        
+
+        <!-- 2024 Q.22 -->
+        <div class="pyq-card">
+          <div class="pyq-header">
+            <span class="pyq-id">GATE DA 2024 — Q.22</span>
+            <div class="pyq-meta-badges">
+              <span class="badge-mark badge-1m">1 Mark</span>
+              <span class="badge-type">MCQ</span>
+              <span class="badge-type" style="background: #ede9fe; color: #5b21b6;">PYQ PDF p. 14-15</span>
+            </div>
+          </div>
+          <span class="pyq-topic">📌 Syllabus Topic: <strong>Dimensionality Reduction - Fisher's Linear Discriminant</strong></span>
+          <div class="pyq-question">
+            <strong>Official Question Statement:</strong><br>
+            <div>For any binary classification dataset, let 𝑆𝐵∈ℝ𝑑×𝑑 and 𝑆𝑊∈ℝ𝑑×𝑑 be the</div>
+<div>between-class and within-class scatter (covariance) matrices, respectively. The</div>
+<div>Fisher linear discriminant is defined by  𝑢∗∈ℝ𝑑, that maximizes</div>
+<pre><code>
+𝐽(𝑢) = 𝑢𝑇𝑆𝐵𝑢
+</code></pre>
+<div>𝑢𝑇𝑆𝑊𝑢</div>
+<div>If 𝜆= 𝐽(𝑢∗),  𝑆𝑊 is non-singular and 𝑆𝐵≠0, then (𝑢∗, 𝜆) must satisfy which ONE</div>
+<div>of the following equations?</div>
+<div>Note: ℝ denotes the set of real numbers.</div>
+<div class="pyq-option">(A)</div>
+<div>𝑆𝑊</div>
+<div>−1𝑆𝐵𝑢∗= 𝜆𝑢∗</div>
+<div class="pyq-option">(B)</div>
+<div>𝑆𝑊𝑢∗= 𝜆𝑆𝐵𝑢∗</div>
+<div class="pyq-option">(C)</div>
+<div>𝑆𝐵𝑆𝑊𝑢∗= 𝜆𝑢∗</div>
+<div class="pyq-option">(D)</div>
+<div>𝑢∗𝑇𝑢∗= 𝜆2</div>
+<br>
+<br>
+<br>
+<div>Organizing Institute: IISc Bengaluru</div>
+          </div>
+          <div class="pyq-source">
+            <span>📖 <strong>Source Textbook:</strong> Bishop pp. 203–207</span>
+            <span>• <strong>Cutout Link:</strong> <a href="./machine-learning-textbook-module-1.pdf#page=115" class="pyq-pdf-link" target="_blank">Open in Module 1 Cutout (p. 115) &rarr;</a></span>
+          </div>
+          <div class="pyq-rationale">
+            <strong>Theoretical Rationale & Exam Strategy:</strong><br>
+            Fisher's LDA finds a linear projection maximizing between-class variance S_B relative to within-class variance S_W: w proportional to S_W^(-1)(m2 - m1).
+          </div>
+        </div>
+        
+
+        <!-- 2024 Q.53 -->
+        <div class="pyq-card">
+          <div class="pyq-header">
+            <span class="pyq-id">GATE DA 2024 — Q.53</span>
+            <div class="pyq-meta-badges">
+              <span class="badge-mark badge-2m">2 Marks</span>
+              <span class="badge-type">MSQ</span>
+              <span class="badge-type" style="background: #ede9fe; color: #5b21b6;">PYQ PDF p. 33</span>
+            </div>
+          </div>
+          <span class="pyq-topic">📌 Syllabus Topic: <strong>Supervised Learning - Linear Separability</strong></span>
+          <div class="pyq-question">
+            <strong>Official Question Statement:</strong><br>
+            <div>Consider the following figures representing datasets consisting of</div>
+<div>two-dimensional features with two classes denoted by circles and squares.</div>
+<br>
+<div>(i)</div>
+<br>
+<div>(ii)</div>
+<br>
+<div>(iii)</div>
+<br>
+<div>(iv)</div>
+<div>Which of the following is/are TRUE?</div>
+<div class="pyq-option">(A)</div>
+<div>(i) is linearly separable.</div>
+<div class="pyq-option">(B)</div>
+<div>(ii) is linearly separable.</div>
+<div class="pyq-option">(C)</div>
+<div>(iii) is linearly separable.</div>
+<div class="pyq-option">(D)</div>
+<div>(iv) is linearly separable.</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<div>Organizing Institute: IISc Bengaluru</div>
+          </div>
+          <div class="pyq-source">
+            <span>📖 <strong>Source Textbook:</strong> Bishop pp. 198–212</span>
+            <span>• <strong>Cutout Link:</strong> <a href="./machine-learning-textbook-module-1.pdf#page=110" class="pyq-pdf-link" target="_blank">Open in Module 1 Cutout (p. 110) &rarr;</a></span>
+          </div>
+          <div class="pyq-rationale">
+            <strong>Theoretical Rationale & Exam Strategy:</strong><br>
+            A dataset is linearly separable if there exists a hyperplane w^T x + b = 0 such that all positive points lie on one side and all negative points on the other (e.g. AND, OR are linearly separable, XOR is not).
+          </div>
+        </div>
+        
+
+        <!-- 2025 Q.22 -->
+        <div class="pyq-card">
+          <div class="pyq-header">
+            <span class="pyq-id">GATE DA 2025 — Q.22</span>
+            <div class="pyq-meta-badges">
+              <span class="badge-mark badge-1m">1 Mark</span>
+              <span class="badge-type">MCQ</span>
+              <span class="badge-type" style="background: #ede9fe; color: #5b21b6;">PYQ PDF p. 14</span>
+            </div>
+          </div>
+          <span class="pyq-topic">📌 Syllabus Topic: <strong>Linear Classifiers - Geometric Margin & Distance to Hyperplane</strong></span>
+          <div class="pyq-question">
+            <strong>Official Question Statement:</strong><br>
+            <div>Consider designing a linear classiﬁer</div>
+<pre><code>
+y = sign(f(x; w, b)),
+f(x; w, b) = w⊤x + b
+on a dataset D = {(x1, y1), (x2, y2), . . . , (xN, yN)}, xi ∈Rd, yi ∈{+1, −1}, i =
+</code></pre>
+<div>1, 2, . . . , N. Recall that the sign function outputs +1 if the argument is positive, and −1</div>
+<div>if the argument is non-positive. The parameters w and b are updated as per the following</div>
+<div>training algorithm:</div>
+<pre><code>
+wnew = wold + ynxn,
+bnew = bold + yn
+whenever sign(f(xn; wold, bold))̸ = yn. In other words, whenever the classiﬁer wrongly
+</code></pre>
+<div>predicts a sample (xn, yn) from the dataset, wold gets updated to wnew, and likewise bold</div>
+<div>gets updated to bnew. Consider the case (xn, +1), f(xn; wold, bold) &lt; 0. Then</div>
+<div class="pyq-option">(A)</div>
+<div>f(xn; wnew, bnew) &gt; f(xn; wold, bold)</div>
+<div class="pyq-option">(B)</div>
+<div>f(xn; wnew, bnew) &lt; f(xn; wold, bold)</div>
+<div class="pyq-option">(C)</div>
+<pre><code>
+f(xn; wnew, bnew) = f(xn; wold, bold)
+</code></pre>
+<div class="pyq-option">(D)</div>
+<div>ynf(xn; wold, bold) &gt; 1</div>
+<br>
+<div>Data Science &amp; Artiﬁcial Intelligence - DA</div>
+          </div>
+          <div class="pyq-source">
+            <span>📖 <strong>Source Textbook:</strong> Bishop pp. 198–203</span>
+            <span>• <strong>Cutout Link:</strong> <a href="./machine-learning-textbook-module-1.pdf#page=110" class="pyq-pdf-link" target="_blank">Open in Module 1 Cutout (p. 110) &rarr;</a></span>
+          </div>
+          <div class="pyq-rationale">
+            <strong>Theoretical Rationale & Exam Strategy:</strong><br>
+            The perpendicular distance of a point x to the decision hyperplane w^T x + w0 = 0 is given by r = (w^T x + w0) / ||w||. The normal vector w determines hyperplane orientation.
+          </div>
+        </div>
+        
+
+        <!-- 2025 Q.34 -->
+        <div class="pyq-card">
+          <div class="pyq-header">
+            <span class="pyq-id">GATE DA 2025 — Q.34</span>
+            <div class="pyq-meta-badges">
+              <span class="badge-mark badge-1m">1 Mark</span>
+              <span class="badge-type">NAT</span>
+              <span class="badge-type" style="background: #ede9fe; color: #5b21b6;">PYQ PDF p. 18</span>
+            </div>
+          </div>
+          <span class="pyq-topic">📌 Syllabus Topic: <strong>Linear Regression - Zero-Intercept Least Squares</strong></span>
+          <div class="pyq-question">
+            <strong>Official Question Statement:</strong><br>
+            <pre><code>
+Given data {(−1, 1), (2, −5), (3, 5)} of the form (x, y), we ﬁt a model y = wx using
+</code></pre>
+<div>linear least-squares regression. The optimal value of w is</div>
+<div>(Round off to three decimal places)</div>
+          </div>
+          <div class="pyq-source">
+            <span>📖 <strong>Source Textbook:</strong> Bishop pp. 156–164</span>
+            <span>• <strong>Cutout Link:</strong> <a href="./machine-learning-textbook-module-1.pdf#page=68" class="pyq-pdf-link" target="_blank">Open in Module 1 Cutout (p. 68) &rarr;</a></span>
+          </div>
+          <div class="pyq-rationale">
+            <strong>Theoretical Rationale & Exam Strategy:</strong><br>
+            For zero-intercept model y = w x, minimizing sum (y_i - w x_i)^2 gives derivative -2 sum x_i(y_i - w x_i) = 0 => w = (sum x_i y_i) / (sum x_i^2).
+          </div>
+        </div>
+        
+
+        <!-- 2025 Q.53 -->
+        <div class="pyq-card">
+          <div class="pyq-header">
+            <span class="pyq-id">GATE DA 2025 — Q.53</span>
+            <div class="pyq-meta-badges">
+              <span class="badge-mark badge-2m">2 Marks</span>
+              <span class="badge-type">MSQ</span>
+              <span class="badge-type" style="background: #ede9fe; color: #5b21b6;">PYQ PDF p. 27</span>
+            </div>
+          </div>
+          <span class="pyq-topic">📌 Syllabus Topic: <strong>Linear Classification - Perceptron & Separating Hyperplanes</strong></span>
+          <div class="pyq-question">
+            <strong>Official Question Statement:</strong><br>
+            <pre><code>
+Consider designing a linear binary classiﬁer f(x) = sign(w⊤x + b), x ∈R2 on the
+</code></pre>
+<div>following training data:</div>
+<div>Class-1:</div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div>2</div>
+<div>0</div>
+<div></div>
+<div>,</div>
+<div></div>
+<div>0</div>
+<div>2</div>
+<div></div>
+<div>,</div>
+<div></div>
+<div>2</div>
+<div>2</div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div>, Class-2:</div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div>0</div>
+<div>0</div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div>Hard-margin support vector machine (SVM) formulation is solved to obtain w and b.</div>
+<div>Which of the following options is/are correct?</div>
+<div class="pyq-option">(A)</div>
+<div>w =</div>
+<div></div>
+<div>4</div>
+<div>4</div>
+<div></div>
+<pre><code>
+and b = 1
+</code></pre>
+<div class="pyq-option">(B)</div>
+<div>The number of support vectors is 3</div>
+<div class="pyq-option">(C)</div>
+<div>The margin is</div>
+<div>√</div>
+<div>2</div>
+<div class="pyq-option">(D)</div>
+<div>Training accuracy is 98%</div>
+<br>
+<div>Data Science &amp; Artiﬁcial Intelligence - DA</div>
+          </div>
+          <div class="pyq-source">
+            <span>📖 <strong>Source Textbook:</strong> Bishop pp. 209–213</span>
+            <span>• <strong>Cutout Link:</strong> <a href="./machine-learning-textbook-module-1.pdf#page=121" class="pyq-pdf-link" target="_blank">Open in Module 1 Cutout (p. 121) &rarr;</a></span>
+          </div>
+          <div class="pyq-rationale">
+            <strong>Theoretical Rationale & Exam Strategy:</strong><br>
+            Perceptron learning algorithm converges in finite steps if training data is linearly separable; if not separable, it cycles indefinitely without converging.
+          </div>
+        </div>
+        
+
+        <!-- 2025 Q.55 -->
+        <div class="pyq-card">
+          <div class="pyq-header">
+            <span class="pyq-id">GATE DA 2025 — Q.55</span>
+            <div class="pyq-meta-badges">
+              <span class="badge-mark badge-2m">2 Marks</span>
+              <span class="badge-type">MSQ</span>
+              <span class="badge-type" style="background: #ede9fe; color: #5b21b6;">PYQ PDF p. 28</span>
+            </div>
+          </div>
+          <span class="pyq-topic">📌 Syllabus Topic: <strong>Classification - Centroid Classifier / Gaussian Generative Models</strong></span>
+          <div class="pyq-question">
+            <strong>Official Question Statement:</strong><br>
+            <div>Consider a two-class problem in Rd with class labels red and green. Let µred and</div>
+<div>µgreen be the means of the two classes. Given test sample x ∈Rd, a classiﬁer calculates</div>
+<div>the squared Euclidean distance (denoted by ∥· ∥2) between x and the means of the two</div>
+<div>classes and assigns the class label that the sample x is closest to. That is, the classiﬁer</div>
+<div>computes</div>
+<pre><code>
+f(x) = ∥µred −x∥2 −∥µgreen −x∥2
+</code></pre>
+<div>and assigns the label red to x if f(x) &lt; 0, and green otherwise. Which of the following</div>
+<div>statements is/are correct?</div>
+<div class="pyq-option">(A)</div>
+<pre><code>
+The sample x = 0 is assigned the label green if ∥µred∥&lt; ∥µgreen∥
+</code></pre>
+<div class="pyq-option">(B)</div>
+<div>f is a linear function of x</div>
+<div class="pyq-option">(C)</div>
+<pre><code>
+f(x) = w⊤x + b, where w and b are functions of µred and µgreen
+</code></pre>
+<div class="pyq-option">(D)</div>
+<div>f is a quadratic polynomial in x</div>
+<br>
+<div>Data Science &amp; Artiﬁcial Intelligence - DA</div>
+          </div>
+          <div class="pyq-source">
+            <span>📖 <strong>Source Textbook:</strong> Bishop pp. 213–219</span>
+            <span>• <strong>Cutout Link:</strong> <a href="./machine-learning-textbook-module-1.pdf#page=125" class="pyq-pdf-link" target="_blank">Open in Module 1 Cutout (p. 125) &rarr;</a></span>
+          </div>
+          <div class="pyq-rationale">
+            <strong>Theoretical Rationale & Exam Strategy:</strong><br>
+            When classes have equal spherical Gaussian covariances Sigma = sigma^2 I and equal priors, the Bayes optimal decision boundary is the perpendicular bisector between class centroids.
+          </div>
+        </div>
+        
+
+        <!-- 2026 Q.12 -->
+        <div class="pyq-card">
+          <div class="pyq-header">
+            <span class="pyq-id">GATE DA 2026 — Q.12</span>
+            <div class="pyq-meta-badges">
+              <span class="badge-mark badge-1m">1 Mark</span>
+              <span class="badge-type">MCQ</span>
+              <span class="badge-type" style="background: #ede9fe; color: #5b21b6;">PYQ PDF p. 9</span>
+            </div>
+          </div>
+          <span class="pyq-topic">📌 Syllabus Topic: <strong>Supervised Learning - Multiclass Softmax Parameter Counting</strong></span>
+          <div class="pyq-question">
+            <strong>Official Question Statement:</strong><br>
+            <div>Consider that you are training a classifier for a 10-class classification problem.</div>
+<div>Each input is represented as a 512-dimensional vector. There are 1000 samples,</div>
+<div>out of which first 100 will be used for testing. Let Leave-One-Out-Cross-</div>
+<div>Validation (LOOCV) be used for selection of the classifier model before testing.</div>
+<div>Which of the following options is the correct number of validation splits that will</div>
+<div>be generated?</div>
+<br>
+<br>
+<div class="pyq-option">(A)</div>
+<div>10</div>
+<div class="pyq-option">(B)</div>
+<div>512</div>
+<div class="pyq-option">(C)</div>
+<div>900</div>
+<div class="pyq-option">(D)</div>
+<div>1000</div>
+<br>
+<br>
+<br>
+<div>Data Science and Artificial Intelligence (DA)</div>
+          </div>
+          <div class="pyq-source">
+            <span>📖 <strong>Source Textbook:</strong> Bishop pp. 228–230</span>
+            <span>• <strong>Cutout Link:</strong> <a href="./machine-learning-textbook-module-1.pdf#page=140" class="pyq-pdf-link" target="_blank">Open in Module 1 Cutout (p. 140) &rarr;</a></span>
+          </div>
+          <div class="pyq-rationale">
+            <strong>Theoretical Rationale & Exam Strategy:</strong><br>
+            For K classes with d input features, unconstrained softmax has K * (d + 1) parameters; with redundant parameter elimination fixing reference class K, it has (K - 1) * (d + 1) parameters.
+          </div>
+        </div>
+        
+
+        <!-- 2026 Q.23 -->
+        <div class="pyq-card">
+          <div class="pyq-header">
+            <span class="pyq-id">GATE DA 2026 — Q.23</span>
+            <div class="pyq-meta-badges">
+              <span class="badge-mark badge-1m">1 Mark</span>
+              <span class="badge-type">MCQ</span>
+              <span class="badge-type" style="background: #ede9fe; color: #5b21b6;">PYQ PDF p. 15</span>
+            </div>
+          </div>
+          <span class="pyq-topic">📌 Syllabus Topic: <strong>ML Algorithm Taxonomy - Task to Algorithm Matching</strong></span>
+          <div class="pyq-question">
+            <strong>Official Question Statement:</strong><br>
+            <div>In the following table, the Task column lists a few tasks related to machine</div>
+<div>learning. The Algorithm column lists a few algorithms.</div>
+<div>Each entry “t” from the Task column is to be matched with an appropriate entry</div>
+<div>“a” from the Algorithm column such that the task “t” can be solved using the</div>
+<div>algorithm “a”. Denote such a match as t:a</div>
+<div>Task</div>
+<div>Algorithm</div>
+<div>T1 – Clustering</div>
+<div>A1 – Markov Chain Monte Carlo</div>
+<div>T2 – Classification</div>
+<div>A2 – K-Medoid</div>
+<div>T3 – Sampling</div>
+<div>A3 – Linear Discriminant Analysis</div>
+<div>T4 – Feature Extraction</div>
+<div>A4 – Naive Bayes</div>
+<div>Which of the following options is/are the correct matching(s)?</div>
+<br>
+<br>
+<div class="pyq-option">(A)</div>
+<div>T1:A4, T2:A3, T3:A1, T4:A2</div>
+<div class="pyq-option">(B)</div>
+<div>T1:A2, T2:A4, T3:A1, T4:A3</div>
+<div class="pyq-option">(C)</div>
+<div>T1:A3, T2:A4, T3:A1, T4:A2</div>
+<div class="pyq-option">(D)</div>
+<div>T1:A4, T2:A2, T3:A1, T4:A3</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<div>Data Science and Artificial Intelligence (DA)</div>
+          </div>
+          <div class="pyq-source">
+            <span>📖 <strong>Source Textbook:</strong> Bishop pp. 56–65</span>
+            <span>• <strong>Cutout Link:</strong> <a href="./machine-learning-textbook-module-1.pdf#page=38" class="pyq-pdf-link" target="_blank">Open in Module 1 Cutout (p. 38) &rarr;</a></span>
+          </div>
+          <div class="pyq-rationale">
+            <strong>Theoretical Rationale & Exam Strategy:</strong><br>
+            Matching machine learning paradigms: Supervised regression (Linear/Ridge Regression), Supervised classification (SVM, Decision Trees), Unsupervised clustering (k-Means, Hierarchical), Dimensionality reduction (PCA).
+          </div>
+        </div>
+        
+
+        <!-- 2026 Q.37 -->
+        <div class="pyq-card">
+          <div class="pyq-header">
+            <span class="pyq-id">GATE DA 2026 — Q.37</span>
+            <div class="pyq-meta-badges">
+              <span class="badge-mark badge-2m">2 Marks</span>
+              <span class="badge-type">MCQ</span>
+              <span class="badge-type" style="background: #ede9fe; color: #5b21b6;">PYQ PDF p. 24</span>
+            </div>
+          </div>
+          <span class="pyq-topic">📌 Syllabus Topic: <strong>Linear Regression - Ridge Regularization Properties</strong></span>
+          <div class="pyq-question">
+            <strong>Official Question Statement:</strong><br>
+            <div>Which of the following statements is true for Ridge Regression?</div>
+<br>
+<br>
+<div class="pyq-option">(A)</div>
+<div>The regularizer in the objective function of Ridge Regression is used to guard</div>
+<div>against scenarios where the model works well for the test data, but poorly for the</div>
+<div>training data.</div>
+<div class="pyq-option">(B)</div>
+<div>The regularizer of Ridge Regression uses 𝐿1 norm.</div>
+<div class="pyq-option">(C)</div>
+<div>Ridge Regression aims to reduce the number of parameters that have negative</div>
+<div>values.</div>
+<div class="pyq-option">(D)</div>
+<div>The regularizer of Ridge Regression may increase the bias of the model, but it</div>
+<div>helps in reducing the variance in predictions.</div>
+          </div>
+          <div class="pyq-source">
+            <span>📖 <strong>Source Textbook:</strong> Bishop pp. 162–164</span>
+            <span>• <strong>Cutout Link:</strong> <a href="./machine-learning-textbook-module-1.pdf#page=74" class="pyq-pdf-link" target="_blank">Open in Module 1 Cutout (p. 74) &rarr;</a></span>
+          </div>
+          <div class="pyq-rationale">
+            <strong>Theoretical Rationale & Exam Strategy:</strong><br>
+            Ridge regression adds penalty lambda ||w||^2. It shrinks coefficients toward zero without setting them exactly to zero, handles multicollinearity, and increases bias while decreasing variance.
+          </div>
+        </div>
+        
+
+        <!-- 2026 Q.55 -->
+        <div class="pyq-card">
+          <div class="pyq-header">
+            <span class="pyq-id">GATE DA 2026 — Q.55</span>
+            <div class="pyq-meta-badges">
+              <span class="badge-mark badge-2m">2 Marks</span>
+              <span class="badge-type">MSQ</span>
+              <span class="badge-type" style="background: #ede9fe; color: #5b21b6;">PYQ PDF p. 37</span>
+            </div>
+          </div>
+          <span class="pyq-topic">📌 Syllabus Topic: <strong>Ridge Regression - Closed-Form Solution & Gradient</strong></span>
+          <div class="pyq-question">
+            <strong>Official Question Statement:</strong><br>
+            <div>Consider that Linear Ridge Regression is being used to learn a prediction function</div>
+<div>𝑦𝑝𝑟𝑒𝑑= 𝑤𝑇𝑥, where 𝑤, 𝑥∈ℝ2 and Mean Absolute Error (MAE) is used to</div>
+<div>measure the prediction error. A weight of 0.20 is associated with the regularizer.</div>
+<div>At an intermediate step of the training process, assume that the parameter 𝑤=</div>
+<div>[−3.00, 4.00]𝑇. In the next step, for the input 𝑥= [1.00, 2.00]𝑇, the predicted</div>
+<div>value of 𝑦 is noted. Let the relation between 𝑥= [𝑥1, 𝑥2]𝑇and the true value of 𝑦</div>
+<div>be 𝑦𝑡𝑟𝑢𝑒= 𝑥1 + 𝑥2.</div>
+<br>
+<div>The value of the overall regularized loss function for this instance is _______ .</div>
+<div>(Rounded off to two decimal places)</div>
+<br>
+<div>Data Science and Artificial Intelligence (DA)</div>
+          </div>
+          <div class="pyq-source">
+            <span>📖 <strong>Source Textbook:</strong> Bishop pp. 162–164</span>
+            <span>• <strong>Cutout Link:</strong> <a href="./machine-learning-textbook-module-1.pdf#page=74" class="pyq-pdf-link" target="_blank">Open in Module 1 Cutout (p. 74) &rarr;</a></span>
+          </div>
+          <div class="pyq-rationale">
+            <strong>Theoretical Rationale & Exam Strategy:</strong><br>
+            Objective J(w) = ||y - X w||^2 + lambda ||w||^2. Gradient grad J = -2 X^T(y - X w) + 2 lambda w. Setting to zero yields w = (X^T X + lambda I)^(-1) X^T y. (X^T X + lambda I) is strictly positive definite for lambda > 0.
+          </div>
+        </div>
+        
+</div>
+
+      <!-- Module 2 PYQ Group -->
+      <div style="margin-bottom: 2.5rem;">
+        <div style="background: #f1f5f9; border-left: 4px solid var(--primary); padding: 0.85rem 1.25rem; border-radius: var(--radius-sm); margin-bottom: 1.25rem;">
+          <h3 style="font-size: 1.2rem; color: var(--text);">Module 2: Decision Trees, Naive Bayes & Instance-Based Learning (4 Questions | 6 Marks)</h3>
+        </div>
+    
+
+        <!-- 2024 Q.20 -->
+        <div class="pyq-card">
+          <div class="pyq-header">
+            <span class="pyq-id">GATE DA 2024 — Q.20</span>
+            <div class="pyq-meta-badges">
+              <span class="badge-mark badge-1m">1 Mark</span>
+              <span class="badge-type">MCQ</span>
+              <span class="badge-type" style="background: #ede9fe; color: #5b21b6;">PYQ PDF p. 13-14</span>
+            </div>
+          </div>
+          <span class="pyq-topic">📌 Syllabus Topic: <strong>Naive Bayes Classifier - Parameter Estimation</strong></span>
+          <div class="pyq-question">
+            <strong>Official Question Statement:</strong><br>
+            <div>Given a dataset with 𝐾 binary-valued attributes (where 𝐾&gt; 2) for a two-class</div>
+<div>classification task, the number of parameters to be estimated for learning a naïve</div>
+<div>Bayes classifier is</div>
+<div class="pyq-option">(A)</div>
+<div>2𝐾+ 1</div>
+<div class="pyq-option">(B)</div>
+<div>2𝐾+ 1</div>
+<div class="pyq-option">(C)</div>
+<div>2𝐾+1 + 1</div>
+<div class="pyq-option">(D)</div>
+<div>𝐾2 + 1</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<div>Organizing Institute: IISc Bengaluru</div>
+          </div>
+          <div class="pyq-source">
+            <span>📖 <strong>Source Textbook:</strong> Mitchell pp. 189–191</span>
+            <span>• <strong>Cutout Link:</strong> <a href="./machine-learning-textbook-module-2.pdf#page=45" class="pyq-pdf-link" target="_blank">Open in Module 2 Cutout (p. 45) &rarr;</a></span>
+          </div>
+          <div class="pyq-rationale">
+            <strong>Theoretical Rationale & Exam Strategy:</strong><br>
+            For binary target Y and K binary features X_i, Naive Bayes estimates 1 prior P(Y=1) plus 2 conditional probabilities P(X_i=1|Y=y) per feature, yielding exactly 1 + 2K independent parameters.
+          </div>
+        </div>
+        
+
+        <!-- 2024 Q.62 -->
+        <div class="pyq-card">
+          <div class="pyq-header">
+            <span class="pyq-id">GATE DA 2024 — Q.62</span>
+            <div class="pyq-meta-badges">
+              <span class="badge-mark badge-2m">2 Marks</span>
+              <span class="badge-type">NAT</span>
+              <span class="badge-type" style="background: #ede9fe; color: #5b21b6;">PYQ PDF p. 38</span>
+            </div>
+          </div>
+          <span class="pyq-topic">📌 Syllabus Topic: <strong>Decision Trees - Entropy & Information Gain (ID3)</strong></span>
+          <div class="pyq-question">
+            <strong>Official Question Statement:</strong><br>
+            <div>Details of ten international cricket games between two teams “Green” and “Blue”</div>
+<div>are given in Table C. This table consists of matches played on different pitches,</div>
+<div>across formats along with their winners. The attribute Pitch can take one of two</div>
+<div>values: spin-friendly (represented as 𝑆) or pace-friendly (represented as 𝐹). The</div>
+<div>attribute Format can take one of two values: one-day match (represented as 𝑂) or</div>
+<div>test match (represented as 𝑇).</div>
+<br>
+<div>A cricket organization would like to use the information given in Table C to develop</div>
+<div>a decision-tree model to predict outcomes of future games between these two teams.</div>
+<br>
+<div>To develop such a model, the computed InformationGain(C, Pitch) with respect to</div>
+<div>the Target is ______ (rounded off to two decimal places).</div>
+<br>
+<br>
+<div>Table C</div>
+<br>
+<div>Match</div>
+<div>Number</div>
+<div>Pitch</div>
+<div>Format</div>
+<div>Winner (Target)</div>
+<div>1</div>
+<div>𝑆</div>
+<div>𝑇</div>
+<div>Green</div>
+<div>2</div>
+<div>𝑆</div>
+<div>𝑇</div>
+<div>Blue</div>
+<div>3</div>
+<div>𝐹</div>
+<div>𝑂</div>
+<div>Blue</div>
+<div>4</div>
+<div>𝑆</div>
+<div>𝑂</div>
+<div>Blue</div>
+<div>5</div>
+<div>𝐹</div>
+<div>𝑇</div>
+<div>Green</div>
+<div>6</div>
+<div>𝐹</div>
+<div>𝑂</div>
+<div>Blue</div>
+<div>7</div>
+<div>𝑆</div>
+<div>𝑂</div>
+<div>Green</div>
+<div>8</div>
+<div>𝐹</div>
+<div>𝑇</div>
+<div>Blue</div>
+<div>9</div>
+<div>𝐹</div>
+<div>𝑂</div>
+<div>Blue</div>
+<div>10</div>
+<div>𝑆</div>
+<div>𝑂</div>
+<div>Green</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<div>Organizing Institute: IISc Bengaluru</div>
+          </div>
+          <div class="pyq-source">
+            <span>📖 <strong>Source Textbook:</strong> Mitchell pp. 67–74</span>
+            <span>• <strong>Cutout Link:</strong> <a href="./machine-learning-textbook-module-2.pdf#page=4" class="pyq-pdf-link" target="_blank">Open in Module 2 Cutout (p. 4) &rarr;</a></span>
+          </div>
+          <div class="pyq-rationale">
+            <strong>Theoretical Rationale & Exam Strategy:</strong><br>
+            Computing parent entropy H(S), child subset entropies H(S_v), and subtracting weighted average to obtain Information Gain Gain(S, A) = H(S) - sum (|S_v|/|S|) H(S_v).
+          </div>
+        </div>
+        
+
+        <!-- 2024 Q.63 -->
+        <div class="pyq-card">
+          <div class="pyq-header">
+            <span class="pyq-id">GATE DA 2024 — Q.63</span>
+            <div class="pyq-meta-badges">
+              <span class="badge-mark badge-2m">2 Marks</span>
+              <span class="badge-type">NAT</span>
+              <span class="badge-type" style="background: #ede9fe; color: #5b21b6;">PYQ PDF p. 39</span>
+            </div>
+          </div>
+          <span class="pyq-topic">📌 Syllabus Topic: <strong>k-Nearest Neighbor Classifier - Decision Boundary</strong></span>
+          <div class="pyq-question">
+            <strong>Official Question Statement:</strong><br>
+            <div>Given the two-dimensional dataset consisting of 5 data points from two classes</div>
+<div>(circles and squares) and assume that the Euclidean distance is used to measure the</div>
+<div>distance between two points. The minimum odd value of 𝑘 in 𝑘-nearest neighbor</div>
+<div>algorithm for which the diamond (⋄) shaped data point is assigned the label square</div>
+<div>is ______.</div>
+<br>
+<br>
+<br>
+<div>Organizing Institute: IISc Bengaluru</div>
+          </div>
+          <div class="pyq-source">
+            <span>📖 <strong>Source Textbook:</strong> Mitchell pp. 243–247</span>
+            <span>• <strong>Cutout Link:</strong> <a href="./machine-learning-textbook-module-2.pdf#page=70" class="pyq-pdf-link" target="_blank">Open in Module 2 Cutout (p. 70) &rarr;</a></span>
+          </div>
+          <div class="pyq-rationale">
+            <strong>Theoretical Rationale & Exam Strategy:</strong><br>
+            Finding the k nearest neighbors using Euclidean distance; classifying test point by majority vote; computing decision boundary threshold coordinates.
+          </div>
+        </div>
+        
+
+        <!-- 2025 Q.35 -->
+        <div class="pyq-card">
+          <div class="pyq-header">
+            <span class="pyq-id">GATE DA 2025 — Q.35</span>
+            <div class="pyq-meta-badges">
+              <span class="badge-mark badge-1m">1 Mark</span>
+              <span class="badge-type">NAT</span>
+              <span class="badge-type" style="background: #ede9fe; color: #5b21b6;">PYQ PDF p. 18-19</span>
+            </div>
+          </div>
+          <span class="pyq-topic">📌 Syllabus Topic: <strong>Naive Bayes Classifier - Posterior Classification Odds</strong></span>
+          <div class="pyq-question">
+            <strong>Official Question Statement:</strong><br>
+            <div>The naive Bayes classiﬁer is used to solve a two-class classiﬁcation problem with class-</div>
+<pre><code>
+labels y1, y2. Suppose the prior probabilities are P(y1) = 1
+3 and P(y2) = 2
+</code></pre>
+<div>3. Assuming</div>
+<div>a discrete feature space with</div>
+<pre><code>
+P(x|y1) = 3
+</code></pre>
+<div>4</div>
+<div>and</div>
+<pre><code>
+P(x|y2) = 1
+</code></pre>
+<div>4</div>
+<pre><code>
+for a speciﬁc feature vector x. The probability of misclassifying x is
+</code></pre>
+<div>(Round off to two decimal places)</div>
+<br>
+<div>Data Science &amp; Artiﬁcial Intelligence - DA</div>
+          </div>
+          <div class="pyq-source">
+            <span>📖 <strong>Source Textbook:</strong> Mitchell pp. 189–191</span>
+            <span>• <strong>Cutout Link:</strong> <a href="./machine-learning-textbook-module-2.pdf#page=45" class="pyq-pdf-link" target="_blank">Open in Module 2 Cutout (p. 45) &rarr;</a></span>
+          </div>
+          <div class="pyq-rationale">
+            <strong>Theoretical Rationale & Exam Strategy:</strong><br>
+            Evaluating posterior ratio P(Y=1|x) / P(Y=0|x) = [P(Y=1)/P(Y=0)] * prod [P(x_i|Y=1)/P(x_i|Y=0)] using independence assumption and training frequencies.
+          </div>
+        </div>
+        
+</div>
+
+      <!-- Module 3 PYQ Group -->
+      <div style="margin-bottom: 2.5rem;">
+        <div style="background: #f1f5f9; border-left: 4px solid var(--primary); padding: 0.85rem 1.25rem; border-radius: var(--radius-sm); margin-bottom: 1.25rem;">
+          <h3 style="font-size: 1.2rem; color: var(--text);">Module 3: Support Vector Machines & Artificial Neural Networks (5 Questions | 9 Marks)</h3>
+        </div>
+    
+
+        <!-- 2024 Q.17 -->
+        <div class="pyq-card">
+          <div class="pyq-header">
+            <span class="pyq-id">GATE DA 2024 — Q.17</span>
+            <div class="pyq-meta-badges">
+              <span class="badge-mark badge-1m">1 Mark</span>
+              <span class="badge-type">MCQ</span>
+              <span class="badge-type" style="background: #ede9fe; color: #5b21b6;">PYQ PDF p. 12</span>
+            </div>
+          </div>
+          <span class="pyq-topic">📌 Syllabus Topic: <strong>Support Vector Machines - Support Vectors & Margin</strong></span>
+          <div class="pyq-question">
+            <strong>Official Question Statement:</strong><br>
+            <div>Consider</div>
+<div>the dataset with</div>
+<div>six</div>
+<div>datapoints:</div>
+<div>{(𝒙𝟏, 𝒚𝟏),(𝒙𝟐,𝒚𝟐),… , (𝒙𝟔,𝒚𝟔)},</div>
+<div>where 𝒙𝟏= [1</div>
+<div>0], 𝒙𝟐= [0</div>
+<div>1], 𝒙𝟑= [ 0</div>
+<div>−1] , 𝒙𝟒= [−1</div>
+<div>0 ], 𝒙𝟓= [2</div>
+<div>2] , 𝒙𝟔= [−2</div>
+<div>−2]</div>
+<div>and the labels are given by 𝒚𝟏= 𝒚𝟐= 𝒚𝟓= 1, and 𝒚𝟑= 𝒚𝟒= 𝒚𝟔= −1. A hard</div>
+<div>margin linear support vector machine is trained on the above dataset.</div>
+<div>Which ONE of the following sets is a possible set of support vectors?</div>
+<div class="pyq-option">(A)</div>
+<div>{𝒙𝟏, 𝒙𝟐,𝒙𝟓}</div>
+<div class="pyq-option">(B)</div>
+<div>{𝒙𝟑, 𝒙𝟒,𝒙𝟓}</div>
+<div class="pyq-option">(C)</div>
+<div>{𝒙𝟒, 𝒙𝟓}</div>
+<div class="pyq-option">(D)</div>
+<div>{𝒙𝟏, 𝒙𝟐,𝒙𝟑, 𝒙𝟒}</div>
+          </div>
+          <div class="pyq-source">
+            <span>📖 <strong>Source Textbook:</strong> Bishop pp. 343–348</span>
+            <span>• <strong>Cutout Link:</strong> <a href="./machine-learning-textbook-module-3.pdf#page=69" class="pyq-pdf-link" target="_blank">Open in Module 3 Cutout (p. 69) &rarr;</a></span>
+          </div>
+          <div class="pyq-rationale">
+            <strong>Theoretical Rationale & Exam Strategy:</strong><br>
+            Support vectors are the training data points that lie directly on the margin hyperplanes y_n(w^T phi(x_n) + b) = 1. Removing non-support vector data points does not change the decision boundary.
+          </div>
+        </div>
+        
+
+        <!-- 2024 Q.43 -->
+        <div class="pyq-card">
+          <div class="pyq-header">
+            <span class="pyq-id">GATE DA 2024 — Q.43</span>
+            <div class="pyq-meta-badges">
+              <span class="badge-mark badge-2m">2 Marks</span>
+              <span class="badge-type">MCQ</span>
+              <span class="badge-type" style="background: #ede9fe; color: #5b21b6;">PYQ PDF p. 27</span>
+            </div>
+          </div>
+          <span class="pyq-topic">📌 Syllabus Topic: <strong>Neural Networks - Multilayer Perceptron Equivalence & ReLU</strong></span>
+          <div class="pyq-question">
+            <strong>Official Question Statement:</strong><br>
+            <div>Consider the two neural networks (NNs) shown in Figures 1 and 2, with 𝑅𝑒𝐿𝑈</div>
+<pre><code>
+activation (𝑅𝑒𝐿𝑈(𝑧) = max{0, 𝑧} , ∀𝑧∈ℝ). ℝ denotes the set of real numbers. The 
+</code></pre>
+<div>connections and their corresponding weights are shown in the Figures. The biases</div>
+<div>at every neuron are set to 0. For what values of 𝑝, 𝑞, 𝑟 in Figure 2 are the two NNs</div>
+<div>equivalent, when 𝑥1,𝑥2, 𝑥3 are positive?</div>
+<div>Figure 1</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<div>Figure 2</div>
+<div class="pyq-option">(A)</div>
+<div>𝑝= 36, 𝑞= 24,𝑟= 24</div>
+<div class="pyq-option">(B)</div>
+<div>𝑝= 24, 𝑞= 24,𝑟= 36</div>
+<div class="pyq-option">(C)</div>
+<div>𝑝= 18, 𝑞= 36,𝑟= 24</div>
+<div class="pyq-option">(D)</div>
+<div>𝑝= 36, 𝑞= 36,𝑟= 36</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<div>Organizing Institute: IISc Bengaluru</div>
+          </div>
+          <div class="pyq-source">
+            <span>📖 <strong>Source Textbook:</strong> Bishop pp. 244–248</span>
+            <span>• <strong>Cutout Link:</strong> <a href="./machine-learning-textbook-module-3.pdf#page=3" class="pyq-pdf-link" target="_blank">Open in Module 3 Cutout (p. 3) &rarr;</a></span>
+          </div>
+          <div class="pyq-rationale">
+            <strong>Theoretical Rationale & Exam Strategy:</strong><br>
+            A multilayer network without non-linear activation functions collapses to a simple linear model. ReLU f(a) = max(0, a) introduces non-linearity while maintaining piecewise linear decision regions.
+          </div>
+        </div>
+        
+
+        <!-- 2025 Q.42 -->
+        <div class="pyq-card">
+          <div class="pyq-header">
+            <span class="pyq-id">GATE DA 2025 — Q.42</span>
+            <div class="pyq-meta-badges">
+              <span class="badge-mark badge-2m">2 Marks</span>
+              <span class="badge-type">MCQ</span>
+              <span class="badge-type" style="background: #ede9fe; color: #5b21b6;">PYQ PDF p. 21</span>
+            </div>
+          </div>
+          <span class="pyq-topic">📌 Syllabus Topic: <strong>Neural Networks - Feedforward Architecture Forward Pass</strong></span>
+          <div class="pyq-question">
+            <strong>Official Question Statement:</strong><br>
+            <div>Consider the neural network shown in the ﬁgure with</div>
+<div>inputs: u, v</div>
+<div>weights: a, b, c, d, e, f</div>
+<div>output: y</div>
+<pre><code>
+R denotes the ReLU function, R(x) = max(0, x).
+</code></pre>
+<div>u</div>
+<div>v</div>
+<div>R</div>
+<div>R</div>
+<div>R</div>
+<div>a</div>
+<div>b</div>
+<div>c</div>
+<div>d</div>
+<div>e</div>
+<div>f</div>
+<div>y</div>
+<pre><code>
+Given u = 2, v = 3,
+a = 1, b = 1, c = 1, d = −1, e = 4, f = −1,
+</code></pre>
+<div>which one of the following is correct?</div>
+<div class="pyq-option">(A)</div>
+<div>∂y</div>
+<pre><code>
+∂a = 8, ∂y
+∂f = 0
+</code></pre>
+<div class="pyq-option">(B)</div>
+<div>∂y</div>
+<pre><code>
+∂a = 1, ∂y
+∂f = 0
+</code></pre>
+<div class="pyq-option">(C)</div>
+<div>∂y</div>
+<pre><code>
+∂a = 1, ∂y
+∂f = −1
+</code></pre>
+<div class="pyq-option">(D)</div>
+<div>∂y</div>
+<pre><code>
+∂a = 2, ∂y
+∂f = −1
+</code></pre>
+<br>
+<div>Data Science &amp; Artiﬁcial Intelligence - DA</div>
+          </div>
+          <div class="pyq-source">
+            <span>📖 <strong>Source Textbook:</strong> Bishop pp. 244–248</span>
+            <span>• <strong>Cutout Link:</strong> <a href="./machine-learning-textbook-module-3.pdf#page=3" class="pyq-pdf-link" target="_blank">Open in Module 3 Cutout (p. 3) &rarr;</a></span>
+          </div>
+          <div class="pyq-rationale">
+            <strong>Theoretical Rationale & Exam Strategy:</strong><br>
+            Tracing a feedforward forward pass through linear combinations a = W x + b followed by activation functions to evaluate final network output values.
+          </div>
+        </div>
+        
+
+        <!-- 2025 Q.48 -->
+        <div class="pyq-card">
+          <div class="pyq-header">
+            <span class="pyq-id">GATE DA 2025 — Q.48</span>
+            <div class="pyq-meta-badges">
+              <span class="badge-mark badge-2m">2 Marks</span>
+              <span class="badge-type">MSQ</span>
+              <span class="badge-type" style="background: #ede9fe; color: #5b21b6;">PYQ PDF p. 24</span>
+            </div>
+          </div>
+          <span class="pyq-topic">📌 Syllabus Topic: <strong>Neural Networks - ReLU Activation Function Properties</strong></span>
+          <div class="pyq-question">
+            <strong>Official Question Statement:</strong><br>
+            <div>Which of the following statements is/are correct about the rectiﬁed linear unit (ReLU)</div>
+<pre><code>
+activation function deﬁned as ReLU(x) = max(x, 0), where x ∈R?
+</code></pre>
+<div class="pyq-option">(A)</div>
+<div>ReLU is continuous everywhere</div>
+<div class="pyq-option">(B)</div>
+<div>ReLU is differentiable everywhere</div>
+<div class="pyq-option">(C)</div>
+<pre><code>
+ReLU is not differentiable at x = 0
+</code></pre>
+<div class="pyq-option">(D)</div>
+<pre><code>
+ReLU(x) = ReLU(ax), for all a ∈R
+</code></pre>
+<br>
+<div>Data Science &amp; Artiﬁcial Intelligence - DA</div>
+          </div>
+          <div class="pyq-source">
+            <span>📖 <strong>Source Textbook:</strong> Bishop pp. 244–248</span>
+            <span>• <strong>Cutout Link:</strong> <a href="./machine-learning-textbook-module-3.pdf#page=3" class="pyq-pdf-link" target="_blank">Open in Module 3 Cutout (p. 3) &rarr;</a></span>
+          </div>
+          <div class="pyq-rationale">
+            <strong>Theoretical Rationale & Exam Strategy:</strong><br>
+            Properties of ReLU: f(x) = max(0, x). Continuous everywhere, non-differentiable at x = 0 (subgradient [0, 1]), derivative is 1 for x > 0 avoiding vanishing gradient, non-negative output.
+          </div>
+        </div>
+        
+
+        <!-- 2026 Q.56 -->
+        <div class="pyq-card">
+          <div class="pyq-header">
+            <span class="pyq-id">GATE DA 2026 — Q.56</span>
+            <div class="pyq-meta-badges">
+              <span class="badge-mark badge-2m">2 Marks</span>
+              <span class="badge-type">NAT</span>
+              <span class="badge-type" style="background: #ede9fe; color: #5b21b6;">PYQ PDF p. 38</span>
+            </div>
+          </div>
+          <span class="pyq-topic">📌 Syllabus Topic: <strong>Neural Networks - Parameter Counting in Fully Connected MLP</strong></span>
+          <div class="pyq-question">
+            <strong>Official Question Statement:</strong><br>
+            <div>Consider a fully-connected feed-forward multi-layer perceptron. It has 30 neurons</div>
+<div>in the input layer, followed by two hidden layers and an output layer. The first</div>
+<div>hidden layer has 4 neurons and the second hidden layer has 3 neurons. The output</div>
+<div>layer has only one neuron. Assume that no bias parameters are used.</div>
+<div>The number of learnable parameters in the multi-layer perceptron is __________ .</div>
+<div>(Answer in integer)</div>
+          </div>
+          <div class="pyq-source">
+            <span>📖 <strong>Source Textbook:</strong> Bishop pp. 245–248</span>
+            <span>• <strong>Cutout Link:</strong> <a href="./machine-learning-textbook-module-3.pdf#page=4" class="pyq-pdf-link" target="_blank">Open in Module 3 Cutout (p. 4) &rarr;</a></span>
+          </div>
+          <div class="pyq-rationale">
+            <strong>Theoretical Rationale & Exam Strategy:</strong><br>
+            Fully connected MLP with input dimension D, hidden layers H1, H2, and output K: Total weights = D*H1 + H1*H2 + H2*K; Total biases = H1 + H2 + K; Total parameters = sum weights + sum biases.
+          </div>
+        </div>
+        
+</div>
+
+      <!-- Module 4 PYQ Group -->
+      <div style="margin-bottom: 2.5rem;">
+        <div style="background: #f1f5f9; border-left: 4px solid var(--primary); padding: 0.85rem 1.25rem; border-radius: var(--radius-sm); margin-bottom: 1.25rem;">
+          <h3 style="font-size: 1.2rem; color: var(--text);">Module 4: Unsupervised Learning & Dimensionality Reduction (5 Questions | 8 Marks)</h3>
+        </div>
+    
+
+        <!-- 2024 Q.19 -->
+        <div class="pyq-card">
+          <div class="pyq-header">
+            <span class="pyq-id">GATE DA 2024 — Q.19</span>
+            <div class="pyq-meta-badges">
+              <span class="badge-mark badge-1m">1 Mark</span>
+              <span class="badge-type">MCQ</span>
+              <span class="badge-type" style="background: #ede9fe; color: #5b21b6;">PYQ PDF p. 13</span>
+            </div>
+          </div>
+          <span class="pyq-topic">📌 Syllabus Topic: <strong>k-Means Clustering & Convexity of Voronoi Cells</strong></span>
+          <div class="pyq-question">
+            <strong>Official Question Statement:</strong><br>
+            <div>Euclidean distance based 𝑘-means clustering algorithm was run on a dataset of 100</div>
+<div>points with 𝑘= 3. If the points [1</div>
+<div>1] and  [−1</div>
+<div>1 ] are both part of cluster 3, then which</div>
+<div>ONE of the following points is necessarily also part of cluster 3?</div>
+<div class="pyq-option">(A)</div>
+<div>[0</div>
+<div>0]</div>
+<div class="pyq-option">(B)</div>
+<div>[0</div>
+<div>2]</div>
+<div class="pyq-option">(C)</div>
+<div>[2</div>
+<div>0]</div>
+<div class="pyq-option">(D)</div>
+<div>[0</div>
+<div>1]</div>
+          </div>
+          <div class="pyq-source">
+            <span>📖 <strong>Source Textbook:</strong> Bishop pp. 441–446</span>
+            <span>• <strong>Cutout Link:</strong> <a href="./machine-learning-textbook-module-4.pdf#page=3" class="pyq-pdf-link" target="_blank">Open in Module 4 Cutout (p. 3) &rarr;</a></span>
+          </div>
+          <div class="pyq-rationale">
+            <strong>Theoretical Rationale & Exam Strategy:</strong><br>
+            In k-Means clustering under Euclidean distance, each cluster region is a Voronoi cell formed by intersection of half-spaces, which is mathematically guaranteed to be convex.
+          </div>
+        </div>
+        
+
+        <!-- 2024 Q.42 -->
+        <div class="pyq-card">
+          <div class="pyq-header">
+            <span class="pyq-id">GATE DA 2024 — Q.42</span>
+            <div class="pyq-meta-badges">
+              <span class="badge-mark badge-2m">2 Marks</span>
+              <span class="badge-type">MCQ</span>
+              <span class="badge-type" style="background: #ede9fe; color: #5b21b6;">PYQ PDF p. 26-27</span>
+            </div>
+          </div>
+          <span class="pyq-topic">📌 Syllabus Topic: <strong>Unsupervised Learning - Hierarchical Single Linkage Clustering</strong></span>
+          <div class="pyq-question">
+            <strong>Official Question Statement:</strong><br>
+            <div>Consider the table below, where the (𝑖, 𝑗)𝑡ℎ element of the table is the distance</div>
+<div>between points 𝑥𝑖 and 𝑥𝑗. Single linkage clustering is performed on data points,</div>
+<div>𝑥1,𝑥2, 𝑥3,𝑥4, 𝑥5.</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<div>Which ONE of the following is the correct representation of the clusters produced?</div>
+<br>
+<div>𝑥1</div>
+<div>𝑥2</div>
+<div>𝑥3</div>
+<div>𝑥4</div>
+<div>𝑥5</div>
+<div>𝑥1</div>
+<div>0</div>
+<div>1</div>
+<div>4</div>
+<div>3</div>
+<div>6</div>
+<div>𝑥2</div>
+<div>1</div>
+<div>0</div>
+<div>3</div>
+<div>5</div>
+<div>3</div>
+<div>𝑥3</div>
+<div>4</div>
+<div>3</div>
+<div>0</div>
+<div>2</div>
+<div>5</div>
+<div>𝑥4</div>
+<div>3</div>
+<div>5</div>
+<div>2</div>
+<div>0</div>
+<div>1</div>
+<div>𝑥5</div>
+<div>6</div>
+<div>3</div>
+<div>5</div>
+<div>1</div>
+<div>0</div>
+<div class="pyq-option">(A)</div>
+<br>
+<div class="pyq-option">(B)</div>
+<br>
+<div class="pyq-option">(C)</div>
+<br>
+<div class="pyq-option">(D)</div>
+<br>
+<br>
+<br>
+<br>
+<div>Organizing Institute: IISc Bengaluru</div>
+          </div>
+          <div class="pyq-source">
+            <span>📖 <strong>Source Textbook:</strong> Han & Kamber pp. 467–474</span>
+            <span>• <strong>Cutout Link:</strong> <a href="./machine-learning-textbook-module-4.pdf#page=63" class="pyq-pdf-link" target="_blank">Open in Module 4 Cutout (p. 63) &rarr;</a></span>
+          </div>
+          <div class="pyq-rationale">
+            <strong>Theoretical Rationale & Exam Strategy:</strong><br>
+            Single linkage agglomerative clustering merges the two clusters with the minimum pairwise distance min_{x in A, y in B} d(x, y). Step-by-step matrix reduction reveals the exact dendrogram.
+          </div>
+        </div>
+        
+
+        <!-- 2025 Q.30 -->
+        <div class="pyq-card">
+          <div class="pyq-header">
+            <span class="pyq-id">GATE DA 2025 — Q.30</span>
+            <div class="pyq-meta-badges">
+              <span class="badge-mark badge-1m">1 Mark</span>
+              <span class="badge-type">MSQ</span>
+              <span class="badge-type" style="background: #ede9fe; color: #5b21b6;">PYQ PDF p. 17</span>
+            </div>
+          </div>
+          <span class="pyq-topic">📌 Syllabus Topic: <strong>Hierarchical Clustering - Linkage Distance Metrics</strong></span>
+          <div class="pyq-question">
+            <strong>Official Question Statement:</strong><br>
+            <div>Let C1 and C2 be two sets of objects. Let D(x, y) be a measure of dissimilarity between</div>
+<div>two objects x and y. Consider the following deﬁnitions of dissimilarity between C1 and</div>
+<div>C2.</div>
+<div>DIS-1(C1, C2) =</div>
+<div>max</div>
+<div>x∈C1, y∈C2D(x, y)</div>
+<div>DIS-2(C1, C2) =</div>
+<div>min</div>
+<div>x∈C1, y∈C2D(x, y)</div>
+<div>Which of the following statements is/are correct?</div>
+<div class="pyq-option">(A)</div>
+<div>Single Linkage Clustering uses DIS-1</div>
+<div class="pyq-option">(B)</div>
+<div>Single Linkage Clustering uses DIS-2</div>
+<div class="pyq-option">(C)</div>
+<div>Complete Linkage Clustering uses DIS-2</div>
+<div class="pyq-option">(D)</div>
+<div>Complete Linkage Clustering uses DIS-1</div>
+          </div>
+          <div class="pyq-source">
+            <span>📖 <strong>Source Textbook:</strong> Han & Kamber pp. 467–474</span>
+            <span>• <strong>Cutout Link:</strong> <a href="./machine-learning-textbook-module-4.pdf#page=63" class="pyq-pdf-link" target="_blank">Open in Module 4 Cutout (p. 63) &rarr;</a></span>
+          </div>
+          <div class="pyq-rationale">
+            <strong>Theoretical Rationale & Exam Strategy:</strong><br>
+            Properties of linkages: Single linkage uses minimum distance (chaining effect), Complete linkage uses maximum distance (compact spherical clusters), Average linkage computes mean of all pairs.
+          </div>
+        </div>
+        
+
+        <!-- 2025 Q.60 -->
+        <div class="pyq-card">
+          <div class="pyq-header">
+            <span class="pyq-id">GATE DA 2025 — Q.60</span>
+            <div class="pyq-meta-badges">
+              <span class="badge-mark badge-2m">2 Marks</span>
+              <span class="badge-type">NAT</span>
+              <span class="badge-type" style="background: #ede9fe; color: #5b21b6;">PYQ PDF p. 32</span>
+            </div>
+          </div>
+          <span class="pyq-topic">📌 Syllabus Topic: <strong>Principal Component Analysis - Variance Explained & Eigenvalues</strong></span>
+          <div class="pyq-question">
+            <strong>Official Question Statement:</strong><br>
+            <pre><code>
+Let D = {x(1), . . . , x(n)} be a dataset of n observations where each x(i) ∈R100. It
+</code></pre>
+<div>is given that</div>
+<div>n</div>
+<div>X</div>
+<div>i=1</div>
+<pre><code>
+x(i) = 0. The covariance matrix computed from D has eigenvalues
+λi = 1002−i, 1 ≤i ≤100. Let u ∈R100 be the direction of maximum variance with
+u⊤u = 1.
+</code></pre>
+<div>The value of</div>
+<div>1</div>
+<div>n</div>
+<div>n</div>
+<div>X</div>
+<div>i=1</div>
+<div> u⊤x(i)2 =</div>
+<div>(Answer in integer)</div>
+          </div>
+          <div class="pyq-source">
+            <span>📖 <strong>Source Textbook:</strong> Deisenroth pp. 334–337</span>
+            <span>• <strong>Cutout Link:</strong> <a href="./machine-learning-textbook-module-4.pdf#page=49" class="pyq-pdf-link" target="_blank">Open in Module 4 Cutout (p. 49) &rarr;</a></span>
+          </div>
+          <div class="pyq-rationale">
+            <strong>Theoretical Rationale & Exam Strategy:</strong><br>
+            The fraction of total variance explained by the first k principal components equals (sum_{i=1}^k lambda_i) / (sum_{i=1}^d lambda_i), where lambda_i are the eigenvalues of sample covariance matrix.
+          </div>
+        </div>
+        
+
+        <!-- 2026 Q.11 -->
+        <div class="pyq-card">
+          <div class="pyq-header">
+            <span class="pyq-id">GATE DA 2026 — Q.11</span>
+            <div class="pyq-meta-badges">
+              <span class="badge-mark badge-1m">1 Mark</span>
+              <span class="badge-type">MCQ</span>
+              <span class="badge-type" style="background: #ede9fe; color: #5b21b6;">PYQ PDF p. 8</span>
+            </div>
+          </div>
+          <span class="pyq-topic">📌 Syllabus Topic: <strong>Dimensionality Reduction - Principal Component Analysis (PCA) Properties</strong></span>
+          <div class="pyq-question">
+            <strong>Official Question Statement:</strong><br>
+            <div>For a classification problem, Principal Component Analysis (PCA) has been used</div>
+<div>to reduce the dimensionality of a feature space from 100 to 10.</div>
+<div>Which of the following options is true about the angle 𝜃 between the first and the</div>
+<div>tenth principal components?</div>
+<br>
+<br>
+<div class="pyq-option">(A)</div>
+<pre><code>
+𝜃 = 0°  
+</code></pre>
+<div class="pyq-option">(B)</div>
+<pre><code>
+𝜃 = 90°  
+</code></pre>
+<div class="pyq-option">(C)</div>
+<div>90° &lt; 𝜃  ≤ 180°</div>
+<div class="pyq-option">(D)</div>
+<div>0 &lt; 𝜃&lt; 90°</div>
+          </div>
+          <div class="pyq-source">
+            <span>📖 <strong>Source Textbook:</strong> Deisenroth pp. 325–329</span>
+            <span>• <strong>Cutout Link:</strong> <a href="./machine-learning-textbook-module-4.pdf#page=40" class="pyq-pdf-link" target="_blank">Open in Module 4 Cutout (p. 40) &rarr;</a></span>
+          </div>
+          <div class="pyq-rationale">
+            <strong>Theoretical Rationale & Exam Strategy:</strong><br>
+            PCA is an unsupervised linear dimensionality reduction method that finds orthogonal projection axes maximizing variance without considering class labels.
+          </div>
+        </div>
+        
+</div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer style="text-align: center; color: var(--text-muted); font-size: 0.875rem; padding: 2rem 0; border-top: 1px solid var(--border);">
+      <p>GATE Data Science & Artificial Intelligence (DA) Preparation Pathway &bull; Phase 3 Applied Intelligence</p>
+      <p style="margin-top: 0.25rem;">Built with precision for 100% syllabus mastery and verified with official GATE papers.</p>
+    </footer>
+
+  </div>
+
+  <!-- KaTeX Auto-Render Script -->
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>

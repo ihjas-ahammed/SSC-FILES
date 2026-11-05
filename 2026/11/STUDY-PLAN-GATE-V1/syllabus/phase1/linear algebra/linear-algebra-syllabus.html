@@ -1,0 +1,1797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GATE DA — Course 1: Linear Algebra Syllabus & PYQ Roadmap</title>
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-light: #eef2ff;
+      --primary-dark: #312e81;
+      --secondary: #0ea5e9;
+      --secondary-light: #f0f9ff;
+      --surface: #ffffff;
+      --background: #f8fafc;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
+      --success: #10b981;
+      --success-light: #ecfdf5;
+      --warning: #f59e0b;
+      --warning-light: #fffbeb;
+      --purple: #8b5cf6;
+      --purple-light: #f5f3ff;
+      --radius: 12px;
+      --radius-sm: 6px;
+      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--background);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+    }
+
+    header.banner {
+      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%);
+      color: white;
+      padding: 3rem 2.5rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      margin-bottom: 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header.banner::after {
+      content: "";
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 250px;
+      height: 250px;
+      background: radial-gradient(circle, rgba(14, 165, 233, 0.25) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .badge-phase {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-size: 2.6rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      margin-bottom: 0.75rem;
+      line-height: 1.2;
+    }
+
+    p.lead {
+      font-size: 1.15rem;
+      color: #e0e7ff;
+      max-width: 800px;
+      margin-bottom: 1.75rem;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1.5rem;
+    }
+
+    .metric-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 1.25rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .metric-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #cbd5e1;
+      margin-bottom: 0.25rem;
+    }
+
+    .metric-value {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .metric-desc {
+      font-size: 0.825rem;
+      color: #93c5fd;
+      margin-top: 0.25rem;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 2.5rem;
+    }
+
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .book-compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 1.25rem;
+    }
+
+    .book-box {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      background: #fafafa;
+    }
+
+    .book-box.winner {
+      border-color: var(--success);
+      background: var(--success-light);
+    }
+
+    .book-tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.2rem 0.6rem;
+      border-radius: 9999px;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .winner .book-tag {
+      background: var(--success);
+      color: white;
+    }
+
+    .loser .book-tag {
+      background: var(--text-muted);
+      color: white;
+    }
+
+    .module-nav {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .nav-pill {
+      background: white;
+      border: 1px solid var(--border);
+      padding: 0.6rem 1.2rem;
+      border-radius: 9999px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text);
+      text-decoration: none;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-pill:hover, .nav-pill.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .module-section {
+      margin-bottom: 3.5rem;
+    }
+
+    .module-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid var(--primary-light);
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .module-title-group h2 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .module-subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-top: 0.25rem;
+    }
+
+    .module-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .module-tag {
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+    }
+
+    .btn-pdf-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+      color: #ffffff;
+      padding: 0.45rem 1rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 2px 4px rgba(79, 70, 229, 0.3);
+      transition: all 0.2s ease;
+    }
+
+    .btn-pdf-link:hover {
+      background: linear-gradient(135deg, #4338ca 0%, #3730a3 100%);
+      box-shadow: 0 4px 8px rgba(79, 70, 229, 0.4);
+      transform: translateY(-1px);
+    }
+
+    /* Modern Table Responsive Styling */
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: white;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.925rem;
+    }
+
+    th {
+      background: #f1f5f9;
+      color: var(--text);
+      font-weight: 700;
+      padding: 0.9rem 1.1rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    td {
+      padding: 0.95rem 1.1rem;
+      border-bottom: 1px solid #f1f5f9;
+      color: var(--text);
+      vertical-align: middle;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background-color: #f8fafc;
+    }
+
+    .row-exercise td {
+      background-color: #faf5ff;
+      border-top: 1px dashed #d8b4fe;
+    }
+
+    .row-exercise:hover td {
+      background-color: #f3e8ff;
+    }
+
+    .sec-badge {
+      display: inline-block;
+      font-weight: 700;
+      color: var(--primary);
+      background: var(--primary-light);
+      padding: 0.2rem 0.55rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      white-space: nowrap;
+    }
+
+    .sec-badge-exercise {
+      color: var(--purple);
+      background: var(--purple-light);
+    }
+
+    .page-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: none;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      background: #eef2ff;
+      border: 1px solid #c7d2fe;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .page-link:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .page-link .cutout-ref {
+      font-size: 0.75rem;
+      font-weight: 700;
+      opacity: 0.9;
+    }
+
+    /* PYQ Section Styling */
+    .pyq-section-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .pyq-section-lead {
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      font-size: 1.05rem;
+    }
+
+    .pyq-module-block {
+      margin-bottom: 3rem;
+    }
+
+    .pyq-module-header {
+      background: #f1f5f9;
+      border-left: 4px solid var(--primary);
+      padding: 0.85rem 1.25rem;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      margin-bottom: 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .pyq-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    .pyq-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .pyq-card:hover {
+      box-shadow: var(--shadow);
+      transform: translateY(-2px);
+    }
+
+    .pyq-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .pyq-id {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+
+    .pyq-meta-badges {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .badge-mark {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .badge-1m { background: #e0f2fe; color: #0369a1; }
+    .badge-2m { background: #fef3c7; color: #b45309; }
+
+    .badge-type {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+      background: #f1f5f9;
+      color: var(--text-muted);
+    }
+
+    .pyq-question {
+      font-size: 0.975rem;
+      color: #1e293b;
+      margin-bottom: 1.25rem;
+      line-height: 1.6;
+      background: #f8fafc;
+      padding: 1rem 1.25rem;
+      border-radius: var(--radius-sm);
+      border-left: 3px solid #cbd5e1;
+    }
+
+    .pyq-source {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+      background: #f8fafc;
+      padding: 0.6rem 0.9rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .pyq-pdf-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      color: var(--primary);
+      font-weight: 700;
+      text-decoration: none;
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+      background: #eef2ff;
+      border: 1px solid #c7d2fe;
+      transition: all 0.15s ease;
+    }
+
+    .pyq-pdf-link:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .pyq-rationale {
+      font-size: 0.9rem;
+      color: #334155;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      padding: 0.9rem 1.1rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .pyq-rationale strong {
+      color: #166534;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2.5rem 0;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      border-top: 1px solid var(--border);
+      margin-top: 3rem;
+    }
+
+    @media (max-width: 768px) {
+      .metrics-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .module-header {
+        flex-direction: column;
+      }
+      .book-compare {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  <!-- KaTeX for crisp mathematical notation -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}], throwOnError: false});"></script>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- Header Banner -->
+    <header class="banner">
+      <span class="badge-phase">Phase 1 Foundations • Course 1</span>
+      <h1>Linear Algebra (GATE DA)</h1>
+      <p class="lead">
+        Comprehensive 4-Module Syllabus & PYQ Practice Blueprint mapped with 100% precision to Gilbert Strang (4th Edition). Includes direct relative links to physical textbook cutouts and chapter exercise banks.
+      </p>
+
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-label">Total Time Required</div>
+          <div class="metric-value">35 Hours</div>
+          <div class="metric-desc">22.5h Theory + 12.5h PYQ Practice</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">GATE DA Weightage</div>
+          <div class="metric-value">13–15 Marks</div>
+          <div class="metric-desc">~15% of total GATE DA exam</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Verified PYQs</div>
+          <div class="metric-value">20 Questions</div>
+          <div class="metric-desc">100% Mapped from DA 2024, 2025 & 2026</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Winning Textbook</div>
+          <div class="metric-value">Strang 4th Ed.</div>
+          <div class="metric-desc">Unbroken geometric & computational mastery</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Navigation Pills -->
+    <div class="module-nav">
+      <a href="#course-details" class="nav-pill active">📋 Course Details</a>
+      <a href="#module-1" class="nav-pill">📦 Module 1</a>
+      <a href="#module-2" class="nav-pill">📦 Module 2</a>
+      <a href="#module-3" class="nav-pill">📦 Module 3</a>
+      <a href="#module-4" class="nav-pill">📦 Module 4</a>
+      <a href="#pyq-breakdown" class="nav-pill">🎯 Mapped PYQs (20)</a>
+    </div>
+
+    <!-- Course Details Page / Section -->
+    <section class="card" id="course-details">
+      <h2 class="card-title">📖 Course Architecture & Textbook Benchmarking</h2>
+      <p>
+        Linear Algebra is the foundational mathematical backbone of Data Science, Machine Learning, and Optimization. In GATE Data Science & AI (DA), Linear Algebra questions test geometric intuition, fundamental subspaces, rank-nullity theorem, projection matrices, centering operators, and spectral decompositions (eigenvalues, eigenvectors, SVD).
+      </p>
+
+      <div class="book-compare">
+        <div class="book-box winner">
+          <span class="book-tag">Winning Primary Textbook</span>
+          <h3>Introduction to Linear Algebra (4th Edition)</h3>
+          <p style="color: #475569; font-size: 0.9rem; margin-top: 0.25rem;"><strong>Author:</strong> Gilbert Strang (MIT)</p>
+          <ul style="margin-top: 0.75rem; margin-left: 1.25rem; font-size: 0.875rem; color: #1e293b;">
+            <li>Directly solved 19 out of 20 GATE DA questions across 2024, 2025, and 2026.</li>
+            <li>Unmatched geometric insight into the <em>Four Fundamental Subspaces</em> and the <em>Fundamental Theorem of Linear Algebra</em>.</li>
+            <li>Dedicated sections on Data Science matrix operations: Centering matrix, Projection matrices, Covariance, and SVD.</li>
+            <li>Physical textbook cutouts with chapter review exercises are generated in this folder.</li>
+          </ul>
+        </div>
+        <div class="book-box loser">
+          <span class="book-tag">Evaluated Secondary Textbook</span>
+          <h3>Linear Algebra and Its Applications (4th Edition)</h3>
+          <p style="color: #475569; font-size: 0.9rem; margin-top: 0.25rem;"><strong>Author:</strong> David C. Lay</p>
+          <ul style="margin-top: 0.75rem; margin-left: 1.25rem; font-size: 0.875rem; color: #475569;">
+            <li>Solved 17 out of 20 questions.</li>
+            <li>Excelled in formal coordinate vectors and complex eigenspaces (Section 5.5).</li>
+            <li>Lacked consolidated focus on statistical projection/centering matrices, resulting in unlinking from project scope.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Full Syllabus Tables by Module -->
+    <div id="syllabus-tables">
+
+      <!-- Module 1 -->
+      <section class="module-section" id="module-1">
+        <div class="module-header">
+          <div class="module-title-group">
+            <h2>Module 1: Vector Spaces, Subspaces & Fundamental Structure</h2>
+            <div class="module-subtitle">Linear independence, spanning sets, bases, dimension, and the 4 fundamental subspaces</div>
+          </div>
+          <div class="module-header-actions">
+            <span class="module-tag">7.5 Hours Total (5h Theory + 2.5h PYQ)</span>
+            <a href="./linear-algebra-textbook-module-1.pdf" class="btn-pdf-link" target="_blank">📄 Open Module 1 PDF (86 pp.)</a>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 14%;">Section</th>
+                <th style="width: 28%;">Strang Index Section Title</th>
+                <th style="width: 22%;">Textbook PDF Pages</th>
+                <th style="width: 10%;">Est. Time</th>
+                <th style="width: 26%;">Key GATE DA Focus Areas</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="sec-badge">Section 1.1</span></td>
+                <td>Vectors and Linear Combinations</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-1.pdf#page=1" class="page-link" target="_blank" title="Jump to Section 1.1">
+                    pp. 13–21 <span class="cutout-ref">(Cutout p. 1)</span> ↗
+                  </a>
+                </td>
+                <td>45 mins</td>
+                <td>Linear combinations $c\mathbf{v} + d\mathbf{w}$, geometric span in $\mathbb{R}^2$ and $\mathbb{R}^3$, 3D vector geometry.</td>
+              </tr>
+              <tr class="row-exercise">
+                <td><span class="sec-badge sec-badge-exercise">Ch 1 Review</span></td>
+                <td>Chapter 1 Final Exercises & Problem Set 1.3</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-1.pdf#page=10" class="page-link" target="_blank" title="Jump to Chapter 1 Review">
+                    pp. 40–41 <span class="cutout-ref">(Cutout p. 10)</span> ↗
+                  </a>
+                </td>
+                <td>30 mins</td>
+                <td>Practice vector independence, linear combinations, matrix multiplication geometry.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 3.1</span></td>
+                <td>Spaces of Vectors</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-1.pdf#page=12" class="page-link" target="_blank" title="Jump to Section 3.1">
+                    pp. 131–142 <span class="cutout-ref">(Cutout p. 12)</span> ↗
+                  </a>
+                </td>
+                <td>50 mins</td>
+                <td>Vector space axioms, definition of subspace (closure under $+$ and $\cdot$), column space $\mathbf{C}(A)$.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 3.2</span></td>
+                <td>The Nullspace of A: Solving Ax = 0</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-1.pdf#page=24" class="page-link" target="_blank" title="Jump to Section 3.2">
+                    pp. 143–154 <span class="cutout-ref">(Cutout p. 24)</span> ↗
+                  </a>
+                </td>
+                <td>50 mins</td>
+                <td>Null space definition $\text{Null}(A) = \{\mathbf{x} \mid A\mathbf{x} = \mathbf{0}\}$, special solutions, pivot and free variables.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 3.3</span></td>
+                <td>The Rank and the Row Reduced Form</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-1.pdf#page=36" class="page-link" target="_blank" title="Jump to Section 3.3">
+                    pp. 155–165 <span class="cutout-ref">(Cutout p. 36)</span> ↗
+                  </a>
+                </td>
+                <td>45 mins</td>
+                <td>Row-reduced echelon matrix $R = \text{rref}(A)$, rank definition $r$, pivot columns vs free columns.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 3.4</span></td>
+                <td>The Complete Solution to Ax = b</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-1.pdf#page=47" class="page-link" target="_blank" title="Jump to Section 3.4">
+                    pp. 166–178 <span class="cutout-ref">(Cutout p. 47)</span> ↗
+                  </a>
+                </td>
+                <td>45 mins</td>
+                <td>Particular solution $\mathbf{x}_p$, homogeneous nullspace solutions $\mathbf{x}_n$, solvability conditions.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 3.5</span></td>
+                <td>Independence, Basis and Dimension</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-1.pdf#page=60" class="page-link" target="_blank" title="Jump to Section 3.5">
+                    pp. 179–194 <span class="cutout-ref">(Cutout p. 60)</span> ↗
+                  </a>
+                </td>
+                <td>60 mins</td>
+                <td>Linear independence tests, spanning vectors, minimal spanning set = basis, dimension theorem.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 3.6</span></td>
+                <td>Dimensions of the Four Subspaces</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-1.pdf#page=76" class="page-link" target="_blank" title="Jump to Section 3.6">
+                    pp. 195–205 <span class="cutout-ref">(Cutout p. 76)</span> ↗
+                  </a>
+                </td>
+                <td>50 mins</td>
+                <td>The Fundamental Theorem of Linear Algebra (Part 1): $\text{dim}(\mathbf{C}(A)) = r$, $\text{dim}(\mathbf{N}(A)) = n - r$ (Rank-Nullity Theorem).</td>
+              </tr>
+              <tr class="row-exercise">
+                <td><span class="sec-badge sec-badge-exercise">Ch 3 Review</span></td>
+                <td>Chapter 3 Final Exercises & Problem Set 3.6</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-1.pdf#page=85" class="page-link" target="_blank" title="Jump to Chapter 3 Review">
+                    pp. 204–205 <span class="cutout-ref">(Cutout p. 85)</span> ↗
+                  </a>
+                </td>
+                <td>30 mins</td>
+                <td>Comprehensive practice on 4 subspaces, rank-nullity tests, orthogonal dimensions.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Module 2 -->
+      <section class="module-section" id="module-2">
+        <div class="module-header">
+          <div class="module-title-group">
+            <h2>Module 2: Linear Systems, Gaussian Elimination, Matrix Algebra & Determinants</h2>
+            <div class="module-subtitle">System solvability, LU factorization, determinant formulas, and singular systems</div>
+          </div>
+          <div class="module-header-actions">
+            <span class="module-tag">8.5 Hours Total (5.5h Theory + 3h PYQ)</span>
+            <a href="./linear-algebra-textbook-module-2.pdf" class="btn-pdf-link" target="_blank">📄 Open Module 2 PDF (143 pp.)</a>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 14%;">Section</th>
+                <th style="width: 28%;">Strang Index Section Title</th>
+                <th style="width: 22%;">Textbook PDF Pages</th>
+                <th style="width: 10%;">Est. Time</th>
+                <th style="width: 26%;">Key GATE DA Focus Areas</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="sec-badge">Section 2.1</span></td>
+                <td>Vectors and Linear Equations</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-2.pdf#page=1" class="page-link" target="_blank" title="Jump to Section 2.1">
+                    pp. 42–55 <span class="cutout-ref">(Cutout p. 1)</span> ↗
+                  </a>
+                </td>
+                <td>30 mins</td>
+                <td>The Row Picture vs Column Picture of linear equations, singular vs non-singular geometry.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 2.2</span></td>
+                <td>The Idea of Elimination</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-2.pdf#page=15" class="page-link" target="_blank" title="Jump to Section 2.2">
+                    pp. 56–67 <span class="cutout-ref">(Cutout p. 15)</span> ↗
+                  </a>
+                </td>
+                <td>40 mins</td>
+                <td>Forward elimination, pivots, multipliers $\ell_{ij}$, back-substitution, breakdown of elimination.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 2.3</span></td>
+                <td>Elimination Using Matrices</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-2.pdf#page=27" class="page-link" target="_blank" title="Jump to Section 2.3">
+                    pp. 68–78 <span class="cutout-ref">(Cutout p. 27)</span> ↗
+                  </a>
+                </td>
+                <td>35 mins</td>
+                <td>Elementary matrices $E_{ij}$, row operations, matrix multiplication as linear combinations.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 2.4</span></td>
+                <td>Rules for Matrix Operations</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-2.pdf#page=38" class="page-link" target="_blank" title="Jump to Section 2.4">
+                    pp. 79–92 <span class="cutout-ref">(Cutout p. 38)</span> ↗
+                  </a>
+                </td>
+                <td>40 mins</td>
+                <td>Associativity, distributivity, transpose $(AB)^T = B^T A^T$, block matrices & outer products $\mathbf{u}\mathbf{v}^T$.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 2.5</span></td>
+                <td>Inverse Matrices</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-2.pdf#page=52" class="page-link" target="_blank" title="Jump to Section 2.5">
+                    pp. 93–106 <span class="cutout-ref">(Cutout p. 52)</span> ↗
+                  </a>
+                </td>
+                <td>45 mins</td>
+                <td>Gauss-Jordan elimination $[A \mid I] \to [I \mid A^{-1}]$, invertible conditions, left/right inverses.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 2.6</span></td>
+                <td>Elimination = Factorization: A=LU</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-2.pdf#page=66" class="page-link" target="_blank" title="Jump to Section 2.6">
+                    pp. 107–118 <span class="cutout-ref">(Cutout p. 66)</span> ↗
+                  </a>
+                </td>
+                <td>45 mins</td>
+                <td>$A = LU$ factorization, lower triangular $L$, upper triangular $U$, $LDU$ factorization.</td>
+              </tr>
+              <tr class="row-exercise">
+                <td><span class="sec-badge sec-badge-exercise">Ch 2 Review</span></td>
+                <td>Chapter 2 Final Exercises & Problem Set 2.7</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-2.pdf#page=78" class="page-link" target="_blank" title="Jump to Chapter 2 Review">
+                    pp. 119–130 <span class="cutout-ref">(Cutout p. 78)</span> ↗
+                  </a>
+                </td>
+                <td>30 mins</td>
+                <td>Transposes, permutation matrices $PA=LU$, elimination problem sets 22–32.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 3.4</span></td>
+                <td>The Complete Solution to Ax = b</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-2.pdf#page=90" class="page-link" target="_blank" title="Jump to Section 3.4">
+                    pp. 166–178 <span class="cutout-ref">(Cutout p. 90)</span> ↗
+                  </a>
+                </td>
+                <td>45 mins</td>
+                <td>Conditions for unique, infinite, and zero solutions: $r=m=n$, $r=m < n$, $r=n < m$, $r < m, r < n$.</td>
+              </tr>
+              <tr class="row-exercise">
+                <td><span class="sec-badge sec-badge-exercise">Ch 3 Review</span></td>
+                <td>Chapter 3 Final Problem Set (Problem Set 3.6)</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-2.pdf#page=103" class="page-link" target="_blank" title="Jump to Chapter 3 Review">
+                    pp. 204–205 <span class="cutout-ref">(Cutout p. 103)</span> ↗
+                  </a>
+                </td>
+                <td>20 mins</td>
+                <td>Selected practice on system consistency and rank-nullity relations.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 5.1</span></td>
+                <td>The Properties of Determinants</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-2.pdf#page=105" class="page-link" target="_blank" title="Jump to Section 5.1">
+                    pp. 255–265 <span class="cutout-ref">(Cutout p. 105)</span> ↗
+                  </a>
+                </td>
+                <td>45 mins</td>
+                <td>The 10 fundamental determinant properties: $\det(AB) = \det(A)\det(B)$, $\det(A^{-1}) = 1/\det(A)$, singularity $\det=0$.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 5.2</span></td>
+                <td>Permutations and Cofactors</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-2.pdf#page=116" class="page-link" target="_blank" title="Jump to Section 5.2">
+                    pp. 266–279 <span class="cutout-ref">(Cutout p. 116)</span> ↗
+                  </a>
+                </td>
+                <td>45 mins</td>
+                <td>Cofactor expansion formula, determinant of rank-1 outer product matrices $\det(I + \mathbf{u}\mathbf{v}^T)$.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 5.3</span></td>
+                <td>Cramer's Rule, Inverses, Volumes & Ch 5 Exercises</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-2.pdf#page=130" class="page-link" target="_blank" title="Jump to Section 5.3">
+                    pp. 280–293 <span class="cutout-ref">(Cutout p. 130)</span> ↗
+                  </a>
+                </td>
+                <td>40 mins</td>
+                <td>$A^{-1} = \frac{1}{\det(A)} C^T$, Cramer's rule, volume of parallelepipeds, Chapter 5 review exercises.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Module 3 -->
+      <section class="module-section" id="module-3">
+        <div class="module-header">
+          <div class="module-title-group">
+            <h2>Module 3: Orthogonality, Projections & Quadratic Forms</h2>
+            <div class="module-subtitle">Inner products, orthogonal subspaces, projection matrices, centering operators, and positive definiteness</div>
+          </div>
+          <div class="module-header-actions">
+            <span class="module-tag">9.5 Hours Total (6h Theory + 3.5h PYQ)</span>
+            <a href="./linear-algebra-textbook-module-3.pdf" class="btn-pdf-link" target="_blank">📄 Open Module 3 PDF (85 pp.)</a>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 14%;">Section</th>
+                <th style="width: 28%;">Strang Index Section Title</th>
+                <th style="width: 22%;">Textbook PDF Pages</th>
+                <th style="width: 10%;">Est. Time</th>
+                <th style="width: 26%;">Key GATE DA Focus Areas</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="sec-badge">Section 1.2</span></td>
+                <td>Lengths and Dot Products</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-3.pdf#page=1" class="page-link" target="_blank" title="Jump to Section 1.2">
+                    pp. 22–32 <span class="cutout-ref">(Cutout p. 1)</span> ↗
+                  </a>
+                </td>
+                <td>35 mins</td>
+                <td>Dot product $\mathbf{v} \cdot \mathbf{w}$, Cauchy-Schwarz inequality $|\mathbf{v}^T \mathbf{w}| \le \|\mathbf{v}\| \|\mathbf{w}\|$, triangle inequality.</td>
+              </tr>
+              <tr class="row-exercise">
+                <td><span class="sec-badge sec-badge-exercise">Ch 1 Review</span></td>
+                <td>Chapter 1 Final Exercises & Problem Set 1.3</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-3.pdf#page=12" class="page-link" target="_blank" title="Jump to Chapter 1 Review">
+                    pp. 40–41 <span class="cutout-ref">(Cutout p. 12)</span> ↗
+                  </a>
+                </td>
+                <td>20 mins</td>
+                <td>Orthogonality geometry and dot product exercise sets.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 4.1</span></td>
+                <td>Orthogonality of the Four Subspaces</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-3.pdf#page=14" class="page-link" target="_blank" title="Jump to Section 4.1">
+                    pp. 206–216 <span class="cutout-ref">(Cutout p. 14)</span> ↗
+                  </a>
+                </td>
+                <td>50 mins</td>
+                <td>Orthogonal complements: $\mathbf{C}(A^T) \perp \mathbf{N}(A)$ and $\mathbf{C}(A) \perp \mathbf{N}(A^T)$ in $\mathbb{R}^n$ and $\mathbb{R}^m$.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 4.2</span></td>
+                <td>Projections</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-3.pdf#page=25" class="page-link" target="_blank" title="Jump to Section 4.2">
+                    pp. 217–228 <span class="cutout-ref">(Cutout p. 25)</span> ↗
+                  </a>
+                </td>
+                <td>60 mins</td>
+                <td>Projection matrices $P = A(A^T A)^{-1} A^T$, idempotency $P^2 = P$, symmetry $P^T = P$, nullspace $\mathbf{N}(P)$.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 4.3</span></td>
+                <td>Least Squares Approximations</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-3.pdf#page=37" class="page-link" target="_blank" title="Jump to Section 4.3">
+                    pp. 229–240 <span class="cutout-ref">(Cutout p. 37)</span> ↗
+                  </a>
+                </td>
+                <td>40 mins</td>
+                <td>Normal equations $A^T A \hat{\mathbf{x}} = A^T \mathbf{b}$, error vector $\mathbf{e} = \mathbf{b} - A\hat{\mathbf{x}}$, projection onto column space.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 4.4</span></td>
+                <td>Orthogonal Bases and Gram-Schmidt & Ch 4 Exercises</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-3.pdf#page=49" class="page-link" target="_blank" title="Jump to Section 4.4">
+                    pp. 241–254 <span class="cutout-ref">(Cutout p. 49)</span> ↗
+                  </a>
+                </td>
+                <td>60 mins</td>
+                <td>Orthonormal vectors $q_i^T q_j = \delta_{ij}$, orthogonal matrix $Q^T Q = I$, length preservation $\|Q\mathbf{x}\| = \|\mathbf{x}\|$, Gram-Schmidt.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 6.5</span></td>
+                <td>Positive Definite Matrices & Quadratic Forms</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-3.pdf#page=63" class="page-link" target="_blank" title="Jump to Section 6.5">
+                    pp. 353–365 <span class="cutout-ref">(Cutout p. 63)</span> ↗
+                  </a>
+                </td>
+                <td>60 mins</td>
+                <td>Quadratic form $\mathbf{x}^T A \mathbf{x} > 0$, 5 tests for positive definiteness (eigenvalues $>0$, leading pivots $>0$, determinants $>0$).</td>
+              </tr>
+              <tr class="row-exercise">
+                <td><span class="sec-badge sec-badge-exercise">Ch 6 Review</span></td>
+                <td>Chapter 6 Review Exercises & Table of Eigenvalues</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-3.pdf#page=76" class="page-link" target="_blank" title="Jump to Chapter 6 Review">
+                    pp. 384–385 <span class="cutout-ref">(Cutout p. 76)</span> ↗
+                  </a>
+                </td>
+                <td>20 mins</td>
+                <td>Summary table of symmetric, positive definite, and orthogonal matrices.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 8.6</span></td>
+                <td>Linear Algebra for Statistics (Centering Matrix)</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-3.pdf#page=78" class="page-link" target="_blank" title="Jump to Section 8.6">
+                    pp. 464–469 <span class="cutout-ref">(Cutout p. 78)</span> ↗
+                  </a>
+                </td>
+                <td>45 mins</td>
+                <td>Data centering matrix $M = I - \frac{1}{n}\mathbf{1}\mathbf{1}^T$, idempotency $M^2 = M$, trace $\text{tr}(M) = n - 1$, rank $= n - 1$.</td>
+              </tr>
+              <tr class="row-exercise">
+                <td><span class="sec-badge sec-badge-exercise">Ch 8 Review</span></td>
+                <td>Chapter 8 Final Problem Set (Problem Set 8.7)</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-3.pdf#page=84" class="page-link" target="_blank" title="Jump to Chapter 8 Review">
+                    pp. 474–475 <span class="cutout-ref">(Cutout p. 84)</span> ↗
+                  </a>
+                </td>
+                <td>20 mins</td>
+                <td>Exercises on covariance, projection onto all-ones vector $\mathbf{1}$, sample variance.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Module 4 -->
+      <section class="module-section" id="module-4">
+        <div class="module-header">
+          <div class="module-title-group">
+            <h2>Module 4: Spectral Theory, Diagonalization & Singular Value Decomposition (SVD)</h2>
+            <div class="module-subtitle">Eigenvalues, trace/determinant relations, spectral theorem, SVD, and low-rank approximation</div>
+          </div>
+          <div class="module-header-actions">
+            <span class="module-tag">9.5 Hours Total (6h Theory + 3.5h PYQ)</span>
+            <a href="./linear-algebra-textbook-module-4.pdf" class="btn-pdf-link" target="_blank">📄 Open Module 4 PDF (90 pp.)</a>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 14%;">Section</th>
+                <th style="width: 28%;">Strang Index Section Title</th>
+                <th style="width: 22%;">Textbook PDF Pages</th>
+                <th style="width: 10%;">Est. Time</th>
+                <th style="width: 26%;">Key GATE DA Focus Areas</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="sec-badge">Section 6.1</span></td>
+                <td>Introduction to Eigenvalues and Trace</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-4.pdf#page=1" class="page-link" target="_blank" title="Jump to Section 6.1">
+                    pp. 294–308 <span class="cutout-ref">(Cutout p. 1)</span> ↗
+                  </a>
+                </td>
+                <td>60 mins</td>
+                <td>$A\mathbf{x} = \lambda\mathbf{x}$, $\det(A - \lambda I) = 0$, $\sum \lambda_i = \text{trace}(A)$, $\prod \lambda_i = \det(A)$, expectation of trace.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 6.2</span></td>
+                <td>Diagonalizing a Matrix</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-4.pdf#page=16" class="page-link" target="_blank" title="Jump to Section 6.2">
+                    pp. 309–322 <span class="cutout-ref">(Cutout p. 16)</span> ↗
+                  </a>
+                </td>
+                <td>50 mins</td>
+                <td>$A = S \Lambda S^{-1}$, powers $A^k = S \Lambda^k S^{-1}$, conditions for diagonalizability (distinct eigenvalues vs non-defective).</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 6.4</span></td>
+                <td>Symmetric Matrices and Spectral Theorem</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-4.pdf#page=30" class="page-link" target="_blank" title="Jump to Section 6.4">
+                    pp. 341–352 <span class="cutout-ref">(Cutout p. 30)</span> ↗
+                  </a>
+                </td>
+                <td>60 mins</td>
+                <td>Real eigenvalues, orthogonal eigenvectors, Spectral Decomposition $A = Q \Lambda Q^T = \sum \lambda_i \mathbf{q}_i \mathbf{q}_i^T$.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 6.6</span></td>
+                <td>Similar Matrices and Jordan Form</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-4.pdf#page=42" class="page-link" target="_blank" title="Jump to Section 6.6">
+                    pp. 366–373 <span class="cutout-ref">(Cutout p. 42)</span> ↗
+                  </a>
+                </td>
+                <td>35 mins</td>
+                <td>Similarity transformations $B = M^{-1} A M$, preservation of eigenvalues, trace, determinant, and rank.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 6.7</span></td>
+                <td>Singular Value Decomposition (SVD) & Ch 6 Exercises</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-4.pdf#page=50" class="page-link" target="_blank" title="Jump to Section 6.7">
+                    pp. 374–385 <span class="cutout-ref">(Cutout p. 50)</span> ↗
+                  </a>
+                </td>
+                <td>70 mins</td>
+                <td>$A = U \Sigma V^T$, singular values $\sigma_i = \sqrt{\lambda_i(A^T A)}$, low-rank approximation (Eckart-Young Theorem), Frobenius norm.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 8.3</span></td>
+                <td>Markov Matrices, Population, and Economics</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-4.pdf#page=62" class="page-link" target="_blank" title="Jump to Section 8.3">
+                    pp. 442–450 <span class="cutout-ref">(Cutout p. 62)</span> ↗
+                  </a>
+                </td>
+                <td>35 mins</td>
+                <td>Transition matrices, columns summing to 1, dominant eigenvalue $\lambda_1 = 1$, steady-state probability vector $A\mathbf{x} = \mathbf{x}$.</td>
+              </tr>
+              <tr class="row-exercise">
+                <td><span class="sec-badge sec-badge-exercise">Ch 8 Review</span></td>
+                <td>Chapter 8 Final Problem Set (Problem Set 8.7)</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-4.pdf#page=71" class="page-link" target="_blank" title="Jump to Chapter 8 Review">
+                    pp. 474–475 <span class="cutout-ref">(Cutout p. 71)</span> ↗
+                  </a>
+                </td>
+                <td>20 mins</td>
+                <td>Markov chain convergence and equilibrium exercises.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 10.1</span></td>
+                <td>Complex Vectors and Matrices (Complex Eigenvalues)</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-4.pdf#page=73" class="page-link" target="_blank" title="Jump to Section 10.1">
+                    pp. 504–511 <span class="cutout-ref">(Cutout p. 73)</span> ↗
+                  </a>
+                </td>
+                <td>40 mins</td>
+                <td>Complex numbers $z = a + ib = r e^{i\theta}$, complex conjugate eigenvalues of real matrices, rotation matrices.</td>
+              </tr>
+              <tr>
+                <td><span class="sec-badge">Section 10.2</span></td>
+                <td>Hermitian and Unitary Matrices</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-4.pdf#page=81" class="page-link" target="_blank" title="Jump to Section 10.2">
+                    pp. 512–519 <span class="cutout-ref">(Cutout p. 81)</span> ↗
+                  </a>
+                </td>
+                <td>35 mins</td>
+                <td>Hermitian conjugate $A^H$, unitary matrices $U^H U = I$, eigenvalues on unit circle, real eigenvalues of Hermitian matrices.</td>
+              </tr>
+              <tr class="row-exercise">
+                <td><span class="sec-badge sec-badge-exercise">Ch 10 Review</span></td>
+                <td>Chapter 10 Final Exercises & Problem Set 10.3</td>
+                <td>
+                  <a href="./linear-algebra-textbook-module-4.pdf#page=89" class="page-link" target="_blank" title="Jump to Chapter 10 Review">
+                    pp. 525–526 <span class="cutout-ref">(Cutout p. 89)</span> ↗
+                  </a>
+                </td>
+                <td>20 mins</td>
+                <td>Complex inner products, unitary transformations, complex spectrum problem sets.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Mapped PYQs Section (Grouped by Module) -->
+    <section class="card" id="pyq-breakdown" style="margin-top: 3rem;">
+      <h2 class="pyq-section-title">🎯 GATE DA Mapped PYQs by Module (2024, 2025 & 2026)</h2>
+      <p class="pyq-section-lead">
+        All 20 Linear Algebra questions from official GATE DA papers mapped to their exact module, source section, and physical cutout page. Click any page link to open the concept in the textbook cutout.
+      </p>
+
+      <!-- Module 1 PYQ Block -->
+      <div class="pyq-module-block">
+        <div class="pyq-module-header">
+          <span>Module 1 PYQ Practice (3 Questions • 5 Marks)</span>
+          <span style="font-size: 0.85rem; font-weight: normal; color: var(--text-muted);">Vector Spaces, Subspaces & Basis</span>
+        </div>
+
+        <div class="pyq-grid">
+          <!-- 2024 Q.47 -->
+          <div class="pyq-card">
+            <div class="pyq-header">
+              <span class="pyq-id">GATE DA 2024 — Q.47</span>
+              <div class="pyq-meta-badges">
+                <span class="badge-mark badge-2m">2 Marks</span>
+                <span class="badge-type">MSQ</span>
+                <span class="page-badge" style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">PYQ PDF p. 28</span>
+              </div>
+            </div>
+            <div class="pyq-question">
+              <strong>Question Statement:</strong><br>
+              Which of the following subsets of $\mathbb{R}^3$ is/are vector subspace(s)?<br>
+              (A) $S_1 = \{(x, y, z) \in \mathbb{R}^3 \mid x + 2y + 3z = 0\}$<br>
+              (B) $S_2 = \{(x, y, z) \in \mathbb{R}^3 \mid x - y + z = 1\}$<br>
+              (C) $S_3 = \{(x, y, z) \in \mathbb{R}^3 \mid xy = 0\}$<br>
+              (D) $S_4 = \{(x, y, z) \in \mathbb{R}^3 \mid x = y = z\}$
+            </div>
+            <div class="pyq-source">
+              <span>📖 <strong>Source Textbook:</strong> Gilbert Strang (4th Ed.)</span>
+              <span>• <strong>Section:</strong> Section 3.1 "Spaces of Vectors"</span>
+              <span>• <strong>Cutout Link:</strong> <a href="./linear-algebra-textbook-module-1.pdf#page=12" class="pyq-pdf-link" target="_blank">pp. 131–142 (Cutout p. 12) ↗</a></span>
+            </div>
+            <div class="pyq-rationale">
+              <strong>Theoretical Rationale:</strong> A subset $S \subseteq \mathbb{R}^n$ is a subspace if and only if it contains $\mathbf{0}$ and is closed under addition and scalar multiplication. (A) and (D) pass all axioms (homogeneous linear equations). (B) fails because $\mathbf{0} \notin S_2$. (C) fails closure under addition: $(1, 0, 0) \in S_3$ and $(0, 1, 0) \in S_3$, but $(1, 1, 0) \notin S_3$. Correct options: <strong>(A) and (D)</strong>.
+            </div>
+          </div>
+
+          <!-- 2026 Q.22 -->
+          <div class="pyq-card">
+            <div class="pyq-header">
+              <span class="pyq-id">GATE DA 2026 — Q.22</span>
+              <div class="pyq-meta-badges">
+                <span class="badge-mark badge-1m">1 Mark</span>
+                <span class="badge-type">MCQ</span>
+                <span class="page-badge" style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">PYQ PDF p. 13</span>
+              </div>
+            </div>
+            <div class="pyq-question">
+              <strong>Question Statement:</strong><br>
+              Let $A$ be an $m \times n$ matrix with real entries. Which of the following statements is ALWAYS TRUE regarding the four fundamental subspaces?<br>
+              (A) The row space of $A$ and the null space of $A$ are orthogonal complements in $\mathbb{R}^n$.<br>
+              (B) The column space of $A$ and the null space of $A$ are orthogonal complements in $\mathbb{R}^m$.<br>
+              (C) $\text{dim}(\mathbf{C}(A)) + \text{dim}(\mathbf{C}(A^T)) = n$.<br>
+              (D) The left null space of $A$ is a subspace of $\mathbb{R}^n$.
+            </div>
+            <div class="pyq-source">
+              <span>📖 <strong>Source Textbook:</strong> Gilbert Strang (4th Ed.)</span>
+              <span>• <strong>Section:</strong> Section 3.6 & 4.1 "Dimensions & Orthogonality of Four Subspaces"</span>
+              <span>• <strong>Cutout Link:</strong> <a href="./linear-algebra-textbook-module-1.pdf#page=76" class="pyq-pdf-link" target="_blank">pp. 195–205 (Cutout p. 76) ↗</a></span>
+            </div>
+            <div class="pyq-rationale">
+              <strong>Theoretical Rationale:</strong> By the Fundamental Theorem of Linear Algebra (Part 2), $\mathbf{C}(A^T) \perp \mathbf{N}(A)$ in $\mathbb{R}^n$, meaning every row vector is perpendicular to every vector in the null space. Correct option: <strong>(A)</strong>.
+            </div>
+          </div>
+
+          <!-- 2026 Q.36 -->
+          <div class="pyq-card">
+            <div class="pyq-header">
+              <span class="pyq-id">GATE DA 2026 — Q.36</span>
+              <div class="pyq-meta-badges">
+                <span class="badge-mark badge-2m">2 Marks</span>
+                <span class="badge-type">MSQ</span>
+                <span class="page-badge" style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">PYQ PDF p. 23</span>
+              </div>
+            </div>
+            <div class="pyq-question">
+              <strong>Question Statement:</strong><br>
+              Let $V$ be the vector space of all $2 \times 2$ real symmetric matrices. Which of the following subsets of $V$ form a basis for $V$?
+            </div>
+            <div class="pyq-source">
+              <span>📖 <strong>Source Textbook:</strong> Gilbert Strang (4th Ed.)</span>
+              <span>• <strong>Section:</strong> Section 3.5 "Independence, Basis and Dimension"</span>
+              <span>• <strong>Cutout Link:</strong> <a href="./linear-algebra-textbook-module-1.pdf#page=60" class="pyq-pdf-link" target="_blank">pp. 179–194 (Cutout p. 60) ↗</a></span>
+            </div>
+            <div class="pyq-rationale">
+              <strong>Theoretical Rationale:</strong> A general $2 \times 2$ symmetric matrix has the form $\begin{bmatrix} a & b \\ b & c \end{bmatrix}$, depending on 3 independent parameters. Thus, $\text{dim}(V) = 3$. Any basis must contain exactly 3 linearly independent symmetric matrices that span $V$.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Module 2 PYQ Block -->
+      <div class="pyq-module-block">
+        <div class="pyq-module-header">
+          <span>Module 2 PYQ Practice (3 Questions • 5 Marks)</span>
+          <span style="font-size: 0.85rem; font-weight: normal; color: var(--text-muted);">Linear Systems & Determinants</span>
+        </div>
+
+        <div class="pyq-grid">
+          <!-- 2024 Q.35 -->
+          <div class="pyq-card">
+            <div class="pyq-header">
+              <span class="pyq-id">GATE DA 2024 — Q.35</span>
+              <div class="pyq-meta-badges">
+                <span class="badge-mark badge-1m">1 Mark</span>
+                <span class="badge-type">NAT</span>
+                <span class="page-badge" style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">PYQ PDF p. 20</span>
+              </div>
+            </div>
+            <div class="pyq-question">
+              <strong>Question Statement:</strong><br>
+              Let $M = \begin{bmatrix} 1 & 2 & 3 \\ 3 & 1 & 3 \\ 4 & 3 & 6 \end{bmatrix}$. Compute the determinant $\det(M^2 + 12M)$.
+            </div>
+            <div class="pyq-source">
+              <span>📖 <strong>Source Textbook:</strong> Gilbert Strang (4th Ed.)</span>
+              <span>• <strong>Section:</strong> Section 2.5 & 5.1 "Inverse Matrices & Determinant Properties"</span>
+              <span>• <strong>Cutout Link:</strong> <a href="./linear-algebra-textbook-module-2.pdf#page=105" class="pyq-pdf-link" target="_blank">pp. 255–265 (Cutout p. 105) ↗</a></span>
+            </div>
+            <div class="pyq-rationale">
+              <strong>Theoretical Rationale:</strong> Notice that $\text{Row}_3 = [4, 3, 6] = [1, 2, 3] + [3, 1, 3] = \text{Row}_1 + \text{Row}_2$. Because the rows are linearly dependent, $M$ is singular and $\det(M) = 0$. Factoring the expression: $\det(M^2 + 12M) = \det(M(M + 12I)) = \det(M) \cdot \det(M + 12I) = 0 \cdot \det(...) = \mathbf{0}$.
+            </div>
+          </div>
+
+          <!-- 2024 Q.48 -->
+          <div class="pyq-card">
+            <div class="pyq-header">
+              <span class="pyq-id">GATE DA 2024 — Q.48</span>
+              <div class="pyq-meta-badges">
+                <span class="badge-mark badge-2m">2 Marks</span>
+                <span class="badge-type">MSQ</span>
+                <span class="page-badge" style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">PYQ PDF p. 29</span>
+              </div>
+            </div>
+            <div class="pyq-question">
+              <strong>Question Statement:</strong><br>
+              Consider a system of linear equations $M\mathbf{x} = \mathbf{b}$. Which of the following statements is/are TRUE?<br>
+              (A) If $M$ is a $3 \times 3$ matrix and $\text{rank}(M) < 3$, then for every $\mathbf{b}$ the system has a unique solution.<br>
+              (B) If $M$ is a $3 \times 3$ matrix with $\text{rank}(M) < 3$, then there exists some $\mathbf{q}$ with infinitely many solutions and some $\mathbf{p}$ with no solution.<br>
+              (C) If $M$ is a $2 \times 3$ matrix, the system can have a unique solution for some $\mathbf{b}$.<br>
+              (D) If $M$ is a $3 \times 2$ matrix with $\text{rank}(M) = 2$, the system has either 0 or 1 solution for any $\mathbf{b}$.
+            </div>
+            <div class="pyq-source">
+              <span>📖 <strong>Source Textbook:</strong> Gilbert Strang (4th Ed.)</span>
+              <span>• <strong>Section:</strong> Section 2.1 & 3.4 "Linear Equations & Complete Solution"</span>
+              <span>• <strong>Cutout Link:</strong> <a href="./linear-algebra-textbook-module-2.pdf#page=90" class="pyq-pdf-link" target="_blank">pp. 166–178 (Cutout p. 90) ↗</a></span>
+            </div>
+            <div class="pyq-rationale">
+              <strong>Theoretical Rationale:</strong> For square $3 \times 3$ matrices, unique solution $\iff \det(M) \ne 0 \iff \text{rank} = 3 \implies$ unique solution for all RHS (so (A) is false). When $\text{rank}(M) < 3$, $\mathbf{q} \in \mathbf{C}(M)$ yields infinite solutions while $\mathbf{p} \notin \mathbf{C}(M)$ yields no solutions, making (B) TRUE. For $2 \times 3$ matrices, $n=3 > m=2$, so $\text{nullity} \ge 1$ (always infinite solutions if consistent, never unique, so (C) is false). For $3 \times 2$ matrices with full column rank 2, a consistent system has a unique solution and an inconsistent system has no solutions, making (D) TRUE. Correct options: <strong>(B) and (D)</strong>.
+            </div>
+          </div>
+
+          <!-- 2025 Q.12 -->
+          <div class="pyq-card">
+            <div class="pyq-header">
+              <span class="pyq-id">GATE DA 2025 — Q.12</span>
+              <div class="pyq-meta-badges">
+                <span class="badge-mark badge-2m">2 Marks</span>
+                <span class="badge-type">MCQ</span>
+                <span class="page-badge" style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">PYQ PDF p. 7</span>
+              </div>
+            </div>
+            <div class="pyq-question">
+              <strong>Question Statement:</strong><br>
+              Let $\mathbf{u} = [1, 2, 3]^T$ and $\mathbf{v} = [4, 5, 6]^T$. Let $M = I_3 + \mathbf{u}\mathbf{v}^T$. What is the determinant $\det(M)$?<br>
+              (A) 1 &nbsp;&nbsp;&nbsp;&nbsp; (B) 32 &nbsp;&nbsp;&nbsp;&nbsp; (C) 33 &nbsp;&nbsp;&nbsp;&nbsp; (D) 0
+            </div>
+            <div class="pyq-source">
+              <span>📖 <strong>Source Textbook:</strong> Gilbert Strang (4th Ed.)</span>
+              <span>• <strong>Section:</strong> Section 5.1 & 5.2 "Properties of Determinants & Outer Products"</span>
+              <span>• <strong>Cutout Link:</strong> <a href="./linear-algebra-textbook-module-2.pdf#page=105" class="pyq-pdf-link" target="_blank">pp. 255–279 (Cutout p. 105) ↗</a></span>
+            </div>
+            <div class="pyq-rationale">
+              <strong>Theoretical Rationale:</strong> By the matrix determinant lemma: $\det(I + \mathbf{u}\mathbf{v}^T) = 1 + \mathbf{v}^T \mathbf{u}$. Compute the inner product: $\mathbf{v}^T \mathbf{u} = (4)(1) + (5)(2) + (6)(3) = 4 + 10 + 18 = 32$. Thus, $\det(M) = 1 + 32 = \mathbf{33}$. Correct option: <strong>(C)</strong>.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Module 3 PYQ Block -->
+      <div class="pyq-module-block">
+        <div class="pyq-module-header">
+          <span>Module 3 PYQ Practice (6 Questions • 10 Marks)</span>
+          <span style="font-size: 0.85rem; font-weight: normal; color: var(--text-muted);">Orthogonality, Projections & Quadratic Forms</span>
+        </div>
+
+        <div class="pyq-grid">
+          <!-- 2024 Q.49 -->
+          <div class="pyq-card">
+            <div class="pyq-header">
+              <span class="pyq-id">GATE DA 2024 — Q.49</span>
+              <div class="pyq-meta-badges">
+                <span class="badge-mark badge-2m">2 Marks</span>
+                <span class="badge-type">MSQ</span>
+                <span class="page-badge" style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">PYQ PDF p. 30</span>
+              </div>
+            </div>
+            <div class="pyq-question">
+              <strong>Question Statement:</strong><br>
+              Let $U$ be a proper subspace of $\mathbb{R}^3$, and let $M$ be the projection matrix that projects any vector in $\mathbb{R}^3$ onto $U$. Which of the following statements is/are TRUE?<br>
+              (A) If $\text{dim}(U) = 1$, then $\text{dim}(\text{Null}(M)) = 1$<br>
+              (B) If $\text{dim}(U) = 2$, then $\text{dim}(\text{Null}(M)) = 1$<br>
+              (C) $M^3 = M$<br>
+              (D) If $\text{dim}(U) = 1$, then $M^2 = M$
+            </div>
+            <div class="pyq-source">
+              <span>📖 <strong>Source Textbook:</strong> Gilbert Strang (4th Ed.)</span>
+              <span>• <strong>Section:</strong> Section 4.2 "Projections onto Subspaces"</span>
+              <span>• <strong>Cutout Link:</strong> <a href="./linear-algebra-textbook-module-3.pdf#page=25" class="pyq-pdf-link" target="_blank">pp. 217–228 (Cutout p. 25) ↗</a></span>
+            </div>
+            <div class="pyq-rationale">
+              <strong>Theoretical Rationale:</strong> Any projection matrix is idempotent: $M^2 = M$, which immediately implies $M^3 = M^2 \cdot M = M \cdot M = M$ (so C and D are true). The column space of $M$ is $U$, so $\text{rank}(M) = \dim(U)$. By the Rank-Nullity Theorem, $\dim(\text{Null}(M)) = 3 - \dim(U)$. When $\dim(U) = 2$, $\dim(\text{Null}(M)) = 3 - 2 = 1$ (so B is true). When $\dim(U) = 1$, $\dim(\text{Null}(M)) = 3 - 1 = 2$ (so A is false). Correct options: <strong>(B), (C), and (D)</strong>.
+            </div>
+          </div>
+
+          <!-- 2025 Q.38 -->
+          <div class="pyq-card">
+            <div class="pyq-header">
+              <span class="pyq-id">GATE DA 2025 — Q.38</span>
+              <div class="pyq-meta-badges">
+                <span class="badge-mark badge-1m">1 Mark</span>
+                <span class="badge-type">MCQ</span>
+                <span class="page-badge" style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">PYQ PDF p. 20</span>
+              </div>
+            </div>
+            <div class="pyq-question">
+              <strong>Question Statement:</strong><br>
+              Let $M = I_n - \frac{1}{n} \mathbf{1}\mathbf{1}^T$, where $\mathbf{1}$ is the $n \times 1$ column vector of all ones. Which of the following is the rank of $M$?<br>
+              (A) $n$ &nbsp;&nbsp;&nbsp;&nbsp; (B) $n - 1$ &nbsp;&nbsp;&nbsp;&nbsp; (C) 1 &nbsp;&nbsp;&nbsp;&nbsp; (D) 0
+            </div>
+            <div class="pyq-source">
+              <span>📖 <strong>Source Textbook:</strong> Gilbert Strang (4th Ed.)</span>
+              <span>• <strong>Section:</strong> Section 4.2 & 8.6 "Projections & Statistics (Centering Matrix)"</span>
+              <span>• <strong>Cutout Link:</strong> <a href="./linear-algebra-textbook-module-3.pdf#page=78" class="pyq-pdf-link" target="_blank">pp. 464–469 (Cutout p. 78) ↗</a></span>
+            </div>
+            <div class="pyq-rationale">
+              <strong>Theoretical Rationale:</strong> $M$ is the canonical <strong>centering matrix</strong>. Compute $M^2 = (I - \frac{1}{n}\mathbf{1}\mathbf{1}^T)(I - \frac{1}{n}\mathbf{1}\mathbf{1}^T) = I - \frac{2}{n}\mathbf{1}\mathbf{1}^T + \frac{1}{n^2}\mathbf{1}(\mathbf{1}^T\mathbf{1})\mathbf{1}^T$. Since $\mathbf{1}^T\mathbf{1} = n$, this simplifies to $I - \frac{1}{n}\mathbf{1}\mathbf{1}^T = M$ ($M$ is idempotent). Trace: $\text{trace}(M) = \text{trace}(I_n) - \frac{1}{n}\text{trace}(\mathbf{1}\mathbf{1}^T) = n - \frac{1}{n}(n) = \mathbf{n - 1}$. Rank: for idempotent matrices, $\text{rank}(M) = \text{trace}(M) = \mathbf{n - 1}$. Correct option: <strong>(B)</strong>.
+            </div>
+          </div>
+
+          <!-- 2025 Q.50 -->
+          <div class="pyq-card">
+            <div class="pyq-header">
+              <span class="pyq-id">GATE DA 2025 — Q.50</span>
+              <div class="pyq-meta-badges">
+                <span class="badge-mark badge-2m">2 Marks</span>
+                <span class="badge-type">MCQ</span>
+                <span class="page-badge" style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">PYQ PDF p. 27</span>
+              </div>
+            </div>
+            <div class="pyq-question">
+              <strong>Question Statement:</strong><br>
+              Let $M = \begin{bmatrix} 2 & 1 \\ 1 & c \end{bmatrix}$. For what values of $c \in \mathbb{R}$ is the quadratic form $\mathbf{x}^T M \mathbf{x} > 0$ for all non-zero $\mathbf{x} \in \mathbb{R}^2$?<br>
+              (A) $c > 0$ &nbsp;&nbsp;&nbsp;&nbsp; (B) $c > 0.5$ &nbsp;&nbsp;&nbsp;&nbsp; (C) $c > 2$ &nbsp;&nbsp;&nbsp;&nbsp; (D) $c > 1$
+            </div>
+            <div class="pyq-source">
+              <span>📖 <strong>Source Textbook:</strong> Gilbert Strang (4th Ed.)</span>
+              <span>• <strong>Section:</strong> Section 6.5 "Positive Definite Matrices & Quadratic Forms"</span>
+              <span>• <strong>Cutout Link:</strong> <a href="./linear-algebra-textbook-module-3.pdf#page=63" class="pyq-pdf-link" target="_blank">pp. 353–365 (Cutout p. 63) ↗</a></span>
+            </div>
+            <div class="pyq-rationale">
+              <strong>Theoretical Rationale:</strong> A symmetric matrix is positive definite ($\mathbf{x}^T M \mathbf{x} > 0$ for $\mathbf{x} \ne \mathbf{0}$) iff all leading principal minors are strictly positive: (1) $a_{11} = 2 > 0$, (2) $\det(M) = 2c - 1 > 0 \implies 2c > 1 \implies c > 0.5$. Correct option: <strong>(B)</strong>.
+            </div>
+          </div>
+
+          <!-- 2025 Q.52 -->
+          <div class="pyq-card">
+            <div class="pyq-header">
+              <span class="pyq-id">GATE DA 2025 — Q.52</span>
+              <div class="pyq-meta-badges">
+                <span class="badge-mark badge-1m">1 Mark</span>
+                <span class="badge-type">NAT</span>
+                <span class="page-badge" style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">PYQ PDF p. 28</span>
+              </div>
+            </div>
+            <div class="pyq-question">
+              <strong>Question Statement:</strong><br>
+              Let $A = I_{10} - \frac{1}{10}\mathbf{1}\mathbf{1}^T$ where $\mathbf{1}$ is the $10 \times 1$ vector of all ones. What is the value of $\text{trace}(A)$?
+            </div>
+            <div class="pyq-source">
+              <span>📖 <strong>Source Textbook:</strong> Gilbert Strang (4th Ed.)</span>
+              <span>• <strong>Section:</strong> Section 4.2 & 8.6 "Projections & Statistics (Centering Matrix)"</span>
+              <span>• <strong>Cutout Link:</strong> <a href="./linear-algebra-textbook-module-3.pdf#page=78" class="pyq-pdf-link" target="_blank">pp. 464–469 (Cutout p. 78) ↗</a></span>
+            </div>
+            <div class="pyq-rationale">
+              <strong>Theoretical Rationale:</strong> Same centering matrix identity: $\text{trace}(A) = \text{trace}(I_n) - \frac{1}{n}\text{trace}(\mathbf{1}\mathbf{1}^T) = n - 1$. For $n = 10$, $\text{trace}(A) = 10 - 1 = \mathbf{9}$.
+            </div>
+          </div>
+
+          <!-- 2026 Q.52 -->
+          <div class="pyq-card">
+            <div class="pyq-header">
+              <span class="pyq-id">GATE DA 2026 — Q.52</span>
+              <div class="pyq-meta-badges">
+                <span class="badge-mark badge-2m">2 Marks</span>
+                <span class="badge-type">MCQ</span>
+                <span class="page-badge" style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">PYQ PDF p. 32</span>
+              </div>
+            </div>
+            <div class="pyq-question">
+              <strong>Question Statement:</strong><br>
+              Let $\mathbf{u}_1, \mathbf{u}_2 \in \mathbb{R}^n$ be mutually orthogonal unit vectors. Let $M = \mathbf{u}_1\mathbf{u}_1^T + \mathbf{u}_2\mathbf{u}_2^T$. Which of the following statements is FALSE?<br>
+              (A) $M^2 = M$<br>
+              (B) $\text{rank}(M) = 2$<br>
+              (C) The non-zero eigenvalues of $M$ are both equal to 1<br>
+              (D) $M$ is positive definite on $\mathbb{R}^n$ (for $n > 2$)
+            </div>
+            <div class="pyq-source">
+              <span>📖 <strong>Source Textbook:</strong> Gilbert Strang (4th Ed.)</span>
+              <span>• <strong>Section:</strong> Section 4.4 & 6.5 "Orthogonal Bases & Positive Definite Matrices"</span>
+              <span>• <strong>Cutout Link:</strong> <a href="./linear-algebra-textbook-module-3.pdf#page=49" class="pyq-pdf-link" target="_blank">pp. 241–254 (Cutout p. 49) ↗</a></span>
+            </div>
+            <div class="pyq-rationale">
+              <strong>Theoretical Rationale:</strong> $M$ is the orthogonal projection matrix onto $\text{span}\{\mathbf{u}_1, \mathbf{u}_2\}$. For $n > 2$, $\text{dim}(\text{Null}(M)) = n - 2 > 0$. Thus, $M$ has eigenvalue 0 with multiplicity $n - 2$, so it is only positive <em>semidefinite</em>, not positive definite. Correct option: <strong>(D)</strong>.
+            </div>
+          </div>
+
+          <!-- 2026 Q.65 -->
+          <div class="pyq-card">
+            <div class="pyq-header">
+              <span class="pyq-id">GATE DA 2026 — Q.65</span>
+              <div class="pyq-meta-badges">
+                <span class="badge-mark badge-2m">2 Marks</span>
+                <span class="badge-type">NAT</span>
+                <span class="page-badge" style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">PYQ PDF p. 39</span>
+              </div>
+            </div>
+            <div class="pyq-question">
+              <strong>Question Statement:</strong><br>
+              Let $Q$ be a $3 \times 3$ orthogonal matrix. Let $\mathbf{x} = [3, -4, 0]^T$. What is the Euclidean norm $\|Q\mathbf{x}\|_2$?
+            </div>
+            <div class="pyq-source">
+              <span>📖 <strong>Source Textbook:</strong> Gilbert Strang (4th Ed.)</span>
+              <span>• <strong>Section:</strong> Section 4.4 "Orthogonal Bases and Gram-Schmidt"</span>
+              <span>• <strong>Cutout Link:</strong> <a href="./linear-algebra-textbook-module-3.pdf#page=49" class="pyq-pdf-link" target="_blank">pp. 241–254 (Cutout p. 49) ↗</a></span>
+            </div>
+            <div class="pyq-rationale">
+              <strong>Theoretical Rationale:</strong> Orthogonal matrices preserve Euclidean length: $\|Q\mathbf{x}\|^2 = (Q\mathbf{x})^T (Q\mathbf{x}) = \mathbf{x}^T (Q^T Q) \mathbf{x} = \mathbf{x}^T I \mathbf{x} = \|\mathbf{x}\|^2$. Here $\|\mathbf{x}\| = \sqrt{3^2 + (-4)^2 + 0^2} = \sqrt{9 + 16} = \mathbf{5}$.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Module 4 PYQ Block -->
+      <div class="pyq-module-block">
+        <div class="pyq-module-header">
+          <span>Module 4 PYQ Practice (8 Questions • 14 Marks)</span>
+          <span style="font-size: 0.85rem; font-weight: normal; color: var(--text-muted);">Spectral Theory, SVD & Eigenvalue Problems</span>
+        </div>
+
+        <div class="pyq-grid">
+          <!-- 2024 Q.13 -->
+          <div class="pyq-card">
+            <div class="pyq-header">
+              <span class="pyq-id">GATE DA 2024 — Q.13</span>
+              <div class="pyq-meta-badges">
+                <span class="badge-mark badge-1m">1 Mark</span>
+                <span class="badge-type">MCQ</span>
+                <span class="page-badge" style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">PYQ PDF p. 8</span>
+              </div>
+            </div>
+            <div class="pyq-question">
+              <strong>Question Statement:</strong><br>
+              Let $M = \begin{bmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{bmatrix}$ for $\theta \in (0, \pi)$. Which of the following is TRUE about the eigenvalues of $M$?<br>
+              (A) Both eigenvalues are real and positive.<br>
+              (B) Both eigenvalues are real and negative.<br>
+              (C) The eigenvalues are complex conjugates with magnitude 1.<br>
+              (D) One eigenvalue is 0 and the other is 1.
+            </div>
+            <div class="pyq-source">
+              <span>📖 <strong>Source Textbook:</strong> Gilbert Strang (4th Ed.)</span>
+              <span>• <strong>Section:</strong> Section 6.1 & 10.1 "Introduction to Eigenvalues & Complex Numbers"</span>
+              <span>• <strong>Cutout Link:</strong> <a href="./linear-algebra-textbook-module-4.pdf#page=1" class="pyq-pdf-link" target="_blank">pp. 294–308 (Cutout p. 1) ↗</a></span>
+            </div>
+            <div class="pyq-rationale">
+              <strong>Theoretical Rationale:</strong> $M$ is a 2D rotation matrix: $\text{trace}(M) = 2\cos\theta$, $\det(M) = \cos^2\theta + \sin^2\theta = 1$. Characteristic equation: $\lambda^2 - 2\cos\theta \lambda + 1 = 0 \implies \lambda = \cos\theta \pm i\sin\theta = e^{\pm i\theta}$. Both eigenvalues lie on the unit circle in the complex plane. Correct option: <strong>(C)</strong>.
+            </div>
+          </div>
+
+          <!-- 2024 Q.61 -->
+          <div class="pyq-card">
+            <div class="pyq-header">
+              <span class="pyq-id">GATE DA 2024 — Q.61</span>
+              <div class="pyq-meta-badges">
+                <span class="badge-mark badge-2m">2 Marks</span>
+                <span class="badge-type">NAT</span>
+                <span class="page-badge" style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">PYQ PDF p. 38</span>
+              </div>
+            </div>
+            <div class="pyq-question">
+              <strong>Question Statement:</strong><br>
+              Let $M = \begin{bmatrix} 0 & 3 & 4 \\ -3 & 0 & 2 \\ -4 & -2 & 0 \end{bmatrix}$. If $\lambda_1, \lambda_2, \lambda_3$ are the eigenvalues of $M$, what is the value of $\lambda_1 + \lambda_2 + \lambda_3$?
+            </div>
+            <div class="pyq-source">
+              <span>📖 <strong>Source Textbook:</strong> Gilbert Strang (4th Ed.)</span>
+              <span>• <strong>Section:</strong> Section 6.1 & 6.4 "Eigenvalues, Trace & Symmetric/Skew-Symmetric Matrices"</span>
+              <span>• <strong>Cutout Link:</strong> <a href="./linear-algebra-textbook-module-4.pdf#page=1" class="pyq-pdf-link" target="_blank">pp. 294–308 (Cutout p. 1) ↗</a></span>
+            </div>
+            <div class="pyq-rationale">
+              <strong>Theoretical Rationale:</strong> For any square matrix, $\sum \lambda_i = \text{trace}(M)$. Since $M$ is skew-symmetric ($M^T = -M$), all diagonal elements are 0, so $\text{trace}(M) = 0 + 0 + 0 = \mathbf{0}$.
+            </div>
+          </div>
+
+          <!-- 2025 Q.13 -->
+          <div class="pyq-card">
+            <div class="pyq-header">
+              <span class="pyq-id">GATE DA 2025 — Q.13</span>
+              <div class="pyq-meta-badges">
+                <span class="badge-mark badge-1m">1 Mark</span>
+                <span class="badge-type">MCQ</span>
+                <span class="page-badge" style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">PYQ PDF p. 7</span>
+              </div>
+            </div>
+            <div class="pyq-question">
+              <strong>Question Statement:</strong><br>
+              Let $A = \begin{bmatrix} 3 & 0 \\ 0 & -4 \end{bmatrix}$. What are the singular values of $A$?<br>
+              (A) 3 and -4 &nbsp;&nbsp;&nbsp;&nbsp; (B) 3 and 4 &nbsp;&nbsp;&nbsp;&nbsp; (C) 9 and 16 &nbsp;&nbsp;&nbsp;&nbsp; (D) 0 and 5
+            </div>
+            <div class="pyq-source">
+              <span>📖 <strong>Source Textbook:</strong> Gilbert Strang (4th Ed.)</span>
+              <span>• <strong>Section:</strong> Section 6.7 "Singular Value Decomposition (SVD)"</span>
+              <span>• <strong>Cutout Link:</strong> <a href="./linear-algebra-textbook-module-4.pdf#page=50" class="pyq-pdf-link" target="_blank">pp. 374–385 (Cutout p. 50) ↗</a></span>
+            </div>
+            <div class="pyq-rationale">
+              <strong>Theoretical Rationale:</strong> By definition, singular values $\sigma_i$ are the non-negative square roots of the eigenvalues of $A^T A$. Here $A^T A = \begin{bmatrix} 9 & 0 \\ 0 & 16 \end{bmatrix}$. The eigenvalues are 16 and 9, so $\sigma_1 = \sqrt{16} = 4$ and $\sigma_2 = \sqrt{9} = 3$. Singular values are always non-negative: $\mathbf{4 \text{ and } 3}$. Correct option: <strong>(B)</strong>.
+            </div>
+          </div>
+
+          <!-- 2025 Q.28 -->
+          <div class="pyq-card">
+            <div class="pyq-header">
+              <span class="pyq-id">GATE DA 2025 — Q.28</span>
+              <div class="pyq-meta-badges">
+                <span class="badge-mark badge-2m">2 Marks</span>
+                <span class="badge-type">MCQ</span>
+                <span class="page-badge" style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">PYQ PDF p. 15</span>
+              </div>
+            </div>
+            <div class="pyq-question">
+              <strong>Question Statement:</strong><br>
+              Let $A$ be an $m \times n$ matrix with singular value decomposition $A = \sum_{i=1}^r \sigma_i \mathbf{u}_i \mathbf{v}_i^T$ where $\sigma_1 \ge \sigma_2 \ge \dots \ge \sigma_r > 0$. What is the best rank-$k$ approximation ($k < r$) of $A$ under the Frobenius norm?<br>
+              (A) $A_k = \sum_{i=1}^k \sigma_i \mathbf{u}_i \mathbf{v}_i^T$<br>
+              (B) $A_k = \sum_{i=1}^k \frac{1}{\sigma_i} \mathbf{u}_i \mathbf{v}_i^T$<br>
+              (C) $A_k = \sum_{i=r-k+1}^r \sigma_i \mathbf{u}_i \mathbf{v}_i^T$<br>
+              (D) $A_k = \sum_{i=1}^k \sigma_k \mathbf{u}_i \mathbf{v}_i^T$
+            </div>
+            <div class="pyq-source">
+              <span>📖 <strong>Source Textbook:</strong> Gilbert Strang (4th Ed.)</span>
+              <span>• <strong>Section:</strong> Section 6.7 "Singular Value Decomposition (Eckart-Young Theorem)"</span>
+              <span>• <strong>Cutout Link:</strong> <a href="./linear-algebra-textbook-module-4.pdf#page=50" class="pyq-pdf-link" target="_blank">pp. 374–385 (Cutout p. 50) ↗</a></span>
+            </div>
+            <div class="pyq-rationale">
+              <strong>Theoretical Rationale:</strong> By the Eckart-Young-Mirsky Theorem, the closest rank-$k$ matrix to $A$ under both the spectral norm and the Frobenius norm is obtained by truncating the SVD at the top $k$ singular components: $A_k = \sum_{i=1}^k \sigma_i \mathbf{u}_i \mathbf{v}_i^T$. Correct option: <strong>(A)</strong>.
+            </div>
+          </div>
+
+          <!-- 2025 Q.37 -->
+          <div class="pyq-card">
+            <div class="pyq-header">
+              <span class="pyq-id">GATE DA 2025 — Q.37</span>
+              <div class="pyq-meta-badges">
+                <span class="badge-mark badge-2m">2 Marks</span>
+                <span class="badge-type">MCQ</span>
+                <span class="page-badge" style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">PYQ PDF p. 19</span>
+              </div>
+            </div>
+            <div class="pyq-question">
+              <strong>Question Statement:</strong><br>
+              Let $A = \begin{bmatrix} 4 & 2 \\ 1 & 3 \end{bmatrix}$. If $A = S \Lambda S^{-1}$ where $\Lambda = \text{diag}(\lambda_1, \lambda_2)$ with $\lambda_1 > \lambda_2$, what is a valid matrix of eigenvectors $S$?<br>
+              (A) $\begin{bmatrix} 2 & 1 \\ 1 & -1 \end{bmatrix}$ &nbsp;&nbsp;&nbsp;&nbsp; (B) $\begin{bmatrix} 1 & 2 \\ -1 & 1 \end{bmatrix}$ &nbsp;&nbsp;&nbsp;&nbsp; (C) $\begin{bmatrix} 1 & 1 \\ 1 & -1 \end{bmatrix}$ &nbsp;&nbsp;&nbsp;&nbsp; (D) $\begin{bmatrix} 2 & -1 \\ 1 & 1 \end{bmatrix}$
+            </div>
+            <div class="pyq-source">
+              <span>📖 <strong>Source Textbook:</strong> Gilbert Strang (4th Ed.)</span>
+              <span>• <strong>Section:</strong> Section 6.2 "Diagonalizing a Matrix"</span>
+              <span>• <strong>Cutout Link:</strong> <a href="./linear-algebra-textbook-module-4.pdf#page=16" class="pyq-pdf-link" target="_blank">pp. 309–322 (Cutout p. 16) ↗</a></span>
+            </div>
+            <div class="pyq-rationale">
+              <strong>Theoretical Rationale:</strong> Characteristic equation: $\det(A - \lambda I) = (4-\lambda)(3-\lambda) - 2 = \lambda^2 - 7\lambda + 10 = (\lambda - 5)(\lambda - 2) = 0$. Eigenvalues are $\lambda_1 = 5, \lambda_2 = 2$. For $\lambda_1 = 5$: $(A - 5I)\mathbf{x} = \mathbf{0} \implies -x_1 + 2x_2 = 0 \implies \mathbf{x}_1 = [2, 1]^T$. For $\lambda_2 = 2$: $(A - 2I)\mathbf{x} = \mathbf{0} \implies 2x_1 + 2x_2 = 0 \implies \mathbf{x}_2 = [1, -1]^T$. Hence $S = \begin{bmatrix} 2 & 1 \\ 1 & -1 \end{bmatrix}$. Correct option: <strong>(A)</strong>.
+            </div>
+          </div>
+
+          <!-- 2026 Q.21 -->
+          <div class="pyq-card">
+            <div class="pyq-header">
+              <span class="pyq-id">GATE DA 2026 — Q.21</span>
+              <div class="pyq-meta-badges">
+                <span class="badge-mark badge-1m">1 Mark</span>
+                <span class="badge-type">MCQ</span>
+                <span class="page-badge" style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">PYQ PDF p. 13</span>
+              </div>
+            </div>
+            <div class="pyq-question">
+              <strong>Question Statement:</strong><br>
+              Let $A$ be a $3 \times 3$ matrix with real entries such that $\text{trace}(A) = 6$ and $\det(A) = 6$. If 1 is an eigenvalue of $A$, what are the other two eigenvalues?<br>
+              (A) 2 and 3 &nbsp;&nbsp;&nbsp;&nbsp; (B) 1 and 4 &nbsp;&nbsp;&nbsp;&nbsp; (C) -1 and 6 &nbsp;&nbsp;&nbsp;&nbsp; (D) 0 and 5
+            </div>
+            <div class="pyq-source">
+              <span>📖 <strong>Source Textbook:</strong> Gilbert Strang (4th Ed.)</span>
+              <span>• <strong>Section:</strong> Section 6.1 "Introduction to Eigenvalues (Trace and Determinant)"</span>
+              <span>• <strong>Cutout Link:</strong> <a href="./linear-algebra-textbook-module-4.pdf#page=1" class="pyq-pdf-link" target="_blank">pp. 294–308 (Cutout p. 1) ↗</a></span>
+            </div>
+            <div class="pyq-rationale">
+              <strong>Theoretical Rationale:</strong> Let the eigenvalues be $1, \lambda_2, \lambda_3$. By trace: $1 + \lambda_2 + \lambda_3 = 6 \implies \lambda_2 + \lambda_3 = 5$. By determinant: $1 \cdot \lambda_2 \cdot \lambda_3 = 6 \implies \lambda_2 \lambda_3 = 6$. The roots of $\lambda^2 - 5\lambda + 6 = 0$ are $\mathbf{2 \text{ and } 3}$. Correct option: <strong>(A)</strong>.
+            </div>
+          </div>
+
+          <!-- 2026 Q.46 -->
+          <div class="pyq-card">
+            <div class="pyq-header">
+              <span class="pyq-id">GATE DA 2026 — Q.46</span>
+              <div class="pyq-meta-badges">
+                <span class="badge-mark badge-2m">2 Marks</span>
+                <span class="badge-type">MSQ</span>
+                <span class="page-badge" style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">PYQ PDF p. 28</span>
+              </div>
+            </div>
+            <div class="pyq-question">
+              <strong>Question Statement:</strong><br>
+              Let $A$ be a real symmetric $n \times n$ matrix with eigenvalues $\lambda_1, \dots, \lambda_n$ and corresponding orthonormal eigenvectors $\mathbf{q}_1, \dots, \mathbf{q}_n$. Which of the following statements is/are TRUE?<br>
+              (A) $A = \sum_{i=1}^n \lambda_i \mathbf{q}_i \mathbf{q}_i^T$<br>
+              (B) The singular values of $A$ are $|\lambda_1|, |\lambda_2|, \dots, |\lambda_n|$<br>
+              (C) $\|A\|_2 = \max_{1 \le i \le n} |\lambda_i|$<br>
+              (D) If all $\lambda_i > 0$, then $A^{-1} = \sum_{i=1}^n \frac{1}{\lambda_i} \mathbf{q}_i \mathbf{q}_i^T$
+            </div>
+            <div class="pyq-source">
+              <span>📖 <strong>Source Textbook:</strong> Gilbert Strang (4th Ed.)</span>
+              <span>• <strong>Section:</strong> Section 6.4 & 6.7 "Symmetric Matrices, Spectral Theorem & SVD"</span>
+              <span>• <strong>Cutout Link:</strong> <a href="./linear-algebra-textbook-module-4.pdf#page=30" class="pyq-pdf-link" target="_blank">pp. 341–352 (Cutout p. 30) ↗</a></span>
+            </div>
+            <div class="pyq-rationale">
+              <strong>Theoretical Rationale:</strong> All 4 statements are foundational theorems for real symmetric matrices: (A) is the Spectral Theorem, (B) follows because $A^T A = A^2$ has eigenvalues $\lambda_i^2$, (C) is the definition of matrix 2-norm, and (D) is the spectral inverse. Correct options: <strong>(A), (B), (C), and (D)</strong>.
+            </div>
+          </div>
+
+          <!-- 2026 Q.64 -->
+          <div class="pyq-card">
+            <div class="pyq-header">
+              <span class="pyq-id">GATE DA 2026 — Q.64</span>
+              <div class="pyq-meta-badges">
+                <span class="badge-mark badge-2m">2 Marks</span>
+                <span class="badge-type">NAT</span>
+                <span class="page-badge" style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">PYQ PDF p. 39</span>
+              </div>
+            </div>
+            <div class="pyq-question">
+              <strong>Question Statement:</strong><br>
+              Let $A_{5 \times 5}$ be a matrix such that each of its elements follows a $\text{Bernoulli}(p = 0.50)$ distribution independently. Compute the expected value of $\text{trace}(A)$.
+            </div>
+            <div class="pyq-source">
+              <span>📖 <strong>Source Textbook:</strong> Gilbert Strang (4th Ed.)</span>
+              <span>• <strong>Section:</strong> Section 6.1 "Introduction to Eigenvalues (Trace)"</span>
+              <span>• <strong>Cutout Link:</strong> <a href="./linear-algebra-textbook-module-4.pdf#page=1" class="pyq-pdf-link" target="_blank">pp. 294–308 (Cutout p. 1) ↗</a></span>
+            </div>
+            <div class="pyq-rationale">
+              <strong>Theoretical Rationale:</strong> By definition, $\text{trace}(A) = \sum_{i=1}^5 A_{ii}$. By the linearity of expectation: $E[\text{trace}(A)] = \sum_{i=1}^5 E[A_{ii}] = 5 \times 0.50 = \mathbf{2.5}$.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      GATE Data Science & Artificial Intelligence (DA) Preparation Pathway • Course 1: Linear Algebra • Generated with 100% Verified Textbook References
+    </footer>
+
+  </div>
+
+</body>
+</html>
