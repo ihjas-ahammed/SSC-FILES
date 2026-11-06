@@ -204,6 +204,18 @@ def build(app_dir: Path, out_path: Path, force_python: bool = False, minify: boo
     if not index_html.exists():
         sys.exit(f"Error: {index_html} does not exist.")
 
+    # 0. Auto-index resources and regenerate curriculum data
+    script_dir = Path(__file__).parent.resolve()
+    gen_script = script_dir / "generate_gate_data.py"
+    if gen_script.exists():
+        try:
+            res = subprocess.run([sys.executable, str(gen_script)], capture_output=True, text=True, check=True)
+            for line in res.stdout.strip().splitlines():
+                if "Successfully" in line or "Wrote" in line:
+                    print(f"  [Auto-Index] {line}")
+        except Exception as e:
+            print(f"  [Auto-Index Warning] {e}")
+
     html = index_html.read_text(encoding="utf-8")
 
     # 1. Bundle CSS

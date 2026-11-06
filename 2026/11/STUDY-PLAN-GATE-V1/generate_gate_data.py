@@ -141,6 +141,114 @@ def clean_text(html):
     t = re.sub(r"<[^>]+>", " ", html)
     return re.sub(r"\s+", " ", t).strip()
 
+def format_size(bytes_num):
+    if bytes_num < 1024:
+        return f"{bytes_num} B"
+    elif bytes_num < 1024 * 1024:
+        return f"{bytes_num / 1024:.0f} KB"
+    else:
+        return f"{bytes_num / (1024 * 1024):.1f} MB"
+
+def scan_course_resources(dir_path, rel_dir, mod_units_map):
+    """
+    Auto-indexes all resources for a course directory:
+    - Modular notes (*module-[1..4].pdf or *notes*.pdf without 'textbook')
+    - Modular textbook cutouts (*textbook*module-[1..4].pdf)
+    - Interactive syllabus HTML (*-syllabus.html)
+    - Full reference books and documents
+    De-duplicates symlinks and files pointing to identical physical targets.
+    """
+    modules = {"1": [], "2": [], "3": [], "4": []}
+    extra = []
+    
+    if not os.path.exists(dir_path):
+        return {"folder": rel_dir, "modules": modules, "extra": extra}
+        
+    files = [f for f in os.listdir(dir_path) if not f.startswith(".") and not os.path.isdir(os.path.join(dir_path, f))]
+    
+    # De-duplicate symlinks pointing to the exact same physical file
+    real_map = {}
+    for f in files:
+        fp = os.path.join(dir_path, f)
+        rp = os.path.realpath(fp)
+        real_map.setdefault(rp, []).append(f)
+        
+    chosen_files = []
+    for rp, flist in real_map.items():
+        # Prefer the filename with full course name or longer descriptive name
+        # e.g. linear-algebra-module-1.pdf over linear-module-1.pdf
+        flist.sort(key=lambda x: (len(x), x), reverse=True)
+        chosen_files.append(flist[0])
+        
+    chosen_files.sort()
+    
+    for f in chosen_files:
+        fp = os.path.join(dir_path, f)
+        rel_path = os.path.normpath(os.path.join(rel_dir, f))
+        size_bytes = os.path.getsize(fp) if os.path.exists(fp) else 0
+        size_str = format_size(size_bytes)
+        f_lower = f.lower()
+        
+        if f_lower.endswith(".html"):
+            label = "Interactive Syllabus & PYQ Roadmap" if "syllabus" in f_lower else f.replace("-", " ").replace(".html", "").title()
+            extra.append({
+                "category": "syllabus",
+                "badge": "Syllabus",
+                "label": label,
+                "name": f,
+                "path": rel_path,
+                "sizeStr": size_str
+            })
+            continue
+            
+        if f_lower.endswith(".pdf"):
+            mod_match = re.search(r"(?:module|mod)[-_ ]?([1-4])", f_lower)
+            if not mod_match:
+                mod_match = re.search(r"[-_ ]m([1-4])[-_ .]", f_lower)
+                
+            if mod_match:
+                m = int(mod_match.group(1))
+                m_str = str(m)
+                if "textbook" in f_lower or "book" in f_lower:
+                    modules[m_str].append({
+                        "category": "textbook",
+                        "badge": "Textbook",
+                        "label": f"Module {m} Textbook Cutout",
+                        "name": f,
+                        "path": rel_path,
+                        "sizeStr": size_str,
+                        "units": mod_units_map.get(m, [])
+                    })
+                else:
+                    modules[m_str].append({
+                        "category": "notes",
+                        "badge": "Notes",
+                        "label": f"Module {m} Notes",
+                        "name": f,
+                        "path": rel_path,
+                        "sizeStr": size_str,
+                        "units": mod_units_map.get(m, [])
+                    })
+            else:
+                extra.append({
+                    "category": "reference",
+                    "badge": "Reference",
+                    "label": f.replace("-", " ").replace(".pdf", "").title(),
+                    "name": f,
+                    "path": rel_path,
+                    "sizeStr": size_str
+                })
+                
+    # Sort resources within each module: Notes first, then Textbook
+    for m_str in modules:
+        modules[m_str].sort(key=lambda x: (0 if x["category"] == "notes" else 1, x["label"]))
+        
+    return {
+        "folder": rel_dir,
+        "modules": modules,
+        "extra": extra
+    }
+
 subjects_dict = {}
 unit_module_dict = {}
 syllabus_hours_map = {}
@@ -209,10 +317,6 @@ for c in COURSES:
     # Parse PYQ cards
     subj_pyqs = {1: [], 2: [], 3: [], 4: []}
     # Match pyq cards and associate them with modules
-    # In the html, check for Module N headers or sections before each PYQ block
-    pyq_blocks = re.findall(r"(?:Module (\d+)[^<]*PYQ Practice|🎯 Mapped Official GATE DA PYQs for Module (\d+)|Module (\d+):[^\n]*Questions)(.*?)(?=(?:Module \d+[^<]*PYQ Practice|🎯 Mapped Official GATE DA PYQs for Module \d+|Module \d+:[^\n]*Questions|</main>|</body>|$))", content, re.DOTALL | re.IGNORECASE)
-    
-    # Alternatively parse all pyq-card divs
     cards = re.findall(r"<div class=[\x27\"]pyq-card[\x27\"]>(.*?)</div>\s*</div>\s*(?:</div>)?", content, re.DOTALL)
     card_idx = 0
     for card_html in cards:
@@ -233,7 +337,6 @@ for c in COURSES:
         q_text = re.sub(r"^Question Statement:\s*", "", q_text)
         
         # Assign to module based on card position or index
-        # Divide cards proportionally across 4 modules if module headers not explicit
         target_mod = min(4, max(1, (card_idx * 4 // len(cards)) + 1)) if cards else 1
         
         subj_pyqs[target_mod].append({
@@ -267,27 +370,8 @@ for c in COURSES:
     syllabus_hours_map[cid] = hours_list
     unit_pages_dict[cid] = unit_pages
     
-    # Resources
-    resources_dict[cid] = {
-        "folder": rel_dir,
-        "modules": {}
-    }
-    for m in [1, 2, 3, 4]:
-        # Find module pdf
-        pdf_name = f"{cid.lower()}-module-{m}.pdf"
-        # Look for matching pdf in dir
-        matching_pdfs = [f for f in os.listdir(dir_path) if f.endswith(f"module-{m}.pdf")]
-        pdf_file = matching_pdfs[0] if matching_pdfs else f"module-{m}.pdf"
-        pdf_rel_path = os.path.normpath(os.path.join(rel_dir, pdf_file))
-        
-        resources_dict[cid]["modules"][str(m)] = [
-            {
-                "label": f"Module {m} Cutout",
-                "name": f"Module {m} Verified Textbook Cutout",
-                "path": pdf_rel_path,
-                "units": mod_units_map[m]
-            }
-        ]
+    # Auto-index resources
+    resources_dict[cid] = scan_course_resources(dir_path, rel_dir, mod_units_map)
 
 print("Successfully processed all 8 courses.")
 

@@ -205,26 +205,60 @@ export function addPermutationResource() {
   toast('Added Gallian Ch. 5 to Permutations');
 }
 
-function resRow(item, title, sub) {
-  const displayTitle = title || item.label;
-  const isPdf = item.path.endsWith('.pdf');
+function resRow(item, subjName) {
+  const displayTitle = item.label || item.name;
+  const isPdf = (item.path || '').toLowerCase().endsWith('.pdf');
   const href = resHref(item.path);
-  return `<div class="py-2.5 flex items-center justify-between gap-3">
+  const sizeSub = item.sizeStr ? `${item.name} · ${item.sizeStr}` : (item.name || '');
+
+  // Icon & Badge by category
+  let iconHtml = '';
+  let badgeHtml = '';
+
+  if (item.category === 'notes') {
+    iconHtml = `<div class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 border border-amber-200/60 flex items-center justify-center shrink-0">
+      <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
+    </div>`;
+    badgeHtml = `<span class="px-2 py-0.5 rounded-md text-[10px] font-bold tracking-wide uppercase bg-amber-50 text-amber-700 border border-amber-200/70 shrink-0">Notes</span>`;
+  } else if (item.category === 'textbook') {
+    iconHtml = `<div class="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 border border-blue-200/60 flex items-center justify-center shrink-0">
+      <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+    </div>`;
+    badgeHtml = `<span class="px-2 py-0.5 rounded-md text-[10px] font-bold tracking-wide uppercase bg-blue-50 text-blue-700 border border-blue-200/70 shrink-0">Textbook</span>`;
+  } else if (item.category === 'syllabus') {
+    iconHtml = `<div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 border border-indigo-200/60 flex items-center justify-center shrink-0">
+      <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934a1.12 1.12 0 01-1.006 0L9.503 3.31a1.125 1.125 0 00-1.006 0L3.622 5.748A1.125 1.125 0 003 6.754v11.93c0 .836.88 1.38 1.628 1.006l3.869-1.934a1.12 1.12 0 011.006 0l4.994 2.497a1.12 1.12 0 001.006 0z"/></svg>
+    </div>`;
+    badgeHtml = `<span class="px-2 py-0.5 rounded-md text-[10px] font-bold tracking-wide uppercase bg-indigo-50 text-indigo-700 border border-indigo-200/70 shrink-0">Syllabus</span>`;
+  } else {
+    iconHtml = `<div class="w-9 h-9 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center shrink-0">${RES_ICON}</div>`;
+    badgeHtml = `<span class="px-2 py-0.5 rounded-md text-[10px] font-bold tracking-wide uppercase bg-slate-100 text-slate-700 border border-slate-200 shrink-0">${esc(item.badge || 'Ref')}</span>`;
+  }
+
+  return `<div class="py-3 flex items-center justify-between gap-3">
     <div class="flex items-center gap-3 min-w-0">
-      <div class="w-9 h-9 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center shrink-0">${RES_ICON}</div>
+      ${iconHtml}
       <div class="min-w-0">
-        <div class="font-display font-bold text-sm text-slate-900 truncate">${esc(displayTitle)}</div>
-        ${sub ? `<div class="text-xs text-slate-500 truncate">${esc(sub)}</div>` : ""}
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="font-display font-bold text-sm text-slate-900 truncate">${esc(displayTitle)}</span>
+          ${badgeHtml}
+        </div>
+        ${sizeSub ? `<div class="text-xs text-slate-500 truncate mt-0.5">${esc(sizeSub)}</div>` : ''}
       </div>
     </div>
     <div class="flex items-center gap-2 shrink-0">
       ${isPdf ? `
-      <button onclick="openPdfViewer({ url: '${esc(href)}', title: '${esc(displayTitle)}', page: 1, rawUrl: '${esc(href)}' })" class="px-3 py-1.5 rounded-xl bg-[#1d4ed8] hover:bg-[#1e40af] text-white font-bold text-xs inline-flex items-center gap-1.5 transition shadow-2xs">
-        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-        <span>Read in App</span>
-      </button>` : ""}
-      <a href="${esc(href)}" target="_blank" rel="noopener" title="Open or download original file" class="px-2.5 py-1.5 rounded-xl bg-[#f0f6ff] hover:bg-blue-100/80 border border-blue-200/80 text-[#1d4ed8] font-semibold text-xs inline-flex items-center gap-1 transition">
-        ${RES_OPEN}
+      <button onclick="openPdfViewer({ url: '${esc(item.path)}', title: '${esc(subjName)}', sectionTitle: '${esc(displayTitle)}', page: 1, rawUrl: '${esc(href)}' })" class="px-3 py-1.5 rounded-xl bg-[#1d4ed8] hover:bg-[#1e40af] active:scale-95 text-white font-bold text-xs inline-flex items-center gap-1.5 transition shadow-2xs cursor-pointer" title="Read in in-app reader">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+        <span>Read</span>
+      </button>` : `
+      <a href="${esc(href)}" target="_blank" rel="noopener" class="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-bold text-xs inline-flex items-center gap-1.5 transition shadow-2xs" title="Open in new tab">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+        <span>Open</span>
+      </a>`}
+      <a href="${esc(href)}" download="${esc(item.name || '')}" target="_blank" rel="noopener" class="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-200/90 text-slate-700 font-bold text-xs inline-flex items-center gap-1.5 transition shadow-2xs hover:border-slate-300" title="Download file">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"/></svg>
+        <span>Download</span>
       </a>
     </div>
   </div>`;
@@ -233,32 +267,48 @@ function resRow(item, title, sub) {
 export function resourcesHtml(det) {
   const R = RESOURCES[det.subjectId];
   if (!R) return `<p class="text-sm font-medium text-slate-500">No files for this subject yet.</p>`;
-  const units = normUnits(det.units).map(v => v.u).filter(u => SUBJECTS[det.subjectId].units.some(x => x.u === u));
-  const mods = [...new Set(units.map(u => String(unitMod(det.subjectId, u))))];
+  const s = SUBJECTS[det.subjectId];
+  const subjName = s ? s.name : det.subjectId;
 
-  let cards = mods.map(m => {
-    const modUnits = units.filter(u => String(unitMod(det.subjectId, u)) === m);
-    const rows = modUnits.flatMap(u => {
-      const unit = SUBJECTS[det.subjectId].units.find(x => x.u === u);
-      return (R.modules[m] || []).filter(it => it.units.includes(u)).map(it => resRow(it, cleanUnit(unit.text), ""));
-    });
+  // Identify which module(s) are in this session
+  const sessionUnits = normUnits(det.units).map(v => v.u).filter(u => s && s.units.some(x => x.u === u));
+  const activeMods = new Set(sessionUnits.map(u => String(unitMod(det.subjectId, u))));
+
+  // Render all 4 modules, highlighting the ones active in this session
+  const modKeys = ["1", "2", "3", "4"];
+  let cards = modKeys.map(m => {
+    const items = (R.modules && R.modules[m]) || [];
+    const isActive = activeMods.has(m);
+    const activeUnits = sessionUnits.filter(u => String(unitMod(det.subjectId, u)) === m);
+
+    const rows = items.length
+      ? items.map(it => resRow(it, subjName)).join("")
+      : `<p class="py-2.5 text-xs font-medium text-slate-400">No resources indexed for Module ${m} yet.</p>`;
+
     return `
-      <section class="bg-white rounded-[20px] p-4 sm:p-5 border border-slate-200/85 shadow-2xs space-y-3">
+      <section class="bg-white rounded-[20px] p-4 sm:p-5 border ${isActive ? 'border-blue-200/90 ring-1 ring-blue-500/20 shadow-xs' : 'border-slate-200/85 shadow-2xs'} space-y-3">
         <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-          <h4 class="font-display font-bold text-[15px] text-slate-900">${esc(MOD_ROMAN[m] || "Module " + m)}</h4>
-          <span class="text-xs font-bold text-slate-500 shrink-0">${modUnits.length} unit${modUnits.length === 1 ? "" : "s"}</span>
+          <div class="flex items-center gap-2">
+            <h4 class="font-display font-bold text-[15px] text-slate-900">${esc(MOD_ROMAN[m] || "Module " + m)}</h4>
+            ${isActive ? `<span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-blue-50 text-blue-700 border border-blue-200">Current Session (${activeUnits.length} units)</span>` : ''}
+          </div>
+          <span class="text-xs font-bold text-slate-500 shrink-0">${items.length} file${items.length === 1 ? '' : 's'}</span>
         </div>
-        <div class="divide-y divide-slate-100">${rows.length ? rows.join("") : `<p class="py-2.5 text-xs font-medium text-slate-500">No cutouts for these units yet.</p>`}</div>
+        <div class="divide-y divide-slate-100">${rows}</div>
       </section>`;
   }).join("");
 
-  if (R.extra.length) {
+  if (R.extra && R.extra.length) {
     cards += `
       <section class="bg-white rounded-[20px] p-4 sm:p-5 border border-slate-200/85 shadow-2xs space-y-3">
-        <div class="border-b border-slate-100 pb-3"><h4 class="font-display font-bold text-[15px] text-slate-900">Syllabus and full textbooks</h4></div>
-        <div class="divide-y divide-slate-100">${R.extra.map(it => resRow(it, it.label, it.name)).join("")}</div>
+        <div class="border-b border-slate-100 pb-3 flex items-center justify-between">
+          <h4 class="font-display font-bold text-[15px] text-slate-900">Syllabus & Course Roadmap</h4>
+          <span class="text-xs font-bold text-slate-500 shrink-0">${R.extra.length} item${R.extra.length === 1 ? '' : 's'}</span>
+        </div>
+        <div class="divide-y divide-slate-100">${R.extra.map(it => resRow(it, subjName)).join("")}</div>
       </section>`;
   }
+
   return `<div class="space-y-4">${cards}</div>`;
 }
 
