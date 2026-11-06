@@ -175,9 +175,8 @@ def scan_course_resources(dir_path, rel_dir, mod_units_map):
         
     chosen_files = []
     for rp, flist in real_map.items():
-        # Prefer the filename with full course name or longer descriptive name
-        # e.g. linear-algebra-module-1.pdf over linear-module-1.pdf
-        flist.sort(key=lambda x: (len(x), x), reverse=True)
+        # Prefer real physical files over symlinks, and longer descriptive names
+        flist.sort(key=lambda x: (not os.path.islink(os.path.join(dir_path, x)), len(x), x), reverse=True)
         chosen_files.append(flist[0])
         
     chosen_files.sort()
