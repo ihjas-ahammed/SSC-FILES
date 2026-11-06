@@ -37,45 +37,34 @@ export function renderUnits() {
   container.innerHTML = unitsData.map((u, idx) => {
     const sc = stageConfig[u.stage];
     return `
-      <div class="bg-white rounded-[20px] border border-slate-200/85 shadow-[0_4px_18px_-4px_rgba(15,23,42,0.04)] flex items-stretch overflow-hidden transition">
-        <div class="w-1.5 ${sc.border} shrink-0"></div>
-        <div class="flex-1 min-w-0 p-3.5 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div class="flex-1 min-w-0">
-            <div class="mb-2 sm:mb-2.5">
-              <h4 class="font-display font-bold text-[14.5px] sm:text-[16px] text-[#0f172a] leading-snug line-clamp-2" title="${esc(u.name)}">${esc(u.name)}</h4>
-            </div>
-            <div class="relative flex items-center justify-between max-w-[280px] sm:max-w-[250px] pr-2">
-              <div class="absolute left-3 right-5 top-[7px] h-[2px] bg-slate-200 z-0"></div>
+      <div class="unit-card">
+        <div class="unit-color-bar ${sc.border}"></div>
+        <div class="unit-card-body">
+          <div class="unit-card-left">
+            <h4 class="unit-card-title" title="${esc(u.name)}">${esc(u.name)}</h4>
+            <div class="unit-slider-track">
+              <div class="unit-slider-line"></div>
               ${MODE_SLIDER.map((sIdx) => {
                 const stepLabel = MODE_NAMES[sIdx];
                 const isActive = u.stage === sIdx;
                 const activeDotClass = isActive ? stageConfig[sIdx].dot : 'bg-slate-300 hover:bg-slate-400';
                 const labelClass = isActive ? 'font-bold text-[#0f172a]' : 'font-medium text-slate-500';
                 return `
-                  <button onclick="setUnitStage(${idx}, ${sIdx})" class="relative z-10 flex flex-col items-center gap-1.5 group focus:outline-none" title="Set ${esc(u.name)} to ${stepLabel}">
+                  <button onclick="setUnitStage(${idx}, ${sIdx})" class="unit-stage-btn group" title="Set ${esc(u.name)} to ${stepLabel}">
                     <span class="w-3.5 h-3.5 rounded-full transition-all ${activeDotClass}"></span>
-                    <span class="text-[11px] ${labelClass} transition-colors">${stepLabel}</span>
+                    <span class="text-[11px] ${labelClass}">${stepLabel}</span>
                   </button>`;
               }).join('')}
             </div>
           </div>
 
-          <div class="hidden sm:block w-[1px] self-stretch bg-slate-100 my-1"></div>
-
-          <div class="flex items-center justify-between sm:justify-end pt-2 sm:pt-0 border-t border-slate-100/90 sm:border-0">
-            <span class="text-[11px] font-semibold text-slate-400 sm:hidden">Textbook section</span>
-            <button onclick="openUnitPdf('${sid}', ${u.u})" title="Read ${esc(u.name)} in textbook" class="flex items-center gap-2.5 px-3 py-1.5 rounded-2xl bg-blue-50/90 hover:bg-blue-100/90 active:scale-[0.98] border border-blue-100/90 transition text-left shrink-0">
-              <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#1d4ed8] text-white flex items-center justify-center shrink-0 shadow-2xs">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-              </div>
-              <div>
-                <div class="font-display font-extrabold text-[12px] sm:text-[12.5px] text-[#1e40af] leading-tight flex items-center gap-1">
-                  <span>Read</span>
-                  <svg class="w-3 h-3 text-[#2563eb]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-                </div>
-                <div class="text-[10.5px] sm:text-[11px] font-semibold text-slate-500 mt-0.5">${esc(u.estimate)}</div>
-              </div>
+          <div class="unit-card-right">
+            <button onclick="openUnitPdf('${sid}', ${u.u})" title="Read ${esc(u.name)} in textbook" class="unit-material-btn" aria-label="Read in textbook">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+              </svg>
             </button>
+            <span class="unit-est-badge">${esc(u.estimate)}</span>
           </div>
         </div>
       </div>`;

@@ -176,6 +176,15 @@
   font-family: inherit;
   outline: none;
   transition: border-color 0.15s;
+  -moz-appearance: textfield;
+  appearance: textfield;
+  box-sizing: border-box;
+}
+
+.pdf-page-input::-webkit-outer-spin-button,
+.pdf-page-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .pdf-page-input:focus {
@@ -276,7 +285,9 @@
 /* Scrollable Body Viewport (Multi-directional Swipe & Pinch Zoom) */
 .pdf-viewer-body {
   flex: 1;
-  width: 100%;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
   overflow-y: auto;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
@@ -457,7 +468,7 @@
 .pdf-mobile-bar {
   display: none;
   position: fixed;
-  bottom: 18px;
+  bottom: 16px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 50;
@@ -467,23 +478,62 @@
   border: 1px solid rgba(255, 255, 255, 0.18);
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.65);
   border-radius: 9999px;
-  padding: 5px 10px;
+  padding: 4px 8px;
   align-items: center;
-  gap: 8px;
-  max-width: 95vw;
+  gap: 5px;
+  max-width: calc(100vw - 20px);
+  box-sizing: border-box;
 }
 
 .pdf-mobile-bar .pdf-btn-step {
-  width: 36px;
-  height: 36px;
-  background: rgba(255, 255, 255, 0.1);
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.08);
   border-radius: 50%;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.pdf-mobile-bar .pdf-page-input-wrap {
+  gap: 3px;
+  padding: 0 2px;
+  font-size: 12px;
+  flex-shrink: 0;
 }
 
 .pdf-mobile-bar .pdf-page-input {
-  width: 36px;
-  height: 30px;
+  width: 32px;
+  height: 28px;
   font-size: 12px;
+  padding: 0 2px;
+  flex-shrink: 0;
+}
+
+.pdf-mobile-bar .pdf-page-total {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #94a3b8;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.pdf-mobile-bar .pdf-m-divider {
+  width: 1px;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.18);
+  margin: 0 2px;
+  flex-shrink: 0;
+}
+
+.pdf-mobile-bar .pdf-zoom-badge {
+  padding: 4px 9px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+  border: none;
+  flex-shrink: 0;
 }
 
 /* Zen / Pure Pages Fullscreen Mode */
@@ -527,10 +577,20 @@
   transform: scale(1.04);
 }
 
-/* Responsive Breakpoints */
+/* Desktop Optical Centering & Layout */
+@media (min-width: 769px) {
+  #pv-btn-fullscreen-top {
+    display: none !important;
+  }
+  .pdf-pages-container {
+    transform: translateX(-4px); /* Optical center compensation for vertical scrollbar */
+  }
+}
+
+/* Responsive Mobile Layout & Redesigned Header */
 @media (max-width: 768px) {
   .pdf-hdr-center {
-    display: none;
+    display: none !important;
   }
   
   .pdf-mobile-bar {
@@ -538,9 +598,57 @@
   }
   
   .pdf-viewer-header {
+    height: 52px;
     padding: 0 12px;
+    gap: 10px;
   }
-  
+
+  .pdf-hdr-left {
+    max-width: none;
+    flex: 1;
+    min-width: 0;
+    gap: 10px;
+  }
+
+  .pdf-title-group {
+    flex: 1;
+    min-width: 0;
+    gap: 1px;
+  }
+
+  .pdf-doc-title {
+    font-size: 14px;
+    font-weight: 700;
+    max-width: 100%;
+  }
+
+  .pdf-section-pill {
+    font-size: 11px;
+    max-width: 100%;
+  }
+
+  .pdf-hdr-right {
+    flex-shrink: 0;
+    gap: 6px;
+  }
+
+  #pv-btn-close-right {
+    display: none !important;
+  }
+
+  #pv-btn-fullscreen-top {
+    display: inline-flex !important;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+  }
+
+  #pv-btn-close-left {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+  }
+
   .pdf-viewer-body {
     padding: 8px 0px 84px;
     gap: 12px;
@@ -549,12 +657,10 @@
 
 @media (max-width: 480px) {
   .pdf-doc-title {
-    max-width: 170px;
     font-size: 13.5px;
   }
   
   .pdf-section-pill {
-    max-width: 170px;
-    font-size: 11px;
+    font-size: 10.5px;
   }
 }

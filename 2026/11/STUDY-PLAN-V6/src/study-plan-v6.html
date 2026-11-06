@@ -2913,6 +2913,147 @@ details.unit-dd[open] summary::after {
   cursor: not-allowed;
 }
 
+/* =========================================================================
+   Unit List Item Card & Material Icon Read Button
+   ========================================================================= */
+.sess-scope .unit-card {
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1px solid rgba(226, 232, 240, 0.85);
+  box-shadow: 0 4px 18px -4px rgba(15, 23, 42, 0.04);
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+  transition: all 0.15s ease;
+  margin-bottom: 12px;
+}
+
+.sess-scope .unit-color-bar {
+  width: 6px;
+  flex-shrink: 0;
+}
+
+.sess-scope .unit-card-body {
+  flex: 1;
+  min-width: 0;
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.sess-scope .unit-card-left {
+  flex: 1;
+  min-width: 0;
+}
+
+.sess-scope .unit-card-title {
+  font-family: 'Plus Jakarta Sans', Inter, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.35;
+  margin: 0 0 10px 0;
+  padding: 0;
+  word-break: break-word;
+}
+
+.sess-scope .unit-slider-track {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 250px;
+  width: 100%;
+}
+
+.sess-scope .unit-slider-line {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  top: 7px;
+  height: 2px;
+  background: #e2e8f0;
+  z-index: 0;
+}
+
+.sess-scope .unit-stage-btn {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.sess-scope .unit-card-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+/* Material Design Icon Button */
+.sess-scope .unit-material-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #eff6ff;
+  color: #1d4ed8;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #bfdbfe;
+  cursor: pointer;
+  box-shadow: 0 2px 6px -1px rgba(29, 78, 216, 0.16);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sess-scope .unit-material-btn:hover {
+  background: #dbeafe;
+  color: #1e40af;
+  border-color: #93c5fd;
+  transform: scale(1.08);
+  box-shadow: 0 4px 12px -2px rgba(29, 78, 216, 0.28);
+}
+
+.sess-scope .unit-material-btn:active {
+  transform: scale(0.92);
+  background: #bfdbfe;
+}
+
+.sess-scope .unit-est-badge {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .sess-scope .unit-card-body {
+    padding: 14px 14px;
+    gap: 12px;
+  }
+  .sess-scope .unit-card-title {
+    font-size: 14.5px;
+    margin-bottom: 8px;
+  }
+  .sess-scope .unit-slider-track {
+    max-width: 220px;
+  }
+  .sess-scope .unit-material-btn {
+    width: 40px;
+    height: 40px;
+  }
+}
+
 /* === 06-pdf-viewer.css === */
 /* =========================================================================
    06. IN-APP JAVASCRIPT PDF VIEWER (MOBILE & DESKTOP RESPONSIVE)
@@ -3092,6 +3233,15 @@ details.unit-dd[open] summary::after {
   font-family: inherit;
   outline: none;
   transition: border-color 0.15s;
+  -moz-appearance: textfield;
+  appearance: textfield;
+  box-sizing: border-box;
+}
+
+.pdf-page-input::-webkit-outer-spin-button,
+.pdf-page-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .pdf-page-input:focus {
@@ -3192,7 +3342,9 @@ details.unit-dd[open] summary::after {
 /* Scrollable Body Viewport (Multi-directional Swipe & Pinch Zoom) */
 .pdf-viewer-body {
   flex: 1;
-  width: 100%;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
   overflow-y: auto;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
@@ -3373,7 +3525,7 @@ details.unit-dd[open] summary::after {
 .pdf-mobile-bar {
   display: none;
   position: fixed;
-  bottom: 18px;
+  bottom: 16px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 50;
@@ -3383,23 +3535,62 @@ details.unit-dd[open] summary::after {
   border: 1px solid rgba(255, 255, 255, 0.18);
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.65);
   border-radius: 9999px;
-  padding: 5px 10px;
+  padding: 4px 8px;
   align-items: center;
-  gap: 8px;
-  max-width: 95vw;
+  gap: 5px;
+  max-width: calc(100vw - 20px);
+  box-sizing: border-box;
 }
 
 .pdf-mobile-bar .pdf-btn-step {
-  width: 36px;
-  height: 36px;
-  background: rgba(255, 255, 255, 0.1);
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.08);
   border-radius: 50%;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.pdf-mobile-bar .pdf-page-input-wrap {
+  gap: 3px;
+  padding: 0 2px;
+  font-size: 12px;
+  flex-shrink: 0;
 }
 
 .pdf-mobile-bar .pdf-page-input {
-  width: 36px;
-  height: 30px;
+  width: 32px;
+  height: 28px;
   font-size: 12px;
+  padding: 0 2px;
+  flex-shrink: 0;
+}
+
+.pdf-mobile-bar .pdf-page-total {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #94a3b8;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.pdf-mobile-bar .pdf-m-divider {
+  width: 1px;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.18);
+  margin: 0 2px;
+  flex-shrink: 0;
+}
+
+.pdf-mobile-bar .pdf-zoom-badge {
+  padding: 4px 9px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+  border: none;
+  flex-shrink: 0;
 }
 
 /* Zen / Pure Pages Fullscreen Mode */
@@ -3443,10 +3634,20 @@ details.unit-dd[open] summary::after {
   transform: scale(1.04);
 }
 
-/* Responsive Breakpoints */
+/* Desktop Optical Centering & Layout */
+@media (min-width: 769px) {
+  #pv-btn-fullscreen-top {
+    display: none !important;
+  }
+  .pdf-pages-container {
+    transform: translateX(-4px); /* Optical center compensation for vertical scrollbar */
+  }
+}
+
+/* Responsive Mobile Layout & Redesigned Header */
 @media (max-width: 768px) {
   .pdf-hdr-center {
-    display: none;
+    display: none !important;
   }
   
   .pdf-mobile-bar {
@@ -3454,9 +3655,57 @@ details.unit-dd[open] summary::after {
   }
   
   .pdf-viewer-header {
+    height: 52px;
     padding: 0 12px;
+    gap: 10px;
   }
-  
+
+  .pdf-hdr-left {
+    max-width: none;
+    flex: 1;
+    min-width: 0;
+    gap: 10px;
+  }
+
+  .pdf-title-group {
+    flex: 1;
+    min-width: 0;
+    gap: 1px;
+  }
+
+  .pdf-doc-title {
+    font-size: 14px;
+    font-weight: 700;
+    max-width: 100%;
+  }
+
+  .pdf-section-pill {
+    font-size: 11px;
+    max-width: 100%;
+  }
+
+  .pdf-hdr-right {
+    flex-shrink: 0;
+    gap: 6px;
+  }
+
+  #pv-btn-close-right {
+    display: none !important;
+  }
+
+  #pv-btn-fullscreen-top {
+    display: inline-flex !important;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+  }
+
+  #pv-btn-close-left {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+  }
+
   .pdf-viewer-body {
     padding: 8px 0px 84px;
     gap: 12px;
@@ -3465,13 +3714,11 @@ details.unit-dd[open] summary::after {
 
 @media (max-width: 480px) {
   .pdf-doc-title {
-    max-width: 170px;
     font-size: 13.5px;
   }
   
   .pdf-section-pill {
-    max-width: 170px;
-    font-size: 11px;
+    font-size: 10.5px;
   }
 }
 </style>
@@ -7623,14 +7870,17 @@ details.unit-dd[open] summary::after {
 
       <!-- Right Header Actions -->
       <div class="pdf-hdr-right">
+        <button id="pv-btn-fullscreen-top" class="pdf-btn-icon" title="Fullscreen (Zen mode - only pages)" aria-label="Fullscreen">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+        </button>
         <button id="pv-btn-close-right" class="pdf-btn-icon" title="Close (Esc)" aria-label="Close">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
     </header>
 
-    <!-- Scrollable Document Viewport -->
-    <main id="pdf-viewer-body" class="pdf-viewer-body">
+    <!-- Scrollable Document Viewport (DIV instead of MAIN to avoid shell desktop margin-left: 200px) -->
+    <div id="pdf-viewer-body" class="pdf-viewer-body">
       <!-- Loading State -->
       <div id="pv-loading" class="pdf-state-card">
         <div class="pdf-spinner"></div>
@@ -7653,7 +7903,7 @@ details.unit-dd[open] summary::after {
 
       <!-- Rendered Page Slots Container -->
       <div id="pv-pages-container" class="pdf-pages-container"></div>
-    </main>
+    </div>
 
     <!-- Floating Exit Button for Zen Mode -->
     <button id="pv-zen-exit" class="pdf-zen-exit hidden" title="Exit Fullscreen (Esc)">
@@ -7673,13 +7923,10 @@ details.unit-dd[open] summary::after {
       <button id="pv-m-next" class="pdf-btn-step" title="Next page" aria-label="Next page">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
       </button>
-      <div class="w-[1px] h-5 bg-white/20 my-auto"></div>
+      <div class="pdf-m-divider"></div>
       <button id="pv-m-fit" class="pdf-zoom-badge" title="Fit width">Fit</button>
       <button id="pv-m-zoom-in" class="pdf-btn-step" title="Zoom in" aria-label="Zoom in">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
-      </button>
-      <button id="pv-m-fullscreen" class="pdf-btn-step" title="Fullscreen (Zen mode)" aria-label="Fullscreen">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
       </button>
     </div>
   `;
@@ -7730,10 +7977,10 @@ details.unit-dd[open] summary::after {
     setupMobileGestures(el);
     const toggleZen = () => toggleZenMode();
     const fsBtn = el.querySelector("#pv-btn-fullscreen");
-    const mFsBtn = el.querySelector("#pv-m-fullscreen");
+    const topFsBtn = el.querySelector("#pv-btn-fullscreen-top");
     const zenExitBtn = el.querySelector("#pv-zen-exit");
     if (fsBtn) fsBtn.onclick = toggleZen;
-    if (mFsBtn) mFsBtn.onclick = toggleZen;
+    if (topFsBtn) topFsBtn.onclick = toggleZen;
     if (zenExitBtn) zenExitBtn.onclick = () => toggleZenMode(false);
     document.addEventListener("fullscreenchange", () => {
       if (!document.fullscreenElement && PV_STATE.isZenMode) {
@@ -8300,45 +8547,34 @@ details.unit-dd[open] summary::after {
     container.innerHTML = unitsData.map((u, idx) => {
       const sc = stageConfig[u.stage];
       return `
-      <div class="bg-white rounded-[20px] border border-slate-200/85 shadow-[0_4px_18px_-4px_rgba(15,23,42,0.04)] flex items-stretch overflow-hidden transition">
-        <div class="w-1.5 ${sc.border} shrink-0"></div>
-        <div class="flex-1 min-w-0 p-3.5 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div class="flex-1 min-w-0">
-            <div class="mb-2 sm:mb-2.5">
-              <h4 class="font-display font-bold text-[14.5px] sm:text-[16px] text-[#0f172a] leading-snug line-clamp-2" title="${esc(u.name)}">${esc(u.name)}</h4>
-            </div>
-            <div class="relative flex items-center justify-between max-w-[280px] sm:max-w-[250px] pr-2">
-              <div class="absolute left-3 right-5 top-[7px] h-[2px] bg-slate-200 z-0"></div>
+      <div class="unit-card">
+        <div class="unit-color-bar ${sc.border}"></div>
+        <div class="unit-card-body">
+          <div class="unit-card-left">
+            <h4 class="unit-card-title" title="${esc(u.name)}">${esc(u.name)}</h4>
+            <div class="unit-slider-track">
+              <div class="unit-slider-line"></div>
               ${MODE_SLIDER.map((sIdx) => {
         const stepLabel = MODE_NAMES[sIdx];
         const isActive = u.stage === sIdx;
         const activeDotClass = isActive ? stageConfig[sIdx].dot : "bg-slate-300 hover:bg-slate-400";
         const labelClass = isActive ? "font-bold text-[#0f172a]" : "font-medium text-slate-500";
         return `
-                  <button onclick="setUnitStage(${idx}, ${sIdx})" class="relative z-10 flex flex-col items-center gap-1.5 group focus:outline-none" title="Set ${esc(u.name)} to ${stepLabel}">
+                  <button onclick="setUnitStage(${idx}, ${sIdx})" class="unit-stage-btn group" title="Set ${esc(u.name)} to ${stepLabel}">
                     <span class="w-3.5 h-3.5 rounded-full transition-all ${activeDotClass}"></span>
-                    <span class="text-[11px] ${labelClass} transition-colors">${stepLabel}</span>
+                    <span class="text-[11px] ${labelClass}">${stepLabel}</span>
                   </button>`;
       }).join("")}
             </div>
           </div>
 
-          <div class="hidden sm:block w-[1px] self-stretch bg-slate-100 my-1"></div>
-
-          <div class="flex items-center justify-between sm:justify-end pt-2 sm:pt-0 border-t border-slate-100/90 sm:border-0">
-            <span class="text-[11px] font-semibold text-slate-400 sm:hidden">Textbook section</span>
-            <button onclick="openUnitPdf('${sid}', ${u.u})" title="Read ${esc(u.name)} in textbook" class="flex items-center gap-2.5 px-3 py-1.5 rounded-2xl bg-blue-50/90 hover:bg-blue-100/90 active:scale-[0.98] border border-blue-100/90 transition text-left shrink-0">
-              <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#1d4ed8] text-white flex items-center justify-center shrink-0 shadow-2xs">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-              </div>
-              <div>
-                <div class="font-display font-extrabold text-[12px] sm:text-[12.5px] text-[#1e40af] leading-tight flex items-center gap-1">
-                  <span>Read</span>
-                  <svg class="w-3 h-3 text-[#2563eb]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-                </div>
-                <div class="text-[10.5px] sm:text-[11px] font-semibold text-slate-500 mt-0.5">${esc(u.estimate)}</div>
-              </div>
+          <div class="unit-card-right">
+            <button onclick="openUnitPdf('${sid}', ${u.u})" title="Read ${esc(u.name)} in textbook" class="unit-material-btn" aria-label="Read in textbook">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+              </svg>
             </button>
+            <span class="unit-est-badge">${esc(u.estimate)}</span>
           </div>
         </div>
       </div>`;

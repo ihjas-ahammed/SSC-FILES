@@ -119,14 +119,17 @@ export function getOrCreateViewerEl() {
 
       <!-- Right Header Actions -->
       <div class="pdf-hdr-right">
+        <button id="pv-btn-fullscreen-top" class="pdf-btn-icon" title="Fullscreen (Zen mode - only pages)" aria-label="Fullscreen">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+        </button>
         <button id="pv-btn-close-right" class="pdf-btn-icon" title="Close (Esc)" aria-label="Close">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
     </header>
 
-    <!-- Scrollable Document Viewport -->
-    <main id="pdf-viewer-body" class="pdf-viewer-body">
+    <!-- Scrollable Document Viewport (DIV instead of MAIN to avoid shell desktop margin-left: 200px) -->
+    <div id="pdf-viewer-body" class="pdf-viewer-body">
       <!-- Loading State -->
       <div id="pv-loading" class="pdf-state-card">
         <div class="pdf-spinner"></div>
@@ -149,7 +152,7 @@ export function getOrCreateViewerEl() {
 
       <!-- Rendered Page Slots Container -->
       <div id="pv-pages-container" class="pdf-pages-container"></div>
-    </main>
+    </div>
 
     <!-- Floating Exit Button for Zen Mode -->
     <button id="pv-zen-exit" class="pdf-zen-exit hidden" title="Exit Fullscreen (Esc)">
@@ -169,13 +172,10 @@ export function getOrCreateViewerEl() {
       <button id="pv-m-next" class="pdf-btn-step" title="Next page" aria-label="Next page">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
       </button>
-      <div class="w-[1px] h-5 bg-white/20 my-auto"></div>
+      <div class="pdf-m-divider"></div>
       <button id="pv-m-fit" class="pdf-zoom-badge" title="Fit width">Fit</button>
       <button id="pv-m-zoom-in" class="pdf-btn-step" title="Zoom in" aria-label="Zoom in">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
-      </button>
-      <button id="pv-m-fullscreen" class="pdf-btn-step" title="Fullscreen (Zen mode)" aria-label="Fullscreen">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
       </button>
     </div>
   `;
@@ -237,10 +237,10 @@ function bindViewerEvents(el) {
   // Fullscreen / Zen Mode controls
   const toggleZen = () => toggleZenMode();
   const fsBtn = el.querySelector("#pv-btn-fullscreen");
-  const mFsBtn = el.querySelector("#pv-m-fullscreen");
+  const topFsBtn = el.querySelector("#pv-btn-fullscreen-top");
   const zenExitBtn = el.querySelector("#pv-zen-exit");
   if (fsBtn) fsBtn.onclick = toggleZen;
-  if (mFsBtn) mFsBtn.onclick = toggleZen;
+  if (topFsBtn) topFsBtn.onclick = toggleZen;
   if (zenExitBtn) zenExitBtn.onclick = () => toggleZenMode(false);
 
   // Listen to native fullscreen changes
