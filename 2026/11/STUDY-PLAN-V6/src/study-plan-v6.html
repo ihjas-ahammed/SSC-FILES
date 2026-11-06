@@ -3192,16 +3192,17 @@ details.unit-dd[open] summary::after {
 /* Scrollable Body Viewport (Multi-directional Swipe & Pinch Zoom) */
 .pdf-viewer-body {
   flex: 1;
+  width: 100%;
   overflow-y: auto;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   touch-action: pan-x pan-y pinch-zoom;
   overscroll-behavior: contain;
-  padding: 20px 16px 90px;
+  padding: 20px 0 90px 0;
   display: block;
   position: relative;
   background: #0b1329;
-  scroll-behavior: smooth;
+  box-sizing: border-box;
   /* Custom Transparent Scrollbar (Firefox) */
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
@@ -3285,9 +3286,11 @@ details.unit-dd[open] summary::after {
   flex-direction: column;
   align-items: center;
   gap: 22px;
-  width: max-content;
+  width: fit-content;
   min-width: 100%;
-  margin: 0 auto;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
   touch-action: pan-x pan-y pinch-zoom;
   will-change: transform;
 }
@@ -3304,6 +3307,8 @@ details.unit-dd[open] summary::after {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  margin: 0 auto;
+  box-sizing: border-box;
   touch-action: pan-x pan-y pinch-zoom;
 }
 
@@ -3686,7 +3691,7 @@ details.unit-dd[open] summary::after {
   <!-- Main Application Entry -->
   <script>
 (() => {
-  // ../app/js/utils/dom.js
+  // src/app/js/utils/dom.js
   var $ = (s, r = document) => r.querySelector(s);
   var esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({
     "&": "&amp;",
@@ -3713,7 +3718,7 @@ details.unit-dd[open] summary::after {
   </div>`;
   }
 
-  // ../app/js/utils/dates.js
+  // src/app/js/utils/dates.js
   var NOW_OVERRIDE = new URLSearchParams(location.search).get("now");
   var now = () => NOW_OVERRIDE ? new Date(NOW_OVERRIDE) : /* @__PURE__ */ new Date();
   var iso = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
@@ -3755,7 +3760,7 @@ details.unit-dd[open] summary::after {
   var clampMin = (m) => Math.max(0, Math.min(1440, m));
   var durMin = (x) => toMin(x.end) - toMin(x.start);
 
-  // ../app/js/data/subjects.js
+  // src/app/js/data/subjects.js
   var MODULE_LABEL = { "1": "I", "2": "II", "3": "III", "4": "IV" };
   var MOD_ROMAN = { "1": "Module I", "2": "Module II", "3": "Module III", "4": "Module IV" };
   var MODS = ["1", "2", "3", "4"];
@@ -4316,7 +4321,7 @@ details.unit-dd[open] summary::after {
   };
   var LAST_EXAM = Object.values(SUBJECTS).reduce((m, s) => s.examDate > m ? s.examDate : m, "0000");
 
-  // ../app/js/engine/syllabus.js
+  // src/app/js/engine/syllabus.js
   var UNIT_REF_RE = /\s*\((?:Units?\s*)?[\d.]+(?:\s*[–-]\s*[\d.]+)?\)\s*$/;
   var cleanUnit = (t) => t.replace(UNIT_REF_RE, "");
   var TIME_SCALE = 1.25;
@@ -4362,7 +4367,7 @@ details.unit-dd[open] summary::after {
   var availHrs = (draft) => Math.max(0, (toMin(draft.end) - toMin(draft.start)) / 60);
   var fitsHrs = (used, avail) => used <= avail + 1e-9;
 
-  // ../app/js/engine/planner.js
+  // src/app/js/engine/planner.js
   var planDates = (c) => rangeDates(c.start, addDays(LAST_EXAM, -1));
   var slotCount = (c, d) => Math.max(0, Math.min(c.maxPerDay, c.days[d] ?? c.maxPerDay));
   function sessionNeeds(c) {
@@ -4552,7 +4557,7 @@ details.unit-dd[open] summary::after {
     };
   }
 
-  // ../app/js/sync.js
+  // src/app/js/sync.js
   var RTDB_BASE = "https://data-science-ef878-default-rtdb.firebaseio.com";
   var RTDB_PATH = "study_plan_v6_sem6";
   var SYNC_STATE = {
@@ -4704,7 +4709,7 @@ details.unit-dd[open] summary::after {
     }
   }
 
-  // ../app/js/state.js
+  // src/app/js/state.js
   var STORE_KEY = "study_plan_v6-sem6";
   function defaultCfg() {
     return {
@@ -4833,7 +4838,7 @@ details.unit-dd[open] summary::after {
     plan = cfg.ready ? buildPlan(cfg) : { sessions: [], dates: [], warnings: [], info: {}, slots: 0 };
   }
 
-  // ../app/js/data/icons.js
+  // src/app/js/data/icons.js
   var ICON = {
     check: `<svg class="mi" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>`,
     left: `<svg class="mi" viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>`,
@@ -4994,7 +4999,7 @@ details.unit-dd[open] summary::after {
     </svg>`
   };
 
-  // ../app/js/views/shared-editors.js
+  // src/app/js/views/shared-editors.js
   function editDates(d) {
     return rangeDates(focusISO(), addDays(LAST_EXAM, -1));
   }
@@ -5336,7 +5341,7 @@ details.unit-dd[open] summary::after {
     };
   }
 
-  // ../app/js/views/wizard.js
+  // src/app/js/views/wizard.js
   var WZ_STEPS = [
     { title: "Who's studying?", lead: "Pick your department. All 3 Major Core, 2 Electives, and department SEC courses with exam dates are already built in.", render: renderProfile },
     { title: "Session rules", lead: "Choose your preferred pace. All topics and requested revision will be included.", render: renderRules },
@@ -5423,7 +5428,7 @@ details.unit-dd[open] summary::after {
     toast(d.rollNo ? `Plan built and synced for Roll No ${d.rollNo}!` : "Plan built. Good luck!");
   }
 
-  // ../app/js/utils/export-image.js
+  // src/app/js/utils/export-image.js
   async function exportPng(el, filename, fixedWidth) {
     if (!el || exportPng.busy) return;
     if (!window.modernScreenshot) {
@@ -5466,7 +5471,7 @@ details.unit-dd[open] summary::after {
     }
   }
 
-  // ../app/js/views/plan-view.js
+  // src/app/js/views/plan-view.js
   function sessionsOn(d) {
     return plan.sessions.filter((s) => s.date === d);
   }
@@ -5546,7 +5551,7 @@ details.unit-dd[open] summary::after {
     if (dl) dl.onclick = () => exportPng($("#plan-export"), "Study-Plan.png", 1120);
   }
 
-  // ../app/js/views/day-view.js
+  // src/app/js/views/day-view.js
   function renderDay() {
     const root = $("#view-day");
     if (!cfg.ready) {
@@ -5694,7 +5699,7 @@ details.unit-dd[open] summary::after {
   </div>`;
   }
 
-  // ../app/js/views/session-modal.js
+  // src/app/js/views/session-modal.js
   function noteText(draft) {
     const dur = toMin(draft.end) - toMin(draft.start), avail = availHrs(draft), used = usedHrs(draft);
     if (dur <= 0) return "End must be after start.";
@@ -5940,10 +5945,10 @@ details.unit-dd[open] summary::after {
     }
   }
 
-  // ../app/js/data/systems.js
+  // src/app/js/data/systems.js
   var SYS_BASE = /(^|\.)ssc-data-science-qm\.web\.app$/.test(location.hostname) ? "" : "https://ssc-data-science-qm.web.app";
 
-  // ../app/js/data/resources.js
+  // src/app/js/data/resources.js
   var RES_RAW = "https://raw.githubusercontent.com/ihjas-ahammed/SSC-FILES/main/";
   var RESOURCES = {
     "TH": {
@@ -6952,7 +6957,7 @@ details.unit-dd[open] summary::after {
     }
   };
 
-  // ../app/js/data/pyq-optics.js
+  // src/app/js/data/pyq-optics.js
   var OPT_PYQ = {
     "1": [
       { "id": "opt-pyq-n23-q1", "t": "Q1 \xB7 Law of refraction (2 marks)", "y": 2023, "m": "Nov", "k": 2, "s": "N23", "q": "What is law of refraction ?" },
@@ -7218,7 +7223,7 @@ details.unit-dd[open] summary::after {
     ]
   };
 
-  // ../app/js/data/unit-pages.js
+  // src/app/js/data/unit-pages.js
   var UNIT_PAGES = {
     AP: {
       1: { page: 1, path: "2026/11/STUDY-PLAN-V6/src/sem6-math/applied probability/applied-probability-textbook-module-1.pdf" },
@@ -7512,7 +7517,7 @@ details.unit-dd[open] summary::after {
     return s[unitNumber] || null;
   }
 
-  // ../app/js/views/pdf-viewer.js
+  // src/app/js/views/pdf-viewer.js
   var PV_STATE = {
     isOpen: false,
     isZenMode: false,
@@ -7879,22 +7884,27 @@ details.unit-dd[open] summary::after {
       setTimeout(recalculateScaleAndLayout, 50);
     }
   }
-  function computeScale(sampleViewport) {
+  function getViewerViewportWidth() {
     const bodyEl = document.getElementById("pdf-viewer-body");
-    if (!bodyEl || !sampleViewport) return 1;
+    const bodyW = bodyEl && bodyEl.clientWidth > 200 ? bodyEl.clientWidth : 0;
+    const vpW = window.visualViewport && window.visualViewport.width || window.innerWidth || document.documentElement.clientWidth || 360;
+    return bodyW > 0 ? bodyW : vpW;
+  }
+  function computeScale(sampleViewport) {
+    if (!sampleViewport) return 1;
     if (PV_STATE.scaleMode === "fit-width") {
-      const clientW = bodyEl.clientWidth || window.innerWidth;
+      const clientW = getViewerViewportWidth();
       const isMobile = clientW <= 768;
       let targetW;
       if (isMobile) {
         targetW = clientW;
       } else {
-        targetW = Math.max(320, clientW - 32);
+        targetW = Math.min(Math.max(480, clientW * 0.8), 940);
       }
       let scale = targetW / sampleViewport.width;
-      if (scale < 0.25) scale = 0.25;
-      if (scale > 4) scale = 4;
-      return scale;
+      if (scale < 0.35) scale = 0.35;
+      if (scale > 3) scale = 3;
+      return Math.round(scale * 100) / 100;
     }
     return typeof PV_STATE.scaleMode === "number" ? PV_STATE.scaleMode : 1;
   }
@@ -8018,7 +8028,11 @@ details.unit-dd[open] summary::after {
       delete PV_STATE.renderTasks[pageNum];
       PV_STATE.renderedPages.add(pageNum);
       const ph = slot.querySelector(".pdf-page-placeholder");
-      if (ph) ph.style.display = "none";
+      if (ph) {
+        ph.style.display = "none";
+        ph.style.visibility = "hidden";
+      }
+      if (canvas) canvas.style.display = "block";
     } catch (err) {
       if (err?.name === "RenderingCancelledException") return;
       console.warn(`[PDF.js] Page ${pageNum} render error:`, err);
@@ -8125,6 +8139,12 @@ details.unit-dd[open] summary::after {
       const sampleVp = firstPage.getViewport({ scale: 1 });
       PV_STATE.pageViewports[1] = sampleVp;
       PV_STATE.currentScale = computeScale(sampleVp);
+      const zoomLevelEl = document.getElementById("pv-zoom-level");
+      if (zoomLevelEl) zoomLevelEl.textContent = `${Math.round(PV_STATE.currentScale * 100)}%`;
+      const fitBtn = document.getElementById("pv-btn-fit-width");
+      const mFitBtn = document.getElementById("pv-m-fit");
+      if (fitBtn) fitBtn.classList.toggle("active", PV_STATE.scaleMode === "fit-width");
+      if (mFitBtn) mFitBtn.classList.toggle("active", PV_STATE.scaleMode === "fit-width");
       const totalText = `/ ${doc.numPages}`;
       const pTotal = document.getElementById("pv-page-total");
       const mTotal = document.getElementById("pv-m-total");
@@ -8253,13 +8273,15 @@ details.unit-dd[open] summary::after {
     PV_STATE.renderTasks = {};
   }
   if (typeof window !== "undefined") {
+    window.PV_STATE = PV_STATE;
     window.openPdfViewer = openPdfViewer;
     window.openUnitPdf = openUnitPdf;
     window.closePdfViewer = closePdfViewer;
     window.toggleZenMode = toggleZenMode;
+    window.recalculateScaleAndLayout = recalculateScaleAndLayout;
   }
 
-  // ../app/js/views/session-detail-view.js
+  // src/app/js/views/session-detail-view.js
   var SS = { det: null, onStage: null, onDone: null };
   var unitsData = [];
   var stageConfig = [
@@ -8280,13 +8302,13 @@ details.unit-dd[open] summary::after {
       return `
       <div class="bg-white rounded-[20px] border border-slate-200/85 shadow-[0_4px_18px_-4px_rgba(15,23,42,0.04)] flex items-stretch overflow-hidden transition">
         <div class="w-1.5 ${sc.border} shrink-0"></div>
-        <div class="flex-1 min-w-0 p-3.5 sm:p-4 flex items-center justify-between gap-3">
-          <div class="flex-1 min-w-0 pr-1 sm:pr-2">
-            <div class="mb-2.5">
-              <h4 class="font-display font-bold text-[15px] sm:text-[16px] text-[#0f172a] truncate" title="${esc(u.name)}">${esc(u.name)}</h4>
+        <div class="flex-1 min-w-0 p-3.5 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex-1 min-w-0">
+            <div class="mb-2 sm:mb-2.5">
+              <h4 class="font-display font-bold text-[14.5px] sm:text-[16px] text-[#0f172a] leading-snug line-clamp-2" title="${esc(u.name)}">${esc(u.name)}</h4>
             </div>
-            <div class="relative flex items-center justify-between max-w-[230px]">
-              <div class="absolute left-3 right-3 top-[7px] h-[2px] bg-slate-200 z-0"></div>
+            <div class="relative flex items-center justify-between max-w-[280px] sm:max-w-[250px] pr-2">
+              <div class="absolute left-3 right-5 top-[7px] h-[2px] bg-slate-200 z-0"></div>
               ${MODE_SLIDER.map((sIdx) => {
         const stepLabel = MODE_NAMES[sIdx];
         const isActive = u.stage === sIdx;
@@ -8300,19 +8322,24 @@ details.unit-dd[open] summary::after {
       }).join("")}
             </div>
           </div>
-          <div class="w-[1px] self-stretch bg-slate-100 my-1"></div>
-          <button onclick="openUnitPdf('${sid}', ${u.u})" title="Read ${esc(u.name)} in textbook" class="flex items-center gap-2.5 pl-2 pr-3 py-1.5 rounded-2xl bg-blue-50/80 hover:bg-blue-100/90 active:scale-[0.98] border border-blue-100/80 transition text-left shrink-0">
-            <div class="w-9 h-9 rounded-xl bg-[#1d4ed8] text-white flex items-center justify-center shrink-0 shadow-2xs">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-            </div>
-            <div>
-              <div class="font-display font-extrabold text-[12.5px] text-[#1e40af] leading-tight flex items-center gap-1">
-                <span>Read</span>
-                <svg class="w-3 h-3 text-[#2563eb]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+
+          <div class="hidden sm:block w-[1px] self-stretch bg-slate-100 my-1"></div>
+
+          <div class="flex items-center justify-between sm:justify-end pt-2 sm:pt-0 border-t border-slate-100/90 sm:border-0">
+            <span class="text-[11px] font-semibold text-slate-400 sm:hidden">Textbook section</span>
+            <button onclick="openUnitPdf('${sid}', ${u.u})" title="Read ${esc(u.name)} in textbook" class="flex items-center gap-2.5 px-3 py-1.5 rounded-2xl bg-blue-50/90 hover:bg-blue-100/90 active:scale-[0.98] border border-blue-100/90 transition text-left shrink-0">
+              <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#1d4ed8] text-white flex items-center justify-center shrink-0 shadow-2xs">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
               </div>
-              <div class="text-[11px] font-semibold text-slate-500 mt-0.5">${esc(u.estimate)}</div>
-            </div>
-          </button>
+              <div>
+                <div class="font-display font-extrabold text-[12px] sm:text-[12.5px] text-[#1e40af] leading-tight flex items-center gap-1">
+                  <span>Read</span>
+                  <svg class="w-3 h-3 text-[#2563eb]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                </div>
+                <div class="text-[10.5px] sm:text-[11px] font-semibold text-slate-500 mt-0.5">${esc(u.estimate)}</div>
+              </div>
+            </button>
+          </div>
         </div>
       </div>`;
     }).join("");
@@ -8566,9 +8593,11 @@ details.unit-dd[open] summary::after {
     window.setUnitStage = setUnitStage;
     window.toggleUnitEstimate = toggleUnitEstimate;
     window.ssSwitchTab = ssSwitchTab;
+    window.ssFill = ssFill;
+    window.renderUnits = renderUnits;
   }
 
-  // ../app/js/views/schedule-view.js
+  // src/app/js/views/schedule-view.js
   function customOn(d) {
     return (cfg.custom || []).filter((x) => x.date === d && x.start && x.end).sort((a, b) => toMin(a.start) - toMin(b.start));
   }
@@ -8913,7 +8942,7 @@ details.unit-dd[open] summary::after {
     setTimeout(() => document.addEventListener("pointerdown", outside, true), 0);
   }
 
-  // ../app/js/views/settings-view.js
+  // src/app/js/views/settings-view.js
   function exportData() {
     save();
     const data = {
@@ -9158,7 +9187,7 @@ details.unit-dd[open] summary::after {
     updateSyncBadges();
   }
 
-  // ../app/js/main.js
+  // src/app/js/main.js
   Object.assign(window, {
     openWizard,
     setUnitStage,

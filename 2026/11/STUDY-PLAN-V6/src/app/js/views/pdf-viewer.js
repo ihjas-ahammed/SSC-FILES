@@ -422,13 +422,20 @@ export function toggleZenMode(forceState) {
   }
 }
 
-// Compute Optimal Scale (Matches device width)
-function computeScale(sampleViewport) {
+// Helper to reliably get the active viewport width (immune to un-reflowed clientWidth)
+function getViewerViewportWidth() {
   const bodyEl = document.getElementById("pdf-viewer-body");
-  if (!bodyEl || !sampleViewport) return 1.0;
+  const bodyW = bodyEl && bodyEl.clientWidth > 200 ? bodyEl.clientWidth : 0;
+  const vpW = (window.visualViewport && window.visualViewport.width) || window.innerWidth || document.documentElement.clientWidth || 360;
+  return bodyW > 0 ? bodyW : vpW;
+}
+
+// Compute Optimal Scale (Matches device width and comfortable reading width)
+function computeScale(sampleViewport) {
+  if (!sampleViewport) return 1.0;
 
   if (PV_STATE.scaleMode === "fit-width") {
-    const clientW = bodyEl.clientWidth || window.innerWidth;
+    const clientW = getViewerViewportWidth();
     const isMobile = clientW <= 768;
 
     let targetW;
@@ -436,14 +443,15 @@ function computeScale(sampleViewport) {
       // Mobile: fit to 100% of device width edge-to-edge
       targetW = clientW;
     } else {
-      // Desktop: fit width to screen width with clean 16px paper margins
-      targetW = Math.max(320, clientW - 32);
+      // Desktop: fit to 80-82% of window width, capped at comfortable reading width (max 940px)
+      // This prevents stretching across wide 1440p/4K monitors
+      targetW = Math.min(Math.max(480, clientW * 0.8), 940);
     }
 
     let scale = targetW / sampleViewport.width;
-    if (scale < 0.25) scale = 0.25;
-    if (scale > 4.0) scale = 4.0;
-    return scale;
+    if (scale < 0.35) scale = 0.35;
+    if (scale > 3.0) scale = 3.0;
+    return Math.round(scale * 100) / 100;
   }
 
   return typeof PV_STATE.scaleMode === "number" ? PV_STATE.scaleMode : 1.0;
@@ -608,7 +616,11 @@ async function renderPageCanvas(pageNum, slot) {
 
     // Hide placeholder once rendered
     const ph = slot.querySelector(".pdf-page-placeholder");
-    if (ph) ph.style.display = "none";
+    if (ph) {
+      ph.style.display = "none";
+      ph.style.visibility = "hidden";
+    }
+    if (canvas) canvas.style.display = "block";
   } catch (err) {
     if (err?.name === "RenderingCancelledException") return;
     console.warn(`[PDF.js] Page ${pageNum} render error:`, err);
@@ -748,6 +760,14 @@ async function loadDocument(url, targetPage = 1) {
 
     // Compute scale (80% on desktop, 100% on mobile)
     PV_STATE.currentScale = computeScale(sampleVp);
+
+    // Update zoom level indicator and fit-width active badge
+    const zoomLevelEl = document.getElementById("pv-zoom-level");
+    if (zoomLevelEl) zoomLevelEl.textContent = `${Math.round(PV_STATE.currentScale * 100)}%`;
+    const fitBtn = document.getElementById("pv-btn-fit-width");
+    const mFitBtn = document.getElementById("pv-m-fit");
+    if (fitBtn) fitBtn.classList.toggle("active", PV_STATE.scaleMode === "fit-width");
+    if (mFitBtn) mFitBtn.classList.toggle("active", PV_STATE.scaleMode === "fit-width");
 
     // Populate total pages in UI
     const totalText = `/ ${doc.numPages}`;
@@ -923,8 +943,10 @@ export function closePdfViewer() {
 
 // Global window exposure for inline HTML event handlers
 if (typeof window !== "undefined") {
+  window.PV_STATE = PV_STATE;
   window.openPdfViewer = openPdfViewer;
   window.openUnitPdf = openUnitPdf;
   window.closePdfViewer = closePdfViewer;
   window.toggleZenMode = toggleZenMode;
+  window.recalculateScaleAndLayout = recalculateScaleAndLayout;
 }
