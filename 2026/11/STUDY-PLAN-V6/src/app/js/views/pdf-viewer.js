@@ -318,62 +318,64 @@ function bindViewerEvents(el) {
 // Finds the page slot under or closest to screen coordinate (screenX, screenY) relative to bodyEl
 function getAnchorSlotAndOffset(screenX, screenY) {
   const bodyEl = document.getElementById("pdf-viewer-body");
-  if (!bodyEl) return null;
-  const bRect = bodyEl.getBoundingClientRect();
-  const clientX = bRect.left + screenX;
-  const clientY = bRect.top + screenY;
+  const container = document.getElementById("pv-pages-container");
+  if (!bodyEl || !container) return null;
 
-  let el = document.elementFromPoint(clientX, clientY);
-  let slot = el ? el.closest(".pdf-page-slot") : null;
+  const pointX = bodyEl.scrollLeft + screenX;
+  const pointY = bodyEl.scrollTop + screenY;
+  const cTop = container.offsetTop;
+  const cLeft = container.offsetLeft;
 
-  if (!slot) {
-    const slots = Array.from(document.querySelectorAll(".pdf-page-slot"));
-    if (slots.length === 0) return null;
-    let closest = null;
-    let minDist = Infinity;
-    for (const s of slots) {
-      const r = s.getBoundingClientRect();
-      if (clientY >= r.top && clientY <= r.bottom) {
-        slot = s;
-        break;
-      }
-      const d = Math.min(Math.abs(clientY - r.top), Math.abs(clientY - r.bottom));
-      if (d < minDist) {
-        minDist = d;
-        closest = s;
-      }
+  const slots = Array.from(document.querySelectorAll(".pdf-page-slot"));
+  if (slots.length === 0) return null;
+
+  let targetSlot = null;
+  let closestSlot = slots[0];
+  let minDistance = Infinity;
+
+  for (const s of slots) {
+    const top = s.offsetTop + cTop;
+    const bottom = top + s.clientHeight;
+
+    if (pointY >= top && pointY <= bottom) {
+      targetSlot = s;
+      break;
     }
-    if (!slot) slot = closest;
+
+    const dist = Math.min(Math.abs(pointY - top), Math.abs(pointY - bottom));
+    if (dist < minDistance) {
+      minDistance = dist;
+      closestSlot = s;
+    }
   }
 
-  if (!slot) return null;
-  const sRect = slot.getBoundingClientRect();
+  const slot = targetSlot || closestSlot;
+  const sTop = slot.offsetTop + cTop;
+  const sLeft = slot.offsetLeft + cLeft;
   const pageNum = parseInt(slot.dataset.page || slot.getAttribute("data-page") || slot.id.replace("pv-page-slot-", ""), 10) || 1;
+
   return {
     slot,
     pageNum,
-    relX: sRect.width > 0 ? (clientX - sRect.left) / sRect.width : 0.5,
-    relY: sRect.height > 0 ? (clientY - sRect.top) / sRect.height : 0.5
+    relX: slot.clientWidth > 0 ? (pointX - sLeft) / slot.clientWidth : 0.5,
+    relY: slot.clientHeight > 0 ? (pointY - sTop) / slot.clientHeight : 0.5
   };
 }
 
 // Restores scroll position so that anchor's (relX, relY) lands exactly at (targetScreenX, targetScreenY)
 function restoreAnchorScroll(anchor, targetScreenX, targetScreenY) {
   const bodyEl = document.getElementById("pdf-viewer-body");
-  if (!bodyEl || !anchor) return;
+  const container = document.getElementById("pv-pages-container");
+  if (!bodyEl || !container || !anchor) return;
 
   const slot = document.getElementById(`pv-page-slot-${anchor.pageNum}`) || anchor.slot;
   if (!slot) return;
 
-  const bRect = bodyEl.getBoundingClientRect();
-  const sRect = slot.getBoundingClientRect();
+  const sTop = slot.offsetTop + container.offsetTop;
+  const sLeft = slot.offsetLeft + container.offsetLeft;
 
-  // Slot position in body's scrollable content space
-  const slotTopInBody = sRect.top - bRect.top + bodyEl.scrollTop;
-  const slotLeftInBody = sRect.left - bRect.left + bodyEl.scrollLeft;
-
-  const newPointY = slotTopInBody + (slot.clientHeight * anchor.relY);
-  const newPointX = slotLeftInBody + (slot.clientWidth * anchor.relX);
+  const newPointY = sTop + (slot.clientHeight * anchor.relY);
+  const newPointX = sLeft + (slot.clientWidth * anchor.relX);
 
   bodyEl.scrollTop = Math.max(0, Math.round(newPointY - targetScreenY));
   bodyEl.scrollLeft = Math.max(0, Math.round(newPointX - targetScreenX));
