@@ -434,6 +434,26 @@ if [ -f "$PLAN6" ]; then
   done
 fi
 
+# --- Study plan GATE (STUDY-PLAN-GATE-V1/src/study-plan-gate.html) and its install files ---
+#   /study-plan-gate/               the GATE Data Science & AI study plan (index.html)
+#   /study-paln-gate/               typo alias
+PLANGATE="$REPO/../11/STUDY-PLAN-GATE-V1/src/study-plan-gate.html"
+if [ ! -f "$PLANGATE" ] && [ -f "$REPO/../../2026/11/STUDY-PLAN-GATE-V1/src/study-plan-gate.html" ]; then
+  PLANGATE="$REPO/../../2026/11/STUDY-PLAN-GATE-V1/src/study-plan-gate.html"
+fi
+if [ -f "$PLANGATE" ]; then
+  mkdir -p "$TMP/public/study-plan-gate" "$TMP/public/study-paln-gate"
+  cp "$PLANGATE" "$TMP/public/study-plan-gate/index.html"
+  cp "$PLANGATE" "$TMP/public/study-paln-gate/index.html"
+  APPGATE="$(dirname "$PLANGATE")/app"
+  for F in icon.svg icon-192.png icon-512.png manifest.webmanifest sw.js; do
+    if [ -f "$APPGATE/$F" ]; then
+      cp "$APPGATE/$F" "$TMP/public/study-plan-gate/$F"
+      cp "$APPGATE/$F" "$TMP/public/study-paln-gate/$F"
+    fi
+  done
+fi
+
 # --- SSC-V6 revision cards (SSC-V6/revision/<subject>/<module>/index.html) ---
 #   /revision/optics/1/ … built by SSC-V6/revision/src/build.py (src/ stays out of the site)
 if [ -d "$V6/revision" ]; then
