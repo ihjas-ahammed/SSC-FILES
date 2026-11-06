@@ -93,9 +93,20 @@ export function buildPlan(c) {
       let best = null, bestScore = -1;
       order.forEach(id => {
         if (teachCounts[id] >= needs[id].need || !inWindow(id, slot.date) || i >= (firstRev[id] ?? T)) return;
-        const left = slots.reduce((n, next, j) => n + (j >= i && !assignments[j] && inWindow(id, next.date) && j < (firstRev[id] ?? T) ? 1 : 0), 0);
-        let score = (needs[id].need - teachCounts[id]) / Math.max(1, left);
-        if (usedToday.has(id)) score *= 0.7;
+        
+        // Fair proportional remaining need
+        const remFraction = (needs[id].need - teachCounts[id]) / needs[id].need;
+        
+        // Curricular phase weighting: Math Foundations (Phase 1) > Systems (Phase 2) > Applications (Phase 3)
+        let phaseWeight = 1.0;
+        if (["LA", "CO", "PS"].includes(id)) phaseWeight = 1.15;
+        else if (["PDSA", "DB"].includes(id)) phaseWeight = 1.08;
+        
+        let score = remFraction * phaseWeight;
+        
+        // Strong penalty for repeating the same subject on the same day
+        if (usedToday.has(id)) score *= 0.15;
+        
         if (score > bestScore) { best = id; bestScore = score; }
       });
       if (best) { assign(i, best, "teach"); teachCounts[best]++; }
@@ -121,15 +132,24 @@ export function buildPlan(c) {
     const studyDays = selected.length ? selected : [available[available.length - 1]];
     const mine = placed[id];
 
-    if (needs[id].need && !mine.some(p => p.type === "teach")) {
-      const order = [...studyDays, ...available];
-      const date = freeDay(order, id, "teach") ?? freeDay(order, id, null) ?? studyDays[0];
-      mine.push({ date, slot: extraSlot(date), type: "teach" });
+    // Ensure all needed teaching sessions are allocated
+    const missingTeach = Math.max(0, needs[id].need - mine.filter(p => p.type === "teach").length);
+    for (let pass = 0; pass < missingTeach; pass++) {
+      const orderDays = [...studyDays, ...available];
+      const bestDay = orderDays.slice().sort((a, b) => {
+        const hasSubA = placed[id].some(p => p.date === a);
+        const hasSubB = placed[id].some(p => p.date === b);
+        if (hasSubA !== hasSubB) return hasSubA ? 1 : -1;
+        return dayLoad(a) - dayLoad(b);
+      })[0];
+      mine.push({ date: bestDay, slot: extraSlot(bestDay), type: "teach" });
     }
-    const missing = Math.max(0, c.revision - mine.filter(p => p.type === "rev").length);
-    for (let pass = 0; pass < missing; pass++) {
-      const order = [...studyDays, ...available].reverse();
-      const date = freeDay(order, id, "rev") ?? freeDay(order, id, null) ?? studyDays[studyDays.length - 1];
+
+    // Ensure all revision sessions are allocated
+    const missingRev = Math.max(0, c.revision - mine.filter(p => p.type === "rev").length);
+    for (let pass = 0; pass < missingRev; pass++) {
+      const orderDays = [...studyDays, ...available].reverse();
+      const date = freeDay(orderDays, id, "rev") ?? freeDay(orderDays, id, null) ?? studyDays[studyDays.length - 1];
       mine.push({ date, slot: extraSlot(date), type: "rev" });
     }
     mine.sort((a, b) => a.date.localeCompare(b.date) || a.slot - b.slot);
@@ -152,8 +172,9 @@ export function buildPlan(c) {
         chunk = rem.slice(idx);
         idx = rem.length;
       } else {
-        const target = totH * (i + 1) / teach.length;
-        while (idx < rem.length - left && (chunk.length === 0 || cum + rem[idx].h / 2 <= target)) {
+        const targetH = totH * (i + 1) / teach.length;
+        const targetU = Math.round(rem.length * (i + 1) / teach.length);
+        while (idx < rem.length - left && (chunk.length === 0 || (cum + rem[idx].h / 2 <= targetH && (idx + 1) <= targetU + 1))) {
           chunk.push(rem[idx]);
           cum += rem[idx].h;
           idx++;

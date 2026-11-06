@@ -3,7 +3,7 @@
    ========================================================================= */
 
 // "?now=2026-10-22T10:00" overrides the clock for testing
-const NOW_OVERRIDE = new URLSearchParams(location.search).get("now");
+const NOW_OVERRIDE = typeof location !== "undefined" && location.search ? new URLSearchParams(location.search).get("now") : null;
 
 export const now = () => NOW_OVERRIDE ? new Date(NOW_OVERRIDE) : new Date();
 export const iso = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
