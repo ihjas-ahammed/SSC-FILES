@@ -1,7 +1,7 @@
 // Study Plan app shell: the page and its icons work offline after the first visit.
 // The page itself is fetched from the network first, so plan changes show up at once.
 // Study match pages and resource files are not cached here; they load as normal.
-var VERSION = 'study-plan-shell-v1';
+var VERSION = 'study-plan-shell-v3';
 var SHELL = ['./', './index.html', './manifest.webmanifest', './icon.svg', './icon-192.png', './icon-512.png'];
 var PAGE = ['./', './index.html'];
 
