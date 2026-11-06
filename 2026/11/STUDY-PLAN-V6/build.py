@@ -100,6 +100,7 @@ def bundle_js_python(js_dir: Path) -> str:
         "data/pyq-optics.js",
         "engine/syllabus.js",
         "engine/planner.js",
+        "sync.js",
         "state.js",
         "views/shared-editors.js",
         "views/wizard.js",

@@ -10,7 +10,7 @@ export const planDates = (c) => rangeDates(c.start, addDays(LAST_EXAM, -1));
 export const slotCount = (c, d) => Math.max(0, Math.min(c.maxPerDay, c.days[d] ?? c.maxPerDay));
 export const totalSlots = (c, from) => planDates({ ...c, start: from || c.start }).reduce((n, d) => n + slotCount(c, d), 0);
 
-// Sessions each subject needs at the chosen session length (SEC uses the number the user asked for).
+// Sessions each subject needs at the chosen session length.
 export function sessionNeeds(c) {
   const out = {};
   activeIds(c).forEach(id => {
@@ -22,8 +22,6 @@ export function sessionNeeds(c) {
       need: rem.length ? Math.min(rem.length, Math.max(1, Math.ceil(h / c.hours - 1e-9))) : 0
     };
   });
-  const secId = c.sec || (DEPTS[c.dept] && DEPTS[c.dept].sec);
-  if (secId && out[secId] && out[secId].units) out[secId].need = Math.min(c.secSessions, out[secId].units);
   return out;
 }
 
@@ -43,12 +41,13 @@ export function buildPlan(c) {
   });
   const T = slots.length;
   const needs = sessionNeeds(c);
-  const secId = c.sec || (DEPTS[c.dept] && DEPTS[c.dept].sec);
 
   // A subject's teaching sessions never exceed the session length, so its hours are spread over
   // ceil(hours / length) sessions. If the slots cannot hold all of that, the shortfall is reported.
-  ids.filter(id => id !== secId && needs[id].need).forEach(id => {
-    needs[id].sessionHours = needs[id].hours / needs[id].need;
+  ids.forEach(id => {
+    if (needs[id].need) {
+      needs[id].sessionHours = needs[id].hours / needs[id].need;
+    }
   });
 
   const demand = ids.reduce((s, id) => s + needs[id].need + (needs[id].units ? c.revision : 0), 0);

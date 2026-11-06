@@ -7,8 +7,8 @@ import { ICON, SUBJECT_SVGS } from "../data/icons.js";
 import { $, esc, toast } from "../utils/dom.js";
 import { focusISO, rangeDates, addDays, hrs, fmtH, niceDate, wdName, parse } from "../utils/dates.js";
 import { activeIds, examsOf, remainingUnits, subj, unitMod, doneSet, unitHrs, cleanUnit } from "../engine/syllabus.js";
-import { cfg, ui, save, loadProfile, replan } from "../state.js";
-import { openWizard } from "./wizard.js";
+import { cfg, ui, save, loadProfile, replan, restoreFromCloud } from "../state.js";
+import { openWizard, closeWizard } from "./wizard.js";
 import { renderAll } from "../main.js";
 
 export function editDates(d) {
@@ -75,8 +75,55 @@ export function renderProfile(root, d, onChange) {
         <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--navy-500,#64748b)">Skill Enhancement Course (SEC)</div>
         <div id="sec-auto-label" style="font-size:14px;font-weight:700;color:var(--navy-900,#0f172a);margin-top:2px"></div>
       </div>
+    </div>
+
+    <!-- Quick Restore for existing users with Roll Number -->
+    <div class="restore-card" style="margin-top:24px;padding:16px;background:#ffffff;border-radius:16px;border:1.5px dashed var(--line,#cbd5e1);display:flex;flex-direction:column;gap:12px;box-shadow:0 2px 12px rgba(15,23,42,0.03)">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+        <div>
+          <div style="font-size:13.5px;font-weight:800;color:var(--navy-800,#1e293b)">Already have a plan?</div>
+          <div style="font-size:12px;color:var(--muted,#64748b);margin-top:2px">Restore all your settings and progress with your Roll Number</div>
+        </div>
+        <button type="button" id="btn-toggle-restore" class="btn sm" style="white-space:nowrap;font-weight:700;flex-shrink:0">Restore</button>
+      </div>
+      <div id="restore-input-row" style="display:none;align-items:center;gap:8px;margin-top:4px">
+        <input type="text" id="restore-roll-input" placeholder="Enter Roll No (e.g. 23PH01)" autocomplete="off" autocapitalize="characters" style="flex:1;min-width:0;height:42px;padding:0 12px;border:1.5px solid var(--line,#cbd5e1);border-radius:10px;font-size:13.5px;font-weight:800;text-transform:uppercase;color:var(--navy-900,#0f172a);font-family:inherit;outline:none" />
+        <button type="button" id="btn-do-restore" class="btn primary sm" style="height:42px;padding:0 16px;font-weight:800;flex-shrink:0">Restore</button>
+      </div>
     </div>`;
+
   const dg = $("#dept-grid", root), lbl = $("#sec-auto-label", root);
+  const toggleBtn = $("#btn-toggle-restore", root);
+  const row = $("#restore-input-row", root);
+  const rollIn = $("#restore-roll-input", root);
+  const doBtn = $("#btn-do-restore", root);
+
+  if (toggleBtn && row) {
+    toggleBtn.onclick = () => {
+      const open = row.style.display === "flex";
+      row.style.display = open ? "none" : "flex";
+      if (!open && rollIn) rollIn.focus();
+    };
+  }
+
+  if (doBtn && rollIn) {
+    const triggerRestore = async () => {
+      const val = rollIn.value.trim().toUpperCase();
+      if (!val) { toast("Please enter your Roll Number"); return; }
+      doBtn.disabled = true;
+      doBtn.textContent = "Restoring...";
+      const ok = await restoreFromCloud(val);
+      doBtn.disabled = false;
+      doBtn.textContent = "Restore";
+      if (ok) {
+        closeWizard();
+        renderAll();
+      }
+    };
+    doBtn.onclick = triggerRestore;
+    rollIn.onkeydown = (e) => { if (e.key === "Enter") triggerRestore(); };
+  }
+
   const paint = () => {
     dg.innerHTML = Object.entries(DEPTS)
       .map(([k, v]) => `<button type="button" class="choice ${d.dept === k ? "on" : ""}" data-k="${k}"><b>${v.label}</b><span>${v.sub}</span></button>`)
@@ -105,7 +152,6 @@ export function renderRules(root, d, onChange) {
   root.append(
     ruleSlider("Hours per session", "Your preferred pace; all topics are included regardless of time", "hours", d, 1, 6, 0.5, v => hrs(v), onChange),
     ruleSlider("Preferred sessions per day", "Extra sessions are added when needed to include all topics and revision", "maxPerDay", d, 1, 5, 1, v => v, re),
-    ruleSlider("Sessions for SEC", "Total sessions you want to give the SEC subject", "secSessions", d, 1, 8, 1, v => v, onChange),
     ruleSlider("Revision sessions per subject", "Full-syllabus revision passes kept for the run-up to each exam", "revision", d, 0, 3, 1, v => v === 0 ? "None" : v, onChange)
   );
 }
@@ -299,4 +345,43 @@ export function renderProgress(root, d, onChange) {
   });
 
   paintNeed();
+}
+
+export function renderRollNo(root, d, onChange) {
+  root.innerHTML = `
+    <div style="padding:20px;background:#ffffff;border-radius:20px;border:1.5px solid var(--line,#e2e8f0);box-shadow:0 4px 18px -4px rgba(15,23,42,0.05);display:flex;flex-direction:column;gap:18px">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="width:46px;height:46px;border-radius:14px;background:#eef2ff;color:#4f46e5;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <svg style="width:24px;height:24px" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+        </div>
+        <div>
+          <h3 style="font-size:17px;font-weight:800;color:var(--navy-900,#0f172a);line-height:1.2">Student Roll Number</h3>
+          <p style="font-size:13px;color:var(--muted,#64748b);margin-top:3px">Syncs your study plan and completed sessions across all devices in real time.</p>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <label for="wz-roll-input" style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;color:var(--navy-700,#334155)">Roll Number / Student ID</label>
+        <input
+          type="text"
+          id="wz-roll-input"
+          placeholder="e.g. 23PH01 or 12"
+          value="${esc(d.rollNo || "")}"
+          autocomplete="off"
+          autocapitalize="characters"
+          style="height:48px;padding:0 14px;border:1.5px solid var(--line,#cbd5e1);border-radius:12px;font-size:16px;font-weight:800;text-transform:uppercase;color:var(--navy-900,#0f172a);outline:none;font-family:inherit"
+        />
+      </div>
+
+      <div style="padding:12px 14px;background:#f8fafc;border-radius:12px;border:1px solid #e2e8f0;font-size:12.5px;color:#475569;line-height:1.5;display:flex;align-items:flex-start;gap:10px">
+        <span style="font-size:16px;line-height:1">⚡</span>
+        <div><b>Multi-device Sync:</b> Open this study plan on your phone and laptop using the same Roll Number. Any session marked done or edited will update on both devices automatically.</div>
+      </div>
+    </div>`;
+
+  const input = $("#wz-roll-input", root);
+  input.oninput = () => {
+    d.rollNo = input.value.trim().toUpperCase();
+    onChange();
+  };
 }

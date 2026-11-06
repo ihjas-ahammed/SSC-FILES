@@ -1,13 +1,15 @@
 /* =========================================================================
-   APPLICATION STATE & LOCALSTORAGE PERSISTENCE
+   APPLICATION STATE & LOCALSTORAGE PERSISTENCE (SEM 6 DATA ALIAS)
    ========================================================================= */
 
 import { focusISO } from "./utils/dates.js";
 import { clone, toast } from "./utils/dom.js";
 import { buildPlan } from "./engine/planner.js";
 import { DEPTS } from "./data/subjects.js";
+import { pushCloud, pullCloud, setupRealtimeListener, sanitizeRollNo } from "./sync.js";
 
-export const STORE_KEY = "study_plan_v6";
+// Special data alias for v6 Sem 6: resets sem5 data and forces setup wizard for new users
+export const STORE_KEY = "study_plan_v6-sem6";
 export const openUnitLists = new Set();
 
 export function defaultCfg() {
@@ -17,12 +19,12 @@ export function defaultCfg() {
     sec: "EPD",
     hours: 1,
     maxPerDay: 3,
-    secSessions: 3,
     revision: 1,
     start: focusISO(),
     days: {},
     done: {},
-    custom: []
+    custom: [],
+    rollNo: ""
   };
 }
 
@@ -56,18 +58,37 @@ export function setProg(nextProg) {
   prog = nextProg;
 }
 
-// v6 auto-setup: with no saved profile, start a ready Physics profile with default rules so wizard is skipped.
-export function autoSetup() {
-  if (Object.keys(profiles).length) return;
-  profiles.physics = {
-    cfg: { ...defaultCfg(), dept: "physics", sec: "EPD", ready: true },
-    prog: { sessions: {} }
-  };
+export function handleRemoteSync(remote) {
+  if (!remote || !remote.cfg) return;
+  const prevRollNo = cfg.rollNo;
+  cfg = { ...defaultCfg(), ...remote.cfg, ready: true };
+  if (!cfg.rollNo && remote.rollNo) cfg.rollNo = remote.rollNo;
+  prog = { sessions: {}, ...(remote.prog || {}) };
+  profiles[cfg.dept] = { cfg: clone(cfg), prog: clone(prog) };
   try {
-    localStorage.setItem(STORE_KEY, JSON.stringify({ active: "physics", profiles }));
-  } catch (e) {
-    /* storage unavailable: keep in memory */
+    localStorage.setItem(STORE_KEY, JSON.stringify({ active: cfg.dept, profiles }));
+  } catch (e) {}
+  replan();
+  if (typeof window !== "undefined" && window.renderAll) {
+    window.renderAll();
   }
+}
+
+export async function restoreFromCloud(rollNo) {
+  const sanitized = sanitizeRollNo(rollNo);
+  if (!sanitized) {
+    toast("Please enter a valid Roll Number");
+    return false;
+  }
+  const res = await pullCloud(sanitized);
+  if (!res.ok) {
+    toast(res.error || `No saved plan found for Roll No "${sanitized}"`);
+    return false;
+  }
+  handleRemoteSync(res.data);
+  setupRealtimeListener(sanitized, handleRemoteSync);
+  toast(`Settings restored for Roll No ${sanitized}!`);
+  return true;
 }
 
 export function loadProfile(dept) {
@@ -80,6 +101,9 @@ export function loadProfile(dept) {
     cfg = { ...defaultCfg(), dept, sec };
     prog = { sessions: {} };
   }
+  if (cfg.rollNo) {
+    setupRealtimeListener(cfg.rollNo, handleRemoteSync);
+  }
 }
 
 export function load() {
@@ -90,11 +114,20 @@ export function load() {
     } else if (raw && raw.cfg) {
       profiles = { [raw.cfg.dept || "physics"]: { cfg: raw.cfg, prog: raw.prog || {} } };
     }
-    autoSetup();
-    const active = raw && raw.active && profiles[raw.active] ? raw.active : Object.keys(profiles)[0];
-    if (active) loadProfile(active);
+    const active = raw && raw.active && profiles[raw.active] ? raw.active : (Object.keys(profiles).length ? Object.keys(profiles)[0] : null);
+    if (active) {
+      loadProfile(active);
+    } else {
+      cfg = defaultCfg();
+      prog = { sessions: {} };
+    }
+    if (cfg.rollNo) {
+      setupRealtimeListener(cfg.rollNo, handleRemoteSync);
+    }
   } catch (e) {
     /* storage unavailable: run in memory */
+    cfg = defaultCfg();
+    prog = { sessions: {} };
   }
 }
 
@@ -106,6 +139,9 @@ export function save() {
     localStorage.setItem(STORE_KEY, JSON.stringify({ active: cfg.dept, profiles }));
   } catch (e) {
     toast("Couldn't save to this browser");
+  }
+  if (cfg.ready && cfg.rollNo) {
+    pushCloud(cfg, prog);
   }
 }
 

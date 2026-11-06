@@ -4278,8 +4278,6 @@ details.unit-dd[open] summary::after {
         need: rem.length ? Math.min(rem.length, Math.max(1, Math.ceil(h / c.hours - 1e-9))) : 0
       };
     });
-    const secId = c.sec || DEPTS[c.dept] && DEPTS[c.dept].sec;
-    if (secId && out[secId] && out[secId].units) out[secId].need = Math.min(c.secSessions, out[secId].units);
     return out;
   }
   function revisionBullets(id) {
@@ -4297,9 +4295,10 @@ details.unit-dd[open] summary::after {
     });
     const T = slots.length;
     const needs = sessionNeeds(c);
-    const secId = c.sec || DEPTS[c.dept] && DEPTS[c.dept].sec;
-    ids.filter((id) => id !== secId && needs[id].need).forEach((id) => {
-      needs[id].sessionHours = needs[id].hours / needs[id].need;
+    ids.forEach((id) => {
+      if (needs[id].need) {
+        needs[id].sessionHours = needs[id].hours / needs[id].need;
+      }
     });
     const demand = ids.reduce((s, id) => s + needs[id].need + (needs[id].units ? c.revision : 0), 0);
     const shortfall = demand > T ? `Not enough slots: ${demand} sessions needed, ${T} available at ${c.maxPerDay} per day. Extra sessions go over the daily limit.` : null;
@@ -4455,8 +4454,160 @@ details.unit-dd[open] summary::after {
     };
   }
 
+  // ../app/js/sync.js
+  var RTDB_BASE = "https://data-science-ef878-default-rtdb.firebaseio.com";
+  var RTDB_PATH = "study_plan_v6_sem6";
+  var SYNC_STATE = {
+    rollNo: "",
+    status: "idle",
+    // 'idle' | 'syncing' | 'synced' | 'error' | 'offline'
+    lastSyncTime: 0,
+    eventSource: null,
+    pushTimer: null,
+    onRemoteChange: null
+  };
+  function sanitizeRollNo(raw) {
+    if (!raw) return "";
+    return String(raw).trim().toUpperCase().replace(/[.#$\[\]\/]/g, "_");
+  }
+  function getSyncUrl(rollNo) {
+    const key = sanitizeRollNo(rollNo || SYNC_STATE.rollNo);
+    if (!key) return null;
+    return `${RTDB_BASE}/${RTDB_PATH}/${encodeURIComponent(key)}.json`;
+  }
+  function pushCloud(cfg2, prog2, immediate = false) {
+    const rollNo = sanitizeRollNo(cfg2?.rollNo || SYNC_STATE.rollNo);
+    if (!rollNo) return;
+    SYNC_STATE.rollNo = rollNo;
+    if (SYNC_STATE.pushTimer) {
+      clearTimeout(SYNC_STATE.pushTimer);
+      SYNC_STATE.pushTimer = null;
+    }
+    const executePush = async () => {
+      const url = getSyncUrl(rollNo);
+      if (!url) return;
+      SYNC_STATE.status = "syncing";
+      updateSyncBadges();
+      const payload = {
+        rollNo,
+        updatedAt: Date.now(),
+        cfg: {
+          ready: !!cfg2.ready,
+          dept: cfg2.dept || "physics",
+          sec: cfg2.sec || (cfg2.dept === "math" ? "DSP" : "EPD"),
+          hours: cfg2.hours ?? 1,
+          maxPerDay: cfg2.maxPerDay ?? 3,
+          revision: cfg2.revision ?? 1,
+          start: cfg2.start,
+          days: cfg2.days || {},
+          done: cfg2.done || {},
+          custom: cfg2.custom || [],
+          rollNo
+        },
+        prog: {
+          sessions: prog2?.sessions || {}
+        }
+      };
+      try {
+        const res = await fetch(url, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          SYNC_STATE.status = "synced";
+          SYNC_STATE.lastSyncTime = payload.updatedAt;
+          updateSyncBadges();
+        } else {
+          SYNC_STATE.status = "error";
+          updateSyncBadges();
+        }
+      } catch (err) {
+        console.warn("[Cloud Sync] Push failed:", err);
+        SYNC_STATE.status = "offline";
+        updateSyncBadges();
+      }
+    };
+    if (immediate) {
+      executePush();
+    } else {
+      SYNC_STATE.pushTimer = setTimeout(executePush, 700);
+    }
+  }
+  async function pullCloud(rollNo) {
+    const key = sanitizeRollNo(rollNo);
+    if (!key) return { ok: false, error: "Please enter a valid Roll Number." };
+    const url = getSyncUrl(key);
+    try {
+      const res = await fetch(url, { cache: "no-store" });
+      if (!res.ok) return { ok: false, error: `Server error (${res.status})` };
+      const data = await res.json();
+      if (!data || !data.cfg) {
+        return { ok: false, error: `No saved plan found for Roll No "${key}".` };
+      }
+      return { ok: true, data };
+    } catch (err) {
+      return { ok: false, error: "Network error: could not connect to database." };
+    }
+  }
+  function setupRealtimeListener(rollNo, onRemoteUpdate) {
+    const key = sanitizeRollNo(rollNo);
+    if (!key) return;
+    if (SYNC_STATE.eventSource) {
+      SYNC_STATE.eventSource.close();
+      SYNC_STATE.eventSource = null;
+    }
+    SYNC_STATE.rollNo = key;
+    SYNC_STATE.onRemoteChange = onRemoteUpdate;
+    if (typeof window === "undefined" || !window.EventSource) return;
+    const streamUrl = getSyncUrl(key);
+    if (!streamUrl) return;
+    try {
+      const es = new EventSource(streamUrl);
+      SYNC_STATE.eventSource = es;
+      es.addEventListener("put", (e) => {
+        try {
+          const payload = JSON.parse(e.data);
+          if (!payload || !payload.data) return;
+          const remote = payload.data;
+          if (remote.updatedAt && SYNC_STATE.lastSyncTime && remote.updatedAt <= SYNC_STATE.lastSyncTime) {
+            return;
+          }
+          if (remote.cfg && SYNC_STATE.onRemoteChange) {
+            SYNC_STATE.lastSyncTime = remote.updatedAt || Date.now();
+            SYNC_STATE.onRemoteChange(remote);
+            toast(`Synced updates from Roll No ${key}`);
+          }
+        } catch (err) {
+          console.warn("[Cloud Sync Stream Error]", err);
+        }
+      });
+      es.onerror = () => {
+      };
+    } catch (err) {
+      console.warn("[Cloud Sync] EventSource initialization failed:", err);
+    }
+  }
+  function updateSyncBadges() {
+    const badge = document.getElementById("cloud-sync-badge");
+    if (!badge) return;
+    if (!SYNC_STATE.rollNo) {
+      badge.innerHTML = `<span class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400"><span class="w-2 h-2 rounded-full bg-slate-300"></span>Not connected</span>`;
+      return;
+    }
+    if (SYNC_STATE.status === "syncing") {
+      badge.innerHTML = `<span class="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600"><span class="w-2 h-2 rounded-full bg-blue-500 animate-ping"></span>Syncing...</span>`;
+    } else if (SYNC_STATE.status === "synced") {
+      badge.innerHTML = `<span class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700"><span class="w-2 h-2 rounded-full bg-emerald-500"></span>Cloud synced (${SYNC_STATE.rollNo})</span>`;
+    } else if (SYNC_STATE.status === "error") {
+      badge.innerHTML = `<span class="inline-flex items-center gap-1.5 text-xs font-semibold text-rose-600"><span class="w-2 h-2 rounded-full bg-rose-500"></span>Sync error</span>`;
+    } else if (SYNC_STATE.status === "offline") {
+      badge.innerHTML = `<span class="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-700"><span class="w-2 h-2 rounded-full bg-amber-500"></span>Offline (saved locally)</span>`;
+    }
+  }
+
   // ../app/js/state.js
-  var STORE_KEY = "study_plan_v6";
+  var STORE_KEY = "study_plan_v6-sem6";
   function defaultCfg() {
     return {
       ready: false,
@@ -4464,12 +4615,12 @@ details.unit-dd[open] summary::after {
       sec: "EPD",
       hours: 1,
       maxPerDay: 3,
-      secSessions: 3,
       revision: 1,
       start: focusISO(),
       days: {},
       done: {},
-      custom: []
+      custom: [],
+      rollNo: ""
     };
   }
   var cfg = defaultCfg();
@@ -4498,16 +4649,37 @@ details.unit-dd[open] summary::after {
   function setProg(nextProg) {
     prog = nextProg;
   }
-  function autoSetup() {
-    if (Object.keys(profiles).length) return;
-    profiles.physics = {
-      cfg: { ...defaultCfg(), dept: "physics", sec: "EPD", ready: true },
-      prog: { sessions: {} }
-    };
+  function handleRemoteSync(remote) {
+    if (!remote || !remote.cfg) return;
+    const prevRollNo = cfg.rollNo;
+    cfg = { ...defaultCfg(), ...remote.cfg, ready: true };
+    if (!cfg.rollNo && remote.rollNo) cfg.rollNo = remote.rollNo;
+    prog = { sessions: {}, ...remote.prog || {} };
+    profiles[cfg.dept] = { cfg: clone(cfg), prog: clone(prog) };
     try {
-      localStorage.setItem(STORE_KEY, JSON.stringify({ active: "physics", profiles }));
+      localStorage.setItem(STORE_KEY, JSON.stringify({ active: cfg.dept, profiles }));
     } catch (e) {
     }
+    replan();
+    if (typeof window !== "undefined" && window.renderAll) {
+      window.renderAll();
+    }
+  }
+  async function restoreFromCloud(rollNo) {
+    const sanitized = sanitizeRollNo(rollNo);
+    if (!sanitized) {
+      toast("Please enter a valid Roll Number");
+      return false;
+    }
+    const res = await pullCloud(sanitized);
+    if (!res.ok) {
+      toast(res.error || `No saved plan found for Roll No "${sanitized}"`);
+      return false;
+    }
+    handleRemoteSync(res.data);
+    setupRealtimeListener(sanitized, handleRemoteSync);
+    toast(`Settings restored for Roll No ${sanitized}!`);
+    return true;
   }
   function loadProfile(dept) {
     const p = profiles[dept];
@@ -4519,6 +4691,9 @@ details.unit-dd[open] summary::after {
       cfg = { ...defaultCfg(), dept, sec };
       prog = { sessions: {} };
     }
+    if (cfg.rollNo) {
+      setupRealtimeListener(cfg.rollNo, handleRemoteSync);
+    }
   }
   function load() {
     try {
@@ -4528,10 +4703,19 @@ details.unit-dd[open] summary::after {
       } else if (raw && raw.cfg) {
         profiles = { [raw.cfg.dept || "physics"]: { cfg: raw.cfg, prog: raw.prog || {} } };
       }
-      autoSetup();
-      const active = raw && raw.active && profiles[raw.active] ? raw.active : Object.keys(profiles)[0];
-      if (active) loadProfile(active);
+      const active = raw && raw.active && profiles[raw.active] ? raw.active : Object.keys(profiles).length ? Object.keys(profiles)[0] : null;
+      if (active) {
+        loadProfile(active);
+      } else {
+        cfg = defaultCfg();
+        prog = { sessions: {} };
+      }
+      if (cfg.rollNo) {
+        setupRealtimeListener(cfg.rollNo, handleRemoteSync);
+      }
     } catch (e) {
+      cfg = defaultCfg();
+      prog = { sessions: {} };
     }
   }
   function save() {
@@ -4542,6 +4726,9 @@ details.unit-dd[open] summary::after {
       localStorage.setItem(STORE_KEY, JSON.stringify({ active: cfg.dept, profiles }));
     } catch (e) {
       toast("Couldn't save to this browser");
+    }
+    if (cfg.ready && cfg.rollNo) {
+      pushCloud(cfg, prog);
     }
   }
   function replan() {
@@ -4769,8 +4956,56 @@ details.unit-dd[open] summary::after {
         <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--navy-500,#64748b)">Skill Enhancement Course (SEC)</div>
         <div id="sec-auto-label" style="font-size:14px;font-weight:700;color:var(--navy-900,#0f172a);margin-top:2px"></div>
       </div>
+    </div>
+
+    <!-- Quick Restore for existing users with Roll Number -->
+    <div class="restore-card" style="margin-top:24px;padding:16px;background:#ffffff;border-radius:16px;border:1.5px dashed var(--line,#cbd5e1);display:flex;flex-direction:column;gap:12px;box-shadow:0 2px 12px rgba(15,23,42,0.03)">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+        <div>
+          <div style="font-size:13.5px;font-weight:800;color:var(--navy-800,#1e293b)">Already have a plan?</div>
+          <div style="font-size:12px;color:var(--muted,#64748b);margin-top:2px">Restore all your settings and progress with your Roll Number</div>
+        </div>
+        <button type="button" id="btn-toggle-restore" class="btn sm" style="white-space:nowrap;font-weight:700;flex-shrink:0">Restore</button>
+      </div>
+      <div id="restore-input-row" style="display:none;align-items:center;gap:8px;margin-top:4px">
+        <input type="text" id="restore-roll-input" placeholder="Enter Roll No (e.g. 23PH01)" autocomplete="off" autocapitalize="characters" style="flex:1;min-width:0;height:42px;padding:0 12px;border:1.5px solid var(--line,#cbd5e1);border-radius:10px;font-size:13.5px;font-weight:800;text-transform:uppercase;color:var(--navy-900,#0f172a);font-family:inherit;outline:none" />
+        <button type="button" id="btn-do-restore" class="btn primary sm" style="height:42px;padding:0 16px;font-weight:800;flex-shrink:0">Restore</button>
+      </div>
     </div>`;
     const dg = $("#dept-grid", root), lbl = $("#sec-auto-label", root);
+    const toggleBtn = $("#btn-toggle-restore", root);
+    const row = $("#restore-input-row", root);
+    const rollIn = $("#restore-roll-input", root);
+    const doBtn = $("#btn-do-restore", root);
+    if (toggleBtn && row) {
+      toggleBtn.onclick = () => {
+        const open = row.style.display === "flex";
+        row.style.display = open ? "none" : "flex";
+        if (!open && rollIn) rollIn.focus();
+      };
+    }
+    if (doBtn && rollIn) {
+      const triggerRestore = async () => {
+        const val = rollIn.value.trim().toUpperCase();
+        if (!val) {
+          toast("Please enter your Roll Number");
+          return;
+        }
+        doBtn.disabled = true;
+        doBtn.textContent = "Restoring...";
+        const ok = await restoreFromCloud(val);
+        doBtn.disabled = false;
+        doBtn.textContent = "Restore";
+        if (ok) {
+          closeWizard();
+          renderAll();
+        }
+      };
+      doBtn.onclick = triggerRestore;
+      rollIn.onkeydown = (e) => {
+        if (e.key === "Enter") triggerRestore();
+      };
+    }
     const paint = () => {
       dg.innerHTML = Object.entries(DEPTS).map(([k, v]) => `<button type="button" class="choice ${d.dept === k ? "on" : ""}" data-k="${k}"><b>${v.label}</b><span>${v.sub}</span></button>`).join("");
       const secId = DEPTS[d.dept] && DEPTS[d.dept].sec || (d.dept === "math" ? "DSP" : "EPD");
@@ -4796,7 +5031,6 @@ details.unit-dd[open] summary::after {
     root.append(
       ruleSlider("Hours per session", "Your preferred pace; all topics are included regardless of time", "hours", d, 1, 6, 0.5, (v) => hrs(v), onChange),
       ruleSlider("Preferred sessions per day", "Extra sessions are added when needed to include all topics and revision", "maxPerDay", d, 1, 5, 1, (v) => v, re),
-      ruleSlider("Sessions for SEC", "Total sessions you want to give the SEC subject", "secSessions", d, 1, 8, 1, (v) => v, onChange),
       ruleSlider("Revision sessions per subject", "Full-syllabus revision passes kept for the run-up to each exam", "revision", d, 0, 3, 1, (v) => v === 0 ? "None" : v, onChange)
     );
   }
@@ -4966,13 +5200,51 @@ details.unit-dd[open] summary::after {
     });
     paintNeed();
   }
+  function renderRollNo(root, d, onChange) {
+    root.innerHTML = `
+    <div style="padding:20px;background:#ffffff;border-radius:20px;border:1.5px solid var(--line,#e2e8f0);box-shadow:0 4px 18px -4px rgba(15,23,42,0.05);display:flex;flex-direction:column;gap:18px">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="width:46px;height:46px;border-radius:14px;background:#eef2ff;color:#4f46e5;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <svg style="width:24px;height:24px" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+        </div>
+        <div>
+          <h3 style="font-size:17px;font-weight:800;color:var(--navy-900,#0f172a);line-height:1.2">Student Roll Number</h3>
+          <p style="font-size:13px;color:var(--muted,#64748b);margin-top:3px">Syncs your study plan and completed sessions across all devices in real time.</p>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <label for="wz-roll-input" style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;color:var(--navy-700,#334155)">Roll Number / Student ID</label>
+        <input
+          type="text"
+          id="wz-roll-input"
+          placeholder="e.g. 23PH01 or 12"
+          value="${esc(d.rollNo || "")}"
+          autocomplete="off"
+          autocapitalize="characters"
+          style="height:48px;padding:0 14px;border:1.5px solid var(--line,#cbd5e1);border-radius:12px;font-size:16px;font-weight:800;text-transform:uppercase;color:var(--navy-900,#0f172a);outline:none;font-family:inherit"
+        />
+      </div>
+
+      <div style="padding:12px 14px;background:#f8fafc;border-radius:12px;border:1px solid #e2e8f0;font-size:12.5px;color:#475569;line-height:1.5;display:flex;align-items:flex-start;gap:10px">
+        <span style="font-size:16px;line-height:1">\u26A1</span>
+        <div><b>Multi-device Sync:</b> Open this study plan on your phone and laptop using the same Roll Number. Any session marked done or edited will update on both devices automatically.</div>
+      </div>
+    </div>`;
+    const input = $("#wz-roll-input", root);
+    input.oninput = () => {
+      d.rollNo = input.value.trim().toUpperCase();
+      onChange();
+    };
+  }
 
   // ../app/js/views/wizard.js
   var WZ_STEPS = [
     { title: "Who's studying?", lead: "Pick your department. All 3 Major Core, 2 Electives, and department SEC courses with exam dates are already built in.", render: renderProfile },
     { title: "Session rules", lead: "Choose your preferred pace. All topics and requested revision will be included.", render: renderRules },
     { title: "Your daily schedule", lead: "Slide to choose how many sessions you\u2019ll do each day. Set it to 0 for a day off.", render: renderSchedule },
-    { title: "Where are you now?", lead: "Slide each subject to the units you've already finished. Each stop is one unit; notches mark the modules.", render: renderProgress }
+    { title: "Where are you now?", lead: "Slide each subject to the units you've already finished. Each stop is one unit; notches mark the modules.", render: renderProgress },
+    { title: "Student roll number", lead: "Enter your Roll Number to save and sync your study plan across all your devices in real time.", render: renderRollNo }
   ];
   function openWizard(fromSettings) {
     ui.wizardFromSettings = !!fromSettings;
@@ -5039,6 +5311,7 @@ details.unit-dd[open] summary::after {
   }
   function finishSetup(d) {
     normalizeDraft(d);
+    if (d.rollNo) d.rollNo = d.rollNo.trim().toUpperCase();
     const fresh = !cfg.ready;
     setCfg({ ...clone(d), ready: true });
     if (fresh || ui.wizardFromSettings) setProg({ sessions: {} });
@@ -5049,7 +5322,7 @@ details.unit-dd[open] summary::after {
     ui.dirty = false;
     switchTab("plan");
     renderAll();
-    toast("Plan built. Good luck!");
+    toast(d.rollNo ? `Plan built and synced for Roll No ${d.rollNo}!` : "Plan built. Good luck!");
   }
 
   // ../app/js/utils/export-image.js
@@ -8480,9 +8753,10 @@ details.unit-dd[open] summary::after {
     const d = ui.draft;
     const sections = [
       { k: "Profile", sum: () => `${DEPTS[d.dept].label} \xB7 SEC: ${SUBJECTS[DEPTS[d.dept].sec]?.shortName || ""}`, fn: renderProfile },
-      { k: "Session rules", sum: () => `${hrs(d.hours)} \xB7 ${d.maxPerDay}/day preferred \xB7 SEC ${d.secSessions}`, fn: renderRules },
+      { k: "Session rules", sum: () => `${hrs(d.hours)} \xB7 ${d.maxPerDay}/day preferred \xB7 ${d.revision} revision`, fn: renderRules },
       { k: "Daily schedule", sum: () => `${editDates(d).reduce((s, x) => s + d.days[x], 0)} sessions`, fn: renderSchedule },
-      { k: "Progress so far", sum: () => `${activeIds(d).reduce((s, id) => s + (d.done[id] || []).length, 0)} units done`, fn: renderProgress }
+      { k: "Progress so far", sum: () => `${activeIds(d).reduce((s, id) => s + (d.done[id] || []).length, 0)} units done`, fn: renderProgress },
+      { k: "Roll Number & Cloud Sync", sum: () => d.rollNo ? `Roll No: ${d.rollNo}` : "Not set", fn: renderRollNo }
     ];
     root.innerHTML = `<div class="set-grid">
     <div class="card">
@@ -8499,6 +8773,23 @@ details.unit-dd[open] summary::after {
         </div>
       </div>
     </details>
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <h3 style="font-size:16px;font-weight:800">Cloud Sync (Realtime Database)</h3>
+        <div id="cloud-sync-badge"></div>
+      </div>
+      <p class="muted" style="font-size:13px;font-weight:600;margin-bottom:12px">Roll Number: <b style="color:var(--navy-900,#0f172a)">${esc(d.rollNo || "Not connected")}</b></p>
+      <div class="zone">
+        <div>
+          <button class="btn primary" id="d-cloud-sync">${ICON.check} Sync to Cloud Now</button>
+          <p class="muted" style="font-size:12px;font-weight:600;margin-top:6px">Pushes current plan and progress to Firebase Realtime Database.</p>
+        </div>
+        <div>
+          <button class="btn" id="d-cloud-restore">Restore from Cloud</button>
+          <p class="muted" style="font-size:12px;font-weight:600;margin-top:6px">Pulls settings from cloud using your Roll Number.</p>
+        </div>
+      </div>
+    </div>
     <div class="card">
       <h3 style="font-size:16px;font-weight:800;margin-bottom:10px">Your data</h3>
       <div class="zone">
@@ -8609,6 +8900,38 @@ details.unit-dd[open] summary::after {
       if (e.target.files[0]) importData(e.target.files[0]);
       e.target.value = "";
     };
+    const syncBtn = $("#d-cloud-sync");
+    if (syncBtn) {
+      syncBtn.onclick = () => {
+        if (!d.rollNo) {
+          const roll = prompt("Enter your Roll Number to connect Cloud Sync:", "");
+          if (roll && roll.trim()) {
+            d.rollNo = roll.trim().toUpperCase();
+            setDirty();
+          } else {
+            return;
+          }
+        }
+        pushCloud(cfg, prog, true);
+        toast(`Synced plan for Roll No ${d.rollNo}!`);
+        renderSettings();
+      };
+    }
+    const restoreBtn = $("#d-cloud-restore");
+    if (restoreBtn) {
+      restoreBtn.onclick = async () => {
+        const roll = prompt("Enter Roll Number to restore settings from cloud:", d.rollNo || "");
+        if (roll && roll.trim()) {
+          const ok = await restoreFromCloud(roll.trim().toUpperCase());
+          if (ok) {
+            ui.settingsDraft = false;
+            renderSettings();
+            renderAll();
+          }
+        }
+      };
+    }
+    updateSyncBadges();
   }
 
   // ../app/js/main.js

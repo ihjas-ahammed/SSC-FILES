@@ -5,14 +5,15 @@
 import { ICON } from "../data/icons.js";
 import { $, clone, toast } from "../utils/dom.js";
 import { cfg, ui, defaultCfg, setCfg, setProg, save, replan } from "../state.js";
-import { renderProfile, renderRules, renderSchedule, renderProgress, normalizeDraft, editDates } from "./shared-editors.js";
+import { renderProfile, renderRules, renderSchedule, renderProgress, renderRollNo, normalizeDraft, editDates } from "./shared-editors.js";
 import { switchTab, renderAll } from "../main.js";
 
 export const WZ_STEPS = [
   { title: "Who's studying?", lead: "Pick your department. All 3 Major Core, 2 Electives, and department SEC courses with exam dates are already built in.", render: renderProfile },
   { title: "Session rules", lead: "Choose your preferred pace. All topics and requested revision will be included.", render: renderRules },
   { title: "Your daily schedule", lead: "Slide to choose how many sessions you’ll do each day. Set it to 0 for a day off.", render: renderSchedule },
-  { title: "Where are you now?", lead: "Slide each subject to the units you've already finished. Each stop is one unit; notches mark the modules.", render: renderProgress }
+  { title: "Where are you now?", lead: "Slide each subject to the units you've already finished. Each stop is one unit; notches mark the modules.", render: renderProgress },
+  { title: "Student roll number", lead: "Enter your Roll Number to save and sync your study plan across all your devices in real time.", render: renderRollNo }
 ];
 
 export function openWizard(fromSettings) {
@@ -85,6 +86,7 @@ export function updateWizardNext() {
 
 export function finishSetup(d) {
   normalizeDraft(d);
+  if (d.rollNo) d.rollNo = d.rollNo.trim().toUpperCase();
   const fresh = !cfg.ready;
   setCfg({ ...clone(d), ready: true });
   if (fresh || ui.wizardFromSettings) setProg({ sessions: {} });
@@ -95,5 +97,5 @@ export function finishSetup(d) {
   ui.dirty = false;
   switchTab("plan");
   renderAll();
-  toast("Plan built. Good luck!");
+  toast(d.rollNo ? `Plan built and synced for Roll No ${d.rollNo}!` : "Plan built. Good luck!");
 }

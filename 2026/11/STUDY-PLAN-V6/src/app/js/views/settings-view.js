@@ -9,12 +9,13 @@ import { todayISO, hrs, wdShort, niceDate } from "../utils/dates.js";
 import { activeIds, examsOf } from "../engine/syllabus.js";
 import {
   cfg, prog, profiles, ui, defaultCfg,
-  setCfg, setProg, save, loadProfile, replan
+  setCfg, setProg, save, loadProfile, replan, restoreFromCloud
 } from "../state.js";
 import {
-  renderProfile, renderRules, renderSchedule, renderProgress,
+  renderProfile, renderRules, renderSchedule, renderProgress, renderRollNo,
   normalizeDraft, editDates
 } from "./shared-editors.js";
+import { pushCloud, updateSyncBadges } from "../sync.js";
 import { openWizard } from "./wizard.js";
 import { renderPlan } from "./plan-view.js";
 import { renderDay } from "./day-view.js";
@@ -85,9 +86,10 @@ export function renderSettings() {
   const d = ui.draft;
   const sections = [
     { k: "Profile", sum: () => `${DEPTS[d.dept].label} · SEC: ${SUBJECTS[DEPTS[d.dept].sec]?.shortName || ""}`, fn: renderProfile },
-    { k: "Session rules", sum: () => `${hrs(d.hours)} · ${d.maxPerDay}/day preferred · SEC ${d.secSessions}`, fn: renderRules },
+    { k: "Session rules", sum: () => `${hrs(d.hours)} · ${d.maxPerDay}/day preferred · ${d.revision} revision`, fn: renderRules },
     { k: "Daily schedule", sum: () => `${editDates(d).reduce((s, x) => s + d.days[x], 0)} sessions`, fn: renderSchedule },
-    { k: "Progress so far", sum: () => `${activeIds(d).reduce((s, id) => s + (d.done[id] || []).length, 0)} units done`, fn: renderProgress }
+    { k: "Progress so far", sum: () => `${activeIds(d).reduce((s, id) => s + (d.done[id] || []).length, 0)} units done`, fn: renderProgress },
+    { k: "Roll Number & Cloud Sync", sum: () => d.rollNo ? `Roll No: ${d.rollNo}` : "Not set", fn: renderRollNo }
   ];
 
   root.innerHTML = `<div class="set-grid">
@@ -105,6 +107,23 @@ export function renderSettings() {
         </div>
       </div>
     </details>
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <h3 style="font-size:16px;font-weight:800">Cloud Sync (Realtime Database)</h3>
+        <div id="cloud-sync-badge"></div>
+      </div>
+      <p class="muted" style="font-size:13px;font-weight:600;margin-bottom:12px">Roll Number: <b style="color:var(--navy-900,#0f172a)">${esc(d.rollNo || "Not connected")}</b></p>
+      <div class="zone">
+        <div>
+          <button class="btn primary" id="d-cloud-sync">${ICON.check} Sync to Cloud Now</button>
+          <p class="muted" style="font-size:12px;font-weight:600;margin-top:6px">Pushes current plan and progress to Firebase Realtime Database.</p>
+        </div>
+        <div>
+          <button class="btn" id="d-cloud-restore">Restore from Cloud</button>
+          <p class="muted" style="font-size:12px;font-weight:600;margin-top:6px">Pulls settings from cloud using your Roll Number.</p>
+        </div>
+      </div>
+    </div>
     <div class="card">
       <h3 style="font-size:16px;font-weight:800;margin-bottom:10px">Your data</h3>
       <div class="zone">
@@ -216,4 +235,39 @@ export function renderSettings() {
     if (e.target.files[0]) importData(e.target.files[0]);
     e.target.value = "";
   };
+
+  const syncBtn = $("#d-cloud-sync");
+  if (syncBtn) {
+    syncBtn.onclick = () => {
+      if (!d.rollNo) {
+        const roll = prompt("Enter your Roll Number to connect Cloud Sync:", "");
+        if (roll && roll.trim()) {
+          d.rollNo = roll.trim().toUpperCase();
+          setDirty();
+        } else {
+          return;
+        }
+      }
+      pushCloud(cfg, prog, true);
+      toast(`Synced plan for Roll No ${d.rollNo}!`);
+      renderSettings();
+    };
+  }
+
+  const restoreBtn = $("#d-cloud-restore");
+  if (restoreBtn) {
+    restoreBtn.onclick = async () => {
+      const roll = prompt("Enter Roll Number to restore settings from cloud:", d.rollNo || "");
+      if (roll && roll.trim()) {
+        const ok = await restoreFromCloud(roll.trim().toUpperCase());
+        if (ok) {
+          ui.settingsDraft = false;
+          renderSettings();
+          renderAll();
+        }
+      }
+    };
+  }
+
+  updateSyncBadges();
 }
