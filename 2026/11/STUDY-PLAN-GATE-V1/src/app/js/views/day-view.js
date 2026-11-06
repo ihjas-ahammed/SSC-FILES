@@ -2,7 +2,7 @@
    DAY VIEW (Daily Study Card & Topic Lists)
    ========================================================================= */
 
-import { DEPTS, SUBJECTS } from "../data/subjects.js";
+import { DEPTS, SUBJECTS, LAST_EXAM } from "../data/subjects.js";
 import { ICON, SUBJECT_SVGS } from "../data/icons.js";
 import { $, esc, emptyHtml } from "../utils/dom.js";
 import { focusISO, wdShort, wdName, dayNum, monName, parse, daysBetween, fmtH, niceDate, hrs } from "../utils/dates.js";
@@ -154,7 +154,7 @@ export function dayCardHtml(d) {
         <div class="dc-chips">
           <span class="dc-chip">${ss.length} session${ss.length === 1 ? "" : "s"}</span>
           <span class="dc-chip">${hrs(hoursDay)}</span>
-          ${next && toNext > 0 ? `<span class="dc-chip gold">${esc(next.shortName)} exam in ${toNext}d</span>` : ""}
+          ${next && toNext > 0 ? `<span class="dc-chip gold">${esc(next.shortName)} exam in ${toNext}d</span>` : (d >= LAST_EXAM ? `<span class="dc-chip" style="background:#ef4444; color:#fff;">Post-Exam Day</span>` : "")}
         </div>
       </div>
       <div class="ring no-export">
@@ -166,6 +166,7 @@ export function dayCardHtml(d) {
       </div>
     </div>
     ${exToday.length ? `<div class="exam-banner">${ICON.exam}Exam today: ${exToday.map(s => esc(s.name)).join(" · ")}</div>` : ""}
+    ${d >= LAST_EXAM ? `<div class="no-export" style="margin: 8px 16px 12px; padding: 10px 14px; border-radius: 8px; background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.4); color: #f87171; font-size: 0.88rem; display: flex; align-items: center; gap: 8px;"><span>⚠️</span><span><b>Post-Exam Session:</b> This session is scheduled on or after the GATE exam (14 Feb 2027). Increase your daily sessions in Settings to complete before the exam.</span></div>` : ""}
     <div class="dc-sessions">${sessionHtml}</div>
     ${foot}
     <div class="dc-brand">STUDY PLAN · ${esc(DEPTS[cfg.dept].label.toUpperCase())}</div>

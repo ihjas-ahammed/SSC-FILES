@@ -2,7 +2,7 @@
    PLAN VIEW (Roadmap Calendar Grid)
    ========================================================================= */
 
-import { DEPTS } from "../data/subjects.js";
+import { DEPTS, LAST_EXAM } from "../data/subjects.js";
 import { ICON } from "../data/icons.js";
 import { $, esc, emptyHtml } from "../utils/dom.js";
 import { focusISO, todayISO, parse, iso, niceDate, fmtH, dayNum, wdShort, monName } from "../utils/dates.js";
@@ -30,11 +30,16 @@ export function renderPlan() {
   const f = focusISO();
   const exams = {};
   examsOf(cfg).forEach(s => (exams[s.examDate] = exams[s.examDate] || []).push(s));
-  const days = [...new Set([...planDates(cfg), ...Object.keys(exams).filter(d => d >= cfg.start)])].sort();
+  const days = [...new Set([...planDates(cfg), ...Object.keys(exams).filter(d => d >= cfg.start), ...(plan && plan.dates ? plan.dates : [])])].sort();
   const totalS = plan.sessions.length;
   const revN = plan.sessions.filter(s => s.type === "rev").length;
 
   let html = `<div class="plan-toolbar"><p class="muted">Tap a day to open its study card.</p></div>`;
+  if (plan.warnings && plan.warnings.length) {
+    html += `<div class="plan-warning-box" style="margin: 0 0 16px; padding: 14px 18px; border-radius: 12px; background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.35); color: #fca5a5; display: flex; flex-direction: column; gap: 8px; font-size: 0.95rem; line-height: 1.5;">
+      ${plan.warnings.map(w => `<div style="display:flex; align-items:flex-start; gap:10px;"><span style="font-size:1.2rem; line-height:1;">⚠️</span><div style="flex:1;"><b>Pace Warning:</b> ${esc(w)}</div></div>`).join("")}
+    </div>`;
+  }
   html += `<div id="plan-export">
     <div class="pe-head">
       <div>
@@ -62,12 +67,13 @@ export function renderPlan() {
       html += `<div class="week-label">Week of ${niceDate(wk)}</div><div class="day-grid">`;
     }
     const ss = sessionsOn(d), ex = exams[d] || [];
-    const cls = ["dcell", d === f ? "today" : "", d < f ? "past" : "", ex.length ? "examonly" : ""].join(" ");
+    const isPostExam = d >= LAST_EXAM;
+    const cls = ["dcell", d === f ? "today" : "", d < f ? "past" : "", ex.length ? "examonly" : "", isPostExam ? "post-exam" : ""].join(" ");
     html += `<button class="${cls}" data-d="${d}">
       <div class="top">
         <span class="num">${dayNum(d)}</span>
         <span class="wd">${wdShort(d)} · ${monName(d)}</span>
-        ${d === f ? `<span class="flag no-export">${todayISO() === f ? "TODAY" : "NEXT"}</span>` : ""}
+        ${d === f ? `<span class="flag no-export">${todayISO() === f ? "TODAY" : "NEXT"}</span>` : (isPostExam && ss.length && !ex.length ? `<span class="flag no-export" style="background:#ef4444; color:#fff;">AFTER EXAM</span>` : "")}
       </div>
       ${ss.map(s => `<div class="pill ${prog.sessions[s.id] ? "done" : ""}" style="${colorStyle(s.subjectId)}">
         <span class="nm">${esc(subj(s.subjectId, cfg).shortName)}</span>

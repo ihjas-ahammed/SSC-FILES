@@ -9,7 +9,7 @@ import { renderProfile, renderRules, renderSchedule, renderProgress, renderRollN
 import { switchTab, renderAll } from "../main.js";
 
 export const WZ_STEPS = [
-  { title: "Who's studying?", lead: "GATE Data Science & AI (GATE DA). All 8 core subjects across 3 preparation phases leading to the single February 1 exam are built in.", render: renderProfile },
+  { title: "Who's studying?", lead: "GATE Data Science & AI (GATE DA). All 8 core subjects across 3 preparation phases leading to the single February 14 exam are built in.", render: renderProfile },
   { title: "Session rules", lead: "Choose your preferred pace. All topics and requested revision will be included.", render: renderRules },
   { title: "Your daily schedule", lead: "Slide to choose how many sessions you’ll do each day. Set it to 0 for a day off.", render: renderSchedule },
   { title: "Where are you now?", lead: "Slide each subject to the units you've already finished. Each stop is one unit; notches mark the modules.", render: renderProgress },

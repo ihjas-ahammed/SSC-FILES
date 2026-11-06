@@ -1,6 +1,6 @@
 /* =========================================================================
    GATE DATA SCIENCE & AI (GATE DA) CURRICULUM & MODULE SPECIFICATION
-   Master Exam Date: February 1, 2027 (Single GATE Exam Milestone)
+   Master Exam Date: February 14, 2027 (Single GATE Exam Milestone)
    ========================================================================= */
 
 export const MODULE_LABEL = { "1": "I", "2": "II", "3": "III", "4": "IV" };
@@ -464,7 +464,7 @@ export const SUBJECTS = {
     "role": "Phase 1 \u00b7 Course 1 (11.0m)",
     "name": "Linear Algebra",
     "shortName": "Linear Algebra",
-    "examDate": "2027-02-01",
+    "examDate": "2027-02-14",
     "totalUnits": 41,
     "unitLabel": "units",
     "theme": {
@@ -652,7 +652,7 @@ export const SUBJECTS = {
     "role": "Phase 1 \u00b7 Course 2 (8.7m)",
     "name": "Calculus and Optimization",
     "shortName": "Calculus & Opt",
-    "examDate": "2027-02-01",
+    "examDate": "2027-02-14",
     "totalUnits": 31,
     "unitLabel": "units",
     "theme": {
@@ -800,7 +800,7 @@ export const SUBJECTS = {
     "role": "Phase 1 \u00b7 Course 3 (17.0m)",
     "name": "Probability and Statistics",
     "shortName": "Prob & Stats",
-    "examDate": "2027-02-01",
+    "examDate": "2027-02-14",
     "totalUnits": 29,
     "unitLabel": "units",
     "theme": {
@@ -940,7 +940,7 @@ export const SUBJECTS = {
     "role": "Phase 2 \u00b7 Course 4 (16.0m)",
     "name": "Programming, Data Structures & Algorithms",
     "shortName": "Prog & DSA",
-    "examDate": "2027-02-01",
+    "examDate": "2027-02-14",
     "totalUnits": 94,
     "unitLabel": "units",
     "theme": {
@@ -1340,7 +1340,7 @@ export const SUBJECTS = {
     "role": "Phase 2 \u00b7 Course 5 (13.0m)",
     "name": "Database Management and Warehousing",
     "shortName": "DB & Warehousing",
-    "examDate": "2027-02-01",
+    "examDate": "2027-02-14",
     "totalUnits": 80,
     "unitLabel": "units",
     "theme": {
@@ -1684,7 +1684,7 @@ export const SUBJECTS = {
     "role": "Phase 3 \u00b7 Course 6 (12.3m)",
     "name": "Machine Learning",
     "shortName": "Machine Learning",
-    "examDate": "2027-02-01",
+    "examDate": "2027-02-14",
     "totalUnits": 64,
     "unitLabel": "units",
     "theme": {
@@ -1964,7 +1964,7 @@ export const SUBJECTS = {
     "role": "Phase 3 \u00b7 Course 7 (7.0m)",
     "name": "Artificial Intelligence",
     "shortName": "Artificial Intelligence",
-    "examDate": "2027-02-01",
+    "examDate": "2027-02-14",
     "totalUnits": 44,
     "unitLabel": "units",
     "theme": {
@@ -2164,7 +2164,7 @@ export const SUBJECTS = {
     "role": "Phase 3 \u00b7 Course 8 (15.0m)",
     "name": "General Aptitude",
     "shortName": "General Aptitude",
-    "examDate": "2027-02-01",
+    "examDate": "2027-02-14",
     "totalUnits": 29,
     "unitLabel": "units",
     "theme": {
@@ -2300,4 +2300,4 @@ export const SUBJECTS = {
   }
 };
 
-export const LAST_EXAM = "2027-02-01";
+export const LAST_EXAM = "2027-02-14";

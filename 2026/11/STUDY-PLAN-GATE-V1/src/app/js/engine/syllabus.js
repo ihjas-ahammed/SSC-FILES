@@ -29,7 +29,7 @@ export const examsOf = (cfg) => [
     id: "GATE_DA",
     name: "GATE 2027 Data Science & AI Exam",
     shortName: "GATE DA",
-    examDate: "2027-02-01",
+    examDate: "2027-02-14",
     role: "GATE DA Exam",
     theme: { cardBg: "#EEF2FF", bannerBg: "#E0E7FF", border: "#6366F1" }
   }

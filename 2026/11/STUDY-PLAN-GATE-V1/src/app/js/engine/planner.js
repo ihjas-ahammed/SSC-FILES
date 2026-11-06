@@ -1,10 +1,14 @@
 /* =========================================================================
-   STUDY PLAN GENERATION ENGINE
+   STUDY PLAN GENERATION ENGINE (GATE DATA SCIENCE & AI)
+   Sequential Phase-by-Phase Execution with Strict Daily Slot Enforcement
    ========================================================================= */
 
 import { SUBJECTS, LAST_EXAM, DEPTS } from "../data/subjects.js";
-import { rangeDates, addDays } from "../utils/dates.js";
+import { rangeDates, addDays, niceDate, fmtH } from "../utils/dates.js";
 import { activeIds, remainingUnits, subj } from "./syllabus.js";
+
+// Master sequence according to the 3-phase pathway
+export const COURSE_ORDER = ["LA", "CO", "PS", "PDSA", "DB", "ML", "AI", "GA"];
 
 export const planDates = (c) => rangeDates(c.start, addDays(LAST_EXAM, -1));
 export const slotCount = (c, d) => Math.max(0, Math.min(c.maxPerDay, c.days[d] ?? c.maxPerDay));
@@ -33,188 +37,114 @@ export function revisionBullets(id) {
 }
 
 export function buildPlan(c) {
-  const ids = activeIds(c);
-  const dates = planDates(c);
-  const slots = [];
-  dates.forEach(d => {
-    for (let i = 0; i < slotCount(c, d); i++) slots.push({ date: d, slot: i });
-  });
-  const T = slots.length;
-  const needs = sessionNeeds(c);
+  const active = activeIds(c);
+  const order = COURSE_ORDER.filter(id => active.includes(id));
+  active.forEach(id => { if (!order.includes(id)) order.push(id); });
 
-  // A subject's teaching sessions never exceed the session length, so its hours are spread over
-  // ceil(hours / length) sessions. If the slots cannot hold all of that, the shortfall is reported.
-  ids.forEach(id => {
+  const needs = sessionNeeds(c);
+  order.forEach(id => {
     if (needs[id].need) {
       needs[id].sessionHours = needs[id].hours / needs[id].need;
     }
   });
 
-  const demand = ids.reduce((s, id) => s + needs[id].need + (needs[id].units ? c.revision : 0), 0);
-  const shortfall = demand > T
-    ? `Not enough slots: ${demand} sessions needed, ${T} available at ${c.maxPerDay} per day. Extra sessions go over the daily limit.`
-    : null;
-
-  const deadline = id => SUBJECTS[id].examDate;
-  const inWindow = (id, date) => date < deadline(id);
-
-  const order = ids.slice().sort((a, b) => SUBJECTS[a].examDate.localeCompare(SUBJECTS[b].examDate));
-  const placed = Object.fromEntries(ids.map(id => [id, []]));
-  const assignments = Array(T).fill(null);
-  const firstTeach = {}, firstRev = {};
-  const assign = (i, id, type) => { assignments[i] = { id, type }; };
-
-  // Keep at least one teaching session for every unfinished subject, then reserve
-  // revision nearest its exam. Revision must not disappear when teaching is heavy.
+  // 1. Build master queue of sessions in sequential course order:
+  // Phase 1: Course 1 (LA) -> Course 2 (CO) -> Course 3 (PS)
+  // Phase 2: Course 4 (PDSA) -> Course 5 (DB)
+  // Phase 3: Course 6 (ML) -> Course 7 (AI) -> Course 8 (GA)
+  const queue = [];
   order.forEach(id => {
-    if (!needs[id].need) return;
-    const i = slots.findIndex((slot, j) => !assignments[j] && inWindow(id, slot.date));
-    if (i >= 0) { assign(i, id, "teach"); firstTeach[id] = i; }
-  });
-
-  for (let round = 0; round < c.revision; round++) {
-    order.forEach(id => {
-      if (needs[id].need && firstTeach[id] === undefined) return;
-      for (let i = T - 1; i >= 0; i--) {
-        const sameDayRev = assignments.some((a, j) => a && a.id === id && a.type === "rev" && slots[j].date === slots[i].date);
-        if (!assignments[i] && !sameDayRev && inWindow(id, slots[i].date) && i > (firstTeach[id] ?? -1)) {
-          assign(i, id, "rev"); firstRev[id] = i; break;
-        }
-      }
-    });
-  }
-
-  const teachCounts = Object.fromEntries(ids.map(id => [id, firstTeach[id] === undefined ? 0 : 1]));
-  let curDate = null, usedToday = new Set();
-
-  slots.forEach((slot, i) => {
-    if (slot.date !== curDate) { curDate = slot.date; usedToday = new Set(); }
-    if (!assignments[i]) {
-      let best = null, bestScore = -1;
-      order.forEach(id => {
-        if (teachCounts[id] >= needs[id].need || !inWindow(id, slot.date) || i >= (firstRev[id] ?? T)) return;
-        
-        // Fair proportional remaining need
-        const remFraction = (needs[id].need - teachCounts[id]) / needs[id].need;
-        
-        // Curricular phase weighting: Math Foundations (Phase 1) > Systems (Phase 2) > Applications (Phase 3)
-        let phaseWeight = 1.0;
-        if (["LA", "CO", "PS"].includes(id)) phaseWeight = 1.15;
-        else if (["PDSA", "DB"].includes(id)) phaseWeight = 1.08;
-        
-        let score = remFraction * phaseWeight;
-        
-        // Strong penalty for repeating the same subject on the same day
-        if (usedToday.has(id)) score *= 0.15;
-        
-        if (score > bestScore) { best = id; bestScore = score; }
-      });
-      if (best) { assign(i, best, "teach"); teachCounts[best]++; }
-    }
-    if (assignments[i]) {
-      const { id, type } = assignments[i];
-      placed[id].push({ date: slot.date, slot: slot.slot, type });
-      usedToday.add(id);
-    }
-  });
-
-  // Session counts and hours are preferences, not limits on syllabus coverage.
-  // Add any missing teaching/revision before each upcoming exam.
-  const extraSlot = date => Math.max(-1, ...Object.values(placed).flat().filter(p => p.date === date).map(p => p.slot)) + 1;
-  const dayLoad = date => Object.values(placed).flat().filter(p => p.date === date).length;
-  const freeDay = (days, id, type) =>
-    days.find(date => dayLoad(date) < slotCount(c, date) && !(type && placed[id].some(p => p.date === date && p.type === type)));
-
-  ids.forEach(id => {
-    const available = dates.filter(date => inWindow(id, date));
-    if (!available.length) return;
-    const selected = available.filter(date => slotCount(c, date) > 0);
-    const studyDays = selected.length ? selected : [available[available.length - 1]];
-    const mine = placed[id];
-
-    // Ensure all needed teaching sessions are allocated
-    const missingTeach = Math.max(0, needs[id].need - mine.filter(p => p.type === "teach").length);
-    for (let pass = 0; pass < missingTeach; pass++) {
-      const orderDays = [...studyDays, ...available];
-      const bestDay = orderDays.slice().sort((a, b) => {
-        const hasSubA = placed[id].some(p => p.date === a);
-        const hasSubB = placed[id].some(p => p.date === b);
-        if (hasSubA !== hasSubB) return hasSubA ? 1 : -1;
-        return dayLoad(a) - dayLoad(b);
-      })[0];
-      mine.push({ date: bestDay, slot: extraSlot(bestDay), type: "teach" });
-    }
-
-    // Ensure all revision sessions are allocated
-    const missingRev = Math.max(0, c.revision - mine.filter(p => p.type === "rev").length);
-    for (let pass = 0; pass < missingRev; pass++) {
-      const orderDays = [...studyDays, ...available].reverse();
-      const date = freeDay(orderDays, id, "rev") ?? freeDay(orderDays, id, null) ?? studyDays[studyDays.length - 1];
-      mine.push({ date, slot: extraSlot(date), type: "rev" });
-    }
-    mine.sort((a, b) => a.date.localeCompare(b.date) || a.slot - b.slot);
-  });
-
-  // Hand units to teaching sessions in order
-  const sessions = [];
-  ids.forEach(id => {
-    const s = subj(id, c);
     const rem = remainingUnits(c, id);
-    const total = SUBJECTS[id].units.length;
-    const teach = placed[id].filter(p => p.type === "teach");
+    const totalUnits = SUBJECTS[id].units.length;
+    const teachNeed = needs[id].need;
+    const s = subj(id, c);
     let idx = 0, cum = 0, covered = (c.done[id] || []).length;
     const totH = rem.reduce((a, u) => a + u.h, 0);
 
-    teach.forEach((p, i) => {
-      const left = teach.length - 1 - i;
+    for (let i = 0; i < teachNeed; i++) {
+      const left = teachNeed - 1 - i;
       let chunk = [];
-      if (i === teach.length - 1) {
+      if (i === teachNeed - 1) {
         chunk = rem.slice(idx);
         idx = rem.length;
       } else {
-        const targetH = totH * (i + 1) / teach.length;
-        const targetU = Math.round(rem.length * (i + 1) / teach.length);
+        const targetH = totH * (i + 1) / teachNeed;
+        const targetU = Math.round(rem.length * (i + 1) / teachNeed);
         while (idx < rem.length - left && (chunk.length === 0 || (cum + rem[idx].h / 2 <= targetH && (idx + 1) <= targetU + 1))) {
           chunk.push(rem[idx]);
           cum += rem[idx].h;
           idx++;
         }
       }
-      if (i === teach.length - 1) cum = totH;
+      if (i === teachNeed - 1) cum = totH;
       const before = covered;
       covered += chunk.length;
-      p.units = chunk;
-      p.before = Math.round(100 * before / total);
-      p.after = Math.round(100 * covered / total);
-    });
-
-    placed[id].forEach((p, i, arr) => {
-      const n = arr.slice(0, i + 1).filter(x => x.date === p.date && x.type === p.type).length;
-      sessions.push({
-        id: `${p.date}_${id}_${p.type}${n}`,
-        date: p.date,
-        slot: p.slot,
+      queue.push({
         subjectId: id,
-        type: p.type,
-        hours: p.type === "teach" ? needs[id].sessionHours ?? c.hours : c.hours,
-        units: p.units || [],
-        before: p.before ?? 100,
-        after: p.after ?? 100,
-        bullets: p.type === "rev" ? revisionBullets(id, s) : null
+        type: "teach",
+        hours: needs[id].sessionHours ?? c.hours,
+        units: chunk,
+        before: Math.round(100 * before / totalUnits),
+        after: Math.round(100 * covered / totalUnits),
+        bullets: null
       });
-    });
+    }
 
-    // Revision numbering ("Revision 1/2")
-    sessions
-      .filter(x => x.subjectId === id && x.type === "rev")
-      .sort((a, b) => a.date.localeCompare(b.date) || a.slot - b.slot)
-      .forEach((x, i, arr) => { x.revNo = arr.length > 1 ? `${i + 1}/${arr.length}` : ""; });
+    if (c.revision > 0 && rem.length > 0) {
+      for (let r = 0; r < c.revision; r++) {
+        queue.push({
+          subjectId: id,
+          type: "rev",
+          hours: c.hours,
+          units: [],
+          before: 100,
+          after: 100,
+          revNo: c.revision > 1 ? `${r + 1}/${c.revision}` : "",
+          bullets: revisionBullets(id)
+        });
+      }
+    }
   });
 
-  sessions.sort((a, b) => a.date.localeCompare(b.date) || a.slot - b.slot);
+  // 2. Map sessions strictly onto calendar slots (NEVER exceeding slotCount per day)
+  let curDate = c.start;
+  let curSlot = 0;
+  const sessions = [];
+
+  while (slotCount(c, curDate) === 0) {
+    curDate = addDays(curDate, 1);
+  }
+
+  queue.forEach((item) => {
+    if (curSlot >= slotCount(c, curDate)) {
+      curDate = addDays(curDate, 1);
+      curSlot = 0;
+      while (slotCount(c, curDate) === 0) {
+        curDate = addDays(curDate, 1);
+      }
+    }
+
+    sessions.push({
+      ...item,
+      date: curDate,
+      slot: curSlot,
+      id: `${curDate}_${item.subjectId}_${item.type}${curSlot}`
+    });
+    curSlot++;
+  });
+
+  // 3. Incompletion & post-exam warning
+  const warnings = [];
+  const overdue = sessions.filter(s => s.date >= LAST_EXAM);
+  if (overdue.length > 0) {
+    const overdueH = overdue.reduce((sum, s) => sum + s.hours, 0);
+    const overdueSubjs = [...new Set(overdue.map(s => subj(s.subjectId, c).shortName))];
+    const finishDate = sessions[sessions.length - 1].date;
+    warnings.push(`Your plan extends past the GATE exam date (14 Feb 2027) to ${niceDate(finishDate)}. ${overdue.length} sessions (${fmtH(overdueH)}h) across ${overdueSubjs.join(", ")} will take place after the exam. Please increase your daily sessions or session hours in Settings to complete the syllabus before the exam.`);
+  }
 
   const info = {};
-  ids.forEach(id => {
+  order.forEach(id => {
     const mine = sessions.filter(x => x.subjectId === id);
     info[id] = {
       total: SUBJECTS[id].units.length,
@@ -229,8 +159,8 @@ export function buildPlan(c) {
   return {
     sessions,
     dates: [...new Set(sessions.map(s => s.date))],
-    warnings: shortfall ? [shortfall] : [],
+    warnings,
     info,
-    slots: Math.max(T, sessions.length)
+    slots: sessions.length
   };
 }

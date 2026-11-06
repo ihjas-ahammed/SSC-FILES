@@ -358,7 +358,7 @@ for c in COURSES:
         "role": c["role"],
         "name": c["name"],
         "shortName": c["shortName"],
-        "examDate": "2027-02-01",
+        "examDate": "2027-02-14",
         "totalUnits": len(units),
         "unitLabel": "units",
         "theme": c["theme"],
@@ -378,7 +378,7 @@ print("Successfully processed all 8 courses.")
 # 1. Write subjects.js
 subjects_js_content = f"""/* =========================================================================
    GATE DATA SCIENCE & AI (GATE DA) CURRICULUM & MODULE SPECIFICATION
-   Master Exam Date: February 1, 2027 (Single GATE Exam Milestone)
+   Master Exam Date: February 14, 2027 (Single GATE Exam Milestone)
    ========================================================================= */
 
 export const MODULE_LABEL = {{ "1": "I", "2": "II", "3": "III", "4": "IV" }};
@@ -399,7 +399,7 @@ export const SYLLABUS_HOURS_MAP = {json.dumps(syllabus_hours_map, indent=2)};
 
 export const SUBJECTS = {json.dumps(subjects_dict, indent=2)};
 
-export const LAST_EXAM = "2027-02-01";
+export const LAST_EXAM = "2027-02-14";
 """
 with open(os.path.join(SRC_APP_DATA, "subjects.js"), "w", encoding="utf-8") as f:
     f.write(subjects_js_content)
