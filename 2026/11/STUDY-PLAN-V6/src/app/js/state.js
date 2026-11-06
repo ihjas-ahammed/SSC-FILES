@@ -5,16 +5,16 @@
 import { focusISO } from "./utils/dates.js";
 import { clone, toast } from "./utils/dom.js";
 import { buildPlan } from "./engine/planner.js";
+import { DEPTS } from "./data/subjects.js";
 
-export const STORE_KEY = "study_plan_v4_fresh";
+export const STORE_KEY = "study_plan_v6";
 export const openUnitLists = new Set();
 
 export function defaultCfg() {
   return {
     ready: false,
     dept: "physics",
-    sec: "SEC_PHY",
-    secName: "",
+    sec: "EPD",
     hours: 1,
     maxPerDay: 3,
     secSessions: 3,
@@ -56,11 +56,11 @@ export function setProg(nextProg) {
   prog = nextProg;
 }
 
-// v5 auto-setup: with no saved profile, start a ready Physics profile with default rules so wizard is skipped.
+// v6 auto-setup: with no saved profile, start a ready Physics profile with default rules so wizard is skipped.
 export function autoSetup() {
   if (Object.keys(profiles).length) return;
   profiles.physics = {
-    cfg: { ...defaultCfg(), dept: "physics", ready: true },
+    cfg: { ...defaultCfg(), dept: "physics", sec: "EPD", ready: true },
     prog: { sessions: {} }
   };
   try {
@@ -72,11 +72,12 @@ export function autoSetup() {
 
 export function loadProfile(dept) {
   const p = profiles[dept];
+  const sec = (DEPTS[dept] && DEPTS[dept].sec) || (dept === "math" ? "DSP" : "EPD");
   if (p && p.cfg && p.cfg.ready) {
-    cfg = { ...defaultCfg(), ...clone(p.cfg) };
+    cfg = { ...defaultCfg(), ...clone(p.cfg), dept, sec };
     prog = { sessions: {}, ...clone(p.prog || {}) };
   } else {
-    cfg = { ...defaultCfg(), dept };
+    cfg = { ...defaultCfg(), dept, sec };
     prog = { sessions: {} };
   }
 }

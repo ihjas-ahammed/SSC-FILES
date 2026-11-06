@@ -2,7 +2,7 @@
    STUDY PLAN GENERATION ENGINE
    ========================================================================= */
 
-import { SUBJECTS, LAST_EXAM } from "../data/subjects.js";
+import { SUBJECTS, LAST_EXAM, DEPTS } from "../data/subjects.js";
 import { rangeDates, addDays } from "../utils/dates.js";
 import { activeIds, remainingUnits, subj } from "./syllabus.js";
 
@@ -22,7 +22,8 @@ export function sessionNeeds(c) {
       need: rem.length ? Math.min(rem.length, Math.max(1, Math.ceil(h / c.hours - 1e-9))) : 0
     };
   });
-  if (out[c.sec].units) out[c.sec].need = Math.min(c.secSessions, out[c.sec].units);
+  const secId = c.sec || (DEPTS[c.dept] && DEPTS[c.dept].sec);
+  if (secId && out[secId] && out[secId].units) out[secId].need = Math.min(c.secSessions, out[secId].units);
   return out;
 }
 
@@ -42,10 +43,11 @@ export function buildPlan(c) {
   });
   const T = slots.length;
   const needs = sessionNeeds(c);
+  const secId = c.sec || (DEPTS[c.dept] && DEPTS[c.dept].sec);
 
   // A subject's teaching sessions never exceed the session length, so its hours are spread over
   // ceil(hours / length) sessions. If the slots cannot hold all of that, the shortfall is reported.
-  ids.filter(id => id !== c.sec && needs[id].need).forEach(id => {
+  ids.filter(id => id !== secId && needs[id].need).forEach(id => {
     needs[id].sessionHours = needs[id].hours / needs[id].need;
   });
 
@@ -55,11 +57,7 @@ export function buildPlan(c) {
     : null;
 
   const deadline = id => SUBJECTS[id].examDate;
-  // SEC and the Elective 2 subjects (Materials Science, Machine Learning I) are placed only on 30 Oct to 1 Nov.
-  const inWindow = (id, date) =>
-    (id === c.sec || id === "MS" || id === "ML")
-      ? (date >= "2026-10-30" && date <= "2026-11-01" && date < deadline(id))
-      : date < deadline(id);
+  const inWindow = (id, date) => date < deadline(id);
 
   const order = ids.slice().sort((a, b) => SUBJECTS[a].examDate.localeCompare(SUBJECTS[b].examDate));
   const placed = Object.fromEntries(ids.map(id => [id, []]));

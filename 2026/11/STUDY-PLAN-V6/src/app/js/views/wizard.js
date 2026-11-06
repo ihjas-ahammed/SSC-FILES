@@ -9,7 +9,7 @@ import { renderProfile, renderRules, renderSchedule, renderProgress, normalizeDr
 import { switchTab, renderAll } from "../main.js";
 
 export const WZ_STEPS = [
-  { title: "Who's studying?", lead: "Pick your department and your SEC subject. Exam dates are already built in.", render: renderProfile },
+  { title: "Who's studying?", lead: "Pick your department. All 3 Major Core, 2 Electives, and department SEC courses with exam dates are already built in.", render: renderProfile },
   { title: "Session rules", lead: "Choose your preferred pace. All topics and requested revision will be included.", render: renderRules },
   { title: "Your daily schedule", lead: "Slide to choose how many sessions you’ll do each day. Set it to 0 for a day off.", render: renderSchedule },
   { title: "Where are you now?", lead: "Slide each subject to the units you've already finished. Each stop is one unit; notches mark the modules.", render: renderProgress }
@@ -64,10 +64,6 @@ export function paintWizard() {
   $("#wz-next").onclick = () => {
     if (ui.step === 2 && !editDates(d).some(x => d.days[x] > 0)) {
       toast("Pick at least one study session");
-      return;
-    }
-    if (ui.step === 0 && d.sec === "SEC_OTH" && !d.secName.trim()) {
-      toast("Give your SEC a name");
       return;
     }
     if (last) {

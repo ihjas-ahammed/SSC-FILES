@@ -13,14 +13,10 @@ export const unitHrs = (id, u) => ((SYLLABUS_HOURS_MAP[id] || [])[u - 1] ?? 2) /
 export const unitMod = (id, u) => (UNIT_MODULE[id] || "")[u - 1] || "4";
 
 export function subj(id, cfg) {
-  const s = SUBJECTS[id];
-  if (id === "SEC_OTH" && cfg && cfg.secName.trim()) {
-    return { ...s, name: cfg.secName.trim(), shortName: cfg.secName.trim() };
-  }
-  return s;
+  return SUBJECTS[id];
 }
 
-export const activeIds = (cfg) => [...DEPTS[cfg.dept].ids, cfg.sec];
+export const activeIds = (cfg) => [...DEPTS[cfg.dept].ids, cfg.sec || DEPTS[cfg.dept].sec];
 export const scheduleIds = (cfg) => activeIds(cfg);
 
 export const examsOf = (cfg) =>

@@ -2,7 +2,7 @@
    SETTINGS VIEW, JSON DATA EXPORT/IMPORT & RESET ACTIONS
    ========================================================================= */
 
-import { DEPTS, SEC_OPTIONS } from "../data/subjects.js";
+import { DEPTS, SUBJECTS } from "../data/subjects.js";
 import { ICON } from "../data/icons.js";
 import { $, esc, clone, toast, emptyHtml } from "../utils/dom.js";
 import { todayISO, hrs, wdShort, niceDate } from "../utils/dates.js";
@@ -84,7 +84,7 @@ export function renderSettings() {
   }
   const d = ui.draft;
   const sections = [
-    { k: "Profile", sum: () => `${DEPTS[d.dept].label} · ${SEC_OPTIONS.find(o => o.id === d.sec).label}`, fn: renderProfile },
+    { k: "Profile", sum: () => `${DEPTS[d.dept].label} · SEC: ${SUBJECTS[DEPTS[d.dept].sec]?.shortName || ""}`, fn: renderProfile },
     { k: "Session rules", sum: () => `${hrs(d.hours)} · ${d.maxPerDay}/day preferred · SEC ${d.secSessions}`, fn: renderRules },
     { k: "Daily schedule", sum: () => `${editDates(d).reduce((s, x) => s + d.days[x], 0)} sessions`, fn: renderSchedule },
     { k: "Progress so far", sum: () => `${activeIds(d).reduce((s, id) => s + (d.done[id] || []).length, 0)} units done`, fn: renderProgress }
@@ -142,10 +142,6 @@ export function renderSettings() {
     const status = $("#set-status");
     if (!editDates(d).some(x => d.days[x] > 0)) {
       status.textContent = "Pick at least one study session per day to rebuild.";
-      return;
-    }
-    if (d.sec === "SEC_OTH" && !d.secName.trim()) {
-      status.textContent = "Give your SEC a name to rebuild.";
       return;
     }
     status.textContent = "";

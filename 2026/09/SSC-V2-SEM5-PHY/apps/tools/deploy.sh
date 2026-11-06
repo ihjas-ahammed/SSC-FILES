@@ -414,6 +414,26 @@ else
   echo "WARNING: $PLAN_DIR missing — deploying without the study plan." >&2
 fi
 
+# --- Study plan v6 (STUDY-PLAN-V6/src/study-plan-v6.html) and its install files ---
+#   /study-plan-v6/                  the semester 6 study plan (index.html)
+#   /study-plan/                     default alias pointing to latest study plan
+PLAN6="$REPO/../11/STUDY-PLAN-V6/src/study-plan-v6.html"
+if [ ! -f "$PLAN6" ] && [ -f "$REPO/../../2026/11/STUDY-PLAN-V6/src/study-plan-v6.html" ]; then
+  PLAN6="$REPO/../../2026/11/STUDY-PLAN-V6/src/study-plan-v6.html"
+fi
+if [ -f "$PLAN6" ]; then
+  mkdir -p "$TMP/public/study-plan-v6" "$TMP/public/study-plan"
+  cp "$PLAN6" "$TMP/public/study-plan-v6/index.html"
+  cp "$PLAN6" "$TMP/public/study-plan/index.html"
+  APP6="$(dirname "$PLAN6")/app"
+  for F in icon.svg icon-192.png icon-512.png manifest.webmanifest sw.js; do
+    if [ -f "$APP6/$F" ]; then
+      cp "$APP6/$F" "$TMP/public/study-plan-v6/$F"
+      cp "$APP6/$F" "$TMP/public/study-plan/$F"
+    fi
+  done
+fi
+
 # --- SSC-V6 revision cards (SSC-V6/revision/<subject>/<module>/index.html) ---
 #   /revision/optics/1/ … built by SSC-V6/revision/src/build.py (src/ stays out of the site)
 if [ -d "$V6/revision" ]; then
@@ -500,6 +520,10 @@ echo "Trackers & checklists:"
 for f in "$REPO"/trackers/*.html; do
   echo "  → $BASE/$(basename "$f")"
 done
+echo ""
+echo "Study plan v6 (Semester 6):"
+echo "  → $BASE/study-plan-v6/"
+echo "  → $BASE/study-plan/"
 echo ""
 echo "Study plan v5 (with study match, practice and resources):"
 echo "  → $BASE/study-plan-v5/"

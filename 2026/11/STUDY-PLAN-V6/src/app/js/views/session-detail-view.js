@@ -14,6 +14,7 @@ import {
 } from "../engine/syllabus.js";
 import { cfg, save } from "../state.js";
 import { renderScheduleTab } from "./schedule-view.js";
+import { openUnitPdf, openPdfViewer } from "./pdf-viewer.js";
 
 export const SS = { det: null, onStage: null, onDone: null };
 export const unitsData = [];
@@ -32,6 +33,7 @@ const resHref = (p) => RES_RAW + encodeURI(p);
 export function renderUnits() {
   const container = document.getElementById('units-list');
   if (!container) return;
+  const sid = SS.det ? SS.det.subjectId : "";
   container.innerHTML = unitsData.map((u, idx) => {
     const sc = stageConfig[u.stage];
     return `
@@ -39,7 +41,13 @@ export function renderUnits() {
         <div class="w-1.5 ${sc.border} shrink-0"></div>
         <div class="flex-1 min-w-0 p-4 flex items-center justify-between gap-3">
           <div class="flex-1 min-w-0 pr-2">
-            <h4 class="font-display font-bold text-[16px] text-[#0f172a] mb-3 truncate">${esc(u.name)}</h4>
+            <div class="flex items-center justify-between gap-2 mb-2.5">
+              <h4 class="font-display font-bold text-[16px] text-[#0f172a] truncate">${esc(u.name)}</h4>
+              <button onclick="openUnitPdf('${sid}', ${u.u})" title="Read section in textbook" class="px-2.5 py-1 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-xs inline-flex items-center gap-1.5 transition shrink-0">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                <span>Read</span>
+              </button>
+            </div>
             <div class="relative flex items-center justify-between max-w-[230px]">
               <div class="absolute left-3 right-3 top-[7px] h-[2px] bg-slate-200 z-0"></div>
               ${MODE_SLIDER.map((sIdx) => {
@@ -142,6 +150,14 @@ export function closeStartModal() {
 
 export function startWithNotes() {
   closeStartModal();
+  const det = SS.det;
+  if (det && det.units && det.units.length) {
+    const list = normUnits(det.units);
+    if (list.length) {
+      openUnitPdf(det.subjectId, list[0].u);
+      return;
+    }
+  }
   ssSwitchTab('resources');
   const p = document.getElementById('panel-resources');
   if (p) p.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -220,15 +236,27 @@ export function addPermutationResource() {
 }
 
 function resRow(item, title, sub) {
+  const displayTitle = title || item.label;
+  const isPdf = item.path.endsWith('.pdf');
+  const href = resHref(item.path);
   return `<div class="py-2.5 flex items-center justify-between gap-3">
     <div class="flex items-center gap-3 min-w-0">
       <div class="w-9 h-9 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center shrink-0">${RES_ICON}</div>
       <div class="min-w-0">
-        <div class="font-display font-bold text-sm text-slate-900 truncate">${esc(title || item.label)}</div>
+        <div class="font-display font-bold text-sm text-slate-900 truncate">${esc(displayTitle)}</div>
         ${sub ? `<div class="text-xs text-slate-500 truncate">${esc(sub)}</div>` : ""}
       </div>
     </div>
-    <a href="${esc(resHref(item.path))}" target="_blank" rel="noopener" class="px-3 py-1.5 rounded-xl bg-[#f0f6ff] hover:bg-blue-100/80 border border-blue-200/80 text-[#1d4ed8] font-semibold text-xs flex items-center gap-1.5 shrink-0 transition">${RES_OPEN}<span>Open</span></a>
+    <div class="flex items-center gap-2 shrink-0">
+      ${isPdf ? `
+      <button onclick="openPdfViewer({ url: '${esc(href)}', title: '${esc(displayTitle)}', page: 1, rawUrl: '${esc(href)}' })" class="px-3 py-1.5 rounded-xl bg-[#1d4ed8] hover:bg-[#1e40af] text-white font-bold text-xs inline-flex items-center gap-1.5 transition shadow-2xs">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+        <span>Read in App</span>
+      </button>` : ""}
+      <a href="${esc(href)}" target="_blank" rel="noopener" title="Open or download original file" class="px-2.5 py-1.5 rounded-xl bg-[#f0f6ff] hover:bg-blue-100/80 border border-blue-200/80 text-[#1d4ed8] font-semibold text-xs inline-flex items-center gap-1 transition">
+        ${RES_OPEN}
+      </a>
+    </div>
   </div>`;
 }
 

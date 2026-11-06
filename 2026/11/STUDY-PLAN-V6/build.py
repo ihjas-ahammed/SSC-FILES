@@ -43,7 +43,9 @@ def find_project_dirs(script_dir: Path):
         sys.exit("Error: Could not locate 'src/app' containing index.html. Specify --src.")
 
     # Default output file
-    if (app_dir.parent / "sem6").exists():
+    if app_dir.name == "app":
+        default_out = app_dir.parent / "study-plan-v6.html"
+    elif (app_dir.parent / "sem6-math").exists() or (app_dir.parent / "sem6").exists():
         default_out = app_dir.parent / "study-plan-v6.html"
     else:
         default_out = app_dir / "study-plan-v6.html"
@@ -94,6 +96,7 @@ def bundle_js_python(js_dir: Path) -> str:
         "data/systems.js",
         "data/subjects.js",
         "data/resources.js",
+        "data/unit-pages.js",
         "data/pyq-optics.js",
         "engine/syllabus.js",
         "engine/planner.js",
@@ -103,6 +106,7 @@ def bundle_js_python(js_dir: Path) -> str:
         "views/plan-view.js",
         "views/day-view.js",
         "views/session-modal.js",
+        "views/pdf-viewer.js",
         "views/session-detail-view.js",
         "views/schedule-view.js",
         "views/settings-view.js",

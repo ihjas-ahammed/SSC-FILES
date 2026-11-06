@@ -2,7 +2,7 @@
    SHARED EDITORS (Used by both Setup Wizard and Settings)
    ========================================================================= */
 
-import { DEPTS, SEC_OPTIONS, LAST_EXAM, MODS, MODULE_LABEL } from "../data/subjects.js";
+import { DEPTS, LAST_EXAM, MODS, MODULE_LABEL } from "../data/subjects.js";
 import { ICON, SUBJECT_SVGS } from "../data/icons.js";
 import { $, esc, toast } from "../utils/dom.js";
 import { focusISO, rangeDates, addDays, hrs, fmtH, niceDate, wdName, parse } from "../utils/dates.js";
@@ -67,31 +67,31 @@ export function renderProfile(root, d, onChange) {
   root.innerHTML = `
     <div class="field-title">Department</div>
     <div class="choice-grid" id="dept-grid"></div>
-    <div class="sec-block">
-      <div class="field-title">SEC subject</div>
-      <div class="choice-grid" id="sec-grid"></div>
-      <input class="text-in" id="sec-name" placeholder="Name of your SEC (e.g. Data Science Basics)" maxlength="60" />
+    <div style="margin-top:20px;padding:14px 16px;background:var(--navy-50,#f8fafc);border-radius:12px;border:1px solid var(--navy-100,#e2e8f0);display:flex;align-items:center;gap:12px">
+      <div style="width:36px;height:36px;border-radius:8px;background:var(--navy-100,#e2e8f0);display:flex;align-items:center;justify-content:center;color:var(--navy-700,#334155);flex-shrink:0">
+        ${ICON.book}
+      </div>
+      <div>
+        <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--navy-500,#64748b)">Skill Enhancement Course (SEC)</div>
+        <div id="sec-auto-label" style="font-size:14px;font-weight:700;color:var(--navy-900,#0f172a);margin-top:2px"></div>
+      </div>
     </div>`;
-  const dg = $("#dept-grid", root), sg = $("#sec-grid", root), nm = $("#sec-name", root);
+  const dg = $("#dept-grid", root), lbl = $("#sec-auto-label", root);
   const paint = () => {
     dg.innerHTML = Object.entries(DEPTS)
       .map(([k, v]) => `<button type="button" class="choice ${d.dept === k ? "on" : ""}" data-k="${k}"><b>${v.label}</b><span>${v.sub}</span></button>`)
       .join("");
-    sg.innerHTML = SEC_OPTIONS
-      .map(o => `<button type="button" class="choice ${d.sec === o.id ? "on" : ""}" data-k="${o.id}"><b>${o.label}</b><span>${o.sub}</span></button>`)
-      .join("");
-    nm.style.display = d.sec === "SEC_OTH" ? "block" : "none";
-    nm.value = d.secName;
+    const secId = (DEPTS[d.dept] && DEPTS[d.dept].sec) || (d.dept === "math" ? "DSP" : "EPD");
+    d.sec = secId;
+    if (lbl) {
+      lbl.textContent = d.dept === "math"
+        ? "Data Science with Python (MAT6FS113(1))"
+        : "Electrical and Photovoltaic Devices (PHY6FS113)";
+    }
     dg.querySelectorAll("button").forEach(b => b.onclick = () => {
       if (d.dept !== b.dataset.k) switchDepartment(b.dataset.k);
     });
-    sg.querySelectorAll("button").forEach(b => b.onclick = () => {
-      d.sec = b.dataset.k;
-      paint();
-      onChange();
-    });
   };
-  nm.oninput = () => { d.secName = nm.value; onChange(); };
   paint();
 }
 
