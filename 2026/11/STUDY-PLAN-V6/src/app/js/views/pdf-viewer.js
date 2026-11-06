@@ -12,6 +12,7 @@ import { toast, esc } from "../utils/dom.js";
 export const PV_STATE = {
   isOpen: false,
   isZenMode: false,
+  isPinching: false,
   pdfDoc: null,
   currentUrl: null,
   currentPage: 1,
@@ -314,81 +315,182 @@ function bindViewerEvents(el) {
   });
 }
 
-// Mobile multi-directional swipe & 2-finger pinch zoom
+// Mobile multi-directional swipe & fluid focal-point 2-finger pinch zoom
 function setupMobileGestures(el) {
   const bodyEl = el.querySelector("#pdf-viewer-body");
   const container = el.querySelector("#pv-pages-container");
   if (!bodyEl || !container) return;
 
-  let initialPinchDist = 0;
-  let initialScale = 1.0;
   let isPinching = false;
+  let initialDist = 0;
+  let startScale = 1.0;
+  let focalScreenX = 0;
+  let focalScreenY = 0;
+  let contentFocalX = 0;
+  let contentFocalY = 0;
   let lastTapTime = 0;
+  let lastTapX = 0;
+  let lastTapY = 0;
 
-  // Touch start: 2-finger pinch or double tap
+  // Touch start: detect 2-finger pinch or double tap
   bodyEl.addEventListener("touchstart", (e) => {
     if (e.touches.length === 2) {
       isPinching = true;
+      PV_STATE.isPinching = true;
+
       const t1 = e.touches[0];
       const t2 = e.touches[1];
-      initialPinchDist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
-      initialScale = PV_STATE.currentScale;
+      initialDist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+      startScale = PV_STATE.currentScale;
+
+      const bRect = bodyEl.getBoundingClientRect();
+      focalScreenX = (t1.clientX + t2.clientX) / 2 - bRect.left;
+      focalScreenY = (t1.clientY + t2.clientY) / 2 - bRect.top;
+
+      // Position in content coordinates under focal point
+      contentFocalX = bodyEl.scrollLeft + focalScreenX;
+      contentFocalY = bodyEl.scrollTop + focalScreenY;
+
+      // Anchor CSS preview transform directly on the touch midpoint
       container.style.transition = "none";
+      container.style.transformOrigin = `${contentFocalX}px ${contentFocalY}px`;
     } else if (e.touches.length === 1) {
       const now = Date.now();
-      if (now - lastTapTime < 280) {
-        // Double tap: toggle between fit-width and 1.6x zoom
+      const t = e.touches[0];
+      const bRect = bodyEl.getBoundingClientRect();
+      const tapX = t.clientX - bRect.left;
+      const tapY = t.clientY - bRect.top;
+
+      if (now - lastTapTime < 300 && Math.hypot(tapX - lastTapX, tapY - lastTapY) < 35) {
+        // Double tap: toggle between fit-width and 1.85x zoom centered on tap
         e.preventDefault();
-        const sampleVp = PV_STATE.pageViewports[1];
-        const fitScale = sampleVp ? computeScale(sampleVp) : 1.0;
-        if (PV_STATE.scaleMode === "fit-width" || Math.abs(PV_STATE.currentScale - fitScale) < 0.08) {
-          PV_STATE.scaleMode = Math.round(fitScale * 1.6 * 10) / 10;
-        } else {
-          PV_STATE.scaleMode = "fit-width";
-        }
-        recalculateScaleAndLayout();
+        handleDoubleTap(tapX, tapY);
+        lastTapTime = 0;
+        return;
       }
       lastTapTime = now;
+      lastTapX = tapX;
+      lastTapY = tapY;
     }
   }, { passive: false });
 
-  // Touch move: live smooth pinch zoom with 60fps GPU acceleration
+  // Touch move: scale around focal point smoothly with zero page-jumping
   bodyEl.addEventListener("touchmove", (e) => {
     if (isPinching && e.touches.length === 2) {
-      e.preventDefault();
+      e.preventDefault(); // Prevent native browser viewport zoom interference
+
       const t1 = e.touches[0];
       const t2 = e.touches[1];
-      const currentDist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
-      if (initialPinchDist > 8) {
-        const factor = currentDist / initialPinchDist;
-        container.style.transformOrigin = "50% 0%";
-        container.style.transform = `scale(${factor})`;
+      const dist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+
+      if (initialDist > 8) {
+        const factor = dist / initialDist;
+        const minFactor = 0.5 / startScale;
+        const maxFactor = 3.8 / startScale;
+        const clampedFactor = Math.max(minFactor, Math.min(maxFactor, factor));
+
+        const bRect = bodyEl.getBoundingClientRect();
+        const curMidX = (t1.clientX + t2.clientX) / 2 - bRect.left;
+        const curMidY = (t1.clientY + t2.clientY) / 2 - bRect.top;
+        const panDeltaX = curMidX - focalScreenX;
+        const panDeltaY = curMidY - focalScreenY;
+
+        container.style.transform = `translate(${panDeltaX}px, ${panDeltaY}px) scale(${clampedFactor})`;
       }
     }
   }, { passive: false });
 
-  // Touch end: commit new scale and re-render sharp canvas
-  const onPinchEnd = () => {
-    if (isPinching) {
-      isPinching = false;
-      const matrix = container.style.transform;
-      container.style.transform = "";
-      container.style.transition = "";
+  // Touch end: commit new scale and maintain exact focal point
+  const onPinchEnd = (e) => {
+    if (!isPinching) return;
+    if (e.touches.length > 0) return; // Wait until all fingers are lifted
 
-      const match = matrix.match(/scale\(([^)]+)\)/);
-      if (match) {
-        const factor = parseFloat(match[1]);
-        if (!isNaN(factor) && factor > 0 && Math.abs(factor - 1.0) > 0.05) {
-          const newScale = Math.max(0.4, Math.min(3.8, Math.round(initialScale * factor * 100) / 100));
-          PV_STATE.scaleMode = newScale;
-          recalculateScaleAndLayout();
-        }
+    isPinching = false;
+    const transformStr = container.style.transform;
+    container.style.transform = "";
+    container.style.transformOrigin = "";
+
+    const matchScale = transformStr.match(/scale\(([^)]+)\)/);
+    const matchTranslate = transformStr.match(/translate\(([^p]+)px,\s*([^p]+)px\)/);
+
+    const factor = matchScale ? parseFloat(matchScale[1]) : 1.0;
+    const panX = matchTranslate ? parseFloat(matchTranslate[1]) : 0;
+    const panY = matchTranslate ? parseFloat(matchTranslate[2]) : 0;
+
+    if (!isNaN(factor) && factor > 0 && Math.abs(factor - 1.0) > 0.04) {
+      const sampleVp = PV_STATE.pageViewports[1];
+      const fitScale = sampleVp ? computeScale(sampleVp) : 1.0;
+      let newScale = Math.max(0.45, Math.min(3.8, Math.round(startScale * factor * 100) / 100));
+
+      // Snap to fit-width if user pinched close to device width
+      const isMobile = window.innerWidth <= 768;
+      if (isMobile && Math.abs(newScale - fitScale) < 0.12) {
+        PV_STATE.scaleMode = "fit-width";
+        newScale = fitScale;
+      } else {
+        PV_STATE.scaleMode = newScale;
       }
+
+      // Compute exact new scroll coordinates so focal point stays stationary
+      const ratio = newScale / startScale;
+      const newContentX = contentFocalX * ratio;
+      const newContentY = contentFocalY * ratio;
+
+      const targetScrollLeft = Math.round(newContentX - (focalScreenX + panX));
+      const targetScrollTop = Math.round(newContentY - (focalScreenY + panY));
+
+      recalculateScaleAndLayout(false);
+
+      bodyEl.scrollLeft = Math.max(0, targetScrollLeft);
+      bodyEl.scrollTop = Math.max(0, targetScrollTop);
     }
+
+    setTimeout(() => {
+      PV_STATE.isPinching = false;
+      updateActivePageOnScroll();
+    }, 60);
   };
 
   bodyEl.addEventListener("touchend", onPinchEnd, { passive: true });
   bodyEl.addEventListener("touchcancel", onPinchEnd, { passive: true });
+}
+
+// Double-Tap to Zoom In / Reset Centered on Tap Location
+function handleDoubleTap(tapX, tapY) {
+  const bodyEl = document.getElementById("pdf-viewer-body");
+  if (!bodyEl) return;
+
+  const sampleVp = PV_STATE.pageViewports[1];
+  const fitScale = sampleVp ? computeScale(sampleVp) : 1.0;
+  const isCurrentlyFit = PV_STATE.scaleMode === "fit-width" || Math.abs(PV_STATE.currentScale - fitScale) < 0.08;
+
+  const startScale = PV_STATE.currentScale;
+  let targetScale;
+
+  if (isCurrentlyFit) {
+    targetScale = Math.round(fitScale * 1.85 * 10) / 10;
+    PV_STATE.scaleMode = targetScale;
+  } else {
+    targetScale = fitScale;
+    PV_STATE.scaleMode = "fit-width";
+  }
+
+  const ratio = targetScale / startScale;
+  const contentX = bodyEl.scrollLeft + tapX;
+  const contentY = bodyEl.scrollTop + tapY;
+
+  const newContentX = contentX * ratio;
+  const newContentY = contentY * ratio;
+
+  const targetScrollLeft = Math.round(newContentX - tapX);
+  const targetScrollTop = Math.round(newContentY - tapY);
+
+  recalculateScaleAndLayout(false);
+
+  bodyEl.scrollLeft = Math.max(0, targetScrollLeft);
+  bodyEl.scrollTop = Math.max(0, targetScrollTop);
+
+  setTimeout(updateActivePageOnScroll, 60);
 }
 
 /**
@@ -465,11 +567,26 @@ function computeScale(sampleViewport) {
   return typeof PV_STATE.scaleMode === "number" ? PV_STATE.scaleMode : 1.0;
 }
 
-// Recalculate Page Sizes and Re-render Viewable Slots
-function recalculateScaleAndLayout() {
+// Recalculate Page Sizes and Re-render Viewable Slots (with Scroll Position Preservation)
+function recalculateScaleAndLayout(preservePagePosition = true) {
   if (!PV_STATE.pdfDoc) return;
   const sampleVp = PV_STATE.pageViewports[1];
   if (!sampleVp) return;
+
+  const bodyEl = document.getElementById("pdf-viewer-body");
+  const curPageNum = PV_STATE.currentPage || 1;
+  let pageOffsetRatio = 0;
+
+  // Preserve relative viewing position on the current page across zoom levels
+  if (preservePagePosition && bodyEl && !PV_STATE.isPinching) {
+    const curSlot = document.getElementById(`pv-page-slot-${curPageNum}`);
+    if (curSlot) {
+      const sRect = curSlot.getBoundingClientRect();
+      const bRect = bodyEl.getBoundingClientRect();
+      const offsetFromPageTop = bRect.top - sRect.top;
+      pageOffsetRatio = curSlot.clientHeight > 0 ? offsetFromPageTop / curSlot.clientHeight : 0;
+    }
+  }
 
   const newScale = computeScale(sampleVp);
   PV_STATE.currentScale = newScale;
@@ -501,10 +618,20 @@ function recalculateScaleAndLayout() {
     const h = Math.round(vp.height * newScale);
     slot.style.width = `${w}px`;
     slot.style.height = `${h}px`;
+    slot.style.setProperty("--scale-factor", newScale);
 
     // Invalidate rendered canvas to re-render at new sharp resolution
     if (PV_STATE.renderedPages.has(i)) {
       renderPageCanvas(i, slot);
+    }
+  }
+
+  // Restore relative viewing offset so the user stays on the exact same content
+  if (preservePagePosition && bodyEl && !PV_STATE.isPinching && pageOffsetRatio !== 0) {
+    const curSlot = document.getElementById(`pv-page-slot-${curPageNum}`);
+    if (curSlot) {
+      const newPageTop = curSlot.offsetTop;
+      bodyEl.scrollTop = Math.max(0, Math.round(newPageTop + curSlot.clientHeight * pageOffsetRatio));
     }
   }
 }
@@ -514,7 +641,7 @@ function adjustZoom(delta) {
   let curr = PV_STATE.currentScale;
   let next = Math.max(0.4, Math.min(2.5, curr + delta));
   PV_STATE.scaleMode = Math.round(next * 10) / 10;
-  recalculateScaleAndLayout();
+  recalculateScaleAndLayout(true);
 }
 
 // Step Page Forward/Backward
@@ -525,6 +652,7 @@ function stepPage(delta) {
 
 // Update Active Page Input & Indicator Based on Viewport Position
 function updateActivePageOnScroll() {
+  if (PV_STATE.isPinching) return; // Never flicker page numbers during pinch gestures
   const bodyEl = document.getElementById("pdf-viewer-body");
   if (!bodyEl) return;
   const bodyRect = bodyEl.getBoundingClientRect();
@@ -600,19 +728,14 @@ async function renderPageCanvas(pageNum, slot) {
     const renderDpr = Math.max(2.0, (window.devicePixelRatio || 1) * 1.5);
     const renderViewport = page.getViewport({ scale: scale * renderDpr });
 
-    // Reuse or create canvas
-    let canvas = slot.querySelector("canvas");
-    if (!canvas) {
-      canvas = document.createElement("canvas");
-      slot.appendChild(canvas);
-    }
+    // Render to fresh double-buffered canvas to avoid any blank white flashing
+    const newCanvas = document.createElement("canvas");
+    newCanvas.width = Math.round(renderViewport.width);
+    newCanvas.height = Math.round(renderViewport.height);
+    newCanvas.style.width = `${w}px`;
+    newCanvas.style.height = `${h}px`;
 
-    canvas.width = Math.round(renderViewport.width);
-    canvas.height = Math.round(renderViewport.height);
-    canvas.style.width = `${w}px`;
-    canvas.style.height = `${h}px`;
-
-    const ctx = canvas.getContext("2d", { alpha: false });
+    const ctx = newCanvas.getContext("2d", { alpha: false });
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = "high";
 
@@ -628,26 +751,37 @@ async function renderPageCanvas(pageNum, slot) {
     delete PV_STATE.renderTasks[pageNum];
     PV_STATE.renderedPages.add(pageNum);
 
-    // Render TextLayer for true selectable, copyable and searchable text
-    let textDiv = slot.querySelector(".textLayer");
-    if (textDiv) textDiv.remove();
+    // Swap canvas seamlessly without clearing
+    const oldCanvas = slot.querySelector("canvas");
+    if (oldCanvas) {
+      oldCanvas.replaceWith(newCanvas);
+    } else {
+      slot.appendChild(newCanvas);
+    }
 
-    textDiv = document.createElement("div");
-    textDiv.className = "textLayer";
-    textDiv.style.width = `${w}px`;
-    textDiv.style.height = `${h}px`;
-    textDiv.style.setProperty("--scale-factor", scale);
-    slot.appendChild(textDiv);
-
+    // Double-buffered TextLayer
     try {
       const textVp = page.getViewport({ scale: scale });
       const textContent = await page.getTextContent();
+      const newTextDiv = document.createElement("div");
+      newTextDiv.className = "textLayer";
+      newTextDiv.style.width = `${w}px`;
+      newTextDiv.style.height = `${h}px`;
+      newTextDiv.style.setProperty("--scale-factor", scale);
+
       const textTask = window.pdfjsLib.renderTextLayer({
         textContentSource: textContent,
-        container: textDiv,
+        container: newTextDiv,
         viewport: textVp
       });
       await textTask.promise;
+
+      const oldTextDiv = slot.querySelector(".textLayer");
+      if (oldTextDiv) {
+        oldTextDiv.replaceWith(newTextDiv);
+      } else {
+        slot.appendChild(newTextDiv);
+      }
     } catch (textErr) {
       console.warn(`[PDF.js] TextLayer error on page ${pageNum}:`, textErr);
     }

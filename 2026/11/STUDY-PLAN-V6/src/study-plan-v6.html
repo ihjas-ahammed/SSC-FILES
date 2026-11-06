@@ -3354,7 +3354,7 @@ details.unit-dd[open] summary::after {
   overflow-y: auto;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  touch-action: pan-x pan-y pinch-zoom;
+  touch-action: pan-x pan-y;
   overscroll-behavior: contain;
   padding: 20px 0 90px 0;
   display: block;
@@ -3449,7 +3449,7 @@ details.unit-dd[open] summary::after {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
-  touch-action: pan-x pan-y pinch-zoom;
+  touch-action: pan-x pan-y;
   will-change: transform;
 }
 
@@ -3467,7 +3467,7 @@ details.unit-dd[open] summary::after {
   flex-shrink: 0;
   margin: 0 auto;
   box-sizing: border-box;
-  touch-action: pan-x pan-y pinch-zoom;
+  touch-action: pan-x pan-y;
   user-select: text !important;
   -webkit-user-select: text !important;
 }
@@ -7836,6 +7836,7 @@ details.unit-dd[open] summary::after {
   var PV_STATE = {
     isOpen: false,
     isZenMode: false,
+    isPinching: false,
     pdfDoc: null,
     currentUrl: null,
     currentPage: 1,
@@ -8114,32 +8115,46 @@ details.unit-dd[open] summary::after {
     const bodyEl = el.querySelector("#pdf-viewer-body");
     const container = el.querySelector("#pv-pages-container");
     if (!bodyEl || !container) return;
-    let initialPinchDist = 0;
-    let initialScale = 1;
     let isPinching = false;
+    let initialDist = 0;
+    let startScale = 1;
+    let focalScreenX = 0;
+    let focalScreenY = 0;
+    let contentFocalX = 0;
+    let contentFocalY = 0;
     let lastTapTime = 0;
+    let lastTapX = 0;
+    let lastTapY = 0;
     bodyEl.addEventListener("touchstart", (e) => {
       if (e.touches.length === 2) {
         isPinching = true;
+        PV_STATE.isPinching = true;
         const t1 = e.touches[0];
         const t2 = e.touches[1];
-        initialPinchDist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
-        initialScale = PV_STATE.currentScale;
+        initialDist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+        startScale = PV_STATE.currentScale;
+        const bRect = bodyEl.getBoundingClientRect();
+        focalScreenX = (t1.clientX + t2.clientX) / 2 - bRect.left;
+        focalScreenY = (t1.clientY + t2.clientY) / 2 - bRect.top;
+        contentFocalX = bodyEl.scrollLeft + focalScreenX;
+        contentFocalY = bodyEl.scrollTop + focalScreenY;
         container.style.transition = "none";
+        container.style.transformOrigin = `${contentFocalX}px ${contentFocalY}px`;
       } else if (e.touches.length === 1) {
         const now2 = Date.now();
-        if (now2 - lastTapTime < 280) {
+        const t = e.touches[0];
+        const bRect = bodyEl.getBoundingClientRect();
+        const tapX = t.clientX - bRect.left;
+        const tapY = t.clientY - bRect.top;
+        if (now2 - lastTapTime < 300 && Math.hypot(tapX - lastTapX, tapY - lastTapY) < 35) {
           e.preventDefault();
-          const sampleVp = PV_STATE.pageViewports[1];
-          const fitScale = sampleVp ? computeScale(sampleVp) : 1;
-          if (PV_STATE.scaleMode === "fit-width" || Math.abs(PV_STATE.currentScale - fitScale) < 0.08) {
-            PV_STATE.scaleMode = Math.round(fitScale * 1.6 * 10) / 10;
-          } else {
-            PV_STATE.scaleMode = "fit-width";
-          }
-          recalculateScaleAndLayout();
+          handleDoubleTap(tapX, tapY);
+          lastTapTime = 0;
+          return;
         }
         lastTapTime = now2;
+        lastTapX = tapX;
+        lastTapY = tapY;
       }
     }, { passive: false });
     bodyEl.addEventListener("touchmove", (e) => {
@@ -8147,33 +8162,87 @@ details.unit-dd[open] summary::after {
         e.preventDefault();
         const t1 = e.touches[0];
         const t2 = e.touches[1];
-        const currentDist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
-        if (initialPinchDist > 8) {
-          const factor = currentDist / initialPinchDist;
-          container.style.transformOrigin = "50% 0%";
-          container.style.transform = `scale(${factor})`;
+        const dist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+        if (initialDist > 8) {
+          const factor = dist / initialDist;
+          const minFactor = 0.5 / startScale;
+          const maxFactor = 3.8 / startScale;
+          const clampedFactor = Math.max(minFactor, Math.min(maxFactor, factor));
+          const bRect = bodyEl.getBoundingClientRect();
+          const curMidX = (t1.clientX + t2.clientX) / 2 - bRect.left;
+          const curMidY = (t1.clientY + t2.clientY) / 2 - bRect.top;
+          const panDeltaX = curMidX - focalScreenX;
+          const panDeltaY = curMidY - focalScreenY;
+          container.style.transform = `translate(${panDeltaX}px, ${panDeltaY}px) scale(${clampedFactor})`;
         }
       }
     }, { passive: false });
-    const onPinchEnd = () => {
-      if (isPinching) {
-        isPinching = false;
-        const matrix = container.style.transform;
-        container.style.transform = "";
-        container.style.transition = "";
-        const match = matrix.match(/scale\(([^)]+)\)/);
-        if (match) {
-          const factor = parseFloat(match[1]);
-          if (!isNaN(factor) && factor > 0 && Math.abs(factor - 1) > 0.05) {
-            const newScale = Math.max(0.4, Math.min(3.8, Math.round(initialScale * factor * 100) / 100));
-            PV_STATE.scaleMode = newScale;
-            recalculateScaleAndLayout();
-          }
+    const onPinchEnd = (e) => {
+      if (!isPinching) return;
+      if (e.touches.length > 0) return;
+      isPinching = false;
+      const transformStr = container.style.transform;
+      container.style.transform = "";
+      container.style.transformOrigin = "";
+      const matchScale = transformStr.match(/scale\(([^)]+)\)/);
+      const matchTranslate = transformStr.match(/translate\(([^p]+)px,\s*([^p]+)px\)/);
+      const factor = matchScale ? parseFloat(matchScale[1]) : 1;
+      const panX = matchTranslate ? parseFloat(matchTranslate[1]) : 0;
+      const panY = matchTranslate ? parseFloat(matchTranslate[2]) : 0;
+      if (!isNaN(factor) && factor > 0 && Math.abs(factor - 1) > 0.04) {
+        const sampleVp = PV_STATE.pageViewports[1];
+        const fitScale = sampleVp ? computeScale(sampleVp) : 1;
+        let newScale = Math.max(0.45, Math.min(3.8, Math.round(startScale * factor * 100) / 100));
+        const isMobile = window.innerWidth <= 768;
+        if (isMobile && Math.abs(newScale - fitScale) < 0.12) {
+          PV_STATE.scaleMode = "fit-width";
+          newScale = fitScale;
+        } else {
+          PV_STATE.scaleMode = newScale;
         }
+        const ratio = newScale / startScale;
+        const newContentX = contentFocalX * ratio;
+        const newContentY = contentFocalY * ratio;
+        const targetScrollLeft = Math.round(newContentX - (focalScreenX + panX));
+        const targetScrollTop = Math.round(newContentY - (focalScreenY + panY));
+        recalculateScaleAndLayout(false);
+        bodyEl.scrollLeft = Math.max(0, targetScrollLeft);
+        bodyEl.scrollTop = Math.max(0, targetScrollTop);
       }
+      setTimeout(() => {
+        PV_STATE.isPinching = false;
+        updateActivePageOnScroll();
+      }, 60);
     };
     bodyEl.addEventListener("touchend", onPinchEnd, { passive: true });
     bodyEl.addEventListener("touchcancel", onPinchEnd, { passive: true });
+  }
+  function handleDoubleTap(tapX, tapY) {
+    const bodyEl = document.getElementById("pdf-viewer-body");
+    if (!bodyEl) return;
+    const sampleVp = PV_STATE.pageViewports[1];
+    const fitScale = sampleVp ? computeScale(sampleVp) : 1;
+    const isCurrentlyFit = PV_STATE.scaleMode === "fit-width" || Math.abs(PV_STATE.currentScale - fitScale) < 0.08;
+    const startScale = PV_STATE.currentScale;
+    let targetScale;
+    if (isCurrentlyFit) {
+      targetScale = Math.round(fitScale * 1.85 * 10) / 10;
+      PV_STATE.scaleMode = targetScale;
+    } else {
+      targetScale = fitScale;
+      PV_STATE.scaleMode = "fit-width";
+    }
+    const ratio = targetScale / startScale;
+    const contentX = bodyEl.scrollLeft + tapX;
+    const contentY = bodyEl.scrollTop + tapY;
+    const newContentX = contentX * ratio;
+    const newContentY = contentY * ratio;
+    const targetScrollLeft = Math.round(newContentX - tapX);
+    const targetScrollTop = Math.round(newContentY - tapY);
+    recalculateScaleAndLayout(false);
+    bodyEl.scrollLeft = Math.max(0, targetScrollLeft);
+    bodyEl.scrollTop = Math.max(0, targetScrollTop);
+    setTimeout(updateActivePageOnScroll, 60);
   }
   function toggleZenMode(forceState) {
     const overlay = document.getElementById("pdf-viewer-overlay");
@@ -8230,10 +8299,22 @@ details.unit-dd[open] summary::after {
     }
     return typeof PV_STATE.scaleMode === "number" ? PV_STATE.scaleMode : 1;
   }
-  function recalculateScaleAndLayout() {
+  function recalculateScaleAndLayout(preservePagePosition = true) {
     if (!PV_STATE.pdfDoc) return;
     const sampleVp = PV_STATE.pageViewports[1];
     if (!sampleVp) return;
+    const bodyEl = document.getElementById("pdf-viewer-body");
+    const curPageNum = PV_STATE.currentPage || 1;
+    let pageOffsetRatio = 0;
+    if (preservePagePosition && bodyEl && !PV_STATE.isPinching) {
+      const curSlot = document.getElementById(`pv-page-slot-${curPageNum}`);
+      if (curSlot) {
+        const sRect = curSlot.getBoundingClientRect();
+        const bRect = bodyEl.getBoundingClientRect();
+        const offsetFromPageTop = bRect.top - sRect.top;
+        pageOffsetRatio = curSlot.clientHeight > 0 ? offsetFromPageTop / curSlot.clientHeight : 0;
+      }
+    }
     const newScale = computeScale(sampleVp);
     PV_STATE.currentScale = newScale;
     const pctText = `${Math.round(newScale * 100)}%`;
@@ -8257,8 +8338,16 @@ details.unit-dd[open] summary::after {
       const h = Math.round(vp.height * newScale);
       slot.style.width = `${w}px`;
       slot.style.height = `${h}px`;
+      slot.style.setProperty("--scale-factor", newScale);
       if (PV_STATE.renderedPages.has(i)) {
         renderPageCanvas(i, slot);
+      }
+    }
+    if (preservePagePosition && bodyEl && !PV_STATE.isPinching && pageOffsetRatio !== 0) {
+      const curSlot = document.getElementById(`pv-page-slot-${curPageNum}`);
+      if (curSlot) {
+        const newPageTop = curSlot.offsetTop;
+        bodyEl.scrollTop = Math.max(0, Math.round(newPageTop + curSlot.clientHeight * pageOffsetRatio));
       }
     }
   }
@@ -8266,13 +8355,14 @@ details.unit-dd[open] summary::after {
     let curr = PV_STATE.currentScale;
     let next = Math.max(0.4, Math.min(2.5, curr + delta));
     PV_STATE.scaleMode = Math.round(next * 10) / 10;
-    recalculateScaleAndLayout();
+    recalculateScaleAndLayout(true);
   }
   function stepPage(delta) {
     const target = Math.max(1, Math.min(PV_STATE.totalPages, PV_STATE.currentPage + delta));
     scrollToPage(target);
   }
   function updateActivePageOnScroll() {
+    if (PV_STATE.isPinching) return;
     const bodyEl = document.getElementById("pdf-viewer-body");
     if (!bodyEl) return;
     const bodyRect = bodyEl.getBoundingClientRect();
@@ -8331,16 +8421,12 @@ details.unit-dd[open] summary::after {
       slot.style.setProperty("--scale-factor", scale);
       const renderDpr = Math.max(2, (window.devicePixelRatio || 1) * 1.5);
       const renderViewport = page.getViewport({ scale: scale * renderDpr });
-      let canvas = slot.querySelector("canvas");
-      if (!canvas) {
-        canvas = document.createElement("canvas");
-        slot.appendChild(canvas);
-      }
-      canvas.width = Math.round(renderViewport.width);
-      canvas.height = Math.round(renderViewport.height);
-      canvas.style.width = `${w}px`;
-      canvas.style.height = `${h}px`;
-      const ctx = canvas.getContext("2d", { alpha: false });
+      const newCanvas = document.createElement("canvas");
+      newCanvas.width = Math.round(renderViewport.width);
+      newCanvas.height = Math.round(renderViewport.height);
+      newCanvas.style.width = `${w}px`;
+      newCanvas.style.height = `${h}px`;
+      const ctx = newCanvas.getContext("2d", { alpha: false });
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = "high";
       const renderContext = {
@@ -8352,23 +8438,32 @@ details.unit-dd[open] summary::after {
       await task.promise;
       delete PV_STATE.renderTasks[pageNum];
       PV_STATE.renderedPages.add(pageNum);
-      let textDiv = slot.querySelector(".textLayer");
-      if (textDiv) textDiv.remove();
-      textDiv = document.createElement("div");
-      textDiv.className = "textLayer";
-      textDiv.style.width = `${w}px`;
-      textDiv.style.height = `${h}px`;
-      textDiv.style.setProperty("--scale-factor", scale);
-      slot.appendChild(textDiv);
+      const oldCanvas = slot.querySelector("canvas");
+      if (oldCanvas) {
+        oldCanvas.replaceWith(newCanvas);
+      } else {
+        slot.appendChild(newCanvas);
+      }
       try {
         const textVp = page.getViewport({ scale });
         const textContent = await page.getTextContent();
+        const newTextDiv = document.createElement("div");
+        newTextDiv.className = "textLayer";
+        newTextDiv.style.width = `${w}px`;
+        newTextDiv.style.height = `${h}px`;
+        newTextDiv.style.setProperty("--scale-factor", scale);
         const textTask = window.pdfjsLib.renderTextLayer({
           textContentSource: textContent,
-          container: textDiv,
+          container: newTextDiv,
           viewport: textVp
         });
         await textTask.promise;
+        const oldTextDiv = slot.querySelector(".textLayer");
+        if (oldTextDiv) {
+          oldTextDiv.replaceWith(newTextDiv);
+        } else {
+          slot.appendChild(newTextDiv);
+        }
       } catch (textErr) {
         console.warn(`[PDF.js] TextLayer error on page ${pageNum}:`, textErr);
       }
@@ -8392,11 +8487,11 @@ details.unit-dd[open] summary::after {
       }
       delete PV_STATE.renderTasks[pageNum];
     }
-    const canvas = slot.querySelector("canvas");
-    if (canvas) {
-      canvas.width = 1;
-      canvas.height = 1;
-      canvas.remove();
+    const canvas2 = slot.querySelector("canvas");
+    if (canvas2) {
+      canvas2.width = 1;
+      canvas2.height = 1;
+      canvas2.remove();
     }
     const textDiv = slot.querySelector(".textLayer");
     if (textDiv) {
