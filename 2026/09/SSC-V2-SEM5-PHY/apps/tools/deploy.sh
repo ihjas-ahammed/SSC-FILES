@@ -9,7 +9,13 @@ set -e
 # Resolve symlinks first, so this works when run through a link (e.g. SSC-V4/deploy.sh).
 SELF="$(readlink -f "$0")"
 APPS="$(cd "$(dirname "$SELF")/.." && pwd)"
-REPO="$(cd "$(dirname "$SELF")/../../../../.." && pwd)"
+if [ -d "$APPS/../../SSC-V4" ]; then
+  REPO="$(cd "$APPS/../.." && pwd)"
+elif [ -d "$APPS/../../../../SSC-V4" ]; then
+  REPO="$(cd "$APPS/../../../.." && pwd)"
+else
+  REPO="$(cd "$(dirname "$SELF")/../../../../.." && pwd)"
+fi
 # Keep staging beside the checkout, and optionally prepare without publishing.
 PREPARE_DIR=""
 for ((i=1; i<=$#; i++)); do
@@ -18,7 +24,7 @@ for ((i=1; i<=$#; i++)); do
     [ -n "$PREPARE_DIR" ] || { echo "--prepare needs a directory" >&2; exit 1; }
   fi
 done
-TMP="$(mktemp -d "$REPO/.deploy-stage.XXXXXX")"; mkdir -p "$TMP/public"
+TMP="$(mktemp -d "${TMPDIR:-/tmp}/.deploy-stage.XXXXXX")"; mkdir -p "$TMP/public"
 trap 'rm -rf "$TMP"' EXIT
 
 # Stage a page that is committed but missing from the working tree.
@@ -32,6 +38,8 @@ stage_from_git() {
 }
 
 # --- SEM5 physics study apps ---
+cp "$APPS/COMPUTATIONAL_PHYSICS_1234.html" "$TMP/public/COMPUTATIONAL_PHYSICS_1234.html"
+[ -f "$APPS/cp3.html" ] && cp "$APPS/cp3.html" "$TMP/public/cp3.html"
 cp "$APPS/QM_1.html" "$TMP/public/QM_1.html"
 cp "$APPS/SOLID_STATE_1.html" "$TMP/public/SOLID_STATE_1.html"
 cp "$APPS/SOLID_STATE_1234.html" "$TMP/public/SOLID_STATE_1234.html"
@@ -48,7 +56,13 @@ cp "$APPS/MATERIAL_SCIENCE_12_OFFLINE.html" "$TMP/public/MATERIAL_SCIENCE_12_OFF
 cp "$APPS/QM_1.html" "$TMP/public/index.html"
 
 # --- SEM5 maths study apps (built in SSC-V2/SEM5/MATH/apps/tools/) ---
-MATHAPPS="$(cd "$APPS/../../MATH/apps" && pwd)"
+if [ -d "$APPS/../../MATH/apps" ]; then
+  MATHAPPS="$(cd "$APPS/../../MATH/apps" && pwd)"
+elif [ -d "$APPS/../../../11/SSC-V2-SEM5-MATH/apps" ]; then
+  MATHAPPS="$(cd "$APPS/../../../11/SSC-V2-SEM5-MATH/apps" && pwd)"
+else
+  MATHAPPS="$APPS"
+fi
 cp "$MATHAPPS/CONVEX_OPTIMIZATION_1234.html" "$TMP/public/CONVEX_OPTIMIZATION_1234.html"
 cp "$MATHAPPS/CONVEX_OPTIMIZATION_1234_OFFLINE.html" "$TMP/public/CONVEX_OPTIMIZATION_1234_OFFLINE.html"
 
@@ -362,6 +376,9 @@ fi
 # Only the pages and what they load (manifest, icons, sw.js) are shipped. Build
 # inputs (source/, verification/, src/, data/, node_modules/) stay out of the site.
 V6="$REPO/SSC-V6"
+if [ ! -d "$V6" ] && [ -d "$REPO/../10/SSC-V6" ]; then
+  V6="$(cd "$REPO/../10/SSC-V6" && pwd)"
+fi
 if [ -d "$V6" ]; then
   for DAY in "$V6"/study-day-*/; do
     DAY="${DAY%/}"; NAME="$(basename "$DAY")"
@@ -441,7 +458,7 @@ firebase deploy --only hosting:ssc-data-science-qm --project data-science-ef878
 BASE="https://ssc-data-science-qm.web.app"
 echo ""
 echo "Physics apps:"
-for f in QM_1 SOLID_STATE_1 SOLID_STATE_1234 LATEX_1 LATEX_12_OFFLINE LATEX_1234 LATEX_1234_OFFLINE PYTHON_1234 PYTHON_1234_OFFLINE PYTHON_12 PYTHON_12_OFFLINE \
+for f in COMPUTATIONAL_PHYSICS_1234 cp3 QM_1 SOLID_STATE_1 SOLID_STATE_1234 LATEX_1 LATEX_12_OFFLINE LATEX_1234 LATEX_1234_OFFLINE PYTHON_1234 PYTHON_1234_OFFLINE PYTHON_12 PYTHON_12_OFFLINE \
          MATERIAL_SCIENCE_12 MATERIAL_SCIENCE_12_OFFLINE; do
   echo "  → $BASE/$f.html"
 done

@@ -1,0 +1,2824 @@
+% ---------- Page and fonts ----------
+\documentclass[11pt,a4paper,openany,oneside]{book}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[sc]{mathpazo}
+\linespread{1.08}
+\usepackage[scaled=0.9]{helvet}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{bm}
+\usepackage{cancel}
+\usepackage[a4paper,top=24mm,bottom=24mm,inner=24mm,outer=24mm,headsep=8mm,footskip=12mm]{geometry}
+\usepackage{microtype}
+\usepackage[dvipsnames,svgnames]{xcolor}
+\usepackage{graphicx}
+\usepackage{booktabs,array,tabularx}
+\usepackage{multicol}
+\usepackage{enumitem}
+\setlist{nosep,leftmargin=1.4em,topsep=3pt}
+\usepackage{tikz}
+\usetikzlibrary{angles,quotes,arrows.meta,calc,decorations.pathreplacing,patterns,positioning,shapes.geometric,decorations.markings,3d,intersections}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.17}
+\usepgfplotslibrary{fillbetween,groupplots}
+\usepackage{tikz-3dplot}
+\usepackage[most]{tcolorbox}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{etoolbox}
+\usepackage[hidelinks,unicode,psdextra,bookmarksnumbered=true,bookmarksopen=true,bookmarksopenlevel=1,pdfpagemode=UseOutlines]{hyperref}
+\usepackage{bookmark}
+\hypersetup{pdftitle={Classical Mechanics & Gravitation: The Math Book (Modules 1-4)},pdfauthor={ASD-STE100 Technical Reference},pdfsubject={Momentum, Rotation, Angular Momentum, and Gravitation}}
+
+% ---------- Colours ----------
+\definecolor{ink}{HTML}{1F2A33}
+\definecolor{teal}{HTML}{0F6E6E}
+\definecolor{tealsoft}{HTML}{E8F3F2}
+\definecolor{amber}{HTML}{B4690E}
+\definecolor{ambersoft}{HTML}{FFF6E8}
+\definecolor{plum}{HTML}{6A3D7A}
+\definecolor{plumsoft}{HTML}{F5EFF7}
+\definecolor{rose}{HTML}{B03A48}
+\definecolor{rosesoft}{HTML}{FCEEF0}
+\definecolor{slate}{HTML}{5B6770}
+\definecolor{slatesoft}{HTML}{F3F5F6}
+\definecolor{bluec}{HTML}{2459A8}
+\color{ink}
+
+% ---------- Headings ----------
+\newcommand{\sffamilybold}{\fontfamily{phv}\selectfont\bfseries}
+\titleformat{\part}[display]{\centering\sffamilybold\color{teal}}{\Large\MakeUppercase{\thepart}}{8pt}{\Huge}
+\renewcommand{\thepart}{Module \arabic{part}}
+\usepackage{titletoc}
+\titlecontents{part}[0pt]{\addvspace{12pt}\fontfamily{phv}\selectfont\bfseries\color{teal}}{\thecontentslabel\quad}{}{\hfill\contentspage}[\addvspace{3pt}]
+\titleformat{\chapter}[display]
+  {\sffamilybold\color{ink}}
+  {\color{teal}\large CHAPTER \thechapter}{4pt}{\huge}[\vspace{2pt}{\color{teal}\titlerule[1.2pt]}]
+\titlespacing*{\chapter}{0pt}{0pt}{18pt}
+\titleformat{\section}{\sffamilybold\Large\color{teal}}{\thesection}{0.7em}{}
+\titleformat{\subsection}{\sffamilybold\large\color{ink}}{\thesubsection}{0.7em}{}
+\titleformat{\subsubsection}{\sffamilybold\normalsize\color{slate}}{}{0em}{}
+\titlespacing*{\section}{0pt}{16pt}{7pt}
+\titlespacing*{\subsection}{0pt}{13pt}{5pt}
+\titlespacing*{\subsubsection}{0pt}{9pt}{3pt}
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2}
+
+% ---------- Header / footer ----------
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ \ #1}}
+\fancyhead[L]{\small\fontfamily{phv}\selectfont\color{slate}\leftmark}
+\fancyhead[R]{\small\fontfamily{phv}\selectfont\color{slate}\rightmark}
+\fancyfoot[C]{\small\fontfamily{phv}\selectfont\color{slate}\thepage}
+\fancypagestyle{plain}{\fancyhf{}\renewcommand{\headrulewidth}{0pt}\fancyfoot[C]{\small\fontfamily{phv}\selectfont\color{slate}\thepage}}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+
+% ---------- Boxes ----------
+\tcbset{common/.style={enhanced,breakable,boxrule=0pt,arc=2mm,left=3mm,right=3mm,top=2mm,bottom=2mm,
+  fonttitle=\fontfamily{phv}\selectfont\bfseries\small,coltitle=white,before skip=7pt,after skip=7pt}}
+% Goal of a derivation
+\newtcolorbox{goal}{common,colback=tealsoft,colframe=teal,borderline west={3pt}{0pt}{teal},
+  title={GOAL},attach boxed title to top left={xshift=3mm,yshift=-2mm},boxed title style={colback=teal,arc=1mm}}
+% Plus-two base facts
+\newtcolorbox{base}[1][]{common,colback=ambersoft,colframe=amber,borderline west={3pt}{0pt}{amber},
+  title={FROM YOUR +2 BASE#1},attach boxed title to top left={xshift=3mm,yshift=-2mm},boxed title style={colback=amber,arc=1mm}}
+% Final result
+\newtcolorbox{result}[1][]{common,breakable=false,colback=white,colframe=teal,boxrule=1.2pt,
+  title={RESULT#1},attach boxed title to top left={xshift=3mm,yshift=-2mm},boxed title style={colback=teal,arc=1mm}}
+% Meaning
+\newtcolorbox{means}{common,colback=plumsoft,colframe=plum,borderline west={3pt}{0pt}{plum},
+  title={WHAT IT MEANS},attach boxed title to top left={xshift=3mm,yshift=-2mm},boxed title style={colback=plum,arc=1mm}}
+% Exam trap
+\newtcolorbox{trap}{common,colback=rosesoft,colframe=rose,borderline west={3pt}{0pt}{rose},
+  title={WATCH OUT},attach boxed title to top left={xshift=3mm,yshift=-2mm},boxed title style={colback=rose,arc=1mm}}
+% Worked example
+\newtcolorbox{example}[2]{common,breakable=false,colback=slatesoft,colframe=slate,borderline west={3pt}{0pt}{slate},
+  before upper={\belowpdfbookmark{Book Example #1}{ex#1}},
+  title={BOOK EXAMPLE\ \ #1\quad #2},attach boxed title to top left={xshift=3mm,yshift=-2mm},boxed title style={colback=slate,arc=1mm}}
+% Idea / picture first
+\newtcolorbox{idea}{common,colback=white,colframe=teal!50,boxrule=0.6pt,borderline west={3pt}{0pt}{teal!50},
+  title={THE IDEA},coltitle=teal,attach boxed title to top left={xshift=3mm,yshift=-2mm},boxed title style={colback=white,colframe=teal!50,boxrule=0.6pt,arc=1mm}}
+% Syllabus strip
+\newtcolorbox{syll}{enhanced,colback=slatesoft,colframe=slatesoft,arc=1mm,left=3mm,right=3mm,top=1.5mm,bottom=1.5mm,fontupper=\small\fontfamily{phv}\selectfont}
+
+% ---------- Derivation helpers ----------
+% right-side reason in align: use  &&\why{reason}
+\newcommand{\why}[1]{\text{\small\color{slate}\itshape #1}}
+\newcommand{\step}[1]{\par\smallskip{\fontfamily{phv}\selectfont\bfseries\small\color{teal}#1}\enspace}
+\newcommand{\term}[1]{\textbf{\color{teal}#1}}
+\newcommand{\eqbox}[1]{\boxed{\,#1\,}}
+\newcommand{\vect}[1]{\mathbf{#1}}
+\newcommand{\uv}[1]{\hat{\mathbf{#1}}}
+\newcommand{\ihat}{\hat{\mathbf{i}}}
+\newcommand{\jhat}{\hat{\mathbf{j}}}
+\newcommand{\khat}{\hat{\mathbf{k}}}
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\diff}{\mathrm{d}}
+\newcommand{\Eloc}{E_{\text{loc}}}
+\newcommand{\kT}{k_BT}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\bookref}[1]{{\small\color{slate}[Book: #1]}}
+\newcounter{figno}[chapter]
+\newcommand{\figcap}[1]{\par\nopagebreak[4]\smallskip\refstepcounter{figno}{\centering\small\color{slate}\fontfamily{phv}\selectfont \textbf{Fig.\ \thechapter.\arabic{figno}}\quad #1\par}\medskip}
+
+% figure environment wrapper, no float (keeps math next to picture)
+\newenvironment{pic}{\par\medskip\noindent\begin{minipage}{\linewidth}\centering}{\end{minipage}\par\medskip}
+\usepackage{needspace}
+\pretocmd{\section}{\needspace{8\baselineskip}}{}{}
+\pretocmd{\subsection}{\needspace{6\baselineskip}}{}{}
+\pretocmd{\subsubsection}{\needspace{4\baselineskip}}{}{}
+
+% equation numbering per chapter
+\numberwithin{equation}{chapter}
+
+% TikZ styles
+\tikzset{
+  atom/.style={circle,fill=teal,inner sep=0pt,minimum size=5pt},
+  atomB/.style={circle,fill=amber,inner sep=0pt,minimum size=5pt},
+  latt/.style={circle,fill=ink,inner sep=0pt,minimum size=3pt},
+  vec/.style={-{Stealth[length=2.6mm]},thick},
+  ax/.style={-{Stealth[length=2mm]},thin,slate},
+  dim/.style={{Stealth[length=1.6mm]}-{Stealth[length=1.6mm]},thin,slate},
+  lbl/.style={font=\small},
+}
+
+% ---------- Toolkit items (T1, T2, ...) ----------
+\newcounter{tool}
+\newtcolorbox{toolbox}[2]{common,breakable=false,colback=white,colframe=amber!70,boxrule=0.6pt,
+  borderline west={3pt}{0pt}{amber},
+  title={\refstepcounter{tool}\label{#2}T\thetool\quad #1},coltitle=amber!80!black,
+  before upper={\belowpdfbookmark{T\thetool\ \ #1}{tool\thetool}},
+  attach boxed title to top left={xshift=3mm,yshift=-2mm},
+  boxed title style={colback=white,colframe=amber!70,boxrule=0.6pt,arc=1mm}}
+\newcommand{\tref}[1]{\hyperref[#1]{\textbf{\color{amber!80!black}T\ref*{#1}}}}
+
+% ---------- 3D oblique projection for cells ----------
+\tikzset{
+  cub/.style={x={(1cm,0cm)},y={(0.42cm,0.30cm)},z={(0cm,1cm)}},
+}
+\newcommand{\cubeedges}{%
+    \draw[thick,ink] (0,0,0)--(1,0,0)--(1,0,1)--(0,0,1)--cycle;
+    \draw[thick,ink] (1,0,0)--(1,1,0)--(1,1,1)--(1,0,1);
+    \draw[thick,ink] (0,0,1)--(0,1,1)--(1,1,1);
+    \draw[ink,dashed] (0,0,0)--(0,1,0)--(1,1,0);
+    \draw[ink,dashed] (0,1,0)--(0,1,1);}
+\newcommand{\cubecorners}{%
+    \foreach \x in {0,1}{\foreach \y in {0,1}{\foreach \z in {0,1}{\fill[teal] (\x,\y,\z) circle (2.2pt);}}}}
+\raggedbottom
+
+
+% ---------- Formula sheets ----------
+\newcommand{\formulasheet}[1]{%
+  \cleardoublepage\phantomsection
+  \chapter*{#1}\addcontentsline{toc}{chapter}{#1}\markboth{#1}{}%
+}
+\newtcolorbox{fs}[1]{enhanced,breakable=false,colback=white,colframe=teal!60,boxrule=0.5pt,arc=1.5mm,
+  left=2mm,right=2mm,top=1mm,bottom=1mm,before skip=4pt,after skip=4pt,
+  title={#1},fonttitle=\fontfamily{phv}\selectfont\bfseries\footnotesize,colbacktitle=tealsoft,coltitle=teal}
+
+\newtcolorbox{exampledemo}{common,colback=slatesoft,colframe=slate,borderline west={3pt}{0pt}{slate},
+  title={BOOK EXAMPLE\ \ 1.1},attach boxed title to top left={xshift=3mm,yshift=-2mm},boxed title style={colback=slate,arc=1mm}}
+
+\newtcolorbox{also}{common,colback=tealsoft!40,colframe=teal!70,borderline west={3pt}{0pt}{teal!70},
+  title={ALSO ACCEPTED},attach boxed title to top left={xshift=3mm,yshift=-2mm},boxed title style={colback=teal!70,arc=1mm}}
+\newcommand{\bk}[1]{\texorpdfstring{\enspace{\normalfont\small\color{slate}[Book #1]}}{ [Book #1]}}
+\newcommand{\extra}{\texorpdfstring{\enspace{\normalfont\small\color{slate}(extra)}}{ (extra)}}
+\newcommand{\qual}{\texorpdfstring{\enspace{\normalfont\small\color{slate}(qualitative)}}{ (qualitative)}}
+% second view: x toward viewer (left-down), y right, z up; origin hidden at back
+\tikzset{cubB/.style={x={(-0.55cm,-0.45cm)},y={(1cm,0cm)},z={(0cm,1cm)}}}
+\newcommand{\cubeedgesB}[1][1]{%
+  \draw[thick,ink] (1,0,0)--(1,#1,0)--(1,#1,1)--(1,0,1)--cycle;
+  \draw[thick,ink] (1,#1,0)--(0,#1,0)--(0,#1,1)--(1,#1,1);
+  \draw[thick,ink] (1,0,1)--(0,0,1)--(0,#1,1);
+  \draw[ink,dashed] (0,0,0)--(1,0,0); \draw[ink,dashed] (0,0,0)--(0,#1,0); \draw[ink,dashed] (0,0,0)--(0,0,1);}
+
+\begin{document}
+
+% ============================================================================
+% TITLE PAGE
+% ============================================================================
+\begin{titlepage}
+\centering
+\vspace*{1.5cm}
+{\fontfamily{phv}\selectfont\bfseries\Large\color{teal} ASD-STE100 SIMPLIFIED TECHNICAL ENGLISH EDITION\par}
+\vspace{0.6cm}
+{\fontfamily{phv}\selectfont\bfseries\Huge\color{ink} CLASSICAL MECHANICS \& GRAVITATION:\\[0.3em] THE MATH BOOK\par}
+\vspace{0.5cm}
+{\fontfamily{phv}\selectfont\Large\color{slate} Complete Step-by-Step Derivations from $+2$ Base Knowledge,\\Vector Diagrams, All Book Examples, and Unique Solved Problems\par}
+\vspace{1.2cm}
+\begin{tikzpicture}[scale=1.05]
+  % Central decorative SVG-style vector graphic: Orbit + Collision + Gyroscope
+  \draw[teal!30,fill=tealsoft!50,rounded corners=4mm] (-5.5,-2.2) rectangle (5.5,2.2);
+  % Left: 2D Collision
+  \draw[ax] (-4.8,-1.2) -- (-1.8,-1.2) node[right,font=\scriptsize]{$x$};
+  \draw[ax] (-3.5,-1.8) -- (-3.5,1.5) node[above,font=\scriptsize]{$y$};
+  \fill[teal] (-4.5,0) circle (5pt) node[above=4pt,font=\scriptsize\bfseries]{$m_1$};
+  \draw[vec,teal] (-4.5,0) -- (-3.7,0) node[midway,below,font=\scriptsize]{$\vect{v}_1$};
+  \fill[amber] (-3.5,0) circle (6pt);
+  \draw[vec,teal] (-3.5,0) -- (-2.3,1.0) node[right,font=\scriptsize]{$\vect{v}_1'$};
+  \draw[vec,amber] (-3.5,0) -- (-2.2,-0.8) node[right,font=\scriptsize]{$\vect{v}_2'$};
+  % Center: Rigid body & Angular momentum
+  \draw[thick,plum,fill=plumsoft] (0,0) ellipse (1.1cm and 0.42cm);
+  \draw[vec,plum,ultra thick] (0,-1.3) -- (0,1.4) node[above,font=\scriptsize\bfseries]{$\vect{L}=I\bm{\omega}$};
+  \draw[vec,rose] (0,0) -- (0.95,-0.2) node[below,font=\scriptsize]{$\vect{r}_i$};
+  \fill[ink] (0.95,-0.2) circle (2.5pt);
+  % Right: Kepler Orbit & Gravity
+  \draw[thick,teal,dashed] (3.4,0) ellipse (1.6cm and 1.0cm);
+  \fill[amber] (2.4,0) circle (6pt) node[below=5pt,font=\scriptsize\bfseries]{$M_S$};
+  \fill[teal] (4.7,0.58) circle (3.5pt) node[above right,font=\scriptsize]{$m$};
+  \draw[vec,rose] (4.7,0.58) -- (3.7,0.33) node[above,font=\scriptsize]{$\vect{F}_g$};
+  \draw[vec,bluec] (4.7,0.58) -- (4.35,1.25) node[above,font=\scriptsize]{$\vect{v}$};
+\end{tikzpicture}
+\vspace{1.2cm}
+
+\begin{tcolorbox}[common,colback=slatesoft,colframe=teal,borderline west={3pt}{0pt}{teal},title={SYLLABUS \& SOURCE COVERAGE}]
+\begin{itemize}
+  \item \textbf{Module 1 (PDF 1):} Linear Momentum, Impulse, Collisions, Center of Mass, Reduced Mass, and Rocket Propulsion \emph{(Young \& Freedman Ch.\ 8; Analytical Mechanics Ch.\ 6)}.
+  \item \textbf{Module 2 (PDF 4):} Rotation of Rigid Bodies, Rotational Kinematics, Rotational Kinetic Energy, and Moment-of-Inertia Integrals \emph{(Young \& Freedman Ch.\ 9)}.
+  \item \textbf{Module 3 (PDF 3):} Dynamics of Rotational Motion, Rolling Motion, Angular Momentum, Gyroscopes, and Axial Vectors \emph{(Young \& Freedman Ch.\ 10; Analytical Mechanics Ch.\ 7)}.
+  \item \textbf{Module 4 (PDF 2):} Newton's Law of Gravitation, Satellites, Kepler's Laws, Spherical Shells, Gauss's Law for Gravity, Poisson and Laplace Equations, Black Holes, and General Relativity \emph{(Young \& Freedman Ch.\ 13; Analytical Mechanics Ch.\ 9)}.
+\end{itemize}
+\end{tcolorbox}
+\vfill
+{\small\fontfamily{phv}\selectfont\color{slate} Written in strict compliance with ASD-STE100 Simplified Technical English.\par}
+\end{titlepage}
+
+\tableofcontents
+
+% ============================================================================
+% CHAPTER 0: PLUS-TWO MATHEMATICAL TOOLKIT
+% ============================================================================
+\chapter*{Plus-Two Mathematical Toolkit}
+\addcontentsline{toc}{chapter}{Plus-Two Mathematical Toolkit}
+\markboth{Plus-Two Mathematical Toolkit}{Plus-Two Mathematical Toolkit}
+
+\begin{syll}
+Use these six foundational tools (\textbf{T1}--\textbf{T6}) from $+2$ mathematics and physics to follow every derivation in this book.
+\end{syll}
+
+\begin{toolbox}{Derivatives, Product Rule, and Kinematic Rates}{tool:deriv}
+Let position be $\vect{r}(t) = x(t)\ihat + y(t)\jhat + z(t)\khat$.
+\begin{align*}
+  \vect{v} &= \frac{\diff\vect{r}}{\diff t}, \qquad \vect{a} = \frac{\diff\vect{v}}{\diff t} = \frac{\diff^2\vect{r}}{\diff t^2}, \qquad \frac{\diff}{\diff t}(uv) = \frac{\diff u}{\diff t}v + u\frac{\diff v}{\diff t} &&\why{kinematic derivatives and product rule}\\
+  \frac{\diff}{\diff x}\!\left(x^n\right) &= nx^{n-1}, \qquad \frac{\diff}{\diff x}(\sin x) = \cos x, \qquad \frac{\diff}{\diff x}(\cos x) = -\sin x &&\why{standard $+2$ derivatives}
+\end{align*}
+\end{toolbox}
+
+\begin{toolbox}{Definite Integrals and Logarithms}{tool:integ}
+Integration is the inverse of differentiation. It sums infinitesimal parts from limit $a$ to limit $b$:
+\begin{align*}
+  \int_a^b x^n\dd x &= \left[\frac{x^{n+1}}{n+1}\right]_a^b = \frac{b^{n+1}-a^{n+1}}{n+1}\quad (n\neq -1), \qquad \int_a^b \frac{\diff x}{x} = [\ln x]_a^b = \ln\!\left(\frac{b}{a}\right)
+\end{align*}
+\end{toolbox}
+
+\begin{toolbox}{Scalar (Dot) Product and Work Integral}{tool:dot}
+For two vectors $\vect{A}$ and $\vect{B}$ with angle $\phi$ between them:
+\begin{align*}
+  \vect{A}\cdot\vect{B} &= AB\cos\phi = A_x B_x + A_y B_y + A_z B_z, \qquad \vect{A}\cdot\vect{A} = A^2 &&\why{dot product}\\
+  W &= \int_{\vect{r}_1}^{\vect{r}_2} \vect{F}\cdot\diff\vect{r} = K_2 - K_1 = -\Delta U \quad(\text{for conservative }\vect{F}) &&\why{work--energy theorem}
+\end{align*}
+\end{toolbox}
+
+\begin{toolbox}{Vector (Cross) Product and BAC--CAB Identity}{tool:cross}
+The cross product $\vect{C} = \vect{A}\times\vect{B}$ is perpendicular to both $\vect{A}$ and $\vect{B}$ by the right-hand rule:
+\begin{align*}
+  |\vect{A}\times\vect{B}| &= AB\sin\phi, \qquad \vect{A}\times\vect{B} = -\vect{B}\times\vect{A}, \qquad \vect{A}\times\vect{A} = \vect{0}\\
+  \vect{A}\times(\vect{B}\times\vect{C}) &= \vect{B}(\vect{A}\cdot\vect{C}) - \vect{C}(\vect{A}\cdot\vect{B}) &&\why{BAC--CAB vector triple product}
+\end{align*}
+\end{toolbox}
+
+\begin{toolbox}{Vector Calculus Operators: Gradient, Divergence, Curl, and Gauss's Theorem}{tool:vec_calc}
+Define the del operator $\nabla = \ihat\frac{\partial}{\partial x} + \jhat\frac{\partial}{\partial y} + \khat\frac{\partial}{\partial z}$.
+\begin{align*}
+  \text{Gradient: } \nabla\Phi &= \ihat\frac{\partial\Phi}{\partial x} + \jhat\frac{\partial\Phi}{\partial y} + \khat\frac{\partial\Phi}{\partial z}, \qquad \text{Laplacian: } \nabla^2\Phi = \nabla\cdot(\nabla\Phi) = \frac{\partial^2\Phi}{\partial x^2}+\frac{\partial^2\Phi}{\partial y^2}+\frac{\partial^2\Phi}{\partial z^2}\\
+  \text{Curl of gradient: } \nabla\times(\nabla\Phi) &= \vect{0}, \qquad \text{Gauss's Divergence Theorem: } \oint_S \vect{A}\cdot\uv{n}\dd S = \int_V (\nabla\cdot\vect{A})\dd\tau
+\end{align*}
+\end{toolbox}
+
+\begin{toolbox}{Coordinate Elements in Cylindrical and Spherical Geometry}{tool:coords}
+\begin{itemize}
+  \item \textbf{Polar / Cylindrical $(r,\phi,z)$:} Ring circumference $= 2\pi r$, disk area element $\dd A = r\dd r\dd\phi$ (or $2\pi r\dd r$), cylindrical shell volume $\dd V = 2\pi r L\dd r$.
+  \item \textbf{Spherical $(r,\theta,\phi)$:} Ring radius on sphere of radius $R$ is $R\sin\theta$, ring width is $R\dd\theta$, zone area element $\dd A = 2\pi R^2\sin\theta\dd\theta$, solid angle element $\dd\Omega = \frac{\dd S\cos\theta}{r^2}$ (total sphere $\oint\dd\Omega = 4\pi\text{ sr}$).
+\end{itemize}
+\end{toolbox}
+
+% ============================================================================
+% MODULE 1: LINEAR MOMENTUM, IMPULSE, COLLISIONS, AND ROCKET PROPULSION
+% ============================================================================
+\part{Linear Momentum, Impulse, Collisions, and Rockets}
+
+\chapter{Momentum, Impulse, and Conservation Laws}
+\begin{syll}
+\textbf{Syllabus Coverage (PDF 1):} Young \& Freedman Chapter 8 (Sections 8.1--8.2) and Analytical Mechanics Chapter 6 (Sections 6.1, 6.5, 6.6). Newton's second law in momentum form, impulse--momentum theorem, and conservation of total momentum for $N$-particle systems.
+\end{syll}
+
+\section{Linear Momentum and Newton's Second Law\bk{8.1, 6.1}}
+
+\begin{goal}
+Define linear momentum $\vect{p}$ and express Newton's second law for both constant-mass and variable-mass particles.
+\end{goal}
+
+\begin{base}
+A particle of mass $m$ moves with velocity $\vect{v} = \frac{\diff\vect{r}}{\diff t}$ and acceleration $\vect{a} = \frac{\diff\vect{v}}{\diff t}$. Newton's second law for constant mass is $\sum\vect{F} = m\vect{a}$.
+\end{base}
+
+\step{Step 1: Define linear momentum.}
+Multiply the particle mass $m$ by its velocity vector $\vect{v}$:
+\begin{equation}\label{eq:p_def}
+  \eqbox{\vect{p} = m\vect{v}} \qquad (p_x = mv_x,\quad p_y = mv_y,\quad p_z = mv_z)
+\end{equation}
+
+\step{Step 2: Differentiate $\vect{p}$ with respect to time $t$.}
+Apply the product rule (\tref{tool:deriv}) to $\vect{p} = m\vect{v}$:
+\begin{align}
+  \frac{\diff\vect{p}}{\diff t} &= \frac{\diff}{\diff t}(m\vect{v}) = m\frac{\diff\vect{v}}{\diff t} + \vect{v}\frac{\diff m}{\diff t} &&\why{general variable-mass form (Eq.\ 6.1)}\label{eq:F_varmass}
+\end{align}
+If the mass $m$ is constant, $\frac{\diff m}{\diff t} = 0$. Substitute $\frac{\diff\vect{v}}{\diff t} = \vect{a}$:
+\begin{align}
+  \sum\vect{F} &= m\frac{\diff\vect{v}}{\diff t} = \frac{\diff}{\diff t}(m\vect{v}) = \frac{\diff\vect{p}}{\diff t} &&\why{constant mass $m$}\label{eq:N2_momentum}
+\end{align}
+
+\step{Step 3: Relate kinetic energy $K$ to momentum magnitude $p$.}
+Start from $K = \frac{1}{2}mv^2$ and substitute $v = \frac{p}{m}$:
+\begin{equation}\label{eq:K_p_rel}
+  K = \frac{1}{2}m\!\left(\frac{p}{m}\right)^2 = \eqbox{\frac{p^2}{2m}} \iff p = \sqrt{2mK}
+\end{equation}
+
+\begin{result}[Newton's Second Law in Terms of Momentum]
+\begin{equation*}
+  \sum\vect{F} = \frac{\diff\vect{p}}{\diff t} \quad (\text{constant } m), \qquad \vect{F} = \frac{\diff\vect{p}}{\diff t} = m\frac{\diff\vect{v}}{\diff t} + \vect{v}\frac{\diff m}{\diff t} \quad (\text{variable } m)
+\end{equation*}
+\end{result}
+
+\section{The Impulse--Momentum Theorem\bk{8.1, 6.5}}
+
+\begin{goal}
+Derive the relation between the time integral of net force (impulse $\vect{J}$) and the change in linear momentum $\Delta\vect{p}$.
+\end{goal}
+
+\begin{pic}
+\begin{tikzpicture}[scale=0.95]
+  \begin{axis}[
+    width=8.5cm, height=4.5cm,
+    axis lines=middle,
+    xlabel={$t$}, ylabel={$\sum F_x$},
+    xmin=0, xmax=5, ymin=0, ymax=3.2,
+    xtick={1,4}, xticklabels={$t_1$,$t_2$},
+    ytick={1.35}, yticklabels={$(F_{\text{av}})_x$},
+    clip=false
+  ]
+    \addplot[name path=curve,smooth,thick,rose,domain=1:4,samples=60] {2.8*sin(deg((x-1)*pi/3))^2};
+    \path[name path=axis] (axis cs:1,0) -- (axis cs:4,0);
+    \addplot[rosesoft] fill between[of=curve and axis];
+    \draw[thick,teal,fill=tealsoft,fill opacity=0.45] (axis cs:1,0) rectangle (axis cs:4,1.4);
+    \node[font=\footnotesize,rose!80!black] at (axis cs:2.5,2.1) {$\text{Area} = J_x = \int_{t_1}^{t_2}\sum F_x\dd t$};
+    \node[font=\footnotesize,teal!80!black] at (axis cs:2.5,0.65) {$(F_{\text{av}})_x(t_2-t_1)$};
+  \end{axis}
+\end{tikzpicture}
+\figcap{The area under the curve of net force $\sum F_x$ versus time $t$ equals the impulse $J_x$.}
+\end{pic}
+
+\step{Step 1: Integrate Newton's second law over time.}
+Start from $\sum\vect{F} = \frac{\diff\vect{p}}{\diff t}$ and multiply both sides by $\diff t$:
+\begin{align}
+  \sum\vect{F}\dd t &= \diff\vect{p} &&\why{differential form}\\
+  \int_{t_1}^{t_2}\sum\vect{F}\dd t &= \int_{\vect{p}_1}^{\vect{p}_2}\diff\vect{p} = \vect{p}_2 - \vect{p}_1 = \Delta\vect{p} &&\why{integrate from $t_1$ to $t_2$ (\tref{tool:integ})}
+\end{align}
+
+\step{Step 2: Define impulse $\vect{J}$ and average force $\vect{F}_{\text{av}}$.}
+Define the impulse $\vect{J}$ as the time integral of the net force:
+\begin{equation}\label{eq:impulse_def}
+  \eqbox{\vect{J} = \int_{t_1}^{t_2}\sum\vect{F}\dd t = \vect{p}_2 - \vect{p}_1 = m\vect{v}_2 - m\vect{v}_1}
+\end{equation}
+If $\sum\vect{F}$ is constant, $\vect{J} = \sum\vect{F}(t_2 - t_1) = \sum\vect{F}\Delta t$. For a varying force, define the average net force $\vect{F}_{\text{av}}$ so that it gives the same impulse:
+\begin{equation}\label{eq:impulse_av}
+  \vect{J} = \vect{F}_{\text{av}}(t_2 - t_1), \qquad
+  \begin{cases}
+    J_x = \int_{t_1}^{t_2}\sum F_x\dd t = (F_{\text{av}})_x(t_2-t_1) = mv_{2x} - mv_{1x}\\[4pt]
+    J_y = \int_{t_1}^{t_2}\sum F_y\dd t = (F_{\text{av}})_y(t_2-t_1) = mv_{2y} - mv_{1y}
+  \end{cases}
+\end{equation}
+
+\begin{means}
+Impulse $\vect{J} = \int\sum\vect{F}\dd t$ measures force acting over \textbf{time} and changes \textbf{momentum} ($\Delta\vect{p} = \vect{J}$). Work $W = \int\sum\vect{F}\cdot\diff\vect{r}$ measures force acting over \textbf{distance} and changes \textbf{kinetic energy} ($\Delta K = W$).
+\end{means}
+
+\section{Conservation of Momentum for a System of Particles\bk{8.2, 6.6}}
+
+\begin{goal}
+Prove that internal forces cancel in pairs and that the total linear momentum $\vect{P}_{\text{tot}}$ of a system is conserved when the net external force is zero.
+\end{goal}
+
+\begin{pic}
+\begin{tikzpicture}[scale=1.0]
+  \fill[teal] (0,0) circle (5pt) node[below=5pt,lbl]{Particle $i$ ($m_i$)};
+  \fill[amber] (3.5,0.8) circle (5pt) node[below=5pt,lbl]{Particle $j$ ($m_j$)};
+  \draw[dashed,slate] (0,0) -- (3.5,0.8);
+  \draw[vec,rose,ultra thick] (0,0) -- (1.3,0.3) node[above,font=\small]{$\vect{F}_{ij}$};
+  \draw[vec,rose,ultra thick] (3.5,0.8) -- (2.2,0.5) node[above,font=\small]{$\vect{F}_{ji} = -\vect{F}_{ij}$};
+  \draw[vec,bluec] (0,0) -- (-1.1,0.7) node[left,font=\small]{$\vect{F}_i^{(e)}$};
+  \draw[vec,bluec] (3.5,0.8) -- (4.5,1.6) node[right,font=\small]{$\vect{F}_j^{(e)}$};
+\end{tikzpicture}
+\figcap{Internal action--reaction pair $\vect{F}_{ij} = -\vect{F}_{ji}$ and external forces $\vect{F}_i^{(e)}, \vect{F}_j^{(e)}$ on particles $i$ and $j$.}
+\end{pic}
+
+\step{Step 1: Write Newton's second law for particle $i$ in an $N$-particle system.}
+Let $\vect{F}_i^{(e)}$ be the external force on particle $i$, and let $\vect{F}_{ij}$ be the internal force exerted on particle $i$ by particle $j$ ($j\neq i$):
+\begin{equation}
+  \frac{\diff\vect{p}_i}{\diff t} = \vect{F}_i^{(e)} + \sum_{\substack{j=1\\j\neq i}}^N \vect{F}_{ij}
+\end{equation}
+
+\step{Step 2: Sum over all $N$ particles.}
+Define total momentum $\vect{P}_{\text{tot}} = \sum_{i=1}^N \vect{p}_i = \sum_{i=1}^N m_i\vect{v}_i$:
+\begin{equation}
+  \sum_{i=1}^N \frac{\diff\vect{p}_i}{\diff t} = \frac{\diff\vect{P}_{\text{tot}}}{\diff t} = \sum_{i=1}^N \vect{F}_i^{(e)} + \sum_{i=1}^N\sum_{\substack{j=1\\j\neq i}}^N \vect{F}_{ij}
+\end{equation}
+
+\step{Step 3: Apply Newton's third law to the double sum.}
+For every pair $(i,j)$, Newton's third law gives $\vect{F}_{ij} = -\vect{F}_{ji}$, so $\vect{F}_{ij} + \vect{F}_{ji} = \vect{0}$. Thus the entire double sum over internal forces vanishes:
+\begin{equation}\label{eq:dPtot_dt}
+  \frac{\diff\vect{P}_{\text{tot}}}{\diff t} = \sum_{i=1}^N \vect{F}_i^{(e)} = \vect{F}_{\text{tot}}^{(e)}
+\end{equation}
+
+\step{Step 4: State the conservation condition.}
+If the vector sum of external forces is zero ($\vect{F}_{\text{tot}}^{(e)} = \vect{0}$), then $\frac{\diff\vect{P}_{\text{tot}}}{\diff t} = \vect{0}$:
+\begin{equation}\label{eq:P_conserv}
+  \eqbox{\vect{P}_{\text{tot}} = m_A\vect{v}_A + m_B\vect{v}_B + \cdots = \text{constant} \qquad (\text{when }\sum\vect{F}_{\text{ext}} = \vect{0})}
+\end{equation}
+
+\begin{trap}
+Momentum is a \textbf{vector}. You must conserve each component separately: $P_x = \text{const}$, $P_y = \text{const}$, $P_z = \text{const}$. Never add momentum magnitudes directly unless the vectors are parallel.
+\end{trap}
+
+% ============================================================================
+% CHAPTER 2: COLLISIONS, CENTER OF MASS, AND ROCKET PROPULSION
+% ============================================================================
+\chapter{Collisions, Center of Mass, and Rocket Propulsion}
+\begin{syll}
+\textbf{Syllabus Coverage (PDF 1):} Young \& Freedman Chapter 8 (Sections 8.3--8.6) and Analytical Mechanics Chapter 6 (Sections 6.2--6.4, 6.7). Elastic, inelastic, and completely inelastic collisions; 2D glancing collisions; coefficient of restitution; center of mass; reduced mass; and rocket propulsion.
+\end{syll}
+
+\section{Completely Inelastic Collisions\bk{8.3, 6.1}}
+
+\begin{goal}
+Derive the common final velocity $\vect{v}_2$ and the fraction of kinetic energy lost when two colliding bodies stick together.
+\end{goal}
+
+\step{Step 1: Apply momentum conservation.}
+Bodies $m_A$ and $m_B$ stick together after impact ($\vect{v}_{A2} = \vect{v}_{B2} = \vect{v}_2$):
+\begin{equation}\label{eq:comp_inel_v}
+  m_A\vect{v}_{A1} + m_B\vect{v}_{B1} = (m_A + m_B)\vect{v}_2 \implies \eqbox{\vect{v}_2 = \frac{m_A\vect{v}_{A1} + m_B\vect{v}_{B1}}{m_A + m_B}}
+\end{equation}
+
+\step{Step 2: Specialize to target $B$ initially at rest ($v_{B1x} = 0$).}
+\begin{equation}\label{eq:v2x_rest}
+  v_{2x} = \frac{m_A}{m_A + m_B}v_{A1x}
+\end{equation}
+Compute the initial and final kinetic energies $K_1$ and $K_2$:
+\begin{align}
+  K_1 &= \frac{1}{2}m_A v_{A1x}^2, \qquad
+  K_2 = \frac{1}{2}(m_A + m_B)v_{2x}^2 = \frac{1}{2}(m_A + m_B)\!\left(\frac{m_A}{m_A + m_B}\right)^2 v_{A1x}^2 = \frac{m_A}{m_A + m_B}K_1
+\end{align}
+\begin{equation}\label{eq:K_ratio_inel}
+  \eqbox{\frac{K_2}{K_1} = \frac{m_A}{m_A + m_B} < 1, \qquad \Delta K = K_2 - K_1 = -\frac{1}{2}\frac{m_A m_B}{m_A + m_B}v_{A1x}^2}
+\end{equation}
+
+\section{One-Dimensional Elastic Collisions\bk{8.4, 6.3}}
+
+\begin{goal}
+Derive the relative-velocity reversal law and the final velocities $v_{A2x}, v_{B2x}$ for a 1D elastic collision.
+\end{goal}
+
+\begin{pic}
+\begin{tikzpicture}[scale=0.95]
+  % Before
+  \node[font=\footnotesize\bfseries,slate] at (-1.2,0.8) {BEFORE:};
+  \draw[ax] (0,0.8) -- (5.2,0.8) node[right,font=\scriptsize]{$x$};
+  \fill[teal] (1.2,0.8) circle (7pt) node[above=6pt,font=\footnotesize]{$m_A$};
+  \draw[vec,teal] (1.2,0.8) -- (2.3,0.8) node[midway,below,font=\footnotesize]{$v_{A1x}$};
+  \fill[amber] (3.6,0.8) circle (9pt) node[above=8pt,font=\footnotesize]{$m_B$};
+  \draw[vec,amber] (3.6,0.8) -- (2.8,0.8) node[midway,below,font=\footnotesize]{$v_{B1x}$};
+  % After
+  \node[font=\footnotesize\bfseries,slate] at (-1.2,-0.6) {AFTER:};
+  \draw[ax] (0,-0.6) -- (5.2,-0.6) node[right,font=\scriptsize]{$x$};
+  \fill[teal] (1.2,-0.6) circle (7pt) node[above=6pt,font=\footnotesize]{$m_A$};
+  \draw[vec,teal] (1.2,-0.6) -- (0.3,-0.6) node[midway,below,font=\footnotesize]{$v_{A2x}$};
+  \fill[amber] (3.6,-0.6) circle (9pt) node[above=8pt,font=\footnotesize]{$m_B$};
+  \draw[vec,amber] (3.6,-0.6) -- (4.7,-0.6) node[midway,below,font=\footnotesize]{$v_{B2x}$};
+\end{tikzpicture}
+\figcap{One-dimensional elastic collision along the $x$-axis.}
+\end{pic}
+
+\step{Step 1: Write kinetic energy and momentum conservation.}
+\begin{align}
+  \frac{1}{2}m_A v_{A1x}^2 + \frac{1}{2}m_B v_{B1x}^2 &= \frac{1}{2}m_A v_{A2x}^2 + \frac{1}{2}m_B v_{B2x}^2 &&\why{kinetic energy conserved}\label{eq:el_K}\\
+  m_A v_{A1x} + m_B v_{B1x} &= m_A v_{A2x} + m_B v_{B2x} &&\why{$x$-momentum conserved}\label{eq:el_P}
+\end{align}
+
+\step{Step 2: Group terms by mass $m_A$ on the left and $m_B$ on the right.}
+From Eq.\ \eqref{eq:el_K}, multiply by $2$ and factor using $a^2 - b^2 = (a-b)(a+b)$:
+\begin{align}
+  m_A(v_{A1x} - v_{A2x})(v_{A1x} + v_{A2x}) &= m_B(v_{B2x} - v_{B1x})(v_{B2x} + v_{B1x})\label{eq:el_fact1}\\
+  m_A(v_{A1x} - v_{A2x}) &= m_B(v_{B2x} - v_{B1x}) &&\why{from Eq.\ \eqref{eq:el_P}}\label{eq:el_fact2}
+\end{align}
+
+\step{Step 3: Divide Eq.\ \eqref{eq:el_fact1} by Eq.\ \eqref{eq:el_fact2} (for a non-miss collision $v_{A1x}\neq v_{A2x}$).}
+\begin{equation}\label{eq:rel_vel_1D}
+  v_{A1x} + v_{A2x} = v_{B2x} + v_{B1x} \implies \eqbox{v_{B2x} - v_{A2x} = -(v_{B1x} - v_{A1x})}
+\end{equation}
+
+\step{Step 4: Solve for $v_{A2x}$ and $v_{B2x}$ when target $B$ is initially at rest ($v_{B1x} = 0$).}
+With $v_{B1x} = 0$, Eq.\ \eqref{eq:rel_vel_1D} gives $v_{B2x} = v_{A1x} + v_{A2x}$. Substitute this into $m_A v_{A1x} = m_A v_{A2x} + m_B v_{B2x}$:
+\begin{align}
+  m_A v_{A1x} &= m_A v_{A2x} + m_B(v_{A1x} + v_{A2x}) = (m_A + m_B)v_{A2x} + m_B v_{A1x}\\
+  v_{A2x} &= \frac{m_A - m_B}{m_A + m_B}v_{A1x}, \qquad v_{B2x} = v_{A1x}\!\left(1 + \frac{m_A - m_B}{m_A + m_B}\right) = \frac{2m_A}{m_A + m_B}v_{A1x}
+\end{align}
+
+\begin{result}[1D Elastic Collision with Stationary Target ($v_{B1x}=0$)]
+\begin{equation}\label{eq:elastic_rest}
+  v_{A2x} = \frac{m_A - m_B}{m_A + m_B}v_{A1x}, \qquad v_{B2x} = \frac{2m_A}{m_A + m_B}v_{A1x}
+\end{equation}
+If $v_{B1x}\neq 0$, the general solution is:
+\begin{equation}\label{eq:elastic_gen}
+  v_{A2x} = \frac{m_A - m_B}{m_A + m_B}v_{A1x} + \frac{2m_B}{m_A + m_B}v_{B1x}, \qquad
+  v_{B2x} = \frac{2m_A}{m_A + m_B}v_{A1x} + \frac{m_B - m_A}{m_A + m_B}v_{B1x}
+\end{equation}
+\end{result}
+
+\section{Two-Dimensional Glancing Elastic Collisions\bk{8.4, 6.3}}
+
+\begin{goal}
+Derive the general scattering equation for a mass $M_1$ striking a stationary target $M_2$ at a glancing angle $\theta_1$, and prove that $\theta_1 + \theta_2 = \frac{\pi}{2}$ when $M_1 = M_2$.
+\end{goal}
+
+\begin{pic}
+\begin{tikzpicture}[scale=0.95]
+  \draw[ax] (-2.8,0) -- (3.8,0) node[right,font=\small]{$x$};
+  \draw[ax] (0,-1.8) -- (0,2.0) node[above,font=\small]{$y$};
+  \fill[teal] (-2.2,0) circle (5.5pt) node[above=5pt,font=\small]{$M_1$};
+  \draw[vec,teal] (-2.2,0) -- (-0.9,0) node[midway,below,font=\small]{$\vect{V}_1$};
+  \fill[amber] (0,0) circle (5.5pt) node[below left,font=\small]{$M_2$};
+  \draw[vec,teal] (0,0) -- (2.2,1.5) node[above right,font=\small]{$\vect{V}_1'$};
+  \fill[teal] (1.32,0.9) circle (5.5pt);
+  \draw[vec,amber] (0,0) -- (2.4,-1.3) node[below right,font=\small]{$\vect{V}_2'$};
+  \fill[amber] (1.44,-0.78) circle (5.5pt);
+  \draw[slate] (0.75,0) arc (0:34.3:0.75) node[midway,right,font=\footnotesize]{$\theta_1$};
+  \draw[slate] (0.85,0) arc (0:-28.4:0.85) node[midway,right,font=\footnotesize]{$\theta_2$};
+\end{tikzpicture}
+\figcap{Glancing collision of incoming particle $M_1$ with stationary target $M_2$ at the origin.}
+\end{pic}
+
+\step{Step 1: Write $x$-momentum, $y$-momentum, and kinetic energy conservation (Eqs.\ 6.4--6.6).}
+\begin{align}
+  M_1 V_1 &= M_1 V_1'\cos\theta_1 + M_2 V_2'\cos\theta_2 &&\why{$P_{xi} = P_{xf}$}\label{eq:gl_px}\\
+  0 &= M_1 V_1'\sin\theta_1 - M_2 V_2'\sin\theta_2 &&\why{$P_{yi} = P_{yf}$}\label{eq:gl_py}\\
+  \frac{1}{2}M_1 V_1^2 &= \frac{1}{2}M_1 V_1'^2 + \frac{1}{2}M_2 V_2'^2 &&\why{$T_i = T_f$}\label{eq:gl_E}
+\end{align}
+
+\step{Step 2: Eliminate $\theta_2$ using $\cos^2\theta_2 + \sin^2\theta_2 = 1$.}
+Isolate the $M_2 V_2'$ terms in Eqs.\ \eqref{eq:gl_px} and \eqref{eq:gl_py}, square both, and add:
+\begin{align}
+  (M_1 V_1 - M_1 V_1'\cos\theta_1)^2 + (M_1 V_1'\sin\theta_1)^2 &= M_2^2 V_2'^2(\cos^2\theta_2 + \sin^2\theta_2)\nonumber\\
+  M_1^2 V_1^2 - 2M_1^2 V_1 V_1'\cos\theta_1 + M_1^2 V_1'^2 &= M_2^2 V_2'^2\label{eq:gl_sq}
+\end{align}
+
+\step{Step 3: Eliminate $V_2'^2$ using Eq.\ \eqref{eq:gl_E}.}
+From Eq.\ \eqref{eq:gl_E}, $M_2^2 V_2'^2 = M_1 M_2(V_1^2 - V_1'^2)$. Substitute into Eq.\ \eqref{eq:gl_sq} and divide by $M_1$:
+\begin{equation}\label{eq:gl_quad}
+  (M_1 + M_2)V_1'^2 - (2M_1 V_1\cos\theta_1)V_1' + (M_1 - M_2)V_1^2 = 0
+\end{equation}
+Apply the quadratic formula for $V_1'/V_1$ (Eq.\ 6.11):
+\begin{equation}\label{eq:gl_ratio}
+  \eqbox{\frac{V_1'}{V_1} = \frac{M_1}{M_1 + M_2}\!\left[\cos\theta_1 \pm \sqrt{\cos^2\theta_1 - 1 + \left(\frac{M_2}{M_1}\right)^2}\right]}
+\end{equation}
+
+\step{Step 4: Analyze special cases.}
+\begin{itemize}
+  \item \textbf{Equal masses ($M_1 = M_2$):} Eq.\ \eqref{eq:gl_ratio} gives $V_1' = V_1\cos\theta_1$. Then Eq.\ \eqref{eq:gl_E} gives $V_2'^2 = V_1^2(1-\cos^2\theta_1) = V_1^2\sin^2\theta_1 \implies V_2' = V_1\sin\theta_1$. Substituting into Eq.\ \eqref{eq:gl_py} yields $\cos\theta_1\sin\theta_1 = \sin\theta_1\sin\theta_2 \implies \cos\theta_1 = \sin\theta_2 = \cos\!\left(\frac{\pi}{2}-\theta_2\right)$, so:
+  \begin{equation}\label{eq:90deg_law}
+    \eqbox{\theta_1 + \theta_2 = \frac{\pi}{2} = 90^\circ \qquad (M_1 = M_2)}
+  \end{equation}
+  \item \textbf{Heavy projectile ($M_1 > M_2$):} For $V_1'$ to be real, the radicand in Eq.\ \eqref{eq:gl_ratio} must be non-negative: $\cos^2\theta_1 \ge 1 - \frac{M_2^2}{M_1^2}$, or $\sin\theta_1 \le \frac{M_2}{M_1}$. Thus the maximum scattering angle is:
+  \begin{equation}\label{eq:theta_max}
+    \eqbox{\theta_{\max} = \cos^{-1}\!\left(\sqrt{1 - \frac{M_2^2}{M_1^2}}\right) = \sin^{-1}\!\left(\frac{M_2}{M_1}\right) < \frac{\pi}{2}}
+  \end{equation}
+\end{itemize}
+
+\section{Q-Value and Coefficient of Restitution\bk{6.4}}
+
+\begin{goal}
+Define the reaction energy $Q$ and Newton's coefficient of restitution $e$.
+\end{goal}
+
+\begin{equation}\label{eq:Q_and_e}
+  \eqbox{Q = T_f - T_i}, \qquad \eqbox{e = \frac{|V_2' - V_1'|}{|V_2 - V_1|}} \qquad
+  \begin{cases}
+    e = 1, \ Q = 0 & \text{(perfectly elastic)}\\
+    0 < e < 1, \ Q < 0 & \text{(inelastic / endoergic)}\\
+    e = 0, \ Q < 0 & \text{(completely inelastic)}
+  \end{cases}
+\end{equation}
+
+\section{Center of Mass and Reduced Mass\bk{8.5, 6.6, 6.7}}
+
+\begin{goal}
+Derive the center-of-mass equation of motion and reduce the two-body problem to an equivalent one-body problem with reduced mass $\mu$.
+\end{goal}
+
+\step{Step 1: Center of mass position, velocity, and acceleration.}
+For a system of total mass $M = \sum_i m_i = \int\dd m$:
+\begin{align}
+  \vect{r}_{\text{cm}} &= \frac{\sum_i m_i\vect{r}_i}{M} = \frac{1}{M}\int\vect{r}\dd m &&\why{position of CM}\label{eq:r_cm}\\
+  M\vect{v}_{\text{cm}} &= \sum_i m_i\vect{v}_i = \vect{P}_{\text{tot}} &&\why{differentiate once with respect to $t$}\label{eq:v_cm}\\
+  M\vect{a}_{\text{cm}} &= \sum_i m_i\vect{a}_i = \frac{\diff\vect{P}_{\text{tot}}}{\diff t} = \sum\vect{F}_{\text{ext}} &&\why{differentiate twice with respect to $t$}\label{eq:a_cm}
+\end{align}
+
+\step{Step 2: Relative coordinate $\vect{r}$ and reduced mass $\mu$ (Sec.\ 6.7).}
+Consider an isolated two-body system ($m_1$ at $\vect{r}_1$ and $m_2$ at $\vect{r}_2$). Let $\vect{F}$ be the force on $m_2$ due to $m_1$. By Newton's third law, the force on $m_1$ due to $m_2$ is $-\vect{F}$:
+\begin{align}
+  m_1\ddot{\vect{r}}_1 &= -\vect{F} \implies \ddot{\vect{r}}_1 = -\frac{\vect{F}}{m_1}, \qquad
+  m_2\ddot{\vect{r}}_2 = +\vect{F} \implies \ddot{\vect{r}}_2 = +\frac{\vect{F}}{m_2}
+\end{align}
+Define the relative position vector $\vect{r} = \vect{r}_2 - \vect{r}_1$ and subtract the accelerations:
+\begin{align}
+  \ddot{\vect{r}} &= \ddot{\vect{r}}_2 - \ddot{\vect{r}}_1 = \left(\frac{1}{m_1} + \frac{1}{m_2}\right)\vect{F} = \frac{\vect{F}}{\mu}
+\end{align}
+\begin{result}[Reduced Mass and Relative Equation of Motion]
+\begin{equation}\label{eq:reduced_mass}
+  \mu\ddot{\vect{r}} = \vect{F}, \qquad \text{where}\quad \frac{1}{\mu} = \frac{1}{m_1} + \frac{1}{m_2} \iff \mu = \frac{m_1 m_2}{m_1 + m_2}
+\end{equation}
+\end{result}
+
+\section{Rocket Propulsion\bk{8.6, 6.2}}
+
+\begin{goal}
+Derive the rocket thrust equation and the Tsiolkovsky velocity equation in free space and in a uniform gravitational field.
+\end{goal}
+
+\begin{pic}
+\begin{tikzpicture}[scale=0.95]
+  % Time t
+  \node[font=\footnotesize\bfseries,slate] at (-1.5,0.9) {At time $t$:};
+  \draw[thick,teal,fill=tealsoft] (0,0.6) -- (2.2,0.6) -- (2.7,0.9) -- (2.2,1.2) -- (0,1.2) -- cycle;
+  \node[font=\footnotesize] at (1.2,0.9) {Mass $m$};
+  \draw[vec,teal] (2.8,0.9) -- (3.8,0.9) node[right,font=\footnotesize]{$v$};
+  % Time t + dt
+  \node[font=\footnotesize\bfseries,slate] at (-1.5,-0.5) {At $t+\diff t$:};
+  \draw[thick,amber,fill=ambersoft,dashed] (-0.2,-0.75) rectangle (0.6,-0.25);
+  \node[font=\scriptsize] at (0.2,-1.0) {$-\diff m = \diff M_F$};
+  \draw[vec,amber] (-0.2,-0.5) -- (-1.0,-0.5) node[above,font=\scriptsize]{$v_{\text{fuel}} = v - v_{\text{ex}}$};
+  \draw[thick,teal,fill=tealsoft] (1.1,-0.8) -- (3.1,-0.8) -- (3.6,-0.5) -- (3.1,-0.2) -- (1.1,-0.2) -- cycle;
+  \node[font=\scriptsize] at (2.1,-0.5) {$m+\diff m$};
+  \draw[vec,teal] (3.7,-0.5) -- (4.9,-0.5) node[right,font=\footnotesize]{$v+\diff v$};
+\end{tikzpicture}
+\figcap{Conservation of momentum for a rocket ejecting burned fuel mass $-\diff m = \diff M_F > 0$ at relative exhaust speed $v_{\text{ex}}$.}
+\end{pic}
+
+\step{Step 1: Write momentum at time $t$ and at time $t + \diff t$.}
+At time $t$, the rocket has mass $m$ and velocity $v$, so $P_1 = mv$. During $\diff t$, a positive mass of burned fuel $-\diff m = \diff M_F > 0$ (since $\diff m < 0$ is the change in rocket mass) is ejected backward with speed $v_{\text{ex}}$ relative to the rocket. The fuel velocity in the inertial frame is $v_{\text{fuel}} = v - v_{\text{ex}}$. At $t + \diff t$:
+\begin{equation}
+  P_2 = (m + \diff m)(v + \diff v) + (-\diff m)(v - v_{\text{ex}})
+\end{equation}
+
+\step{Step 2: Apply momentum conservation ($P_1 = P_2$) in gravity-free space.}
+\begin{align}
+  mv &= mv + m\dd v + v\dd m + \cancel{\diff m\dd v} - v\dd m + v_{\text{ex}}\dd m &&\why{neglect 2nd-order differential $\diff m\dd v$}\\
+  m\dd v &= -v_{\text{ex}}\dd m = +v_{\text{ex}}\dd M_F &&\why{divide by $\diff t$}\label{eq:rocket_diff}
+\end{align}
+\begin{equation}\label{eq:rocket_thrust}
+  \eqbox{F_{\text{thrust}} = m\frac{\diff v}{\diff t} = -v_{\text{ex}}\frac{\diff m}{\diff t}, \qquad a = \frac{\diff v}{\diff t} = -\frac{v_{\text{ex}}}{m}\frac{\diff m}{\diff t}}
+\end{equation}
+
+\step{Step 3: Integrate Eq.\ \eqref{eq:rocket_diff} from $(m_0, v_0)$ to $(m, v)$.}
+\begin{align}
+  \int_{v_0}^v \diff v' &= -v_{\text{ex}}\int_{m_0}^m \frac{\diff m'}{m'} = -v_{\text{ex}}\ln\!\left(\frac{m}{m_0}\right) = v_{\text{ex}}\ln\!\left(\frac{m_0}{m}\right)\label{eq:rocket_vel}
+\end{align}
+If a uniform downward gravitational force $-mg$ also acts on the rocket ($F_{\text{ext}} = -mg$), then $m\frac{\diff v}{\diff t} = -v_{\text{ex}}\frac{\diff m}{\diff t} - mg$, which integrates to:
+\begin{equation}\label{eq:rocket_grav}
+  \eqbox{v - v_0 = v_{\text{ex}}\ln\!\left(\frac{m_0}{m}\right) - gt}
+\end{equation}
+
+% ============================================================================
+% SOLVED BOOK EXAMPLES — MODULE 1
+% ============================================================================
+\section{Solved Book Examples (Module 1)}
+
+\begin{example}{8.1}{Momentum versus kinetic energy\bk{p.\ 245}}
+\textbf{Problem:} Two iceboats of masses $m$ and $2m$ start from rest on a frictionless lake. The wind exerts the same constant horizontal force $\vect{F}$ on both over the same distance $s$. Which boat crosses the finish line with greater momentum, and by what factor?
+\tcblower
+\textbf{Solution:} Both boats have the same kinetic energy at the finish line because $K = W_{\text{tot}} = Fs$ is identical for both. Using Eq.\ \eqref{eq:K_p_rel}, $p = \sqrt{2mK}$:
+\begin{equation*}
+  \frac{p_{2m}}{p_m} = \frac{\sqrt{2(2m)K}}{\sqrt{2mK}} = \eqbox{\sqrt{2}}
+\end{equation*}
+The boat of mass $2m$ takes $\sqrt{2}$ times longer to cover distance $s$, receives $\sqrt{2}$ times the impulse $\vect{J}=\vect{F}\Delta t$, and has $\sqrt{2}$ times the momentum.
+\end{example}
+
+\begin{example}{8.2}{A ball hits a wall\bk{p.\ 245}}
+\textbf{Problem:} A $0.40\text{-kg}$ ball hits a brick wall horizontally to the left at $30\text{ m/s}$ and rebounds horizontally to the right at $20\text{ m/s}$. (a) Find the impulse of the net force. (b) If the contact time is $0.010\text{ s}$, find the average horizontal force.
+\tcblower
+\textbf{Solution:} Take $+x$ to the right: $v_{1x} = -30\text{ m/s}$ and $v_{2x} = +20\text{ m/s}$.
+\begin{align*}
+  p_{1x} &= (0.40\text{ kg})(-30\text{ m/s}) = -12\text{ kg}\cdot\text{m/s}, \qquad p_{2x} = (0.40\text{ kg})(+20\text{ m/s}) = +8.0\text{ kg}\cdot\text{m/s}\\
+  \text{(a)}\quad J_x &= p_{2x} - p_{1x} = 8.0 - (-12) = \eqbox{+20\text{ N}\cdot\text{s}} \quad(\text{to the right})\\
+  \text{(b)}\quad (F_{\text{av}})_x &= \frac{J_x}{\Delta t} = \frac{20\text{ N}\cdot\text{s}}{0.010\text{ s}} = \eqbox{2000\text{ N}}
+\end{align*}
+\end{example}
+
+\begin{example}{8.3}{Kicking a soccer ball\bk{p.\ 246}}
+\textbf{Problem:} A $0.40\text{-kg}$ soccer ball moves left at $20\text{ m/s}$. After a kick lasting $\Delta t = 0.010\text{ s}$, it moves at $45^\circ$ upward and right at $30\text{ m/s}$. Find the impulse components and the magnitude and direction of the average net force.
+\tcblower
+\textbf{Solution:} Initial components: $v_{1x} = -20\text{ m/s}$, $v_{1y} = 0$. Final components: $v_{2x} = v_{2y} = (30\text{ m/s})\cos 45^\circ = 21.2\text{ m/s}$.
+\begin{align*}
+  J_x &= m(v_{2x}-v_{1x}) = 0.40[21.2 - (-20)] = \eqbox{16.5\text{ kg}\cdot\text{m/s}}, \qquad (F_{\text{av}})_x = \frac{J_x}{\Delta t} = 1650\text{ N}\\
+  J_y &= m(v_{2y}-v_{1y}) = 0.40(21.2 - 0) = \eqbox{8.5\text{ kg}\cdot\text{m/s}}, \qquad (F_{\text{av}})_y = \frac{J_y}{\Delta t} = 850\text{ N}\\
+  F_{\text{av}} &= \sqrt{(1650)^2 + (850)^2} = \eqbox{1.9\times 10^3\text{ N}}, \qquad \theta = \arctan\!\left(\frac{850}{1650}\right) = \eqbox{27^\circ}
+\end{align*}
+\end{example}
+
+\begin{example}{8.4}{Recoil of a rifle\bk{p.\ 249}}
+\textbf{Problem:} A rifle of mass $m_R = 3.00\text{ kg}$ fires a bullet of mass $m_B = 5.00\text{ g} = 0.00500\text{ kg}$ at $v_{Bx} = 300\text{ m/s}$. Find the recoil velocity $v_{Rx}$ of the rifle and the final momentum and kinetic energy of each.
+\tcblower
+\textbf{Solution:} Total initial momentum is $P_x = 0 = m_B v_{Bx} + m_R v_{Rx}$:
+\begin{align*}
+  v_{Rx} &= -\frac{m_B}{m_R}v_{Bx} = -\frac{0.00500}{3.00}(300\text{ m/s}) = \eqbox{-0.500\text{ m/s}}\\
+  p_{Bx} &= (0.00500)(300) = \eqbox{+1.50\text{ kg}\cdot\text{m/s}}, \qquad p_{Rx} = (3.00)(-0.500) = \eqbox{-1.50\text{ kg}\cdot\text{m/s}}\\
+  K_B &= \frac{1}{2}(0.00500)(300)^2 = \eqbox{225\text{ J}}, \qquad K_R = \frac{1}{2}(3.00)(-0.500)^2 = \eqbox{0.375\text{ J}}
+\end{align*}
+\end{example}
+
+\begin{example}{8.5}{Collision along a straight line\bk{p.\ 249}}
+\textbf{Problem:} Glider $A$ ($m_A = 0.50\text{ kg}$, $v_{A1x} = +2.0\text{ m/s}$) and glider $B$ ($m_B = 0.30\text{ kg}$, $v_{B1x} = -2.0\text{ m/s}$) collide on a frictionless air track. After collision, $v_{B2x} = +2.0\text{ m/s}$. Find $v_{A2x}$ and the changes in momentum and velocity.
+\tcblower
+\textbf{Solution:} Total $x$-momentum before collision: $P_x = (0.50)(2.0) + (0.30)(-2.0) = +0.40\text{ kg}\cdot\text{m/s}$.
+\begin{align*}
+  v_{A2x} &= \frac{P_x - m_B v_{B2x}}{m_A} = \frac{0.40 - (0.30)(2.0)}{0.50} = \eqbox{-0.40\text{ m/s}}\\
+  \Delta p_{Ax} &= 0.50(-0.40 - 2.0) = -1.2\text{ kg}\cdot\text{m/s}, \qquad \Delta p_{Bx} = 0.30[2.0 - (-2.0)] = +1.2\text{ kg}\cdot\text{m/s}\\
+  \Delta v_{Ax} &= -2.4\text{ m/s}, \qquad \Delta v_{Bx} = +4.0\text{ m/s}
+\end{align*}
+\end{example}
+
+\begin{example}{8.6}{Collision in a horizontal plane\bk{p.\ 250}}
+\textbf{Problem:} Robot $A$ ($m_A = 20\text{ kg}$) moves at $v_{A1x} = 2.0\text{ m/s}$ along $+x$ and hits stationary robot $B$ ($m_B = 12\text{ kg}$). After impact, $A$ moves at $v_{A2} = 1.0\text{ m/s}$ at $\alpha = 30^\circ$ above $+x$. Find the final velocity $\vect{v}_{B2}$ of robot $B$.
+\tcblower
+\textbf{Solution:} Apply $x$- and $y$-momentum conservation:
+\begin{align*}
+  v_{B2x} &= \frac{m_A v_{A1x} - m_A v_{A2}\cos 30^\circ}{m_B} = \frac{20(2.0) - 20(1.0)\cos 30^\circ}{12} = 1.89\text{ m/s}\\
+  v_{B2y} &= \frac{0 - m_A v_{A2}\sin 30^\circ}{m_B} = \frac{-20(1.0)\sin 30^\circ}{12} = -0.83\text{ m/s}\\
+  v_{B2} &= \sqrt{(1.89)^2 + (-0.83)^2} = \eqbox{2.1\text{ m/s}}, \qquad \beta = \arctan\!\left(\frac{-0.83}{1.89}\right) = \eqbox{-24^\circ}
+\end{align*}
+\end{example}
+
+\begin{example}{8.7}{A completely inelastic collision\bk{p.\ 252}}
+\textbf{Problem:} Repeat Example 8.5 ($m_A = 0.50\text{ kg}, v_{A1x} = 2.0\text{ m/s}$; $m_B = 0.30\text{ kg}, v_{B1x} = -2.0\text{ m/s}$) when the gliders stick together. Find $v_{2x}$, $K_1$, and $K_2$.
+\tcblower
+\textbf{Solution:}
+\begin{align*}
+  v_{2x} &= \frac{m_A v_{A1x} + m_B v_{B1x}}{m_A + m_B} = \frac{0.40\text{ kg}\cdot\text{m/s}}{0.80\text{ kg}} = \eqbox{0.50\text{ m/s}}\\
+  K_1 &= \frac{1}{2}(0.50)(2.0)^2 + \frac{1}{2}(0.30)(-2.0)^2 = 1.0 + 0.60 = \eqbox{1.6\text{ J}}\\
+  K_2 &= \frac{1}{2}(0.50 + 0.30)(0.50)^2 = \eqbox{0.10\text{ J}} \quad\left(\frac{15}{16}\text{ of }K_1\text{ is converted to other energy forms}\right)
+\end{align*}
+\end{example}
+
+\begin{example}{8.8}{The ballistic pendulum\bk{p.\ 253}}
+\textbf{Problem:} A bullet of mass $m_B = 5.00\text{ g}$ embeds into a suspended wooden block of mass $m_W = 2.00\text{ kg}$, which swings up to maximum height $y = 3.00\text{ cm} = 0.0300\text{ m}$. Derive the formula for initial bullet speed $v_1$ and evaluate it.
+\tcblower
+\textbf{Solution:} Stage 1 (collision, momentum conserved): $m_B v_1 = (m_B + m_W)v_2 \implies v_1 = \frac{m_B + m_W}{m_B}v_2$.
+Stage 2 (pendulum swing, mechanical energy conserved): $\frac{1}{2}(m_B + m_W)v_2^2 = (m_B + m_W)gy \implies v_2 = \sqrt{2gy}$.
+\begin{align*}
+  v_1 &= \eqbox{\frac{m_B + m_W}{m_B}\sqrt{2gy}} = \frac{0.00500 + 2.00}{0.00500}\sqrt{2(9.80)(0.0300)} = \eqbox{307\text{ m/s}}, \qquad v_2 = 0.767\text{ m/s}
+\end{align*}
+\end{example}
+
+\begin{example}{8.9}{An automobile collision\bk{p.\ 254}}
+\textbf{Problem:} A $1000\text{-kg}$ car traveling north ($+y$) at $15\text{ m/s}$ collides with a $2000\text{-kg}$ truck traveling east ($+x$) at $10\text{ m/s}$. They lock together ($M = 3000\text{ kg}$). Find the velocity $\vect{V}$ of the wreckage just after impact.
+\tcblower
+\textbf{Solution:}
+\begin{align*}
+  P_x &= (2000\text{ kg})(10\text{ m/s}) = 2.0\times 10^4\text{ kg}\cdot\text{m/s}, \qquad P_y = (1000\text{ kg})(15\text{ m/s}) = 1.5\times 10^4\text{ kg}\cdot\text{m/s}\\
+  P &= \sqrt{P_x^2 + P_y^2} = 2.5\times 10^4\text{ kg}\cdot\text{m/s}, \qquad \tan\theta = \frac{P_y}{P_x} = 0.75 \implies \theta = \eqbox{37^\circ\text{ north of east}}\\
+  V &= \frac{P}{M} = \frac{2.5\times 10^4}{3000} = \eqbox{8.3\text{ m/s}}
+\end{align*}
+\end{example}
+
+\begin{example}{8.10}{An elastic straight-line collision\bk{p.\ 257}}
+\textbf{Problem:} Repeat Example 8.5 ($m_A = 0.50\text{ kg}, v_{A1x} = 2.0\text{ m/s}$; $m_B = 0.30\text{ kg}, v_{B1x} = -2.0\text{ m/s}$) for an elastic collision. Find $v_{A2x}$ and $v_{B2x}$.
+\tcblower
+\textbf{Solution:} Relative velocity Eq.\ \eqref{eq:rel_vel_1D} and momentum conservation give:
+\begin{align*}
+  v_{B2x} - v_{A2x} &= -(v_{B1x} - v_{A1x}) = -(-2.0 - 2.0) = 4.0\text{ m/s} \implies v_{B2x} = v_{A2x} + 4.0\\
+  0.50v_{A2x} + 0.30v_{B2x} &= 0.40\text{ m/s} \implies 0.50v_{A2x} + 0.30(v_{A2x} + 4.0) = 0.40\\
+  0.80v_{A2x} &= -0.80 \implies \eqbox{v_{A2x} = -1.0\text{ m/s}}, \qquad \eqbox{v_{B2x} = +3.0\text{ m/s}}
+\end{align*}
+\end{example}
+
+\begin{example}{8.11}{Moderating fission neutrons in a nuclear reactor\bk{p.\ 257}}
+\textbf{Problem:} A neutron ($m_n = 1.0\text{ u}$, $v_{n1x} = 2.6\times 10^7\text{ m/s}$) makes a head-on elastic collision with a carbon nucleus ($m_C = 12\text{ u}$) initially at rest. Find the final velocities $v_{n2x}$ and $v_{C2x}$.
+\tcblower
+\textbf{Solution:} Apply Eq.\ \eqref{eq:elastic_rest}:
+\begin{align*}
+  v_{n2x} &= \frac{m_n - m_C}{m_n + m_C}v_{n1x} = \frac{1.0 - 12}{1.0 + 12}(2.6\times 10^7\text{ m/s}) = -\frac{11}{13}(2.6\times 10^7) = \eqbox{-2.2\times 10^7\text{ m/s}}\\
+  v_{C2x} &= \frac{2m_n}{m_n + m_C}v_{n1x} = \frac{2(1.0)}{13}(2.6\times 10^7\text{ m/s}) = \eqbox{+0.4\times 10^7\text{ m/s}}
+\end{align*}
+\end{example}
+
+\begin{example}{8.12}{A two-dimensional elastic collision\bk{p.\ 258}}
+\textbf{Problem:} Puck $A$ ($m_A = 0.500\text{ kg}$, $v_{A1} = 4.00\text{ m/s}$ along $+x$) collides elastically with stationary puck $B$ ($m_B = 0.300\text{ kg}$). After collision, $v_{A2} = 2.00\text{ m/s}$ at angle $\alpha$ above $+x$, and $B$ moves at speed $v_{B2}$ at angle $\beta$ below $+x$. Find $v_{B2}$, $\alpha$, and $\beta$.
+\tcblower
+\textbf{Solution:} From energy conservation $\frac{1}{2}m_A v_{A1}^2 = \frac{1}{2}m_A v_{A2}^2 + \frac{1}{2}m_B v_{B2}^2$:
+\begin{equation*}
+  v_{B2} = \sqrt{\frac{m_A(v_{A1}^2 - v_{A2}^2)}{m_B}} = \sqrt{\frac{0.500(16.0 - 4.00)}{0.300}} = \sqrt{20.0} = \eqbox{4.47\text{ m/s}}
+\end{equation*}
+Momentum conservation along $x$ and $y$:
+\begin{align*}
+  (0.300)(4.47)\cos\beta &= (0.500)(4.00) - (0.500)(2.00)\cos\alpha = 2.00 - 1.00\cos\alpha\\
+  (0.300)(4.47)\sin\beta &= (0.500)(2.00)\sin\alpha = 1.00\sin\alpha
+\end{align*}
+Square and add both equations using $\cos^2\beta + \sin^2\beta = 1$:
+\begin{align*}
+  (1.342)^2 &= 1.80 = (2.00 - \cos\alpha)^2 + \sin^2\alpha = 4.00 - 4.00\cos\alpha + 1.00\\
+  \cos\alpha &= \frac{3.20}{4.00} = 0.800 \implies \eqbox{\alpha = 36.9^\circ}, \qquad \sin\beta = \frac{1.00\sin 36.9^\circ}{1.342} = 0.447 \implies \eqbox{\beta = 26.6^\circ}
+\end{align*}
+\end{example}
+
+\begin{example}{8.13}{Center of mass of a water molecule\bk{p.\ 259}}
+\textbf{Problem:} An $\text{H}_2\text{O}$ molecule has oxygen ($16.0\text{ u}$) at the origin and two hydrogen atoms ($1.0\text{ u}$ each) at distance $d = 9.57\times 10^{-11}\text{ m}$ at angles $\pm 105^\circ/2 = \pm 52.5^\circ$ from the $+x$-axis. Find $(x_{\text{cm}}, y_{\text{cm}})$.
+\tcblower
+\textbf{Solution:} By symmetry, $y_{\text{cm}} = 0$. Along the $x$-axis:
+\begin{equation*}
+  x_{\text{cm}} = \frac{1.0d\cos 52.5^\circ + 1.0d\cos 52.5^\circ + 16.0(0)}{1.0 + 1.0 + 16.0} = 0.068d = \eqbox{6.5\times 10^{-12}\text{ m}}
+\end{equation*}
+\end{example}
+
+\begin{example}{8.14}{A tug-of-war on the ice\bk{p.\ 260}}
+\textbf{Problem:} James ($m_J = 90.0\text{ kg}$ at $x_1 = -10.0\text{ m}$) and Ramon ($m_R = 60.0\text{ kg}$ at $x_2 = +10.0\text{ m}$) pull on a light rope on frictionless ice. A mug is at $x=0$. When James moves $6.0\text{ m}$ toward the mug (to $x_1' = -4.0\text{ m}$), how far and in what direction has Ramon moved?
+\tcblower
+\textbf{Solution:} No external horizontal force acts, so $x_{\text{cm}}$ stays fixed:
+\begin{align*}
+  x_{\text{cm}} &= \frac{90.0(-10.0) + 60.0(+10.0)}{90.0 + 60.0} = -2.0\text{ m}\\
+  -2.0\text{ m} &= \frac{90.0(-4.0\text{ m}) + 60.0 x_2'}{150.0} \implies x_2' = +1.0\text{ m}
+\end{align*}
+Ramon has moved from $+10.0\text{ m}$ to $+1.0\text{ m}$, which is $\eqbox{9.0\text{ m}\text{ toward the mug}}$.
+\end{example}
+
+\begin{example}{8.15}{Acceleration of a rocket\bk{p.\ 264}}
+\textbf{Problem:} A rocket in outer space ejects $\frac{1}{120}$ of its initial mass $m_0$ in the first $1.0\text{ s}$ at constant rate with relative exhaust speed $v_{\text{ex}} = 2400\text{ m/s}$. Find the initial acceleration.
+\tcblower
+\textbf{Solution:} Here $\frac{\diff m}{\diff t} = -\frac{m_0}{120\text{ s}}$. From Eq.\ \eqref{eq:rocket_thrust}:
+\begin{equation*}
+  a = -\frac{v_{\text{ex}}}{m_0}\frac{\diff m}{\diff t} = -\frac{2400\text{ m/s}}{m_0}\!\left(-\frac{m_0}{120\text{ s}}\right) = \eqbox{20\text{ m/s}^2}
+\end{equation*}
+\end{example}
+
+\begin{example}{8.16}{Speed of a rocket\bk{p.\ 265}}
+\textbf{Problem:} If the rocket in Example 8.15 starts from rest ($v_0=0$) and consumes $\frac{3}{4}$ of its initial mass as fuel ($m = m_0/4$), find its final speed.
+\tcblower
+\textbf{Solution:} From Eq.\ \eqref{eq:rocket_vel}:
+\begin{equation*}
+  v = v_0 + v_{\text{ex}}\ln\!\left(\frac{m_0}{m}\right) = 0 + (2400\text{ m/s})\ln 4 = \eqbox{3327\text{ m/s}}
+\end{equation*}
+\end{example}
+
+\begin{example}{Ch.\ 8}{Bridging Problem: One Collision After Another\bk{p.\ 267, 277}}
+\textbf{Problem:} Sphere $A$ ($0.600\text{ kg}$, $v_{A1x} = 4.00\text{ m/s}$) hits sphere $B$ ($1.80\text{ kg}$, $v_{B1x} = 2.00\text{ m/s}$). After collision 1, $B$ moves at $v_{B2x} = 3.00\text{ m/s}$ along $+x$. Then $B$ strikes stationary sphere $C$ ($1.20\text{ kg}$) off-center; after collision 2, $B$ moves at $v_{B3} = 2.00\text{ m/s}$ at $+19.0^\circ$ to $+x$. Find: (a) $\vect{v}_{A2}$, (b) whether collision 1 is elastic, (c) $\vect{v}_{C3}$, (d) impulse $\vect{J}_{\text{on }B}$ in collision 2, (e) whether collision 2 is elastic, and (f) $\vect{v}_{\text{cm}}$ of the three-sphere system.
+\tcblower
+\textbf{Solution:}
+\begin{itemize}
+  \item \textbf{(a)} $P_{1x} = 0.600(4.00) + 1.80(2.00) = 6.00\text{ kg}\cdot\text{m/s} = 0.600v_{A2x} + 1.80(3.00) \implies \eqbox{v_{A2x} = +1.00\text{ m/s}\text{ (right)}}$.
+  \item \textbf{(b)} $K_1 = \frac{1}{2}(0.600)(4.00)^2 + \frac{1}{2}(1.80)(2.00)^2 = 8.40\text{ J}$. $K_2 = \frac{1}{2}(0.600)(1.00)^2 + \frac{1}{2}(1.80)(3.00)^2 = 8.40\text{ J} \implies \eqbox{\text{Elastic}}$.
+  \item \textbf{(c)} In collision 2, $p_{B2x} = 1.80(3.00) = 5.40\text{ kg}\cdot\text{m/s}$, $p_{B2y} = 0$. After collision 2:
+  \begin{align*}
+    v_{C3x} &= \frac{5.40 - 1.80(2.00)\cos 19.0^\circ}{1.20} = 1.664\text{ m/s}, \qquad v_{C3y} = \frac{0 - 1.80(2.00)\sin 19.0^\circ}{1.20} = -0.9767\text{ m/s}\\
+    v_{C3} &= \sqrt{(1.664)^2 + (-0.9767)^2} = \eqbox{1.93\text{ m/s}\text{ at }\theta_C = -30.4^\circ}
+  \end{align*}
+  \item \textbf{(d)} $\vect{J}_{\text{on }B} = \Delta\vect{p}_B = -\Delta\vect{p}_C = -m_C\vect{v}_{C3}$, so $J = 1.20(1.93) = \eqbox{2.31\text{ kg}\cdot\text{m/s}\text{ at }180^\circ - 30.4^\circ = 149.6^\circ}$.
+  \item \textbf{(e)} $K_{\text{before 2}} = \frac{1}{2}(1.80)(3.00)^2 = 8.10\text{ J}$; $K_{\text{after 2}} = \frac{1}{2}(1.80)(2.00)^2 + \frac{1}{2}(1.20)(1.93)^2 = 5.83\text{ J} < 8.10\text{ J} \implies \eqbox{\text{Inelastic}}$.
+  \item \textbf{(f)} $v_{\text{cm-}x} = \frac{P_{\text{tot},x}}{m_A+m_B+m_C} = \frac{6.00\text{ kg}\cdot\text{m/s}}{0.600+1.80+1.20\text{ kg}} = \eqbox{1.67\text{ m/s}\text{ in the }+x\text{-direction}}$.
+\end{itemize}
+\end{example}
+
+\begin{example}{6.1}{Braking a rocket in interplanetary space\bk{Analytical Mechanics p.\ 152}}
+\textbf{Problem:} A rocket of total mass $m_0$ coasts at speed $V_0$ and fires its engine forward (exhaust speed $U$ relative to rocket) to slow down to $V_0/2$. Find the mass of fuel burned.
+\tcblower
+\textbf{Solution:} Because fuel is ejected forward to decelerate the rocket, $v_{\text{fuel}} = V + U$. Momentum conservation $M\dd V + (V+U)\dd M_F - V\dd M_F = 0$ with $\dd M_F = -\dd M$ gives $\dd V = U\frac{\diff M}{M}$. Integrating from $(m_0, V_0)$ to $(m_f, V_0/2)$:
+\begin{equation*}
+  \frac{1}{U}\int_{V_0}^{V_0/2}\diff V = \int_{m_0}^{m_f}\frac{\diff M}{M} \implies -\frac{V_0}{2U} = \ln\!\left(\frac{m_f}{m_0}\right) \implies m_f = m_0 e^{-V_0/2U}, \quad \Delta m_{\text{fuel}} = m_0 - m_f = \eqbox{m_0\!\left(1 - e^{-V_0/2U}\right)}
+\end{equation*}
+\end{example}
+
+\begin{example}{6.2}{Rocket equation from total system momentum\bk{Analytical Mechanics p.\ 152}}
+\textbf{Problem:} Derive $M_R\frac{\diff V_R}{\diff t} = -U\frac{\diff M_R}{\diff t}$ by differentiating the integral expression for total momentum at time $\tau$.
+\tcblower
+\textbf{Solution:} Let burn rate be $\dot{m} = -\frac{\diff M_R}{\diff t} = \frac{\diff m_f}{\diff t}$. At time $\tau$, the momentum of all expelled fuel is $P_f(\tau) = \int_0^\tau \dot{m}(V_R(t)-U)\dd t$ and rocket momentum is $P_R(\tau) = M_R(\tau)V_R(\tau)$. Differentiating $P_{\text{tot}} = P_R + P_f$ with respect to $\tau$:
+\begin{equation*}
+  \frac{\diff P_{\text{tot}}}{\diff t} = \frac{\diff M_R}{\diff t}V_R + M_R\frac{\diff V_R}{\diff t} + \dot{m}(V_R - U) = 0
+\end{equation*}
+Since $\frac{\diff M_R}{\diff t} = -\dot{m}$, the first and third terms cancel, leaving $\eqbox{M_R\frac{\diff V_R}{\diff t} = \dot{m}U = -U\frac{\diff M_R}{\diff t}}$.
+\end{example}
+
+\begin{example}{6.3}{Spacecraft gravitational slingshot around Mars\bk{Analytical Mechanics p.\ 158}}
+\textbf{Problem:} A spacecraft ($M_1 = 2000\text{ kg}$, $V_{\text{sc},i} = -12\text{ km/s}$) makes a 1D elastic slingshot around Mars ($M_2 = 6.4\times 10^{23}\text{ kg}$, $V_{\text{Mars},i} = +23.36\text{ km/s}$). Find (a) the final speed of the spacecraft and (b) the ratio $T_f/T_i$ of its kinetic energies.
+\tcblower
+\textbf{Solution:} Transform to the rest frame of Mars by subtracting $23.36\text{ km/s}$: $V_2 = 0$ and $V_1 = -12 - 23.36 = -35.36\text{ km/s}$. Since $M_1 \ll M_2$, Eq.\ \eqref{eq:elastic_rest} gives $V_1' = \frac{M_1 - M_2}{M_1 + M_2}V_1 \approx -V_1 = +35.36\text{ km/s}$. Transform back to the Sun frame by adding $23.36\text{ km/s}$:
+\begin{equation*}
+  \text{(a)}\quad v_{\text{sc}}' = 35.36 + 23.36 = \eqbox{+58.72\text{ km/s}}, \qquad \text{(b)}\quad \frac{T_f}{T_i} = \left(\frac{58.72}{12}\right)^2 = \eqbox{23.9}
+\end{equation*}
+\end{example}
+
+\begin{example}{6.4}{90-degree deflection rule for equal masses\bk{Analytical Mechanics p.\ 160}}
+\textbf{Problem:} Prove that in any non-head-on 2D elastic collision between two bodies of equal mass ($M_1 = M_2$), the sum of the deflection angles is $\theta_1 + \theta_2 = \pi/2$.
+\tcblower
+\textbf{Solution:} From Eqs.\ \eqref{eq:gl_ratio} and \eqref{eq:gl_E} with $M_1 = M_2$, $V_1' = V_1\cos\theta_1$ and $V_2' = V_1\sin\theta_1$. Substitute into $y$-momentum conservation $V_1'\sin\theta_1 = V_2'\sin\theta_2$:
+\begin{equation*}
+  V_1\cos\theta_1\sin\theta_1 = V_1\sin\theta_1\sin\theta_2 \implies \cos\theta_1 = \sin\theta_2 = \cos\!\left(\frac{\pi}{2}-\theta_2\right) \implies \eqbox{\theta_1 + \theta_2 = \frac{\pi}{2}}
+\end{equation*}
+\end{example}
+
+% ============================================================================
+% UNIQUE SOLVED PROBLEMS — MODULE 1
+% ============================================================================
+\section{Unique Solved Problems (Module 1)}
+
+\subsubsection{Part A: Analytical Mechanics Chapter 6 Exercises (with Complete Derivations)}
+
+\begin{enumerate}[label=\textbf{Ex.\ 6.\arabic*},leftmargin=3.5em]
+  \item \textbf{(Bullet and Block):} A bullet of mass $m$ and speed $v$ embeds in a stationary block of mass $M$.
+  \begin{itemize}
+    \item \textbf{(a)} Final speed: $mv = (m+M)V \implies \eqbox{V = \frac{mv}{M+m}}$.
+    \item \textbf{(b)} Kinetic energy is not conserved because nonconservative friction forces act during penetration.
+    \item \textbf{(c)} Loss of kinetic energy: $\Delta T = \frac{1}{2}(m+M)V^2 - \frac{1}{2}mv^2 = \frac{1}{2}mv^2\!\left(\frac{m}{m+M}-1\right) = \eqbox{-\frac{1}{2}\frac{mM}{m+M}v^2}$.
+  \end{itemize}
+
+  \item \textbf{(Rocket Acceleration):} $m_0 = 500\text{ kg}$, burn rate $\dot{m} = 5\text{ kg/s}$, $U = 300\text{ m/s}$.
+  \begin{itemize}
+    \item Initial acceleration: $a_0 = \frac{\dot{m}U}{m_0} = \frac{5(300)}{500} = \eqbox{3\text{ m/s}^2}$.
+    \item After $t = 60\text{ s}$: $m(60) = 500 - 5(60) = 200\text{ kg} \implies a(60) = \frac{5(300)}{200} = \eqbox{7.5\text{ m/s}^2}$.
+  \end{itemize}
+
+  \item \textbf{(Snowing Flatcars --- Joe and Bill):} Joe sweeps snow off the side perpendicular to the flatcar motion; Bill lets snow accumulate.
+  \begin{itemize}
+    \item \textbf{Conceptual \& Mathematical Solution:} Vertically falling snow has zero initial horizontal momentum. When snow lands on the car of mass $M$ and speed $V$, it acquires horizontal speed $V$. When Joe sweeps snow off perpendicular to the track, the snow leaves with horizontal velocity $V$ relative to the ground, so it carries away momentum $\diff m_{\text{snow}}V$ just like the snow remaining on Bill's car! In both cases, $P_x = M_0 V_0 = (M_0 + m_{\text{snow}}(t))V(t)$. Therefore, \textbf{both flatcars travel the exact same distance} in the same time interval.
+  \end{itemize}
+
+  \item \textbf{(Variable-Mass Rocket with External Force):} Generalize Eq.\ (6.2) to include external force $\vect{F}$.
+  \begin{itemize}
+    \item At time $t$, $\vect{P}_i = M\vect{V}$. At $t+\diff t$, $\vect{P}_f = (M+\diff M)(\vect{V}+\diff\vect{V}) + (-\diff M)(\vect{V}+\vect{u})$, where $\vect{u}$ is exhaust velocity relative to the rocket. Then $\diff\vect{P} = \vect{P}_f - \vect{P}_i = M\diff\vect{V} - \vect{u}\diff M = \vect{F}\diff t \implies \eqbox{M\frac{\diff\vect{V}}{\diff t} - \vect{u}\frac{\diff M}{\diff t} = \vect{F}}$ (or $M\frac{\diff\vect{V}}{\diff t} + \vect{u}\frac{\diff M}{\diff t} = \vect{F}$ if $\vect{u}$ is defined opposite to $\vect{V}$).
+  \end{itemize}
+
+  \item \textbf{(What Pushes a Rocket Upward?):} High-pressure gas inside the combustion chamber pushes in all directions. At the front wall of the chamber, the gas exerts a large forward pressure force; at the open rear nozzle, the gas escapes so there is no opposing backward wall force. Thus the internal pressure imbalance (reaction to the expelled gas) pushes the rocket upward.
+
+  \item \textbf{(Head-on Limit of Glancing Collision):} Set $\theta_1 = 0 \implies \cos\theta_1 = 1$ in Eq.\ \eqref{eq:gl_ratio}:
+  \begin{equation*}
+    \frac{V_1'}{V_1} = \frac{M_1}{M_1+M_2}\!\left[1 \pm \sqrt{1 - 1 + \left(\frac{M_2}{M_1}\right)^2}\right] = \frac{M_1}{M_1+M_2}\!\left(1 \pm \frac{M_2}{M_1}\right) = \eqbox{\frac{M_1 \pm M_2}{M_1 + M_2}}
+  \end{equation*}
+
+  \item \textbf{(1D Elastic Collisions of $m$ and $3m$):}
+  \begin{itemize}
+    \item \textbf{(a)} $M_1 = m, M_2 = 3m$: $V_1' = \frac{m-3m}{m+3m}v = \eqbox{-\frac{v}{2}}$, $V_2' = \frac{2m}{m+3m}v = \eqbox{+\frac{v}{2}}$.
+    \item \textbf{(b)} $M_1 = 3m, M_2 = m$: $V_1' = \frac{3m-m}{3m+m}v = \eqbox{+\frac{v}{2}}$, $V_2' = \frac{2(3m)}{3m+m}v = \eqbox{+\frac{3v}{2}}$.
+  \end{itemize}
+
+  \item \textbf{(Null Solution of Eq.\ 6.15):} For $M_1 = M_2$, the upper/lower solution $V_1' = 0$ in $\frac{1}{2}M_1 V_1^2 = \frac{1}{2}M_1 V_1'^2 + \frac{1}{2}M_2 V_2'^2$ gives $V_2' = V_1$. Momentum conservation $\vect{V}_1 = \vect{V}_2'$ then requires $\theta_2 = 0$, which is a head-on collision.
+
+  \item \textbf{(Sign of $V_2' = \pm V_1\sin\theta_1$):} Since $\theta_1 \in (0, \pi/2)$ for a glancing collision with $M_1=M_2$, $\sin\theta_1 > 0$. Speed $V_2'$ is a magnitude and must be non-negative, so only $V_2' = +V_1\sin\theta_1$ is physical.
+
+  \item \textbf{(Limit $M_1 \ll M_2$ in Glancing Collision):} Divide numerator and denominator of Eq.\ \eqref{eq:gl_ratio} by $M_2$:
+  \begin{equation*}
+    \frac{V_1'}{V_1} = \frac{M_1/M_2}{1 + M_1/M_2}\!\left[\cos\theta_1 + \sqrt{\cos^2\theta_1 - 1 + \left(\frac{M_2}{M_1}\right)^2}\right] \xrightarrow{M_1/M_2 \to 0} \frac{M_1}{M_2}\!\left(\frac{M_2}{M_1}\right) = \eqbox{1 \implies V_1' \approx V_1}
+  \end{equation*}
+
+  \item \textbf{(Billiard Ball Glancing Collision at $\theta_1 = 20^\circ$):} Since $M_1 = M_2$:
+  \begin{equation*}
+    \theta_2 = 90^\circ - \theta_1 = \eqbox{70^\circ}, \qquad V_1' = v\cos 20^\circ = \eqbox{0.940v}, \qquad V_2' = v\sin 20^\circ = \eqbox{0.342v}
+  \end{equation*}
+
+  \item \textbf{(Coefficient of Restitution $e$):} For a completely inelastic collision, $V_1' = V_2'$, so $e = \frac{|V_2'-V_1'|}{|V_2-V_1|} = \eqbox{0}$. For a 1D elastic collision, Eq.\ \eqref{eq:rel_vel_1D} gives $V_2' - V_1' = -(V_2 - V_1)$, so $e = \frac{|-(V_2-V_1)|}{|V_2-V_1|} = \eqbox{1}$.
+
+  \item \textbf{($Q=0$ for 1D Elastic Collision):} Using Eqs.\ (6.13)--(6.14):
+  \begin{equation*}
+    T_f = \frac{1}{2}M_1 V_1^2\!\left(\frac{M_1-M_2}{M_1+M_2}\right)^2 + \frac{1}{2}M_2 V_1^2\!\left(\frac{2M_1}{M_1+M_2}\right)^2 = \frac{1}{2}M_1 V_1^2\frac{(M_1-M_2)^2 + 4M_1 M_2}{(M_1+M_2)^2} = \frac{1}{2}M_1 V_1^2 = T_i \implies \eqbox{Q = T_f - T_i = 0}
+  \end{equation*}
+
+  \item \textbf{(Impulse of Sinusoidal Force):} $F = 3\sin 5t\text{ N}$ on $m = 2\text{ kg}$ from $t=0$ to $t=\pi/10\text{ s}$ ($v_0=0$):
+  \begin{equation*}
+    J = \int_0^{\pi/10} 3\sin 5t\dd t = \left[-\frac{3}{5}\cos 5t\right]_0^{\pi/10} = -\frac{3}{5}(0 - 1) = 0.6\text{ N}\cdot\text{s} \implies v_f = \frac{J}{m} = \frac{0.6}{2} = \eqbox{0.3\text{ m/s}}
+  \end{equation*}
+
+  \item \textbf{(Piecewise Force Impulse):} $F(t) = 2t$ on $[0,2]$, $F(t)=4$ on $[2,5]$, $F(t)=-t$ on $[5,7]$:
+  \begin{equation*}
+    p_f = \int_0^2 2t\dd t + \int_2^5 4\dd t + \int_5^7 (-t)\dd t = [t^2]_0^2 + 4(3) - \left[\frac{t^2}{2}\right]_5^7 = 4 + 12 - \frac{49-25}{2} = 16 - 12 = \eqbox{4\text{ kg}\cdot\text{m/s}}
+  \end{equation*}
+\end{enumerate}
+
+\subsubsection{Part B: Unique \& Challenge Problems from Young \& Freedman (PDF 1)}
+
+\begin{enumerate}[label=\textbf{Prob.\ \arabic*},leftmargin=4.2em]
+  \setcounter{enumi}{0}
+  \item \textbf{[Challenge Problem 7.87, p.\ 239] Proton in 1D Potential $U(x) = \frac{\alpha}{x^2} - \frac{\beta}{x}$:}
+  Released from rest at $x_0 = \alpha/\beta$.
+  \begin{itemize}
+    \item \textbf{(a)} Factor out $\frac{\alpha}{x_0^2}$ using $\beta = \frac{\alpha}{x_0}$:
+    \begin{equation*}
+      U(x) = \frac{\alpha}{x^2} - \frac{\alpha}{x_0 x} = \eqbox{\frac{\alpha}{x_0^2}\!\left[\left(\frac{x_0}{x}\right)^2 - \frac{x_0}{x}\right]}, \qquad U(x_0) = 0
+    \end{equation*}
+    \item \textbf{(b)} Since $K_1 + U(x_0) = 0 + 0 = 0$, conservation of energy $\frac{1}{2}mv^2 + U(x) = 0$ gives:
+    \begin{equation*}
+      v(x) = \sqrt{-\frac{2U(x)}{m}} = \eqbox{\sqrt{\frac{2\alpha}{m x_0^2}\!\left[\frac{x_0}{x} - \left(\frac{x_0}{x}\right)^2\right]}}
+    \end{equation*}
+    The proton moves from $x_0$ toward $+\infty$, accelerating at first and then slowing to $v\to 0$ as $x\to\infty$.
+    \item \textbf{(c)--(d)} Maximum speed occurs where $U(x)$ is minimum, i.e., $F_x = -\frac{\diff U}{\diff x} = \frac{2\alpha}{x^3} - \frac{\beta}{x^2} = 0$:
+    \begin{equation*}
+      x_m = \frac{2\alpha}{\beta} = \eqbox{2x_0}, \qquad v_{\max} = \eqbox{\sqrt{\frac{\alpha}{2m x_0^2}} = \frac{\beta}{\sqrt{2m\alpha}}}, \qquad F_x(2x_0) = \eqbox{0}
+    \end{equation*}
+    \item \textbf{(e)--(f)} If released at $x_1 = \frac{3\alpha}{\beta} = 3x_0$, then $E = U(3x_0) = -\frac{2\alpha}{9x_0^2} < 0$. Setting $U(x) = E$ gives $\left(\frac{x_0}{x}\right)^2 - \frac{x_0}{x} + \frac{2}{9} = \left(\frac{x_0}{x} - \frac{1}{3}\right)\!\left(\frac{x_0}{x} - \frac{2}{3}\right) = 0$. Thus the proton oscillates periodically between $x_{\min} = \eqbox{\frac{3}{2}x_0 = \frac{3\alpha}{2\beta}}$ and $x_{\max} = \eqbox{3x_0 = \frac{3\alpha}{\beta}}$. For release at $x_0$, $x_{\min} = x_0$ and $x_{\max} = \infty$.
+  \end{itemize}
+
+  \item \textbf{[Prob.\ 8.66, p.\ 272] Girl Acted on by Time-Varying Force:} $m = 40.0\text{ kg}$, $p_{0x} = +90.0\text{ kg}\cdot\text{m/s}$ (east), $F_x(t) = -(8.20\text{ N/s})t$ (west).
+  \begin{itemize}
+    \item \textbf{(a)} Time when $p_x(t) = -60.0\text{ kg}\cdot\text{m/s}$:
+    \begin{equation*}
+      \Delta p_x = -60.0 - 90.0 = -150.0\text{ N}\cdot\text{s} = \int_0^t -(8.20)t'\dd t' = -4.10t^2 \implies t = \sqrt{\frac{150.0}{4.10}} = \eqbox{6.05\text{ s}}
+    \end{equation*}
+    \item \textbf{(b)} Work done by force: $W = K_2 - K_1 = \frac{p_2^2 - p_1^2}{2m} = \frac{(-60.0)^2 - (90.0)^2}{2(40.0)} = \eqbox{-56.3\text{ J}}$.
+    \item \textbf{(c)} Acceleration magnitude at $t = 6.05\text{ s}$: $a = \frac{F(6.05)}{m} = \frac{8.20(6.05)}{40.0} = \eqbox{1.24\text{ m/s}^2}$.
+  \end{itemize}
+
+  \item \textbf{[Prob.\ 8.86, p.\ 274] Two Identical Masses in a Hemispherical Bowl:}
+  Mass $A$ starts at the rim (height $R$ above bottom); mass $B$ starts at rest at the bottom.
+  \begin{itemize}
+    \item Speed of $A$ just before impact at the bottom: $\frac{1}{2}mv_1^2 = mgR \implies v_1 = \sqrt{2gR}$.
+    \item Completely inelastic collision at the bottom: $mv_1 = (2m)v_2 \implies v_2 = \frac{1}{2}v_1$.
+    \item Final height $h$: $\frac{1}{2}(2m)v_2^2 = (2m)gh \implies h = \frac{v_2^2}{2g} = \frac{v_1^2}{8g} = \eqbox{\frac{R}{4}}$.
+  \end{itemize}
+
+  \item \textbf{[Prob.\ 8.88, p.\ 274] Dart and Lead Sphere Complete Vertical Loop:}
+  Sphere $M = 20.00\text{ kg}$ on a thin wire of length $L = 3.50\text{ m}$; dart $m = 5.00\text{ kg}$.
+  \begin{itemize}
+    \item For a flexible wire of length $L$, the combination must have minimum speed $v_{\text{top}} = \sqrt{gL}$ at the top of the circle ($y = 2L$) so tension does not go slack.
+    \item Energy conservation from bottom ($v_2$) to top ($v_{\text{top}}$): $\frac{1}{2}M_{\text{tot}}v_2^2 = M_{\text{tot}}g(2L) + \frac{1}{2}M_{\text{tot}}(gL) \implies v_2 = \sqrt{5gL}$.
+    \item Momentum conservation during impact: $mv_0 = (m+M)v_2 \implies v_0 = \frac{5.00+20.00}{5.00}\sqrt{5(9.80)(3.50)} = 5(13.09) = \eqbox{65.5\text{ m/s}}$.
+  \end{itemize}
+
+  \item \textbf{[Prob.\ 8.93 \& 8.94, p.\ 274] Energy Sharing in Head-On Elastic Collisions:}
+  Incident mass $m$ with kinetic energy $K_0$ hits stationary mass $M$.
+  \begin{itemize}
+    \item \textbf{(a)} Final speed of $m$ is $v_{m2} = \frac{m-M}{m+M}v_0$, so $K_{m2} = \left(\frac{m-M}{m+M}\right)^2 K_0$. Kinetic energy lost by $m$ (and gained by $M$) is:
+    \begin{equation*}
+      \Delta K_{\text{lost}} = K_0 - K_{m2} = K_0\!\left[1 - \frac{(m-M)^2}{(m+M)^2}\right] = \eqbox{\frac{4mM}{(M+m)^2}K_0}
+    \end{equation*}
+    \item \textbf{(b)--(c)} Maximum energy loss (100\%) occurs when $\eqbox{M = m}$, where $\eqbox{v_{m2} = 0}$. Equal energy sharing ($\Delta K_{\text{lost}} = \frac{1}{2}K_0$) occurs when $\left(\frac{m_A-m_B}{m_A+m_B}\right)^2 = \frac{1}{2} \implies \frac{m_A}{m_B} = \eqbox{3 \pm 2\sqrt{2}}$ ($5.83$ or $0.172$).
+  \end{itemize}
+
+  \item \textbf{[Prob.\ 8.97, p.\ 275] Jack and Jill Jumping Off a Crate:}
+  $m_J = 75.0\text{ kg}$, $m_{Ji} = 45.0\text{ kg}$, crate $m_C = 15.0\text{ kg}$. Each jumps at $v_{\text{rel}} = 4.00\text{ m/s}$ relative to the crate.
+  \begin{itemize}
+    \item \textbf{(a) Simultaneous jump:} $0 = (m_J+m_{Ji})(v_C - v_{\text{rel}}) + m_C v_C \implies v_C = \frac{120.0}{135.0}(4.00) = \eqbox{3.56\text{ m/s}}$.
+    \item \textbf{(b) Jack first, then Jill:} After Jack jumps, $v_{C1} = \frac{m_J}{m_J+m_{Ji}+m_C}v_{\text{rel}} = \frac{75.0}{135.0}(4.00) = 2.222\text{ m/s}$. Next Jill jumps from the moving crate: $v_{C2} = v_{C1} + \frac{m_{Ji}}{m_{Ji}+m_C}v_{\text{rel}} = 2.222 + \frac{45.0}{60.0}(4.00) = \eqbox{5.22\text{ m/s}}$.
+    \item \textbf{(c) Jill first, then Jack:} $v_C = \frac{45.0}{135.0}(4.00) + \frac{75.0}{90.0}(4.00) = 1.333 + 3.333 = \eqbox{4.67\text{ m/s}}$.
+  \end{itemize}
+
+  \item \textbf{[Prob.\ 8.98, p.\ 275] Superball Double Bounce:}
+  Large ball ($M \gg m$) rebounds with $+\vect{v}$ and collides head-on with small ball ($m$) descending with $-\vect{v}$.
+  \begin{itemize}
+    \item \textbf{(a)} From Eq.\ \eqref{eq:elastic_gen} with $m \ll M$, $v_{m2} = \frac{m-M}{m+M}(-v) + \frac{2M}{m+M}(+v) \approx +v + 2v = \eqbox{3\vect{v}}$.
+    \item \textbf{(b)} Since $h \propto v^2$, the rebound height ratio is $\left(\frac{3v}{v}\right)^2 = \eqbox{9}$.
+  \end{itemize}
+
+  \item \textbf{[Prob.\ 8.100 \& 8.101, p.\ 275] Explosion Energy Sharing:}
+  Mass $m = m_A + m_B$ at rest explodes releasing energy $Q = K_A + K_B$.
+  \begin{itemize}
+    \item Since $p_A = p_B = p$, $K_A = \frac{p^2}{2m_A}$ and $K_B = \frac{p^2}{2m_B}$, so $\frac{K_A}{K_B} = \frac{m_B}{m_A}$:
+    \begin{equation*}
+      \eqbox{K_A = \frac{m_B}{m_A + m_B}Q, \qquad K_B = \frac{m_A}{m_A + m_B}Q}
+    \end{equation*}
+    For neutron decay ($m_p = 1836 m_e$), the proton gets $\frac{m_e}{m_p + m_e} = \frac{1}{1837} = \eqbox{5.44\times 10^{-4}\ (0.0544\%)}$ of $Q$.
+  \end{itemize}
+
+  \item \textbf{[Prob.\ 8.105 \& 8.106, p.\ 275] Walking on a Floating Log / Canoe:}
+  In Prob.\ 8.106, woman ($m_w = 45.0\text{ kg}$) walks $d_{\text{rel}} = 3.00\text{ m}$ from $1.00\text{ m}$ from one end to $1.00\text{ m}$ from the other end of a $5.00\text{-m}$ canoe ($m_c = 60.0\text{ kg}$).
+  \begin{itemize}
+    \item Since $x_{\text{cm}}$ does not move: $m_w(\Delta x_{\text{canoe}} + d_{\text{rel}}) + m_c\Delta x_{\text{canoe}} = 0 \implies |\Delta x_{\text{canoe}}| = \frac{m_w d_{\text{rel}}}{m_w + m_c} = \frac{45.0(3.00)}{105.0} = \eqbox{1.29\text{ m}}$.
+    \item Similarly, in Prob.\ 8.105 (Ernie $40.0\text{ kg}$ walks $3.0\text{ m}$ on a $20.0\text{-kg}$ log with Burt $30.0\text{ kg}$), $|\Delta x_{\text{log}}| = \frac{40.0(3.0)}{40.0+30.0+20.0} = \eqbox{1.3\text{ m}}$.
+  \end{itemize}
+
+  \item \textbf{[Prob.\ 8.113, p.\ 276] Multistage Rocket:}
+  Stage 1: $m_1 = 12,000\text{ kg}$ ($9000\text{ kg}$ fuel, $3000\text{ kg}$ dry). Stage 2: $m_2 = 1000\text{ kg}$ ($700\text{ kg}$ fuel, $300\text{ kg}$ dry).
+  \begin{itemize}
+    \item \textbf{(a) Single-stage equivalent:} $m_0 = 13,000\text{ kg}$, $m_f = 13,000 - 9700 = 3300\text{ kg} \implies v = v_{\text{ex}}\ln\!\left(\frac{13,000}{3300}\right) = \eqbox{1.37v_{\text{ex}}}$.
+    \item \textbf{(b) Speed after Stage 1 burnout:} $m_0 = 13,000\text{ kg}$, $m_f = 4000\text{ kg} \implies v_1 = v_{\text{ex}}\ln\!\left(\frac{13,000}{4000}\right) = \eqbox{1.18v_{\text{ex}}}$.
+    \item \textbf{(c) Final speed of Stage 2:} $v_2 = v_1 + v_{\text{ex}}\ln\!\left(\frac{1000}{300}\right) = (1.18 + 1.20)v_{\text{ex}} = \eqbox{2.38v_{\text{ex}}}$.
+    \item \textbf{(d)} For $v_2 = 7.00\text{ km/s}$: $v_{\text{ex}} = \frac{7.00\text{ km/s}}{2.38} = \eqbox{2.94\text{ km/s}}$.
+  \end{itemize}
+
+  \item \textbf{[Challenge Problem 8.114, p.\ 276] Variable-Mass Raindrop (Krane Problem):}
+  Mass grows with distance fallen: $m = kx$, $\frac{\diff m}{\diff t} = kv$, and $F_{\text{ext}} = mg = \frac{\diff p}{\diff t} = m\frac{\diff v}{\diff t} + v\frac{\diff m}{\diff t}$, which simplifies to $xg = x\frac{\diff v}{\diff t} + v^2$.
+  \begin{itemize}
+    \item \textbf{(a)} Substitute $v = at$ and $x = \frac{1}{2}at^2$:
+    \begin{equation*}
+      \left(\frac{1}{2}at^2\right)g = \left(\frac{1}{2}at^2\right)a + (at)^2 = \frac{3}{2}a^2 t^2 \implies \eqbox{a = \frac{g}{3} = 3.27\text{ m/s}^2}
+    \end{equation*}
+    \item \textbf{(b)} In $t = 3.00\text{ s}$: $x = \frac{1}{2}\!\left(\frac{9.80}{3}\right)(3.00)^2 = \eqbox{14.7\text{ m}}$.
+    \item \textbf{(c)} Given $k = 2.00\text{ g/m}$: $m = kx = (2.00\text{ g/m})(14.7\text{ m}) = \eqbox{29.4\text{ g}}$.
+  \end{itemize}
+
+  \item \textbf{[Challenge Problems 8.115 \& 8.116, p.\ 276--277] Continuous Center-of-Mass Integrals:}
+  \begin{itemize}
+    \item \textbf{8.115(a) Uniform rod ($\rho = M/V$, $\diff m = \frac{M}{L}\dd x$):} $x_{\text{cm}} = \frac{1}{M}\int_0^L x\frac{M}{L}\dd x = \eqbox{\frac{L}{2}}$.
+    \item \textbf{8.115(b) Linearly varying rod ($\rho = \alpha x$, $\diff m = \alpha A x\dd x$):} $M = \int_0^L \alpha A x\dd x = \frac{1}{2}\alpha A L^2$, and $x_{\text{cm}} = \frac{1}{M}\int_0^L \alpha A x^2\dd x = \frac{\frac{1}{3}\alpha A L^3}{\frac{1}{2}\alpha A L^2} = \eqbox{\frac{2}{3}L}$.
+    \item \textbf{8.116 Semicircular plate of radius $a$ in upper half-plane ($y\ge 0$):} By symmetry, $x_{\text{cm}} = 0$. Using polar coordinates ($y = r\sin\theta$, $\diff m = \rho t r\dd r\dd\theta$, $M = \frac{1}{2}\rho\pi a^2 t$):
+    \begin{equation*}
+      y_{\text{cm}} = \frac{\rho t}{M}\int_0^a r^2\dd r \int_0^\pi \sin\theta\dd\theta = \frac{\rho t}{\frac{1}{2}\rho\pi a^2 t}\!\left(\frac{a^3}{3}\right)(2) = \eqbox{\frac{4a}{3\pi} \approx 0.424a}
+    \end{equation*}
+  \end{itemize}
+\end{enumerate}
+
+% ============================================================================
+% FORMULA SHEET — MODULE 1
+% ============================================================================
+\formulasheet{Module 1 Formula Sheet: Momentum, Collisions, and Rockets}
+
+\begin{fs}{1. Momentum, Newton's Second Law, and Impulse}
+\begin{align*}
+  \vect{p} &= m\vect{v}, \qquad K = \frac{p^2}{2m}, \qquad \sum\vect{F} = \frac{\diff\vect{p}}{\diff t} = m\frac{\diff\vect{v}}{\diff t} + \vect{v}\frac{\diff m}{\diff t}\\
+  \vect{J} &= \int_{t_1}^{t_2}\sum\vect{F}\dd t = \vect{F}_{\text{av}}\Delta t = \vect{p}_2 - \vect{p}_1
+\end{align*}
+\end{fs}
+
+\begin{fs}{2. Collisions (1D and 2D) and Coefficient of Restitution}
+\begin{align*}
+  \text{Completely Inelastic:}\quad & \vect{v}_2 = \frac{m_A\vect{v}_{A1}+m_B\vect{v}_{B1}}{m_A+m_B}, \qquad \frac{K_2}{K_1} = \frac{m_A}{m_A+m_B}\quad (v_{B1}=0)\\
+  \text{1D Elastic ($v_{B1x}=0$):}\quad & v_{A2x} = \frac{m_A-m_B}{m_A+m_B}v_{A1x}, \qquad v_{B2x} = \frac{2m_A}{m_A+m_B}v_{A1x}, \qquad v_{B2x}-v_{A2x} = -(v_{B1x}-v_{A1x})\\
+  \text{2D Glancing Elastic:}\quad & \frac{V_1'}{V_1} = \frac{M_1}{M_1+M_2}\!\left[\cos\theta_1 \pm \sqrt{\cos^2\theta_1 - 1 + \left(\frac{M_2}{M_1}\right)^2}\right], \qquad \theta_1+\theta_2 = \frac{\pi}{2}\ (M_1=M_2)\\
+  \text{Restitution \& $Q$-value:}\quad & e = \frac{|V_2'-V_1'|}{|V_2-V_1|}, \qquad Q = T_f - T_i
+\end{align*}
+\end{fs}
+
+\begin{fs}{3. Center of Mass, Reduced Mass, and Rocket Propulsion}
+\begin{align*}
+  \vect{r}_{\text{cm}} &= \frac{\sum m_i\vect{r}_i}{M} = \frac{1}{M}\int\vect{r}\dd m, \qquad \vect{P}_{\text{tot}} = M\vect{v}_{\text{cm}}, \qquad \sum\vect{F}_{\text{ext}} = M\vect{a}_{\text{cm}}, \qquad \mu = \frac{m_1 m_2}{m_1+m_2}\\
+  F_{\text{thrust}} &= -v_{\text{ex}}\frac{\diff m}{\diff t}, \qquad a = -\frac{v_{\text{ex}}}{m}\frac{\diff m}{\diff t} - g, \qquad v - v_0 = v_{\text{ex}}\ln\!\left(\frac{m_0}{m}\right) - gt
+\end{align*}
+\end{fs}
+
+% ============================================================================
+% MODULE 2: ROTATION OF RIGID BODIES (PDF 4: Y&F CH. 9)
+% ============================================================================
+\part{Rotation of Rigid Bodies: Kinematics and Moment of Inertia}
+
+\chapter{Rotational Kinematics and Linear--Angular Relations}
+\begin{syll}
+\textbf{Syllabus Coverage (PDF 4):} Young \& Freedman Chapter 9 (Sections 9.1--9.3). Radian measure, angular velocity, angular acceleration, constant angular acceleration kinematics, and tangential/centripetal linear kinematics.
+\end{syll}
+
+\section{Angular Position, Velocity, and Acceleration\bk{9.1}}
+
+\begin{goal}
+Define radian angle $\theta$, angular velocity $\omega_z$, and angular acceleration $\alpha_z$ for a rigid body rotating about a fixed $z$-axis.
+\end{goal}
+
+\begin{pic}
+\begin{tikzpicture}[scale=0.95]
+  \draw[ax] (-1.8,0) -- (2.6,0) node[right,font=\small]{$x$};
+  \draw[ax] (0,-1.6) -- (0,2.2) node[above,font=\small]{$y$};
+  \draw[thick,teal,fill=tealsoft!50] (0,0) circle (1.4cm);
+  \draw[thick,ink] (0,0) -- (1.4,0);
+  \draw[thick,teal] (0,0) -- (0.99,0.99) node[midway,above left,font=\footnotesize]{$r$};
+  \fill[rose] (0.99,0.99) circle (2.5pt) node[above right,font=\footnotesize]{$P$};
+  \draw[ultra thick,amber] (1.4,0) arc (0:45:1.4) node[midway,right,font=\footnotesize]{$s = r\theta$};
+  \draw[slate] (0.55,0) arc (0:45:0.55) node[midway,right,font=\footnotesize]{$\theta$};
+\end{tikzpicture}
+\figcap{Angle $\theta = s/r$ in radians on a circle of radius $r$.}
+\end{pic}
+
+\step{Step 1: Relate arc length $s$ and radius $r$.}
+\begin{equation}\label{eq:rad_def}
+  \eqbox{\theta = \frac{s}{r} \iff s = r\theta} \qquad \left(1\text{ rev} = 360^\circ = 2\pi\text{ rad},\quad 1\text{ rad} = \frac{360^\circ}{2\pi} \approx 57.3^\circ\right)
+\end{equation}
+
+\step{Step 2: Define average and instantaneous angular velocity $\omega_z$.}
+\begin{equation}\label{eq:omega_def}
+  \omega_{\text{av-}z} = \frac{\theta_2 - \theta_1}{t_2 - t_1} = \frac{\Delta\theta}{\Delta t}, \qquad \eqbox{\omega_z = \lim_{\Delta t\to 0}\frac{\Delta\theta}{\Delta t} = \frac{\diff\theta}{\diff t}} \qquad \left(1\text{ rpm} = \frac{2\pi}{60}\text{ rad/s}\right)
+\end{equation}
+
+\step{Step 3: Define average and instantaneous angular acceleration $\alpha_z$.}
+\begin{equation}\label{eq:alpha_def}
+  \alpha_{\text{av-}z} = \frac{\omega_{2z} - \omega_{1z}}{t_2 - t_1} = \frac{\Delta\omega_z}{\Delta t}, \qquad \eqbox{\alpha_z = \lim_{\Delta t\to 0}\frac{\Delta\omega_z}{\Delta t} = \frac{\diff\omega_z}{\diff t} = \frac{\diff^2\theta}{\diff t^2}}
+\end{equation}
+Using the chain rule (\tref{tool:deriv}), we can also eliminate $\diff t$:
+\begin{equation}\label{eq:alpha_dtheta}
+  \alpha_z = \frac{\diff\omega_z}{\diff\theta}\frac{\diff\theta}{\diff t} = \omega_z\frac{\diff\omega_z}{\diff\theta}
+\end{equation}
+
+\section{Rotation with Constant Angular Acceleration\bk{9.2}}
+
+\begin{goal}
+Derive the four kinematic equations for fixed-axis rotation when $\alpha_z = \text{constant}$.
+\end{goal}
+
+\step{Step 1: Integrate $\frac{\diff\omega_z}{\diff t} = \alpha_z$ from $t=0$ ($\omega_{0z}$) to $t$ ($\omega_z$).}
+\begin{equation}\label{eq:rot_kin1}
+  \int_{\omega_{0z}}^{\omega_z}\diff\omega_z' = \int_0^t \alpha_z\dd t' \implies \eqbox{\omega_z = \omega_{0z} + \alpha_z t}
+\end{equation}
+
+\step{Step 2: Integrate $\frac{\diff\theta}{\diff t} = \omega_z = \omega_{0z} + \alpha_z t$ from $t=0$ ($\theta_0$) to $t$ ($\theta$).}
+\begin{equation}\label{eq:rot_kin2}
+  \int_{\theta_0}^\theta \diff\theta' = \int_0^t (\omega_{0z} + \alpha_z t')\dd t' \implies \eqbox{\theta = \theta_0 + \omega_{0z}t + \frac{1}{2}\alpha_z t^2}
+\end{equation}
+
+\step{Step 3: Express $\theta - \theta_0$ in terms of average angular velocity.}
+Since $\omega_z$ varies linearly with $t$, $\omega_{\text{av-}z} = \frac{1}{2}(\omega_{0z} + \omega_z) = \frac{\theta - \theta_0}{t}$:
+\begin{equation}\label{eq:rot_kin3}
+  \eqbox{\theta - \theta_0 = \frac{1}{2}(\omega_{0z} + \omega_z)t}
+\end{equation}
+
+\step{Step 4: Eliminate $t$ (or integrate $\omega_z\dd\omega_z = \alpha_z\dd\theta$).}
+Substitute $t = \frac{\omega_z - \omega_{0z}}{\alpha_z}$ from Eq.\ \eqref{eq:rot_kin1} into Eq.\ \eqref{eq:rot_kin3}:
+\begin{equation}\label{eq:rot_kin4}
+  \theta - \theta_0 = \frac{1}{2}(\omega_{0z} + \omega_z)\!\left(\frac{\omega_z - \omega_{0z}}{\alpha_z}\right) \implies \eqbox{\omega_z^2 = \omega_{0z}^2 + 2\alpha_z(\theta - \theta_0)}
+\end{equation}
+
+\section{Relating Linear and Angular Kinematics\bk{9.3}}
+
+\begin{goal}
+Derive the linear speed $v$, tangential acceleration $a_{\text{tan}}$, and centripetal acceleration $a_{\text{rad}}$ of a point at distance $r$ from the rotation axis.
+\end{goal}
+
+\begin{pic}
+\begin{tikzpicture}[scale=0.95]
+  \draw[ax] (-1.8,0) -- (2.6,0) node[right,font=\small]{$x$};
+  \draw[ax] (0,-1.6) -- (0,2.3) node[above,font=\small]{$y$};
+  \draw[thick,teal,dashed] (0,0) circle (1.5cm);
+  \coordinate (P) at (40:1.5);
+  \draw[thick,ink] (0,0) -- (P) node[midway,below right,font=\footnotesize]{$r$};
+  \fill[teal] (P) circle (3pt) node[right=2pt,font=\footnotesize]{$P$};
+  \draw[vec,amber,thick] (P) -- ++(130:1.2) node[above,font=\footnotesize]{$\vect{a}_{\text{tan}} = r\alpha\uv{\theta}$};
+  \draw[vec,rose,thick] (P) -- ++(220:0.95) node[above left,font=\footnotesize]{$\vect{a}_{\text{rad}} = \omega^2 r(-\uv{r})$};
+  \draw[vec,bluec,ultra thick] (P) -- ($(P)+(130:1.2)+(220:0.95)$) node[left,font=\footnotesize]{$\vect{a}$};
+\end{tikzpicture}
+\figcap{Tangential acceleration $a_{\text{tan}} = r\alpha$ and centripetal acceleration $a_{\text{rad}} = \omega^2 r$ at point $P$.}
+\end{pic}
+
+\step{Step 1: Differentiate $s = r\theta$ with respect to time $t$ (with $r$ constant).}
+\begin{equation}\label{eq:v_romega}
+  \left|\frac{\diff s}{\diff t}\right| = r\left|\frac{\diff\theta}{\diff t}\right| \implies \eqbox{v = r\omega}
+\end{equation}
+
+\step{Step 2: Differentiate $v = r\omega$ with respect to time $t$ to obtain tangential acceleration $a_{\text{tan}}$.}
+\begin{equation}\label{eq:a_tan}
+  \eqbox{a_{\text{tan}} = \frac{\diff v}{\diff t} = r\frac{\diff\omega}{\diff t} = r\alpha}
+\end{equation}
+
+\step{Step 3: Substitute $v = r\omega$ into centripetal acceleration $a_{\text{rad}} = \frac{v^2}{r}$.}
+\begin{equation}\label{eq:a_rad}
+  \eqbox{a_{\text{rad}} = \frac{v^2}{r} = \frac{(r\omega)^2}{r} = \omega^2 r}, \qquad \eqbox{a = \sqrt{a_{\text{tan}}^2 + a_{\text{rad}}^2} = r\sqrt{\alpha^2 + \omega^4}}
+\end{equation}
+
+\begin{trap}
+Equations \eqref{eq:rad_def}, \eqref{eq:v_romega}, \eqref{eq:a_tan}, and \eqref{eq:a_rad} are valid \textbf{only} when $\theta$ is in $\text{rad}$, $\omega$ is in $\text{rad/s}$, and $\alpha$ is in $\text{rad/s}^2$. Always convert $\text{rev}$ and $\text{rpm}$ to radians first!
+\end{trap}
+
+% ============================================================================
+% CHAPTER 4: ROTATIONAL ENERGY AND MOMENT OF INERTIA
+% ============================================================================
+\chapter{Rotational Energy and Moment-of-Inertia Calculations}
+\begin{syll}
+\textbf{Syllabus Coverage (PDF 4):} Young \& Freedman Chapter 9 (Sections 9.4--9.6). Rotational kinetic energy, moment of inertia, gravitational potential energy of an extended body, parallel-axis and perpendicular-axis theorems, and continuous moment-of-inertia integrals.
+\end{syll}
+
+\section{Rotational Kinetic Energy and Moment of Inertia\bk{9.4}}
+
+\begin{goal}
+Derive the rotational kinetic energy $K = \frac{1}{2}I\omega^2$ and gravitational potential energy $U = Mgy_{\text{cm}}$ of a rigid body.
+\end{goal}
+
+\step{Step 1: Sum the kinetic energies of all particles $m_i$ in the rotating rigid body.}
+Particle $i$ is at perpendicular distance $r_i$ from the rotation axis, so its speed is $v_i = r_i\omega$:
+\begin{align}
+  K &= \sum_i \frac{1}{2}m_i v_i^2 = \sum_i \frac{1}{2}m_i(r_i\omega)^2 = \frac{1}{2}\!\left(\sum_i m_i r_i^2\right)\omega^2\label{eq:K_rot_sum}
+\end{align}
+Define the moment of inertia $I$ about the rotation axis:
+\begin{equation}\label{eq:I_def_rot}
+  \eqbox{I = \sum_i m_i r_i^2 = \int r^2\dd m}, \qquad \eqbox{K = \frac{1}{2}I\omega^2}
+\end{equation}
+
+\step{Step 2: Sum the gravitational potential energies of all particles $m_i$.}
+\begin{equation}\label{eq:U_grav_ext}
+  U = \sum_i m_i g y_i = \left(\sum_i m_i y_i\right)g = \eqbox{M g y_{\text{cm}}}
+\end{equation}
+
+\section{Parallel-Axis and Perpendicular-Axis Theorems\bk{9.5, 7.5.1}}
+
+\begin{goal}
+Prove the parallel-axis theorem $I_P = I_{\text{cm}} + Md^2$ for any 3D body and the perpendicular-axis theorem $I_O = I_x + I_y$ for a thin planar lamina.
+\end{goal}
+
+\begin{pic}
+\begin{tikzpicture}[scale=0.9]
+  \draw[thick,teal,fill=tealsoft!60] plot[smooth cycle,tension=0.8] coordinates {(-1.5,-1.0) (1.2,-1.3) (2.6,0.2) (1.8,1.8) (-0.8,1.6) (-2.0,0.4)};
+  \draw[ax] (-2.4,0) -- (3.0,0) node[right,font=\small]{$x$};
+  \draw[ax] (0,-1.6) -- (0,2.2) node[above,font=\small]{$y$};
+  \fill[ink] (0,0) circle (2.5pt) node[below left,font=\footnotesize]{$O\ (\text{cm})$};
+  \coordinate (P) at (1.1,0.7);
+  \fill[amber] (P) circle (2.5pt) node[below right,font=\footnotesize]{$P(a,b)$};
+  \draw[thick,amber] (0,0) -- (P) node[midway,above left,font=\footnotesize]{$d$};
+  \coordinate (M) at (1.8,1.4);
+  \fill[rose] (M) circle (2.5pt) node[above,font=\footnotesize]{$m_i(x_i,y_i)$};
+  \draw[dashed,slate] (P) -- (1.8,0.7) -- (M);
+\end{tikzpicture}
+\figcap{Geometry for the parallel-axis theorem: cm at origin $O(0,0)$ and parallel axis through $P(a,b)$ at distance $d = \sqrt{a^2+b^2}$.}
+\end{pic}
+
+\step{Step 1: Proof of the Parallel-Axis Theorem.}
+Place the origin at the center of mass ($\text{cm}$), so $x_{\text{cm}} = \frac{1}{M}\sum m_i x_i = 0$ and $y_{\text{cm}} = \frac{1}{M}\sum m_i y_i = 0$. Let the parallel axis pass through $P(a,b)$, where $d^2 = a^2 + b^2$. The squared distance from $m_i(x_i,y_i)$ to $P(a,b)$ is $(x_i - a)^2 + (y_i - b)^2$:
+\begin{align}
+  I_P &= \sum_i m_i\!\left[(x_i - a)^2 + (y_i - b)^2\right]\nonumber\\
+      &= \underbrace{\sum_i m_i(x_i^2 + y_i^2)}_{I_{\text{cm}}} - 2a\underbrace{\sum_i m_i x_i}_{0} - 2b\underbrace{\sum_i m_i y_i}_{0} + \underbrace{(a^2 + b^2)}_{d^2}\underbrace{\sum_i m_i}_{M} = \eqbox{I_{\text{cm}} + Md^2}\label{eq:parallel_axis}
+\end{align}
+
+\step{Step 2: Proof of the Perpendicular-Axis Theorem (for a thin flat lamina in the $xy$-plane).}
+For a thin lamina in the $xy$-plane ($z_i = 0$), the perpendicular distance of $m_i$ from the $x$-axis is $y_i$, from the $y$-axis is $x_i$, and from the $z$-axis (through $O$) is $r_i = \sqrt{x_i^2 + y_i^2}$:
+\begin{equation}\label{eq:perp_axis}
+  I_x = \sum_i m_i y_i^2, \qquad I_y = \sum_i m_i x_i^2 \implies I_O = I_z = \sum_i m_i(x_i^2 + y_i^2) = \eqbox{I_x + I_y}
+\end{equation}
+
+\section{Moment-of-Inertia Calculations by Integration\bk{9.6, 7.5}}
+
+\begin{goal}
+Derive the standard moments of inertia in Table 9.2 using $I = \int r^2\dd m = \int r^2\rho\dd V$.
+\end{goal}
+
+\subsection{1. Uniform Slender Rod of Mass $M$ and Length $L$}
+Let the rod lie along the $x$-axis with linear mass density $\lambda = \frac{M}{L}$, so $\diff m = \frac{M}{L}\dd x$:
+\begin{itemize}
+  \item \textbf{Axis through center ($x\in [-L/2, L/2]$):}
+  \begin{equation}\label{eq:I_rod_cm}
+    I_{\text{cm}} = \int_{-L/2}^{L/2} x^2\!\left(\frac{M}{L}\dd x\right) = \frac{M}{L}\!\left[\frac{x^3}{3}\right]_{-L/2}^{L/2} = \eqbox{\frac{1}{12}ML^2}
+  \end{equation}
+  \item \textbf{Axis through one end ($x\in [0, L]$):}
+  \begin{equation}\label{eq:I_rod_end}
+    I_{\text{end}} = \int_0^L x^2\!\left(\frac{M}{L}\dd x\right) = \eqbox{\frac{1}{3}ML^2} \qquad \left(\text{or by parallel axis: }\frac{1}{12}ML^2 + M\!\left(\frac{L}{2}\right)^2 = \frac{1}{3}ML^2\right)
+  \end{equation}
+\end{itemize}
+
+\subsection{2. Uniform Hollow or Solid Cylinder (Example 9.10)}
+Divide a cylinder of length $L$, inner radius $R_1$, outer radius $R_2$, and density $\rho$ into thin cylindrical shells of radius $r$, thickness $\diff r$, volume $\diff V = 2\pi r L\dd r$, and mass $\diff m = 2\pi\rho L r\dd r$. Since total mass is $M = \pi\rho L(R_2^2 - R_1^2)$:
+\begin{align}\label{eq:I_cyl}
+  I &= \int_{R_1}^{R_2} r^2(2\pi\rho L r\dd r) = 2\pi\rho L\frac{R_2^4 - R_1^4}{4} = \frac{1}{2}\!\left[\pi\rho L(R_2^2 - R_1^2)\right](R_1^2 + R_2^2) = \eqbox{\frac{1}{2}M(R_1^2 + R_2^2)}
+\end{align}
+\begin{itemize}
+  \item \textbf{Solid cylinder/disk ($R_1 = 0, R_2 = R$):} $\eqbox{I = \frac{1}{2}MR^2}$.
+  \item \textbf{Thin-walled hollow cylinder/hoop ($R_1 = R_2 = R$):} $\eqbox{I = MR^2}$.
+\end{itemize}
+
+\subsection{3. Uniform Solid Sphere of Mass $M$ and Radius $R$ (Example 9.11)}
+Slice the sphere into thin disks of radius $r = \sqrt{R^2 - x^2}$ and thickness $\diff x$ at distance $x$ from the center. Each disk has mass $\diff m = \rho\pi(R^2 - x^2)\dd x$ and moment of inertia $\diff I = \frac{1}{2}r^2\dd m = \frac{1}{2}\pi\rho(R^2 - x^2)^2\dd x$. Since $M = \frac{4}{3}\pi R^3\rho$:
+\begin{align}\label{eq:I_sphere}
+  I &= 2\int_0^R \frac{1}{2}\pi\rho(R^4 - 2R^2 x^2 + x^4)\dd x = \pi\rho\!\left[R^5 - \frac{2}{3}R^5 + \frac{1}{5}R^5\right] = \frac{8\pi\rho R^5}{15} = \left(\frac{4}{3}\pi\rho R^3\right)\!\left(\frac{2}{5}R^2\right) = \eqbox{\frac{2}{5}MR^2}
+\end{align}
+For a \textbf{thin-walled hollow sphere} of radius $R$, $\diff I = \frac{2}{5}\diff(MR^2) \implies \eqbox{I = \frac{2}{3}MR^2}$.
+
+% ============================================================================
+% SOLVED BOOK EXAMPLES — MODULE 2
+% ============================================================================
+\section{Solved Book Examples (Module 2)}
+
+\begin{example}{9.1}{Calculating angular velocity\bk{p.\ 281}}
+\textbf{Problem:} The angular position of a flywheel of diameter $0.36\text{ m}$ ($r = 0.18\text{ m}$) is $\theta = (2.0\text{ rad/s}^3)t^3$. Find: (a) $\theta_1$ at $t_1 = 2.0\text{ s}$ and $\theta_2$ at $t_2 = 5.0\text{ s}$ in rad and degrees, (b) distance $s$ moved by a rim point, (c) $\omega_{\text{av-}z}$ on $[2.0\text{ s}, 5.0\text{ s}]$, and (d) $\omega_z$ at $t_1$ and $t_2$.
+\tcblower
+\textbf{Solution:}
+\begin{itemize}
+  \item \textbf{(a)} $\theta_1 = 2.0(2.0)^3 = \eqbox{16\text{ rad} = 920^\circ}$, $\theta_2 = 2.0(5.0)^3 = \eqbox{250\text{ rad} = 14,000^\circ}$.
+  \item \textbf{(b)} $\Delta\theta = 250 - 16 = 234\text{ rad} \implies s = r\Delta\theta = (0.18\text{ m})(234\text{ rad}) = \eqbox{42\text{ m}}$.
+  \item \textbf{(c)} $\omega_{\text{av-}z} = \frac{234\text{ rad}}{5.0 - 2.0\text{ s}} = \eqbox{78\text{ rad/s} = 740\text{ rev/min}}$.
+  \item \textbf{(d)} $\omega_z = \frac{\diff\theta}{\diff t} = (6.0\text{ rad/s}^3)t^2 \implies \omega_{1z} = 6.0(2.0)^2 = \eqbox{24\text{ rad/s}}$, $\omega_{2z} = 6.0(5.0)^2 = \eqbox{150\text{ rad/s}}$.
+\end{itemize}
+\end{example}
+
+\begin{example}{9.2}{Calculating angular acceleration\bk{p.\ 283}}
+\textbf{Problem:} For the flywheel of Example 9.1, find (a) $\alpha_{\text{av-}z}$ between $t_1 = 2.0\text{ s}$ and $t_2 = 5.0\text{ s}$, and (b) $\alpha_z$ at $t_1$ and $t_2$.
+\tcblower
+\textbf{Solution:}
+\begin{itemize}
+  \item \textbf{(a)} $\alpha_{\text{av-}z} = \frac{\omega_{2z} - \omega_{1z}}{t_2 - t_1} = \frac{150 - 24}{5.0 - 2.0} = \eqbox{42\text{ rad/s}^2}$.
+  \item \textbf{(b)} $\alpha_z = \frac{\diff\omega_z}{\diff t} = (12\text{ rad/s}^3)t \implies \alpha_{1z} = 12(2.0) = \eqbox{24\text{ rad/s}^2}$, $\alpha_{2z} = 12(5.0) = \eqbox{60\text{ rad/s}^2}$.
+\end{itemize}
+\end{example}
+
+\begin{example}{9.3}{Rotation with constant angular acceleration\bk{p.\ 285}}
+\textbf{Problem:} A Blu-ray disc has $\omega_{0z} = 27.5\text{ rad/s}$, $\theta_0 = 0$, and constant $\alpha_z = -10.0\text{ rad/s}^2$. At $t = 0.300\text{ s}$, find (a) $\omega_z$ and (b) the angle a reference line $PQ$ makes with the $+x$-axis.
+\tcblower
+\textbf{Solution:}
+\begin{itemize}
+  \item \textbf{(a)} $\omega_z = \omega_{0z} + \alpha_z t = 27.5 + (-10.0)(0.300) = \eqbox{24.5\text{ rad/s}}$.
+  \item \textbf{(b)} $\theta = 0 + (27.5)(0.300) + \frac{1}{2}(-10.0)(0.300)^2 = \eqbox{7.80\text{ rad} = 1.24\text{ rev}}$. Subtracting $1\text{ rev} = 360^\circ$ leaves $(0.24\text{ rev})(360^\circ/\text{rev}) = \eqbox{87^\circ}$.
+\end{itemize}
+\end{example}
+
+\begin{example}{9.4}{Throwing a discus\bk{p.\ 287}}
+\textbf{Problem:} A discus moves in a circle of radius $r = 0.800\text{ m}$. At an instant when $\omega = 10.0\text{ rad/s}$ and $\alpha = 50.0\text{ rad/s}^2$, find $a_{\text{tan}}$, $a_{\text{rad}}$, and total acceleration magnitude $a$.
+\tcblower
+\textbf{Solution:}
+\begin{align*}
+  a_{\text{tan}} &= r\alpha = (0.800\text{ m})(50.0\text{ rad/s}^2) = \eqbox{40.0\text{ m/s}^2}\\
+  a_{\text{rad}} &= \omega^2 r = (10.0\text{ rad/s})^2(0.800\text{ m}) = \eqbox{80.0\text{ m/s}^2}\\
+  a &= \sqrt{a_{\text{tan}}^2 + a_{\text{rad}}^2} = \sqrt{(40.0)^2 + (80.0)^2} = \eqbox{89.4\text{ m/s}^2}
+\end{align*}
+\end{example}
+
+\begin{example}{9.5}{Designing a propeller\bk{p.\ 288}}
+\textbf{Problem:} An airplane propeller turns at $2400\text{ rpm}$ ($\omega = 251\text{ rad/s}$) while the plane flies forward at $v_{\text{plane}} = 75.0\text{ m/s}$. The tip speed through the air is $v_{\text{tip}} = \sqrt{v_{\text{plane}}^2 + r^2\omega^2} \le 270\text{ m/s}$. Find (a) $r_{\max}$ and (b) $a_{\text{rad}}$ of the tip.
+\tcblower
+\textbf{Solution:}
+\begin{align*}
+  \text{(a)}\quad r &= \frac{\sqrt{v_{\text{tip}}^2 - v_{\text{plane}}^2}}{\omega} = \frac{\sqrt{(270)^2 - (75.0)^2}}{251\text{ rad/s}} = \eqbox{1.03\text{ m}}\\
+  \text{(b)}\quad a_{\text{rad}} &= \omega^2 r = (251\text{ rad/s})^2(1.03\text{ m}) = \eqbox{6.5\times 10^4\text{ m/s}^2 = 6600g}
+\end{align*}
+\end{example}
+
+\begin{example}{9.6}{Moments of inertia for different rotation axes\bk{p.\ 290}}
+\textbf{Problem:} Three point-like disks ($m_A = 0.30\text{ kg}$, $m_B = 0.10\text{ kg}$, $m_C = 0.20\text{ kg}$) are joined by massless struts ($r_{AB} = 0.50\text{ m}$, $r_{AC} = 0.40\text{ m}$, $r_{BC} = 0.30\text{ m}$, forming a right triangle with right angle at $C$). Find: (a) $I_A$ about an axis through $A$ perpendicular to the plane, (b) $I_{BC}$ about line $BC$, and (c) $K_A$ when $\omega = 4.0\text{ rad/s}$ about $A$.
+\tcblower
+\textbf{Solution:}
+\begin{align*}
+  \text{(a)}\quad I_A &= m_B r_{AB}^2 + m_C r_{AC}^2 = (0.10)(0.50)^2 + (0.20)(0.40)^2 = \eqbox{0.057\text{ kg}\cdot\text{m}^2}\\
+  \text{(b)}\quad I_{BC} &= m_A r_{AC}^2 = (0.30\text{ kg})(0.40\text{ m})^2 = \eqbox{0.048\text{ kg}\cdot\text{m}^2}\\
+  \text{(c)}\quad K_A &= \frac{1}{2}I_A\omega^2 = \frac{1}{2}(0.057)(4.0)^2 = \eqbox{0.46\text{ J}}
+\end{align*}
+\end{example}
+
+\begin{example}{9.7}{An unwinding cable I\bk{p.\ 291}}
+\textbf{Problem:} A light cable wrapped around a solid cylinder ($M = 50\text{ kg}$, $R = 0.060\text{ m}$) is pulled with constant force $F = 9.0\text{ N}$ over distance $s = 2.0\text{ m}$ starting from rest. Find the final angular speed $\omega$ and cable speed $v$.
+\tcblower
+\textbf{Solution:}
+\begin{align*}
+  W_{\text{other}} &= Fs = (9.0\text{ N})(2.0\text{ m}) = 18\text{ J}, \qquad I = \frac{1}{2}MR^2 = \frac{1}{2}(50)(0.060)^2 = 0.090\text{ kg}\cdot\text{m}^2\\
+  \omega &= \sqrt{\frac{2W_{\text{other}}}{I}} = \sqrt{\frac{2(18\text{ J})}{0.090\text{ kg}\cdot\text{m}^2}} = \eqbox{20\text{ rad/s}}, \qquad v = R\omega = (0.060)(20) = \eqbox{1.2\text{ m/s}}
+\end{align*}
+\end{example}
+
+\begin{example}{9.8}{An unwinding cable II\bk{p.\ 292}}
+\textbf{Problem:} A block of mass $m$ hangs from a light cable wrapped around a solid cylinder of mass $M$ and radius $R$. Released from rest at height $h$, find the block's speed $v$ after falling distance $h$.
+\tcblower
+\textbf{Solution:} Conservation of mechanical energy $K_1 + U_1 = K_2 + U_2$ with $I = \frac{1}{2}MR^2$ and $\omega = v/R$:
+\begin{equation*}
+  0 + mgh = \frac{1}{2}mv^2 + \frac{1}{2}\!\left(\frac{1}{2}MR^2\right)\!\left(\frac{v}{R}\right)^2 = \frac{1}{2}\!\left(m + \frac{1}{2}M\right)v^2 \implies \eqbox{v = \sqrt{\frac{2gh}{1 + M/2m}}}
+\end{equation*}
+\end{example}
+
+\begin{example}{9.9}{Using the parallel-axis theorem\bk{p.\ 294}}
+\textbf{Problem:} A linkage part of mass $M = 3.6\text{ kg}$ has $I_P = 0.132\text{ kg}\cdot\text{m}^2$ about an axis $d = 0.15\text{ m}$ from its center of mass. Find $I_{\text{cm}}$.
+\tcblower
+\textbf{Solution:}
+\begin{equation*}
+  I_{\text{cm}} = I_P - Md^2 = 0.132 - (3.6)(0.15)^2 = \eqbox{0.051\text{ kg}\cdot\text{m}^2}
+\end{equation*}
+\end{example}
+
+\begin{example}{Ch.\ 9}{Bridging Problem: A Rotating, Uniform Thin Rod\bk{p.\ 298, 307}}
+\textbf{Problem:} A slender uniform rod of mass $M$ and length $L$ pivots about an axis through $O$ at distance $h$ from one end. (a) Integrate to find $I$ about $O$. (b) Starting from rest with constant angular acceleration $\alpha$, find the work $W$ done in time $t$. (c) Find the magnitude of the linear acceleration $a$ of the far end (distance $L-h$) at time $t$.
+\tcblower
+\textbf{Solution:}
+\begin{itemize}
+  \item \textbf{(a)} With $\diff m = \frac{M}{L}\dd x$ from $x = -h$ to $x = L-h$:
+  \begin{equation*}
+    I = \int_{-h}^{L-h} x^2\!\left(\frac{M}{L}\dd x\right) = \frac{M}{3L}\!\left[(L-h)^3 - (-h)^3\right] = \eqbox{\frac{1}{3}M(L^2 - 3Lh + 3h^2)}
+  \end{equation*}
+  \item \textbf{(b)} At time $t$, $\omega = \alpha t$, so $W = K = \frac{1}{2}I\omega^2 = \eqbox{\frac{1}{6}M(L^2 - 3Lh + 3h^2)\alpha^2 t^2}$.
+  \item \textbf{(c)} At $r = L-h$, $a_{\text{tan}} = (L-h)\alpha$ and $a_{\text{rad}} = \omega^2 r = (L-h)\alpha^2 t^2$, so:
+  \begin{equation*}
+    a = \sqrt{a_{\text{tan}}^2 + a_{\text{rad}}^2} = \eqbox{(L-h)\alpha\sqrt{1 + \alpha^2 t^4}}
+  \end{equation*}
+\end{itemize}
+\end{example}
+
+% ============================================================================
+% UNIQUE SOLVED PROBLEMS — MODULE 2
+% ============================================================================
+\section{Unique Solved Problems (Module 2)}
+
+\begin{enumerate}[label=\textbf{Prob.\ 9.\arabic*},leftmargin=4.2em]
+  \setcounter{enumi}{59}
+  \item \textbf{[Prob.\ 9.60, p.\ 303] Non-Uniform Slender Rod ($\diff m/\diff x = \gamma x$):}
+  \begin{itemize}
+    \item \textbf{(a) Total mass:} $M = \int_0^L \gamma x\dd x = \eqbox{\frac{1}{2}\gamma L^2} \implies \gamma = \frac{2M}{L^2}$.
+    \item \textbf{(b) Axis at light end ($x=0$):} $I_{\text{left}} = \int_0^L x^2(\gamma x\dd x) = \frac{1}{4}\gamma L^4 = \eqbox{\frac{1}{2}ML^2}$ (greater than $\frac{1}{3}ML^2$ because more mass is near $x=L$).
+    \item \textbf{(c) Axis at heavy end ($x=L$):} $I_{\text{right}} = \int_0^L (L-x)^2(\gamma x\dd x) = \gamma L^4\!\left(\frac{1}{2} - \frac{2}{3} + \frac{1}{4}\right) = \frac{1}{12}\gamma L^4 = \eqbox{\frac{1}{6}ML^2}$ (smaller than $\frac{1}{3}ML^2$ because more mass is close to the axis at $x=L$).
+  \end{itemize}
+
+  \item \textbf{[Prob.\ 9.78, p.\ 304] Disk with Point Mass on Rim:}
+  Uniform disk ($m, R$, $I_{\text{disk}} = \frac{1}{2}mR^2$) pivoted at center has a point mass $m$ glued to its rim at horizontal level ($y=0$) and is released from rest. When the point mass reaches the bottom ($y = -R$):
+  \begin{equation*}
+    -\Delta U = mgR = \frac{1}{2}(I_{\text{disk}} + I_{\text{point}})\omega^2 = \frac{1}{2}\!\left(\frac{1}{2}mR^2 + mR^2\right)\omega^2 = \frac{3}{4}mR^2\omega^2 \implies \eqbox{\omega = \sqrt{\frac{4g}{3R}}}
+  \end{equation*}
+
+  \item \textbf{[Prob.\ 9.79, p.\ 304] Right-Triangular Plate of Base $b$, Height $h$, and Mass $M$:}
+  Divide the triangle into thin vertical strips parallel to side $h$ at distance $x\in [0,b]$ from side $h$. Strip height is $y(x) = h\!\left(1 - \frac{x}{b}\right)$ and area is $A = \frac{1}{2}bh$, so $\diff m = \frac{M}{A}y(x)\dd x = \frac{2M}{b}\!\left(1 - \frac{x}{b}\right)\dd x$:
+  \begin{equation*}
+    I_h = \int_0^b x^2\dd m = \frac{2M}{b}\int_0^b \left(x^2 - \frac{x^3}{b}\right)\dd x = \frac{2M}{b}\!\left(\frac{b^3}{3} - \frac{b^3}{4}\right) = \eqbox{\frac{1}{6}Mb^2}
+  \end{equation*}
+
+  \item \textbf{[Prob.\ 9.82, p.\ 305] Flexible Rope Unwrapping from a Cylinder:}
+  One turn of rope (mass $m$, length $L = 2\pi R$) unwraps from cylinder ($M, R$, initial $\omega_0$) and hangs vertically tangent to the cylinder. Its center of mass drops by $y_{\text{cm}} = \frac{L}{2} = \pi R$:
+  \begin{align*}
+    \frac{1}{2}\!\left(\frac{1}{2}MR^2 + mR^2\right)\omega_0^2 + mg(\pi R) &= \frac{1}{2}\!\left(\frac{1}{2}MR^2 + mR^2\right)\omega^2\\
+    \eqbox{\omega = \sqrt{\omega_0^2 + \frac{4\pi mg}{(M+2m)R}}}, \qquad v &= R\omega
+  \end{align*}
+
+  \item \textbf{[Prob.\ 9.83, p.\ 305] Block--Pulley--Table System with Friction:}
+  Block $B$ ($m_B$) descends distance $d$, pulling block $A$ ($m_A$, friction $\mu_k$) across a horizontal table over a pulley ($I, R$).
+  \begin{align*}
+    K_1 + U_1 + W_{\text{fric}} = K_2 + U_2 &\implies 0 + m_B gd - \mu_k m_A gd = \frac{1}{2}(m_A + m_B)v^2 + \frac{1}{2}I\!\left(\frac{v}{R}\right)^2\\
+    &\implies \eqbox{v = \sqrt{\frac{2(m_B - \mu_k m_A)gd}{m_A + m_B + I/R^2}}}
+  \end{align*}
+
+  \item \textbf{[Prob.\ 9.91, p.\ 305] Disk with Off-Center Circular Hole:}
+  Full disk has mass $M_{\text{orig}}$ and radius $R$. A hole of radius $r_h = R/4$ (area $= \frac{1}{16}$ of full disk) is punched at distance $d = R/2$ from center $O$. Let $M$ be the mass of the original full disk: $m_{\text{hole}} = \frac{M}{16}$.
+  \begin{itemize}
+    \item \textbf{(a) Axis through original center $O$:} By parallel-axis theorem, $I_{\text{hole},O} = \frac{1}{2}m_{\text{hole}}r_h^2 + m_{\text{hole}}d^2 = \frac{1}{2}\!\left(\frac{M}{16}\right)\!\left(\frac{R}{4}\right)^2 + \left(\frac{M}{16}\right)\!\left(\frac{R}{2}\right)^2 = \frac{9}{512}MR^2$. Subtracting from $I_{\text{full},O} = \frac{1}{2}MR^2$:
+    \begin{equation*}
+      I_O = \frac{1}{2}MR^2 - \frac{9}{512}MR^2 = \eqbox{\frac{247}{512}MR^2 \approx 0.482MR^2}
+    \end{equation*}
+    \item \textbf{(b) Axis through center of hole $C$:} $I_{\text{full},C} = \frac{1}{2}MR^2 + M\!\left(\frac{R}{2}\right)^2 = \frac{3}{4}MR^2$, and $I_{\text{hole},C} = \frac{1}{2}\!\left(\frac{M}{16}\right)\!\left(\frac{R}{4}\right)^2 = \frac{1}{512}MR^2$:
+    \begin{equation*}
+      I_C = \frac{3}{4}MR^2 - \frac{1}{512}MR^2 = \eqbox{\frac{383}{512}MR^2 \approx 0.748MR^2}
+    \end{equation*}
+  \end{itemize}
+
+  \item \textbf{[Prob.\ 9.96, p.\ 306] Thin Rod Bent into a Square of Side $a$ (Total Mass $M$, $L=4a$):}
+  Each side has mass $m_s = M/4$, length $a$, and distance $d = a/2$ from the square's center:
+  \begin{equation*}
+    I = 4\!\left(\frac{1}{12}m_s a^2 + m_s d^2\right) = 4\!\left(\frac{M}{4}\right)\!\left(\frac{a^2}{12} + \frac{a^2}{4}\right) = \eqbox{\frac{1}{3}Ma^2}
+  \end{equation*}
+
+  \item \textbf{[Prob.\ 9.97, p.\ 306] Cylinder with Radially Increasing Density $\rho(r) = \alpha r$:}
+  \begin{itemize}
+    \item \textbf{(a)} Mass $M = \int_0^R (\alpha r)(2\pi r L\dd r) = \frac{2}{3}\pi\alpha L R^3$. Moment of inertia:
+    \begin{equation*}
+      I = \int_0^R r^2(\alpha r)(2\pi r L\dd r) = \frac{2}{5}\pi\alpha L R^5 = \left(\frac{2}{3}\pi\alpha L R^3\right)\!\left(\frac{3}{5}R^2\right) = \eqbox{\frac{3}{5}MR^2 = 0.60MR^2}
+    \end{equation*}
+    \item \textbf{(b)} This is larger than $\frac{1}{2}MR^2$ for a uniform cylinder because more mass is concentrated near the outer rim.
+  \end{itemize}
+
+  \item \textbf{[Challenge Problem 9.100, p.\ 306] Moment of Inertia of a Uniform Solid Cone:}
+  Slice the cone (mass $M$, base radius $R$, height $h$, volume $V = \frac{1}{3}\pi R^2 h$) into thin disks at distance $y\in [0,h]$ from the apex, where disk radius is $r(y) = \frac{R}{h}y$ and $\diff m = \rho\pi r^2\dd y$:
+  \begin{equation*}
+    I = \int_0^h \frac{1}{2}r^2\dd m = \frac{1}{2}\pi\rho\frac{R^4}{h^4}\int_0^h y^4\dd y = \frac{1}{10}\pi\rho R^4 h = \frac{3}{10}\!\left(\frac{1}{3}\pi\rho R^2 h\right)R^2 = \eqbox{\frac{3}{10}MR^2}
+  \end{equation*}
+
+  \item \textbf{[Challenge Problem 9.101, p.\ 306--307] Compact Disc Spiral Track Kinematics:}
+  Given $r(\theta) = r_0 + \beta\theta$ and constant linear speed $v$:
+  \begin{itemize}
+    \item \textbf{(a)} Integrate $\diff s = r(\theta)\dd\theta$ from $0$ to $\theta$:
+    \begin{equation*}
+      s(\theta) = \int_0^\theta (r_0 + \beta\theta')\dd\theta' = \eqbox{r_0\theta + \frac{1}{2}\beta\theta^2}
+    \end{equation*}
+    \item \textbf{(b)} Set $s(\theta) = vt \implies \frac{1}{2}\beta\theta^2 + r_0\theta - vt = 0$. Taking the positive root (since $\theta \ge 0$ for $t \ge 0$):
+    \begin{equation*}
+      \eqbox{\theta(t) = \frac{\sqrt{r_0^2 + 2\beta vt} - r_0}{\beta}}
+    \end{equation*}
+    \item \textbf{(c)} Differentiate $\theta(t)$ with respect to $t$:
+    \begin{equation*}
+      \eqbox{\omega_z(t) = \frac{\diff\theta}{\diff t} = \frac{v}{\sqrt{r_0^2 + 2\beta vt}}, \qquad \alpha_z(t) = \frac{\diff\omega_z}{\diff t} = -\frac{\beta v^2}{(r_0^2 + 2\beta vt)^{3/2}}} \quad(\text{not constant})
+    \end{equation*}
+  \end{itemize}
+\end{enumerate}
+
+% ============================================================================
+% FORMULA SHEET — MODULE 2
+% ============================================================================
+\formulasheet{Module 2 Formula Sheet: Rotation of Rigid Bodies}
+
+\begin{fs}{1. Rotational and Linear Kinematics}
+\begin{align*}
+  s &= r\theta, \qquad \omega_z = \frac{\diff\theta}{\diff t}, \qquad \alpha_z = \frac{\diff\omega_z}{\diff t} = \frac{\diff^2\theta}{\diff t^2} = \omega_z\frac{\diff\omega_z}{\diff\theta}\\
+  \text{Constant }\alpha_z:\quad & \omega_z = \omega_{0z} + \alpha_z t, \qquad \theta - \theta_0 = \omega_{0z}t + \frac{1}{2}\alpha_z t^2 = \frac{1}{2}(\omega_{0z}+\omega_z)t, \qquad \omega_z^2 = \omega_{0z}^2 + 2\alpha_z(\theta-\theta_0)\\
+  \text{Linear--Angular:}\quad & v = r\omega, \qquad a_{\text{tan}} = r\alpha, \qquad a_{\text{rad}} = \frac{v^2}{r} = \omega^2 r, \qquad a = \sqrt{a_{\text{tan}}^2 + a_{\text{rad}}^2}
+\end{align*}
+\end{fs}
+
+\begin{fs}{2. Rotational Energy, Parallel/Perpendicular-Axis Theorems, and Standard Moments of Inertia}
+\begin{align*}
+  I &= \sum_i m_i r_i^2 = \int r^2\dd m, \qquad K_{\text{rot}} = \frac{1}{2}I\omega^2, \qquad U_{\text{grav}} = Mgy_{\text{cm}}, \qquad I_P = I_{\text{cm}} + Md^2, \qquad I_z = I_x + I_y\ (\text{lamina})\\
+  I_{\text{rod,cm}} &= \frac{1}{12}ML^2, \quad I_{\text{rod,end}} = \frac{1}{3}ML^2, \quad I_{\text{cyl}} = \frac{1}{2}M(R_1^2+R_2^2), \quad I_{\text{disk}} = \frac{1}{2}MR^2, \quad I_{\text{hoop}} = MR^2, \quad I_{\text{sphere}} = \frac{2}{5}MR^2, \quad I_{\text{shell}} = \frac{2}{3}MR^2
+\end{align*}
+\end{fs}
+
+% ============================================================================
+% MODULE 3: DYNAMICS OF ROTATIONAL MOTION AND ANGULAR MOMENTUM (PDF 3)
+% ============================================================================
+\part{Dynamics of Rotational Motion and Angular Momentum}
+
+\chapter{Torque, Rotational Dynamics, and Rolling Motion}
+\begin{syll}
+\textbf{Syllabus Coverage (PDF 3):} Young \& Freedman Chapter 10 (Sections 10.1--10.4) and Analytical Mechanics Chapter 7 (Section 7.2.1). Torque vector, rotational analog of Newton's second law, combined translation and rotation (Koenig's theorem), rolling without slipping, and rotational work and power.
+\end{syll}
+
+\section{Torque and Rotational Equilibrium\bk{10.1, 7.2.1}}
+
+\begin{goal}
+Define the torque vector $\bm{\tau} = \vect{r}\times\vect{F}$ and prove that if a body is in translational and rotational equilibrium about one point $O$, the net torque about any other point $O'$ is also zero.
+\end{goal}
+
+\begin{pic}
+\begin{tikzpicture}[scale=0.95]
+  \fill[ink] (0,0) circle (2.5pt) node[below left,font=\small]{$O$};
+  \coordinate (P) at (2.8,0.8);
+  \draw[vec,teal] (0,0) -- (P) node[midway,below,font=\small]{$\vect{r}$};
+  \draw[dashed,slate] (P) -- ++(16.0:1.2);
+  \draw[vec,rose,ultra thick] (P) -- ++(115:1.6) node[above,font=\small]{$\vect{F}$};
+  \draw[dashed,amber,thick] (0,0) -- ($(P)!(0,0)!($(P)+(115:1.6)$)$) node[midway,above left,font=\footnotesize]{$l = r\sin\phi$};
+  \draw[slate] ($(P)+(16.0:0.55)$) arc (16.0:115:0.55) node[midway,right,font=\footnotesize]{$\phi$};
+\end{tikzpicture}
+\figcap{Torque $\bm{\tau} = \vect{r}\times\vect{F}$ has magnitude $\tau = Fl = rF\sin\phi = F_{\text{tan}}r$ and points out of the page.}
+\end{pic}
+
+\step{Step 1: Define torque magnitude and vector.}
+\begin{equation}\label{eq:torque_def}
+  \eqbox{\bm{\tau} = \vect{r}\times\vect{F} \quad (\text{or }\vect{N} = \vect{r}\times\vect{F})}, \qquad \eqbox{\tau = Fl = rF\sin\phi = F_{\text{tan}}r}
+\end{equation}
+
+\step{Step 2: Origin independence of equilibrium (Worked Example 7.1, p.\ 178--179).}
+Let $\vect{r}_{iO}$ be the position vector of force $\vect{F}_i$ from $O$, and let $O'$ be displaced by $\vect{d}$ from $O$, so $\vect{r}_{iO} = \vect{d} + \vect{r}_{iO'}$ ($\vect{r}_{iO'} = \vect{r}_{iO} - \vect{d}$):
+\begin{equation}\label{eq:torque_shift}
+  \sum\vect{N}_{iO'} = \sum \vect{r}_{iO'}\times\vect{F}_i = \sum(\vect{r}_{iO} - \vect{d})\times\vect{F}_i = \sum\vect{N}_{iO} - \vect{d}\times\sum\vect{F}_i
+\end{equation}
+If the body is in equilibrium ($\sum\vect{F}_i = \vect{0}$ and $\sum\vect{N}_{iO} = \vect{0}$), then $\eqbox{\sum\vect{N}_{iO'} = \vect{0}}$ about \textbf{every} point $O'$.
+
+\section{Torque and Angular Acceleration for a Rigid Body\bk{10.2}}
+
+\begin{goal}
+Derive $\sum\tau_z = I\alpha_z$ for a rigid body rotating about a fixed $z$-axis.
+\end{goal}
+
+\step{Step 1: Apply Newton's second law to the tangential motion of particle $i$.}
+Particle $i$ (mass $m_i$, distance $r_i$ from the $z$-axis) has tangential acceleration $a_{i,\text{tan}} = r_i\alpha_z$:
+\begin{align}
+  F_{i,\text{tan}} &= m_i a_{i,\text{tan}} = m_i r_i\alpha_z &&\why{multiply both sides by $r_i$}\\
+  \tau_{iz} &= F_{i,\text{tan}}r_i = m_i r_i^2\alpha_z = I_i\alpha_z &&\why{torque on particle $i$}
+\end{align}
+
+\step{Step 2: Sum over all particles in the rigid body.}
+Internal forces between any pair of particles act along the line joining them with equal lever arms and opposite directions, so internal torques cancel in pairs:
+\begin{equation}\label{eq:tau_Ialpha}
+  \sum\tau_{iz} = \left(\sum_i m_i r_i^2\right)\alpha_z \implies \eqbox{\sum\tau_z = I\alpha_z}
+\end{equation}
+
+\section{Rigid-Body Rotation About a Moving Axis and Rolling Motion\bk{10.3}}
+
+\begin{goal}
+Prove that the total kinetic energy of a translating and rotating rigid body is $K = \frac{1}{2}Mv_{\text{cm}}^2 + \frac{1}{2}I_{\text{cm}}\omega^2$, and derive the dynamics of rolling without slipping.
+\end{goal}
+
+\step{Step 1: Prove Koenig's Kinetic Energy Theorem.}
+Write the velocity of particle $i$ as $\vect{v}_i = \vect{v}_{\text{cm}} + \vect{v}_i'$, where $\vect{v}_i'$ is the velocity relative to the center of mass:
+\begin{align}
+  K &= \sum_i \frac{1}{2}m_i(\vect{v}_{\text{cm}} + \vect{v}_i')\cdot(\vect{v}_{\text{cm}} + \vect{v}_i')\nonumber\\
+    &= \frac{1}{2}\!\left(\sum_i m_i\right)v_{\text{cm}}^2 + \vect{v}_{\text{cm}}\cdot\!\underbrace{\left(\sum_i m_i\vect{v}_i'\right)}_{\vect{0}\text{ (by CM def.)}} + \sum_i \frac{1}{2}m_i v_i'^2 = \eqbox{\frac{1}{2}Mv_{\text{cm}}^2 + \frac{1}{2}I_{\text{cm}}\omega^2}\label{eq:K_koenig}
+\end{align}
+
+\step{Step 2: Rolling without slipping condition and dynamics.}
+For a wheel of radius $R$ rolling without slipping on a stationary surface, the contact point is instantaneously at rest:
+\begin{equation}\label{eq:roll_cond}
+  \eqbox{v_{\text{cm}} = R\omega, \qquad a_{\text{cm}} = R\alpha}
+\end{equation}
+If the axis through the center of mass is a symmetry axis that does not change direction, the coupled equations of motion are:
+\begin{equation}\label{eq:trans_rot_dyn}
+  \eqbox{\sum\vect{F}_{\text{ext}} = M\vect{a}_{\text{cm}}, \qquad \sum\tau_z = I_{\text{cm}}\alpha_z}
+\end{equation}
+
+\step{Step 3: General formulas for a round body ($I_{\text{cm}} = cMR^2$) rolling without slipping down an incline $\beta$.}
+Along the incline: $Mg\sin\beta - f_s = Ma_{\text{cm-}x}$. About the center of mass: $f_s R = I_{\text{cm}}\alpha_z = (cMR^2)\!\left(\frac{a_{\text{cm-}x}}{R}\right) \implies f_s = cMa_{\text{cm-}x}$. Substitute $f_s$ into the force equation:
+\begin{equation}\label{eq:roll_incline}
+  \eqbox{a_{\text{cm-}x} = \frac{g\sin\beta}{1 + c}, \qquad f_s = \frac{c}{1 + c}Mg\sin\beta, \qquad \mu_{s,\min} = \frac{f_s}{Mg\cos\beta} = \frac{c}{1 + c}\tan\beta, \qquad v_{\text{cm}} = \sqrt{\frac{2gh}{1 + c}}}
+\end{equation}
+
+\section{Work and Power in Rotational Motion\bk{10.4}}
+
+\begin{goal}
+Derive the work done by a torque, the rotational work--energy theorem, and rotational power $P = \tau_z\omega_z$.
+\end{goal}
+
+\step{Step 1: Infinitesimal work $\diff W$ of a tangential force.}
+\begin{equation}\label{eq:work_rot}
+  \diff W = F_{\text{tan}}\dd s = F_{\text{tan}}(R\dd\theta) = \tau_z\dd\theta \implies \eqbox{W = \int_{\theta_1}^{\theta_2}\tau_z\dd\theta} \quad(W = \tau_z\Delta\theta\text{ for constant }\tau_z)
+\end{equation}
+
+\step{Step 2: Rotational Work--Energy Theorem.}
+Substitute $\tau_z\dd\theta = (I\alpha_z)\dd\theta = I\frac{\diff\omega_z}{\diff t}\dd\theta = I\omega_z\dd\omega_z$:
+\begin{equation}\label{eq:rot_WE}
+  \eqbox{W_{\text{tot}} = \int_{\omega_1}^{\omega_2} I\omega_z\dd\omega_z = \frac{1}{2}I\omega_2^2 - \frac{1}{2}I\omega_1^2}
+\end{equation}
+
+\step{Step 3: Rotational Power.}
+Divide $\diff W = \tau_z\dd\theta$ by $\diff t$:
+\begin{equation}\label{eq:rot_power}
+  \eqbox{P = \frac{\diff W}{\diff t} = \tau_z\frac{\diff\theta}{\diff t} = \tau_z\omega_z}
+\end{equation}
+
+% ============================================================================
+% CHAPTER 6: ANGULAR MOMENTUM, GYROSCOPES, AND AXIAL VECTORS
+% ============================================================================
+\chapter{Angular Momentum, Gyroscopes, and Axial Vectors}
+\begin{syll}
+\textbf{Syllabus Coverage (PDF 3):} Young \& Freedman Chapter 10 (Sections 10.5--10.7) and Analytical Mechanics Chapter 7 (Sections 7.1--7.8). Angular momentum of a particle and system of particles, center-of-mass decomposition $\vect{L} = \vect{L}_c + \vect{L}'$, BAC--CAB derivation of $\vect{L} = I\bm{\omega}$, conservation of angular momentum, gyroscope precession, and axial vectors (pseudovectors).
+\end{syll}
+
+\section{Angular Momentum of a Particle and a System of Particles\bk{10.5, 7.1--7.3}}
+
+\begin{goal}
+Derive $\frac{\diff\vect{l}}{\diff t} = \bm{\tau}$ for a single particle, $\frac{\diff\vect{L}}{\diff t} = \vect{N}_{\text{tot}}^{(e)}$ for an $N$-particle system, and the center-of-mass decomposition $\vect{L} = \vect{L}_c + \vect{L}'$.
+\end{goal}
+
+\step{Step 1: Single particle angular momentum $\vect{l}$ and its time derivative.}
+\begin{align}
+  \vect{l} &= \vect{r}\times\vect{p} = \vect{r}\times m\vect{v} \qquad (l = mvr\sin\phi = mvl)\label{eq:l_particle}\\
+  \frac{\diff\vect{l}}{\diff t} &= \frac{\diff\vect{r}}{\diff t}\times m\vect{v} + \vect{r}\times m\frac{\diff\vect{v}}{\diff t} = \underbrace{\vect{v}\times m\vect{v}}_{\vect{0}} + \vect{r}\times\vect{F} = \eqbox{\bm{\tau} = \vect{N}}\label{eq:dl_dt}
+\end{align}
+
+\step{Step 2: System of $N$ particles and pairwise cancellation of internal torques (Sec.\ 7.3).}
+For particle $i$, $\frac{\diff\vect{l}_i}{\diff t} = \vect{r}_i\times\vect{F}_i^{(e)} + \sum_{j\neq i}\vect{r}_i\times\vect{F}_{ij}$. Summing over all $i = 1,\dots,N$ with $\vect{L} = \sum_i\vect{l}_i$:
+\begin{equation}
+  \frac{\diff\vect{L}}{\diff t} = \sum_i \vect{r}_i\times\vect{F}_i^{(e)} + \sum_i\sum_{j\neq i}\vect{r}_i\times\vect{F}_{ij}
+\end{equation}
+For each pair $(i,j)$, Newton's third law gives $\vect{F}_{ji} = -\vect{F}_{ij}$, so the pair contributes:
+\begin{equation}
+  \vect{r}_i\times\vect{F}_{ij} + \vect{r}_j\times\vect{F}_{ji} = (\vect{r}_i - \vect{r}_j)\times\vect{F}_{ij} = \vect{r}_{ij}\times\vect{F}_{ij} = \vect{0}
+\end{equation}
+because central internal forces act along the line $\vect{r}_{ij}$ joining the particles ($\vect{r}_{ij}\parallel\vect{F}_{ij}$). Therefore:
+\begin{equation}\label{eq:dL_dt_sys}
+  \eqbox{\frac{\diff\vect{L}}{\diff t} = \sum\bm{\tau}_{\text{ext}} = \vect{N}_{\text{tot}}^{(e)}} \implies \text{If }\vect{N}_{\text{tot}}^{(e)} = \vect{0},\text{ then }\eqbox{\vect{L} = \text{constant}}
+\end{equation}
+
+\step{Step 3: Angular Momentum Relative to the Center of Mass (Sec.\ 7.3.1, p.\ 184).}
+Write $\vect{r}_i = \vect{r}_c + \vect{r}_i'$ and $\dot{\vect{r}}_i = \dot{\vect{r}}_c + \dot{\vect{r}}_i'$, where $\sum_i m_i\vect{r}_i' = \vect{0}$ and $\sum_i m_i\dot{\vect{r}}_i' = \vect{0}$:
+\begin{align}
+  \vect{L} &= \sum_i m_i(\vect{r}_c + \vect{r}_i')\times(\dot{\vect{r}}_c + \dot{\vect{r}}_i')\nonumber\\
+           &= \left(\sum_i m_i\right)\vect{r}_c\times\dot{\vect{r}}_c + \vect{r}_c\times\!\underbrace{\left(\sum_i m_i\dot{\vect{r}}_i'\right)}_{\vect{0}} - \dot{\vect{r}}_c\times\!\underbrace{\left(\sum_i m_i\vect{r}_i'\right)}_{\vect{0}} + \sum_i m_i(\vect{r}_i'\times\dot{\vect{r}}_i')\nonumber\\
+  \vect{L} &= \eqbox{M(\vect{r}_c\times\dot{\vect{r}}_c) + \sum_i m_i(\vect{r}_i'\times\dot{\vect{r}}_i') = \vect{L}_c + \vect{L}'}\label{eq:L_cm_decomp}
+\end{align}
+
+\section{Angular Momentum of a Rigid Body (BAC--CAB Derivation)\bk{10.5, 7.4--7.5}}
+
+\begin{goal}
+Derive $\vect{l}_i = m_i r_i^2\omega\sin^2\theta_i\khat - m_i r_i^2\omega\sin\theta_i\cos\theta_i\uv{e}_i$ using the BAC--CAB identity, and show that $\vect{L} = I\bm{\omega}$ for a symmetric rigid body.
+\end{goal}
+
+\begin{pic}
+\begin{tikzpicture}[scale=0.95]
+  \draw[ax] (0,-1.4) -- (0,2.4) node[above,font=\small]{$\bm{\omega} = \omega\khat$};
+  \draw[thick,teal,dashed] (0,1.2) ellipse (1.6cm and 0.38cm);
+  \coordinate (M1) at (1.6,1.2);
+  \coordinate (M2) at (-1.6,1.2);
+  \fill[teal] (M1) circle (3pt) node[right,font=\footnotesize]{$m_i$};
+  \fill[amber] (M2) circle (3pt) node[left,font=\footnotesize]{$m_j = m_i$};
+  \draw[vec,ink] (0,0) -- (M1) node[midway,below right,font=\footnotesize]{$\vect{r}_i$};
+  \draw[vec,ink] (0,0) -- (M2) node[midway,below left,font=\footnotesize]{$\vect{r}_j$};
+  \draw[vec,rose,thick] (0,0) -- (-0.75,1.0) node[left,font=\footnotesize]{$\vect{l}_i$};
+  \draw[vec,rose,thick] (0,0) -- (0.75,1.0) node[right,font=\footnotesize]{$\vect{l}_j$};
+  \draw[vec,plum,ultra thick] (0,0) -- (0,2.0) node[right,font=\footnotesize]{$\vect{l}_i + \vect{l}_j$};
+  \draw[slate] (0,0.55) arc (90:36.9:0.55) node[midway,above right,font=\scriptsize]{$\theta_i$};
+\end{tikzpicture}
+\figcap{For a symmetric rigid body, the radial components of $\vect{l}_i$ and $\vect{l}_j$ cancel, leaving $\vect{L} = I\bm{\omega}$ along the rotation axis.}
+\end{pic}
+
+\step{Step 1: Expand $\vect{l}_i = m_i\vect{r}_i\times(\bm{\omega}\times\vect{r}_i)$ using the BAC--CAB rule (\tref{tool:cross}) (Exercise 7.8, p.\ 186--187).}
+Since $\vect{v}_i = \bm{\omega}\times\vect{r}_{i\perp} = \bm{\omega}\times\vect{r}_i$:
+\begin{equation}\label{eq:li_baccab}
+  \vect{l}_i = m_i\vect{r}_i\times(\bm{\omega}\times\vect{r}_i) = m_i\!\left[r_i^2\bm{\omega} - (\vect{r}_i\cdot\bm{\omega})\vect{r}_i\right]
+\end{equation}
+
+\step{Step 2: Resolve $\vect{r}_i$ along $\khat$ and perpendicular unit vector $\uv{e}_i$.}
+Let $\bm{\omega} = \omega\khat$ and $\vect{r}_i = r_i\cos\theta_i\khat + r_i\sin\theta_i\uv{e}_i$, so $\vect{r}_i\cdot\bm{\omega} = r_i\omega\cos\theta_i$. Substitute into Eq.\ \eqref{eq:li_baccab}:
+\begin{align}
+  \vect{l}_i &= m_i\!\left[r_i^2\omega\khat - (r_i\omega\cos\theta_i)(r_i\cos\theta_i\khat + r_i\sin\theta_i\uv{e}_i)\right]\nonumber\\
+             &= m_i r_i^2\omega(1 - \cos^2\theta_i)\khat - m_i r_i^2\omega\sin\theta_i\cos\theta_i\uv{e}_i\nonumber\\
+  \vect{l}_i &= \eqbox{m_i r_i^2\omega\sin^2\theta_i\khat - m_i r_i^2\omega\sin\theta_i\cos\theta_i\uv{e}_i}\label{eq:li_components}
+\end{align}
+
+\step{Step 3: Sum over all particles for a symmetric rigid body.}
+For a body symmetric about the rotation axis, every particle $i$ at $+\uv{e}_i$ has an identical partner $j$ at $-\uv{e}_i$, so the $\uv{e}_i$ terms cancel in pairs. With $r_{i\perp} = r_i\sin\theta_i$:
+\begin{equation}\label{eq:L_Iomega}
+  \vect{L} = \left(\sum_i m_i r_i^2\sin^2\theta_i\right)\omega\khat = \left(\sum_i m_i r_{i\perp}^2\right)\omega\khat \implies \eqbox{\vect{L} = I\bm{\omega}}
+\end{equation}
+When $I$ can vary with zero net external torque ($\sum\tau_{\text{ext},z} = 0$), angular momentum is conserved:
+\begin{equation}\label{eq:L_conserv}
+  \eqbox{I_1\omega_{1z} = I_2\omega_{2z}}
+\end{equation}
+
+\section{Gyroscopes and Precession\bk{10.7, 7.6}}
+
+\begin{goal}
+Derive the precession angular speed $\Omega_p = \frac{Mgr}{I\omega}$ for both a horizontal gyroscope and a gyroscope tilted at an arbitrary angle $\theta$ to the vertical.
+\end{goal}
+
+\begin{pic}
+\begin{tikzpicture}[scale=0.95]
+  % Left: Side view tilted at angle theta
+  \draw[ax] (0,0) -- (0,2.5) node[above,font=\footnotesize]{$z$};
+  \draw[vec,teal,ultra thick] (0,0) -- (1.4,2.0) node[right,font=\footnotesize]{$\vect{L}$};
+  \draw[dashed,slate] (0,2.0) -- (1.4,2.0) node[midway,above,font=\scriptsize]{$L\sin\theta$};
+  \draw[slate] (0,0.7) arc (90:55:0.7) node[midway,above right,font=\scriptsize]{$\theta$};
+  \node[font=\footnotesize,slate] at (0.7,-0.4) {Side view};
+  % Right: Top view of horizontal circle
+  \begin{scope}[xshift=4.8cm,yshift=1.1cm]
+    \draw[thick,teal,dashed] (0,0) circle (1.2cm);
+    \draw[vec,teal,thick] (0,0) -- (-10:1.2) node[midway,below,font=\scriptsize]{$L\sin\theta$};
+    \draw[vec,teal,thick] (0,0) -- (25:1.2);
+    \draw[vec,rose,thick] (-10:1.2) -- (25:1.2) node[midway,right,font=\scriptsize]{$\Delta\vect{L} = \bm{\tau}\dd t$};
+    \draw[slate] (-10:0.45) arc (-10:25:0.45) node[midway,right,font=\scriptsize]{$\Delta\phi$};
+    \node[font=\footnotesize,slate] at (0,-1.5) {Top view};
+  \end{scope}
+\end{tikzpicture}
+\figcap{Precession of a gyroscope tilted at angle $\theta$ from the vertical: $\Delta L = (L\sin\theta)\Delta\phi$.}
+\end{pic}
+
+\step{Step 1: Torque of gravity about the pivot $Q$.}
+Let the center of mass be at distance $r$ (or $R$) along the axle at angle $\theta$ from the vertical $z$-axis:
+\begin{equation}
+  \bm{\tau} = \vect{r}\times M\vect{g} \implies \tau = Mgr\sin\theta = wr\sin\theta \quad(\text{directed horizontally in the }\uv{\phi}\text{-direction})
+\end{equation}
+
+\step{Step 2: Relate $\diff L = \tau\dd t$ to the precession angle $\diff\phi$.}
+The horizontal radius of the circle traced by the tip of $\vect{L}$ is $L_{\text{horiz}} = L\sin\theta$. In time $\diff t$, the tip of $\vect{L}$ sweeps through azimuthal angle $\diff\phi$:
+\begin{align}
+  \diff L &= (L\sin\theta)\dd\phi \implies \frac{\diff L}{\diff t} = L\sin\theta\frac{\diff\phi}{\diff t} = L\sin\theta\,\Omega_p\\
+  Mgr\sin\theta &= (I\omega)\sin\theta\,\Omega_p \implies \eqbox{\Omega_p = \frac{\diff\phi}{\diff t} = \frac{Mgr}{I\omega} = \frac{wr}{I\omega}}\label{eq:precession}
+\end{align}
+Notice that $\sin\theta$ cancels: $\Omega_p$ is independent of the tilt angle $\theta$ (for fast spin $\omega \gg \Omega_p$).
+
+\section{Polar Vectors versus Axial Vectors (Pseudovectors)\bk{7.7}}
+
+\begin{goal}
+Distinguish polar (true) vectors from axial vectors (pseudovectors) under an improper coordinate transformation (mirror reflection / parity inversion).
+\end{goal}
+
+\begin{itemize}
+  \item \textbf{Polar (True) Vectors ($\vect{r}, \vect{v}, \vect{a}, \vect{p}, \vect{F}$):} Under space inversion ($\vect{r} \to -\vect{r}$), all polar vectors reverse sign: $\vect{v} \to -\vect{v}$, $\vect{p} \to -\vect{p}$, $\vect{F} \to -\vect{F}$.
+  \item \textbf{Axial Vectors / Pseudovectors ($\bm{\omega}, \vect{l} = \vect{r}\times\vect{p}, \bm{\tau} = \vect{r}\times\vect{F}$):} Because an axial vector is the cross product of two polar vectors, under inversion ($\vect{r}\to -\vect{r}$, $\vect{p}\to -\vect{p}$) it \textbf{does not} change sign:
+  \begin{equation}\label{eq:axial_parity}
+    \eqbox{\vect{l}' = (-\vect{r})\times(-\vect{p}) = +(\vect{r}\times\vect{p}) = +\vect{l}, \qquad \bm{\tau}' = (-\vect{r})\times(-\vect{F}) = +\bm{\tau}}
+  \end{equation}
+\end{itemize}
+
+% ============================================================================
+% SOLVED BOOK EXAMPLES — MODULE 3
+% ============================================================================
+\section{Solved Book Examples (Module 3)}
+
+\begin{example}{10.1}{Applying a torque\bk{p.\ 310}}
+\textbf{Problem:} A plumber applies a downward force $F = 900\text{ N}$ at the end of a wrench handle of length $r = 0.80\text{ m}$ inclined at $19^\circ$ above the horizontal ($\phi = 90^\circ + 19^\circ = 109^\circ$). Find the magnitude and direction of the torque about the center of the fitting $O$.
+\tcblower
+\textbf{Solution:}
+\begin{align*}
+  l &= r\sin 109^\circ = (0.80\text{ m})\cos 19^\circ = 0.76\text{ m}\\
+  \tau &= Fl = rF\sin 109^\circ = (0.80\text{ m})(900\text{ N})\sin 109^\circ = \eqbox{680\text{ N}\cdot\text{m}\text{ (out of page, counterclockwise)}}
+\end{align*}
+\end{example}
+
+\begin{example}{10.2}{An unwinding cable I (Dynamics)\bk{p.\ 313}}
+\textbf{Problem:} For the solid cylinder ($M = 50\text{ kg}$, $R = 0.060\text{ m}$) pulled with force $F = 9.0\text{ N}$ in Example 9.7, find the angular acceleration $\alpha_z$ of the cylinder and the linear acceleration $a_{\text{tan}}$ of the cable.
+\tcblower
+\textbf{Solution:}
+\begin{align*}
+  \alpha_z &= \frac{\tau_z}{I} = \frac{FR}{\frac{1}{2}MR^2} = \frac{2F}{MR} = \frac{2(9.0\text{ N})}{(50\text{ kg})(0.060\text{ m})} = \eqbox{6.0\text{ rad/s}^2}\\
+  a_{\text{tan}} &= R\alpha_z = (0.060\text{ m})(6.0\text{ rad/s}^2) = \eqbox{0.36\text{ m/s}^2}
+\end{align*}
+\end{example}
+
+\begin{example}{10.3}{An unwinding cable II (Dynamics)\bk{p.\ 314}}
+\textbf{Problem:} For the falling block ($m$) and solid cylinder ($M, R$) of Example 9.8, find the downward acceleration $a_y$ of the block and the cable tension $T$.
+\tcblower
+\textbf{Solution:} For the block: $mg - T = ma_y$. For the cylinder: $RT = I\alpha_z = \left(\frac{1}{2}MR^2\right)\!\left(\frac{a_y}{R}\right) \implies T = \frac{1}{2}Ma_y$. Substitute $T$ into the block equation:
+\begin{equation*}
+  mg - \frac{1}{2}Ma_y = ma_y \implies \eqbox{a_y = \frac{g}{1 + M/2m}}, \qquad \eqbox{T = \frac{1}{2}Ma_y = \frac{mg}{1 + 2m/M}}
+\end{equation*}
+\end{example}
+
+\begin{example}{10.4}{Speed of a primitive yo-yo\bk{p.\ 317}}
+\textbf{Problem:} A solid cylinder ($M, R$, $I_{\text{cm}} = \frac{1}{2}MR^2$) unwinds from rest down a massless string held fixed at the top. Find $v_{\text{cm}}$ after descending distance $h$.
+\tcblower
+\textbf{Solution:} Using Eq.\ \eqref{eq:K_koenig} with $\omega = v_{\text{cm}}/R$:
+\begin{equation*}
+  K_2 = \frac{1}{2}Mv_{\text{cm}}^2 + \frac{1}{2}\!\left(\frac{1}{2}MR^2\right)\!\left(\frac{v_{\text{cm}}}{R}\right)^2 = \frac{3}{4}Mv_{\text{cm}}^2 = Mgh \implies \eqbox{v_{\text{cm}} = \sqrt{\frac{4}{3}gh}}
+\end{equation*}
+\end{example}
+
+\begin{example}{10.5}{Race of the rolling bodies\bk{p.\ 317}}
+\textbf{Problem:} Various round bodies with $I_{\text{cm}} = cMR^2$ roll without slipping from rest down an incline of vertical height $h$. Find $v_{\text{cm}}$ at the bottom and rank the bodies.
+\tcblower
+\textbf{Solution:} From energy conservation $Mgh = \frac{1}{2}Mv_{\text{cm}}^2 + \frac{1}{2}(cMR^2)(v_{\text{cm}}/R)^2 = \frac{1}{2}(1+c)Mv_{\text{cm}}^2$:
+\begin{equation*}
+  \eqbox{v_{\text{cm}} = \sqrt{\frac{2gh}{1+c}}} \implies \text{Order of finish: Solid sphere }\left(c=\frac{2}{5}\right),\text{ Solid cylinder }\left(c=\frac{1}{2}\right),\text{ Hollow sphere }\left(c=\frac{2}{3}\right),\text{ Hoop }(c=1).
+\end{equation*}
+\end{example}
+
+\begin{example}{10.6}{Acceleration of a primitive yo-yo\bk{p.\ 319}}
+\textbf{Problem:} Find the downward acceleration $a_{\text{cm-}y}$ and string tension $T$ for the yo-yo of Example 10.4.
+\tcblower
+\textbf{Solution:} Translation: $Mg - T = Ma_{\text{cm-}y}$. Rotation: $TR = \left(\frac{1}{2}MR^2\right)\!\left(\frac{a_{\text{cm-}y}}{R}\right) \implies T = \frac{1}{2}Ma_{\text{cm-}y}$:
+\begin{equation*}
+  Mg - \frac{1}{2}Ma_{\text{cm-}y} = Ma_{\text{cm-}y} \implies \eqbox{a_{\text{cm-}y} = \frac{2}{3}g}, \qquad \eqbox{T = \frac{1}{3}Mg}
+\end{equation*}
+\end{example}
+
+\begin{example}{10.7}{Acceleration of a rolling sphere\bk{p.\ 319}}
+\textbf{Problem:} A uniform solid sphere ($c = 2/5$) rolls without slipping down a ramp inclined at angle $\beta$. Find $a_{\text{cm-}x}$ and the static friction force $f$.
+\tcblower
+\textbf{Solution:} Using Eq.\ \eqref{eq:roll_incline} with $c = 2/5$:
+\begin{equation*}
+  \eqbox{a_{\text{cm-}x} = \frac{g\sin\beta}{1 + 2/5} = \frac{5}{7}g\sin\beta}, \qquad \eqbox{f = \frac{2/5}{1 + 2/5}Mg\sin\beta = \frac{2}{7}Mg\sin\beta}
+\end{equation*}
+\end{example}
+
+\begin{example}{10.8}{Calculating power from torque\bk{p.\ 322}}
+\textbf{Problem:} A motor applies constant torque $\tau_z = 10\text{ N}\cdot\text{m}$ to a grindstone ($I = 2.0\text{ kg}\cdot\text{m}^2$) starting from rest for $t = 8.0\text{ s}$. Find $W$, $K$, and $P_{\text{av}}$.
+\tcblower
+\textbf{Solution:}
+\begin{align*}
+  \alpha_z &= \frac{\tau_z}{I} = \frac{10}{2.0} = 5.0\text{ rad/s}^2, \qquad \Delta\theta = \frac{1}{2}\alpha_z t^2 = \frac{1}{2}(5.0)(8.0)^2 = 160\text{ rad}, \qquad \omega_z = \alpha_z t = 40\text{ rad/s}\\
+  W &= \tau_z\Delta\theta = (10)(160) = \eqbox{1600\text{ J}} = K, \qquad P_{\text{av}} = \frac{W}{\Delta t} = \frac{1600\text{ J}}{8.0\text{ s}} = \eqbox{200\text{ W}}
+\end{align*}
+\end{example}
+
+\begin{example}{10.9}{Angular momentum and torque\bk{p.\ 324}}
+\textbf{Problem:} A turbine fan ($I = 2.5\text{ kg}\cdot\text{m}^2$) has $\omega_z = (40\text{ rad/s}^3)t^2$. Find (a) $L_z(t)$ and $L_z(3.0\text{ s})$, and (b) $\tau_z(t)$ and $\tau_z(3.0\text{ s})$.
+\tcblower
+\textbf{Solution:}
+\begin{align*}
+  \text{(a)}\quad L_z(t) &= I\omega_z = (2.5)(40)t^2 = \eqbox{(100\text{ kg}\cdot\text{m}^2/\text{s}^3)t^2}, \qquad L_z(3.0\text{ s}) = \eqbox{900\text{ kg}\cdot\text{m}^2/\text{s}}\\
+  \text{(b)}\quad \tau_z(t) &= \frac{\diff L_z}{\diff t} = \eqbox{(200\text{ kg}\cdot\text{m}^2/\text{s}^3)t}, \qquad \tau_z(3.0\text{ s}) = \eqbox{600\text{ N}\cdot\text{m}}
+\end{align*}
+\end{example}
+
+\begin{example}{10.10}{Anyone can be a ballerina\bk{p.\ 326}}
+\textbf{Problem:} A professor on a frictionless turntable ($\omega_{1z} = 1\text{ rev}/2.0\text{ s} = 0.50\text{ rev/s} = 3.14\text{ rad/s}$) holds two $5.0\text{-kg}$ dumbbells at $r_1 = 1.0\text{ m}$ ($I_{\text{prof},1} = 3.0\text{ kg}\cdot\text{m}^2$) and pulls them in to $r_2 = 0.20\text{ m}$ ($I_{\text{prof},2} = 2.2\text{ kg}\cdot\text{m}^2$). Find $\omega_{2z}$, $K_1$, and $K_2$.
+\tcblower
+\textbf{Solution:}
+\begin{align*}
+  I_1 &= 3.0 + 2(5.0)(1.0)^2 = 13\text{ kg}\cdot\text{m}^2, \qquad I_2 = 2.2 + 2(5.0)(0.20)^2 = 2.6\text{ kg}\cdot\text{m}^2\\
+  \omega_{2z} &= \frac{I_1}{I_2}\omega_{1z} = \frac{13}{2.6}(0.50\text{ rev/s}) = \eqbox{2.5\text{ rev/s} = 15.7\text{ rad/s}}\\
+  K_1 &= \frac{1}{2}(13)(3.14)^2 = \eqbox{64\text{ J}}, \qquad K_2 = \frac{1}{2}(2.6)(15.7)^2 = \eqbox{320\text{ J}}
+\end{align*}
+\end{example}
+
+\begin{example}{10.11}{A rotational ``collision''\bk{p.\ 326}}
+\textbf{Problem:} Two disks with moments of inertia $I_A, I_B$ and initial angular speeds $\omega_A, \omega_B$ are pushed together along their common axis until they reach a common angular speed $\omega$. Find $\omega$.
+\tcblower
+\textbf{Solution:} Conservation of angular momentum gives:
+\begin{equation*}
+  I_A\omega_A + I_B\omega_B = (I_A + I_B)\omega \implies \eqbox{\omega = \frac{I_A\omega_A + I_B\omega_B}{I_A + I_B}}
+\end{equation*}
+\end{example}
+
+\begin{example}{10.12}{Angular momentum in a crime bust\bk{p.\ 327}}
+\textbf{Problem:} A bullet ($m = 0.010\text{ kg}$, $v = 400\text{ m/s}$) strikes the center ($l = 0.50\text{ m}$) of a door ($M = 15\text{ kg}$, width $d = 1.00\text{ m}$) perpendicular to the door and embeds in it. Find $\omega$, $K_1$, and $K_2$.
+\tcblower
+\textbf{Solution:}
+\begin{align*}
+  L &= mvl = (0.010)(400)(0.50) = 2.0\text{ kg}\cdot\text{m}^2/\text{s}, \qquad I = \frac{1}{3}Md^2 + ml^2 = 5.0 + 0.0025 = 5.0025\text{ kg}\cdot\text{m}^2\\
+  \omega &= \frac{L}{I} = \frac{2.0}{5.0025} = \eqbox{0.40\text{ rad/s}}, \qquad K_1 = \frac{1}{2}mv^2 = \eqbox{800\text{ J}}, \qquad K_2 = \frac{1}{2}I\omega^2 = \eqbox{0.40\text{ J}}
+\end{align*}
+\end{example}
+
+\begin{example}{10.13}{A precessing gyroscope\bk{p.\ 330}}
+\textbf{Problem:} A solid cylindrical gyroscope wheel ($R = 3.0\text{ cm} = 0.030\text{ m}$, pivot distance $r = 2.0\text{ cm} = 0.020\text{ m}$) has spin vector $\bm{\omega}$ pointing left as seen from above and takes $4.0\text{ s}$ per revolution of precession ($\Omega = 2\pi/4.0 = 1.57\text{ rad/s}$). Find (a) the sense of precession and (b) spin angular speed $\omega$.
+\tcblower
+\textbf{Solution:}
+\begin{itemize}
+  \item \textbf{(a)} $\vect{r}$ points left and $\vect{w}$ points into the page, so $\bm{\tau} = \vect{r}\times\vect{w}$ points toward the top of the page. Thus $\vect{L}$ turns \eqbox{\text{clockwise}} as seen from above.
+  \item \textbf{(b)} With $I = \frac{1}{2}mR^2$, Eq.\ \eqref{eq:precession} gives:
+  \begin{equation*}
+    \omega = \frac{mgr}{\left(\frac{1}{2}mR^2\right)\Omega} = \frac{2gr}{R^2\Omega} = \frac{2(9.8)(0.020)}{(0.030)^2(1.57)} = \eqbox{280\text{ rad/s} = 2600\text{ rev/min}}
+  \end{equation*}
+\end{itemize}
+\end{example}
+
+\begin{example}{Ch.\ 10}{Bridging Problem: Billiard Physics\bk{p.\ 332}}
+\textbf{Problem:} A uniform solid sphere ($m, R$, $I_{\text{cm}} = \frac{2}{5}mR^2$) is struck horizontally with force $F$ for a short time $\Delta t$ at height $h$ above its center. (a) For what height $h$ does the ball roll without slipping immediately after the hit? (b) If struck dead center ($h=0$) giving initial speed $v_0 = F\Delta t/m$ and $\omega_0 = 0$, find the final center-of-mass speed $v_{\text{cm}}$ when rolling without slipping begins.
+\tcblower
+\textbf{Solution:}
+\begin{itemize}
+  \item \textbf{(a)} Linear impulse: $F\Delta t = mv_{\text{cm}}$. Angular impulse about cm: $(Fh)\Delta t = I_{\text{cm}}\omega = \left(\frac{2}{5}mR^2\right)\!\left(\frac{v_{\text{cm}}}{R}\right) = \frac{2}{5}mRv_{\text{cm}}$. Dividing the two equations gives:
+  \begin{equation*}
+    \eqbox{h = \frac{2}{5}R}
+  \end{equation*}
+  \item \textbf{(b)} When hit at $h=0$, $v_{\text{cm}}(0) = v_0$ and $\omega(0) = 0$. While skidding, kinetic friction $f_k = \mu_k mg$ decelerates translation ($a_{\text{cm}} = -\mu_k g$) and accelerates rotation ($\alpha = \frac{f_k R}{\frac{2}{5}mR^2} = \frac{5\mu_k g}{2R}$):
+  \begin{align*}
+    v_{\text{cm}}(t) &= v_0 - \mu_k gt, \qquad R\omega(t) = \frac{5}{2}\mu_k gt
+  \end{align*}
+  Rolling without slipping starts when $v_{\text{cm}}(t) = R\omega(t) \implies v_0 - \mu_k gt = \frac{5}{2}\mu_k gt \implies \mu_k gt = \frac{2}{7}v_0$. Thus:
+  \begin{equation*}
+    \eqbox{v_{\text{cm,final}} = v_0 - \frac{2}{7}v_0 = \frac{5}{7}v_0}
+  \end{equation*}
+\end{itemize}
+\end{example}
+
+\begin{example}{7.2}{Puck on a String Pulled Through a Hole\bk{Analytical Mechanics p.\ 183}}
+\textbf{Problem:} A puck of mass $m$ revolves on a frictionless table at initial radius $d_0$ and angular velocity $\omega_0$. The string is pulled from below to reduce the radius to $d_f = d_0/2$. Find: (a) $\Delta l$, (b) $\omega_f$, (c) $\Delta T$, and (d) the work $W$ done in pulling the string.
+\tcblower
+\textbf{Solution:}
+\begin{itemize}
+  \item \textbf{(a)} Since string tension is central ($\vect{r}\parallel\vect{F}$), $\vect{N} = \vect{r}\times\vect{F} = \vect{0}$, so $\eqbox{\Delta l = 0}$.
+  \item \textbf{(b)} $md_f^2\omega_f = md_0^2\omega_0 \implies \omega_f = \left(\frac{d_0}{d_0/2}\right)^2\omega_0 = \eqbox{4\omega_0}$.
+  \item \textbf{(c)--(d)} With $T_0 = \frac{1}{2}md_0^2\omega_0^2$, $T_f = \frac{1}{2}m(d_0/2)^2(4\omega_0)^2 = 4T_0$, so $\eqbox{\Delta T = W = 3T_0 = \frac{3}{2}md_0^2\omega_0^2}$.
+\end{itemize}
+\end{example}
+
+% ============================================================================
+% UNIQUE SOLVED PROBLEMS — MODULE 3
+% ============================================================================
+\section{Unique Solved Problems (Module 3)}
+
+\subsubsection{Part A: Analytical Mechanics Chapter 7 Exercises (with Complete Derivations)}
+
+\begin{enumerate}[label=\textbf{Ex.\ 7.\arabic*},leftmargin=3.5em]
+  \item \textbf{(Automobile Angular Momentum):} $m = 1000\text{ kg}$, $v = 100\text{ km/h} = 27.78\text{ m/s}$, perpendicular distance $b = 20\text{ m}$:
+  \begin{equation*}
+    l = mvb = (1000\text{ kg})(27.78\text{ m/s})(20\text{ m}) = \eqbox{5.56\times 10^5\text{ kg}\cdot\text{m}^2/\text{s}} \quad(\text{downward for one side, upward for the other})
+  \end{equation*}
+
+  \item \textbf{(Second Derivative of $\vect{l}$):} Particle ($m$) at origin at $t=0$ with $\vect{v} = v_0\ihat$ under constant force $\vect{F} = f_0\jhat$:
+  \begin{equation*}
+    \frac{\diff\vect{l}}{\diff t} = \vect{r}\times\vect{F} \implies \frac{\diff^2\vect{l}}{\diff t^2} = \frac{\diff\vect{r}}{\diff t}\times\vect{F} + \vect{r}\times\underbrace{\frac{\diff\vect{F}}{\diff t}}_{\vect{0}} = \vect{v}\times\vect{F}\Big|_{t=0} = (v_0\ihat)\times(f_0\jhat) = \eqbox{v_0 f_0\khat}
+  \end{equation*}
+
+  \item \textbf{(Girl Jumping onto Merry-Go-Round):} Girl ($m = 20\text{ kg}$, $v = 3\text{ m/s}$) jumps tangentially onto rim of stationary disk ($M = 50\text{ kg}$, $R = 1\text{ m}$, $I_{\text{disk}} = \frac{1}{2}MR^2 = 25\text{ kg}\cdot\text{m}^2$):
+  \begin{equation*}
+    L_i = mvR = (20)(3)(1) = 60\text{ kg}\cdot\text{m}^2/\text{s} = (I_{\text{disk}} + mR^2)\omega_f = (25 + 20)\omega_f \implies \eqbox{\omega_f = \frac{60}{45} = \frac{4}{3}\text{ rad/s}}
+  \end{equation*}
+
+  \item \textbf{(Atwood's Machine in CGS Units):} $m_1 = 500\text{ g}$, $m_2 = 700\text{ g}$, pulley $r = 2\text{ cm}$, $I = 100\text{ g}\cdot\text{cm}^2$, $g = 980\text{ cm/s}^2$.
+  \begin{itemize}
+    \item Equations of motion: $m_2 g - T_2 = m_2 a$, $T_1 - m_1 g = m_1 a$, and $\frac{\diff L}{\diff t} = (T_2 - T_1)r = I\frac{a}{r}$.
+    \item Adding the three equations gives $(m_2 - m_1)g = \left(m_1 + m_2 + \frac{I}{r^2}\right)a \implies a = \frac{200(980)}{500 + 700 + 100/4} = \frac{196,000}{1225} = 160\text{ cm/s}^2$.
+    \item Rate of change of pulley angular momentum: $\frac{\diff L}{\diff t} = I\alpha = I\frac{a}{r} = 100\!\left(\frac{160}{2}\right) = \eqbox{8000\text{ dyne}\cdot\text{cm}}$.
+  \end{itemize}
+
+  \item \textbf{(Spinning Top Torque):} Top of mass $M$, CM at distance $R$ from tip, tilted at angle $\theta$ from vertical:
+  \begin{equation*}
+    \vect{N} = \vect{R}\times M\vect{g} \implies \eqbox{N = RMg\sin\theta} \quad(\text{horizontal, perpendicular to }\bm{\omega}\text{ and }\vect{g})
+  \end{equation*}
+
+  \item \textbf{(Dumbbell Mass Flying Off):} Two point masses $M$ on massless rod of length $d$ rotate about CM at $\omega_0$. Each mass has speed $v_0 = \frac{d}{2}\omega_0$. When one mass comes loose, no force acts on the remaining mass, so it moves in a straight line at constant speed $v_0$ and its angular velocity about the original pivot is $\eqbox{\omega_0}$ (or $0$ about its own CM).
+
+  \item \textbf{(Proof that $\sum_i m_i\vect{r}_i' = \vect{0}$):} Since $\vect{r}_i = \vect{r}_c + \vect{r}_i'$ and $M\vect{r}_c = \sum_i m_i\vect{r}_i$, summing $m_i\vect{r}_i'$ gives $\sum_i m_i(\vect{r}_i - \vect{r}_c) = \sum_i m_i\vect{r}_i - M\vect{r}_c = \eqbox{\vect{0}}$.
+
+  \item \textbf{(Exercise 7.6[9] on p.\ 188 --- Gum Falling on Spinning Disk):} Disk ($R = 10\text{ cm}$, $M = 15\text{ g}$, $I_{\text{disk}} = \frac{1}{2}MR^2 = 750\text{ g}\cdot\text{cm}^2$) spins at $\omega_i = 50\text{ rad/s}$. Gum ($m = 3\text{ g}$) lands on rim ($I_{\text{gum}} = mR^2 = 300\text{ g}\cdot\text{cm}^2$):
+  \begin{equation*}
+    \omega_f = \frac{I_{\text{disk}}}{I_{\text{disk}} + I_{\text{gum}}}\omega_i = \frac{750}{750 + 300}(50\text{ rad/s}) = \frac{5}{7}(50) = \eqbox{35.7\text{ rad/s}}
+  \end{equation*}
+
+  \setcounter{enumi}{9}
+  \item \textbf{(Rod about Axis at Distance $a$ Beyond End):} Here $d = \frac{l}{2} + a$ from the center of mass:
+  \begin{equation*}
+    I = I_c + Md^2 = \frac{1}{12}Ml^2 + M\!\left(\frac{l}{2} + a\right)^2 = \eqbox{Ma^2 + Mal + \frac{1}{3}Ml^2}
+  \end{equation*}
+
+  \item \textbf{(Three Exercises Numbered 7.11 on p.\ 189):}
+  \begin{itemize}
+    \item \textbf{7.11(a) Disk Angular Acceleration:} $F = 2\text{ N}$, $M = 15\text{ kg}$, $R = 0.20\text{ m} \implies \alpha = \frac{FR}{\frac{1}{2}MR^2} = \frac{2(2)}{15(0.20)} = \eqbox{\frac{4}{3}\text{ rad/s}^2}$.
+    \item \textbf{7.11(b) Square Plate In-Plane Axis:} Given $I_z = \frac{1}{6}Ma^2$, by symmetry $I_x = I_y$ and $I_x + I_y = I_z \implies \eqbox{I_x = \frac{1}{12}Ma^2}$.
+    \item \textbf{7.11(c) Ring/Hoop from Definition:} All mass elements $\diff m$ are at $r_\perp = R$, so $I = \int R^2\dd m = R^2\int\dd m = \eqbox{MR^2}$.
+  \end{itemize}
+
+  \setcounter{enumi}{13}
+  \item \textbf{(Meter Stick Pivoted at $20\text{ cm}$ Mark):} $M = 0.25\text{ kg}$, $l = 1.00\text{ m}$, pivot at $0.20\text{ m}$ ($d = 0.30\text{ m}$ from CM at $0.50\text{ m}$), force $F = 3\text{ N}$ at $0.80\text{ m}$ (lever arm $r_F = 0.80 - 0.20 = 0.60\text{ m}$):
+  \begin{equation*}
+    I = \frac{1}{12}Ml^2 + Md^2 = 0.25\!\left(\frac{1}{12} + 0.09\right) = 0.04333\text{ kg}\cdot\text{m}^2, \qquad \alpha = \frac{F r_F}{I} = \frac{3(0.60)}{0.04333} = \eqbox{41.5\text{ rad/s}^2}
+  \end{equation*}
+
+  \item \textbf{(Ring Gyroscope Precession Rate):} Ring of mass $M$ and radius $a$ has $I = Ma^2$ and CM at distance $d$ from pivot:
+  \begin{equation*}
+    \Omega_p = \frac{Mgd}{I\omega} = \frac{Mgd}{Ma^2\omega} = \eqbox{\frac{gd}{a^2\omega}}
+  \end{equation*}
+\end{enumerate}
+
+\subsubsection{Part B: Unique \& Challenge Problems from Young \& Freedman (PDF 3)}
+
+\begin{enumerate}[label=\textbf{Prob.\ 10.\arabic*},leftmargin=4.5em]
+  \setcounter{enumi}{65}
+  \item \textbf{[Prob.\ 10.66, p.\ 338--339] Balancing a Rod with a Clay Blob (Pool Cue Physics):}
+  Uniform rod ($L, M$) with clay blob ($M$) at one end.
+  \begin{itemize}
+    \item \textbf{(a)} Center of mass is at distance $\frac{M(L/2) + M(L)}{2M} = \eqbox{\frac{3}{4}L}$ from the clay-free end (or $\frac{1}{4}L$ from the clay end).
+    \item \textbf{(b) Clay at top, pivoted at bottom:} $I_{\text{bottom}} = \frac{1}{3}ML^2 + ML^2 = \frac{4}{3}ML^2$, $\tau = (2M)g\!\left(\frac{3}{4}L\right)\sin\theta \approx \frac{3}{2}MgL\theta \implies \alpha = \frac{\tau}{I} = \eqbox{\frac{9g}{8L}\theta}$.
+    \item \textbf{(c) Clay at bottom, pivoted at bottom:} $I_{\text{bottom}} = \frac{1}{3}ML^2 + 0 = \frac{1}{3}ML^2$, $\tau = Mg\!\left(\frac{L}{2}\right)\sin\theta \approx \frac{1}{2}MgL\theta \implies \alpha = \eqbox{\frac{3g}{2L}\theta}$ (larger angular acceleration, so it tips over faster and is harder to balance!).
+  \end{itemize}
+
+  \setcounter{enumi}{74}
+  \item \textbf{[Prob.\ 10.75, p.\ 339] Two-Disk Yo-Yo with Axle of Radius $b$:}
+  Total mass $M_{\text{tot}} = 2m$, moment of inertia $I_{\text{cm}} = 2\!\left(\frac{1}{2}mR^2\right) = mR^2$. Unwinding without slipping on axle of radius $b$ gives $a_y = b\alpha_z$.
+  \begin{align*}
+    2mg - T &= 2ma_y, \qquad Tb = I_{\text{cm}}\alpha_z = mR^2\!\left(\frac{a_y}{b}\right) \implies T = m\frac{R^2}{b^2}a_y\\
+    \eqbox{a_y = \frac{g}{1 + R^2/(2b^2)}, \qquad \alpha_z = \frac{g}{b + R^2/(2b)}, \qquad T = \frac{2mg}{1 + 2b^2/R^2}}
+  \end{align*}
+
+  \item \textbf{[Prob.\ 10.76, p.\ 339--340] Hollow Spherical Shell Rolling in a Loop-the-Loop:}
+  For a thin-walled hollow sphere ($c = 2/3$), $K = \frac{1}{2}(1+2/3)mv^2 = \frac{5}{6}mv^2$.
+  \begin{itemize}
+    \item \textbf{(a)} At the top of the loop ($y = 2R$), minimum speed for contact is $v_{\text{top}}^2 = gR$. Conservation of energy from $h_0$ to $2R$:
+    \begin{equation*}
+      mgh_0 = mg(2R) + \frac{5}{6}mv_{\text{top}}^2 = 2mgR + \frac{5}{6}mgR \implies \eqbox{h_0 = \frac{17}{6}R}
+    \end{equation*}
+    \item \textbf{(b)} At point $B$ ($y = R$): $mg(h_0 - R) = \frac{11}{6}mgR = \frac{5}{6}mv_B^2 \implies v_B^2 = \frac{11}{5}gR \implies N_B = \frac{mv_B^2}{R} = \eqbox{\frac{11}{5}mg = 2.20mg}$.
+  \end{itemize}
+
+  \setcounter{enumi}{98}
+  \item \textbf{[Prob.\ 10.99, p.\ 342] Center of Percussion of a Baseball Bat:}
+  Bat has mass $M = 0.800\text{ kg}$, length $L = 0.900\text{ m}$, CM at $d = 0.600\text{ m}$ from handle end, and $I_{\text{cm}} = 0.0530\text{ kg}\cdot\text{m}^2$. Impact impulse $J$ at distance $x$ from handle gives $v_{\text{cm}} = \frac{J}{M}$ and $\omega = \frac{J(x - d)}{I_{\text{cm}}}$. For the handle end to remain at rest ($v_{\text{handle}} = v_{\text{cm}} - d\omega = 0$):
+  \begin{equation*}
+    \frac{J}{M} = d\frac{J(x - d)}{I_{\text{cm}}} \implies \eqbox{x = d + \frac{I_{\text{cm}}}{Md}} = 0.600\text{ m} + \frac{0.0530\text{ kg}\cdot\text{m}^2}{(0.800\text{ kg})(0.600\text{ m})} = \eqbox{0.710\text{ m}}
+  \end{equation*}
+
+  \item \textbf{[Challenge Problem 10.100, p.\ 342] Ball Rolling Between Two Parallel Rails:}
+  \begin{itemize}
+    \item \textbf{(a)} The contact points on the two rails (separated by $d$) are at perpendicular distance $r_{\text{eff}} = \sqrt{R^2 - (d/2)^2} = \sqrt{R^2 - d^2/4}$ from the ball's rotation axis, so instantaneous rolling without slipping gives $\eqbox{v_{\text{cm}} = \omega\sqrt{R^2 - d^2/4}}$.
+    \item \textbf{(b)} Energy conservation $Mgh = \frac{1}{2}Mv_{\text{cm}}^2 + \frac{1}{2}\!\left(\frac{2}{5}MR^2\right)\omega^2$ with $\omega^2 = \frac{v_{\text{cm}}^2}{R^2 - d^2/4}$ yields:
+    \begin{equation*}
+      gh = \frac{1}{2}v_{\text{cm}}^2\!\left[1 + \frac{2}{5(1 - d^2/4R^2)}\right] \implies \eqbox{v_{\text{cm}} = \sqrt{\frac{10gh}{5 + 2/(1 - d^2/4R^2)}}}
+    \end{equation*}
+  \end{itemize}
+
+  \item \textbf{[Challenge Problem 10.101, p.\ 342] Skidding Cylinder Transition to Rolling Without Slipping:}
+  Solid cylinder ($M, R, I_{\text{cm}} = \frac{1}{2}MR^2$) is set down with $v_{0x} = 0$ and initial spin $\omega_0$.
+  \begin{itemize}
+    \item \textbf{(a)} The bottom point slips backward, so kinetic friction $f_k = \mu_k Mg$ acts forward ($+x$):
+    \begin{equation*}
+      \eqbox{a_x = \frac{f_k}{M} = \mu_k g, \qquad \alpha_z = -\frac{f_k R}{\frac{1}{2}MR^2} = -\frac{2\mu_k g}{R}}
+    \end{equation*}
+    \item \textbf{(b)} $v_x(t) = \mu_k gt$ and $\omega_z(t) = \omega_0 - \frac{2\mu_k g}{R}t$. Setting $v_x(t^*) = R\omega_z(t^*)$ gives $\mu_k gt^* = R\omega_0 - 2\mu_k gt^* \implies t^* = \frac{R\omega_0}{3\mu_k g}$. The distance traveled before slipping stops is:
+    \begin{equation*}
+      d = \frac{1}{2}a_x(t^*)^2 = \frac{1}{2}(\mu_k g)\!\left(\frac{R\omega_0}{3\mu_k g}\right)^2 = \eqbox{\frac{R^2\omega_0^2}{18\mu_k g}}
+    \end{equation*}
+    \item \textbf{(c)} Final angular speed is $\omega_f = \frac{1}{3}\omega_0$ and $v_f = \frac{1}{3}R\omega_0$. Work done by friction on the cylinder is:
+    \begin{equation*}
+      W_{\text{fric}} = K_f - K_i = \left[\frac{1}{2}M\!\left(\frac{R\omega_0}{3}\right)^2 + \frac{1}{2}\!\left(\frac{1}{2}MR^2\right)\!\left(\frac{\omega_0}{3}\right)^2\right] - \frac{1}{2}\!\left(\frac{1}{2}MR^2\right)\omega_0^2 = \eqbox{-\frac{1}{6}MR^2\omega_0^2}
+    \end{equation*}
+  \end{itemize}
+
+  \setcounter{enumi}{102}
+  \item \textbf{[Challenge Problem 10.103, p.\ 342] Work Integral for Block Pulled Inward on a String:}
+  \begin{itemize}
+    \item \textbf{(a)} Angular momentum $L = mv_1 r_1 = mv(r)r \implies v(r) = \frac{v_1 r_1}{r}$. String tension provides centripetal force:
+    \begin{equation*}
+      \eqbox{T(r) = \frac{mv(r)^2}{r} = \frac{mv_1^2 r_1^2}{r^3}}
+    \end{equation*}
+    \item \textbf{(b)--(c)} Since $\vect{T}$ points radially inward ($-\uv{r}$), $\vect{T}(r)\cdot\diff\vect{r} = -T(r)\dd r$:
+    \begin{equation*}
+      W = \int_{r_1}^{r_2} -\frac{mv_1^2 r_1^2}{r^3}\dd r = \left[\frac{1}{2}\frac{mv_1^2 r_1^2}{r^2}\right]_{r_1}^{r_2} = \eqbox{\frac{1}{2}mv_1^2\!\left(\frac{r_1^2}{r_2^2} - 1\right) = \Delta K}
+    \end{equation*}
+  \end{itemize}
+\end{enumerate}
+
+% ============================================================================
+% FORMULA SHEET — MODULE 3
+% ============================================================================
+\formulasheet{Module 3 Formula Sheet: Rotational Dynamics and Angular Momentum}
+
+\begin{fs}{1. Torque, Rotational Dynamics, Rolling, Work, and Power}
+\begin{align*}
+  \bm{\tau} &= \vect{r}\times\vect{F}, \qquad \tau = Fl = rF\sin\phi = F_{\text{tan}}r, \qquad \sum\tau_z = I\alpha_z\\
+  K_{\text{tot}} &= \frac{1}{2}Mv_{\text{cm}}^2 + \frac{1}{2}I_{\text{cm}}\omega^2, \qquad v_{\text{cm}} = R\omega, \qquad a_{\text{cm-}x} = \frac{g\sin\beta}{1+c}, \qquad f_s = \frac{c}{1+c}Mg\sin\beta\\
+  W &= \int_{\theta_1}^{\theta_2}\tau_z\dd\theta = \frac{1}{2}I\omega_2^2 - \frac{1}{2}I\omega_1^2, \qquad P = \tau_z\omega_z
+\end{align*}
+\end{fs}
+
+\begin{fs}{2. Angular Momentum, Conservation, and Gyroscope Precession}
+\begin{align*}
+  \vect{l} &= \vect{r}\times\vect{p}, \qquad \frac{\diff\vect{L}}{\diff t} = \sum\bm{\tau}_{\text{ext}}, \qquad \vect{L} = M(\vect{r}_c\times\dot{\vect{r}}_c) + \sum m_i(\vect{r}_i'\times\dot{\vect{r}}_i') = \vect{L}_c + \vect{L}'\\
+  \vect{l}_i &= m_i r_i^2\omega\sin^2\theta_i\khat - m_i r_i^2\omega\sin\theta_i\cos\theta_i\uv{e}_i \implies \vect{L} = I\bm{\omega}\ (\text{symmetric}), \qquad I_1\omega_{1z} = I_2\omega_{2z}, \qquad \Omega_p = \frac{Mgr}{I\omega}
+\end{align*}
+\end{fs}
+
+% ============================================================================
+% MODULE 4: GRAVITATION AND THE GRAVITATIONAL FIELD (PDF 2)
+% ============================================================================
+\part{Gravitation and The Gravitational Field}
+
+\chapter{Newton's Law of Gravitation, Satellites, and Kepler's Laws}
+\begin{syll}
+\textbf{Syllabus Coverage (PDF 2):} Young \& Freedman Chapter 13 (Sections 13.1--13.5, 13.7--13.8) and Analytical Mechanics Chapter 9 (Section 9.1). Universal gravitation in scalar and vector forms, weight and planetary density, gravitational potential energy, escape speed, satellite orbits, Kepler's laws, apparent weight on a rotating planet, and black holes.
+\end{syll}
+
+\section{Newton's Law of Universal Gravitation and Weight\bk{13.1, 13.2, 9.1}}
+
+\begin{goal}
+Express Newton's law of universal gravitation in scalar and vector forms, and relate surface gravity $g$ to planetary mass $m_E$, radius $R_E$, and mean density $\rho$.
+\end{goal}
+
+\begin{pic}
+\begin{tikzpicture}[scale=0.95]
+  \draw[ax] (0,0) -- (4.2,0);
+  \draw[ax] (0,0) -- (0,2.5);
+  \coordinate (M1) at (1.0,2.0);
+  \coordinate (M2) at (3.4,0.9);
+  \draw[vec,slate] (0,0) -- (M1) node[midway,above left,font=\footnotesize]{$\vect{r}_1$};
+  \draw[vec,slate] (0,0) -- (M2) node[midway,below right,font=\footnotesize]{$\vect{r}_2$};
+  \draw[vec,teal] (M1) -- (M2) node[midway,above,font=\footnotesize]{$\vect{r}_2 - \vect{r}_1$};
+  \draw[vec,rose,ultra thick] (M2) -- ($(M2)!0.42!(M1)$) node[below left,font=\footnotesize]{$\vect{F}_{21}$};
+  \fill[teal] (M1) circle (4pt) node[above left,font=\small]{$m_1$};
+  \fill[amber] (M2) circle (4pt) node[right,font=\small]{$m_2$};
+\end{tikzpicture}
+\figcap{Vector form of Newton's law of gravitation: $\vect{F}_{21}$ is the attractive force on $m_2$ due to $m_1$.}
+\end{pic}
+
+\step{Step 1: Scalar and vector forms of the gravitational force (Eqs.\ 13.1, 9.1, 9.2).}
+Let $\uv{r} = \frac{\vect{r}_2 - \vect{r}_1}{|\vect{r}_2 - \vect{r}_1|}$ be the unit vector pointing from $m_1$ to $m_2$:
+\begin{equation}\label{eq:F_grav_vec}
+  \eqbox{F_g = \frac{Gm_1 m_2}{r^2}}, \qquad \eqbox{\vect{F}_{21} = -G\frac{m_1 m_2}{|\vect{r}_2 - \vect{r}_1|^2}\uv{r} = -Gm_1 m_2\frac{\vect{r}_2 - \vect{r}_1}{|\vect{r}_2 - \vect{r}_1|^3}}
+\end{equation}
+where $G = 6.67\times 10^{-11}\text{ N}\cdot\text{m}^2/\text{kg}^2$.
+
+\step{Step 2: Weight, surface acceleration due to gravity $g$, and average density $\rho$.}
+At the surface of a spherically symmetric planet of mass $m_E$ and radius $R_E$, weight is $w = mg = \frac{Gm_E m}{R_E^2}$:
+\begin{equation}\label{eq:g_and_rho}
+  \eqbox{g = \frac{Gm_E}{R_E^2}}, \qquad \eqbox{w(r) = \frac{Gm_E m}{r^2}\quad (r\ge R_E)}, \qquad \eqbox{\rho = \frac{m_E}{\frac{4}{3}\pi R_E^3} = \frac{3g}{4\pi G R_E}}
+\end{equation}
+
+\section{Gravitational Potential Energy and Escape Speed\bk{13.3}}
+
+\begin{goal}
+Derive $U(r) = -\frac{Gm_E m}{r}$ by integrating the gravitational work from $r_1$ to $r_2$, and derive the escape speed $v_{\text{esc}}$.
+\end{goal}
+
+\step{Step 1: Integrate radial gravitational work from $r_1$ to $r_2$.}
+The radial component of gravitational force is inward, $F_r = -\frac{Gm_E m}{r^2}$:
+\begin{align}
+  W_{\text{grav}} &= \int_{r_1}^{r_2} F_r\dd r = -Gm_E m\int_{r_1}^{r_2}\frac{\diff r}{r^2} = \left[\frac{Gm_E m}{r}\right]_{r_1}^{r_2} = \frac{Gm_E m}{r_2} - \frac{Gm_E m}{r_1} = U_1 - U_2\label{eq:W_grav_int}
+\end{align}
+Choosing $U(\infty) = 0$ gives the gravitational potential energy:
+\begin{equation}\label{eq:U_grav_gen}
+  \eqbox{U(r) = -\frac{Gm_E m}{r}}
+\end{equation}
+Near Earth's surface ($r_1, r_2 \approx R_E$), $W_{\text{grav}} = Gm_E m\frac{r_1 - r_2}{r_1 r_2} \approx \frac{Gm_E m}{R_E^2}(r_1 - r_2) = mg(y_1 - y_2)$, recovering $\Delta U = mg\Delta y$.
+
+\step{Step 2: Derive the escape speed $v_{\text{esc}}$ from a spherical body of mass $M$ and radius $R$.}
+Set total mechanical energy at $r = R$ equal to zero at $r = \infty$ ($K_2 = 0, U_2 = 0$):
+\begin{equation}\label{eq:v_esc}
+  \frac{1}{2}mv_{\text{esc}}^2 + \left(-\frac{GMm}{R}\right) = 0 \implies \eqbox{v_{\text{esc}} = \sqrt{\frac{2GM}{R}} = \sqrt{\frac{8\pi G\rho}{3}}R}
+\end{equation}
+
+\section{The Motion of Satellites\bk{13.4}}
+
+\begin{goal}
+Derive the circular orbital speed $v$, period $T$, and total mechanical energy $E$ of a satellite at radius $r$.
+\end{goal}
+
+\step{Step 1: Equate gravitational attraction to centripetal force.}
+\begin{equation}\label{eq:v_orb}
+  \frac{Gm_E m}{r^2} = \frac{mv^2}{r} \implies \eqbox{v = \sqrt{\frac{Gm_E}{r}}}
+\end{equation}
+
+\step{Step 2: Derive orbital period $T$ and mechanical energy $E$.}
+Substitute $v = \frac{2\pi r}{T}$ into Eq.\ \eqref{eq:v_orb}:
+\begin{align}
+  T &= \frac{2\pi r}{v} = 2\pi r\sqrt{\frac{r}{Gm_E}} = \eqbox{\frac{2\pi r^{3/2}}{\sqrt{Gm_E}}}\label{eq:T_orb}\\
+  E &= K + U = \frac{1}{2}mv^2 - \frac{Gm_E m}{r} = \frac{1}{2}m\!\left(\frac{Gm_E}{r}\right) - \frac{Gm_E m}{r} = \eqbox{-\frac{Gm_E m}{2r} = \frac{U}{2} = -K}\label{eq:E_orb}
+\end{align}
+
+\section{Kepler's Laws and Planetary Motion\bk{13.5}}
+
+\begin{goal}
+State Kepler's three laws and prove that Kepler's second law (constant sector velocity $\frac{\diff A}{\diff t}$) is a direct consequence of conservation of angular momentum.
+\end{goal}
+
+\begin{pic}
+\begin{tikzpicture}[scale=0.95]
+  \draw[thick,teal] (0,0) ellipse (3.0cm and 1.7cm);
+  \draw[ax] (-3.5,0) -- (3.5,0) node[right,font=\footnotesize]{Major axis ($2a$)};
+  \draw[ax] (0,-2.0) -- (0,2.0);
+  \coordinate (S) at (-1.8,0);
+  \coordinate (S2) at (1.8,0);
+  \fill[amber] (S) circle (5pt) node[below=4pt,font=\footnotesize\bfseries]{Sun $S$};
+  \fill[slate] (S2) circle (2pt) node[below=4pt,font=\footnotesize]{$S'$};
+  \node[left,font=\footnotesize,teal] at (-3.0,0.3) {Perihelion};
+  \node[right,font=\footnotesize,teal] at (3.0,0.3) {Aphelion};
+  \draw[dim] (-3.0,-0.6) -- (-1.8,-0.6) node[midway,below,font=\scriptsize]{$r_p = a(1-e)$};
+  \draw[dim] (-1.8,-0.6) -- (0,-0.6) node[midway,below,font=\scriptsize]{$ea$};
+  \draw[dim] (-1.8,-1.25) -- (3.0,-1.25) node[midway,below,font=\scriptsize]{$r_a = a(1+e)$};
+  % Sector area dA
+  \fill[ambersoft,opacity=0.8] (S) -- (40:3.0 and 1.7) -- (58:3.0 and 1.7) -- cycle;
+  \draw[thick,amber] (S) -- (40:3.0 and 1.7) node[midway,below right,font=\scriptsize]{$r$};
+  \draw[thick,amber] (S) -- (58:3.0 and 1.7);
+  \node[font=\scriptsize,amber!80!black] at (0.3,0.95) {$\diff A$};
+\end{tikzpicture}
+\figcap{Elliptical planetary orbit of semi-major axis $a$ and eccentricity $e$: $r_p = a(1-e)$, $r_a = a(1+e)$.}
+\end{pic}
+
+\step{Step 1: Kepler's First Law (Elliptical Orbits).}
+Each planet moves in an ellipse with the Sun $S$ at one focus. The perihelion and aphelion distances are:
+\begin{equation}\label{eq:kepler1}
+  \eqbox{r_p = a(1 - e), \qquad r_a = a(1 + e), \qquad r_p + r_a = 2a, \qquad e = \frac{r_a - r_p}{r_a + r_p}}
+\end{equation}
+
+\step{Step 2: Kepler's Second Law (Equal Areas in Equal Times).}
+In time $\diff t$, the radius vector $SP$ turns through angle $\diff\theta$, sweeping out triangular area $\diff A = \frac{1}{2}r(r\dd\theta) = \frac{1}{2}r^2\dd\theta$. Since $v_\perp = v\sin\phi = r\frac{\diff\theta}{\diff t}$, the sector velocity is:
+\begin{equation}\label{eq:kepler2}
+  \eqbox{\frac{\diff A}{\diff t} = \frac{1}{2}r^2\frac{\diff\theta}{\diff t} = \frac{1}{2}rv\sin\phi = \frac{1}{2m}|\vect{r}\times m\vect{v}| = \frac{L}{2m} = \text{constant}}
+\end{equation}
+Because gravitational force is central ($\vect{F}\parallel\vect{r}$), $\frac{\diff\vect{L}}{\diff t} = \vect{r}\times\vect{F} = \vect{0}$, so $\vect{L}$ and $\frac{\diff A}{\diff t}$ are strictly constant. At perihelion and aphelion ($\phi = 90^\circ$), $L = mr_p v_p = mr_a v_a \implies r_p v_p = r_a v_a$.
+
+\step{Step 3: Kepler's Third Law (Harmonic Law).}
+\begin{equation}\label{eq:kepler3}
+  \eqbox{T = \frac{2\pi a^{3/2}}{\sqrt{Gm_S}} \iff T^2 = \left(\frac{4\pi^2}{Gm_S}\right)a^3}
+\end{equation}
+
+\section{Apparent Weight and Black Holes\bk{13.7, 13.8}}
+
+\begin{goal}
+Derive the apparent weight on a rotating planet and the Schwarzschild radius $R_S$ of a black hole.
+\end{goal}
+
+\step{Step 1: Apparent weight on a rotating Earth.}
+In general, $\vect{w} = \vect{w}_0 - m\vect{a}_{\text{rad}}$. At the equator, centripetal acceleration is $a_{\text{rad}} = \frac{v^2}{R_E} = \omega^2 R_E$ inward:
+\begin{equation}\label{eq:app_weight}
+  \eqbox{w = w_0 - \frac{mv^2}{R_E}, \qquad g = g_0 - \frac{v^2}{R_E} = g_0 - \omega^2 R_E\quad (\text{at equator})}
+\end{equation}
+
+\step{Step 2: Schwarzschild radius $R_S$ of a nonrotating black hole.}
+Setting the escape speed $v_{\text{esc}} = \sqrt{\frac{2GM}{R_S}}$ equal to the speed of light $c$ yields Karl Schwarzschild's exact general-relativistic event-horizon radius:
+\begin{equation}\label{eq:R_schwarz}
+  c = \sqrt{\frac{2GM}{R_S}} \implies \eqbox{R_S = \frac{2GM}{c^2}}
+\end{equation}
+
+% ============================================================================
+% CHAPTER 8: THE GRAVITATIONAL FIELD, GAUSS'S LAW, AND GENERAL RELATIVITY
+% ============================================================================
+\chapter{The Gravitational Field, Gauss's Law, and General Relativity}
+\begin{syll}
+\textbf{Syllabus Coverage (PDF 2):} Analytical Mechanics Chapter 9 (Sections 9.2--9.9) and Young \& Freedman Section 13.6. Gravitational field $\vect{g}(\vect{r})$ and potential $\Phi(\vect{r})$ of point and extended bodies, Spherical Shell Theorem, Gauss's law for gravity (integral and differential forms), Poisson's and Laplace's equations, and Einstein's field equations.
+\end{syll}
+
+\section{The Gravitational Field and Potential\bk{9.2--9.4}}
+
+\begin{goal}
+Define the gravitational field vector $\vect{g}(\vect{r})$ and scalar potential $\Phi(\vect{r})$ for discrete and continuous mass distributions, and show that $\vect{g} = -\nabla\Phi$.
+\end{goal}
+
+\step{Step 1: Gravitational field $\vect{g}(\vect{r})$ (force per unit test mass).}
+For a point mass $M$ at source point $\vect{r}'$ and a continuous body with density $\rho(\vect{r}')$ and volume element $\diff\tau'$:
+\begin{equation}\label{eq:g_field_def}
+  \eqbox{\vect{g}(\vect{r}) = \lim_{m\to 0}\frac{\vect{F}}{m} = -GM\frac{\vect{r}-\vect{r}'}{|\vect{r}-\vect{r}'|^3}}, \qquad \eqbox{\vect{g}(\vect{r}) = -G\int_{\text{body}}\rho(\vect{r}')\frac{\vect{r}-\vect{r}'}{|\vect{r}-\vect{r}'|^3}\dd\tau'}
+\end{equation}
+
+\step{Step 2: Gravitational potential $\Phi(\vect{r})$ (potential energy per unit test mass).}
+Since $\nabla\times\vect{g} = \vect{0}$, $\vect{g}$ is conservative and is the negative gradient of a scalar potential $\Phi(\vect{r}) = \lim_{m\to 0}\frac{V(\vect{r})}{m}$:
+\begin{equation}\label{eq:Phi_def}
+  \eqbox{\Phi(\vect{r}) = -\frac{GM}{r}\quad (\text{point mass at origin})}, \qquad \eqbox{\Phi(\vect{r}) = -G\int_{\text{body}}\frac{\rho(\vect{r}')\dd\tau'}{|\vect{r}-\vect{r}'|}}, \qquad \eqbox{\vect{g} = -\nabla\Phi}
+\end{equation}
+
+\section{Spherical Mass Distributions (The Shell Theorem)\bk{13.6, 9.4}}
+
+\begin{goal}
+Prove by integration that a uniform spherical shell of mass $M$ and radius $R$ (or $a$) produces potential $\Phi(r) = -\frac{GM}{r}$ and field $g_r = -\frac{GM}{r^2}$ outside ($r > R$), and constant potential $\Phi(r) = -\frac{GM}{R}$ and zero field ($g_r = 0$) inside ($r < R$).
+\end{goal}
+
+\begin{pic}
+\begin{tikzpicture}[scale=0.95]
+  \draw[thick,teal,fill=tealsoft!40] (0,0) circle (1.6cm);
+  \draw[ax] (-2.0,0) -- (4.5,0);
+  \fill[ink] (0,0) circle (2pt) node[below left,font=\footnotesize]{$O$};
+  \coordinate (P) at (3.8,0);
+  \fill[rose] (P) circle (2.5pt) node[below,font=\footnotesize]{$P\ (\text{mass }m)$};
+  % Ring on sphere
+  \draw[thick,amber,fill=ambersoft!80] ({1.6*cos(42)},-1.07) ellipse (0.15cm and 1.07cm);
+  \coordinate (RingTop) at (42:1.6);
+  \draw[thick,teal] (0,0) -- (RingTop) node[midway,above left,font=\footnotesize]{$R$};
+  \draw[thick,rose] (RingTop) -- (P) node[midway,above,font=\footnotesize]{$s = |\vect{r}-\vect{r}'|$};
+  \draw[dashed,slate] (RingTop) -- ({1.6*cos(42)},0) node[midway,left,font=\scriptsize]{$R\sin\phi$};
+  \draw[slate] (0.5,0) arc (0:42:0.5) node[midway,right,font=\scriptsize]{$\phi$};
+  \draw[dim] (0,-1.85) -- (3.8,-1.85) node[midway,below,font=\footnotesize]{$r$};
+\end{tikzpicture}
+\figcap{Integrating over thin rings of radius $R\sin\phi$ and width $R\dd\phi$ on a spherical shell of radius $R$ and mass $M$.}
+\end{pic}
+
+\step{Step 1: Express the ring mass $\diff M$ in terms of polar angle $\phi\in [0,\pi]$.}
+The ring has radius $R\sin\phi$, circumference $2\pi R\sin\phi$, width $R\dd\phi$, and area $\diff A = 2\pi R^2\sin\phi\dd\phi$. Since the total shell area is $4\pi R^2$:
+\begin{equation}\label{eq:shell_dM}
+  \frac{\diff M}{M} = \frac{2\pi R^2\sin\phi\dd\phi}{4\pi R^2} = \frac{1}{2}\sin\phi\dd\phi \implies \diff U = -\frac{Gm\dd M}{s} = -\frac{GMm\sin\phi\dd\phi}{2s}
+\end{equation}
+
+\step{Step 2: Change integration variable from $\phi$ to $s$ using the Law of Cosines.}
+In triangle $O\text{--Ring--}P$, the law of cosines gives:
+\begin{equation}\label{eq:shell_cos}
+  s^2 = r^2 + R^2 - 2rR\cos\phi \xrightarrow{\text{differentiate}} 2s\dd s = 2rR\sin\phi\dd\phi \implies \frac{\sin\phi\dd\phi}{s} = \frac{\dd s}{rR}
+\end{equation}
+Substitute Eq.\ \eqref{eq:shell_cos} into Eq.\ \eqref{eq:shell_dM}:
+\begin{equation}\label{eq:shell_dU}
+  \diff U = -\frac{GMm}{2rR}\dd s \qquad \left(\text{or }\diff\Phi = -\frac{GM}{2rR}\dd s\right)
+\end{equation}
+
+\step{Step 3: Case 1 --- Point $P$ Outside the Shell ($r > R$).}
+As $\phi$ goes from $0$ to $\pi$, $s$ goes from $s_{\min} = r - R$ to $s_{\max} = r + R$:
+\begin{align}
+  U(r) &= -\frac{GMm}{2rR}\int_{r-R}^{r+R}\dd s = -\frac{GMm}{2rR}\!\left[(r+R) - (r-R)\right] = \eqbox{-\frac{GMm}{r}} \quad (r > R)\label{eq:U_shell_out}\\
+  \Phi(r) &= \eqbox{-\frac{GM}{r}}, \qquad F_r = -\frac{\diff U}{\diff r} = \eqbox{-\frac{GMm}{r^2}}, \qquad g_r = -\frac{\diff\Phi}{\diff r} = \eqbox{-\frac{GM}{r^2}}\label{eq:g_shell_out}
+\end{align}
+
+\step{Step 4: Case 2 --- Point $P$ Inside the Shell ($r < R$).}
+As $\phi$ goes from $0$ to $\pi$, $s$ goes from $s_{\min} = R - r$ to $s_{\max} = R + r$:
+\begin{align}
+  U(r) &= -\frac{GMm}{2rR}\int_{R-r}^{R+r}\dd s = -\frac{GMm}{2rR}\!\left[(R+r) - (R-r)\right] = \eqbox{-\frac{GMm}{R} = \text{constant}} \quad (r < R)\label{eq:U_shell_in}\\
+  \Phi(r) &= \eqbox{-\frac{GM}{R}}, \qquad F_r = -\frac{\diff U}{\diff r} = \eqbox{0}, \qquad g_r = -\frac{\diff\Phi}{\diff r} = \eqbox{0}\label{eq:g_shell_in}
+\end{align}
+
+\section{Gauss's Law for Gravity, Poisson's Equation, and Laplace's Equation\bk{9.6, 9.7}}
+
+\begin{goal}
+Derive Gauss's law for gravity in integral form ($\oint_S\vect{g}\cdot\uv{n}\dd S = -4\pi G M_{\text{enc}}$) and differential form ($\nabla\cdot\vect{g} = -4\pi G\rho$), and obtain Poisson's and Laplace's equations for $\Phi$.
+\end{goal}
+
+\step{Step 1: Flux of $\vect{g}$ through a closed surface $S$ enclosing point mass $M$.}
+Place mass $M$ at the origin. At surface patch $\diff S$ with outward normal $\uv{n}$, $\vect{g} = -\frac{GM}{r^2}\uv{r}$, so:
+\begin{equation}
+  \vect{g}\cdot\uv{n}\dd S = -\frac{GM}{r^2}(\uv{r}\cdot\uv{n})\dd S = -GM\frac{\diff S\cos\theta}{r^2} = -GM\dd\Omega
+\end{equation}
+where $\diff\Omega = \frac{\diff S_\perp}{r^2} = \frac{\diff S\cos\theta}{r^2}$ is the solid angle subtended by $\diff S$ at $M$ (\tref{tool:coords}). Since a closed surface surrounding an interior point subtends a total solid angle $\oint_S\dd\Omega = 4\pi\text{ sr}$:
+\begin{equation}
+  \oint_S \vect{g}\cdot\uv{n}\dd S = -GM\oint_S\dd\Omega = -4\pi GM
+\end{equation}
+By superposition over all enclosed masses $M_{\text{enc}} = \sum m_i = \int_V \rho\dd\tau$:
+\begin{equation}\label{eq:gauss_int}
+  \eqbox{\oint_S \vect{g}\cdot\uv{n}\dd S = -4\pi G M_{\text{enc}} = -\int_V 4\pi G\rho\dd\tau} \qquad \text{(Gauss's law for gravity, integral form)}
+\end{equation}
+
+\step{Step 2: Apply Gauss's Divergence Theorem (\tref{tool:vec_calc}) to obtain the differential field equations.}
+Replace the surface integral in Eq.\ \eqref{eq:gauss_int} by $\int_V (\nabla\cdot\vect{g})\dd\tau$:
+\begin{equation}\label{eq:gauss_diff}
+  \int_V (\nabla\cdot\vect{g})\dd\tau = -\int_V 4\pi G\rho\dd\tau \implies \eqbox{\nabla\cdot\vect{g} = -4\pi G\rho} \qquad \text{(with }\eqbox{\nabla\times\vect{g} = \vect{0}}\text{)}
+\end{equation}
+
+\step{Step 3: Substitute $\vect{g} = -\nabla\Phi$ into $\nabla\cdot\vect{g} = -4\pi G\rho$.}
+Since $\nabla\cdot\vect{g} = \nabla\cdot(-\nabla\Phi) = -\nabla^2\Phi$:
+\begin{equation}\label{eq:poisson_laplace}
+  \eqbox{\nabla^2\Phi = 4\pi G\rho \quad\text{(Poisson's equation)}}, \qquad \eqbox{\nabla^2\Phi = 0 \quad\text{(Laplace's equation in vacuum, }\rho = 0\text{)}}
+\end{equation}
+
+\section{Einstein's Theory of Gravitation (General Relativity)\bk{9.8}}
+
+\begin{goal}
+Summarize the 4D space-time metric tensor, Minkowski metric, and Einstein field equations.
+\end{goal}
+
+\begin{itemize}
+  \item \textbf{4D Coordinates and Flat Minkowski Space-Time:} Let $(x^0, x^1, x^2, x^3) = (ct, x, y, z)$. The invariant line element in flat space-time is:
+  \begin{equation}\label{eq:minkowski}
+    \dd s^2 = \sum_{\mu,\nu=0}^3 \eta_{\mu\nu}\dd x^\mu\dd x^\nu = c^2\dd t^2 - \dd x^2 - \dd y^2 - \dd z^2, \qquad
+    \eta_{\mu\nu} = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & -1 & 0 & 0 \\ 0 & 0 & -1 & 0 \\ 0 & 0 & 0 & -1 \end{pmatrix}
+  \end{equation}
+  \item \textbf{Curved Riemannian Space-Time and Einstein Field Equations:} In curved space-time, $\dd s^2 = \sum_{\mu,\nu=0}^3 g_{\mu\nu}\dd x^\mu\dd x^\nu$. Generalizing Poisson's equation $\nabla^2\Phi = 4\pi G\rho$ by replacing $\rho$ with the symmetric $4\times 4$ energy--momentum tensor $T^{\mu\nu}$ and $\nabla^2\Phi$ with the Einstein curvature tensor $G^{\mu\nu}$ gives:
+  \begin{equation}\label{eq:einstein_eq}
+    \eqbox{G^{\mu\nu} = -\frac{8\pi G}{c^2}T^{\mu\nu}}, \qquad \eqbox{G^{\mu\nu} = -\frac{8\pi G}{c^2}T^{\mu\nu} - \Lambda g^{\mu\nu}} \quad(\text{with cosmological constant }\Lambda)
+  \end{equation}
+\end{itemize}
+
+% ============================================================================
+% SOLVED BOOK EXAMPLES — MODULE 4
+% ============================================================================
+\section{Solved Book Examples (Module 4)}
+
+\begin{example}{13.1--13.2}{Cavendish balance force and accelerations\bk{p.\ 405}}
+\textbf{Problem:} Two spheres of masses $m_1 = 0.0100\text{ kg}$ and $m_2 = 0.500\text{ kg}$ have centers $r = 0.0500\text{ m}$ apart. Find (a) the gravitational force $F_g$ on each and (b) their accelerations $a_1, a_2$ in free space.
+\tcblower
+\textbf{Solution:}
+\begin{align*}
+  \text{(a)}\quad F_g &= \frac{Gm_1 m_2}{r^2} = \frac{(6.67\times 10^{-11})(0.0100)(0.500)}{(0.0500)^2} = \eqbox{1.33\times 10^{-10}\text{ N}}\\
+  \text{(b)}\quad a_1 &= \frac{F_g}{m_1} = \eqbox{1.33\times 10^{-8}\text{ m/s}^2}, \qquad a_2 = \frac{F_g}{m_2} = \eqbox{2.66\times 10^{-10}\text{ m/s}^2}
+\end{align*}
+\end{example}
+
+\begin{example}{13.3}{Superposition of gravitational forces\bk{p.\ 405}}
+\textbf{Problem:} A small star ($m = 1.00\times 10^{30}\text{ kg}$) is at the origin $(0,0)$. Two large stars ($M_1 = M_2 = 8.00\times 10^{30}\text{ kg}$) are at $(2.00\times 10^{12}\text{ m}, 2.00\times 10^{12}\text{ m})$ and $(2.00\times 10^{12}\text{ m}, 0)$. Find the magnitude and direction of the total gravitational force $\vect{F}$ on the small star.
+\tcblower
+\textbf{Solution:}
+\begin{align*}
+  F_1 &= \frac{(6.67\times 10^{-11})(8.00\times 10^{30})(1.00\times 10^{30})}{(2.00\times 10^{12})^2 + (2.00\times 10^{12})^2} = 6.67\times 10^{25}\text{ N}\quad (\text{at }45^\circ)\\
+  F_2 &= \frac{(6.67\times 10^{-11})(8.00\times 10^{30})(1.00\times 10^{30})}{(2.00\times 10^{12})^2} = 1.33\times 10^{26}\text{ N}\quad (\text{along }+x)\\
+  F_x &= F_1\cos 45^\circ + F_2 = 1.81\times 10^{26}\text{ N}, \qquad F_y = F_1\sin 45^\circ = 4.72\times 10^{25}\text{ N}\\
+  F &= \sqrt{F_x^2 + F_y^2} = \eqbox{1.87\times 10^{26}\text{ N}}, \qquad \theta = \arctan\!\left(\frac{F_y}{F_x}\right) = \eqbox{14.6^\circ}
+\end{align*}
+\end{example}
+
+\begin{example}{13.4}{Gravity on Mars\bk{p.\ 408}}
+\textbf{Problem:} A lander weighs $w = 3430\text{ N}$ on Earth ($m = w/g = 350\text{ kg}$). Find its weight $F_g$ and gravitational acceleration $g_M$ on Mars ($R_M = 3.40\times 10^6\text{ m}$, $m_M = 6.42\times 10^{23}\text{ kg}$).
+\tcblower
+\textbf{Solution:}
+\begin{equation*}
+  F_g = \frac{Gm_M m}{R_M^2} = \frac{(6.67\times 10^{-11})(6.42\times 10^{23})(350)}{(3.40\times 10^6)^2} = \eqbox{1.30\times 10^3\text{ N}}, \qquad g_M = \frac{F_g}{m} = \eqbox{3.7\text{ m/s}^2}
+\end{equation*}
+\end{example}
+
+\begin{example}{13.5}{``From the earth to the moon''\bk{p.\ 410}}
+\textbf{Problem:} Find the minimum launch speed from Earth ($R_E = 6.38\times 10^6\text{ m}$, $m_E = 5.97\times 10^{24}\text{ kg}$) to reach (a) $r_2 = 2R_E$ and (b) $r_2 = \infty$ (escape speed).
+\tcblower
+\textbf{Solution:}
+\begin{align*}
+  \text{(a)}\quad \frac{1}{2}mv_1^2 - \frac{Gm_E m}{R_E} &= -\frac{Gm_E m}{2R_E} \implies v_1 = \sqrt{\frac{Gm_E}{R_E}} = \eqbox{7900\text{ m/s}}\\
+  \text{(b)}\quad \frac{1}{2}mv_1^2 - \frac{Gm_E m}{R_E} &= 0 \implies v_1 = \sqrt{\frac{2Gm_E}{R_E}} = \eqbox{1.12\times 10^4\text{ m/s} = 11.2\text{ km/s}}
+\end{align*}
+\end{example}
+
+\begin{example}{13.6}{A satellite orbit\bk{p.\ 414}}
+\textbf{Problem:} A $1000\text{-kg}$ satellite is in circular orbit $300\text{ km}$ above Earth's surface ($r = 6.68\times 10^6\text{ m}$). Find (a) $v$, $T$, and $a_{\text{rad}}$, (b) work $W_{\text{req}}$ to place it in orbit from rest on the launch pad, and (c) additional work to make it escape to $\infty$.
+\tcblower
+\textbf{Solution:}
+\begin{align*}
+  \text{(a)}\quad v &= \sqrt{\frac{Gm_E}{r}} = \eqbox{7720\text{ m/s}}, \qquad T = \frac{2\pi r}{v} = \eqbox{5440\text{ s} = 90.6\text{ min}}, \qquad a_{\text{rad}} = \frac{v^2}{r} = \eqbox{8.92\text{ m/s}^2}\\
+  \text{(b)}\quad E_2 &= -\frac{Gm_E m}{2r} = -2.98\times 10^{10}\text{ J}, \qquad E_1 = -\frac{Gm_E m}{R_E} = -6.24\times 10^{10}\text{ J}\\
+  W_{\text{req}} &= E_2 - E_1 = \eqbox{3.26\times 10^{10}\text{ J}}\\
+  \text{(c)}\quad W_{\text{esc}} &= 0 - E_2 = \eqbox{2.98\times 10^{10}\text{ J}}
+\end{align*}
+\end{example}
+
+\begin{example}{13.8--13.9}{Kepler's Third Law: Asteroid Pallas and Comet Halley\bk{p.\ 417}}
+\textbf{Problem:} (a) Pallas has period $T = 4.62\text{ yr} = 1.46\times 10^8\text{ s}$ around the Sun ($m_S = 1.99\times 10^{30}\text{ kg}$); find $a$. (b) Comet Halley has $r_p = 8.75\times 10^7\text{ km}$ and $r_a = 5.26\times 10^9\text{ km}$; find $a$, $e$, and $T$.
+\tcblower
+\textbf{Solution:}
+\begin{align*}
+  \text{(a)}\quad a &= \left(\frac{Gm_S T^2}{4\pi^2}\right)^{1/3} = \eqbox{4.15\times 10^{11}\text{ m}}\\
+  \text{(b)}\quad a &= \frac{r_p + r_a}{2} = \eqbox{2.67\times 10^9\text{ km}}, \qquad e = 1 - \frac{r_p}{a} = \eqbox{0.967}, \qquad T = \frac{2\pi a^{3/2}}{\sqrt{Gm_S}} = \eqbox{75.5\text{ yr}}
+\end{align*}
+\end{example}
+
+\begin{example}{13.10}{``Journey to the center of the earth''\bk{p.\ 420}}
+\textbf{Problem:} Assuming uniform Earth density, find the gravitational force $F_g(r)$ on a mass $m$ at distance $r < R_E$ from Earth's center.
+\tcblower
+\textbf{Solution:} Only the mass $M(r) = m_E\frac{r^3}{R_E^3}$ inside radius $r$ contributes to the force:
+\begin{equation*}
+  F_g(r) = \frac{GM(r)m}{r^2} = \frac{Gm}{r^2}\!\left(m_E\frac{r^3}{R_E^3}\right) = \eqbox{\frac{Gm_E m}{R_E^3}r = mg\frac{r}{R_E}}
+\end{equation*}
+\end{example}
+
+\begin{example}{13.11}{Black hole calculations\bk{p.\ 424}}
+\textbf{Problem:} Find the Schwarzschild radius $R_S$ and average density $\rho$ at the event horizon for a black hole of mass $M = 3M_\odot = 6.0\times 10^{30}\text{ kg}$.
+\tcblower
+\textbf{Solution:}
+\begin{equation*}
+  R_S = \frac{2GM}{c^2} = \frac{2(6.67\times 10^{-11})(6.0\times 10^{30})}{(3.00\times 10^8)^2} = \eqbox{8.9\times 10^3\text{ m} = 8.9\text{ km}}, \qquad \rho = \frac{M}{\frac{4}{3}\pi R_S^3} = \eqbox{2.0\times 10^{18}\text{ kg/m}^3}
+\end{equation*}
+\end{example}
+
+\begin{example}{Ch.\ 13}{Bridging Problem: Speeds in an Elliptical Orbit\bk{p.\ 428}}
+\textbf{Problem:} A comet orbits the Sun ($m_S$) in an ellipse of semi-major axis $a$ and eccentricity $e$. (a) Derive expressions for the speeds $v_p$ at perihelion and $v_a$ at aphelion. (b) Evaluate for Comet Halley ($a = 2.67\times 10^{12}\text{ m}$, $e = 0.967$).
+\tcblower
+\textbf{Solution:} At perihelion $r_p = a(1-e)$ and aphelion $r_a = a(1+e)$, angular momentum conservation ($\phi = 90^\circ$) gives $r_p v_p = r_a v_a \implies v_a = \frac{1-e}{1+e}v_p$. Energy conservation between $r_p$ and $r_a$:
+\begin{align*}
+  \frac{1}{2}m(v_p^2 - v_a^2) &= Gm_S m\!\left(\frac{1}{a(1-e)} - \frac{1}{a(1+e)}\right) = \frac{2Gm_S m e}{a(1-e^2)}\\
+  v_p^2\!\left[1 - \left(\frac{1-e}{1+e}\right)^2\right] &= v_p^2\frac{4e}{(1+e)^2} = \frac{4Gm_S e}{a(1-e)(1+e)}\\
+  \text{(a)}\quad \eqbox{v_p = \sqrt{\frac{Gm_S(1+e)}{a(1-e)}}}, &\qquad \eqbox{v_a = \sqrt{\frac{Gm_S(1-e)}{a(1+e)}}}\\
+  \text{(b)}\quad \text{For Comet Halley: } v_p &= \eqbox{5.46\times 10^4\text{ m/s} = 54.6\text{ km/s}}, \qquad v_a = \eqbox{916\text{ m/s} = 0.916\text{ km/s}}
+\end{align*}
+\end{example}
+
+\begin{example}{9.1}{Gravitational field of a uniform thin rod on its axis\bk{Analytical Mechanics p.\ 217}}
+\textbf{Problem:} A uniform thin rod of length $L$ and linear mass density $\lambda$ lies along the $x$-axis from $x'=0$ to $x'=L$. Find the gravitational field $\vect{g}$ at $x = 4L$.
+\tcblower
+\textbf{Solution:} Element $\diff m = \lambda\dd x'$ at $x'$ produces field $\diff\vect{g} = -\frac{G\lambda\dd x'}{(4L-x')^2}\ihat$ at $x=4L$:
+\begin{equation*}
+  \vect{g} = -G\lambda\ihat\int_0^L \frac{\diff x'}{(4L-x')^2} = -G\lambda\ihat\!\left[\frac{1}{4L-x'}\right]_0^L = -G\lambda\ihat\!\left(\frac{1}{3L} - \frac{1}{4L}\right) = \eqbox{-\frac{1}{12L}\lambda G\ihat}
+\end{equation*}
+\end{example}
+
+\begin{example}{9.2}{Gravitational field on the axis of a uniform thin disk\bk{Analytical Mechanics p.\ 218}}
+\textbf{Problem:} Find the gravitational field $\vect{g}$ at distance $+z$ along the symmetry axis of a uniform thin disk of mass $M$, radius $R$, and surface mass density $\sigma = \frac{M}{\pi R^2}$.
+\tcblower
+\textbf{Solution:} By symmetry, horizontal components cancel. A ring of radius $r'$ and width $\diff r'$ has area $\diff A' = 2\pi r'\dd r'$, distance $D = \sqrt{r'^2+z^2}$ to $P$, and $\cos\theta = \frac{z}{\sqrt{r'^2+z^2}}$:
+\begin{align*}
+  \vect{g} &= -G\sigma\khat\int_0^R \frac{2\pi r'\dd r'}{r'^2+z^2}\frac{z}{\sqrt{r'^2+z^2}} = -2\pi\sigma G z\khat\int_0^R \frac{r'\dd r'}{(r'^2+z^2)^{3/2}}\\
+           &= -2\pi\sigma G z\khat\!\left[-\frac{1}{\sqrt{r'^2+z^2}}\right]_0^R = \eqbox{-2\pi\sigma G\!\left(1 - \frac{z}{\sqrt{z^2+R^2}}\right)\khat = -\frac{2GM}{R^2}\!\left(1 - \frac{z}{\sqrt{z^2+R^2}}\right)\khat}
+\end{align*}
+\end{example}
+
+\begin{example}{9.4}{Gravitational field of an infinite cylinder via Gauss's Law\bk{Analytical Mechanics p.\ 224--225}}
+\textbf{Problem:} Use Gauss's law to find the gravitational field $\vect{g}$ outside ($r > a$) an infinitely long cylinder of radius $a$ and linear mass density $\lambda$.
+\tcblower
+\textbf{Solution:} Choose a coaxial cylindrical Gaussian surface of radius $r > a$ and length $L$. By symmetry, $\vect{g} = -g(r)\uv{\rho}$ is radial and zero flux passes through the end caps. Enclosed mass is $M_{\text{enc}} = \lambda L$:
+\begin{equation*}
+  \oint_S \vect{g}\cdot\uv{n}\dd S = -g(2\pi r L) = -4\pi G M_{\text{enc}} = -4\pi G(\lambda L) \implies \eqbox{\vect{g} = -\frac{2G\lambda}{r}\uv{\rho}}
+\end{equation*}
+\end{example}
+
+% ============================================================================
+% UNIQUE SOLVED PROBLEMS — MODULE 4
+% ============================================================================
+\section{Unique Solved Problems (Module 4)}
+
+\subsubsection{Part A: Analytical Mechanics Chapter 9 Exercises (with Complete Derivations)}
+
+\begin{enumerate}[label=\textbf{Ex.\ 9.\arabic*},leftmargin=3.5em]
+  \item \textbf{(Mars--Sun Force and Accelerations):} $M_S = 1.99\times 10^{30}\text{ kg}$, $M_{\text{Mars}} = 6.42\times 10^{23}\text{ kg}$, $r = 2.28\times 10^{11}\text{ m}$:
+  \begin{equation*}
+    F = \frac{GM_S M_{\text{Mars}}}{r^2} = \eqbox{1.64\times 10^{21}\text{ N}}, \quad a_{\text{Mars}} = \frac{F}{M_{\text{Mars}}} = \eqbox{2.55\times 10^{-3}\text{ m/s}^2}, \quad a_S = \frac{F}{M_S} = \eqbox{8.24\times 10^{-10}\text{ m/s}^2}
+  \end{equation*}
+
+  \item \textbf{(Mass Independence of Free Fall):} $m\vect{a} = \vect{F}_g = m\vect{g} \implies \vect{a} = \vect{g} = -\frac{GM_E}{r^2}\uv{r}$, which is independent of $m$.
+
+  \item \textbf{(Three Point Masses):} $m_1 = m$ at $(1,2)$, $m_2 = 2m$ at $(3,4)$, $m_3 = 3m$ at $(-2,-2)$. Force on $m_2$:
+  \begin{align*}
+    \vect{r}_2 - \vect{r}_1 &= 2\ihat + 2\jhat \quad(|\vect{r}_2-\vect{r}_1| = \sqrt{8}), \qquad \vect{r}_2 - \vect{r}_3 = 5\ihat + 6\jhat \quad(|\vect{r}_2-\vect{r}_3| = \sqrt{61})\\
+    \vect{F}_2 &= -Gm(2m)\frac{2\ihat+2\jhat}{8\sqrt{8}} - G(3m)(2m)\frac{5\ihat+6\jhat}{61\sqrt{61}} = \eqbox{-Gm^2(0.24\ihat + 0.25\jhat)}
+  \end{align*}
+
+  \item \textbf{(Curl of Newton's Law of Gravitation):} For $\vect{F} = -GMm\frac{x\ihat+y\jhat+z\khat}{(x^2+y^2+z^2)^{3/2}}$, $(\nabla\times\vect{F})_z = \frac{\partial F_y}{\partial x} - \frac{\partial F_x}{\partial y} = -GMm\!\left[\frac{3xy}{r^5} - \frac{3yx}{r^5}\right] = 0$, and cyclic permutations give $\eqbox{\nabla\times\vect{F} = \vect{0}}$.
+
+  \item \textbf{(Field on Perpendicular Bisector of Two Masses $M$ Separated by $a$):} At $(0,0,z)$ with sources at $(\pm a/2, 0, 0)$, distance is $D = \sqrt{(a/2)^2 + z^2}$ and $\cos\theta = \frac{z}{D}$:
+  \begin{equation*}
+    \vect{g} = -2\frac{GM}{D^2}\cos\theta\,\uv{z} = \eqbox{-\frac{2GMz}{\left[(a/2)^2 + z^2\right]^{3/2}}\uv{z}}
+  \end{equation*}
+
+  \item \textbf{(Two Masses $M$ at $(0,0)$ and $(0,4)$):}
+  \begin{itemize}
+    \item At $(0,3)$: $\vect{g} = -GM\!\left(\frac{\jhat}{3^2} - \frac{\jhat}{1^2}\right) = \eqbox{+\frac{8}{9}GM\jhat = 0.89GM\jhat}$.
+    \item At $(3,0)$: $\vect{r}-\vect{r}_1 = 3\ihat$ ($r_1=3$), $\vect{r}-\vect{r}_2 = 3\ihat - 4\jhat$ ($r_2=5$):
+    \begin{equation*}
+      \vect{g}(3,0) = -GM\!\left[\frac{3\ihat}{27} + \frac{3\ihat - 4\jhat}{125}\right] = -GM\!\left[\left(\frac{1}{9}+\frac{3}{125}\right)\ihat - \frac{4}{125}\jhat\right] = \eqbox{GM(-0.14\ihat + 0.03\jhat)}
+    \end{equation*}
+  \end{itemize}
+
+  \setcounter{enumi}{7}
+  \item \textbf{(Field on the Axis of a Ring of Mass $M$ and Radius $R$):} Every element $\diff m$ is at distance $D = \sqrt{z^2+R^2}$ with $\cos\theta = \frac{z}{\sqrt{z^2+R^2}}$, so $g_z = -\int\frac{G\dd m}{z^2+R^2}\frac{z}{\sqrt{z^2+R^2}} = \eqbox{-\frac{GMz}{(z^2+R^2)^{3/2}}}$.
+
+  \item \textbf{(Disk as Concentric Rings):} A ring of radius $r'$ and width $\diff r'$ has mass $\diff M = \sigma(2\pi r'\dd r')$. Using Exercise 9.8:
+  \begin{equation*}
+    g_z = -\int_0^R \frac{G(2\pi\sigma r'\dd r')z}{(z^2+r'^2)^{3/2}} = -2\pi\sigma G z\!\left[-\frac{1}{\sqrt{z^2+r'^2}}\right]_0^R = \eqbox{-2\pi\sigma G\!\left(1 - \frac{z}{\sqrt{z^2+R^2}}\right)}
+  \end{equation*}
+
+  \item \textbf{(Potential on the Axis of a Thin Disk of Radius $R$, Density $\rho$, and Thickness $t$):} With $\sigma = \rho t$ and ring mass $\diff m = 2\pi\rho t r'\dd r'$ at distance $\sqrt{z^2+r'^2}$:
+  \begin{equation*}
+    \Phi(z) = -G\int_0^R \frac{2\pi\rho t r'\dd r'}{\sqrt{z^2+r'^2}} = -2\pi\rho t G\!\left[\sqrt{z^2+r'^2}\right]_0^R = \eqbox{-2\pi\rho t G\!\left[(z^2+R^2)^{1/2} - z\right]}
+  \end{equation*}
+
+  \item \textbf{(Solid Angle of a Spherical Shell):} By Eq.\ (9.11), $\oint_S\dd\Omega = \int_0^{2\pi}\dd\phi\int_0^\pi\sin\theta\dd\theta = 2\pi(2) = \eqbox{4\pi\text{ sr}}$.
+
+  \item \textbf{(Point Mass Field via Gauss's Law):} For a spherical Gaussian surface of radius $r$ centered on $M$, $\oint_S\vect{g}\cdot\uv{n}\dd S = g_r(4\pi r^2) = -4\pi GM \implies \eqbox{\vect{g} = -\frac{GM}{r^2}\uv{r}}$.
+
+  \item \textbf{(Sources of $\vect{E}$ and $\vect{B}$ in Maxwell's Equations):} By Helmholtz's theorem, the sources of a vector field are its divergence and curl. Thus the sources of $\vect{E}$ are charge density $\rho$ and time-varying magnetic fields $-\frac{\partial\vect{B}}{\partial t}$; the sources of $\vect{B}$ are current density $\vect{J}$ and time-varying electric fields $\frac{\partial\vect{E}}{\partial t}$ (displacement current).
+\end{enumerate}
+
+\subsubsection{Part B: Section 9.10 End-of-Chapter Problems (PDF 2, pp.\ 231--234)}
+
+\begin{enumerate}[label=\textbf{Prob.\ 9.\arabic*},leftmargin=4.2em]
+  \setcounter{enumi}{3}
+  \item \textbf{[Prob.\ 9.4, p.\ 231] Time for a Stopped Earth to Fall into the Sun:}
+  An object falling from rest at $r_0 = a_{\text{orbit}}$ directly into the Sun follows a degenerate ellipse with semi-major axis $a_{\text{fall}} = \frac{r_0}{2}$ ($e\to 1$). By Kepler's third law ($T \propto a^{3/2}$), a full fall-and-return period is $T_{\text{fall}} = T_{\text{Earth}}\!\left(\frac{1}{2}\right)^{3/2}$, so the one-way collision time is half of $T_{\text{fall}}$:
+  \begin{equation*}
+    t_{\text{collide}} = \frac{1}{2}\!\left(\frac{1}{2}\right)^{3/2} T_{\text{Earth}} = \frac{T_{\text{Earth}}}{4\sqrt{2}} = \frac{365.25\text{ days}}{5.657} = \eqbox{64.6\text{ days}}
+  \end{equation*}
+
+  \setcounter{enumi}{6}
+  \item \textbf{[Prob.\ 9.7, p.\ 231] Surface-Skimming Satellite Period Depends Only on Density $\rho$:}
+  For a circular orbit at $r = R$ around a uniform spherical planet of mass $M = \frac{4}{3}\pi R^3\rho$:
+  \begin{equation*}
+    T = \frac{2\pi R^{3/2}}{\sqrt{GM}} = \frac{2\pi R^{3/2}}{\sqrt{G\!\left(\frac{4}{3}\pi R^3\rho\right)}} = \eqbox{\sqrt{\frac{3\pi}{G\rho}}}
+  \end{equation*}
+  Because $R$ cancels completely, a planet of radius $2R$ with the same density $\rho$ has the \textbf{exact same} surface-skimming orbital period $T$.
+
+  \item \textbf{[Prob.\ 9.8 \& 9.18, p.\ 231--232] Infinite Flat Sheet of Surface Mass Density $\sigma$:}
+  \begin{itemize}
+    \item \textbf{(a) Via Gauss's Law (Prob.\ 9.18a) or Integration (Prob.\ 9.8a):} Using a cylindrical pillbox of cross-sectional area $A$ straddling the sheet ($M_{\text{enc}} = \sigma A$), flux through the two faces is $-2gA = -4\pi G(\sigma A) \implies \eqbox{g = 2\pi G\sigma}$ (uniform, pointing toward the sheet).
+    \item \textbf{(b) Force on spherical shell of mass $M$ at height $b > a$:} $\eqbox{F = Mg = 2\pi G\sigma M}$.
+    \item \textbf{(c) Comparison with spherical shell of surface density $\sigma$ (Prob.\ 9.18b--c):} Just outside a sphere of mass $M = 4\pi a^2\sigma$, $g_{\text{sphere}} = \frac{G(4\pi a^2\sigma)}{a^2} = \eqbox{4\pi G\sigma = 2g_{\text{sheet}}}$.
+  \end{itemize}
+
+  \item \textbf{[Prob.\ 9.9, p.\ 231] Gravitational Pressure on an Outer Concentric Spherical Shell:}
+  Inner sphere has radius $a, m_a$; outer shell has radius $b > a$ and mass $m_b$ ($\sigma_b = \frac{m_b}{4\pi b^2}$). The field at radius $b$ is the sum of the field $g_a = \frac{Gm_a}{b^2}$ from the inner shell and the self-field $\frac{1}{2}g_b = \frac{Gm_b}{2b^2}$ of the outer shell on itself. Thus the inward force per unit area (pressure) on the outer sphere is:
+  \begin{equation*}
+    P = \sigma_b\!\left(\frac{Gm_a}{b^2} + \frac{Gm_b}{2b^2}\right) = \eqbox{\frac{Gm_b(m_a + m_b/2)}{4\pi b^4}} \qquad \left(\text{or }\frac{Gm_a m_b}{4\pi b^4}\text{ due to }m_a\text{ alone}\right)
+  \end{equation*}
+
+  \setcounter{enumi}{10}
+  \item \textbf{[Prob.\ 9.11 \& 9.14, p.\ 231] Field and Potential on the Axis of a Right Circular Cylinder ($M, L, a$):}
+  Center of cylinder is at $z'=0$ ($z'\in [-L/2, L/2]$); field point is at $z > L/2$. Distance to disk at $z'$ is $t = z - z'$ ($\diff t = -\diff z'$, $\diff m = \frac{M}{L}\dd z'$).
+  \begin{itemize}
+    \item \textbf{Prob.\ 9.11 (Field $g_z$):} Integrate Worked Example 9.2 over $t\in [z-L/2, z+L/2]$:
+    \begin{align*}
+      g_z &= -\frac{2GM}{La^2}\int_{z-L/2}^{z+L/2}\left(1 - \frac{t}{\sqrt{t^2+a^2}}\right)\dd t = \eqbox{-\frac{2GM}{La^2}\!\left[L - \sqrt{(z+L/2)^2+a^2} + \sqrt{(z-L/2)^2+a^2}\right]}
+    \end{align*}
+    \item \textbf{Prob.\ 9.14 (Potential $\Phi$):} Integrate $\diff\Phi_{\text{disk}} = \frac{2G\dd m}{a^2}\!\left[t - \sqrt{a^2+t^2}\right]$ from $t_1 = z - L/2$ to $t_2 = z + L/2$ using $\int\sqrt{a^2+t^2}\dd t = \frac{1}{2}\!\left[t\sqrt{a^2+t^2} + a^2\ln\!\left(t+\sqrt{a^2+t^2}\right)\right]$:
+    \begin{equation*}
+      \eqbox{\Phi(z) = \frac{2GM}{La^2}\!\left[zL - \frac{1}{2}\!\left(t\sqrt{a^2+t^2} + a^2\ln\!\left(t+\sqrt{a^2+t^2}\right)\right)_{t_1 = z-L/2}^{t_2 = z+L/2}\right]}
+    \end{equation*}
+  \end{itemize}
+
+  \setcounter{enumi}{16}
+  \item \textbf{[Prob.\ 9.17 \& 9.20, p.\ 232] Field and Potential Inside and Outside a Uniform Sphere ($M, R$):}
+  \begin{itemize}
+    \item \textbf{Outside ($r \ge R$):} $M_{\text{enc}} = M \implies \eqbox{\vect{g}(r) = -\frac{GM}{r^2}\uv{r}}$, and $\eqbox{\Phi(r) = -\frac{GM}{r}}$.
+    \item \textbf{Inside ($r < R$):} $M_{\text{enc}} = M\frac{r^3}{R^3} \implies 4\pi r^2 g_r = -4\pi G M\frac{r^3}{R^3} \implies \eqbox{\vect{g}(r) = -\frac{GMr}{R^3}\uv{r}}$.
+    \item Integrating $\Phi(r) - \Phi(R) = -\int_R^r g_{r'}\dd r' = \int_R^r \frac{GMr'}{R^3}\dd r' = \frac{GM}{2R^3}(r^2 - R^2)$ with $\Phi(R) = -\frac{GM}{R}$ gives:
+    \begin{equation*}
+      \eqbox{\Phi(r) = -\frac{GM}{2R^3}(3R^2 - r^2) \qquad (r < R)}
+    \end{equation*}
+  \end{itemize}
+
+  \setcounter{enumi}{18}
+  \item \textbf{[Prob.\ 9.19, p.\ 232] Intergalactic Gas Cloud with $\rho(r) = \frac{Mb^2}{2\pi r(r^2+b^2)^2}$:}
+  \begin{itemize}
+    \item Enclosed mass inside radius $r$:
+    \begin{equation*}
+      M_{\text{enc}}(r) = \int_0^r \frac{Mb^2}{2\pi r'(r'^2+b^2)^2}(4\pi r'^2\dd r') = 2Mb^2\int_0^r \frac{r'\dd r'}{(r'^2+b^2)^2} = 2Mb^2\!\left[-\frac{1}{2(r'^2+b^2)}\right]_0^r = \frac{Mr^2}{r^2+b^2}
+    \end{equation*}
+    \item By Gauss's law, $-4\pi r^2 g_r = -4\pi G M_{\text{enc}}(r)$:
+    \begin{equation*}
+      \eqbox{\vect{g}(r) = -\frac{GM}{r^2+b^2}\uv{r}}, \qquad \Phi(r) = \int_\infty^r g_{r'}\dd r' = \eqbox{-\frac{GM}{b}\!\left[\frac{\pi}{2} - \arctan\!\left(\frac{r}{b}\right)\right] = -\frac{GM}{b}\cot^{-1}\!\left(\frac{r}{b}\right)}
+    \end{equation*}
+  \end{itemize}
+
+  \setcounter{enumi}{22}
+  \item \textbf{[Prob.\ 9.23, p.\ 232] Sphere of Radius $R$ with Off-Center Spherical Cavity of Radius $R/2$:}
+  Full sphere has mass $M_{\text{full}} = \frac{4}{3}\pi R^3\rho$ centered at $O$. Cavity has radius $R/2$, volume $\frac{1}{8}V_{\text{full}}$, mass $M_{\text{cav}} = \frac{1}{8}M_{\text{full}} = \frac{1}{6}\pi R^3\rho$, centered at $z_c = R/4$. At $z > R$ on the line of centers, superpose the full sphere at $z=0$ and negative cavity mass at $z = R/4$:
+  \begin{equation*}
+    F_z = -Gm\!\left[\frac{M_{\text{full}}}{z^2} - \frac{M_{\text{cav}}}{(z - R/4)^2}\right] = \eqbox{-\frac{4}{3}\pi G\rho R^3 m\!\left[\frac{1}{z^2} - \frac{1}{8(z - R/4)^2}\right]}
+  \end{equation*}
+
+  \item \textbf{[Prob.\ 9.24 \& 9.29, p.\ 232--233] Quadrupole Potential of a Ring of Mass $m$ and Radius $a$ at $(r,\theta)$ ($r \gg a$):}
+  Place the ring in the $xy$-plane ($\theta_1 = \pi/2$, $\phi_1 = \phi'$). For a field point at $(r,\theta,0)$, $\cos\gamma = \sin\theta\cos\phi'$. The distance from ring element $\diff m = \frac{m}{2\pi}\dd\phi'$ to the field point is:
+  \begin{align*}
+    |\vect{r}-\vect{r}'|^{-1} &= r^{-1}\!\left(1 - \frac{2a}{r}\sin\theta\cos\phi' + \frac{a^2}{r^2}\right)^{-1/2}\\
+    &\approx \frac{1}{r}\!\left[1 + \frac{a}{r}\sin\theta\cos\phi' + \frac{a^2}{2r^2}(3\sin^2\theta\cos^2\phi' - 1) + \mathcal{O}\!\left(\frac{a^3}{r^3}\right)\right]
+  \end{align*}
+  Integrate over $\phi'\in [0, 2\pi]$ using $\int_0^{2\pi}\cos\phi'\dd\phi' = 0$ and $\int_0^{2\pi}\cos^2\phi'\dd\phi' = \pi$:
+  \begin{equation*}
+    \eqbox{\Phi(r,\theta) = -\frac{Gm}{r}\!\left[1 + \frac{a^2}{4r^2}(3\sin^2\theta - 2)\right] = -\frac{Gm}{r}\!\left[1 - \frac{a^2}{2r^2}P_2(\cos\theta)\right]}
+  \end{equation*}
+  In the plane of the ring ($\theta = \pi/2$, $\sin\theta = 1$, Prob.\ 9.29 with mass $M$), this gives $\eqbox{\Phi(r,\pi/2) = -\frac{GM}{r}\!\left(1 + \frac{a^2}{4r^2}\right)}$.
+
+  \item \textbf{[Prob.\ 9.25, p.\ 233] Simple Harmonic Motion in a Tunnel Through Earth:}
+  From Example 13.10, at distance $r$ from Earth's center, the restoring force is $F_r = -\frac{GM_E m}{R_E^3}r = -kr$ where $k = \frac{GM_E m}{R_E^3} = \frac{mg}{R_E}$.
+  \begin{itemize}
+    \item \textbf{(a)} The equation of motion is:
+    \begin{equation*}
+      m\ddot{r} + \frac{mg}{R_E}r = 0 \implies \eqbox{\ddot{r} + \omega^2 r = 0, \qquad \omega = \sqrt{\frac{g}{R_E}}}
+    \end{equation*}
+    \item \textbf{(b)} The period of oscillation is:
+    \begin{equation*}
+      \eqbox{T = \frac{2\pi}{\omega} = 2\pi\sqrt{\frac{R_E}{g}}} = 2\pi\sqrt{\frac{6.38\times 10^6\text{ m}}{9.80\text{ m/s}^2}} = \eqbox{5070\text{ s} \approx 84.5\text{ min}}
+    \end{equation*}
+    This is identical to the period of a satellite in a surface-skimming circular orbit.
+    \item \textbf{(c)} The one-way transit time through Earth is:
+    \begin{equation*}
+      \eqbox{t_{\text{transit}} = \frac{T}{2} \approx 42.2\text{ min}}
+    \end{equation*}
+  \end{itemize}
+
+  \item \textbf{[Prob.\ 9.26, p.\ 233] Gravitational Self-Energy of a Uniform Solid Sphere:}
+  Assemble a uniform solid sphere of mass $M$, radius $R$, and density $\rho = \frac{3M}{4\pi R^3}$ layer by layer from $r = 0$ to $r = R$. Bringing a spherical shell of radius $r$, thickness $\diff r$, and mass $\diff m = 4\pi\rho r^2\dd r$ from infinity to the surface of the core of mass $M(r) = \frac{4}{3}\pi\rho r^3$ requires gravitational work:
+  \begin{equation*}
+    \diff U = -\frac{GM(r)\dd m}{r} = -\frac{G\left(\frac{4}{3}\pi\rho r^3\right)(4\pi\rho r^2\dd r)}{r} = -\frac{16}{3}\pi^2 G\rho^2 r^4\dd r
+  \end{equation*}
+  Integrating from $r = 0$ to $r = R$:
+  \begin{equation*}
+    \eqbox{U_{\text{self}} = -\frac{16}{3}\pi^2 G\rho^2\int_0^R r^4\dd r = -\frac{16}{15}\pi^2 G\rho^2 R^5 = -\frac{3}{5}\frac{GM^2}{R}}
+  \end{equation*}
+
+  \item \textbf{[Young \& Freedman Prob.\ 13.71, p.\ 433] Secant Tunnel Through a Rotating Planet:}
+  A straight frictionless tunnel is drilled through Earth along a chord at perpendicular distance $d$ from Earth's center.
+  \begin{itemize}
+    \item \textbf{(a)} When a body of mass $m$ is at distance $x$ along the tunnel from the midpoint, its distance from the center is $r = \sqrt{x^2 + d^2}$. The radial gravitational force points toward the center: $\vect{F}_g = -\frac{mg}{R_E}\vect{r}$.
+    \item \textbf{(b)} The component of force along the tunnel is $F_x = F_g\cos\theta = -\left(\frac{mg}{R_E}r\right)\!\left(\frac{x}{r}\right) = \eqbox{-\frac{mg}{R_E}x}$.
+    \item \textbf{(c)} Since $F_x = -kx$ with $k = \frac{mg}{R_E}$ independent of $d$, the oscillation period along \textbf{any} chord through Earth is:
+    \begin{equation*}
+      \eqbox{T = 2\pi\sqrt{\frac{R_E}{g}} \approx 84.5\text{ min}}
+    \end{equation*}
+  \end{itemize}
+
+  \item \textbf{[Young \& Freedman Prob.\ 13.83, p.\ 434] Hohmann Transfer Orbit to Mars:}
+  A spacecraft transfers from Earth's circular orbit ($r_E = 1.50\times 10^{11}\text{ m}$) to Mars's orbit ($r_M = 2.28\times 10^{11}\text{ m}$) along an elliptical orbit with perihelion at Earth and aphelion at Mars ($m_S = 1.99\times 10^{30}\text{ kg}$).
+  \begin{itemize}
+    \item \textbf{(a)} Semi-major axis: $a = \frac{r_E + r_M}{2} = \frac{1.50\times 10^{11} + 2.28\times 10^{11}}{2} = \eqbox{1.89\times 10^{11}\text{ m}}$.
+    \item \textbf{(b)} The transfer time is half the orbital period:
+    \begin{equation*}
+      \eqbox{t_{\text{transfer}} = \frac{T}{2} = \frac{\pi a^{3/2}}{\sqrt{Gm_S}} = \frac{\pi(1.89\times 10^{11})^{3/2}}{\sqrt{(6.67\times 10^{-11})(1.99\times 10^{30})}} = 2.24\times 10^7\text{ s} \approx 259\text{ days} \approx 8.5\text{ months}}
+    \end{equation*}
+    \item \textbf{(c)} Speed needed at perihelion: $v_p = \sqrt{Gm_S\!\left(\frac{2}{r_E} - \frac{1}{a}\right)} = \eqbox{32.7\text{ km/s}}$ (an impulse of $\Delta v = 32.7 - 29.8 = 2.9\text{ km/s}$ relative to Earth's orbit).
+  \end{itemize}
+\end{enumerate}
+
+% ============================================================================
+% FORMULA SHEET — MODULE 4
+% ============================================================================
+\formulasheet{Module 4 Formula Sheet: Gravitation and Gravitational Fields}
+
+\begin{fs}{1. Newton's Law of Gravitation, Satellites, and Kepler's Laws}
+\begin{align*}
+  \vect{F}_{21} &= -G\frac{m_1 m_2}{r^2}\uv{r}, \qquad g = \frac{GM_E}{R_E^2}, \qquad U(r) = -\frac{GMm}{r}, \qquad v_{\text{esc}} = \sqrt{\frac{2GM}{R}}\\
+  v_{\text{orb}} &= \sqrt{\frac{GM}{r}}, \qquad T = \frac{2\pi r^{3/2}}{\sqrt{GM}}, \qquad E = -\frac{GMm}{2r} = -K = \frac{U}{2}\\
+  \text{Kepler's Laws:}\quad & r_p = a(1-e), \quad r_a = a(1+e), \quad \frac{\diff A}{\diff t} = \frac{L}{2m} = \text{const}, \quad T^2 = \left(\frac{4\pi^2}{GM_S}\right)a^3, \quad R_S = \frac{2GM}{c^2}
+\end{align*}
+\end{fs}
+
+\begin{fs}{2. Gravitational Field, Gauss's Law, Poisson's and Laplace's Equations}
+\begin{align*}
+  \vect{g} &= -\nabla\Phi, \qquad \Phi(\vect{r}) = -G\int\frac{\rho(\vect{r}')\dd\tau'}{|\vect{r}-\vect{r}'|}\\
+  \text{Spherical Shell:}\quad & \Phi(r) = -\frac{GM}{r},\ \vect{g} = -\frac{GM}{r^2}\uv{r}\ (r > R); \qquad \Phi(r) = -\frac{GM}{R},\ \vect{g} = \vect{0}\ (r < R)\\
+  \text{Solid Sphere:}\quad & g(r) = -\frac{GM}{r^2}\ (r \ge R); \qquad g(r) = -\frac{GMr}{R^3}\ (r < R)\\
+  \text{Gauss's Law:}\quad & \oint_S\vect{g}\cdot\uv{n}\dd S = -4\pi GM_{\text{enc}} \iff \nabla\cdot\vect{g} = -4\pi G\rho, \qquad \nabla\times\vect{g} = \vect{0}\\
+  \text{Field Equations:}\quad & \nabla^2\Phi = 4\pi G\rho\ (\text{Poisson}), \qquad \nabla^2\Phi = 0\ (\text{Laplace}), \qquad G^{\mu\nu} = -\frac{8\pi G}{c^2}T^{\mu\nu}\ (\text{Einstein})
+\end{align*}
+\end{fs}
+
+\end{document}
