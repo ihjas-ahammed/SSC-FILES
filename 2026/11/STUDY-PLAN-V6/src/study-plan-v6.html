@@ -8126,6 +8126,7 @@ details.unit-dd[open] summary::after {
     let lastTapX = 0;
     let lastTapY = 0;
     bodyEl.addEventListener("touchstart", (e) => {
+      if (!e.touches) return;
       if (e.touches.length === 2) {
         isPinching = true;
         PV_STATE.isPinching = true;
@@ -8158,6 +8159,7 @@ details.unit-dd[open] summary::after {
       }
     }, { passive: false });
     bodyEl.addEventListener("touchmove", (e) => {
+      if (!e.touches) return;
       if (isPinching && e.touches.length === 2) {
         e.preventDefault();
         const t1 = e.touches[0];
@@ -8179,7 +8181,7 @@ details.unit-dd[open] summary::after {
     }, { passive: false });
     const onPinchEnd = (e) => {
       if (!isPinching) return;
-      if (e.touches.length > 0) return;
+      if (e.touches && e.touches.length > 0) return;
       isPinching = false;
       const transformStr = container.style.transform;
       container.style.transform = "";

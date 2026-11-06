@@ -334,6 +334,7 @@ function setupMobileGestures(el) {
 
   // Touch start: detect 2-finger pinch or double tap
   bodyEl.addEventListener("touchstart", (e) => {
+    if (!e.touches) return;
     if (e.touches.length === 2) {
       isPinching = true;
       PV_STATE.isPinching = true;
@@ -376,6 +377,7 @@ function setupMobileGestures(el) {
 
   // Touch move: scale around focal point smoothly with zero page-jumping
   bodyEl.addEventListener("touchmove", (e) => {
+    if (!e.touches) return;
     if (isPinching && e.touches.length === 2) {
       e.preventDefault(); // Prevent native browser viewport zoom interference
 
@@ -403,7 +405,7 @@ function setupMobileGestures(el) {
   // Touch end: commit new scale and maintain exact focal point
   const onPinchEnd = (e) => {
     if (!isPinching) return;
-    if (e.touches.length > 0) return; // Wait until all fingers are lifted
+    if (e.touches && e.touches.length > 0) return; // Wait until all fingers are lifted
 
     isPinching = false;
     const transformStr = container.style.transform;
