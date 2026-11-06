@@ -11,6 +11,7 @@ import { toast, esc } from "../utils/dom.js";
 // Viewer State
 export const PV_STATE = {
   isOpen: false,
+  isZenMode: false,
   pdfDoc: null,
   currentUrl: null,
   currentPage: 1,
@@ -83,7 +84,7 @@ export function getOrCreateViewerEl() {
         </div>
       </div>
 
-      <!-- Desktop Toolbar: Page Jump & Zoom -->
+      <!-- Desktop Toolbar: Page Jump & Zoom & Fullscreen -->
       <div class="pdf-hdr-center">
         <div class="pdf-page-controls">
           <button id="pv-btn-prev" class="pdf-btn-step" title="Previous page (Left arrow)" aria-label="Previous page">
@@ -102,9 +103,12 @@ export function getOrCreateViewerEl() {
           <button id="pv-btn-zoom-out" class="pdf-btn-step" title="Zoom out (-)" aria-label="Zoom out">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4"/></svg>
           </button>
-          <button id="pv-btn-fit-width" class="pdf-zoom-badge" title="Fit width">Fit Width</button>
+          <button id="pv-btn-fit-width" class="pdf-zoom-badge" title="Fit width (80% on desktop, 100% on mobile)">Fit Width</button>
           <button id="pv-btn-zoom-in" class="pdf-btn-step" title="Zoom in (+)" aria-label="Zoom in">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+          </button>
+          <button id="pv-btn-fullscreen" class="pdf-btn-step" title="Fullscreen (Zen mode - only pages)" aria-label="Fullscreen">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
           </button>
         </div>
       </div>
@@ -131,7 +135,7 @@ export function getOrCreateViewerEl() {
       </div>
 
       <!-- Error State -->
-      <div id="pv-error" class="pdf-state-card hidden">
+      <div id="pv-error" class="pdf-state-card hidden" style="display: none;">
         <div class="w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 flex items-center justify-center">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
         </div>
@@ -146,6 +150,12 @@ export function getOrCreateViewerEl() {
       <!-- Rendered Page Slots Container -->
       <div id="pv-pages-container" class="pdf-pages-container"></div>
     </main>
+
+    <!-- Floating Exit Button for Zen Mode -->
+    <button id="pv-zen-exit" class="pdf-zen-exit hidden" title="Exit Fullscreen (Esc)">
+      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+      <span>Exit Fullscreen</span>
+    </button>
 
     <!-- Mobile Floating Bottom Toolbar -->
     <div class="pdf-mobile-bar">
@@ -163,6 +173,9 @@ export function getOrCreateViewerEl() {
       <button id="pv-m-fit" class="pdf-zoom-badge" title="Fit width">Fit</button>
       <button id="pv-m-zoom-in" class="pdf-btn-step" title="Zoom in" aria-label="Zoom in">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+      </button>
+      <button id="pv-m-fullscreen" class="pdf-btn-step" title="Fullscreen (Zen mode)" aria-label="Fullscreen">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
       </button>
     </div>
   `;
@@ -210,6 +223,22 @@ function bindViewerEvents(el) {
   el.querySelector("#pv-btn-fit-width").onclick = toggleFitWidth;
   el.querySelector("#pv-m-fit").onclick = toggleFitWidth;
 
+  // Fullscreen / Zen Mode controls
+  const toggleZen = () => toggleZenMode();
+  const fsBtn = el.querySelector("#pv-btn-fullscreen");
+  const mFsBtn = el.querySelector("#pv-m-fullscreen");
+  const zenExitBtn = el.querySelector("#pv-zen-exit");
+  if (fsBtn) fsBtn.onclick = toggleZen;
+  if (mFsBtn) mFsBtn.onclick = toggleZen;
+  if (zenExitBtn) zenExitBtn.onclick = () => toggleZenMode(false);
+
+  // Listen to native fullscreen changes
+  document.addEventListener("fullscreenchange", () => {
+    if (!document.fullscreenElement && PV_STATE.isZenMode) {
+      toggleZenMode(false);
+    }
+  });
+
   // Retry
   el.querySelector("#pv-btn-retry").onclick = () => {
     if (PV_STATE.currentUrl) {
@@ -222,7 +251,11 @@ function bindViewerEvents(el) {
     if (!PV_STATE.isOpen) return;
     if (e.key === "Escape") {
       e.preventDefault();
-      closePdfViewer();
+      if (PV_STATE.isZenMode) {
+        toggleZenMode(false);
+      } else {
+        closePdfViewer();
+      }
     } else if (e.key === "ArrowLeft" || e.key === "PageUp") {
       if (document.activeElement?.tagName !== "INPUT") {
         e.preventDefault();
@@ -262,20 +295,66 @@ function bindViewerEvents(el) {
   });
 }
 
-// Compute Optimal Scale
+/**
+ * Toggle Fullscreen / Zen Mode (only pages visible)
+ * @param {boolean} [forceState]
+ */
+export function toggleZenMode(forceState) {
+  const overlay = document.getElementById("pdf-viewer-overlay");
+  const exitBtn = document.getElementById("pv-zen-exit");
+  if (!overlay) return;
+
+  const willBeZen = typeof forceState === "boolean" ? forceState : !PV_STATE.isZenMode;
+  PV_STATE.isZenMode = willBeZen;
+
+  if (willBeZen) {
+    overlay.classList.add("pdf-zen-mode");
+    if (exitBtn) {
+      exitBtn.classList.remove("hidden");
+      exitBtn.style.display = "inline-flex";
+    }
+    // Attempt native browser fullscreen if available and permitted
+    if (!document.fullscreenElement && overlay.requestFullscreen) {
+      overlay.requestFullscreen().catch(() => {});
+    }
+  } else {
+    overlay.classList.remove("pdf-zen-mode");
+    if (exitBtn) {
+      exitBtn.classList.add("hidden");
+      exitBtn.style.display = "none";
+    }
+    if (document.fullscreenElement && document.exitFullscreen) {
+      document.exitFullscreen().catch(() => {});
+    }
+  }
+
+  // Reflow page sizing in new full-viewport dimensions
+  if (PV_STATE.scaleMode === "fit-width") {
+    setTimeout(recalculateScaleAndLayout, 50);
+  }
+}
+
+// Compute Optimal Scale (80% on desktop, 100% on mobile)
 function computeScale(sampleViewport) {
   const bodyEl = document.getElementById("pdf-viewer-body");
   if (!bodyEl || !sampleViewport) return 1.0;
 
   if (PV_STATE.scaleMode === "fit-width") {
-    // Available viewport width with padding
-    const clientW = bodyEl.clientWidth;
-    const padding = clientW <= 640 ? 20 : 48;
-    const availW = Math.max(280, clientW - padding);
-    let scale = availW / sampleViewport.width;
-    // On large desktop, cap width so text doesn't become gigantic
-    if (scale > 1.4) scale = 1.4;
-    if (scale < 0.4) scale = 0.4;
+    const clientW = bodyEl.clientWidth || window.innerWidth;
+    const isMobile = clientW <= 768;
+
+    let targetW;
+    if (isMobile) {
+      // 5. On mobile fit to 100% viewport width edge-to-edge
+      targetW = clientW;
+    } else {
+      // 4. On desktop fit to 80% window width
+      targetW = Math.round(clientW * 0.8);
+    }
+
+    let scale = targetW / sampleViewport.width;
+    if (scale < 0.25) scale = 0.25;
+    if (scale > 3.5) scale = 3.5;
     return scale;
   }
 
@@ -529,8 +608,14 @@ async function loadDocument(url, targetPage = 1) {
   const errorEl = document.getElementById("pv-error");
   const pagesContainer = document.getElementById("pv-pages-container");
 
-  if (loadingEl) loadingEl.classList.remove("hidden");
-  if (errorEl) errorEl.classList.add("hidden");
+  if (loadingEl) {
+    loadingEl.classList.remove("hidden");
+    loadingEl.style.display = "flex";
+  }
+  if (errorEl) {
+    errorEl.classList.add("hidden");
+    errorEl.style.display = "none";
+  }
   if (pagesContainer) pagesContainer.innerHTML = "";
 
   // Reset internal state
@@ -563,7 +648,7 @@ async function loadDocument(url, targetPage = 1) {
     const sampleVp = firstPage.getViewport({ scale: 1.0 });
     PV_STATE.pageViewports[1] = sampleVp;
 
-    // Compute scale
+    // Compute scale (80% on desktop, 100% on mobile)
     PV_STATE.currentScale = computeScale(sampleVp);
 
     // Populate total pages in UI
@@ -603,7 +688,10 @@ async function loadDocument(url, targetPage = 1) {
     pagesContainer.appendChild(fragment);
 
     // Hide loader
-    if (loadingEl) loadingEl.classList.add("hidden");
+    if (loadingEl) {
+      loadingEl.classList.add("hidden");
+      loadingEl.style.display = "none";
+    }
 
     // Initialize IntersectionObserver for lazy rendering
     setupIntersectionObserver();
@@ -615,9 +703,13 @@ async function loadDocument(url, targetPage = 1) {
 
   } catch (err) {
     console.error("[PDF Viewer Error]", err);
-    if (loadingEl) loadingEl.classList.add("hidden");
+    if (loadingEl) {
+      loadingEl.classList.add("hidden");
+      loadingEl.style.display = "none";
+    }
     if (errorEl) {
       errorEl.classList.remove("hidden");
+      errorEl.style.display = "flex";
       const sub = document.getElementById("pv-error-sub");
       if (sub) sub.textContent = err.message || "Failed to fetch PDF from GitHub.";
     }
@@ -678,23 +770,32 @@ export function openPdfViewer({ url, page = 1, title = "Textbook", sectionTitle 
  * @param {number} unitNumber - e.g. 1, 2, 3
  */
 export function openUnitPdf(subjectId, unitNumber) {
+  const num = Number(unitNumber);
   const s = SUBJECTS[subjectId];
-  const info = getUnitPdfInfo(subjectId, unitNumber);
+  let info = getUnitPdfInfo(subjectId, num);
+
+  if (!info) {
+    // Graceful fallback to any mapped unit in this subject
+    const anyUnit = s?.units?.find(u => getUnitPdfInfo(subjectId, u.u));
+    if (anyUnit) {
+      info = getUnitPdfInfo(subjectId, anyUnit.u);
+    }
+  }
 
   if (!info) {
     toast(`No cutout mapped for ${subjectId} Unit ${unitNumber}`);
     return;
   }
 
-  const uObj = s?.units?.find(x => x.u === unitNumber);
-  const uTitle = uObj ? cleanUnit(uObj.text) : `Unit ${unitNumber}`;
+  const uObj = s?.units?.find(x => x.u === num);
+  const uTitle = uObj ? cleanUnit(uObj.text) : `Unit ${num}`;
   const subjName = s?.name || subjectId;
 
   openPdfViewer({
     url: info.path,
     page: info.page,
     title: subjName,
-    sectionTitle: `Unit ${unitNumber}: ${uTitle}`,
+    sectionTitle: `Unit ${num}: ${uTitle}`,
     rawUrl: RES_RAW + encodeURI(info.path)
   });
 }
@@ -703,6 +804,10 @@ export function openUnitPdf(subjectId, unitNumber) {
  * Close In-App PDF Viewer
  */
 export function closePdfViewer() {
+  if (PV_STATE.isZenMode) {
+    toggleZenMode(false);
+  }
+
   const overlay = document.getElementById("pdf-viewer-overlay");
   if (overlay) overlay.classList.add("hidden");
   document.body.style.overflow = "";
@@ -725,4 +830,5 @@ if (typeof window !== "undefined") {
   window.openPdfViewer = openPdfViewer;
   window.openUnitPdf = openUnitPdf;
   window.closePdfViewer = closePdfViewer;
+  window.toggleZenMode = toggleZenMode;
 }

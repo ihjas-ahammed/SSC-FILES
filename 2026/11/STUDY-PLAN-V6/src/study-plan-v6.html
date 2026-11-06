@@ -2933,7 +2933,10 @@ details.unit-dd[open] summary::after {
   -webkit-user-select: none;
 }
 
-.pdf-viewer-overlay.hidden {
+.pdf-viewer-overlay.hidden,
+.pdf-state-card.hidden,
+.pdf-zen-exit.hidden,
+.hidden {
   display: none !important;
 }
 
@@ -3172,6 +3175,34 @@ details.unit-dd[open] summary::after {
   position: relative;
   background: #0b1329;
   scroll-behavior: smooth;
+  /* Custom Transparent Scrollbar (Firefox) */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+}
+
+/* Custom Transparent Scrollbar (WebKit / Chrome / Safari / Edge) */
+.pdf-viewer-body::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  background: transparent;
+}
+
+.pdf-viewer-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.pdf-viewer-body::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 9999px;
+  transition: background 0.2s ease;
+}
+
+.pdf-viewer-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.pdf-viewer-body::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
 /* Loading & Error States */
@@ -3234,7 +3265,7 @@ details.unit-dd[open] summary::after {
 .pdf-page-slot {
   position: relative;
   background: #ffffff;
-  border-radius: 8px;
+  border-radius: 0 !important;
   box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.08);
   transition: transform 0.2s ease, box-shadow 0.2s ease, outline 0.2s ease;
   overflow: hidden;
@@ -3269,7 +3300,7 @@ details.unit-dd[open] summary::after {
   display: block;
   width: 100%;
   height: 100%;
-  border-radius: 8px;
+  border-radius: 0 !important;
 }
 
 .pdf-page-placeholder {
@@ -3284,6 +3315,7 @@ details.unit-dd[open] summary::after {
   color: #64748b;
   font-size: 13px;
   font-weight: 700;
+  border-radius: 0 !important;
 }
 
 .pdf-page-number-tag {
@@ -3332,6 +3364,47 @@ details.unit-dd[open] summary::after {
   font-size: 12px;
 }
 
+/* Zen / Pure Pages Fullscreen Mode */
+.pdf-viewer-overlay.pdf-zen-mode .pdf-viewer-header,
+.pdf-viewer-overlay.pdf-zen-mode .pdf-mobile-bar {
+  display: none !important;
+}
+
+.pdf-viewer-overlay.pdf-zen-mode .pdf-viewer-body {
+  padding: 16px 0 32px;
+  gap: 18px;
+}
+
+.pdf-zen-exit {
+  position: fixed;
+  top: 16px;
+  right: 18px;
+  z-index: 10000;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: #f8fafc;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+  transition: all 0.2s ease;
+  opacity: 0.35;
+}
+
+.pdf-zen-exit:hover {
+  opacity: 1;
+  background: rgba(15, 23, 42, 0.98);
+  border-color: rgba(255, 255, 255, 0.45);
+  transform: scale(1.04);
+}
+
 /* Responsive Breakpoints */
 @media (max-width: 768px) {
   .pdf-hdr-center {
@@ -3355,8 +3428,8 @@ details.unit-dd[open] summary::after {
   }
   
   .pdf-viewer-body {
-    padding: 14px 10px 84px;
-    gap: 16px;
+    padding: 8px 0px 84px;
+    gap: 12px;
   }
 }
 
@@ -3545,7 +3618,7 @@ details.unit-dd[open] summary::after {
       <div id="panel-pyq" class="hidden space-y-4"></div>
 
       <!-- START BUTTON -->
-      <button id="ss-main-start" onclick="openStartModal()" class="w-full py-3.5 px-6 rounded-[18px] bg-[#fbbd23] hover:bg-[#f4b315] active:scale-[0.99] text-[#0b1e5e] font-display font-extrabold text-[17px] shadow-[0_8px_20px_-4px_rgba(251,189,35,0.45)] flex items-center justify-center gap-2.5 transition">
+      <button id="ss-main-start" onclick="startSessionReader()" class="w-full py-3.5 px-6 rounded-[18px] bg-[#fbbd23] hover:bg-[#f4b315] active:scale-[0.99] text-[#0b1e5e] font-display font-extrabold text-[17px] shadow-[0_8px_20px_-4px_rgba(251,189,35,0.45)] flex items-center justify-center gap-2.5 transition">
         <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M7 5.5v13l11-6.5-11-6.5z"/></svg>
         <span id="main-start-btn-text">Start</span>
       </button>
@@ -5844,22 +5917,6 @@ details.unit-dd[open] summary::after {
 
   // ../app/js/data/systems.js
   var SYS_BASE = /(^|\.)ssc-data-science-qm\.web\.app$/.test(location.hostname) ? "" : "https://ssc-data-science-qm.web.app";
-  var SYSTEMS = {
-    // Physics
-    TH: { name: "Thermodynamics", url: "/phy/thermodynamics/", modules: ["1", "2", "3", "4"] },
-    EL2: { name: "Electronics II", url: "/phy/electronics-2/", modules: ["1", "2", "3", "4"] },
-    NP: { name: "Nuclear & Particle Physics", url: "/phy/nuclear-physics/", modules: ["1", "2", "3", "4"] },
-    NT: { name: "Nanoscience & Technology", url: "/phy/nanoscience/", modules: ["1", "2", "3", "4"] },
-    OPTO: { name: "Optoelectronics", url: "/phy/optoelectronics/", modules: ["1", "2", "3", "4"] },
-    EPD: { name: "Electrical & Photovoltaic Devices", url: "/phy/epd/", modules: ["1", "2", "3", "4"] },
-    // Mathematics
-    DE: { name: "Methods of Differential Equations", url: "/math/diff-equations/", modules: ["1", "2", "3", "4"] },
-    CA2: { name: "Complex Analysis II", url: "/math/complex-analysis-2/", modules: ["1", "2", "3", "4"] },
-    ENT: { name: "Elementary Number Theory", url: "/math/number-theory/", modules: ["1", "2", "3", "4"] },
-    AP: { name: "Applied Probability", url: "/math/applied-probability/", modules: ["1", "2", "3", "4"] },
-    ML2: { name: "Machine Learning II", url: "/math/machine-learning-2/", modules: ["1", "2", "3", "4"] },
-    DSP: { name: "Data Science with Python", url: "/math/data-science-python/", modules: ["1", "2", "3", "4"] }
-  };
 
   // ../app/js/data/resources.js
   var RES_RAW = "https://raw.githubusercontent.com/ihjas-ahammed/SSC-FILES/main/";
@@ -7433,6 +7490,7 @@ details.unit-dd[open] summary::after {
   // ../app/js/views/pdf-viewer.js
   var PV_STATE = {
     isOpen: false,
+    isZenMode: false,
     pdfDoc: null,
     currentUrl: null,
     currentPage: 1,
@@ -7500,7 +7558,7 @@ details.unit-dd[open] summary::after {
         </div>
       </div>
 
-      <!-- Desktop Toolbar: Page Jump & Zoom -->
+      <!-- Desktop Toolbar: Page Jump & Zoom & Fullscreen -->
       <div class="pdf-hdr-center">
         <div class="pdf-page-controls">
           <button id="pv-btn-prev" class="pdf-btn-step" title="Previous page (Left arrow)" aria-label="Previous page">
@@ -7519,9 +7577,12 @@ details.unit-dd[open] summary::after {
           <button id="pv-btn-zoom-out" class="pdf-btn-step" title="Zoom out (-)" aria-label="Zoom out">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4"/></svg>
           </button>
-          <button id="pv-btn-fit-width" class="pdf-zoom-badge" title="Fit width">Fit Width</button>
+          <button id="pv-btn-fit-width" class="pdf-zoom-badge" title="Fit width (80% on desktop, 100% on mobile)">Fit Width</button>
           <button id="pv-btn-zoom-in" class="pdf-btn-step" title="Zoom in (+)" aria-label="Zoom in">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+          </button>
+          <button id="pv-btn-fullscreen" class="pdf-btn-step" title="Fullscreen (Zen mode - only pages)" aria-label="Fullscreen">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
           </button>
         </div>
       </div>
@@ -7548,7 +7609,7 @@ details.unit-dd[open] summary::after {
       </div>
 
       <!-- Error State -->
-      <div id="pv-error" class="pdf-state-card hidden">
+      <div id="pv-error" class="pdf-state-card hidden" style="display: none;">
         <div class="w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 flex items-center justify-center">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
         </div>
@@ -7563,6 +7624,12 @@ details.unit-dd[open] summary::after {
       <!-- Rendered Page Slots Container -->
       <div id="pv-pages-container" class="pdf-pages-container"></div>
     </main>
+
+    <!-- Floating Exit Button for Zen Mode -->
+    <button id="pv-zen-exit" class="pdf-zen-exit hidden" title="Exit Fullscreen (Esc)">
+      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+      <span>Exit Fullscreen</span>
+    </button>
 
     <!-- Mobile Floating Bottom Toolbar -->
     <div class="pdf-mobile-bar">
@@ -7580,6 +7647,9 @@ details.unit-dd[open] summary::after {
       <button id="pv-m-fit" class="pdf-zoom-badge" title="Fit width">Fit</button>
       <button id="pv-m-zoom-in" class="pdf-btn-step" title="Zoom in" aria-label="Zoom in">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+      </button>
+      <button id="pv-m-fullscreen" class="pdf-btn-step" title="Fullscreen (Zen mode)" aria-label="Fullscreen">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
       </button>
     </div>
   `;
@@ -7620,6 +7690,18 @@ details.unit-dd[open] summary::after {
     };
     el.querySelector("#pv-btn-fit-width").onclick = toggleFitWidth;
     el.querySelector("#pv-m-fit").onclick = toggleFitWidth;
+    const toggleZen = () => toggleZenMode();
+    const fsBtn = el.querySelector("#pv-btn-fullscreen");
+    const mFsBtn = el.querySelector("#pv-m-fullscreen");
+    const zenExitBtn = el.querySelector("#pv-zen-exit");
+    if (fsBtn) fsBtn.onclick = toggleZen;
+    if (mFsBtn) mFsBtn.onclick = toggleZen;
+    if (zenExitBtn) zenExitBtn.onclick = () => toggleZenMode(false);
+    document.addEventListener("fullscreenchange", () => {
+      if (!document.fullscreenElement && PV_STATE.isZenMode) {
+        toggleZenMode(false);
+      }
+    });
     el.querySelector("#pv-btn-retry").onclick = () => {
       if (PV_STATE.currentUrl) {
         loadDocument(PV_STATE.currentUrl, PV_STATE.targetPage);
@@ -7629,7 +7711,11 @@ details.unit-dd[open] summary::after {
       if (!PV_STATE.isOpen) return;
       if (e.key === "Escape") {
         e.preventDefault();
-        closePdfViewer();
+        if (PV_STATE.isZenMode) {
+          toggleZenMode(false);
+        } else {
+          closePdfViewer();
+        }
       } else if (e.key === "ArrowLeft" || e.key === "PageUp") {
         if (document.activeElement?.tagName !== "INPUT") {
           e.preventDefault();
@@ -7664,16 +7750,52 @@ details.unit-dd[open] summary::after {
       }
     });
   }
+  function toggleZenMode(forceState) {
+    const overlay = document.getElementById("pdf-viewer-overlay");
+    const exitBtn = document.getElementById("pv-zen-exit");
+    if (!overlay) return;
+    const willBeZen = typeof forceState === "boolean" ? forceState : !PV_STATE.isZenMode;
+    PV_STATE.isZenMode = willBeZen;
+    if (willBeZen) {
+      overlay.classList.add("pdf-zen-mode");
+      if (exitBtn) {
+        exitBtn.classList.remove("hidden");
+        exitBtn.style.display = "inline-flex";
+      }
+      if (!document.fullscreenElement && overlay.requestFullscreen) {
+        overlay.requestFullscreen().catch(() => {
+        });
+      }
+    } else {
+      overlay.classList.remove("pdf-zen-mode");
+      if (exitBtn) {
+        exitBtn.classList.add("hidden");
+        exitBtn.style.display = "none";
+      }
+      if (document.fullscreenElement && document.exitFullscreen) {
+        document.exitFullscreen().catch(() => {
+        });
+      }
+    }
+    if (PV_STATE.scaleMode === "fit-width") {
+      setTimeout(recalculateScaleAndLayout, 50);
+    }
+  }
   function computeScale(sampleViewport) {
     const bodyEl = document.getElementById("pdf-viewer-body");
     if (!bodyEl || !sampleViewport) return 1;
     if (PV_STATE.scaleMode === "fit-width") {
-      const clientW = bodyEl.clientWidth;
-      const padding = clientW <= 640 ? 20 : 48;
-      const availW = Math.max(280, clientW - padding);
-      let scale = availW / sampleViewport.width;
-      if (scale > 1.4) scale = 1.4;
-      if (scale < 0.4) scale = 0.4;
+      const clientW = bodyEl.clientWidth || window.innerWidth;
+      const isMobile = clientW <= 768;
+      let targetW;
+      if (isMobile) {
+        targetW = clientW;
+      } else {
+        targetW = Math.round(clientW * 0.8);
+      }
+      let scale = targetW / sampleViewport.width;
+      if (scale < 0.25) scale = 0.25;
+      if (scale > 3.5) scale = 3.5;
       return scale;
     }
     return typeof PV_STATE.scaleMode === "number" ? PV_STATE.scaleMode : 1;
@@ -7864,8 +7986,14 @@ details.unit-dd[open] summary::after {
     const loadingEl = document.getElementById("pv-loading");
     const errorEl = document.getElementById("pv-error");
     const pagesContainer = document.getElementById("pv-pages-container");
-    if (loadingEl) loadingEl.classList.remove("hidden");
-    if (errorEl) errorEl.classList.add("hidden");
+    if (loadingEl) {
+      loadingEl.classList.remove("hidden");
+      loadingEl.style.display = "flex";
+    }
+    if (errorEl) {
+      errorEl.classList.add("hidden");
+      errorEl.style.display = "none";
+    }
     if (pagesContainer) pagesContainer.innerHTML = "";
     PV_STATE.renderedPages.clear();
     PV_STATE.pageViewports = {};
@@ -7926,16 +8054,23 @@ details.unit-dd[open] summary::after {
         fragment.appendChild(slot);
       }
       pagesContainer.appendChild(fragment);
-      if (loadingEl) loadingEl.classList.add("hidden");
+      if (loadingEl) {
+        loadingEl.classList.add("hidden");
+        loadingEl.style.display = "none";
+      }
       setupIntersectionObserver();
       setTimeout(() => {
         scrollToPage(targetPage);
       }, 100);
     } catch (err) {
       console.error("[PDF Viewer Error]", err);
-      if (loadingEl) loadingEl.classList.add("hidden");
+      if (loadingEl) {
+        loadingEl.classList.add("hidden");
+        loadingEl.style.display = "none";
+      }
       if (errorEl) {
         errorEl.classList.remove("hidden");
+        errorEl.style.display = "flex";
         const sub = document.getElementById("pv-error-sub");
         if (sub) sub.textContent = err.message || "Failed to fetch PDF from GitHub.";
       }
@@ -7969,24 +8104,34 @@ details.unit-dd[open] summary::after {
     loadDocument(fullUrl, page);
   }
   function openUnitPdf(subjectId, unitNumber) {
+    const num = Number(unitNumber);
     const s = SUBJECTS[subjectId];
-    const info = getUnitPdfInfo(subjectId, unitNumber);
+    let info = getUnitPdfInfo(subjectId, num);
+    if (!info) {
+      const anyUnit = s?.units?.find((u) => getUnitPdfInfo(subjectId, u.u));
+      if (anyUnit) {
+        info = getUnitPdfInfo(subjectId, anyUnit.u);
+      }
+    }
     if (!info) {
       toast(`No cutout mapped for ${subjectId} Unit ${unitNumber}`);
       return;
     }
-    const uObj = s?.units?.find((x) => x.u === unitNumber);
-    const uTitle = uObj ? cleanUnit(uObj.text) : `Unit ${unitNumber}`;
+    const uObj = s?.units?.find((x) => x.u === num);
+    const uTitle = uObj ? cleanUnit(uObj.text) : `Unit ${num}`;
     const subjName = s?.name || subjectId;
     openPdfViewer({
       url: info.path,
       page: info.page,
       title: subjName,
-      sectionTitle: `Unit ${unitNumber}: ${uTitle}`,
+      sectionTitle: `Unit ${num}: ${uTitle}`,
       rawUrl: RES_RAW + encodeURI(info.path)
     });
   }
   function closePdfViewer() {
+    if (PV_STATE.isZenMode) {
+      toggleZenMode(false);
+    }
     const overlay = document.getElementById("pdf-viewer-overlay");
     if (overlay) overlay.classList.add("hidden");
     document.body.style.overflow = "";
@@ -8007,6 +8152,7 @@ details.unit-dd[open] summary::after {
     window.openPdfViewer = openPdfViewer;
     window.openUnitPdf = openUnitPdf;
     window.closePdfViewer = closePdfViewer;
+    window.toggleZenMode = toggleZenMode;
   }
 
   // ../app/js/views/session-detail-view.js
@@ -8086,59 +8232,25 @@ details.unit-dd[open] summary::after {
     const divider = document.getElementById("tab-divider");
     if (divider) divider.style.display = tab === "session" ? "block" : "none";
   }
-  function sysFor(det) {
-    const S = SYSTEMS[det.subjectId] || null;
-    const units = normUnits(det.units).map((v) => v.u).filter((u) => SUBJECTS[det.subjectId].units.some((x) => x.u === u));
-    const inside = S ? units.filter((u) => S.modules.includes(String(unitMod(det.subjectId, u)))) : [];
-    return { S, units, inside, outside: units.filter((u) => !inside.includes(u)) };
-  }
-  function sysUrl(S, det, units) {
-    const q = new URLSearchParams({ from: "study-plan", subject: det.subjectId, session: det.id, units: units.join(",") });
-    const at = S.at && S.at[units[0]];
-    return SYS_BASE + S.url + "?" + q.toString() + (at ? "#" + at : "");
-  }
-  function openStartModal() {
+  function startSessionReader() {
     const det = SS.det;
     if (!det) return;
-    const r = sysFor(det);
-    if (!r.units.length) {
+    const list = normUnits(det.units);
+    if (!list.length) {
       toast("No units in this session");
       return;
     }
-    if (r.S && !r.outside.length) {
-      window.open(sysUrl(r.S, det, r.inside), "_blank", "noopener");
-      return;
-    }
-    const name = subj(det.subjectId, cfg).name;
-    const list = (us) => us.map((u) => "Unit " + u).join(", ");
-    document.getElementById("start-modal-msg").textContent = !r.S ? `Dynamic notes are not available for ${name} yet. Use the notes for this session instead?` : r.inside.length ? `${r.S.name} covers ${list(r.inside)} only. Dynamic notes are not available for ${list(r.outside)} yet: use the notes for those.` : `${r.S.name} does not cover ${list(r.outside)}. Dynamic notes are not available for these units yet. Use the notes instead?`;
-    const sysBtn = document.getElementById("start-sys-btn");
-    sysBtn.classList.toggle("hidden", !(r.S && r.inside.length));
-    if (r.S && r.inside.length) {
-      document.getElementById("start-sys-label").textContent = `Open ${r.S.name} for ${list(r.inside)}`;
-      sysBtn.onclick = () => {
-        closeStartModal();
-        window.open(sysUrl(r.S, det, r.inside), "_blank", "noopener");
-      };
-    }
-    document.getElementById("start-modal-backdrop").classList.remove("hidden");
+    const firstUnit = list[0].u;
+    openUnitPdf(det.subjectId, firstUnit);
+  }
+  function openStartModal() {
+    startSessionReader();
   }
   function closeStartModal() {
-    document.getElementById("start-modal-backdrop").classList.add("hidden");
+    document.getElementById("start-modal-backdrop")?.classList.add("hidden");
   }
   function startWithNotes() {
-    closeStartModal();
-    const det = SS.det;
-    if (det && det.units && det.units.length) {
-      const list = normUnits(det.units);
-      if (list.length) {
-        openUnitPdf(det.subjectId, list[0].u);
-        return;
-      }
-    }
-    ssSwitchTab("resources");
-    const p = document.getElementById("panel-resources");
-    if (p) p.scrollIntoView({ behavior: "smooth", block: "start" });
+    startSessionReader();
   }
   function setStatusState(state) {
     const badge = document.getElementById("hero-status-badge");
@@ -8306,11 +8418,11 @@ details.unit-dd[open] summary::after {
     const fillBtn = document.getElementById("fill-details-btn");
     if (fillBtn) fillBtn.remove();
     setStatusState(det.done ? "done" : "not-done");
-    const sys = sysFor(det).S;
     const mainStart = document.getElementById("ss-main-start");
     if (mainStart) {
       mainStart.disabled = false;
-      mainStart.title = sys ? "Open " + sys.name : "Use the notes";
+      mainStart.title = "Start reading textbook in app";
+      mainStart.onclick = () => startSessionReader();
     }
     unitsData.length = 0;
     normUnits(det.units).forEach((v) => {
@@ -8342,6 +8454,15 @@ details.unit-dd[open] summary::after {
     document.getElementById("panel-resources").innerHTML = resourcesHtml(det);
     document.getElementById("panel-pyq").innerHTML = pyqHtml(det);
     renderUnits();
+  }
+  if (typeof window !== "undefined") {
+    window.startSessionReader = startSessionReader;
+    window.openStartModal = startSessionReader;
+    window.closeStartModal = closeStartModal;
+    window.startWithNotes = startWithNotes;
+    window.setUnitStage = setUnitStage;
+    window.toggleUnitEstimate = toggleUnitEstimate;
+    window.ssSwitchTab = ssSwitchTab;
   }
 
   // ../app/js/views/schedule-view.js

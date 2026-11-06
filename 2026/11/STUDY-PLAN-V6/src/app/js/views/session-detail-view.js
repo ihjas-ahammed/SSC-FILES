@@ -115,52 +115,29 @@ export function sysUrl(S, det, units) {
   return SYS_BASE + S.url + "?" + q.toString() + (at ? "#" + at : "");
 }
 
-export function openStartModal() {
+export function startSessionReader() {
   const det = SS.det;
   if (!det) return;
-  const r = sysFor(det);
-  if (!r.units.length) { toast("No units in this session"); return; }
-  if (r.S && !r.outside.length) {
-    window.open(sysUrl(r.S, det, r.inside), "_blank", "noopener");
+  const list = normUnits(det.units);
+  if (!list.length) {
+    toast("No units in this session");
     return;
   }
-  const name = subj(det.subjectId, cfg).name;
-  const list = (us) => us.map(u => "Unit " + u).join(", ");
-  document.getElementById('start-modal-msg').textContent = !r.S
-    ? `Dynamic notes are not available for ${name} yet. Use the notes for this session instead?`
-    : r.inside.length
-      ? `${r.S.name} covers ${list(r.inside)} only. Dynamic notes are not available for ${list(r.outside)} yet: use the notes for those.`
-      : `${r.S.name} does not cover ${list(r.outside)}. Dynamic notes are not available for these units yet. Use the notes instead?`;
+  const firstUnit = list[0].u;
+  openUnitPdf(det.subjectId, firstUnit);
+}
 
-  const sysBtn = document.getElementById('start-sys-btn');
-  sysBtn.classList.toggle('hidden', !(r.S && r.inside.length));
-  if (r.S && r.inside.length) {
-    document.getElementById('start-sys-label').textContent = `Open ${r.S.name} for ${list(r.inside)}`;
-    sysBtn.onclick = () => {
-      closeStartModal();
-      window.open(sysUrl(r.S, det, r.inside), "_blank", "noopener");
-    };
-  }
-  document.getElementById('start-modal-backdrop').classList.remove('hidden');
+export function openStartModal() {
+  // Directly start the in-app reader for the session without opening broken or obsolete modals
+  startSessionReader();
 }
 
 export function closeStartModal() {
-  document.getElementById('start-modal-backdrop').classList.add('hidden');
+  document.getElementById('start-modal-backdrop')?.classList.add('hidden');
 }
 
 export function startWithNotes() {
-  closeStartModal();
-  const det = SS.det;
-  if (det && det.units && det.units.length) {
-    const list = normUnits(det.units);
-    if (list.length) {
-      openUnitPdf(det.subjectId, list[0].u);
-      return;
-    }
-  }
-  ssSwitchTab('resources');
-  const p = document.getElementById('panel-resources');
-  if (p) p.scrollIntoView({ behavior: "smooth", block: "start" });
+  startSessionReader();
 }
 
 export function setStatusState(state) {
@@ -346,11 +323,11 @@ export function ssFill(det) {
   if (fillBtn) fillBtn.remove();
   setStatusState(det.done ? 'done' : 'not-done');
 
-  const sys = sysFor(det).S;
   const mainStart = document.getElementById('ss-main-start');
   if (mainStart) {
     mainStart.disabled = false;
-    mainStart.title = sys ? 'Open ' + sys.name : 'Use the notes';
+    mainStart.title = 'Start reading textbook in app';
+    mainStart.onclick = () => startSessionReader();
   }
 
   unitsData.length = 0;
@@ -381,4 +358,14 @@ export function ssFill(det) {
   document.getElementById('panel-resources').innerHTML = resourcesHtml(det);
   document.getElementById('panel-pyq').innerHTML = pyqHtml(det);
   renderUnits();
+}
+
+if (typeof window !== "undefined") {
+  window.startSessionReader = startSessionReader;
+  window.openStartModal = startSessionReader;
+  window.closeStartModal = closeStartModal;
+  window.startWithNotes = startWithNotes;
+  window.setUnitStage = setUnitStage;
+  window.toggleUnitEstimate = toggleUnitEstimate;
+  window.ssSwitchTab = ssSwitchTab;
 }
