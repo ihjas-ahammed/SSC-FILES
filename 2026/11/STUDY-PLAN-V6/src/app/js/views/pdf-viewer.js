@@ -315,6 +315,70 @@ function bindViewerEvents(el) {
   });
 }
 
+// Finds the page slot under or closest to screen coordinate (screenX, screenY) relative to bodyEl
+function getAnchorSlotAndOffset(screenX, screenY) {
+  const bodyEl = document.getElementById("pdf-viewer-body");
+  if (!bodyEl) return null;
+  const bRect = bodyEl.getBoundingClientRect();
+  const clientX = bRect.left + screenX;
+  const clientY = bRect.top + screenY;
+
+  let el = document.elementFromPoint(clientX, clientY);
+  let slot = el ? el.closest(".pdf-page-slot") : null;
+
+  if (!slot) {
+    const slots = Array.from(document.querySelectorAll(".pdf-page-slot"));
+    if (slots.length === 0) return null;
+    let closest = null;
+    let minDist = Infinity;
+    for (const s of slots) {
+      const r = s.getBoundingClientRect();
+      if (clientY >= r.top && clientY <= r.bottom) {
+        slot = s;
+        break;
+      }
+      const d = Math.min(Math.abs(clientY - r.top), Math.abs(clientY - r.bottom));
+      if (d < minDist) {
+        minDist = d;
+        closest = s;
+      }
+    }
+    if (!slot) slot = closest;
+  }
+
+  if (!slot) return null;
+  const sRect = slot.getBoundingClientRect();
+  const pageNum = parseInt(slot.dataset.page || slot.getAttribute("data-page") || slot.id.replace("pv-page-slot-", ""), 10) || 1;
+  return {
+    slot,
+    pageNum,
+    relX: sRect.width > 0 ? (clientX - sRect.left) / sRect.width : 0.5,
+    relY: sRect.height > 0 ? (clientY - sRect.top) / sRect.height : 0.5
+  };
+}
+
+// Restores scroll position so that anchor's (relX, relY) lands exactly at (targetScreenX, targetScreenY)
+function restoreAnchorScroll(anchor, targetScreenX, targetScreenY) {
+  const bodyEl = document.getElementById("pdf-viewer-body");
+  if (!bodyEl || !anchor) return;
+
+  const slot = document.getElementById(`pv-page-slot-${anchor.pageNum}`) || anchor.slot;
+  if (!slot) return;
+
+  const bRect = bodyEl.getBoundingClientRect();
+  const sRect = slot.getBoundingClientRect();
+
+  // Slot position in body's scrollable content space
+  const slotTopInBody = sRect.top - bRect.top + bodyEl.scrollTop;
+  const slotLeftInBody = sRect.left - bRect.left + bodyEl.scrollLeft;
+
+  const newPointY = slotTopInBody + (slot.clientHeight * anchor.relY);
+  const newPointX = slotLeftInBody + (slot.clientWidth * anchor.relX);
+
+  bodyEl.scrollTop = Math.max(0, Math.round(newPointY - targetScreenY));
+  bodyEl.scrollLeft = Math.max(0, Math.round(newPointX - targetScreenX));
+}
+
 // Mobile multi-directional swipe & fluid focal-point 2-finger pinch zoom
 function setupMobileGestures(el) {
   const bodyEl = el.querySelector("#pdf-viewer-body");
@@ -326,8 +390,9 @@ function setupMobileGestures(el) {
   let startScale = 1.0;
   let focalScreenX = 0;
   let focalScreenY = 0;
-  let contentFocalX = 0;
-  let contentFocalY = 0;
+  let pinchAnchor = null;
+  let panDeltaX = 0;
+  let panDeltaY = 0;
   let lastTapTime = 0;
   let lastTapX = 0;
   let lastTapY = 0;
@@ -345,16 +410,23 @@ function setupMobileGestures(el) {
       startScale = PV_STATE.currentScale;
 
       const bRect = bodyEl.getBoundingClientRect();
+      const cRect = container.getBoundingClientRect();
+
       focalScreenX = (t1.clientX + t2.clientX) / 2 - bRect.left;
       focalScreenY = (t1.clientY + t2.clientY) / 2 - bRect.top;
 
-      // Position in content coordinates under focal point
-      contentFocalX = bodyEl.scrollLeft + focalScreenX;
-      contentFocalY = bodyEl.scrollTop + focalScreenY;
+      // Capture anchor at touchstart in un-transformed coordinates
+      pinchAnchor = getAnchorSlotAndOffset(focalScreenX, focalScreenY);
 
-      // Anchor CSS preview transform directly on the touch midpoint
+      // Anchor CSS preview transform directly on touch midpoint in container coordinates
+      const originX = (t1.clientX + t2.clientX) / 2 - cRect.left;
+      const originY = (t1.clientY + t2.clientY) / 2 - cRect.top;
+
+      panDeltaX = 0;
+      panDeltaY = 0;
+
       container.style.transition = "none";
-      container.style.transformOrigin = `${contentFocalX}px ${contentFocalY}px`;
+      container.style.transformOrigin = `${originX}px ${originY}px`;
     } else if (e.touches.length === 1) {
       const now = Date.now();
       const t = e.touches[0];
@@ -394,8 +466,8 @@ function setupMobileGestures(el) {
         const bRect = bodyEl.getBoundingClientRect();
         const curMidX = (t1.clientX + t2.clientX) / 2 - bRect.left;
         const curMidY = (t1.clientY + t2.clientY) / 2 - bRect.top;
-        const panDeltaX = curMidX - focalScreenX;
-        const panDeltaY = curMidY - focalScreenY;
+        panDeltaX = curMidX - focalScreenX;
+        panDeltaY = curMidY - focalScreenY;
 
         container.style.transform = `translate(${panDeltaX}px, ${panDeltaY}px) scale(${clampedFactor})`;
       }
@@ -413,11 +485,9 @@ function setupMobileGestures(el) {
     container.style.transformOrigin = "";
 
     const matchScale = transformStr.match(/scale\(([^)]+)\)/);
-    const matchTranslate = transformStr.match(/translate\(([^p]+)px,\s*([^p]+)px\)/);
-
     const factor = matchScale ? parseFloat(matchScale[1]) : 1.0;
-    const panX = matchTranslate ? parseFloat(matchTranslate[1]) : 0;
-    const panY = matchTranslate ? parseFloat(matchTranslate[2]) : 0;
+    const targetScreenX = focalScreenX + panDeltaX;
+    const targetScreenY = focalScreenY + panDeltaY;
 
     if (!isNaN(factor) && factor > 0 && Math.abs(factor - 1.0) > 0.04) {
       const sampleVp = PV_STATE.pageViewports[1];
@@ -433,19 +503,14 @@ function setupMobileGestures(el) {
         PV_STATE.scaleMode = newScale;
       }
 
-      // Compute exact new scroll coordinates so focal point stays stationary
-      const ratio = newScale / startScale;
-      const newContentX = contentFocalX * ratio;
-      const newContentY = contentFocalY * ratio;
-
-      const targetScrollLeft = Math.round(newContentX - (focalScreenX + panX));
-      const targetScrollTop = Math.round(newContentY - (focalScreenY + panY));
-
       recalculateScaleAndLayout(false);
 
-      bodyEl.scrollLeft = Math.max(0, targetScrollLeft);
-      bodyEl.scrollTop = Math.max(0, targetScrollTop);
+      if (pinchAnchor) {
+        restoreAnchorScroll(pinchAnchor, targetScreenX, targetScreenY);
+      }
     }
+
+    pinchAnchor = null;
 
     setTimeout(() => {
       PV_STATE.isPinching = false;
@@ -466,31 +531,19 @@ function handleDoubleTap(tapX, tapY) {
   const fitScale = sampleVp ? computeScale(sampleVp) : 1.0;
   const isCurrentlyFit = PV_STATE.scaleMode === "fit-width" || Math.abs(PV_STATE.currentScale - fitScale) < 0.08;
 
-  const startScale = PV_STATE.currentScale;
-  let targetScale;
+  const anchor = getAnchorSlotAndOffset(tapX, tapY);
 
   if (isCurrentlyFit) {
-    targetScale = Math.round(fitScale * 1.85 * 10) / 10;
-    PV_STATE.scaleMode = targetScale;
+    PV_STATE.scaleMode = Math.round(fitScale * 1.85 * 10) / 10;
   } else {
-    targetScale = fitScale;
     PV_STATE.scaleMode = "fit-width";
   }
 
-  const ratio = targetScale / startScale;
-  const contentX = bodyEl.scrollLeft + tapX;
-  const contentY = bodyEl.scrollTop + tapY;
-
-  const newContentX = contentX * ratio;
-  const newContentY = contentY * ratio;
-
-  const targetScrollLeft = Math.round(newContentX - tapX);
-  const targetScrollTop = Math.round(newContentY - tapY);
-
   recalculateScaleAndLayout(false);
 
-  bodyEl.scrollLeft = Math.max(0, targetScrollLeft);
-  bodyEl.scrollTop = Math.max(0, targetScrollTop);
+  if (anchor) {
+    restoreAnchorScroll(anchor, tapX, tapY);
+  }
 
   setTimeout(updateActivePageOnScroll, 60);
 }
@@ -576,18 +629,15 @@ function recalculateScaleAndLayout(preservePagePosition = true) {
   if (!sampleVp) return;
 
   const bodyEl = document.getElementById("pdf-viewer-body");
-  const curPageNum = PV_STATE.currentPage || 1;
-  let pageOffsetRatio = 0;
+  let anchor = null;
+  let anchorScreenX = 0;
+  let anchorScreenY = 0;
 
-  // Preserve relative viewing position on the current page across zoom levels
+  // Anchor to exact center of view before reflow
   if (preservePagePosition && bodyEl && !PV_STATE.isPinching) {
-    const curSlot = document.getElementById(`pv-page-slot-${curPageNum}`);
-    if (curSlot) {
-      const sRect = curSlot.getBoundingClientRect();
-      const bRect = bodyEl.getBoundingClientRect();
-      const offsetFromPageTop = bRect.top - sRect.top;
-      pageOffsetRatio = curSlot.clientHeight > 0 ? offsetFromPageTop / curSlot.clientHeight : 0;
-    }
+    anchorScreenX = bodyEl.clientWidth / 2;
+    anchorScreenY = bodyEl.clientHeight / 2;
+    anchor = getAnchorSlotAndOffset(anchorScreenX, anchorScreenY);
   }
 
   const newScale = computeScale(sampleVp);
@@ -628,13 +678,9 @@ function recalculateScaleAndLayout(preservePagePosition = true) {
     }
   }
 
-  // Restore relative viewing offset so the user stays on the exact same content
-  if (preservePagePosition && bodyEl && !PV_STATE.isPinching && pageOffsetRatio !== 0) {
-    const curSlot = document.getElementById(`pv-page-slot-${curPageNum}`);
-    if (curSlot) {
-      const newPageTop = curSlot.offsetTop;
-      bodyEl.scrollTop = Math.max(0, Math.round(newPageTop + curSlot.clientHeight * pageOffsetRatio));
-    }
+  // Restore center anchor position so user remains locked on same reading point
+  if (preservePagePosition && bodyEl && !PV_STATE.isPinching && anchor) {
+    restoreAnchorScroll(anchor, anchorScreenX, anchorScreenY);
   }
 }
 
