@@ -103,9 +103,13 @@ export function getOrCreateViewerEl() {
           <button id="pv-btn-zoom-out" class="pdf-btn-step" title="Zoom out (-)" aria-label="Zoom out">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4"/></svg>
           </button>
-          <button id="pv-btn-fit-width" class="pdf-zoom-badge" title="Fit width (80% on desktop, 100% on mobile)">Fit Width</button>
+          <span id="pv-zoom-level" class="pdf-zoom-level" title="Current zoom (click to reset 100%)">100%</span>
           <button id="pv-btn-zoom-in" class="pdf-btn-step" title="Zoom in (+)" aria-label="Zoom in">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+          </button>
+          <button id="pv-btn-fit-width" class="pdf-btn-fit-width" title="Fit width to screen">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 8h16M4 16h16M8 4L4 8l4 4M16 12l4 4-4 4"/></svg>
+            <span>Fit Width</span>
           </button>
           <button id="pv-btn-fullscreen" class="pdf-btn-step" title="Fullscreen (Zen mode - only pages)" aria-label="Fullscreen">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
@@ -115,10 +119,6 @@ export function getOrCreateViewerEl() {
 
       <!-- Right Header Actions -->
       <div class="pdf-hdr-right">
-        <a id="pv-btn-raw" href="#" target="_blank" rel="noopener" class="pdf-btn-open-raw" title="Open or download original PDF on GitHub">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-          <span>Raw</span>
-        </a>
         <button id="pv-btn-close-right" class="pdf-btn-icon" title="Close (Esc)" aria-label="Close">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
@@ -223,6 +223,17 @@ function bindViewerEvents(el) {
   el.querySelector("#pv-btn-fit-width").onclick = toggleFitWidth;
   el.querySelector("#pv-m-fit").onclick = toggleFitWidth;
 
+  const zoomLevelEl = el.querySelector("#pv-zoom-level");
+  if (zoomLevelEl) {
+    zoomLevelEl.onclick = () => {
+      PV_STATE.scaleMode = 1.0;
+      recalculateScaleAndLayout();
+    };
+  }
+
+  // Mobile multi-directional gestures and pinch zoom
+  setupMobileGestures(el);
+
   // Fullscreen / Zen Mode controls
   const toggleZen = () => toggleZenMode();
   const fsBtn = el.querySelector("#pv-btn-fullscreen");
@@ -295,6 +306,83 @@ function bindViewerEvents(el) {
   });
 }
 
+// Mobile multi-directional swipe & 2-finger pinch zoom
+function setupMobileGestures(el) {
+  const bodyEl = el.querySelector("#pdf-viewer-body");
+  const container = el.querySelector("#pv-pages-container");
+  if (!bodyEl || !container) return;
+
+  let initialPinchDist = 0;
+  let initialScale = 1.0;
+  let isPinching = false;
+  let lastTapTime = 0;
+
+  // Touch start: 2-finger pinch or double tap
+  bodyEl.addEventListener("touchstart", (e) => {
+    if (e.touches.length === 2) {
+      isPinching = true;
+      const t1 = e.touches[0];
+      const t2 = e.touches[1];
+      initialPinchDist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+      initialScale = PV_STATE.currentScale;
+      container.style.transition = "none";
+    } else if (e.touches.length === 1) {
+      const now = Date.now();
+      if (now - lastTapTime < 280) {
+        // Double tap: toggle between fit-width and 1.6x zoom
+        e.preventDefault();
+        const sampleVp = PV_STATE.pageViewports[1];
+        const fitScale = sampleVp ? computeScale(sampleVp) : 1.0;
+        if (PV_STATE.scaleMode === "fit-width" || Math.abs(PV_STATE.currentScale - fitScale) < 0.08) {
+          PV_STATE.scaleMode = Math.round(fitScale * 1.6 * 10) / 10;
+        } else {
+          PV_STATE.scaleMode = "fit-width";
+        }
+        recalculateScaleAndLayout();
+      }
+      lastTapTime = now;
+    }
+  }, { passive: false });
+
+  // Touch move: live smooth pinch zoom with 60fps GPU acceleration
+  bodyEl.addEventListener("touchmove", (e) => {
+    if (isPinching && e.touches.length === 2) {
+      e.preventDefault();
+      const t1 = e.touches[0];
+      const t2 = e.touches[1];
+      const currentDist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+      if (initialPinchDist > 8) {
+        const factor = currentDist / initialPinchDist;
+        container.style.transformOrigin = "50% 0%";
+        container.style.transform = `scale(${factor})`;
+      }
+    }
+  }, { passive: false });
+
+  // Touch end: commit new scale and re-render sharp canvas
+  const onPinchEnd = () => {
+    if (isPinching) {
+      isPinching = false;
+      const matrix = container.style.transform;
+      container.style.transform = "";
+      container.style.transition = "";
+
+      const match = matrix.match(/scale\(([^)]+)\)/);
+      if (match) {
+        const factor = parseFloat(match[1]);
+        if (!isNaN(factor) && factor > 0 && Math.abs(factor - 1.0) > 0.05) {
+          const newScale = Math.max(0.4, Math.min(3.8, Math.round(initialScale * factor * 100) / 100));
+          PV_STATE.scaleMode = newScale;
+          recalculateScaleAndLayout();
+        }
+      }
+    }
+  };
+
+  bodyEl.addEventListener("touchend", onPinchEnd, { passive: true });
+  bodyEl.addEventListener("touchcancel", onPinchEnd, { passive: true });
+}
+
 /**
  * Toggle Fullscreen / Zen Mode (only pages visible)
  * @param {boolean} [forceState]
@@ -334,7 +422,7 @@ export function toggleZenMode(forceState) {
   }
 }
 
-// Compute Optimal Scale (80% on desktop, 100% on mobile)
+// Compute Optimal Scale (Matches device width)
 function computeScale(sampleViewport) {
   const bodyEl = document.getElementById("pdf-viewer-body");
   if (!bodyEl || !sampleViewport) return 1.0;
@@ -345,16 +433,16 @@ function computeScale(sampleViewport) {
 
     let targetW;
     if (isMobile) {
-      // 5. On mobile fit to 100% viewport width edge-to-edge
+      // Mobile: fit to 100% of device width edge-to-edge
       targetW = clientW;
     } else {
-      // 4. On desktop fit to 80% window width
-      targetW = Math.round(clientW * 0.8);
+      // Desktop: fit width to screen width with clean 16px paper margins
+      targetW = Math.max(320, clientW - 32);
     }
 
     let scale = targetW / sampleViewport.width;
     if (scale < 0.25) scale = 0.25;
-    if (scale > 3.5) scale = 3.5;
+    if (scale > 4.0) scale = 4.0;
     return scale;
   }
 
@@ -370,10 +458,20 @@ function recalculateScaleAndLayout() {
   const newScale = computeScale(sampleVp);
   PV_STATE.currentScale = newScale;
 
-  // Update zoom badge text
+  // Update zoom level indicator
   const pctText = `${Math.round(newScale * 100)}%`;
+  const zoomLevelEl = document.getElementById("pv-zoom-level");
+  if (zoomLevelEl) zoomLevelEl.textContent = pctText;
+
+  // Highlight active fit-width badge if currently in fit-width mode
   const fitBtn = document.getElementById("pv-btn-fit-width");
-  if (fitBtn) fitBtn.textContent = PV_STATE.scaleMode === "fit-width" ? "Fit Width" : pctText;
+  const mFitBtn = document.getElementById("pv-m-fit");
+  if (fitBtn) {
+    fitBtn.classList.toggle("active", PV_STATE.scaleMode === "fit-width");
+  }
+  if (mFitBtn) {
+    mFitBtn.classList.toggle("active", PV_STATE.scaleMode === "fit-width");
+  }
 
   // Resize all slots according to new dimensions
   const container = document.getElementById("pv-pages-container");
@@ -750,10 +848,8 @@ export function openPdfViewer({ url, page = 1, title = "Textbook", sectionTitle 
     secPill.style.display = "none";
   }
 
-  // Set Raw button links
-  const rawBtn = document.getElementById("pv-btn-raw");
+  // Set error raw link if needed
   const errRawBtn = document.getElementById("pv-btn-error-raw");
-  if (rawBtn) rawBtn.href = downloadUrl;
   if (errRawBtn) errRawBtn.href = downloadUrl;
 
   // Show Overlay

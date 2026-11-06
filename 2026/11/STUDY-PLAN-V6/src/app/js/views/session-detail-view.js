@@ -39,14 +39,10 @@ export function renderUnits() {
     return `
       <div class="bg-white rounded-[20px] border border-slate-200/85 shadow-[0_4px_18px_-4px_rgba(15,23,42,0.04)] flex items-stretch overflow-hidden transition">
         <div class="w-1.5 ${sc.border} shrink-0"></div>
-        <div class="flex-1 min-w-0 p-4 flex items-center justify-between gap-3">
-          <div class="flex-1 min-w-0 pr-2">
-            <div class="flex items-center justify-between gap-2 mb-2.5">
-              <h4 class="font-display font-bold text-[16px] text-[#0f172a] truncate">${esc(u.name)}</h4>
-              <button onclick="openUnitPdf('${sid}', ${u.u})" title="Read section in textbook" class="px-2.5 py-1 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-xs inline-flex items-center gap-1.5 transition shrink-0">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-                <span>Read</span>
-              </button>
+        <div class="flex-1 min-w-0 p-3.5 sm:p-4 flex items-center justify-between gap-3">
+          <div class="flex-1 min-w-0 pr-1 sm:pr-2">
+            <div class="mb-2.5">
+              <h4 class="font-display font-bold text-[15px] sm:text-[16px] text-[#0f172a] truncate" title="${esc(u.name)}">${esc(u.name)}</h4>
             </div>
             <div class="relative flex items-center justify-between max-w-[230px]">
               <div class="absolute left-3 right-3 top-[7px] h-[2px] bg-slate-200 z-0"></div>
@@ -64,13 +60,16 @@ export function renderUnits() {
             </div>
           </div>
           <div class="w-[1px] self-stretch bg-slate-100 my-1"></div>
-          <button onclick="toggleUnitEstimate(${idx})" title="Time estimate" class="flex items-center gap-2.5 pl-1 pr-1 py-1 rounded-xl hover:bg-slate-50 transition text-left shrink-0">
-            <div class="w-9 h-9 rounded-xl bg-[#f1f5f9] text-slate-600 flex items-center justify-center shrink-0">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.5 4h11M6.5 20h11M8 4v3.5a4 4 0 001.4 3L12 12l2.6-1.5a4 4 0 001.4-3V4M8 20v-3.5a4 4 0 011.4-3L12 12l2.6 1.5a4 4 0 011.4 3V20"/></svg>
+          <button onclick="openUnitPdf('${sid}', ${u.u})" title="Read ${esc(u.name)} in textbook" class="flex items-center gap-2.5 pl-2 pr-3 py-1.5 rounded-2xl bg-blue-50/80 hover:bg-blue-100/90 active:scale-[0.98] border border-blue-100/80 transition text-left shrink-0">
+            <div class="w-9 h-9 rounded-xl bg-[#1d4ed8] text-white flex items-center justify-center shrink-0 shadow-2xs">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
             </div>
             <div>
-              <div class="text-[11px] font-medium text-slate-500 leading-tight">Time estimate</div>
-              <div class="font-display font-bold text-sm text-slate-800 mt-0.5">${esc(u.estimate)}</div>
+              <div class="font-display font-extrabold text-[12.5px] text-[#1e40af] leading-tight flex items-center gap-1">
+                <span>Read</span>
+                <svg class="w-3 h-3 text-[#2563eb]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+              </div>
+              <div class="text-[11px] font-semibold text-slate-500 mt-0.5">${esc(u.estimate)}</div>
             </div>
           </button>
         </div>
