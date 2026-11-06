@@ -1,6 +1,6 @@
 /* =========================================================================
    STUDY PLAN GENERATION ENGINE (GATE DATA SCIENCE & AI)
-   Sequential Phase-by-Phase Execution with Strict Daily Slot Enforcement
+   Sequential Phase-by-Phase Execution with Final Revision Sprint Before Exam
    ========================================================================= */
 
 import { SUBJECTS, LAST_EXAM, DEPTS } from "../data/subjects.js";
@@ -48,16 +48,13 @@ export function buildPlan(c) {
     }
   });
 
-  // 1. Build master queue of sessions in sequential course order:
-  // Phase 1: Course 1 (LA) -> Course 2 (CO) -> Course 3 (PS)
-  // Phase 2: Course 4 (PDSA) -> Course 5 (DB)
-  // Phase 3: Course 6 (ML) -> Course 7 (AI) -> Course 8 (GA)
-  const queue = [];
+  // 1. Build teaching queue in sequential course order (Phase 1 -> Phase 2 -> Phase 3)
+  // No revision is mixed into courses here; teaching finishes completely course by course.
+  const teachQueue = [];
   order.forEach(id => {
     const rem = remainingUnits(c, id);
     const totalUnits = SUBJECTS[id].units.length;
     const teachNeed = needs[id].need;
-    const s = subj(id, c);
     let idx = 0, cum = 0, covered = (c.done[id] || []).length;
     const totH = rem.reduce((a, u) => a + u.h, 0);
 
@@ -79,7 +76,7 @@ export function buildPlan(c) {
       if (i === teachNeed - 1) cum = totH;
       const before = covered;
       covered += chunk.length;
-      queue.push({
+      teachQueue.push({
         subjectId: id,
         type: "teach",
         hours: needs[id].sessionHours ?? c.hours,
@@ -89,51 +86,97 @@ export function buildPlan(c) {
         bullets: null
       });
     }
-
-    if (c.revision > 0 && rem.length > 0) {
-      for (let r = 0; r < c.revision; r++) {
-        queue.push({
-          subjectId: id,
-          type: "rev",
-          hours: c.hours,
-          units: [],
-          before: 100,
-          after: 100,
-          revNo: c.revision > 1 ? `${r + 1}/${c.revision}` : "",
-          bullets: revisionBullets(id)
-        });
-      }
-    }
   });
 
-  // 2. Map sessions strictly onto calendar slots (NEVER exceeding slotCount per day)
-  let curDate = c.start;
-  let curSlot = 0;
-  const sessions = [];
-
-  while (slotCount(c, curDate) === 0) {
-    curDate = addDays(curDate, 1);
+  // 2. Build revision queue for the final days before the GATE exam
+  const revQueue = [];
+  if (c.revision > 0) {
+    for (let r = 0; r < c.revision; r++) {
+      order.forEach(id => {
+        if (needs[id].need > 0) {
+          revQueue.push({
+            subjectId: id,
+            type: "rev",
+            hours: c.hours,
+            units: [],
+            before: 100,
+            after: 100,
+            revNo: c.revision > 1 ? `${r + 1}/${c.revision}` : "",
+            bullets: revisionBullets(id)
+          });
+        }
+      });
+    }
   }
 
-  queue.forEach((item) => {
-    if (curSlot >= slotCount(c, curDate)) {
-      curDate = addDays(curDate, 1);
-      curSlot = 0;
-      while (slotCount(c, curDate) === 0) {
-        curDate = addDays(curDate, 1);
-      }
-    }
-
-    sessions.push({
-      ...item,
-      date: curDate,
-      slot: curSlot,
-      id: `${curDate}_${item.subjectId}_${item.type}${curSlot}`
-    });
-    curSlot++;
+  // 3. Pre-exam slots calculation (all days from c.start up to the day before LAST_EXAM)
+  const preExamDates = rangeDates(c.start, addDays(LAST_EXAM, -1));
+  const preExamSlots = [];
+  preExamDates.forEach(d => {
+    for (let s = 0; s < slotCount(c, d); s++) preExamSlots.push({ date: d, slot: s });
   });
 
-  // 3. Incompletion & post-exam warning
+  const sessions = [];
+  const totalNeeded = teachQueue.length + revQueue.length;
+
+  if (preExamSlots.length >= totalNeeded) {
+    // Both teaching and revision fit comfortably before the exam!
+    // Revision sessions are placed in the FINAL slots immediately preceding the exam date.
+    const revStartIndex = preExamSlots.length - revQueue.length;
+
+    // Teaching sessions fill sequentially from Day 1
+    teachQueue.forEach((item, i) => {
+      const slotObj = preExamSlots[i];
+      sessions.push({
+        ...item,
+        date: slotObj.date,
+        slot: slotObj.slot,
+        id: `${slotObj.date}_${item.subjectId}_${item.type}${slotObj.slot}`
+      });
+    });
+
+    // Revision sessions occupy the final days before the exam
+    revQueue.forEach((item, i) => {
+      const slotObj = preExamSlots[revStartIndex + i];
+      sessions.push({
+        ...item,
+        date: slotObj.date,
+        slot: slotObj.slot,
+        id: `${slotObj.date}_${item.subjectId}_${item.type}${slotObj.slot}`
+      });
+    });
+  } else {
+    // Schedule slots are constrained (e.g. 1 session/day, or late start).
+    // Allocate sequentially: teaching first, then revision follows when syllabus is complete.
+    let curDate = c.start;
+    let curSlot = 0;
+    while (slotCount(c, curDate) === 0) {
+      curDate = addDays(curDate, 1);
+    }
+
+    const fullQueue = [...teachQueue, ...revQueue];
+    fullQueue.forEach(item => {
+      if (curSlot >= slotCount(c, curDate)) {
+        curDate = addDays(curDate, 1);
+        curSlot = 0;
+        while (slotCount(c, curDate) === 0) {
+          curDate = addDays(curDate, 1);
+        }
+      }
+
+      sessions.push({
+        ...item,
+        date: curDate,
+        slot: curSlot,
+        id: `${curDate}_${item.subjectId}_${item.type}${curSlot}`
+      });
+      curSlot++;
+    });
+  }
+
+  sessions.sort((a, b) => a.date.localeCompare(b.date) || a.slot - b.slot);
+
+  // 4. Incompletion & post-exam warning
   const warnings = [];
   const overdue = sessions.filter(s => s.date >= LAST_EXAM);
   if (overdue.length > 0) {

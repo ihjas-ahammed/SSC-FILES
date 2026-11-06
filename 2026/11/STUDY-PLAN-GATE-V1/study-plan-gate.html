@@ -6465,12 +6465,11 @@ details.unit-dd[open] summary::after {
         needs[id].sessionHours = needs[id].hours / needs[id].need;
       }
     });
-    const queue = [];
+    const teachQueue = [];
     order.forEach((id) => {
       const rem = remainingUnits(c, id);
       const totalUnits = SUBJECTS[id].units.length;
       const teachNeed = needs[id].need;
-      const s = subj(id, c);
       let idx = 0, cum = 0, covered = (c.done[id] || []).length;
       const totH = rem.reduce((a, u) => a + u.h, 0);
       for (let i = 0; i < teachNeed; i++) {
@@ -6491,7 +6490,7 @@ details.unit-dd[open] summary::after {
         if (i === teachNeed - 1) cum = totH;
         const before = covered;
         covered += chunk.length;
-        queue.push({
+        teachQueue.push({
           subjectId: id,
           type: "teach",
           hours: needs[id].sessionHours ?? c.hours,
@@ -6501,43 +6500,78 @@ details.unit-dd[open] summary::after {
           bullets: null
         });
       }
-      if (c.revision > 0 && rem.length > 0) {
-        for (let r = 0; r < c.revision; r++) {
-          queue.push({
-            subjectId: id,
-            type: "rev",
-            hours: c.hours,
-            units: [],
-            before: 100,
-            after: 100,
-            revNo: c.revision > 1 ? `${r + 1}/${c.revision}` : "",
-            bullets: revisionBullets(id)
-          });
-        }
-      }
     });
-    let curDate = c.start;
-    let curSlot = 0;
-    const sessions = [];
-    while (slotCount(c, curDate) === 0) {
-      curDate = addDays(curDate, 1);
+    const revQueue = [];
+    if (c.revision > 0) {
+      for (let r = 0; r < c.revision; r++) {
+        order.forEach((id) => {
+          if (needs[id].need > 0) {
+            revQueue.push({
+              subjectId: id,
+              type: "rev",
+              hours: c.hours,
+              units: [],
+              before: 100,
+              after: 100,
+              revNo: c.revision > 1 ? `${r + 1}/${c.revision}` : "",
+              bullets: revisionBullets(id)
+            });
+          }
+        });
+      }
     }
-    queue.forEach((item) => {
-      if (curSlot >= slotCount(c, curDate)) {
-        curDate = addDays(curDate, 1);
-        curSlot = 0;
-        while (slotCount(c, curDate) === 0) {
-          curDate = addDays(curDate, 1);
-        }
-      }
-      sessions.push({
-        ...item,
-        date: curDate,
-        slot: curSlot,
-        id: `${curDate}_${item.subjectId}_${item.type}${curSlot}`
-      });
-      curSlot++;
+    const preExamDates = rangeDates(c.start, addDays(LAST_EXAM, -1));
+    const preExamSlots = [];
+    preExamDates.forEach((d) => {
+      for (let s = 0; s < slotCount(c, d); s++) preExamSlots.push({ date: d, slot: s });
     });
+    const sessions = [];
+    const totalNeeded = teachQueue.length + revQueue.length;
+    if (preExamSlots.length >= totalNeeded) {
+      const revStartIndex = preExamSlots.length - revQueue.length;
+      teachQueue.forEach((item, i) => {
+        const slotObj = preExamSlots[i];
+        sessions.push({
+          ...item,
+          date: slotObj.date,
+          slot: slotObj.slot,
+          id: `${slotObj.date}_${item.subjectId}_${item.type}${slotObj.slot}`
+        });
+      });
+      revQueue.forEach((item, i) => {
+        const slotObj = preExamSlots[revStartIndex + i];
+        sessions.push({
+          ...item,
+          date: slotObj.date,
+          slot: slotObj.slot,
+          id: `${slotObj.date}_${item.subjectId}_${item.type}${slotObj.slot}`
+        });
+      });
+    } else {
+      let curDate = c.start;
+      let curSlot = 0;
+      while (slotCount(c, curDate) === 0) {
+        curDate = addDays(curDate, 1);
+      }
+      const fullQueue = [...teachQueue, ...revQueue];
+      fullQueue.forEach((item) => {
+        if (curSlot >= slotCount(c, curDate)) {
+          curDate = addDays(curDate, 1);
+          curSlot = 0;
+          while (slotCount(c, curDate) === 0) {
+            curDate = addDays(curDate, 1);
+          }
+        }
+        sessions.push({
+          ...item,
+          date: curDate,
+          slot: curSlot,
+          id: `${curDate}_${item.subjectId}_${item.type}${curSlot}`
+        });
+        curSlot++;
+      });
+    }
+    sessions.sort((a, b) => a.date.localeCompare(b.date) || a.slot - b.slot);
     const warnings = [];
     const overdue = sessions.filter((s) => s.date >= LAST_EXAM);
     if (overdue.length > 0) {
