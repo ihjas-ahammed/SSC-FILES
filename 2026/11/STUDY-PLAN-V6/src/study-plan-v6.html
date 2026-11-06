@@ -3070,6 +3070,12 @@ details.unit-dd[open] summary::after {
   flex-direction: column;
   overflow: hidden;
   font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+.pdf-viewer-header,
+.pdf-mobile-bar,
+.pdf-state-card,
+.pdf-zen-exit {
   user-select: none;
   -webkit-user-select: none;
 }
@@ -3462,6 +3468,8 @@ details.unit-dd[open] summary::after {
   margin: 0 auto;
   box-sizing: border-box;
   touch-action: pan-x pan-y pinch-zoom;
+  user-select: text !important;
+  -webkit-user-select: text !important;
 }
 
 /* Target Section Highlight Pulse */
@@ -3491,6 +3499,66 @@ details.unit-dd[open] summary::after {
   width: 100%;
   height: 100%;
   border-radius: 0 !important;
+  pointer-events: none; /* Let clicks & selections interact directly with textLayer */
+}
+
+/* =========================================================================
+   PDF.js Text Layer (True Selectable & Copyable Text Overlay)
+   ========================================================================= */
+.textLayer {
+  position: absolute;
+  text-align: initial;
+  inset: 0;
+  overflow: hidden;
+  opacity: 1;
+  line-height: 1;
+  -webkit-text-size-adjust: none;
+  -moz-text-size-adjust: none;
+  text-size-adjust: none;
+  forced-color-adjust: none;
+  transform-origin: 0 0;
+  z-index: 5;
+  user-select: text !important;
+  -webkit-user-select: text !important;
+}
+
+.textLayer :is(span, br) {
+  color: transparent !important;
+  position: absolute;
+  white-space: pre;
+  cursor: text !important;
+  transform-origin: 0 0;
+}
+
+.textLayer span.markedContent {
+  top: 0;
+  height: 0;
+}
+
+.textLayer ::-moz-selection {
+  background: rgba(37, 99, 235, 0.4) !important;
+  color: transparent !important;
+}
+
+.textLayer ::selection {
+  background: rgba(37, 99, 235, 0.4) !important;
+  color: transparent !important;
+}
+
+.textLayer br::-moz-selection,
+.textLayer br::selection {
+  background: transparent !important;
+}
+
+.textLayer .endOfContent {
+  display: block;
+  position: absolute;
+  inset: 100% 0 0;
+  z-index: -1;
+  cursor: default;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
 }
 
 .pdf-page-placeholder {
@@ -7788,6 +7856,13 @@ details.unit-dd[open] summary::after {
     scrollTimeout: null
   };
   function ensurePdfJs() {
+    if (!document.getElementById("pdfjs-viewer-css")) {
+      const link = document.createElement("link");
+      link.id = "pdfjs-viewer-css";
+      link.rel = "stylesheet";
+      link.href = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.css";
+      document.head.appendChild(link);
+    }
     if (window.pdfjsLib) {
       if (!window.pdfjsLib.GlobalWorkerOptions.workerSrc) {
         window.pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
@@ -8249,31 +8324,54 @@ details.unit-dd[open] summary::after {
       const unscaledVp = page.getViewport({ scale: 1 });
       PV_STATE.pageViewports[pageNum] = unscaledVp;
       const scale = PV_STATE.currentScale;
-      const dpr = Math.min(window.devicePixelRatio || 1, 2.2);
-      const viewport = page.getViewport({ scale: scale * dpr });
       const w = Math.round(unscaledVp.width * scale);
       const h = Math.round(unscaledVp.height * scale);
       slot.style.width = `${w}px`;
       slot.style.height = `${h}px`;
+      slot.style.setProperty("--scale-factor", scale);
+      const renderDpr = Math.max(2, (window.devicePixelRatio || 1) * 1.5);
+      const renderViewport = page.getViewport({ scale: scale * renderDpr });
       let canvas = slot.querySelector("canvas");
       if (!canvas) {
         canvas = document.createElement("canvas");
         slot.appendChild(canvas);
       }
-      canvas.width = viewport.width;
-      canvas.height = viewport.height;
+      canvas.width = Math.round(renderViewport.width);
+      canvas.height = Math.round(renderViewport.height);
       canvas.style.width = `${w}px`;
       canvas.style.height = `${h}px`;
       const ctx = canvas.getContext("2d", { alpha: false });
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
       const renderContext = {
         canvasContext: ctx,
-        viewport
+        viewport: renderViewport
       };
       const task = page.render(renderContext);
       PV_STATE.renderTasks[pageNum] = task;
       await task.promise;
       delete PV_STATE.renderTasks[pageNum];
       PV_STATE.renderedPages.add(pageNum);
+      let textDiv = slot.querySelector(".textLayer");
+      if (textDiv) textDiv.remove();
+      textDiv = document.createElement("div");
+      textDiv.className = "textLayer";
+      textDiv.style.width = `${w}px`;
+      textDiv.style.height = `${h}px`;
+      textDiv.style.setProperty("--scale-factor", scale);
+      slot.appendChild(textDiv);
+      try {
+        const textVp = page.getViewport({ scale });
+        const textContent = await page.getTextContent();
+        const textTask = window.pdfjsLib.renderTextLayer({
+          textContentSource: textContent,
+          container: textDiv,
+          viewport: textVp
+        });
+        await textTask.promise;
+      } catch (textErr) {
+        console.warn(`[PDF.js] TextLayer error on page ${pageNum}:`, textErr);
+      }
       const ph = slot.querySelector(".pdf-page-placeholder");
       if (ph) {
         ph.style.display = "none";
@@ -8299,6 +8397,10 @@ details.unit-dd[open] summary::after {
       canvas.width = 1;
       canvas.height = 1;
       canvas.remove();
+    }
+    const textDiv = slot.querySelector(".textLayer");
+    if (textDiv) {
+      textDiv.remove();
     }
     const ph = slot.querySelector(".pdf-page-placeholder");
     if (ph) ph.style.display = "flex";

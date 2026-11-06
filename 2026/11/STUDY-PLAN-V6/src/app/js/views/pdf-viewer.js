@@ -30,6 +30,14 @@ export const PV_STATE = {
 
 // PDF.js CDN Worker Configuration
 export function ensurePdfJs() {
+  if (!document.getElementById("pdfjs-viewer-css")) {
+    const link = document.createElement("link");
+    link.id = "pdfjs-viewer-css";
+    link.rel = "stylesheet";
+    link.href = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.css";
+    document.head.appendChild(link);
+  }
+
   if (window.pdfjsLib) {
     if (!window.pdfjsLib.GlobalWorkerOptions.workerSrc) {
       window.pdfjsLib.GlobalWorkerOptions.workerSrc =
@@ -563,7 +571,7 @@ function updatePageIndicators(num) {
   if (mNext) mNext.disabled = atEnd;
 }
 
-// Render Page Canvas on Demand (Lazy Virtualization)
+// Render Page Canvas on Demand (Lazy Virtualization with High-DPI & TextLayer)
 async function renderPageCanvas(pageNum, slot) {
   if (!PV_STATE.pdfDoc) return;
 
@@ -581,13 +589,16 @@ async function renderPageCanvas(pageNum, slot) {
     PV_STATE.pageViewports[pageNum] = unscaledVp;
 
     const scale = PV_STATE.currentScale;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2.2);
-    const viewport = page.getViewport({ scale: scale * dpr });
-
     const w = Math.round(unscaledVp.width * scale);
     const h = Math.round(unscaledVp.height * scale);
+
     slot.style.width = `${w}px`;
     slot.style.height = `${h}px`;
+    slot.style.setProperty("--scale-factor", scale);
+
+    // High-DPI supersampling (Retina / print-crisp resolution)
+    const renderDpr = Math.max(2.0, (window.devicePixelRatio || 1) * 1.5);
+    const renderViewport = page.getViewport({ scale: scale * renderDpr });
 
     // Reuse or create canvas
     let canvas = slot.querySelector("canvas");
@@ -596,15 +607,18 @@ async function renderPageCanvas(pageNum, slot) {
       slot.appendChild(canvas);
     }
 
-    canvas.width = viewport.width;
-    canvas.height = viewport.height;
+    canvas.width = Math.round(renderViewport.width);
+    canvas.height = Math.round(renderViewport.height);
     canvas.style.width = `${w}px`;
     canvas.style.height = `${h}px`;
 
     const ctx = canvas.getContext("2d", { alpha: false });
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+
     const renderContext = {
       canvasContext: ctx,
-      viewport: viewport
+      viewport: renderViewport
     };
 
     const task = page.render(renderContext);
@@ -613,6 +627,30 @@ async function renderPageCanvas(pageNum, slot) {
     await task.promise;
     delete PV_STATE.renderTasks[pageNum];
     PV_STATE.renderedPages.add(pageNum);
+
+    // Render TextLayer for true selectable, copyable and searchable text
+    let textDiv = slot.querySelector(".textLayer");
+    if (textDiv) textDiv.remove();
+
+    textDiv = document.createElement("div");
+    textDiv.className = "textLayer";
+    textDiv.style.width = `${w}px`;
+    textDiv.style.height = `${h}px`;
+    textDiv.style.setProperty("--scale-factor", scale);
+    slot.appendChild(textDiv);
+
+    try {
+      const textVp = page.getViewport({ scale: scale });
+      const textContent = await page.getTextContent();
+      const textTask = window.pdfjsLib.renderTextLayer({
+        textContentSource: textContent,
+        container: textDiv,
+        viewport: textVp
+      });
+      await textTask.promise;
+    } catch (textErr) {
+      console.warn(`[PDF.js] TextLayer error on page ${pageNum}:`, textErr);
+    }
 
     // Hide placeholder once rendered
     const ph = slot.querySelector(".pdf-page-placeholder");
@@ -627,7 +665,7 @@ async function renderPageCanvas(pageNum, slot) {
   }
 }
 
-// Clear Offscreen Page Canvas to Free Memory (Critical for iOS/Android)
+// Clear Offscreen Page Canvas & TextLayer to Free Memory
 function cleanupPageCanvas(pageNum, slot) {
   if (!PV_STATE.renderedPages.has(pageNum)) return;
 
@@ -643,6 +681,11 @@ function cleanupPageCanvas(pageNum, slot) {
     canvas.width = 1;
     canvas.height = 1;
     canvas.remove();
+  }
+
+  const textDiv = slot.querySelector(".textLayer");
+  if (textDiv) {
+    textDiv.remove();
   }
 
   const ph = slot.querySelector(".pdf-page-placeholder");
