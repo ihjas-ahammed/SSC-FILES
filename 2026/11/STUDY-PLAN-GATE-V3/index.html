@@ -142,7 +142,46 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
 .wk{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
 .wk label{display:block;text-align:center;font-size:12px;color:var(--ink2)}
 .wk input{text-align:center;padding:8px 2px}
+.ptests{margin:6px 0 0}
+.ptest{display:inline-block;font-size:12px;padding:3px 9px;border-radius:999px;margin:4px 4px 0 0;border:1px solid var(--line);color:var(--ink2)}
+.ptest.done{border-color:var(--ok);color:var(--ok);font-weight:600}
+.pq{margin-top:4px}
+/* progress ticks (per course): slider with module marks, topic checkboxes. Theme vars only, so dark mode follows. */
+.psub{border:1px solid var(--line);border-left:4px solid var(--c,var(--ink3));border-radius:var(--r);padding:12px 14px;margin:10px 0;background:var(--surface);box-shadow:var(--shadow)}
+.psub-h{display:flex;gap:10px;align-items:center}
+.psub-h .t{font-weight:700;line-height:1.2}
+.psub-h .pct{margin-left:auto;font-size:22px;font-weight:700;color:var(--c,var(--ink))}
+.slider-wrap{position:relative;padding:14px 4px 34px;margin-top:6px}
+input[type=range].stops{-webkit-appearance:none;appearance:none;width:100%;height:8px;border-radius:99px;margin:0;display:block;cursor:pointer;outline:0;border:1px solid var(--line);background:linear-gradient(90deg,var(--c,var(--accent)) var(--p,0%),var(--surface2) var(--p,0%))}
+input[type=range].stops:focus-visible{outline:2px solid var(--accent);outline-offset:6px}
+input[type=range].stops::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;background:var(--surface);border:4px solid var(--c,var(--accent));box-shadow:0 2px 6px rgba(0,0,0,.3)}
+input[type=range].stops::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--surface);border:4px solid var(--c,var(--accent))}
+.ticks{position:absolute;top:30px;height:16px;pointer-events:none}
+.ticks i{position:absolute;top:0;width:2px;height:6px;background:var(--ink3);transform:translateX(-1px)}
+.ticks i.mod{height:11px;background:var(--ink2)}
+.ticks em{position:absolute;top:12px;font-style:normal;font-size:10px;font-weight:800;color:var(--ink2);transform:translateX(-50%)}
+.sl-label{font-weight:600;color:var(--ink2);margin:0 0 8px}
+details.unit-dd{background:var(--surface2);border-radius:var(--r2);margin-top:2px}
+details.unit-dd summary{padding:9px 12px;font-weight:700;font-size:13px;display:flex;justify-content:space-between;align-items:center;list-style:none}
+details.unit-dd summary::after{content:"";width:22px;height:22px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2386837c'%3E%3Cpath d='M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z'/%3E%3C/svg%3E") center/contain no-repeat;transition:.15s}
+details.unit-dd[open] summary::after{transform:rotate(180deg)}
+details.unit-dd .cnt{margin-left:auto;margin-right:8px;font-size:12px;color:var(--ink3)}
+.unit-list{padding:2px 12px 12px}
+.mod-head{display:flex;justify-content:space-between;align-items:center;font-size:11.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2);margin:10px 0 4px}
+.mod-head button{font-size:11px;font-weight:700;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:2px 8px;text-transform:none;letter-spacing:0;cursor:pointer}
+.ucheck{display:flex;gap:10px;align-items:flex-start;padding:7px 4px;font-size:13.5px;font-weight:600;border-top:1px solid var(--line);cursor:pointer}
+.ucheck input{width:19px;height:19px;accent-color:var(--c,var(--accent));flex:none;margin-top:1px}
+.ucheck .h{margin-left:auto;font-size:11px;color:var(--ink3);font-weight:700;white-space:nowrap;padding-left:6px}
+.urow{border-top:1px solid var(--line);padding:0 0 6px}
+.urow .ucheck{border-top:0}
+.mults{display:flex;gap:6px;flex-wrap:wrap;padding:0 0 2px 29px}
+.mults.course{padding:6px 0 10px;align-items:center;margin-top:6px;border-bottom:1px solid var(--line)}
+.mults.course .tiny{width:100%}
+.mx{min-width:42px;height:28px;padding:0 9px;border-radius:9px;border:1px solid var(--line);background:var(--surface);color:var(--ink2);font-size:12px;font-weight:700;cursor:pointer}
+.mx.on{background:var(--c,var(--accent));border-color:var(--c,var(--accent));color:#fff}
+.ucheck.on .tx{color:var(--ink3);text-decoration:line-through}
 @media (max-width:380px){main{padding-left:12px;padding-right:12px}.stat b{font-size:17px}}
+.mx.keep.on{background:var(--ok);border-color:var(--ok)}
 </style>
 </head>
 <body>
@@ -377,6 +416,8 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
   'use strict';
   const D = window.DATA, RAW = new URLSearchParams(location.search).get('raw') || D.raw;
   const KEY = 'gate_v3';
+  // same Realtime Database as GATE V1 (its own node, so V1's data is not touched)
+  const CLOUD = 'https://data-science-ef878-default-rtdb.firebaseio.com/gate_v3';
   const C = {}; D.courses.forEach((c) => (C[c.id] = c));
   const SEQ = ['LA', 'PS', 'CO', 'DB', 'PDSA', 'ML', 'AI'];
   const Q = {}; D.questions.forEach((q) => (Q[q.id] = q));
@@ -386,14 +427,78 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
   const MOCKS = [['DA2026', 'Mock 1 · GATE DA 2026 (unseen)'], ['DA2025', 'Mock 2 · GATE DA 2025 re-timed'], ['DA2024', 'Mock 3 · GATE DA 2024 re-timed']];
 
   // ---------- state ----------
-  const DEF = { v: 1, done: {}, parts: {}, notes: {}, cards: {}, att: {}, tests: {}, dayMin: {},
-    set: { exam: '2027-02-06', week: [60, 90, 90, 90, 90, 90, 120], includeB: true, includeC: false, sem6: true, gaShare: 25 }, theme: '' };
+  const DEF = { v: 1, done: {"u:LA-1":"2026-01-01","u:LA-2":"2026-01-01","u:LA-3":"2026-01-01","u:LA-4":"2026-01-01","u:LA-5":"2026-01-01","u:LA-6":"2026-01-01","u:LA-7":"2026-01-01","u:LA-8":"2026-01-01","u:LA-9":"2026-01-01","u:PS-1":"2026-01-01","u:PS-2":"2026-01-01","u:PS-3":"2026-01-01","u:PS-4":"2026-01-01","u:PS-5":"2026-01-01","u:PS-6":"2026-01-01","u:LA-10":"2026-11-13","u:LA-11":"2026-11-13","u:LA-12":"2026-11-13"}, parts: {}, notes: {}, cards: {}, att: {}, tests: {}, dayMin: {},
+    mult: {"PDSA-1":0.25,"PDSA-2":0.25,"PDSA-3":0.25,"PDSA-4":0.25,"PDSA-5":0.25,"PDSA-6":0.25,"PDSA-7":0.25,"PDSA-8":0.25,"PDSA-9":0.25,"PDSA-10":0.25,"PDSA-11":0.25,"PDSA-13":0.25,"PDSA-14":0.25,"PDSA-15":0.25,"GA-1":0.25,"GA-3":0.25,"GA-4":0.25,"GA-5":0.25,"GA-6":0.25,"GA-7":0.25,"GA-8":0.25,"GA-9":0.25,"GA-10":0.25,"GA-11":0.25,"GA-12":0.25,"GA-13":0.25,"GA-14":0.25,"GA-15":0.25,"GA-16":0.25,"GA-17":0.25,"GA-18":0.25,"LA-1":0.25,"LA-2":0.25,"LA-3":0.25,"LA-4":0.25,"LA-5":0.25,"LA-6":0.25,"LA-7":0.25,"LA-8":0.25,"LA-9":4,"LA-10":0.25,"LA-11":0.25,"LA-12":0.25,"LA-16":4,"LA-17":0.25,"LA-18":0.25,"LA-23":0.25,"LA-22":0.3333333333,"LA-27":4,"LA-29":4,"LA-31":4,"LA-32":2,"LA-33":2,"LA-34":2,"LA-35":2,"LA-36":2,"LA-37":2,"LA-38":4,"LA-39":2,"LA-40":2,"LA-41":4,"PS-1":0.25,"PS-2":0.25,"PS-3":0.25,"PS-4":0.25,"PS-5":0.25,"PS-6":0.25,"PS-12":4,"PS-16":4,"PS-21":4,"PS-23":2,"PS-22":0.5,"PS-24":0.5,"PS-25":0.5,"PS-26":2,"CO-1":0.25,"CO-2":0.25,"CO-3":0.25,"CO-4":0.25,"CO-5":0.25,"CO-6":2,"CO-7":0.25,"CO-8":0.25,"CO-9":0.25,"CO-10":0.25,"CO-11":0.25,"CO-12":3,"CO-13":2,"CO-14":2,"CO-15":2,"CO-16":4,"CO-17":0.25,"CO-19":0.5,"CO-20":0.5,"CO-21":2,"CO-22":3,"CO-23":3,"CO-24":4,"CO-25":2,"CO-26":2,"CO-27":4,"CO-28":2,"CO-29":2,"CO-30":2,"CO-31":4,"DB-1":0.5,"DB-2":0.5,"DB-3":0.5,"DB-4":0.5,"DB-5":0.5,"DB-6":0.5,"DB-7":0.5,"DB-8":0.5,"DB-9":0.5,"DB-10":0.5,"DB-11":0.5,"DB-12":0.5,"DB-13":0.5,"DB-14":0.5,"DB-15":0.5,"DB-16":0.5,"DB-17":0.5,"DB-18":0.5,"DB-19":0.5,"DB-20":0.5,"DB-21":0.5,"DB-22":0.5,"DB-23":0.5,"DB-24":0.5,"DB-25":0.5,"DB-26":0.5,"DB-27":0.5,"DB-28":0.5,"DB-29":0.5,"DB-30":0.5,"DB-31":0.5,"DB-32":0.5,"DB-33":0.5,"DB-34":0.5,"DB-35":0.5,"DB-36":0.5,"DB-37":0.5,"DB-38":0.5,"DB-39":0.5,"DB-40":0.5,"DB-41":0.5,"DB-42":0.5,"DB-43":0.5,"DB-44":0.5,"DB-45":0.5,"DB-46":0.5,"DB-47":0.5,"DB-48":0.5,"DB-49":0.5,"DB-50":0.5,"DB-51":0.5,"DB-52":0.5,"DB-53":0.5,"DB-54":0.5,"DB-55":0.5,"DB-56":0.5,"DB-57":0.5,"DB-58":0.5,"DB-59":0.5,"DB-60":0.5,"DB-61":0.5,"DB-62":0.5,"DB-63":0.5,"DB-64":0.5,"DB-65":0.5,"DB-66":0.5,"DB-67":0.5,"DB-68":0.5,"DB-69":0.5,"DB-70":0.5,"DB-71":0.5,"DB-72":0.5,"DB-73":0.5,"DB-74":0.5,"DB-75":0.5,"DB-76":0.5,"DB-77":0.5,"DB-78":0.5,"DB-79":0.5,"DB-80":0.5,"PDSA-16":0.25,"PDSA-17":0.25,"PDSA-18":0.25,"PDSA-20":0.25,"PDSA-21":0.25,"PDSA-22":0.25,"PDSA-23":0.25,"PDSA-24":0.25,"PDSA-25":0.25,"PDSA-27":0.25,"PDSA-28":0.25,"PDSA-29":0.25,"PDSA-31":0.25,"PDSA-32":0.25,"PDSA-33":0.25,"PDSA-34":0.25,"PDSA-35":0.25,"PDSA-36":0.25,"PDSA-37":0.25,"PDSA-39":0.25,"PDSA-40":0.25,"PDSA-41":0.25,"PDSA-42":0.25,"PDSA-43":0.25,"PDSA-45":0.3333333333,"PDSA-46":0.3333333333,"PDSA-47":0.3333333333,"PDSA-48":0.3333333333,"PDSA-49":0.3333333333,"PDSA-51":0.3333333333,"PDSA-52":0.3333333333,"PDSA-53":0.3333333333,"PDSA-54":0.3333333333,"PDSA-55":0.3333333333,"PDSA-56":0.3333333333,"PDSA-57":0.3333333333,"PDSA-58":0.3333333333,"PDSA-59":0.3333333333,"PDSA-60":0.3333333333,"PDSA-61":0.3333333333,"PDSA-62":0.3333333333,"PDSA-64":0.3333333333,"PDSA-65":0.3333333333,"PDSA-66":0.3333333333,"PDSA-68":0.3333333333,"PDSA-69":0.3333333333,"PDSA-71":0.3333333333,"PDSA-72":0.3333333333,"PDSA-73":0.3333333333,"PDSA-74":0.3333333333,"PDSA-75":0.3333333333,"PDSA-76":0.3333333333,"PDSA-78":0.3333333333,"PDSA-79":0.3333333333,"PDSA-80":0.3333333333,"PDSA-81":0.3333333333,"PDSA-82":0.3333333333,"PDSA-83":0.3333333333,"PDSA-84":0.3333333333,"PDSA-85":0.3333333333,"PDSA-86":0.3333333333,"PDSA-87":0.3333333333,"PDSA-89":0.3333333333,"PDSA-90":0.3333333333,"PDSA-91":0.3333333333,"PDSA-92":0.3333333333,"PDSA-93":0.3333333333,"PDSA-94":0.3333333333,"GA-2":0.25,"GA-19":0.25,"GA-20":0.25,"GA-21":0.25,"GA-22":0.25,"GA-23":0.25,"GA-24":0.25,"GA-25":0.25,"GA-26":0.25,"GA-27":0.25,"GA-28":0.25,"GA-29":0.25,"AI-1":0.5,"AI-2":0.5,"AI-3":0.5,"AI-4":0.5,"AI-5":0.5,"AI-6":0.5,"AI-7":0.5,"AI-8":0.5,"AI-10":0.5,"AI-11":0.5,"AI-12":0.5,"AI-13":0.5,"AI-14":0.25,"AI-15":0.5,"AI-16":0.5,"AI-17":0.25,"AI-18":0.5,"AI-19":0.5,"AI-20":0.5,"AI-21":0.5,"AI-22":0.5,"AI-23":0.5,"AI-24":0.5,"AI-25":0.5,"AI-26":0.25,"AI-9":0.25,"AI-27":0.5,"AI-28":0.5,"AI-29":0.5,"AI-30":0.5,"AI-31":0.5,"AI-32":0.5,"AI-33":0.5,"AI-34":0.5,"AI-35":0.5,"AI-36":0.5,"AI-37":0.5,"AI-38":0.5,"AI-39":0.5,"AI-40":0.5,"AI-41":0.5,"AI-42":0.5,"AI-43":0.5,"AI-44":0.25}, keep: {}, set: {"exam":"2027-02-06","week":[120,240,240,240,240,240,180],"includeB":true,"includeC":true,"sem6":true,"gaShare":10,"practiceWeekdays":true,"csShare":20,"start":"2026-11-14"}, theme: '' };
   let S = load();
   function load() {
     try { const s = JSON.parse(localStorage.getItem(KEY)); if (s) return Object.assign(structuredClone(DEF), s, { set: Object.assign(structuredClone(DEF.set), s.set || {}) }); } catch (e) {}
     return structuredClone(DEF);
   }
-  function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { toast('Could not save (storage blocked)'); } }
+  // saved on this device, and to the cloud copy of the roll number once signed in
+  function saveLocal() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { toast('Could not save (storage blocked)'); } }
+  function save() { if (S.roll) S.updated = Date.now(); saveLocal(); cloudPush(); }
+
+  // ---------- roll number login + cloud copy ----------
+  const cloudKey = (r) => String(r || '').trim().toUpperCase().replace(/[.#$\[\]\/]/g, '_');
+  const cloudUrl = (r) => CLOUD + '/' + encodeURIComponent(cloudKey(r)) + '.json';
+  const SYNC_TEXT = { idle: 'Not signed in: saved on this device only', pulling: 'Loading…', saving: 'Saving…', synced: 'Saved to the cloud', offline: 'Offline: saved on this device', error: 'Could not save to the cloud' };
+  let SYNC = 'idle', pushT = null, pending = false;
+  function setSync(st) { SYNC = st; const el = document.getElementById('sync-state'); if (el) el.textContent = SYNC_TEXT[st] || ''; }
+  function cloudPush() {
+    if (!S.roll) return;
+    pending = true; clearTimeout(pushT);
+    pushT = setTimeout(async () => {
+      setSync('saving');
+      try {
+        const r = await fetch(cloudUrl(S.roll), { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(S) });
+        pending = false; setSync(r.ok ? 'synced' : 'error');
+      } catch (e) { pending = false; setSync('offline'); }
+    }, 800);
+  }
+  async function cloudGet(roll) {
+    const r = await fetch(cloudUrl(roll), { cache: 'no-store' });
+    if (!r.ok) throw new Error('status ' + r.status);
+    return r.json();
+  }
+  // newer copy in the cloud (saved from another device) replaces this device's copy
+  async function refreshFromCloud() {
+    if (!S.roll || pending) return;
+    setSync('pulling');
+    try {
+      const remote = await cloudGet(S.roll);
+      if (remote && remote.set && (remote.updated || 0) > (S.updated || 0)) {
+        S = Object.assign(structuredClone(DEF), remote); saveLocal(); invalidate(); render();
+        toast('Updated from your other device');
+      }
+      setSync('synced');
+    } catch (e) { setSync('offline'); }
+  }
+  function showLogin(msg) {
+    openSheet('Roll number', '<div class="q"><p class="small muted">Your plan is saved under your roll number, so the same plan opens on any phone or laptop.</p>' +
+      '<label class="field"><span>Roll number</span><input type="text" id="roll-in" autocomplete="off" value="' + esc(S.roll || '') + '" data-testid="roll-input"></label>' +
+      '<div class="row"><button class="btn primary" id="roll-go" data-testid="roll-go">Open my plan</button></div>' +
+      (msg ? '<p class="tiny">' + esc(msg) + '</p>' : '') + '</div>');
+    const go = $('#roll-go'); go.onclick = () => signIn($('#roll-in').value);
+  }
+  // an existing cloud copy opens here; if there is none, this device's plan is saved under the roll number
+  async function signIn(raw) {
+    const roll = cloudKey(raw);
+    if (!roll) return toast('Enter your roll number');
+    setSync('pulling');
+    let remote = null;
+    try { remote = await cloudGet(roll); } catch (e) { toast('Could not reach the database. Working offline.'); }
+    if (remote && remote.set) {
+      S = Object.assign(structuredClone(DEF), remote); S.roll = roll; saveLocal();
+      invalidate(); render(); closeSheet(); toast('Plan loaded for ' + roll);
+      setSync('synced');
+    } else {
+      S.roll = roll; save(); closeSheet(); render(); toast('Plan saved under ' + roll);
+    }
+  }
+  function rollCard() {
+    return '<div class="card"><b>Roll number</b><div class="tiny">' + (S.roll ? esc(S.roll) : 'Not signed in') + '</div><div class="tiny" id="sync-state">' + esc(SYNC_TEXT[SYNC] || '') + '</div>' +
+      '<div class="row wrap" style="margin-top:8px"><button class="btn sm" id="roll-switch" data-testid="roll-switch">' + (S.roll ? 'Switch roll number' : 'Sign in') + '</button></div></div>';
+  }
 
   // ---------- dates ----------
   const pad = (n) => String(n).padStart(2, '0');
@@ -411,8 +516,15 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
   const ICK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
 
   // ---------- capacity ----------
+  // Sat and Sun carry no chapter practice when the switch is on (weekday=true asks for Mon-Fri days only)
+  function practiceOff(d, weekdayOnly) {
+    const wd = parse(d).getDay();
+    if (weekdayOnly) return wd === 0 || wd === 6;
+    return !!S.set.practiceWeekdays && (wd === 0 || wd === 6);
+  }
   function capOf(d) {
     if (S.dayMin[d] != null) return { min: S.dayMin[d], why: 'set by you' };
+    if (S.set.start && d < S.set.start) return { min: 0, why: 'Plan starts ' + nice(S.set.start, true) };
     let m = S.set.week[parse(d).getDay()], why = '';
     if (S.set.sem6) {
       if (D.sem6.exams.includes(d)) return { min: 0, why: 'Sem 6 exam' };
@@ -430,6 +542,12 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
     return own.length ? own : moduleQs(cid, u.m);
   }
   function tierOk(t) { return t === 'A' || (t === 'B' && S.set.includeB) || (t === 'C' && S.set.includeC); }
+  // time buttons per topic (Progress tab): the planned minutes are multiplied, whole minutes, 5 minutes at least
+  const MULTS = [[0.25, '1/4'], [1 / 3, '1/3'], [0.5, '1/2'], [1, '1×'], [2, '2×'], [3, '3×'], [4, '4×']];
+  const mult = (id) => S.mult[id] || 1;
+  const itemMin = (u) => { const base = u.min + 5, f = mult(u.id); return f === 1 ? base : Math.max(5, Math.round(base * f)); };
+  function setKeep(id, on) { if (on) S.keep[id] = true; else delete S.keep[id]; save(); invalidate(); }
+  function setMult(ids, f) { ids.forEach((id) => { if (f === 1) delete S.mult[id]; else S.mult[id] = f; }); save(); invalidate(); }
   let ITEMS = null;
   function items() {
     if (ITEMS) return ITEMS;
@@ -439,7 +557,7 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
       for (const m of c.mods) {
         for (const u of c.units) {
           if (u.m !== m || !tierOk(u.tier)) continue;
-          main.push({ id: 'u:' + u.id, kind: 'learn', c: cid, m, u, min: u.min + 5, val: c.marks * (1 + (u.sc || 0)) });
+          main.push({ id: 'u:' + u.id, kind: 'learn', c: cid, m, u, min: itemMin(u), val: c.marks * (1 + (u.sc || 0)) });
         }
         const qs = moduleQs(cid, m);
         if (qs.length) {
@@ -448,7 +566,7 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
         }
       }
     }
-    for (const u of C.GA.units) if (tierOk(u.tier)) ga.push({ id: 'u:' + u.id, kind: 'learn', c: 'GA', m: u.m, u, min: u.min + 5, val: C.GA.marks * (1 + (u.sc || 0)) });
+    for (const u of C.GA.units) if (tierOk(u.tier)) ga.push({ id: 'u:' + u.id, kind: 'learn', c: 'GA', m: u.m, u, min: itemMin(u), val: C.GA.marks * (1 + (u.sc || 0)) });
     for (const p of TOPIC_PAPERS) {
       const qs = D.questions.filter((q) => q.p === p && q.c === 'GA' && q.key).map((q) => q.id);
       if (qs.length) ga.push({ id: 'g:' + p, kind: 'test', c: 'GA', qs, min: 25, val: 1e6, title: 'Aptitude set · ' + p.replace('DA', 'GATE ') });
@@ -474,6 +592,19 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
   let PLAN = null;
   function plan() {
     if (PLAN) return PLAN;
+    // a learn unit that cannot be placed (weekday-only practice, or time short) is left out and the plan is rebuilt
+    const skip = new Set();
+    let P = null;
+    for (let round = 0; round < 6; round++) {
+      P = buildPlan(skip);
+      const bad = P.unplaced.filter((x) => x.kind === 'learn' && !skip.has(x.id) && !S.keep[x.id]);
+      if (!bad.length) break;
+      bad.forEach((x) => skip.add(x.id));
+    }
+    PLAN = P;
+    return PLAN;
+  }
+  function buildPlan(skip) {
     const I = items(), t = TODAY, exam = S.set.exam;
     const days = [];
     for (let d = t; d < exam; d = addDays(d, 1)) days.push(d);
@@ -508,17 +639,19 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
     const learnCap = learnDays.reduce((s, d) => s + capLeft[d], 0);
 
     // choose what fits: drop the lowest value per minute first (tests are kept)
-    let main = I.main.filter((x) => x.id in left), ga = I.ga.filter((x) => x.id in left);
+    let main = I.main.filter((x) => x.id in left && !skip.has(x.id)), ga = I.ga.filter((x) => x.id in left && !skip.has(x.id));
     const sum = (a) => a.reduce((s, x) => s + left[x.id], 0);
-    const dropped = [];
+    const dropped = I.main.concat(I.ga).filter((x) => skip.has(x.id) && x.id in left);
     let over = sum(main) + sum(ga) - learnCap;
     if (over > 0) {
-      const pool = main.concat(ga).filter((x) => x.kind === 'learn').sort((a, b) => a.val / a.min - b.val / b.min);
+      // kept topics are never dropped; of the rest, the lowest value per minute goes first
+      // chapter practice is weekday-only, so it is not dropped by value: the packer places it or, if it cannot, the rebuild skips it
+      const pool = main.concat(ga).filter((x) => x.kind === 'learn' && !S.keep[x.id] && !(S.set.practiceWeekdays && PRACTICE_UNIT.test(x.u.t))).sort((a, b) => a.val / a.min - b.val / b.min);
       for (const x of pool) { if (over <= 0) break; dropped.push(x); over -= left[x.id]; }
       const gone = new Set(dropped.map((x) => x.id));
       main = main.filter((x) => !gone.has(x.id)); ga = ga.filter((x) => !gone.has(x.id));
       if (over > 0) { // still too much: drop tests of the lowest-mark courses
-        const tp = main.concat(ga).sort((a, b) => C[a.c].marks - C[b.c].marks);
+        const tp = main.concat(ga).filter((x) => !S.keep[x.id]).sort((a, b) => C[a.c].marks - C[b.c].marks);
         for (const x of tp) { if (over <= 0) break; dropped.push(x); over -= left[x.id]; gone.add(x.id); }
         main = main.filter((x) => !gone.has(x.id)); ga = ga.filter((x) => !gone.has(x.id));
       }
@@ -530,39 +663,59 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
     if (days.length) forced.forEach((f) => byDay[t].list.push({ x: f.x, min: f.min, done: true, part: f.part }));
     const rem = {}; Object.keys(left).forEach((k) => (rem[k] = left[k]));
     const maxCap = Math.max(0, ...days.map((d) => capLeft[d]));
-    const take = (q, o, budget) => {
+    // chapter practice (module PYQ tests) is Mon-Fri only when the switch is on, shared equally across the weekdays left
+    const pr = !!S.set.practiceWeekdays;
+    // chapter practice: module PYQ tests, and textbook units that are problem sets or exercises (not GA)
+    const CS_COURSES = ['PDSA', 'DB', 'ML', 'AI'];
+    const isCS = (x) => CS_COURSES.includes(x.c);
+    const chapterTest = (x) => (x.kind === 'test' && x.c !== 'GA') || (x.kind === 'learn' && PRACTICE_UNIT.test(x.u.t));
+    // per weekday: chapter practice is shared by minutes across the weekdays left (at least one item a day)
+    let curD = '', quota = Infinity, placedTests = 0;
+    const blockedTest = (x) => pr && chapterTest(x) && (practiceOff(curD) || (placedTests > 0 && placedTests >= quota));
+    const take = (q, o, budget, only) => {
       while (q.length && budget > 0) {
         let k = 0;
         // a mock sitting is never split when the day could hold it whole: do the next fitting item instead
-        while (k < q.length && q[k].kind === 'mock' && rem[q[k].id] > budget + 10 && maxCap >= rem[q[k].id]) k++;
+        while (k < q.length && ((only && !only(q[k])) || blockedTest(q[k]) || (q[k].kind === 'mock' && rem[q[k].id] > budget + 10 && maxCap >= rem[q[k].id]))) k++;
         if (k === q.length) break;
         if (k) q.unshift(q.splice(k, 1)[0]);
         const x = q[0], r = rem[x.id];
+        const put = r <= budget + 10 ? r : budget;
         if (r <= budget + 10) { o.list.push({ x, min: r, part: r < x.min - 4 }); budget -= r; q.shift(); }
-        else if (budget >= 15) { o.list.push({ x, min: budget, part: true }); rem[x.id] = r - budget; budget = 0; }
+        else if (budget >= 5) { o.list.push({ x, min: budget, part: true }); rem[x.id] = r - budget; budget = 0; }
         else break;
+        if (chapterTest(x)) placedTests += put;
       }
       return budget;
     };
     const mq = main.slice(), gq = ga.slice(), fq = fin.slice();
+    const weekdaysFrom = (d) => { let n = 0; for (let x = d; x < exam; x = addDays(x, 1)) if (!practiceOff(x, true)) n++; return n; };
     for (const o of out) {
       let b = capLeft[o.d];
       if (!b) continue;
+      curD = o.d; placedTests = 0;
+      if (pr) quota = Math.ceil(mq.filter(chapterTest).reduce((n, x) => n + rem[x.id], 0) / Math.max(1, weekdaysFrom(o.d)));
       if (o.d >= finalStart && fq.length) { b = take(fq, o, b); b = take(mq, o, b); b = take(gq, o, b); }
       else {
         let gb = gq.length && mq.length ? r5(b * S.set.gaShare / 100) : 0;
         if (gb && gb < 15) gb = 0;
-        let mb = take(mq, o, b - gb);
+        // CS share: Programming & DSA, Databases, ML and AI get their own part of the day (math is the rest)
+        const hasCS = mq.some(isCS), hasMath = mq.some((x) => !isCS(x));
+        let cb = hasCS && hasMath ? r5(b * (S.set.csShare || 0) / 100) : 0;
+        if (cb && cb < 15) cb = 0;
+        const csUsed = cb - take(mq, o, cb, isCS);
+        let mb = take(mq, o, b - gb - csUsed);
         b = take(gq, o, gb + mb);
         if (b > 0 && mq.length) b = take(mq, o, b);
         if (b > 0 && !mq.length && !gq.length && fq.length && o.d >= addDays(finalStart, -3)) b = take(fq, o, b);
       }
+      // spare weekday time after the even share: practice that is still waiting takes it (the share only spreads the work)
+      if (pr && b >= 10 && !practiceOff(o.d) && mq.some((x) => chapterTest(x) && rem[x.id] > 0)) { quota = Infinity; b = take(mq, o, b); }
       if (b >= 10 && o.d < finalStart) o.list.push({ x: { id: 'free:' + o.d, kind: 'free', c: 'FREE', min: b }, min: b });
     }
     const unplaced = mq.concat(gq, fq).filter((x) => rem[x.id] > 0);
     const needMin = sum(I.main.filter((x) => x.id in left)) + sum(I.ga.filter((x) => x.id in left)) + need();
-    PLAN = { days: out, byDay, dropped, unplaced, finalStart, needMin, haveMin: totalCap + forcedMin, learnDays: learnDays.length, left };
-    return PLAN;
+    return { days: out, byDay, dropped, unplaced, finalStart, needMin, haveMin: totalCap + forcedMin, learnDays: learnDays.length, left };
   }
 
   // ---------- completion ----------
@@ -603,19 +756,19 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
     return bits.join(' · ');
   }
   function taskHTML(e, i, opts) {
-    const x = e.x;
+    const x = e.x, day = (opts && opts.day) || TODAY;
     let acts = '';
     if (x.kind === 'learn') {
       acts += x.u.cut ? '<button class="btn sm primary" data-act="read" data-i="' + i + '">Read</button>' : (x.u.src ? '<button class="btn sm primary" data-act="readsrc" data-i="' + i + '">Read module PDF</button>' : '');
       acts += '<button class="btn sm" data-act="notes" data-i="' + i + '">Notes</button>';
-      acts += '<button class="btn sm" data-act="check" data-i="' + i + '">Quick check</button>';
+      if (!practiceOff(day)) acts += '<button class="btn sm" data-act="check" data-i="' + i + '">Quick check</button>';
       acts += '<button class="btn sm ghost" data-act="explain" data-i="' + i + '">Explain</button>';
     } else if (x.kind === 'test' || x.kind === 'mock') acts += '<button class="btn sm primary" data-act="test" data-i="' + i + '">' + (S.tests[x.id] ? 'Retake' : 'Start') + '</button>';
     else if (x.kind === 'rev') acts += '<button class="btn sm primary" data-act="rev" data-i="' + i + '">Open</button>';
-    else if (x.kind === 'free') acts += '<button class="btn sm" data-act="drill">Quick drill</button><button class="btn sm" data-act="cards">Flashcards</button>';
+    else if (x.kind === 'free') acts += (practiceOff(day) ? '' : '<button class="btn sm" data-act="drill">Quick drill</button>') + '<button class="btn sm" data-act="cards">Flashcards</button>';
     const why = x.kind === 'learn' && x.u.why && /asked/.test(x.u.why) ? '<div class="tiny">' + esc(x.u.why.replace(/\[.*?\]/, '')) + '</div>' : '';
     return '<div class="task' + (e.done ? ' done' : '') + '" style="--c:' + color(x.c) + '">' +
-      (x.kind === 'free' ? '<span class="check" style="border-style:dashed"></span>' : '<button class="check" data-act="tick" data-i="' + i + '" aria-label="Mark done">' + ICK + '</button>') +
+      (x.kind === 'free' || (opts && opts.noTick) ? '<span class="check" style="border-style:dashed"></span>' : '<button class="check" data-act="tick" data-i="' + i + '" aria-label="Mark done">' + ICK + '</button>') +
       '<div class="grow">' + kindLine(x) + '<div class="ttl">' + esc(label(x)) + '</div><div class="small muted">' + meta(x, e.min, e.part) + '</div>' + why +
       (opts && opts.noacts ? '' : '<div class="actions">' + acts + '</div>') + '</div></div>';
   }
@@ -659,6 +812,8 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
     let h = '<div class="top"><div><div class="tiny">' + nice(TODAY, true) + '</div><h1>Today</h1></div>' +
       '<div class="countdown"><b>' + Math.max(0, left) + '</b>days to GATE · ' + nice(S.set.exam) + '</div></div>';
     if (left <= 0) h += '<div class="card notice ok">The exam date has passed. Change it in Progress → Settings if needed.</div>';
+    h += startCard();
+    if (!S.roll) h += '<div class="card notice row wrap"><div class="grow"><b>Sign in with your roll number</b><div class="tiny">Your plan is saved under it, so it opens on any device.</div></div><button class="btn sm primary" id="roll-open">Sign in</button></div>';
     // time control
     h += '<div class="card"><div class="row"><div class="grow"><b>Time for GATE today</b><div class="tiny">' + (capT.why ? esc(capT.why) : 'from your week settings') + '</div></div>' +
       '<button class="iconbtn" data-min="-15" aria-label="Less time">−</button><b style="min-width:52px;text-align:center" data-testid="today-min">' + hm(capT.min) + '</b><button class="iconbtn" data-min="15" aria-label="More time">+</button></div>' +
@@ -672,17 +827,42 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
     CUR.forEach((e, i) => (h += taskHTML(e, i)));
     h += '</div>';
     // next up
-    const next = nextFuture(P);
+    const next = planStarted() ? nextFuture(P) : null;
     if (next) {
       CUR.push(next.e);
       h += '<h2>Finished early?</h2><div class="card"><div class="tiny">Next in the plan (' + nice(next.d, true) + '). Do it now and the plan moves up.</div>' + taskHTML(next.e, CUR.length - 1) + '</div>';
     }
-    const tm = P.byDay[addDays(TODAY, 1)];
-    if (tm && tm.list.length) h += '<h2>Tomorrow · ' + hm(tm.cap) + '</h2><div class="card">' + tm.list.map((e) => pill(e)).join('') + '</div>';
+    // tomorrow: the same cards as today (Read, Notes, Explain) so you can prepare; no ticking until it is today
+    const tomorrow = addDays(TODAY, 1), tm = P.byDay[tomorrow];
+    const tmList = tm ? tm.list.filter((e) => e.x.kind !== 'free') : [];
+    if (tm && tmList.length) {
+      h += '<h2>Tomorrow · ' + hm(tm.cap) + '</h2><div class="card" data-testid="tomorrow-list">' +
+        tmList.map((e) => { CUR.push(e); return taskHTML(e, CUR.length - 1, { day: tomorrow, noTick: true }); }).join('') + '</div>';
+    }
     v.innerHTML = h;
     v.querySelectorAll('[data-min]').forEach((b) => (b.onclick = () => { S.dayMin[TODAY] = Math.max(0, Math.min(600, capT.min + +b.dataset.min)); save(); PLAN = null; render(); }));
     const gc = $('#go-cards'); if (gc) gc.onclick = reviewCards;
+    const st1 = $('#start-tmr'); if (st1) st1.onclick = () => setStart(addDays(TODAY, 1));
+    const ro = $('#roll-open'); if (ro) ro.onclick = () => showLogin();
+    const st0 = $('#start-today'); if (st0) st0.onclick = () => setStart(null);
     bindTasks(v); bindFit(v);
+  }
+  // the plan starts on S.set.start (null = today); nothing is scheduled before it
+  const PRACTICE_UNIT = /\bproblem sets?\b|\bexercises\b|^practice\b/i;
+  const planStarted = () => !S.set.start || S.set.start <= TODAY;
+  function setStart(d) {
+    if (d) S.set.start = d; else delete S.set.start;
+    save(); invalidate(); render();
+    toast(d ? 'Plan starts ' + nice(d, true) : 'Plan starts today');
+  }
+  function startCard() {
+    if (!planStarted()) {
+      return '<div class="card notice row wrap" data-testid="start"><div class="grow"><b>Plan starts ' + nice(S.set.start, true) + '</b><div class="tiny">Nothing is scheduled before then.</div></div>' +
+        '<button class="btn sm primary" id="start-today">Start today</button></div>';
+    }
+    const since = S.set.start && S.set.start < TODAY ? 'Running since ' + nice(S.set.start, true) : 'Starts today';
+    return '<div class="card row" data-testid="start"><div class="grow"><b>Plan start</b><div class="tiny">' + since + '</div></div>' +
+      '<button class="btn sm" id="start-tmr" data-testid="start-tomorrow">Start plan from tomorrow</button></div>';
   }
   function nextFuture(P) {
     for (const o of P.days) {
@@ -696,12 +876,25 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
     const t = e.x.kind === 'learn' ? e.x.u.t : label(e.x);
     return '<span class="pill' + (e.done ? ' done' : '') + '" style="--c:' + color(e.x.c) + '">' + esc(t.length > 38 ? t.slice(0, 36) + '…' : t) + ' · ' + hm(e.min) + '</span>';
   }
+  // minutes your time buttons save (+) or add (-) across the whole plan
+  function timeChangeMin() {
+    const units = D.courses.flatMap((c) => c.units);
+    return Object.keys(S.mult).reduce((t, id) => { const u = units.find((x) => x.id === id); return u ? t + (u.min + 5 - itemMin(u)) : t; }, 0);
+  }
   function fitCard(P) {
+    const h = fitCardBase(P), tc = timeChangeMin();
+    if (!tc) return h;
+    const note = '<div class="small muted" style="grid-column:1/-1">Your time buttons ' + (tc > 0 ? 'save ' + hm(tc) : 'add ' + hm(-tc)) + ' across the plan.</div>';
+    return h.replace(/<\/div>$/, note + '</div>');
+  }
+  function fitCardBase(P) {
     const dropMin = P.dropped.reduce((s, x) => s + (P.left[x.id] || x.min), 0);
     if (!P.dropped.length && !P.unplaced.length) return '<div class="card notice ok fit" data-testid="fit"><b>Everything fits</b><span class="small">' + hm(P.needMin) + ' of work · ' + hm(P.haveMin) + ' available</span></div>';
+    if (!P.dropped.length) return '<div class="card notice fit" data-testid="fit"><b>' + P.unplaced.length + ' practice set' + (P.unplaced.length > 1 ? 's' : '') + ' do not fit before the exam</b><span></span><div class="small muted" style="grid-column:1/-1">Chapter practice runs Mon–Fri only. Add minutes on weekdays to fit them.</div></div>';
     const per = P.learnDays ? r5(Math.ceil(dropMin / P.learnDays / 5) * 5) || 5 : 0;
     return '<div class="card notice fit" data-testid="fit"><b>' + P.dropped.length + ' units (' + hm(dropMin) + ') do not fit</b><span></span>' +
-      '<div class="small muted" style="grid-column:1/-1">The plan keeps the highest-marks units and every PYQ test. ' + (per ? 'About +' + per + ' min a day would fit them all.' : '') + '</div>' +
+      '<div class="small muted" style="grid-column:1/-1">Dropped: ' + P.dropped.slice(0, 3).map((x) => esc(label(x))).join(', ') + (P.dropped.length > 3 ? ' and ' + (P.dropped.length - 3) + ' more' : '') + '.</div>' +
+      '<div class="small muted" style="grid-column:1/-1">Kept topics are never dropped; the rest go lowest value per minute first. ' + (per ? 'About +' + per + ' min a day would fit them all.' : '') + '</div>' +
       '<div style="grid-column:1/-1"><button class="btn sm" id="show-drop">See what was left out</button></div></div>';
   }
   function bindFit(v) {
@@ -717,15 +910,11 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
     const P = plan();
     const mode = vPlan.mode || 'days';
     let h = '<h1>Plan</h1><p class="small muted">Rebuilt every time you tick something or change your time. Tap a day to change its minutes.</p>' +
-      '<div class="seg" style="margin:10px 0"><button data-m="days" class="' + (mode === 'days' ? 'on' : '') + '">Days</button><button data-m="courses" class="' + (mode === 'courses' ? 'on' : '') + '">Courses</button><button data-m="week" class="' + (mode === 'week' ? 'on' : '') + '">My week</button></div>';
+      '<div class="seg" style="margin:10px 0"><button data-m="days" class="' + (mode === 'days' ? 'on' : '') + '">Days</button><button data-m="courses" class="' + (mode === 'courses' ? 'on' : '') + '">Courses</button><button data-m="archive" class="' + (mode === 'archive' ? 'on' : '') + '">Archive</button><button data-m="week" class="' + (mode === 'week' ? 'on' : '') + '">My week</button></div>';
     if (mode === 'days') {
       h += fitCard(P) + '<div class="card">';
       let lastWeek = '';
-      // past days with ticks
-      const pastDone = {};
-      Object.entries(S.done).forEach(([id, d]) => { if (d < TODAY) (pastDone[d] = pastDone[d] || []).push(id); });
-      const pd = Object.keys(pastDone).sort().slice(-5);
-      if (pd.length) h += '<div class="tiny" style="margin-bottom:4px">Recent</div>' + pd.map((d) => '<div class="day"><div class="date">' + nice(d, true) + '</div>' + pastDone[d].map((id) => { const x = items().byId[id]; return x ? pill({ x, min: x.min, done: true }) : ''; }).join('') + '</div>').join('');
+      // finished topics from earlier days live in the Archive tab, not here
       P.days.forEach((o) => {
         const wk = 'Week of ' + nice(addDays(o.d, -((parse(o.d).getDay() + 6) % 7)));
         if (wk !== lastWeek) { h += '<div class="tiny" style="margin-top:12px">' + wk + (o.d >= P.finalStart ? ' · mocks and revision' : '') + '</div>'; lastWeek = wk; }
@@ -733,6 +922,13 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
           (o.list.length ? o.list.map(pill).join('') : '<span class="tiny">No GATE work</span>') + '</div>';
       });
       h += '<div class="day"><div class="date" style="color:var(--bad)">' + nice(S.set.exam, true) + ' · GATE DA</div></div></div>';
+    } else if (mode === 'archive') {
+      // every topic finished before today, by the day it was finished
+      const byDay = {};
+      Object.entries(S.done).forEach(([id, d]) => { if (d < TODAY) (byDay[d] = byDay[d] || []).push(id); });
+      const days = Object.keys(byDay).sort().reverse();
+      h += '<p class="small muted">Finished topics from earlier days. They are out of the plan and kept here.</p>' + (days.length ? days.map((d) => '<div class="day"><div class="date">' + nice(d, true) + ' · ' + byDay[d].length + ' finished</div>' +
+        byDay[d].map((id) => { const x = items().byId[id]; return x ? pill({ x, min: x.min, done: true }) : ''; }).join('') + '</div>').join('') : '<p class="muted">Nothing archived yet.</p>');
     } else if (mode === 'courses') {
       h += '<div class="tiles">' + D.courses.map((c) => {
         const us = c.units.filter((u) => tierOk(u.tier)); const dn = us.filter((u) => S.done['u:' + u.id]).length;
@@ -749,12 +945,16 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
     return '<div class="card"><b>Minutes for GATE on each weekday</b><p class="tiny">Change these whenever your timetable changes. The whole plan refits.</p><div class="wk">' +
       [1, 2, 3, 4, 5, 6, 0].map((i) => '<div><label>' + DOW[i] + '</label><input type="number" inputmode="numeric" min="0" max="600" step="15" data-wd="' + i + '" value="' + S.set.week[i] + '"></div>').join('') + '</div>' +
       '<label class="row" style="margin-top:14px"><input type="checkbox" id="sem6" ' + (S.set.sem6 ? 'checked' : '') + '><span class="grow small">Sem 6 exams: 30 min a day from ' + nice(D.sem6.prep[0]) + ' and no GATE work on exam days (' + D.sem6.exams.map((d) => parse(d).getDate()).join(', ') + ' Jan)</span></label>' +
-      '<label class="field"><span>Share of each day for General Aptitude (%)</span><input type="number" id="gashare" min="0" max="60" step="5" value="' + S.set.gaShare + '"></label></div>';
+      '<label class="row" style="margin-top:10px"><input type="checkbox" id="pwd" ' + (S.set.practiceWeekdays ? 'checked' : '') + '><span class="grow small">Chapter practice problems on Mon–Fri only. Sat and Sun get reading, notes and flashcards; the chapter problems are shared across the weekdays.</span></label>' +
+      '<label class="field"><span>Share of each day for General Aptitude (%)</span><input type="number" id="gashare" min="0" max="60" step="5" value="' + S.set.gaShare + '"></label>' +
+      '<label class="field"><span>Share of each day for CS subjects (%): Programming, Databases, ML, AI. Math is the rest</span><input type="number" id="csshare" min="0" max="60" step="5" value="' + (S.set.csShare || 0) + '"></label></div>';
   }
   function bindWeek(v) {
     v.querySelectorAll('[data-wd]').forEach((inp) => (inp.onchange = () => { S.set.week[+inp.dataset.wd] = Math.max(0, +inp.value || 0); save(); PLAN = null; toast('Plan refitted'); }));
     const s6 = $('#sem6', v); if (s6) s6.onchange = () => { S.set.sem6 = s6.checked; save(); PLAN = null; toast('Plan refitted'); };
+    const pw = $('#pwd', v); if (pw) pw.onchange = () => { S.set.practiceWeekdays = pw.checked; save(); PLAN = null; toast('Plan refitted'); };
     const gs = $('#gashare', v); if (gs) gs.onchange = () => { S.set.gaShare = Math.max(0, Math.min(60, +gs.value || 0)); save(); PLAN = null; toast('Plan refitted'); };
+    const cs = $('#csshare', v); if (cs) cs.onchange = () => { S.set.csShare = Math.max(0, Math.min(60, +cs.value || 0)); save(); PLAN = null; toast('Plan refitted'); };
   }
   function dayEditor(d) {
     const c = capOf(d), P = plan(), o = P.byDay[d];
@@ -776,7 +976,7 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
     for (const m of c.mods) {
       h += '<h2>Module ' + m + '</h2>';
       for (const u of c.units.filter((u) => u.m === m)) {
-        const x = items().byId['u:' + u.id] || { id: 'u:' + u.id, kind: 'learn', c: cid, m, u, min: u.min + 5 };
+        const x = items().byId['u:' + u.id] || { id: 'u:' + u.id, kind: 'learn', c: cid, m, u, min: itemMin(u) };
         const e = { x, min: x.min, done: !!S.done[x.id] };
         CUR.push(e);
         let flag = !tierOk(u.tier) ? ' · not planned' : dropped.has(x.id) ? ' · left out (time)' : '';
@@ -794,21 +994,23 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
       ev.stopPropagation(); const e = CUR[+b.dataset.i];
       if (S.done[e.x.id]) delete S.done[e.x.id]; else S.done[e.x.id] = TODAY;
       save(); PLAN = null; e.done = !!S.done[e.x.id]; b.closest('.task').classList.toggle('done', e.done);
+      render();   // the view behind the sheet (Plan, Progress) refits too
     }));
   }
 
   // ---------- practice ----------
   function vPractice(v) {
-    const wrong = mistakes();
+    const wrong = mistakes(), off = practiceOff(TODAY);   // Sat/Sun: no chapter practice (switch in My week)
     let h = '<h1>Practice</h1><p class="small muted">Every question is a real GATE DA question with the official key: answer and see right or wrong at once.</p>' +
       '<div class="tiles" style="margin-top:10px">' +
-      '<button class="tile" id="p-drill"><div class="n">Quick drill</div><div class="tiny">10 questions from what you have studied</div></button>' +
-      '<button class="tile" id="p-wrong"><div class="n">Mistakes (' + wrong.length + ')</div><div class="tiny">Redo the ones you got wrong</div></button>' +
+      (off ? '' : '<button class="tile" id="p-drill"><div class="n">Quick drill</div><div class="tiny">10 questions from what you have studied</div></button>' +
+      '<button class="tile" id="p-wrong"><div class="n">Mistakes (' + wrong.length + ')</div><div class="tiny">Redo the ones you got wrong</div></button>') +
       '<button class="tile" id="p-cards"><div class="n">Flashcards (' + dueCards().length + ' due)</div><div class="tiny">' + allCards().length + ' cards from your notes</div></button>' +
       '</div><h2>Module-wise GATE PYQ tests</h2><div class="card">';
     CUR = [];
     for (const cid of SEQ.concat(['GA'])) {
       const c = C[cid];
+      if (off && cid !== 'GA') continue;
       const ts = items().all.filter((x) => x.kind === 'test' && x.c === cid);
       if (!ts.length) continue;
       h += '<div class="row" style="margin:12px 0 4px;--c:var(--' + cid + ')"><span class="dot"></span><b class="grow">' + esc(c.short) + '</b><span class="tiny">' + c.marks + '/300</span></div><div class="row wrap">';
@@ -832,7 +1034,8 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
       '<li><b>Module test</b>: when a module ends, a timed PYQ test with GATE marking. Wrong answers go to Mistakes.</li>' +
       '<li><b>At college</b>: open Practice → Quick drill or Flashcards in any 10-minute gap.</li></ol></div>';
     v.innerHTML = h;
-    $('#p-drill').onclick = drill; $('#p-wrong').onclick = () => (wrong.length ? quiz({ title: 'Mistakes', qids: wrong, mode: 'practice' }) : toast('No mistakes yet'));
+    const pd = $('#p-drill'); if (pd) pd.onclick = drill;
+    const pw = $('#p-wrong'); if (pw) pw.onclick = () => (wrong.length ? quiz({ title: 'Mistakes', qids: wrong, mode: 'practice' }) : toast('No mistakes yet'));
     $('#p-cards').onclick = reviewCards;
     v.querySelectorAll('[data-paper]').forEach((b) => (b.onclick = () => quiz({ title: b.dataset.paper.replace('_', ' '), qids: D.questions.filter((q) => q.p === b.dataset.paper).map((q) => q.id), mode: 'practice' })));
     bindTasks(v);
@@ -1092,19 +1295,16 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
     let streak = 0; for (let d = days.has(TODAY) ? TODAY : addDays(TODAY, -1); days.has(d); d = addDays(d, -1)) streak++;
     const att = Object.values(S.att), acc = att.length ? Math.round((att.filter((a) => a.last).length / att.length) * 100) : 0;
     let h = '<h1>Progress</h1><div class="stat" style="margin:10px 0"><div><b>' + hm(mins) + '</b><span class="tiny">studied</span></div><div><b>' + streak + '</b><span class="tiny">day streak</span></div><div><b>' + (att.length ? acc + '%' : '–') + '</b><span class="tiny">' + att.length + ' questions</span></div></div>';
-    h += '<div class="card">' + D.courses.map((c) => {
-      const us = c.units.filter((u) => tierOk(u.tier)); const dn = us.filter((u) => S.done['u:' + u.id]).length;
-      const qa = Object.entries(S.att).filter(([id]) => Q[id] && Q[id].c === c.id); const ok = qa.filter(([, a]) => a.last).length;
-      return '<div style="margin:8px 0;--c:var(--' + c.id + ')"><div class="row small"><span class="dot"></span><span class="grow">' + esc(c.short) + '</span><span class="tiny">' + dn + '/' + us.length + ' units' + (qa.length ? ' · ' + ok + '/' + qa.length + ' right' : '') + '</span></div><div class="bar" style="margin-top:4px"><i style="width:' + (us.length ? (dn / us.length) * 100 : 0) + '%"></i></div></div>';
-    }).join('') + '</div>';
+    h += '<h2>Tick what you have studied</h2><p class="tiny">Ticking a topic refits the plan at once: finished topics leave the plan, and the time moves to what is left.</p>' +
+      '<div id="pg-sum" data-testid="pg-sum"></div>' + D.courses.map(progressBox).join('');
     const tests = Object.entries(S.tests).sort((a, b) => (a[1].d < b[1].d ? 1 : -1)).slice(0, 12);
     if (tests.length) h += '<h2>Recent tests</h2><div class="card small">' + tests.map(([id, t]) => { const x = I.byId[id]; return '<div class="row" style="padding:4px 0"><span class="grow">' + esc(x ? (C[x.c] ? C[x.c].short + ' · ' : '') + label(x) : id.replace(/^(full|free):/, '')) + '</span><b>' + t.score + '/' + t.max + '</b><span class="tiny">&nbsp;' + nice(t.d) + '</span></div>'; }).join('') + '</div>';
-    h += '<h2>Settings</h2><div class="card"><label class="field"><span>GATE DA exam date (the DA paper day is not out yet; GATE 2027 days are 6, 7, 13, 14, 20, 21 Feb)</span><input type="date" id="exam" data-testid="exam-date" value="' + S.set.exam + '"></label>' +
+    h += rollCard() + '<h2>Settings</h2><div class="card"><label class="field"><span>GATE DA exam date (the DA paper day is not out yet; GATE 2027 days are 6, 7, 13, 14, 20, 21 Feb)</span><input type="date" id="exam" data-testid="exam-date" value="' + S.set.exam + '"></label>' +
       '<label class="row"><input type="checkbox" id="incB" ' + (S.set.includeB ? 'checked' : '') + '><span class="small">Plan tier B units (some exam evidence)</span></label>' +
       '<label class="row" style="margin-top:8px"><input type="checkbox" id="incC" ' + (S.set.includeC ? 'checked' : '') + '><span class="small">Plan tier C units too (no evidence; only if time allows)</span></label>' +
       '<label class="field"><span>Theme</span><select id="theme"><option value="">Match the phone</option><option value="light">Light</option><option value="dark">Dark</option></select></label></div>' +
       weekEditor() +
-      '<div class="card"><b>Backup</b><p class="tiny">Progress is stored on this device. Export to keep a copy or move to another phone.</p><div class="row wrap"><button class="btn sm" id="exp" data-testid="export-btn">Export progress</button><label class="btn sm">Import<input type="file" id="imp" accept="application/json" hidden data-testid="import-input"></label><button class="btn sm" id="expn">Export notes (.md)</button><button class="btn sm ghost" id="rst" style="color:var(--bad)">Reset</button></div></div>' +
+      '<div class="card"><b>Backup</b><p class="tiny">Progress is stored on this device. Export to keep a copy or move to another phone.</p><div class="row wrap"><button class="btn sm" id="exp" data-testid="export-btn">Export progress</button><label class="btn sm">Import<input type="file" id="imp" accept="application/json" hidden data-testid="import-input"></label><button class="btn sm" id="expn">Export notes (.md)</button><button class="btn sm" id="dbg" data-testid="debug-copy">Copy debug data</button><button class="btn sm ghost" id="rst" style="color:var(--bad)">Reset</button></div></div>' +
       '<p class="tiny">Built ' + D.built + ' · ' + D.questions.length + ' questions · topic PDFs from GitHub (SSC-FILES).</p>';
     v.innerHTML = h;
     $('#exam').onchange = (e) => { if (e.target.value) { S.set.exam = e.target.value; save(); invalidate(); toast('Plan refitted to ' + nice(S.set.exam)); } };
@@ -1114,8 +1314,142 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
     $('#exp').onclick = () => dl('gate-v3-progress-' + TODAY + '.json', JSON.stringify(S, null, 1), 'application/json');
     $('#imp').onchange = async (e) => { try { const s = JSON.parse(await e.target.files[0].text()); if (!s.set) throw 0; S = Object.assign(structuredClone(DEF), s); save(); invalidate(); render(); toast('Imported'); } catch (er) { toast('Not a progress file'); } };
     $('#expn').onclick = () => dl('gate-notes-' + TODAY + '.md', Object.values(S.notes).map((n) => '## ' + (n.t || '') + '\n\n' + (n.idea ? '**Idea:** ' + n.idea + '\n\n' : '') + (n.keys ? n.keys.split('\n').map((l) => '- ' + l).join('\n') + '\n\n' : '') + (n.ex ? '**Example:**\n' + n.ex + '\n\n' : '') + (n.trap ? '**Trap:** ' + n.trap + '\n' : '')).join('\n'), 'text/markdown');
+    $('#dbg').onclick = async () => {
+      const P = plan(), name = (x) => (x.u ? x.u.t : x.title || x.id);
+      const dump = {
+        built: D.built, today: TODAY, url: location.href, when: new Date().toISOString(),
+        settings: S.set, mult: S.mult, keep: S.keep, dayMin: S.dayMin, parts: S.parts,
+        plan: { finalStart: P.finalStart, needMin: P.needMin, haveMin: P.haveMin, learnDays: P.learnDays,
+          dropped: P.dropped.map((x) => ({ id: x.id, name: name(x), min: P.left[x.id] || x.min, kind: x.kind })),
+          unplaced: P.unplaced.map((x) => ({ id: x.id, name: name(x), left: P.left[x.id], kind: x.kind })),
+          days: P.days.filter((o) => o.list.length).map((o) => ({ d: o.d, cap: o.cap, items: o.list.map((e) => (e.x.id + ' ' + e.min + 'm' + (e.part ? ' part' : ''))) })) },
+        done: S.done, tests: S.tests, att: Object.keys(S.att).length,
+      };
+      const text = JSON.stringify(dump, null, 1);
+      try { await navigator.clipboard.writeText(text); toast('Debug data copied'); }
+      catch (e) { dl('gate-debug-' + TODAY + '.json', text, 'application/json'); toast('Clipboard blocked: saved as a file'); }
+    };
     $('#rst').onclick = () => { if (confirm('Erase all progress, notes and cards on this device?')) { S = structuredClone(DEF); save(); invalidate(); render(); } };
     bindWeek(v);
+    bindProgress(v);
+    paintSummary();
+    const rs = $('#roll-switch'); if (rs) rs.onclick = () => showLogin();
+  }
+
+  // ---------- progress ticks: every tick refits the plan at once ----------
+  const unitsOf = (c) => c.units.filter((u) => tierOk(u.tier));
+  const doneOf = (u) => !!S.done['u:' + u.id];
+  function setUnits(us, on) {
+    us.forEach((u) => {
+      const id = 'u:' + u.id;
+      if (on) { if (!S.done[id]) S.done[id] = TODAY; }
+      else { delete S.done[id]; delete S.parts[id]; }
+    });
+  }
+  function progressBox(c) {
+    const us = unitsOf(c), N = us.length;
+    let ticks = '', list = '';
+    for (let i = 0; i <= N; i++) {
+      const edge = i === 0 || i === N || us[i].m !== us[i - 1].m, left = (i / N * 100) + '%';
+      ticks += '<i class="' + (edge ? 'mod' : '') + '" style="left:' + left + '"></i>';
+      if (i < N && (i === 0 || us[i].m !== us[i - 1].m)) ticks += '<em style="left:' + left + '">M' + us[i].m + '</em>';
+    }
+    [...new Set(us.map((u) => u.m))].forEach((m) => {
+      list += '<div class="mod-head"><span>Module ' + m + '</span><button type="button" data-tickall="' + m + '">Tick all</button></div>' +
+        '<div class="mults mod" data-mod="' + m + '"><span class="tiny">This module</span>' + MULTS.map(([f, l]) => '<button type="button" class="mx" data-mult="' + f + '">' + l + '</button>').join('') + '</div>';
+      us.filter((u) => u.m === m).forEach((u) => {
+        list += '<div class="urow" data-uid="' + u.id + '"><label class="ucheck"><input type="checkbox" data-u="' + u.id + '"><span class="tx">' + esc(u.t) + '</span><span class="h" data-eff></span></label><div class="mults">' + MULTS.map(([f, l]) => '<button type="button" class="mx" data-mult="' + f + '">' + l + '</button>').join('') + '<button type="button" class="mx keep" data-keep="u:' + u.id + '" title="Keep in plan: dropped last">Keep</button></div></div>';
+      });
+    });
+    const courseMults = '<div class="mults course"><span class="tiny">All topics in this course</span>' + MULTS.map(([f, l]) => '<button type="button" class="mx" data-mult="' + f + '">' + l + '</button>').join('') + '</div>';
+    return '<div class="psub" data-c="' + c.id + '" style="--c:var(--' + c.id + ')" data-testid="psub-' + c.id + '">' +
+      '<div class="psub-h"><span class="dot"></span><div class="grow"><div class="t">' + esc(c.name) + '</div><div class="tiny">' + c.marks + ' of 300 marks · ' + c.mods.length + ' modules</div></div><div class="pct"></div></div>' +
+      '<div class="slider-wrap"><input class="stops" type="range" min="0" max="' + N + '" step="1" aria-label="Units done in ' + esc(c.short) + '" data-testid="slider-' + c.id + '"><div class="ticks" style="left:14px;right:14px">' + ticks + '</div></div>' +
+      '<div class="sl-label small"></div><div class="ptests"></div><div class="tiny pq"></div>' +
+      courseMults + '<details class="unit-dd"><summary><span>Tick topics individually</span><span class="cnt"></span></summary><div class="unit-list">' + list + '</div></details></div>';
+  }
+  function paintBox(box) {
+    const c = C[box.dataset.c], us = unitsOf(c), N = us.length;
+    const k = us.filter(doneOf).length, left = us.filter((u) => !doneOf(u)).reduce((s, u) => s + itemMin(u), 0);
+    const range = box.querySelector('.stops');
+    range.value = k; range.style.setProperty('--p', (N ? (k / N) * 100 : 0) + '%');
+    box.querySelector('.pct').textContent = (N ? Math.round((k / N) * 100) : 0) + '%';
+    box.querySelector('.sl-label').textContent = k + ' of ' + N + ' topics done · ' + hm(left) + ' left';
+    const tests = items().all.filter((x) => x.kind === 'test' && x.c === c.id && x.m);
+    box.querySelector('.ptests').innerHTML = tests.map((x) => {
+      const t = S.tests[x.id];
+      return '<span class="ptest' + (S.done[x.id] ? ' done' : '') + '">M' + x.m + ' PYQ test · ' + (t ? t.score + '/' + t.max : 'not taken') + '</span>';
+    }).join('');
+    const qa = Object.entries(S.att).filter(([id]) => Q[id] && Q[id].c === c.id), ok = qa.filter(([, a]) => a.last).length;
+    box.querySelector('.pq').textContent = qa.length ? ok + ' of ' + qa.length + ' questions right so far' : 'No questions answered yet';
+    box.querySelector('.cnt').textContent = k + '/' + N;
+    box.querySelectorAll('input[data-u]').forEach((cb) => {
+      cb.checked = doneOf(us.find((u) => u.id === cb.dataset.u)); cb.closest('.ucheck').classList.toggle('on', cb.checked);
+    });
+    const all = C[box.dataset.c].units;
+    box.querySelectorAll('.urow').forEach((row) => {
+      const u = all.find((x) => x.id === row.dataset.uid);
+      row.querySelector('[data-eff]').textContent = hm(itemMin(u));
+      row.querySelectorAll('.mx[data-mult]').forEach((b) => b.classList.toggle('on', Math.abs(Number(b.dataset.mult) - mult(u.id)) < 1e-9));
+      row.querySelector('.keep').classList.toggle('on', !!S.keep['u:' + u.id]);
+    });
+    box.querySelectorAll('.mults.course .mx').forEach((b) => b.classList.toggle('on', all.every((u) => Math.abs(Number(b.dataset.mult) - mult(u.id)) < 1e-9)));
+    box.querySelectorAll('.mults.mod').forEach((row) => {
+      const ids = all.filter((u) => u.m === +row.dataset.mod);
+      row.querySelectorAll('.mx').forEach((b) => b.classList.toggle('on', ids.every((u) => Math.abs(Number(b.dataset.mult) - mult(u.id)) < 1e-9)));
+    });
+  }
+  function paintSummary() {
+    const el = $('#pg-sum'); if (!el) return;
+    const P = plan(), all = D.courses.flatMap(unitsOf);
+    const dn = all.filter(doneOf).length, left = all.filter((u) => !doneOf(u)).reduce((s, u) => s + itemMin(u), 0);
+    const tt = items().all.filter((x) => x.kind === 'test' && x.c !== 'GA'), tdn = tt.filter((x) => S.done[x.id]).length;
+    el.innerHTML = '<div class="card row"><div class="grow"><b>' + dn + ' of ' + all.length + ' topics done · ' + tdn + ' of ' + tt.length + ' module tests</b><div class="tiny">' + hm(left) + ' of topic time left' + (planStarted() ? '' : ' · plan starts ' + nice(S.set.start, true)) + '</div></div>' +
+      '<button class="btn sm" id="pg-today">Today</button></div>' + fitCard(P);
+    bindFit(el);
+    $('#pg-today', el).onclick = () => { TAB = 'today'; render(); window.scrollTo(0, 0); };
+  }
+  function bindProgress(v) {
+    v.querySelectorAll('.psub').forEach((box) => {
+      const us = unitsOf(C[box.dataset.c]);
+      box.querySelector('.stops').oninput = (e) => {
+        const n = +e.target.value;
+        us.forEach((u, i) => setUnits([u], i < n));
+        progressChanged();
+      };
+      box.querySelectorAll('input[data-u]').forEach((cb) => (cb.onchange = () => {
+        setUnits([us.find((u) => u.id === cb.dataset.u)], cb.checked);
+        progressChanged();
+      }));
+      box.querySelectorAll('[data-tickall]').forEach((b) => (b.onclick = () => {
+        const ms = us.filter((u) => u.m === +b.dataset.tickall);
+        setUnits(ms, !ms.every(doneOf));
+        progressChanged();
+      }));
+      box.querySelectorAll('.urow .keep').forEach((b) => (b.onclick = () => {
+        setKeep(b.dataset.keep, !S.keep[b.dataset.keep]);
+        progressChanged();
+      }));
+      box.querySelectorAll('.urow .mx[data-mult]').forEach((b) => (b.onclick = () => {
+        setMult([b.closest('.urow').dataset.uid], Number(b.dataset.mult));
+        progressChanged();
+      }));
+      box.querySelectorAll('.mults.mod .mx').forEach((b) => (b.onclick = () => {
+        setMult(C[box.dataset.c].units.filter((u) => u.m === +b.closest('.mults').dataset.mod).map((u) => u.id), Number(b.dataset.mult));
+        progressChanged();
+      }));
+      box.querySelectorAll('.mults.course .mx').forEach((b) => (b.onclick = () => {
+        setMult(C[box.dataset.c].units.map((u) => u.id), Number(b.dataset.mult));
+        progressChanged();
+      }));
+      paintBox(box);
+    });
+  }
+  // repaint in place (keeps the open dropdowns and the scroll position), then the plan summary
+  function progressChanged() {
+    save(); PLAN = null;
+    document.querySelectorAll('.psub').forEach(paintBox);
+    paintSummary();
   }
   function dl(name, text, type) { const u = URL.createObjectURL(new Blob([text], { type })); const a = document.createElement('a'); a.href = u; a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 3000); }
 
@@ -1153,6 +1487,9 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
   window.__plan = () => plan();
   window.__state = () => S;
   render();
+  if (!S.roll) showLogin('Sign in to save your plan to the cloud. You can skip this and use the plan on this device.');
+  else refreshFromCloud();
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshFromCloud(); });
 })();
 </script>
 </body>
