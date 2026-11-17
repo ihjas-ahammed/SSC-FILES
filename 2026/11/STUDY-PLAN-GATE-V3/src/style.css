@@ -173,3 +173,39 @@ details.unit-dd .cnt{margin-left:auto;margin-right:8px;font-size:12px;color:var(
 .ucheck.on .tx{color:var(--ink3);text-decoration:line-through}
 @media (max-width:380px){main{padding-left:12px;padding-right:12px}.stat b{font-size:17px}}
 .mx.keep.on{background:var(--ok);border-color:var(--ok)}
+#pdf-sheet{z-index:60}
+
+/* desktop: sidebar on the left, sheets (day, notes, quiz, PDF) open as a panel on the right.
+   Everything is inside this query, so the mobile layout above is untouched. */
+@media (min-width:1000px){
+  :root{--side:224px;--panel:min(560px,42vw);--pdfpanel:min(920px,58vw)}
+  body{padding-left:var(--side)}
+  body{overflow:auto!important}                       /* sheets set overflow:hidden inline; the page behind stays scrollable */
+  main{max-width:900px;padding:24px 32px 48px;transition:margin .2s}
+  body:has(#sheet:not([hidden])) main{margin-right:var(--panel)}
+  body:has(#pdf-sheet:not([hidden])) main{margin-right:var(--pdfpanel)}
+  h1{font-size:26px}
+  .tiles{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
+  .btn:not(:disabled):hover,.tile:hover,.opt:hover,.qnav button:hover,.mx:hover{border-color:var(--accent)}
+  .ent:hover{background:var(--surface2)}
+  .task .actions .btn{min-height:30px}
+
+  nav.tabs{top:0;right:auto;bottom:0;width:var(--side);height:auto;padding:0;border-top:0;border-right:1px solid var(--line);background:var(--surface);backdrop-filter:none;justify-content:flex-start;z-index:20}
+  nav.tabs .in{flex-direction:column;max-width:none;width:100%;padding:18px 12px;gap:4px}
+  nav.tabs .in::before{content:"GATE DA Planner";display:block;font-weight:800;font-size:16px;letter-spacing:-.01em;padding:4px 12px 18px;color:var(--ink)}
+  nav.tabs button{flex:none;flex-direction:row;justify-content:flex-start;gap:12px;font-size:14px;padding:11px 12px;border-radius:10px}
+  nav.tabs button:hover{background:var(--surface2);color:var(--ink)}
+  nav.tabs button.on{background:color-mix(in srgb,var(--accent) 13%,var(--surface));color:var(--accent)}
+
+  .sheet{left:auto;width:var(--panel);border-left:1px solid var(--line);box-shadow:-8px 0 30px rgba(0,0,0,.12)}
+  #pdf-sheet{width:var(--pdfpanel)}
+  #pdf-sheet footer{display:none}                      /* reader: no bottom bar on desktop */
+  .sheet header{min-height:56px}
+  .q{max-width:none}
+  .toast{left:calc(50% + var(--side)/2);bottom:24px}
+}
+/* very wide screens: a little more room for the page and panels */
+@media (min-width:1500px){
+  :root{--panel:560px;--pdfpanel:min(1040px,56vw)}
+  main{max-width:1000px}
+}

@@ -102,6 +102,8 @@
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const $ = (s, r) => (r || document).querySelector(s);
   const raw = (p) => RAW + p.split('/').map(encodeURIComponent).join('/');
+  // Read opens the whole module textbook at the unit's first page (the cut only if the full PDF is unknown)
+  const readUnit = (u) => PDFV.open(raw(u.src || u.cut), u.t, u.src && u.pg && u.pg[0] ? { page: u.pg[0], range: u.pg } : {});
   const ICK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
 
   // ---------- capacity ----------
@@ -348,7 +350,7 @@
     const x = e.x, day = (opts && opts.day) || TODAY;
     let acts = '';
     if (x.kind === 'learn') {
-      acts += x.u.cut ? '<button class="btn sm primary" data-act="read" data-i="' + i + '">Read</button>' : (x.u.src ? '<button class="btn sm primary" data-act="readsrc" data-i="' + i + '">Read module PDF</button>' : '');
+      acts += (x.u.src || x.u.cut) ? '<button class="btn sm primary" data-act="read" data-i="' + i + '">Read</button>' : '';
       acts += '<button class="btn sm" data-act="notes" data-i="' + i + '">Notes</button>';
       if (!practiceOff(day)) acts += '<button class="btn sm" data-act="check" data-i="' + i + '">Quick check</button>';
       acts += '<button class="btn sm ghost" data-act="explain" data-i="' + i + '">Explain</button>';
@@ -369,8 +371,7 @@
         const e = CUR[+b.dataset.i], x = e && e.x;
         switch (b.dataset.act) {
           case 'tick': toggle(e); break;
-          case 'read': PDFV.open(raw(x.u.cut), x.u.t); break;
-          case 'readsrc': PDFV.open(raw(x.u.src), x.u.t); break;
+          case 'read': case 'readsrc': readUnit(x.u); break;
           case 'notes': openNotes(x.c, x.u); break;
           case 'check': quiz({ title: 'Quick check · ' + x.u.t, qids: shuffle(unitQs(x.u, x.c)).slice(0, 6), mode: 'practice' }); break;
           case 'explain': openExplain(x.c, x.u); break;
@@ -548,10 +549,22 @@
   function dayEditor(d) {
     const c = capOf(d), P = plan(), o = P.byDay[d];
     CUR = o ? o.list.slice() : [];
+    // same files as Read -> Download for each learning item of the day (unit pages -1/+1 when cut from a book)
+    const kit = CUR.filter((e) => e.x.kind === 'learn' && (e.x.u.src || e.x.u.cut)).map((e) => { const u = e.x.u; return { url: raw(u.src || u.cut), title: u.t, range: u.src && u.pg && u.pg[0] ? u.pg : null }; });
     openSheet(nice(d, true), '<div class="q"><label class="field"><span>Minutes for GATE on this day</span><input type="number" id="dm" min="0" max="600" step="15" value="' + c.min + '"></label>' +
       '<div class="row wrap">' + [0, 30, 60, 90, 120, 180].map((m) => '<button class="btn sm" data-set="' + m + '">' + (m ? hm(m) : 'Day off') + '</button>').join('') + (S.dayMin[d] != null ? '<button class="btn sm ghost" data-set="reset">Use default</button>' : '') + '</div>' +
-      '<h2>Planned</h2>' + (CUR.length ? CUR.map((e, i) => taskHTML(e, i, { noacts: d !== TODAY })).join('') : '<p class="muted">Nothing planned.</p>') + '</div>');
+      '<h2>Planned</h2>' + (CUR.length ? CUR.map((e, i) => taskHTML(e, i, { day: d, noTick: d !== TODAY })).join('') : '<p class="muted">Nothing planned.</p>') + '</div>',
+      kit.length ? '<button class="iconbtn" id="day-kit" aria-label="Download the day kit (zip)" title="Download the day kit (zip)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg></button>' : '');
     const body = $('#sh-body');
+    const kb = $('#day-kit');
+    if (kb) kb.onclick = async () => {
+      if (kb.disabled) return; kb.disabled = true;
+      try {
+        const n = await PDFV.kit(kit, 'GATE day ' + d, (i, t, name) => toast('Cutting ' + i + '/' + t + ': ' + name.slice(0, 28)));
+        toast('Day kit downloaded (' + n + ' PDF' + (n > 1 ? 's' : '') + ')');
+      } catch (err) { toast('Could not make the kit: ' + (err.message || err)); }
+      kb.disabled = false;
+    };
     const apply = (val) => { if (val === 'reset') delete S.dayMin[d]; else S.dayMin[d] = Math.max(0, +val || 0); save(); PLAN = null; closeSheet(); render(); toast('Plan refitted'); };
     body.querySelectorAll('[data-set]').forEach((b) => (b.onclick = () => apply(b.dataset.set)));
     $('#dm').onchange = (e) => apply(e.target.value);
@@ -707,7 +720,7 @@
         else h += '<div class="feedback no">' + (a == null ? 'Not answered' : 'Not right') + ' · key: ' + esc(q.key.replace(/;/g, ', ')) + '</div>';
         if (q.c && q.m && C[q.c]) {
           const u = C[q.c].units.find((u) => q.u && q.u.includes(u.n));
-          if (u && u.cut) h += '<button class="btn sm" id="q-read" style="margin-top:8px">Read: ' + esc(u.t) + '</button>';
+          if (u && (u.src || u.cut)) h += '<button class="btn sm" id="q-read" style="margin-top:8px">Read: ' + esc(u.t) + '</button>';
         }
       }
       h += '</div>';
@@ -724,7 +737,7 @@
       }));
       const ng = $('#nat-go'); if (ng) ng.onclick = () => { const v = $('#nat').value.trim(); if (!v) return; st.ans[q.id] = v; if (!test) grade(q); draw(); };
       const mg = $('#msq-go'); if (mg) mg.onclick = () => { if (!(st.ans[q.id] || []).length) return; if (!test) grade(q); draw(); };
-      const qr = $('#q-read'); if (qr) qr.onclick = () => { const u = C[q.c].units.find((u) => q.u.includes(u.n)); PDFV.open(raw(u.cut), u.t); };
+      const qr = $('#q-read'); if (qr) qr.onclick = () => { const u = C[q.c].units.find((u) => q.u.includes(u.n)); readUnit(u); };
       $('#q-prev').onclick = () => { st.i--; draw(); };
       $('#q-next').onclick = () => { if (st.i < qs.length - 1) { st.i++; draw(); } else if (test && !st.done) submit(); else { finish(); closeSheet(); } };
       const sb = $('#q-sub'); if (sb) sb.onclick = () => { const un = qs.filter((x) => st.ans[x.id] == null).length; if (!un || confirm(un + ' unanswered. Submit anyway?')) submit(); };
@@ -765,7 +778,7 @@
     const qs = unitQs(u, cid);
     const field = (k, lab, ph, big) => '<label class="field"><span>' + lab + '</span><textarea data-k="' + k + '" rows="' + (big ? 5 : 2) + '" placeholder="' + esc(ph) + '">' + esc(n[k] || '') + '</textarea></label>';
     openSheet('Notes · ' + u.t, '<div class="q">' +
-      '<div class="row wrap" style="margin:6px 0">' + (u.cut ? '<button class="btn sm primary" id="n-read">Read pp ' + u.pg[0] + '–' + u.pg[1] + '</button>' : '') + '<button class="btn sm" id="n-check">Quick check (' + qs.length + ')</button><button class="btn sm ghost" id="n-exp">Explain</button></div>' +
+      '<div class="row wrap" style="margin:6px 0">' + ((u.src || u.cut) ? '<button class="btn sm primary" id="n-read">Read pp ' + u.pg[0] + '–' + u.pg[1] + '</button>' : '') + '<button class="btn sm" id="n-check">Quick check (' + qs.length + ')</button><button class="btn sm ghost" id="n-exp">Explain</button></div>' +
       (u.why && /asked|focus/.test(u.why) ? '<div class="card small"><b>Why it matters:</b> ' + esc(u.why) + '</div>' : '') +
       field('idea', '1 · The idea in one line', 'e.g. Rank = number of pivots = dim of column space') +
       field('keys', '2 · Key results as flashcards (one per line, question :: answer)', 'rank(A) + nullity(A) = ? :: number of columns n\nWhen is Ax=b solvable? :: b in C(A)', true) +
@@ -774,7 +787,7 @@
       '<p class="tiny">Saved as you type. Each <code>::</code> line and the trap become flashcards, shown again after 1, 3, 7, 16 and 35 days.</p></div>');
     const body = $('#sh-body');
     body.querySelectorAll('textarea').forEach((t) => (t.oninput = () => { (S.notes[id] = S.notes[id] || {})[t.dataset.k] = t.value; S.notes[id].t = u.t; S.notes[id].c = cid; save(); }));
-    const r = $('#n-read'); if (r) r.onclick = () => PDFV.open(raw(u.cut), u.t);
+    const r = $('#n-read'); if (r) r.onclick = () => readUnit(u);
     $('#n-check').onclick = () => quiz({ title: 'Quick check · ' + u.t, qids: shuffle(qs).slice(0, 6), mode: 'practice' });
     $('#n-exp').onclick = () => openExplain(cid, u);
   }
