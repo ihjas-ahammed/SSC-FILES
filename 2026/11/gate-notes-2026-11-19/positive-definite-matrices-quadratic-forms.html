@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Linear Algebra Notes (ASD-STE100): Sections 4.4, 6.5, and 6.7</title>
+
+  <!-- MathJax v3 Configuration -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      chtml: {
+        scale: 0.96,
+        matchFontHeight: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    :root {
+      --bg-page: #f4f6f9;
+      --bg-paper: #ffffff;
+      --ink-main: #1b2430;
+      --ink-muted: #4a5568;
+      --accent-primary: #1a4b8c;
+      --accent-secondary: #0d7a6f;
+      --accent-warm: #b45309;
+      --border-light: #d7e0ea;
+      --bg-box-blue: #f0f5fc;
+      --bg-box-teal: #eef9f7;
+      --bg-box-amber: #fff9eb;
+      --bg-code: #f1f5f9;
+      --shadow-card: 0 4px 18px rgba(15, 23, 42, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg-page);
+      color: var(--ink-main);
+      font-family: "Georgia", "Times New Roman", serif;
+      font-size: 15.5px;
+      line-height: 1.58;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    /* Toolbar for 1-col / 2-col / Print */
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #102a43;
+      color: #ffffff;
+      padding: 10px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 13px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .toolbar-title {
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      background: #243b53;
+      color: #ffffff;
+      border: 1px solid #486581;
+      border-radius: 5px;
+      padding: 6px 12px;
+      cursor: pointer;
+      font-size: 12.5px;
+      font-weight: 600;
+      transition: background 0.15s ease;
+    }
+
+    .btn:hover {
+      background: #334e68;
+    }
+
+    .btn.active {
+      background: var(--accent-secondary);
+      border-color: #149183;
+    }
+
+    /* Main Textbook Sheet */
+    .book-sheet {
+      max-width: 1060px;
+      margin: 24px auto 48px auto;
+      background: var(--bg-paper);
+      padding: 42px 48px;
+      border-radius: 8px;
+      box-shadow: var(--shadow-card);
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+    }
+
+    /* Layout Modes */
+    .book-content.single-col {
+      column-count: 1;
+    }
+
+    .book-content.two-col {
+      column-count: 2;
+      column-gap: 28px;
+      column-rule: 1px solid #e5ebf2;
+    }
+
+    .book-content.two-col .span-all {
+      column-span: all;
+    }
+
+    /* Typography */
+    h1, h2, h3, h4, .label-sans {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    .chapter-banner {
+      border-bottom: 3px solid var(--accent-primary);
+      padding-bottom: 14px;
+      margin-bottom: 24px;
+    }
+
+    .chapter-kicker {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--accent-secondary);
+      margin-bottom: 4px;
+    }
+
+    .chapter-banner h1 {
+      margin: 0 0 6px 0;
+      font-size: 26px;
+      color: var(--accent-primary);
+      line-height: 1.2;
+    }
+
+    .chapter-meta {
+      font-size: 13.5px;
+      color: var(--ink-muted);
+      margin: 0;
+    }
+
+    h2.section-heading {
+      font-size: 20px;
+      color: #ffffff;
+      background: var(--accent-primary);
+      padding: 8px 14px;
+      border-radius: 5px;
+      margin: 26px 0 14px 0;
+      break-after: avoid;
+      page-break-after: avoid;
+    }
+
+    h3.sub-heading {
+      font-size: 16.5px;
+      color: var(--accent-primary);
+      border-bottom: 1.5px solid var(--border-light);
+      padding-bottom: 4px;
+      margin: 20px 0 10px 0;
+      break-after: avoid;
+      page-break-after: avoid;
+    }
+
+    p {
+      margin: 0 0 10px 0;
+    }
+
+    ul, ol {
+      margin: 0 0 12px 0;
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 5px;
+    }
+
+    /* Textbook Boxes */
+    .tb-box {
+      border-radius: 6px;
+      padding: 12px 15px;
+      margin: 14px 0;
+      break-inside: avoid;
+      page-break-inside: avoid;
+      max-width: 100%;
+    }
+
+    .tb-rule {
+      background: var(--bg-box-blue);
+      border-left: 4px solid var(--accent-primary);
+    }
+
+    .tb-def {
+      background: var(--bg-box-teal);
+      border-left: 4px solid var(--accent-secondary);
+    }
+
+    .tb-example {
+      background: #fafbfd;
+      border: 1px solid var(--border-light);
+      border-left: 4px solid var(--accent-warm);
+    }
+
+    .tb-review {
+      background: var(--bg-box-amber);
+      border: 1px solid #f0d9a7;
+      border-left: 4px solid var(--accent-warm);
+    }
+
+    .box-title {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 13.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 0 0 6px 0;
+      color: var(--accent-primary);
+    }
+
+    .tb-def .box-title { color: var(--accent-secondary); }
+    .tb-example .box-title, .tb-review .box-title { color: var(--accent-warm); }
+
+    /* Problem Cards */
+    .problem-item {
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 10px 13px;
+      margin: 10px 0;
+      background: #ffffff;
+      break-inside: avoid;
+      page-break-inside: avoid;
+      max-width: 100%;
+    }
+
+    .problem-num {
+      display: inline-block;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-weight: 700;
+      font-size: 12.5px;
+      color: #ffffff;
+      background: var(--accent-primary);
+      padding: 1px 7px;
+      border-radius: 4px;
+      margin-right: 6px;
+    }
+
+    .problem-item.challenge .problem-num {
+      background: var(--accent-warm);
+    }
+
+    /* Code and MATLAB snippets */
+    pre, code {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 12.5px;
+      background: var(--bg-code);
+      border-radius: 4px;
+    }
+
+    code {
+      padding: 1px 5px;
+    }
+
+    pre {
+      padding: 10px 12px;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      border: 1px solid #cbd5e1;
+      margin: 8px 0;
+      max-width: 100%;
+    }
+
+    /* MathJax Overflow Prevention */
+    .math-wrap {
+      max-width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 2px 0;
+    }
+
+    mjx-container {
+      max-width: 100% !important;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      vertical-align: middle;
+    }
+
+    mjx-container[display="true"] {
+      display: block !important;
+      margin: 8px 0 !important;
+      padding: 2px 0;
+    }
+
+    /* SVG Figures */
+    figure.svg-figure {
+      margin: 14px 0;
+      padding: 12px;
+      border: 1px solid var(--border-light);
+      border-radius: 6px;
+      background: #ffffff;
+      text-align: center;
+      break-inside: avoid;
+      page-break-inside: avoid;
+      max-width: 100%;
+    }
+
+    figure.svg-figure svg {
+      width: 100%;
+      height: auto;
+      max-width: 680px;
+      display: block;
+      margin: 0 auto;
+    }
+
+    figcaption {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 12.5px;
+      color: var(--ink-muted);
+      margin-top: 8px;
+      text-align: left;
+    }
+
+    .blank-line {
+      display: inline-block;
+      min-width: 68px;
+      border-bottom: 1.5px solid #334155;
+      height: 1em;
+      vertical-align: baseline;
+    }
+
+    .page-tag {
+      display: inline-block;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--ink-muted);
+      background: #edf2f7;
+      padding: 1px 6px;
+      border-radius: 3px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    /* Responsive Mobile */
+    @media (max-width: 820px) {
+      .book-sheet {
+        margin: 0;
+        padding: 20px 16px;
+        border-radius: 0;
+      }
+      .book-content.two-col {
+        column-count: 1;
+      }
+    }
+
+    /* Print / PDF Styles */
+    @media print {
+      body {
+        background: #ffffff;
+        font-size: 10.5pt;
+        line-height: 1.42;
+      }
+      .toolbar {
+        display: none !important;
+      }
+      .book-sheet {
+        margin: 0;
+        padding: 0;
+        max-width: 100%;
+        box-shadow: none;
+        border-radius: 0;
+      }
+      .book-content.two-col {
+        column-count: 2;
+        column-gap: 18pt;
+      }
+      .tb-box, .problem-item, figure.svg-figure {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+      mjx-container {
+        overflow-x: visible !important;
+        font-size: 92% !important;
+      }
+      @page {
+        size: letter;
+        margin: 0.55in 0.55in;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="toolbar">
+    <div class="toolbar-title">Linear Algebra Notes (ASD-STE100) &mdash; Sections 4.4, 6.5, 6.7</div>
+    <div class="toolbar-actions">
+      <button id="btn-single" class="btn active" onclick="setLayout('single')">1-Column Layout</button>
+      <button id="btn-two" class="btn" onclick="setLayout('two')">2-Column Layout</button>
+      <button class="btn" onclick="window.print()">Print / Save PDF</button>
+    </div>
+  </div>
+
+  <main class="book-sheet">
+    <header class="chapter-banner span-all">
+      <div class="chapter-kicker">ASD-STE100 Simplified Technical Notes &bull; Complete Textbook Edition</div>
+      <h1>Orthogonal Bases, Positive Definite Matrices, and SVD</h1>
+      <p class="chapter-meta">
+        Covers Textbook Pages 243 (Section 4.4 Problems 31–37), Pages 342–354 (Section 6.5 Complete + Problems 1–35), and Page 373 (Section 6.7 Problems 15–17).
+      </p>
+    </header>
+
+    <div id="book-content" class="book-content single-col">
+
+      <!-- ========================================================= -->
+      <!-- SECTION 4.4                                               -->
+      <!-- ========================================================= -->
+      <h2 class="section-heading span-all">4.4 Orthogonal Bases and Gram-Schmidt <span class="page-tag">p. 243</span></h2>
+
+      <p>This section contains selected problems and challenge problems on orthogonal matrices, reflections, and the QR factorization.</p>
+
+      <figure class="svg-figure">
+        <svg viewBox="-6 -6 575.4 232" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Reflection matrix geometry">
+          <rect x="0" y="0" width="560" height="220" fill="#fbfdff" rx="6"/>
+          <!-- Left: Mirror and u, v -->
+          <line x1="50" y1="170" x2="250" y2="50" stroke="#1a4b8c" stroke-width="3"/>
+          <text x="195" y="45" font-family="sans-serif" font-size="12" fill="#1a4b8c" font-weight="bold">Mirror (uᵀx = 0)</text>
+          <!-- Vector u perpendicular to mirror -->
+          <line x1="150" y1="110" x2="108" y2="40" stroke="#0d7a6f" stroke-width="2.5" marker-end="url(#arrowTeal)"/>
+          <text x="92" y="34" font-family="sans-serif" font-size="13" fill="#0d7a6f" font-weight="bold">u</text>
+          <!-- Reflected -u -->
+          <line x1="150" y1="110" x2="192" y2="180" stroke="#b45309" stroke-width="2.5" stroke-dasharray="5,4" marker-end="url(#arrowAmber)"/>
+          <text x="198" y="188" font-family="sans-serif" font-size="13" fill="#b45309" font-weight="bold">Qu = -u</text>
+          <!-- Vector v on mirror -->
+          <line x1="150" y1="110" x2="225" y2="65" stroke="#1b2430" stroke-width="2.5" marker-end="url(#arrowDark)"/>
+          <text x="228" y="80" font-family="sans-serif" font-size="12" fill="#1b2430" font-weight="bold">v = Qv</text>
+          <!-- Right angle mark -->
+          <path d="M 140 93 L 156 83 L 166 100" fill="none" stroke="#0d7a6f" stroke-width="1.5"/>
+
+          <!-- Right: Q1 reflection of (1,2) across u=(0,1) -->
+          <line x1="320" y1="110" x2="520" y2="110" stroke="#64748b" stroke-width="1.5"/>
+          <line x1="390" y1="20" x2="390" y2="200" stroke="#64748b" stroke-width="1.5"/>
+          <text x="505" y="102" font-family="sans-serif" font-size="12" fill="#1a4b8c" font-weight="bold">Mirror y=0</text>
+          <line x1="390" y1="110" x2="440" y2="40" stroke="#0d7a6f" stroke-width="2.5" marker-end="url(#arrowTeal)"/>
+          <text x="444" y="38" font-family="sans-serif" font-size="12" fill="#0d7a6f" font-weight="bold">x = (1, 2)</text>
+          <line x1="390" y1="110" x2="440" y2="180" stroke="#b45309" stroke-width="2.5" marker-end="url(#arrowAmber)"/>
+          <text x="444" y="186" font-family="sans-serif" font-size="12" fill="#b45309" font-weight="bold">Q₁x = (1, -2)</text>
+          <line x1="440" y1="40" x2="440" y2="180" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="3,3"/>
+
+          <defs>
+            <marker id="arrowTeal" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L7,3 z" fill="#0d7a6f"/>
+            </marker>
+            <marker id="arrowAmber" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L7,3 z" fill="#b45309"/>
+            </marker>
+            <marker id="arrowDark" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L7,3 z" fill="#1b2430"/>
+            </marker>
+          </defs>
+        </svg>
+        <figcaption><strong>Figure 4.4-A:</strong> Reflection matrix $Q = I - 2\boldsymbol{u}\boldsymbol{u}^{\mathrm{T}}$. Vectors along $\boldsymbol{u}$ reverse sign ($Q\boldsymbol{u} = -\boldsymbol{u}$). Vectors $\boldsymbol{v}$ in the mirror ($\boldsymbol{u}^{\mathrm{T}}\boldsymbol{v} = 0$) do not change ($Q\boldsymbol{v} = \boldsymbol{v}$).</figcaption>
+      </figure>
+
+      <div class="problem-item">
+        <span class="problem-num">31 (a)</span>
+        Choose $c$ so that $Q$ is an orthogonal matrix:
+        <div class="math-wrap">
+          $$Q = c \begin{bmatrix} 1 & -1 & -1 & -1 \\ -1 & 1 & -1 & -1 \\ -1 & -1 & 1 & -1 \\ -1 & -1 & -1 & 1 \end{bmatrix}.$$
+        </div>
+        Project $\boldsymbol{b} = (1, 1, 1, 1)$ onto the first column. Then project $\boldsymbol{b}$ onto the plane of the first two columns.
+      </div>
+
+      <div class="problem-item">
+        <span class="problem-num">32</span>
+        If $\boldsymbol{u}$ is a unit vector, then $Q = I - 2\boldsymbol{u}\boldsymbol{u}^{\mathrm{T}}$ is a reflection matrix (Example 3). Find $Q_1$ from $\boldsymbol{u} = (0, 1)$. Find $Q_2$ from $\boldsymbol{u} = (0, \sqrt{2}/2, \sqrt{2}/2)$. Draw the reflections when $Q_1$ and $Q_2$ multiply the vectors $(1, 2)$ and $(1, 1, 1)$.
+      </div>
+
+      <div class="problem-item">
+        <span class="problem-num">33</span>
+        Find all matrices that are both orthogonal and lower triangular.
+      </div>
+
+      <div class="problem-item">
+        <span class="problem-num">34</span>
+        $Q = I - 2\boldsymbol{u}\boldsymbol{u}^{\mathrm{T}}$ is a reflection matrix when $\boldsymbol{u}^{\mathrm{T}}\boldsymbol{u} = 1$. Two reflections give $Q^2 = I$.
+        <ol type="a">
+          <li>Show that $Q\boldsymbol{u} = -\boldsymbol{u}$. The mirror is perpendicular to $\boldsymbol{u}$.</li>
+          <li>Find $Q\boldsymbol{v}$ when $\boldsymbol{u}^{\mathrm{T}}\boldsymbol{v} = 0$. The mirror contains $\boldsymbol{v}$. It reflects to itself.</li>
+        </ol>
+      </div>
+
+      <h3 class="sub-heading">Challenge Problems (Section 4.4)</h3>
+
+      <div class="problem-item challenge">
+        <span class="problem-num">35</span>
+        <strong>(MATLAB)</strong> Factor <code>[Q, R] = qr(A)</code> for <code>A = eye(4) - diag([1 1 1], -1)</code>. You orthogonalize the columns $(1, -1, 0, 0)$, $(0, 1, -1, 0)$, $(0, 0, 1, -1)$, and $(0, 0, 0, 1)$ of $A$. Can you scale the orthogonal columns of $Q$ to get nice integer components?
+      </div>
+
+      <div class="problem-item challenge">
+        <span class="problem-num">36</span>
+        If $A$ is $m$ by $n$ with rank $n$, <code>qr(A)</code> produces a square $Q$ and zeros below $R$. The factors from MATLAB are $(m\text{ by }m)(m\text{ by }n)$:
+        <div class="math-wrap">
+          $$A = \begin{bmatrix} Q_1 & Q_2 \end{bmatrix} \begin{bmatrix} R \\ 0 \end{bmatrix}.$$
+        </div>
+        <ul>
+          <li>The $n$ columns of $Q_1$ are an orthonormal basis for which fundamental subspace?</li>
+          <li>The $m - n$ columns of $Q_2$ are an orthonormal basis for which fundamental subspace?</li>
+        </ul>
+      </div>
+
+      <div class="problem-item challenge">
+        <span class="problem-num">37</span>
+        We know that $P = QQ^{\mathrm{T}}$ is the projection onto the column space of $Q$ ($m$ by $n$). Now add another column $\boldsymbol{a}$ to produce $A = \begin{bmatrix} Q & \boldsymbol{a} \end{bmatrix}$. What is the new orthonormal vector $\boldsymbol{q}$ from Gram-Schmidt? Start with $\boldsymbol{a}$, subtract <span class="blank-line"></span>, divide by <span class="blank-line"></span>.
+      </div>
+
+      <!-- ========================================================= -->
+      <!-- SECTION 6.5                                               -->
+      <!-- ========================================================= -->
+      <h2 class="section-heading span-all">6.5 Positive Definite Matrices <span class="page-tag">pp. 342–354</span></h2>
+
+      <p>This section examines symmetric matrices that have positive eigenvalues ($\lambda \gt 0$). Symmetric matrices are important. Symmetric matrices with all positive eigenvalues are special and common in applications. We call these matrices <strong>positive definite</strong>.</p>
+
+      <p>The first task is to recognize positive definite matrices without computing eigenvalues. Eigenvalue calculation takes work. Faster tests exist when we only need to confirm that all eigenvalues are positive. This section has two goals:</p>
+      <ul>
+        <li>Find quick tests on a symmetric matrix that guarantee positive eigenvalues.</li>
+        <li>Explain important applications of positive definiteness.</li>
+      </ul>
+
+      <p>Because the matrix is symmetric, all eigenvalues $\lambda$ are automatically real.</p>
+
+      <h3 class="sub-heading">2 by 2 Determinant and Pivot Tests <span class="page-tag">pp. 342–343</span></h3>
+
+      <p>Start with a $2\times 2$ symmetric matrix $A = \begin{bmatrix} a & b \\ b & c \end{bmatrix}$. When does $A$ have $\lambda_1 \gt 0$ and $\lambda_2 \gt 0$?</p>
+
+      <div class="tb-box tb-rule">
+        <div class="box-title">Determinant Test (2 by 2)</div>
+        <p>The eigenvalues of $A = \begin{bmatrix} a & b \\ b & c \end{bmatrix}$ are positive if and only if $a \gt 0$ and $ac - b^2 \gt 0$.</p>
+      </div>
+
+      <ul>
+        <li>$A_1 = \begin{bmatrix} 1 & 2 \\ 2 & 1 \end{bmatrix}$ is <em>not</em> positive definite because $ac - b^2 = 1 - 4 \lt 0$. Its eigenvalues are $3$ and $-1$. The trace is $3 - 1 = 2$ (positive), and the determinant is $(3)(-1) = -3$ (negative).</li>
+        <li>$A_2 = \begin{bmatrix} 1 & -2 \\ -2 & 6 \end{bmatrix}$ is <em>positive definite</em> because $a = 1 \gt 0$ and $ac - b^2 = 6 - 4 \gt 0$. It has two positive eigenvalues.</li>
+        <li>$A_3 = \begin{bmatrix} -1 & 2 \\ 2 & -6 \end{bmatrix}$ is <em>not</em> positive definite (even with $\det A = +2$) because $a = -1 \lt 0$. Here $A_3 = -A_2$ is <em>negative definite</em>, with two negative eigenvalues.</li>
+      </ul>
+
+      <p><strong>Proof that the 2 by 2 test passes when $\lambda_1 \gt 0$ and $\lambda_2 \gt 0$:</strong> The product $\lambda_1 \lambda_2$ equals the determinant $ac - b^2$, so $ac - b^2 \gt 0$. The sum $\lambda_1 + \lambda_2$ equals the trace $a + c$, so $a + c \gt 0$. Therefore, both $a$ and $c$ must be positive (if either is not positive, $ac - b^2 \gt 0$ fails). Problem 1 reverses this reasoning to show that the tests guarantee $\lambda_1 \gt 0$ and $\lambda_2 \gt 0$.</p>
+
+      <p>This determinant test checks the $1\times 1$ determinant $a$ and the $2\times 2$ determinant $ac - b^2$. For a $3\times 3$ matrix, $\det A \gt 0$ is the third check. The next test uses positive pivots.</p>
+
+      <div class="tb-box tb-rule">
+        <div class="box-title">Pivot Test (2 by 2)</div>
+        <p>The eigenvalues of $A = A^{\mathrm{T}}$ are positive if and only if the pivots are positive:</p>
+        <div class="math-wrap">
+          $$a \gt 0 \quad \text{and} \quad \frac{ac - b^2}{a} \gt 0.$$
+        </div>
+      </div>
+
+      <p>Both tests require $a \gt 0$ and $ac \gt b^2$. Elimination reveals why the ratio $(ac - b^2)/a$ appears—it is the <strong>second pivot</strong> of $A$:</p>
+      <div class="math-wrap">
+        $$\begin{bmatrix} a & b \\ b & c \end{bmatrix} \xrightarrow[\text{Multiplier is } b/a]{\text{First pivot is } a} \begin{bmatrix} a & b \\ 0 & c - \frac{b}{a}b \end{bmatrix}, \quad \text{Second pivot} = c - \frac{b^2}{a} = \frac{ac - b^2}{a}.$$
+      </div>
+
+      <p>This connects two major parts of linear algebra: <strong>positive eigenvalues mean positive pivots and vice versa</strong>. Section 6.4 proved this for symmetric matrices of any size. Pivots give a quick test for $\lambda \gt 0$, and they are much faster to compute than eigenvalues.</p>
+      <ul>
+        <li>$A_1 = \begin{bmatrix} 1 & 2 \\ 2 & 1 \end{bmatrix}$: pivots $1$ and $-3$ (<strong>indefinite</strong>).</li>
+        <li>$A_2 = \begin{bmatrix} 1 & -2 \\ -2 & 6 \end{bmatrix}$: pivots $1$ and $2$ (<strong>positive definite</strong>).</li>
+        <li>$A_3 = \begin{bmatrix} -1 & 2 \\ 2 & -6 \end{bmatrix}$: pivots $-1$ and $-2$ (<strong>negative definite</strong>).</li>
+      </ul>
+
+      <h3 class="sub-heading">Energy-Based Definition and $A = R^{\mathrm{T}} R$ <span class="page-tag">pp. 343–344</span></h3>
+
+      <p>Start from $A\boldsymbol{x} = \lambda \boldsymbol{x}$. Multiply on the left by $\boldsymbol{x}^{\mathrm{T}}$ to get $\boldsymbol{x}^{\mathrm{T}} A \boldsymbol{x} = \lambda \boldsymbol{x}^{\mathrm{T}} \boldsymbol{x} = \lambda \|\boldsymbol{x}\|^2$. When $\lambda \gt 0$ and $\boldsymbol{x} \neq \mathbf{0}$, $\boldsymbol{x}^{\mathrm{T}} A \boldsymbol{x}$ is positive for every eigenvector.</p>
+
+      <p>The fundamental idea requires $\boldsymbol{x}^{\mathrm{T}} A \boldsymbol{x} \gt 0$ for <strong>all nonzero vectors $\boldsymbol{x}$</strong>, not only eigenvectors. In many physical systems, $\boldsymbol{x}^{\mathrm{T}} A \boldsymbol{x}$ (or $\frac{1}{2}\boldsymbol{x}^{\mathrm{T}} A \boldsymbol{x}$) represents the <strong>energy</strong>. Positive energy defines a positive definite matrix.</p>
+
+      <div class="tb-box tb-def">
+        <div class="box-title">Definition (Energy-Based) &mdash; Equation (1)</div>
+        <p>$A$ is <strong>positive definite</strong> if $\boldsymbol{x}^{\mathrm{T}} A \boldsymbol{x} \gt 0$ for every nonzero vector $\boldsymbol{x}$:</p>
+        <div class="math-wrap">
+          $$\boldsymbol{x}^{\mathrm{T}} A \boldsymbol{x} = \begin{bmatrix} x & y \end{bmatrix} \begin{bmatrix} a & b \\ b & c \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix} = ax^2 + 2bxy + cy^2 \gt 0. \qquad (1)$$
+        </div>
+      </div>
+
+      <p>The four entries $a, b, b, c$ create the four parts of $\boldsymbol{x}^{\mathrm{T}} A \boldsymbol{x}$. The diagonal entries $a$ and $c$ produce the pure squares $ax^2$ and $cy^2$. The off-diagonal entries $b$ and $b$ produce the equal cross terms $bxy$ and $byx$, which sum to $2bxy$.</p>
+
+      <div class="tb-box tb-rule">
+        <div class="box-title">Sum Property</div>
+        <p><strong>If $A$ and $B$ are symmetric positive definite, then $A + B$ is also positive definite.</strong></p>
+        <p><em>Reason:</em> $\boldsymbol{x}^{\mathrm{T}}(A + B)\boldsymbol{x} = \boldsymbol{x}^{\mathrm{T}} A \boldsymbol{x} + \boldsymbol{x}^{\mathrm{T}} B \boldsymbol{x}$. Both terms are positive for $\boldsymbol{x} \neq \mathbf{0}$, so their sum is positive. Pivots and eigenvalues are difficult to track under matrix addition, but energies simply add.</p>
+      </div>
+
+      <p>Next, connect $\boldsymbol{x}^{\mathrm{T}} A \boldsymbol{x}$ to $A = R^{\mathrm{T}} R$. Start with any matrix $R$ (square or rectangular). Then $A = R^{\mathrm{T}} R$ is square and symmetric. Furthermore, $A$ is positive definite when $R$ has independent columns:</p>
+      <div class="tb-box tb-rule">
+        <div class="box-title">Least Squares / Factor Test</div>
+        <p><strong>If the columns of $R$ are independent, then $A = R^{\mathrm{T}} R$ is positive definite.</strong></p>
+        <p><em>Proof by parentheses:</em> $\boldsymbol{x}^{\mathrm{T}} A \boldsymbol{x} = \boldsymbol{x}^{\mathrm{T}} R^{\mathrm{T}} R \boldsymbol{x} = (R\boldsymbol{x})^{\mathrm{T}}(R\boldsymbol{x}) = \|R\boldsymbol{x}\|^2$. Because the columns of $R$ are independent, $R\boldsymbol{x} \neq \mathbf{0}$ whenever $\boldsymbol{x} \neq \mathbf{0}$. Therefore, $\|R\boldsymbol{x}\|^2 \gt 0$.</p>
+      </div>
+
+      <div class="tb-box tb-def">
+        <div class="box-title">Five Equivalent Properties of a Symmetric Matrix $A$</div>
+        <p>When a symmetric matrix $A$ satisfies one of these five properties, it satisfies all five:</p>
+        <ol>
+          <li><strong>All $n$ pivots</strong> are positive.</li>
+          <li><strong>All $n$ upper left determinants</strong> ($1\times 1, 2\times 2, \dots, n\times n$) are positive.</li>
+          <li><strong>All $n$ eigenvalues</strong> are positive.</li>
+          <li>$\boldsymbol{x}^{\mathrm{T}} A \boldsymbol{x}$ is positive except at $\boldsymbol{x} = \mathbf{0}$ (the <em>energy-based definition</em>).</li>
+          <li>$A = R^{\mathrm{T}} R$ for a matrix $R$ with <strong>independent columns</strong>.</li>
+        </ol>
+      </div>
+
+      <figure class="svg-figure">
+        <svg viewBox="-6 -6 612 197" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Five equivalent tests for positive definiteness">
+          <rect x="0" y="0" width="600" height="185" fill="#fbfdff" rx="6"/>
+          <rect x="210" y="65" width="180" height="52" rx="8" fill="#1a4b8c"/>
+          <text x="300" y="88" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="bold" fill="#ffffff">Symmetric Matrix A</text>
+          <text x="300" y="105" text-anchor="middle" font-family="sans-serif" font-size="11.5" fill="#dbeafe">Positive Definite (5 Tests)</text>
+
+          <rect x="18" y="14" width="155" height="36" rx="5" fill="#eef9f7" stroke="#0d7a6f" stroke-width="1.5"/>
+          <text x="95" y="36" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="bold" fill="#0d7a6f">1. n Pivots &gt; 0</text>
+          <line x1="173" y1="44" x2="215" y2="72" stroke="#0d7a6f" stroke-width="1.6"/>
+
+          <rect x="215" y="10" width="170" height="36" rx="5" fill="#eef9f7" stroke="#0d7a6f" stroke-width="1.5"/>
+          <text x="300" y="32" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="bold" fill="#0d7a6f">2. Upper Left Dets &gt; 0</text>
+          <line x1="300" y1="46" x2="300" y2="65" stroke="#0d7a6f" stroke-width="1.6"/>
+
+          <rect x="427" y="14" width="155" height="36" rx="5" fill="#eef9f7" stroke="#0d7a6f" stroke-width="1.5"/>
+          <text x="504" y="36" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="bold" fill="#0d7a6f">3. n Eigenvalues &gt; 0</text>
+          <line x1="427" y1="44" x2="385" y2="72" stroke="#0d7a6f" stroke-width="1.6"/>
+
+          <rect x="35" y="136" width="215" height="36" rx="5" fill="#fff9eb" stroke="#b45309" stroke-width="1.5"/>
+          <text x="142" y="158" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="bold" fill="#b45309">4. Energy xᵀAx &gt; 0 (x ≠ 0)</text>
+          <line x1="175" y1="136" x2="235" y2="117" stroke="#b45309" stroke-width="1.6"/>
+
+          <rect x="345" y="136" width="225" height="36" rx="5" fill="#fff9eb" stroke="#b45309" stroke-width="1.5"/>
+          <text x="457" y="158" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="bold" fill="#b45309">5. A = RᵀR (indep. columns)</text>
+          <line x1="425" y1="136" x2="365" y2="117" stroke="#b45309" stroke-width="1.6"/>
+        </svg>
+        <figcaption><strong>Figure 6.5-A:</strong> All five characterizations of positive definiteness are equivalent for a symmetric matrix $A$.</figcaption>
+      </figure>
+
+      <div class="tb-box tb-example">
+        <div class="box-title">Example 1 &mdash; Testing $A$ and $B$ <span class="page-tag">pp. 344–345</span></div>
+        <p>Test these matrices $A$ and $B$ for positive definiteness:</p>
+        <div class="math-wrap">
+          $$A = \begin{bmatrix} 2 & -1 & 0 \\ -1 & 2 & -1 \\ 0 & -1 & 2 \end{bmatrix} \quad \text{and} \quad B = \begin{bmatrix} 2 & -1 & b \\ -1 & 2 & -1 \\ b & -1 & 2 \end{bmatrix}.$$
+        </div>
+        <p><strong>Solution for $A$:</strong></p>
+        <ul>
+          <li><strong>Test 1 (Pivots):</strong> $2$, $\frac{3}{2}$, and $\frac{4}{3}$ (all positive).</li>
+          <li><strong>Test 2 (Upper left determinants):</strong> $2$, $3$, and $4$ (all positive).</li>
+          <li><strong>Test 3 (Eigenvalues):</strong> $2 - \sqrt{2}$, $2$, and $2 + \sqrt{2}$ (all positive).</li>
+          <li><strong>Test 4 (Sum of squares / Energy):</strong> The pivots $2, \frac{3}{2}, \frac{4}{3}$ sit outside the squares, and the multipliers $-\frac{1}{2}, -\frac{2}{3}$ sit inside:
+            <div class="math-wrap">
+              $$\begin{aligned}
+              \boldsymbol{x}^{\mathrm{T}} A \boldsymbol{x} &= 2(x_1^2 - x_1 x_2 + x_2^2 - x_2 x_3 + x_3^2) \\
+              &= 2\left(x_1 - \frac{1}{2}x_2\right)^2 + \frac{3}{2}\left(x_2 - \frac{2}{3}x_3\right)^2 + \frac{4}{3}(x_3)^2 \gt 0 \quad (\boldsymbol{x} \neq \mathbf{0}).
+              \end{aligned}$$
+            </div>
+          </li>
+          <li><strong>Test 5 ($A = R^{\mathrm{T}} R$):</strong> Two useful choices for $R$ exist:
+            <ol>
+              <li>A $4\times 3$ rectangular first-difference matrix with independent columns:
+                <div class="math-wrap">
+                  $$A = R^{\mathrm{T}} R: \quad \begin{bmatrix} 2 & -1 & 0 \\ -1 & 2 & -1 \\ 0 & -1 & 2 \end{bmatrix} = \begin{bmatrix} 1 & -1 & 0 & 0 \\ 0 & 1 & -1 & 0 \\ 0 & 0 & 1 & -1 \end{bmatrix} \begin{bmatrix} 1 & 0 & 0 \\ -1 & 1 & 0 \\ 0 & -1 & 1 \\ 0 & 0 & -1 \end{bmatrix}.$$
+                </div>
+              </li>
+              <li>The <strong>Cholesky factor</strong> from $A = LDL^{\mathrm{T}}$ (put $\sqrt{D}$ with $L$):
+                <div class="math-wrap">
+                  $$LDL^{\mathrm{T}} = \begin{bmatrix} 1 & & \\ -\frac{1}{2} & 1 & \\ 0 & -\frac{2}{3} & 1 \end{bmatrix} \begin{bmatrix} 2 & & \\ & \frac{3}{2} & \\ & & \frac{4}{3} \end{bmatrix} \begin{bmatrix} 1 & -\frac{1}{2} & 0 \\ & 1 & -\frac{2}{3} \\ & & 1 \end{bmatrix} = (L\sqrt{D})(L\sqrt{D})^{\mathrm{T}} = R^{\mathrm{T}} R. \qquad (2)$$
+                </div>
+                Here $R = \sqrt{D} L^{\mathrm{T}}$ is the unique $3\times 3$ upper triangular factor computed by MATLAB's <code>R = chol(A)</code>. A symmetric choice from eigenvalues is $R = Q\sqrt{\Lambda}Q^{\mathrm{T}}$, which gives $R^{\mathrm{T}} R = Q\Lambda Q^{\mathrm{T}} = A$.
+              </li>
+            </ol>
+          </li>
+        </ul>
+        <p><strong>Solution for $B$:</strong> Use the determinant test. The $1\times 1$ determinant is $2$. The $2\times 2$ determinant is $3$. The $3\times 3$ determinant is:</p>
+        <div class="math-wrap">
+          $$\det B = 4 + 2b - 2b^2 = (1 + b)(4 - 2b) \gt 0.$$
+        </div>
+        <p>At $b = -1$ and $b = 2$, $\det B = 0$. Therefore, $B$ is positive definite for $-1 \lt b \lt 2$. The entry $b = 0$ in matrix $A$ lies safely inside this interval.</p>
+      </div>
+
+      <h3 class="sub-heading">Positive Semidefinite Matrices <span class="page-tag">pp. 345–346</span></h3>
+
+      <p>Matrices on the boundary of positive definiteness have $\det A = 0$ and smallest eigenvalue $\lambda = 0$. In that nullspace eigenvector, the energy is $\boldsymbol{x}^{\mathrm{T}} A \boldsymbol{x} = \boldsymbol{x}^{\mathrm{T}}\mathbf{0} = 0$. These singular edge matrices are <strong>positive semidefinite</strong>.</p>
+
+      <div class="math-wrap">
+        $$A = \begin{bmatrix} 1 & 2 \\ 2 & 4 \end{bmatrix} \quad \text{and} \quad B = \begin{bmatrix} 2 & -1 & -1 \\ -1 & 2 & -1 \\ -1 & -1 & 2 \end{bmatrix} \quad \text{are positive semidefinite.}$$
+      </div>
+
+      <ul>
+        <li>Matrix $A$ has eigenvalues $5$ and $0$, upper left determinants $1$ and $0$, and rank $1$. It factors as $R^{\mathrm{T}} R$ with <strong>dependent columns</strong>:
+          <div class="math-wrap">
+            $$\begin{bmatrix} 1 & 2 \\ 2 & 4 \end{bmatrix} = \begin{bmatrix} 1 & 0 \\ 2 & 0 \end{bmatrix} \begin{bmatrix} 1 & 2 \\ 0 & 0 \end{bmatrix} = R^{\mathrm{T}} R.$$
+          </div>
+          If you increase the entry $4$ by any small positive number, $A$ becomes positive definite.
+        </li>
+        <li>The cyclic matrix $B$ corresponds to $b = -1$ above, so $\det B = 0$. The eigenvector $\boldsymbol{x} = (1, 1, 1)$ gives $B\boldsymbol{x} = \mathbf{0}$ and $\boldsymbol{x}^{\mathrm{T}} B \boldsymbol{x} = 0$. All other directions give positive energy. Every factor $R$ in $B = R^{\mathrm{T}} R$ has dependent columns with $(1, 1, 1)$ in its nullspace:
+          <div class="math-wrap">
+            $$\begin{bmatrix} 2 & -1 & -1 \\ -1 & 2 & -1 \\ -1 & -1 & 2 \end{bmatrix} = \begin{bmatrix} 1 & -1 & 0 \\ 0 & 1 & -1 \\ -1 & 0 & 1 \end{bmatrix} \begin{bmatrix} 1 & 0 & -1 \\ -1 & 1 & 0 \\ 0 & -1 & 1 \end{bmatrix}.$$
+          </div>
+        </li>
+      </ul>
+
+      <p>In general, positive semidefinite matrices satisfy all $\lambda \ge 0$ and all $\boldsymbol{x}^{\mathrm{T}} A \boldsymbol{x} \ge 0$.</p>
+
+      <h3 class="sub-heading">First Application: The Ellipse $ax^2 + 2bxy + cy^2 = 1$ <span class="page-tag">pp. 346–347</span></h3>
+
+      <p>A tilted ellipse $\boldsymbol{x}^{\mathrm{T}} A \boldsymbol{x} = 1$ has center $(0, 0)$ (Figure 6.7a). Rotate it to align with the $X$ and $Y$ coordinate axes (Figure 6.7b). These two pictures show the geometry of $A = Q \Lambda Q^{-1} = Q \Lambda Q^{\mathrm{T}}$:</p>
+      <ol>
+        <li>The tilted ellipse belongs to $A$: its equation is $\boldsymbol{x}^{\mathrm{T}} A \boldsymbol{x} = 1$.</li>
+        <li>The lined-up ellipse belongs to $\Lambda$: its equation is $\boldsymbol{X}^{\mathrm{T}} \Lambda \boldsymbol{X} = 1$.</li>
+        <li>The rotation matrix that lines up the ellipse is the eigenvector matrix $Q$.</li>
+      </ol>
+
+      <div class="tb-box tb-example">
+        <div class="box-title">Example 2 &mdash; Axes of the Tilted Ellipse $5x^2 + 8xy + 5y^2 = 1$</div>
+        <p>Write the equation in matrix form using the symmetric positive definite matrix $A$:</p>
+        <div class="math-wrap">
+          $$\begin{bmatrix} x & y \end{bmatrix} \begin{bmatrix} 5 & 4 \\ 4 & 5 \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix} = 1, \qquad A = \begin{bmatrix} 5 & 4 \\ 4 & 5 \end{bmatrix}.$$
+        </div>
+        <p>The eigenvectors are $\begin{bmatrix} 1 \\ 1 \end{bmatrix}$ and $\begin{bmatrix} 1 \\ -1 \end{bmatrix}$. Divide by $\sqrt{2}$ to form unit eigenvectors. Then $A = Q\Lambda Q^{\mathrm{T}}$:</p>
+        <div class="math-wrap">
+          $$\begin{bmatrix} 5 & 4 \\ 4 & 5 \end{bmatrix} = \frac{1}{\sqrt{2}} \begin{bmatrix} 1 & 1 \\ 1 & -1 \end{bmatrix} \begin{bmatrix} 9 & 0 \\ 0 & 1 \end{bmatrix} \frac{1}{\sqrt{2}} \begin{bmatrix} 1 & 1 \\ 1 & -1 \end{bmatrix}.$$
+        </div>
+        <p>Multiply by $\begin{bmatrix} x & y \end{bmatrix}$ on the left and $\begin{bmatrix} x \\ y \end{bmatrix}$ on the right to get a sum of squares:</p>
+        <div class="math-wrap">
+          $$\boldsymbol{x}^{\mathrm{T}} A \boldsymbol{x} = 5x^2 + 8xy + 5y^2 = 9\left(\frac{x+y}{\sqrt{2}}\right)^2 + 1\left(\frac{x-y}{\sqrt{2}}\right)^2. \qquad (3)$$
+        </div>
+        <p>The coefficients are the <strong>eigenvalues $9$ and $1$</strong> from $\Lambda$ (not the pivots $5$ and $9/5$ from $D$). Inside the squares are the unit eigenvectors $(1, 1)/\sqrt{2}$ and $(1, -1)/\sqrt{2}$. Define the lined-up coordinates:</p>
+        <div class="math-wrap">
+          $$X = \frac{x+y}{\sqrt{2}}, \qquad Y = \frac{x-y}{\sqrt{2}}, \qquad 9X^2 + Y^2 = 1.$$
+        </div>
+        <p>The largest value of $X^2$ is $1/9$, so the shorter axis ends at $(X, Y) = (1/3, 0)$. Thus the larger eigenvalue $\lambda_1 = 9$ gives the <em>shorter</em> half-length $1/\sqrt{\lambda_1} = 1/3$. The smaller eigenvalue $\lambda_2 = 1$ gives the <em>longer</em> half-length $1/\sqrt{\lambda_2} = 1$.</p>
+      </div>
+
+      <figure class="svg-figure">
+        <svg viewBox="-6 -6 652 302" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Figure 6.7 Tilted ellipse and aligned ellipse">
+          <rect x="0" y="0" width="640" height="290" fill="#fbfdff" rx="6"/>
+          <!-- Left Plot: Tilted Ellipse x^T A x = 1 -->
+          <g transform="translate(160, 145)">
+            <!-- Axes -->
+            <line x1="-125" y1="0" x2="125" y2="0" stroke="#334155" stroke-width="1.4" marker-end="url(#axisArrow)"/>
+            <line x1="0" y1="125" x2="0" y2="-125" stroke="#334155" stroke-width="1.4" marker-end="url(#axisArrow)"/>
+            <!-- Ticks at -1 and 1 (scale: 1 unit = 95 px) -->
+            <line x1="-95" y1="-4" x2="-95" y2="4" stroke="#334155" stroke-width="1.4"/>
+            <text x="-105" y="18" font-family="sans-serif" font-size="12" fill="#334155">-1</text>
+            <line x1="95" y1="-4" x2="95" y2="4" stroke="#334155" stroke-width="1.4"/>
+            <text x="92" y="18" font-family="sans-serif" font-size="12" fill="#334155">1</text>
+            <line x1="-4" y1="-95" x2="4" y2="-95" stroke="#334155" stroke-width="1.4"/>
+            <text x="-18" y="-91" font-family="sans-serif" font-size="12" fill="#334155">1</text>
+            <line x1="-4" y1="95" x2="4" y2="95" stroke="#334155" stroke-width="1.4"/>
+            <text x="-22" y="99" font-family="sans-serif" font-size="12" fill="#334155">-1</text>
+            <text x="122" y="14" font-family="serif" font-style="italic" font-size="14" fill="#1b2430">x</text>
+            <text x="-14" y="-120" font-family="serif" font-style="italic" font-size="14" fill="#1b2430">y</text>
+
+            <!-- Tilted ellipse: rx=31.67 (1/3 * 95), ry=95, rotated 45 deg -->
+            <ellipse cx="0" cy="0" rx="31.67" ry="95" transform="rotate(45)" fill="rgba(26,75,140,0.08)" stroke="#1a4b8c" stroke-width="2.2"/>
+            <!-- Principal axes lines -->
+            <line x1="0" y1="0" x2="22.4" y2="-22.4" stroke="#0d7a6f" stroke-width="1.8" stroke-dasharray="4,3"/>
+            <line x1="0" y1="0" x2="67.2" y2="67.2" stroke="#b45309" stroke-width="1.8" stroke-dasharray="5,4"/>
+            <text x="35" y="25" font-family="sans-serif" font-size="11.5" fill="#b45309" font-weight="bold">1</text>
+
+            <!-- Endpoints -->
+            <circle cx="22.4" cy="-22.4" r="3.5" fill="#0d7a6f"/>
+            <text x="28" y="-28" font-family="sans-serif" font-size="11.5" fill="#0d7a6f" font-weight="bold">(1/3)(1/√2, 1/√2)</text>
+
+            <circle cx="67.2" cy="67.2" r="3.5" fill="#b45309"/>
+            <text x="38" y="88" font-family="sans-serif" font-size="11.5" fill="#b45309" font-weight="bold">(1/√2, -1/√2)</text>
+
+            <text x="48" y="40" font-family="serif" font-size="13" fill="#1a4b8c" font-weight="bold">xᵀAx = 1</text>
+          </g>
+
+          <!-- Right Plot: Aligned Ellipse X^T Lambda X = 1 -->
+          <g transform="translate(475, 145)">
+            <line x1="-125" y1="0" x2="125" y2="0" stroke="#334155" stroke-width="1.4" marker-end="url(#axisArrow)"/>
+            <line x1="0" y1="125" x2="0" y2="-125" stroke="#334155" stroke-width="1.4" marker-end="url(#axisArrow)"/>
+            <line x1="-95" y1="-4" x2="-95" y2="4" stroke="#334155" stroke-width="1.4"/>
+            <text x="-105" y="18" font-family="sans-serif" font-size="12" fill="#334155">-1</text>
+            <line x1="95" y1="-4" x2="95" y2="4" stroke="#334155" stroke-width="1.4"/>
+            <text x="92" y="18" font-family="sans-serif" font-size="12" fill="#334155">1</text>
+            <text x="122" y="14" font-family="serif" font-style="italic" font-size="14" fill="#1b2430">X</text>
+            <text x="-16" y="-120" font-family="serif" font-style="italic" font-size="14" fill="#1b2430">Y</text>
+
+            <!-- Vertical ellipse rx=31.67, ry=95 -->
+            <ellipse cx="0" cy="0" rx="31.67" ry="95" fill="rgba(13,122,111,0.08)" stroke="#0d7a6f" stroke-width="2.2"/>
+            <circle cx="31.67" cy="0" r="3.5" fill="#0d7a6f"/>
+            <text x="38" y="-8" font-family="sans-serif" font-size="12" fill="#0d7a6f" font-weight="bold">(1/3, 0)</text>
+
+            <circle cx="0" cy="-95" r="3.5" fill="#b45309"/>
+            <text x="10" y="-92" font-family="sans-serif" font-size="12" fill="#b45309" font-weight="bold">(0, 1)</text>
+
+            <text x="40" y="55" font-family="serif" font-size="13" fill="#0d7a6f" font-weight="bold">XᵀΛX = 1</text>
+          </g>
+
+          <defs>
+            <marker id="axisArrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L7,3 z" fill="#334155"/>
+            </marker>
+          </defs>
+        </svg>
+        <figcaption><strong>Figure 6.7:</strong> The tilted ellipse $5x^2 + 8xy + 5y^2 = 1$ (left). When aligned with the eigenvectors, its equation becomes $9X^2 + Y^2 = 1$ (right).</figcaption>
+      </figure>
+
+      <div class="tb-box tb-rule">
+        <div class="box-title">Principal Axis Theorem</div>
+        <p>Suppose $A = Q \Lambda Q^{\mathrm{T}}$ is positive definite, so $\lambda_i \gt 0$. The graph of $\boldsymbol{x}^{\mathrm{T}} A \boldsymbol{x} = 1$ is an ellipse:</p>
+        <div class="math-wrap">
+          $$\begin{bmatrix} x & y \end{bmatrix} Q \Lambda Q^{\mathrm{T}} \begin{bmatrix} x \\ y \end{bmatrix} = \begin{bmatrix} X & Y \end{bmatrix} \Lambda \begin{bmatrix} X \\ Y \end{bmatrix} = \lambda_1 X^2 + \lambda_2 Y^2 = 1.$$
+        </div>
+        <p>The axes point along the eigenvectors of $A$. The half-lengths are $1/\sqrt{\lambda_1}$ and $1/\sqrt{\lambda_2}$.</p>
+      </div>
+
+      <ul>
+        <li>$A = I$ gives the unit circle $x^2 + y^2 = 1$.</li>
+        <li>If one eigenvalue is negative (for instance, exchange $4$'s and $5$'s in $A$), the sum of squares becomes a difference of squares: $9X^2 - Y^2 = 1$. This indefinite matrix gives a <strong>hyperbola</strong>.</li>
+        <li>For a negative definite matrix such as $A = -I$, both $\lambda$'s are negative, and $-x^2 - y^2 = 1$ has no real points.</li>
+      </ul>
+
+      <div class="tb-box tb-review">
+        <div class="box-title">Review of the Key Ideas <span class="page-tag">pp. 347–348</span></div>
+        <ol>
+          <li>Positive definite matrices have positive eigenvalues and positive pivots.</li>
+          <li>A quick test uses the upper left determinants: $a \gt 0$ and $ac - b^2 \gt 0$.</li>
+          <li>The graph of $\boldsymbol{x}^{\mathrm{T}} A \boldsymbol{x} = ax^2 + 2bxy + cy^2$ is a "bowl" going upward from $\boldsymbol{x} = \mathbf{0}$; it is positive everywhere except at $(x, y) = (0, 0)$.</li>
+          <li>$A = R^{\mathrm{T}} R$ is automatically positive definite if $R$ has independent columns.</li>
+          <li>The ellipse $\boldsymbol{x}^{\mathrm{T}} A \boldsymbol{x} = 1$ has its axes along the eigenvectors of $A$, with half-lengths $1/\sqrt{\lambda}$.</li>
+        </ol>
+      </div>
+
+      <h3 class="sub-heading">Worked Examples (Section 6.5) <span class="page-tag">pp. 348–350</span></h3>
+
+      <div class="tb-box tb-example">
+        <div class="box-title">Worked Example 6.5 A &mdash; Energy Proof via $LDL^{\mathrm{T}}$ and $Q\Lambda Q^{\mathrm{T}}$, plus MATLAB Gallery</div>
+        <p>Show that $\boldsymbol{x}^{\mathrm{T}} A \boldsymbol{x} \gt 0$ for all nonzero $\boldsymbol{x}$ if and only if the pivots and eigenvalues are positive. Test these $n\times n$ matrices: <code>pascal(6)</code>, <code>ones(6)</code>, <code>hilb(6)</code>, and others in MATLAB's gallery.</p>
+        <p><strong>Solution:</strong> Insert parentheses into $\boldsymbol{x}^{\mathrm{T}} L D L^{\mathrm{T}} \boldsymbol{x}$ and $\boldsymbol{x}^{\mathrm{T}} Q \Lambda Q^{\mathrm{T}} \boldsymbol{x}$:</p>
+        <div class="math-wrap">
+          $$\boldsymbol{x}^{\mathrm{T}} A \boldsymbol{x} = (L^{\mathrm{T}}\boldsymbol{x})^{\mathrm{T}} D (L^{\mathrm{T}}\boldsymbol{x}) \quad \text{and} \quad \boldsymbol{x}^{\mathrm{T}} A \boldsymbol{x} = (Q^{\mathrm{T}}\boldsymbol{x})^{\mathrm{T}} \Lambda (Q^{\mathrm{T}}\boldsymbol{x}).$$
+        </div>
+        <p>Because $L^{\mathrm{T}}$ and $Q^{\mathrm{T}}$ are invertible, $\boldsymbol{x} \neq \mathbf{0}$ implies $\boldsymbol{y} = L^{\mathrm{T}}\boldsymbol{x} \neq \mathbf{0}$ and $\boldsymbol{z} = Q^{\mathrm{T}}\boldsymbol{x} \neq \mathbf{0}$. Thus $\boldsymbol{x}^{\mathrm{T}} A \boldsymbol{x}$ becomes a positive sum of squares:</p>
+        <div class="math-wrap">
+          $$\begin{aligned}
+          \text{Pivots: } \quad \boldsymbol{x}^{\mathrm{T}} A \boldsymbol{x} &= \boldsymbol{y}^{\mathrm{T}} D \boldsymbol{y} = d_1 y_1^2 + \dots + d_n y_n^2 \gt 0, \\
+          \text{Eigenvalues: } \quad \boldsymbol{x}^{\mathrm{T}} A \boldsymbol{x} &= \boldsymbol{z}^{\mathrm{T}} \Lambda \boldsymbol{z} = \lambda_1 z_1^2 + \dots + \lambda_n z_n^2 \gt 0.
+          \end{aligned}$$
+        </div>
+        <p>Four MATLAB gallery examples:</p>
+        <ul>
+          <li><code>pascal(6)</code> is positive definite because all its pivots equal $1$ (Worked Example 2.6 A).</li>
+          <li><code>ones(6)</code> is positive <em>semidefinite</em> because its eigenvalues are $0, 0, 0, 0, 0, 6$.</li>
+          <li><code>H = hilb(6)</code> is positive definite even though <code>eig(H)</code> shows two eigenvalues very close to zero. For the Hilbert matrix, $H_{ij} = 1/(i + j + 1)$ gives:
+            <div class="math-wrap">
+              $$\boldsymbol{x}^{\mathrm{T}} H \boldsymbol{x} = \int_0^1 (x_1 + x_2 s + \dots + x_6 s^5)^2\, ds \gt 0.$$
+            </div>
+          </li>
+          <li><code>rand(6) + rand(6)'</code> can be positive definite or not. Experiments gave only 2 in 20,000:
+            <pre>n = 20000; p = 0; for k = 1:n, A = rand(6); p = p + all(eig(A + A') &gt; 0); end, p / n</pre>
+          </li>
+        </ul>
+      </div>
+
+      <div class="tb-box tb-example">
+        <div class="box-title">Worked Example 6.5 B &mdash; Block Matrix and Schur Complement</div>
+        <p>When is the symmetric block matrix $M = \begin{bmatrix} A & B \\ B^{\mathrm{T}} & C \end{bmatrix}$ positive definite?</p>
+        <p><strong>Solution:</strong> Multiply the first block row of $M$ by $B^{\mathrm{T}} A^{-1}$ and subtract from the second block row. The <strong>Schur complement</strong> $S = C - B^{\mathrm{T}} A^{-1} B$ appears in the bottom-right corner:</p>
+        <div class="math-wrap">
+          $$\begin{bmatrix} I & 0 \\ -B^{\mathrm{T}} A^{-1} & I \end{bmatrix} \begin{bmatrix} A & B \\ B^{\mathrm{T}} & C \end{bmatrix} = \begin{bmatrix} A & B \\ 0 & C - B^{\mathrm{T}} A^{-1} B \end{bmatrix} = \begin{bmatrix} A & B \\ 0 & S \end{bmatrix}. \qquad (4)$$
+        </div>
+        <p><strong>Both blocks $A$ and $S$ must be positive definite.</strong> Their pivots together form the pivots of $M$.</p>
+      </div>
+
+      <div class="tb-box tb-example">
+        <div class="box-title">Worked Example 6.5 C &mdash; Second Application: Test for a Minimum</div>
+        <p>Does $F(x, y)$ have a minimum if $\partial F/\partial x = 0$ and $\partial F/\partial y = 0$ at $(x, y) = (0, 0)$?</p>
+        <p><strong>Solution:</strong> In one variable $f(x)$, the minimum test is $df/dx = 0$ and $d^2 f/dx^2 \gt 0$. In two variables, the second derivatives form the symmetric Hessian matrix $H$:</p>
+        <div class="math-wrap">
+          $$\text{Second derivative matrix:} \quad H = \begin{bmatrix} \partial^2 F/\partial x^2 & \partial^2 F/\partial x \partial y \\ \partial^2 F/\partial y \partial x & \partial^2 F/\partial y^2 \end{bmatrix}.$$
+        </div>
+        <p><strong>$F(x, y)$ has a minimum if $H$ is positive definite.</strong> Near $(0, 0)$, $H$ captures the quadratic part $ax^2 + 2bxy + cy^2$, because the second derivatives of $F$ are $2a, 2b, 2b, 2c$.</p>
+      </div>
+
+      <figure class="svg-figure">
+        <svg viewBox="-6 -6 572 202" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bowl vs Saddle surface cross-sections">
+          <rect x="0" y="0" width="560" height="190" fill="#fbfdff" rx="6"/>
+          <!-- Left: Bowl (Positive Definite H) -->
+          <g transform="translate(140, 125)">
+            <ellipse cx="0" cy="-65" rx="75" ry="22" fill="rgba(13,122,111,0.12)" stroke="#0d7a6f" stroke-width="1.8"/>
+            <path d="M -75 -65 Q 0 50 75 -65" fill="rgba(13,122,111,0.10)" stroke="#0d7a6f" stroke-width="2.2"/>
+            <circle cx="0" cy="-7" r="4" fill="#1a4b8c"/>
+            <text x="0" y="34" text-anchor="middle" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#0d7a6f">Minimum Bowl (H pos. def.)</text>
+            <text x="0" y="50" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#4a5568">λ₁ &gt; 0, λ₂ &gt; 0</text>
+          </g>
+          <!-- Right: Saddle (Indefinite H) -->
+          <g transform="translate(420, 105)">
+            <path d="M -85 -35 Q 0 15 85 -35" fill="none" stroke="#1a4b8c" stroke-width="2.2"/>
+            <path d="M -55 30 Q 0 -30 55 30" fill="none" stroke="#b45309" stroke-width="2.2"/>
+            <circle cx="0" cy="-3" r="4" fill="#1b2430"/>
+            <text x="0" y="54" text-anchor="middle" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#b45309">Saddle Point (H indefinite)</text>
+            <text x="0" y="70" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#4a5568">λ₁ &gt; 0, λ₂ &lt; 0</text>
+          </g>
+        </svg>
+        <figcaption><strong>Figure 6.5-B:</strong> Geometry of $z = ax^2 + 2bxy + cy^2$. Positive eigenvalues give an upward bowl (minimum). Opposite-sign eigenvalues give a saddle point.</figcaption>
+      </figure>
+
+      <div class="tb-box tb-example">
+        <div class="box-title">Worked Example 6.5 D &mdash; Eigenvalues of the $-1, 2, -1$ Tridiagonal Matrix $K$ <span class="page-tag">pp. 349–350</span></div>
+        <p>Find the eigenvalues of the $-1, 2, -1$ tridiagonal $n\times n$ matrix $K$.</p>
+        <p><strong>Solution:</strong> Guess $\lambda$ and $\boldsymbol{x}$, then verify $K\boldsymbol{x} = \lambda \boldsymbol{x}$. The second-difference matrix $K$ behaves like a second derivative:</p>
+        <div class="math-wrap">
+          $$\text{Eigenvalues } \lambda_1, \lambda_2, \dots \qquad \frac{d^2 y}{dx^2} = \lambda y(x) \quad \text{with } y(0) = 0,\ y(1) = 0. \qquad (5)$$
+        </div>
+        <p>Try $y = \sin cx$. Its second derivative is $y'' = -c^2 \sin cx$, so $\lambda = -c^2$ when boundary conditions hold. Because $\sin 0 = 0$, $y(0) = 0$ holds (cosines are eliminated since $\cos 0 = 1$). At $x = 1$, $y(1) = \sin c = 0$ requires $c = k\pi$ (an integer multiple of $\pi$), giving $\lambda = -k^2 \pi^2$:</p>
+        <div class="math-wrap">
+          $$\text{Eigenvalues } \lambda = -k^2 \pi^2, \quad \text{Eigenfunctions } y = \sin k\pi x, \quad \frac{d^2}{dx^2} \sin k\pi x = -k^2 \pi^2 \sin k\pi x. \qquad (6)$$
+        </div>
+        <p>Now sample $\sin k\pi x$ at $n$ equally spaced points $x = h, 2h, \dots, nh$ between $0$ and $1$, with spacing $\Delta x = h = 1/(n+1)$ so $(n+1)h = 1$. Multiplying this sine vector $\boldsymbol{s}$ by $K$ gives:</p>
+        <div class="math-wrap">
+          $$\text{Eigenvector of } K = \text{sine vector } \boldsymbol{s}: \quad K\boldsymbol{s} = \lambda \boldsymbol{s} = (2 - 2\cos k\pi h)\boldsymbol{s}, \quad \boldsymbol{s} = (\sin k\pi h, \dots, \sin nk\pi h). \qquad (7)$$
+        </div>
+        <p>Two key conclusions follow:</p>
+        <ol>
+          <li>All eigenvalues $2 - 2\cos k\pi h$ are positive, so $K$ is positive definite.</li>
+          <li>The sine matrix $S$ has orthogonal columns $\boldsymbol{s}_1, \dots, \boldsymbol{s}_n$ (eigenvectors of $K$).</li>
+        </ol>
+        <p><strong>Discrete Sine Transform:</strong> The $(j, k)$ entry of $S$ is $\sin jk\pi h$:</p>
+        <div class="math-wrap">
+          $$S = \begin{bmatrix} \sin \pi h & \cdots & \sin k\pi h & \cdots \\ \vdots & \ddots & \vdots & \\ \sin n\pi h & \cdots & \sin nk\pi h & \cdots \end{bmatrix}.$$
+        </div>
+        <p>These eigenvectors are orthogonal, just like the eigenfunctions $\int_0^1 \sin j\pi x \sin k\pi x\, dx = 0$.</p>
+      </div>
+
+      <figure class="svg-figure">
+        <svg viewBox="-6 -6 572 167" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Discrete sine eigenvectors for n=5">
+          <rect x="0" y="0" width="560" height="155" fill="#fbfdff" rx="6"/>
+          <line x1="40" y1="80" x2="520" y2="80" stroke="#64748b" stroke-width="1.3"/>
+          <line x1="40" y1="20" x2="40" y2="140" stroke="#64748b" stroke-width="1.3"/>
+          <!-- k=1 curve -->
+          <path d="M 40 80 Q 280 -25 520 80" fill="none" stroke="#1a4b8c" stroke-width="2" stroke-dasharray="4,3"/>
+          <!-- k=2 curve -->
+          <path d="M 40 80 Q 160 -20 280 80 T 520 80" fill="none" stroke="#0d7a6f" stroke-width="2"/>
+          <!-- Sample points h..5h (n=5, step = 480/6 = 80) -->
+          <circle cx="120" cy="52" r="4" fill="#1a4b8c"/><circle cx="200" cy="35" r="4" fill="#1a4b8c"/><circle cx="280" cy="28" r="4" fill="#1a4b8c"/><circle cx="360" cy="35" r="4" fill="#1a4b8c"/><circle cx="440" cy="52" r="4" fill="#1a4b8c"/>
+          <circle cx="120" cy="35" r="4" fill="#0d7a6f"/><circle cx="200" cy="35" r="4" fill="#0d7a6f"/><circle cx="280" cy="80" r="4" fill="#0d7a6f"/><circle cx="360" cy="125" r="4" fill="#0d7a6f"/><circle cx="440" cy="125" r="4" fill="#0d7a6f"/>
+          <text x="40" y="148" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#4a5568">0</text>
+          <text x="120" y="148" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#4a5568">h</text>
+          <text x="200" y="148" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#4a5568">2h</text>
+          <text x="280" y="148" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#4a5568">3h</text>
+          <text x="360" y="148" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#4a5568">4h</text>
+          <text x="440" y="148" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#4a5568">5h</text>
+          <text x="520" y="148" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#4a5568">1</text>
+          <text x="390" y="24" font-family="sans-serif" font-size="11.5" fill="#1a4b8c" font-weight="bold">k=1: sin(πx)</text>
+          <text x="390" y="40" font-family="sans-serif" font-size="11.5" fill="#0d7a6f" font-weight="bold">k=2: sin(2πx)</text>
+        </svg>
+        <figcaption><strong>Figure 6.5-C:</strong> Sine vectors $\boldsymbol{s}_k$ sample $\sin(k\pi x)$ at $x = h, 2h, \dots, nh$ with $h = 1/(n+1)$ (shown for $n=5$, Problem 34).</figcaption>
+      </figure>
+
+      <!-- ========================================================= -->
+      <!-- PROBLEM SET 6.5                                           -->
+      <!-- ========================================================= -->
+      <h2 class="section-heading span-all">Problem Set 6.5 <span class="page-tag">pp. 350–354</span></h2>
+
+      <h3 class="sub-heading">Problems 1–13: Tests for Positive Definiteness</h3>
+
+      <div class="problem-item">
+        <span class="problem-num">1</span>
+        Suppose the $2\times 2$ tests $a \gt 0$ and $ac - b^2 \gt 0$ pass. Then $c \gt b^2/a$ is also positive.
+        <ol type="i">
+          <li>$\lambda_1$ and $\lambda_2$ have the <em>same sign</em> because their product $\lambda_1 \lambda_2$ equals <span class="blank-line"></span>.</li>
+          <li>That sign is <em>positive</em> because $\lambda_1 + \lambda_2$ equals <span class="blank-line"></span>.</li>
+        </ol>
+        <em>Conclusion:</em> The tests $a \gt 0$ and $ac - b^2 \gt 0$ guarantee positive eigenvalues $\lambda_1, \lambda_2$.
+      </div>
+
+      <div class="problem-item">
+        <span class="problem-num">2</span>
+        Which of $A_1, A_2, A_3, A_4$ has two positive eigenvalues? Use the test; do not compute the $\lambda$'s. Find an $\boldsymbol{x}$ so that $\boldsymbol{x}^{\mathrm{T}} A_1 \boldsymbol{x} \lt 0$, showing $A_1$ fails the test.
+        <div class="math-wrap">
+          $$A_1 = \begin{bmatrix} 5 & 6 \\ 6 & 7 \end{bmatrix}, \quad A_2 = \begin{bmatrix} -1 & -2 \\ -2 & -5 \end{bmatrix}, \quad A_3 = \begin{bmatrix} 1 & 10 \\ 10 & 100 \end{bmatrix}, \quad A_4 = \begin{bmatrix} 1 & 10 \\ 10 & 101 \end{bmatrix}.$$
+        </div>
+      </div>
+
+      <div class="problem-item">
+        <span class="problem-num">3</span>
+        For which numbers $b$ and $c$ are these matrices positive definite?
+        <div class="math-wrap">
+          $$A = \begin{bmatrix} 1 & b \\ b & 9 \end{bmatrix}, \qquad A = \begin{bmatrix} 2 & 4 \\ 4 & c \end{bmatrix}, \qquad A = \begin{bmatrix} c & b \\ b & c \end{bmatrix}.$$
+        </div>
+        With the pivots in $D$ and multiplier in $L$, factor each $A$ into $LDL^{\mathrm{T}}$.
+      </div>
+
+      <div class="problem-item">
+        <span class="problem-num">4</span>
+        What is the quadratic $f = ax^2 + 2bxy + cy^2$ for each of these matrices? Complete the square to write $f$ as a sum of one or two squares $d_1(\ )^2 + d_2(\ )^2$.
+        <div class="math-wrap">
+          $$A = \begin{bmatrix} 1 & 2 \\ 2 & 9 \end{bmatrix} \quad \text{and} \quad A = \begin{bmatrix} 1 & 3 \\ 3 & 9 \end{bmatrix}.$$
+        </div>
+      </div>
+
+      <div class="problem-item">
+        <span class="problem-num">5</span>
+        Write $f(x, y) = x^2 + 4xy + 3y^2$ as a <em>difference</em> of squares and find a point $(x, y)$ where $f$ is negative. The minimum is not at $(0, 0)$ even though $f$ has positive coefficients.
+      </div>
+
+      <div class="problem-item">
+        <span class="problem-num">6</span>
+        The function $f(x, y) = 2xy$ has a saddle point and not a minimum at $(0, 0)$. What symmetric matrix $A$ produces this $f$? What are its eigenvalues?
+      </div>
+
+      <div class="problem-item">
+        <span class="problem-num">7</span>
+        Test to see if $R^{\mathrm{T}} R$ is positive definite in each case:
+        <div class="math-wrap">
+          $$R = \begin{bmatrix} 1 & 2 \\ 0 & 3 \end{bmatrix} \quad \text{and} \quad R = \begin{bmatrix} 1 & 1 \\ 1 & 2 \\ 2 & 1 \end{bmatrix} \quad \text{and} \quad R = \begin{bmatrix} 1 & 1 & 2 \\ 1 & 2 & 1 \end{bmatrix}.$$
+        </div>
+      </div>
+
+      <div class="problem-item">
+        <span class="problem-num">8</span>
+        The function $f(x, y) = 3(x + 2y)^2 + 4y^2$ is positive except at $(0, 0)$. What is the matrix in $f = \begin{bmatrix} x & y \end{bmatrix} A \begin{bmatrix} x & y \end{bmatrix}^{\mathrm{T}}$? Check that the pivots of $A$ are $3$ and $4$.
+      </div>
+
+      <div class="problem-item">
+        <span class="problem-num">9</span>
+        Find the $3\times 3$ matrix $A$ and its pivots, rank, eigenvalues, and determinant:
+        <div class="math-wrap">
+          $$\begin{bmatrix} x_1 & x_2 & x_3 \end{bmatrix} \begin{bmatrix} \ & A & \ \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \\ x_3 \end{bmatrix} = 4(x_1 - x_2 + 2x_3)^2.$$
+        </div>
+      </div>
+
+      <div class="problem-item">
+        <span class="problem-num">10</span>
+        Which $3\times 3$ symmetric matrices $A$ and $B$ produce these quadratics?
+        <div class="math-wrap">
+          $$\boldsymbol{x}^{\mathrm{T}} A \boldsymbol{x} = 2(x_1^2 + x_2^2 + x_3^2 - x_1 x_2 - x_2 x_3). \quad \text{Why is } A \text{ positive definite?}$$
+          $$\boldsymbol{x}^{\mathrm{T}} B \boldsymbol{x} = 2(x_1^2 + x_2^2 + x_3^2 - x_1 x_2 - x_1 x_3 - x_2 x_3). \quad \text{Why is } B \text{ semidefinite?}$$
+        </div>
+      </div>
+
+      <div class="problem-item">
+        <span class="problem-num">11</span>
+        Compute the three upper left determinants of $A$ to establish positive definiteness. Verify that their ratios give the second and third pivots:
+        <div class="math-wrap">
+          $$\text{Pivots = ratios of determinants:} \qquad A = \begin{bmatrix} 2 & 2 & 0 \\ 2 & 5 & 3 \\ 0 & 3 & 8 \end{bmatrix}.$$
+        </div>
+      </div>
+
+      <div class="problem-item">
+        <span class="problem-num">12</span>
+        For what numbers $c$ and $d$ are $A$ and $B$ positive definite? Test the 3 determinants:
+        <div class="math-wrap">
+          $$A = \begin{bmatrix} c & 1 & 1 \\ 1 & c & 1 \\ 1 & 1 & c \end{bmatrix} \quad \text{and} \quad B = \begin{bmatrix} 1 & 2 & 3 \\ 2 & d & 4 \\ 3 & 4 & 5 \end{bmatrix}.$$
+        </div>
+      </div>
+
+      <div class="problem-item">
+        <span class="problem-num">13</span>
+        Find a matrix with $a \gt 0$ and $c \gt 0$ and $a + c \gt 2b$ that has a negative eigenvalue.
+      </div>
+
+      <h3 class="sub-heading">Problems 14–20: Applications of the Tests</h3>
+
+      <div class="problem-item">
+        <span class="problem-num">14</span>
+        If $A$ is positive definite then $A^{-1}$ is positive definite. Best proof: The eigenvalues of $A^{-1}$ are positive because <span class="blank-line"></span>. Second proof (only for $2\times 2$): The entries of $A^{-1} = \frac{1}{ac - b^2}\begin{bmatrix} c & -b \\ -b & a \end{bmatrix}$ pass the determinant tests <span class="blank-line"></span>.
+      </div>
+
+      <div class="problem-item">
+        <span class="problem-num">15</span>
+        If $A$ and $B$ are positive definite, their sum $A + B$ is positive definite. Pivots and eigenvalues are not convenient for $A + B$. Better to prove $\boldsymbol{x}^{\mathrm{T}}(A + B)\boldsymbol{x} \gt 0$. Or if $A = R^{\mathrm{T}} R$ and $B = S^{\mathrm{T}} S$, show that $A + B = \begin{bmatrix} R \\ S \end{bmatrix}^{\mathrm{T}} \begin{bmatrix} R \\ S \end{bmatrix}$ (printed in text as $\begin{bmatrix} R & S \end{bmatrix}^{\mathrm{T}} \begin{bmatrix} R \\ S \end{bmatrix}$) with independent columns.
+      </div>
+
+      <div class="problem-item">
+        <span class="problem-num">16</span>
+        A positive definite matrix cannot have a zero (or a negative number) on its diagonal. Show that this matrix fails to have $\boldsymbol{x}^{\mathrm{T}} A \boldsymbol{x} \gt 0$:
+        <div class="math-wrap">
+          $$\begin{bmatrix} x_1 & x_2 & x_3 \end{bmatrix} \begin{bmatrix} 4 & 1 & 1 \\ 1 & 0 & 2 \\ 1 & 2 & 5 \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \\ x_3 \end{bmatrix} \text{ is not positive when } (x_1, x_2, x_3) = (\quad,\quad,\quad).$$
+        </div>
+      </div>
+
+      <div class="problem-item">
+        <span class="problem-num">17</span>
+        A diagonal entry $a_{jj}$ of a symmetric matrix cannot be smaller than all the $\lambda$'s. If it were, then $A - a_{jj} I$ would have <span class="blank-line"></span> eigenvalues and would be positive definite. But $A - a_{jj} I$ has a <span class="blank-line"></span> on the main diagonal.
+      </div>
+
+      <div class="problem-item">
+        <span class="problem-num">18</span>
+        If $A\boldsymbol{x} = \lambda \boldsymbol{x}$ then $\boldsymbol{x}^{\mathrm{T}} A \boldsymbol{x} = \underline{\qquad}$. If $\boldsymbol{x}^{\mathrm{T}} A \boldsymbol{x} \gt 0$, prove that $\lambda \gt 0$.
+      </div>
+
+      <div class="problem-item">
+        <span class="problem-num">19</span>
+        Reverse Problem 18 to show that if all $\lambda \gt 0$ then $\boldsymbol{x}^{\mathrm{T}} A \boldsymbol{x} \gt 0$. Prove this for every nonzero $\boldsymbol{x}$, not just the eigenvectors. Write $\boldsymbol{x}$ as a combination of the eigenvectors and explain why all "cross terms" are $\boldsymbol{x}_i^{\mathrm{T}} \boldsymbol{x}_j = 0$. Then $\boldsymbol{x}^{\mathrm{T}} A \boldsymbol{x}$ is:
+        <div class="math-wrap">
+          $$(c_1 \boldsymbol{x}_1 + \dots + c_n \boldsymbol{x}_n)^{\mathrm{T}} (c_1 \lambda_1 \boldsymbol{x}_1 + \dots + c_n \lambda_n \boldsymbol{x}_n) = c_1^2 \lambda_1 \boldsymbol{x}_1^{\mathrm{T}} \boldsymbol{x}_1 + \dots + c_n^2 \lambda_n \boldsymbol{x}_n^{\mathrm{T}} \boldsymbol{x}_n \gt 0.$$
+        </div>
+      </div>
+
+      <div class="problem-item">
+        <span class="problem-num">20</span>
+        Give a quick reason why each of these statements is true:
+        <ol type="a">
+          <li>Every positive definite matrix is invertible.</li>
+          <li>The only positive definite projection matrix is $P = I$.</li>
+          <li>A diagonal matrix with positive diagonal entries is positive definite.</li>
+          <li>A symmetric matrix with a positive determinant might not be positive definite!</li>
+        </ol>
+      </div>
+
+      <h3 class="sub-heading">Problems 21–24 (Eigenvalues) and 25–27 (Pivots) <span class="page-tag">pp. 352–353</span></h3>
+
+      <div class="problem-item">
+        <span class="problem-num">21</span>
+        For which $s$ and $t$ do $A$ and $B$ have all $\lambda \gt 0$ (therefore positive definite)?
+        <div class="math-wrap">
+          $$A = \begin{bmatrix} s & -4 & -4 \\ -4 & s & -4 \\ -4 & -4 & s \end{bmatrix} \quad \text{and} \quad B = \begin{bmatrix} t & 3 & 0 \\ 3 & t & 4 \\ 0 & 4 & t \end{bmatrix}.$$
+        </div>
+      </div>
+
+      <div class="problem-item">
+        <span class="problem-num">22</span>
+        From $A = Q \Lambda Q^{\mathrm{T}}$ compute the positive definite symmetric square root $R = Q \Lambda^{1/2} Q^{\mathrm{T}}$ of each matrix. Check that this square root gives $R^2 = A$:
+        <div class="math-wrap">
+          $$A = \begin{bmatrix} 5 & 4 \\ 4 & 5 \end{bmatrix} \quad \text{and} \quad A = \begin{bmatrix} 10 & 6 \\ 6 & 10 \end{bmatrix}.$$
+        </div>
+      </div>
+
+      <div class="problem-item">
+        <span class="problem-num">23</span>
+        You may have seen the equation for an ellipse as $x^2/a^2 + y^2/b^2 = 1$. What are $a$ and $b$ when the equation is written $\lambda_1 x^2 + \lambda_2 y^2 = 1$? The ellipse $9x^2 + 4y^2 = 1$ has axes with half-lengths $a = \underline{\qquad}$ and $b = \underline{\qquad}$.
+      </div>
+
+      <div class="problem-item">
+        <span class="problem-num">24</span>
+        Draw the tilted ellipse $x^2 + xy + y^2 = 1$ and find the half-lengths of its axes from the eigenvalues of the corresponding matrix $A$.
+      </div>
+
+      <div class="problem-item">
+        <span class="problem-num">25</span>
+        With positive pivots in $D$, the factorization $A = LDL^{\mathrm{T}}$ becomes $L\sqrt{D}\sqrt{D}L^{\mathrm{T}}$. (Square roots of the pivots give $D = \sqrt{D}\sqrt{D}$.) Then $C = \sqrt{D}L^{\mathrm{T}}$ yields the <strong>Cholesky factorization</strong> $A = C^{\mathrm{T}} C$, which is "symmetrized $LU$":
+        <ul>
+          <li>From $C = \begin{bmatrix} 3 & 1 \\ 0 & 2 \end{bmatrix}$ find $A$.</li>
+          <li>From $A = \begin{bmatrix} 4 & 8 \\ 8 & 25 \end{bmatrix}$ find $C = \texttt{chol(A)}$.</li>
+        </ul>
+      </div>
+
+      <div class="problem-item">
+        <span class="problem-num">26</span>
+        In the Cholesky factorization $A = C^{\mathrm{T}} C$, with $C^{\mathrm{T}} = L\sqrt{D}$, the square roots of the pivots are on the diagonal of $C$. Find $C$ (upper triangular) for:
+        <div class="math-wrap">
+          $$A = \begin{bmatrix} 9 & 0 & 0 \\ 0 & 1 & 2 \\ 0 & 2 & 8 \end{bmatrix} \quad \text{and} \quad A = \begin{bmatrix} 1 & 1 & 1 \\ 1 & 2 & 2 \\ 1 & 2 & 7 \end{bmatrix}.$$
+        </div>
+      </div>
+
+      <div class="problem-item">
+        <span class="problem-num">27</span>
+        The symmetric factorization $A = LDL^{\mathrm{T}}$ means that $\boldsymbol{x}^{\mathrm{T}} A \boldsymbol{x} = \boldsymbol{x}^{\mathrm{T}} LDL^{\mathrm{T}} \boldsymbol{x}$:
+        <div class="math-wrap">
+          $$\begin{bmatrix} x & y \end{bmatrix} \begin{bmatrix} a & b \\ b & c \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix} = \begin{bmatrix} x & y \end{bmatrix} \begin{bmatrix} 1 & 0 \\ b/a & 1 \end{bmatrix} \begin{bmatrix} a & 0 \\ 0 & (ac - b^2)/a \end{bmatrix} \begin{bmatrix} 1 & b/a \\ 0 & 1 \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix}.$$
+        </div>
+        The left side is $ax^2 + 2bxy + cy^2$. The right side is $a\left(x + \frac{b}{a}y\right)^2 + \underline{\qquad}\, y^2$. The second pivot completes the square! Test with $a = 2, b = 4, c = 10$.
+      </div>
+
+      <h3 class="sub-heading">Problems 28–31: Rotations, Minima, and Saddles <span class="page-tag">p. 353</span></h3>
+
+      <div class="problem-item">
+        <span class="problem-num">28</span>
+        Without multiplying $A = \begin{bmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{bmatrix} \begin{bmatrix} 2 & 0 \\ 0 & 5 \end{bmatrix} \begin{bmatrix} \cos\theta & \sin\theta \\ -\sin\theta & \cos\theta \end{bmatrix}$, find:
+        <ol type="a">
+          <li>the determinant of $A$</li>
+          <li>the eigenvalues of $A$</li>
+          <li>the eigenvectors of $A$</li>
+          <li>a reason why $A$ is symmetric positive definite.</li>
+        </ol>
+      </div>
+
+      <div class="problem-item">
+        <span class="problem-num">29</span>
+        For $F_1(x, y) = \frac{1}{4}x^4 + x^2 y + y^2$ and $F_2(x, y) = x^3 + xy - x$, find the second derivative matrices $H_1$ and $H_2$:
+        <div class="math-wrap">
+          $$\text{Test for minimum:} \quad H = \begin{bmatrix} \partial^2 F/\partial x^2 & \partial^2 F/\partial x \partial y \\ \partial^2 F/\partial y \partial x & \partial^2 F/\partial y^2 \end{bmatrix} \text{ is positive definite.}$$
+        </div>
+        $H_1$ is positive definite so $F_1$ is concave up (= convex). Find the minimum point of $F_1$ and the saddle point of $F_2$ (look only where first derivatives are zero).
+      </div>
+
+      <div class="problem-item">
+        <span class="problem-num">30</span>
+        The graph of $z = x^2 + y^2$ is a bowl opening upward. The graph of $z = x^2 - y^2$ is a saddle. The graph of $z = -x^2 - y^2$ is a bowl opening downward. What is a test on $a, b, c$ for $z = ax^2 + 2bxy + cy^2$ to have a saddle point at $(0, 0)$?
+      </div>
+
+      <div class="problem-item">
+        <span class="problem-num">31</span>
+        Which values of $c$ give a bowl and which $c$ give a saddle point for the graph of $z = 4x^2 + 12xy + cy^2$? Describe this graph at the borderline value of $c$.
+      </div>
+
+      <h3 class="sub-heading">Challenge Problems (Section 6.5) <span class="page-tag">p. 354</span></h3>
+
+      <div class="problem-item challenge">
+        <span class="problem-num">32</span>
+        A <em>group</em> of nonsingular matrices includes $AB$ and $A^{-1}$ if it includes $A$ and $B$ ("products and inverses stay in the group"). Which of these are groups (as in 2.7.37)? Invent a "subgroup" of two of these groups (not $I$ by itself = the smallest group):
+        <ol type="a">
+          <li>Positive definite symmetric matrices $A$.</li>
+          <li>Orthogonal matrices $Q$.</li>
+          <li>All exponentials $e^{tA}$ of a fixed matrix $A$.</li>
+          <li>Matrices $P$ with positive eigenvalues.</li>
+          <li>Matrices $D$ with determinant $1$.</li>
+        </ol>
+      </div>
+
+      <div class="problem-item challenge">
+        <span class="problem-num">33</span>
+        When $A$ and $B$ are symmetric positive definite, $AB$ might not even be symmetric. Still, its eigenvalues are positive. Start from $AB\boldsymbol{x} = \lambda \boldsymbol{x}$ and take dot products with $B\boldsymbol{x}$. Then prove $\lambda \gt 0$.
+      </div>
+
+      <div class="problem-item challenge">
+        <span class="problem-num">34</span>
+        Write down the $5\times 5$ sine matrix $S$ from Worked Example 6.5 D, containing the eigenvectors of $K$ when $n = 5$ and $h = 1/6$. Multiply $K$ times $S$ to see the five positive eigenvalues. Their sum should equal the trace $10$. Their product should be $\det K = 6$.
+      </div>
+
+      <div class="problem-item challenge">
+        <span class="problem-num">35</span>
+        Suppose $C$ is positive definite (so $\boldsymbol{y}^{\mathrm{T}} C \boldsymbol{y} \gt 0$ whenever $\boldsymbol{y} \neq \mathbf{0}$) and $A$ has independent columns (so $A\boldsymbol{x} \neq \mathbf{0}$ whenever $\boldsymbol{x} \neq \mathbf{0}$). Apply the energy test to $\boldsymbol{x}^{\mathrm{T}} A^{\mathrm{T}} C A \boldsymbol{x}$ to show that $A^{\mathrm{T}} C A$ is positive definite: <em>the crucial matrix in engineering</em>.
+      </div>
+
+      <!-- ========================================================= -->
+      <!-- SECTION 6.7                                               -->
+      <!-- ========================================================= -->
+      <h2 class="section-heading span-all">6.7 Singular Value Decomposition (SVD) <span class="page-tag">p. 373</span></h2>
+
+      <div class="problem-item">
+        <span class="problem-num">15</span>
+        Why doesn't the SVD for $A + I$ just use $\Sigma + I$?
+      </div>
+
+      <h3 class="sub-heading">Challenge Problems (Section 6.7)</h3>
+
+      <div class="problem-item challenge">
+        <span class="problem-num">16</span>
+        <strong>(Search engine)</strong> Run a <strong>random walk</strong> $x(2), \dots, x(n)$ starting from website $x(1) = 1$. Count the visits to each site. At each step the code chooses the next website $x(k)$ with probabilities given by column $x(k - 1)$ of $A$. At the end, $\boldsymbol{p}$ gives the fraction of time at each site from a histogram (count visits). <em>The rankings are based on $\boldsymbol{p}$.</em> Please compare $\boldsymbol{p}$ to the steady state eigenvector of the Markov matrix $A$:
+        <pre>A = [0 .1 .2 .7; .05 0 .15 .8; .15 .25 0 .6; .1 .3 .6 0]'
+n = 100; x = zeros(1,n); x(1) = 1;
+for k = 2 : n x(k) = min(find(rand&lt;cumsum(A(:, x(k - 1))))); end
+p = hist(x, 1 : 4)/n</pre>
+      </div>
+
+      <div class="problem-item challenge">
+        <span class="problem-num">17</span>
+        The $1, -1$ first difference matrix $A$ has $A^{\mathrm{T}} A =$ second difference matrix. The singular vectors of $A$ are <strong>sine vectors $\boldsymbol{v}$</strong> and <strong>cosine vectors $\boldsymbol{u}$</strong>. Then $A\boldsymbol{v} = \sigma \boldsymbol{u}$ is the discrete form of $\frac{d}{dx}(\sin cx) = c(\cos cx)$.
+        <div class="math-wrap">
+          $$\text{SVD of } A: \quad A = \begin{bmatrix} 1 & 0 & 0 \\ -1 & 1 & 0 \\ 0 & -1 & 1 \\ 0 & 0 & -1 \end{bmatrix}, \qquad A^{\mathrm{T}} A = \begin{bmatrix} 2 & -1 & 0 \\ -1 & 2 & -1 \\ 0 & -1 & 2 \end{bmatrix},$$
+        </div>
+        <div class="math-wrap">
+          $$\text{Orthogonal sine matrix:} \quad V = \frac{1}{\sqrt{2}} \begin{bmatrix} \sin \pi/4 & \sin 2\pi/4 & \sin 3\pi/4 \\ \sin 2\pi/4 & \sin 4\pi/4 & \sin 6\pi/4 \\ \sin 3\pi/4 & \sin 6\pi/4 & \sin 9\pi/4 \end{bmatrix}.$$
+        </div>
+        <ol type="a">
+          <li>Put numbers in $V$: The unit eigenvectors of $A^{\mathrm{T}} A$ are singular vectors of $A$. Show that the columns of $V$ satisfy $A^{\mathrm{T}} A \boldsymbol{v} = \lambda \boldsymbol{v}$ with $\lambda = 2 - \sqrt{2}, 2, 2 + \sqrt{2}$.</li>
+          <li>Multiply $AV$ and verify that its columns are orthogonal. They are $\sigma_1 \boldsymbol{u}_1$, $\sigma_2 \boldsymbol{u}_2$, and $\sigma_3 \boldsymbol{u}_3$. The first columns of the cosine matrix $U$ are $\boldsymbol{u}_1, \boldsymbol{u}_2, \boldsymbol{u}_3$.</li>
+          <li>Since $A$ is $4$ by $3$, we need a fourth orthogonal vector $\boldsymbol{u}_4$. It comes from the nullspace of $A^{\mathrm{T}}$. What is $\boldsymbol{u}_4$?</li>
+        </ol>
+        <p>The cosine vectors in $U$ are eigenvectors of $AA^{\mathrm{T}}$. The fourth cosine is $(1, 1, 1, 1)/2$:</p>
+        <div class="math-wrap">
+          $$AA^{\mathrm{T}} = \begin{bmatrix} 1 & -1 & 0 & 0 \\ -1 & 2 & -1 & 0 \\ 0 & -1 & 2 & -1 \\ 0 & 0 & -1 & 1 \end{bmatrix}, \qquad U = \frac{1}{\sqrt{2}} \begin{bmatrix} \cos \pi/8 & \cos 2\pi/8 & \cos 3\pi/8 \\ \cos 3\pi/8 & \cos 6\pi/8 & \cos 9\pi/8 \\ \cos 5\pi/8 & \cos 10\pi/8 & \cos 15\pi/8 \\ \cos 7\pi/8 & \cos 14\pi/8 & \cos 21\pi/8 \end{bmatrix}.$$
+        </div>
+        <p>The angles $\pi/8, 3\pi/8, 5\pi/8, 7\pi/8$ fit $4$ points with spacing $\pi/4$ between $0$ and $\pi$. The sine transform has three points $\pi/4, 2\pi/4, 3\pi/4$. The full cosine transform includes $\boldsymbol{u}_4$ from the "zero frequency" or <em>direct current</em> eigenvector $(1, 1, 1, 1)$.</p>
+        <p>The $8$ by $8$ cosine transform in 2D is the workhorse of <strong>JPEG compression</strong>. Linear algebra (circulant, Toeplitz, orthogonal matrices) is at the heart of signal processing.</p>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    function setLayout(mode) {
+      const content = document.getElementById('book-content');
+      const btnSingle = document.getElementById('btn-single');
+      const btnTwo = document.getElementById('btn-two');
+      if (mode === 'two') {
+        content.classList.remove('single-col');
+        content.classList.add('two-col');
+        btnTwo.classList.add('active');
+        btnSingle.classList.remove('active');
+      } else {
+        content.classList.remove('two-col');
+        content.classList.add('single-col');
+        btnSingle.classList.add('active');
+        btnTwo.classList.remove('active');
+      }
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise();
+      }
+    }
+  </script>
+</body>
+</html>

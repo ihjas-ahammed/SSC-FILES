@@ -1,0 +1,1140 @@
+I cannot open external websites, execute `aistudio` CLI commands, or export files on your machine from this interface. However, below is the **complete, self-contained HTML textbook notes** generated directly from all 8 pages of your uploaded PDF (*Database System Concepts*, 4th ed., Sections 2.7.5–2.9).
+
+It includes:
+- **ASD-STE100 style**: clear, active-voice, unambiguous sentences while **losing nothing** (all technical terms, rules, design phases, attributes, relationships, cardinalities, and examples are preserved).
+- **Awesome textbook design** with a built-in **Single-Column / Two-Column layout switcher** and `@media print` rules engineered to prevent horizontal or vertical overflow when printing/saving to PDF.
+- **MathJax (LaTeX)** for formal schema, set, tuple, and cardinality notation.
+- **Full vector SVG diagrams** faithfully recreating Figures **2.18, 2.19, 2.20, 2.21, and 2.22**.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 2: Extended E-R Features &amp; Database Schema Design (ASD-STE100 Notes)</title>
+
+  <!-- MathJax v3 for LaTeX Rendering -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    :root {
+      --primary: #1e3a5f;
+      --primary-light: #2b548a;
+      --accent: #b45309;
+      --bg-page: #f8fafc;
+      --bg-card: #ffffff;
+      --bg-tint: #f1f5f9;
+      --bg-note: #fffbeb;
+      --border: #cbd5e1;
+      --text-main: #1e293b;
+      --text-muted: #475569;
+      --col-count: 1;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg-page);
+      color: var(--text-main);
+      font-family: "Georgia", "Times New Roman", serif;
+      font-size: 16px;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    /* Top Control Bar (hidden on print) */
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 0.75rem 1.5rem;
+      background: var(--primary);
+      color: #ffffff;
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 0.9rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+
+    .toolbar-title {
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .btn {
+      border: 1px solid rgba(255,255,255,0.35);
+      background: rgba(255,255,255,0.12);
+      color: #ffffff;
+      padding: 0.35rem 0.85rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: background 0.15s ease;
+    }
+
+    .btn:hover, .btn.active {
+      background: #ffffff;
+      color: var(--primary);
+    }
+
+    /* Textbook Page Container */
+    .book-wrapper {
+      max-width: 1120px;
+      margin: 1.5rem auto;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 2.5rem 2.75rem;
+      box-shadow: 0 6px 24px rgba(15, 23, 42, 0.06);
+    }
+
+    /* Header Banner */
+    .chapter-header {
+      border-bottom: 3px solid var(--primary);
+      padding-bottom: 1.25rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .chapter-meta {
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      margin-bottom: 0.35rem;
+    }
+
+    h1 {
+      font-size: 1.95rem;
+      line-height: 1.25;
+      color: var(--primary);
+      margin: 0 0 0.5rem 0;
+    }
+
+    .ste-badge {
+      display: inline-block;
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 0.78rem;
+      background: var(--bg-tint);
+      border: 1px solid var(--border);
+      color: var(--primary);
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+
+    /* Multi-column container */
+    .content-flow {
+      column-count: var(--col-count);
+      column-gap: 2.25rem;
+      column-rule: 1px solid #e2e8f0;
+    }
+
+    /* Prevent overflow everywhere */
+    .content-flow > *, p, ul, ol, figure, .callout, .table-wrap {
+      max-width: 100%;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+    }
+
+    h2 {
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 1.32rem;
+      color: var(--primary);
+      border-left: 4px solid var(--primary);
+      padding-left: 0.7rem;
+      margin: 1.75rem 0 0.75rem 0;
+      break-after: avoid;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 1.08rem;
+      color: var(--primary-light);
+      margin: 1.25rem 0 0.5rem 0;
+      break-after: avoid;
+      page-break-after: avoid;
+    }
+
+    h4 {
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 0.98rem;
+      color: var(--text-main);
+      margin: 1rem 0 0.4rem 0;
+      break-after: avoid;
+      page-break-after: avoid;
+    }
+
+    p {
+      margin: 0 0 0.85rem 0;
+      text-align: justify;
+      hyphens: auto;
+    }
+
+    ul, ol {
+      margin: 0 0 0.95rem 0;
+      padding-left: 1.35rem;
+    }
+
+    li {
+      margin-bottom: 0.45rem;
+    }
+
+    code, .term {
+      font-family: "Consolas", "Courier New", monospace;
+      font-size: 0.9em;
+      background: #f1f5f9;
+      color: #0f172a;
+      padding: 0.08rem 0.32rem;
+      border-radius: 4px;
+    }
+
+    /* Callout Boxes */
+    .callout {
+      background: var(--bg-tint);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--primary);
+      border-radius: 6px;
+      padding: 0.85rem 1rem;
+      margin: 1rem 0;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .callout.note {
+      background: var(--bg-note);
+      border-left-color: var(--accent);
+    }
+
+    .callout-title {
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--primary);
+      margin-bottom: 0.35rem;
+    }
+
+    .callout.note .callout-title {
+      color: var(--accent);
+    }
+
+    /* Figures & SVGs */
+    figure {
+      margin: 1.2rem 0;
+      padding: 0.9rem;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      text-align: center;
+      break-inside: avoid;
+      page-break-inside: avoid;
+      overflow: hidden;
+    }
+
+    figure.wide-figure {
+      column-span: all;
+    }
+
+    figure svg {
+      display: block;
+      margin: 0 auto;
+      width: 100%;
+      height: auto;
+      max-width: 100%;
+    }
+
+    figcaption {
+      margin-top: 0.65rem;
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    figcaption strong {
+      color: var(--text-main);
+    }
+
+    /* Summary Tables */
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      margin: 1rem 0;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 0.86rem;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.5rem 0.65rem;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--primary);
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    tr:nth-child(even) td {
+      background: #f8fafc;
+    }
+
+    /* MathJax overflow guard */
+    mjx-container {
+      max-width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+
+    /* Responsive fallback */
+    @media (max-width: 820px) {
+      .book-wrapper {
+        padding: 1.25rem 1rem;
+        margin: 0.5rem;
+      }
+      .content-flow {
+        column-count: 1 !important;
+      }
+    }
+
+    /* Print / PDF Styling */
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 14mm 12mm;
+      }
+      body {
+        background: #ffffff;
+        font-size: 10.5pt;
+        line-height: 1.48;
+      }
+      .toolbar {
+        display: none !important;
+      }
+      .book-wrapper {
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+        border: none;
+        box-shadow: none;
+      }
+      figure, .callout, .table-wrap {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+      h2, h3, h4 {
+        break-after: avoid;
+        page-break-after: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="toolbar">
+    <div class="toolbar-title">Database System Concepts &mdash; Ch. 2 Notes (ASD-STE100)</div>
+    <div class="toolbar-actions">
+      <button id="btn-1col" class="btn active" onclick="setColumns(1)">Single-Column</button>
+      <button id="btn-2col" class="btn" onclick="setColumns(2)">Two-Column</button>
+      <button class="btn" onclick="window.print()">Print / Save PDF</button>
+    </div>
+  </div>
+
+  <main class="book-wrapper">
+    <header class="chapter-header">
+      <div class="chapter-meta">Part I: Data Models &bull; Chapter 2: Entity-Relationship Model (Pages 55&ndash;62)</div>
+      <h1>Extended E-R Features, Schema Design, Banking Enterprise &amp; Table Reduction</h1>
+      <span class="ste-badge">Written in ASD-STE100 (Simplified Technical English) &bull; Complete Technical Fidelity</span>
+    </header>
+
+    <div class="content-flow">
+
+      <!-- SECTION 2.7.5 -->
+      <h2>2.7.5 Aggregation (Continued)</h2>
+
+      <p>
+        Consider a database that models employees who work on jobs at branches, and managers who manage those tasks.
+        Figure 2.18 shows an E-R diagram with two quaternary/ternary-style connections: <code>works-on</code> (relating
+        <code>employee</code>, <code>job</code>, and <code>branch</code>) and <code>manages</code> (relating
+        <code>employee</code>, <code>job</code>, <code>branch</code>, and <code>manager</code>).
+      </p>
+
+      <figure>
+        <svg viewBox="0 0 640 315" style="max-width: 560px;" aria-label="Figure 2.18 E-R diagram with redundant relationships">
+          <defs>
+            <style>
+              .ent { fill: #d9dce3; stroke: #1e293b; stroke-width: 1.5; }
+              .rel { fill: #d9dce3; stroke: #1e293b; stroke-width: 1.5; }
+              .lbl { font-family: Georgia, serif; font-style: italic; font-size: 15px; fill: #0f172a; text-anchor: middle; dominant-baseline: central; }
+              .ln  { stroke: #1e293b; stroke-width: 1.4; fill: none; }
+            </style>
+          </defs>
+          <!-- Entities -->
+          <rect class="ent" x="275" y="15" width="90" height="34" />
+          <text class="lbl" x="320" y="32">job</text>
+
+          <rect class="ent" x="40" y="100" width="105" height="36" />
+          <text class="lbl" x="92.5" y="118">employee</text>
+
+          <rect class="ent" x="455" y="100" width="90" height="36" />
+          <text class="lbl" x="500" y="118">branch</text>
+
+          <rect class="ent" x="270" y="265" width="105" height="36" />
+          <text class="lbl" x="322.5" y="283">manager</text>
+
+          <!-- Relationships -->
+          <polygon class="rel" points="320,90 385,118 320,146 255,118" />
+          <text class="lbl" x="320" y="118">works-on</text>
+
+          <polygon class="rel" points="322.5,175 390,205 322.5,235 255,205" />
+          <text class="lbl" x="322.5" y="205">manages</text>
+
+          <!-- Connections to works-on -->
+          <line class="ln" x1="320" y1="49" x2="320" y2="90" />
+          <line class="ln" x1="145" y1="118" x2="255" y2="118" />
+          <line class="ln" x1="455" y1="118" x2="385" y2="118" />
+
+          <!-- Connections to manages -->
+          <polyline class="ln" points="365,32 595,32 595,205 390,205" />
+          <line class="ln" x1="115" y1="136" x2="275" y2="196" />
+          <line class="ln" x1="500" y1="136" x2="368" y2="195" />
+          <line class="ln" x1="322.5" y1="265" x2="322.5" y2="235" />
+        </svg>
+        <figcaption><strong>Figure 2.18</strong> E-R diagram with redundant relationships.</figcaption>
+      </figure>
+
+      <p>
+        Figure 2.18 contains redundant data. Every $(e, b, j)$ combination in <code>manages</code> is also present in <code>works-on</code>:
+        $$\pi_{employee, branch, job}(\text{manages}) \subseteq \text{works-on}.$$
+      </p>
+
+      <div class="callout note">
+        <div class="callout-title">Why Not Make <code>manager</code> a Multivalued Attribute?</div>
+        <p style="margin-bottom:0;">
+          If <code>manager</code> were a simple value instead of an entity, we could make <code>manager</code> a multivalued attribute of the relationship <code>works-on</code>.
+          However, that design makes it more difficult (both logically and in query execution cost) to find all $(\text{employee}, \text{branch}, \text{job})$ triples for which a manager is responsible.
+          Because <code>manager</code> is an entity set, this alternative is ruled out.
+        </p>
+      </div>
+
+      <p>
+        <strong>Definition (Aggregation):</strong> Aggregation is an abstraction through which relationships are treated as higher-level entities.
+      </p>
+      <p>
+        To model the example cleanly, treat the relationship set <code>works-on</code> (which relates <code>employee</code>, <code>branch</code>, and <code>job</code>) as a higher-level entity set named <code>works-on</code>.
+        Treat this higher-level entity set in the same way as any other entity set. Then create a binary relationship <code>manages</code> between <code>works-on</code> and <code>manager</code> to show who manages what tasks. Figure 2.19 shows this notation.
+      </p>
+
+      <figure>
+        <svg viewBox="0 0 600 320" style="max-width: 520px;" aria-label="Figure 2.19 E-R diagram with aggregation">
+          <defs>
+            <style>
+              .ent2 { fill: #d9dce3; stroke: #1e293b; stroke-width: 1.5; }
+              .rel2 { fill: #d9dce3; stroke: #1e293b; stroke-width: 1.5; }
+              .lbl2 { font-family: Georgia, serif; font-style: italic; font-size: 15px; fill: #0f172a; text-anchor: middle; dominant-baseline: central; }
+              .ln2  { stroke: #1e293b; stroke-width: 1.4; fill: none; }
+            </style>
+          </defs>
+          <!-- Outer Aggregation Box -->
+          <rect x="45" y="14" width="510" height="152" fill="none" stroke="#1e293b" stroke-width="1.5" />
+
+          <!-- Inner Entities & works-on -->
+          <rect class="ent2" x="260" y="28" width="80" height="32" />
+          <text class="lbl2" x="300" y="44">job</text>
+
+          <rect class="ent2" x="80" y="102" width="100" height="34" />
+          <text class="lbl2" x="130" y="119">employee</text>
+
+          <rect class="ent2" x="435" y="102" width="85" height="34" />
+          <text class="lbl2" x="477.5" y="119">branch</text>
+
+          <polygon class="rel2" points="300,90 365,119 300,148 235,119" />
+          <text class="lbl2" x="300" y="119">works-on</text>
+
+          <line class="ln2" x1="300" y1="60" x2="300" y2="90" />
+          <line class="ln2" x1="180" y1="119" x2="235" y2="119" />
+          <line class="ln2" x1="435" y1="119" x2="365" y2="119" />
+
+          <!-- manages & manager -->
+          <line class="ln2" x1="300" y1="166" x2="300" y2="192" />
+          <polygon class="rel2" points="300,192 365,220 300,248 235,220" />
+          <text class="lbl2" x="300" y="220">manages</text>
+
+          <line class="ln2" x1="300" y1="248" x2="300" y2="274" />
+          <rect class="ent2" x="248" y="274" width="104" height="34" />
+          <text class="lbl2" x="300" y="291">manager</text>
+        </svg>
+        <figcaption><strong>Figure 2.19</strong> E-R diagram with aggregation.</figcaption>
+      </figure>
+
+      <!-- SECTION 2.7.6 -->
+      <h2>2.7.6 Alternative E-R Notations</h2>
+
+      <p>
+        There is no universal standard for E-R diagram notation. Different textbooks and E-R diagram tools use different symbols.
+        Figure 2.20 summarizes the complete set of E-R symbols used in this chapter, and Figure 2.21 shows widely used alternative notations:
+      </p>
+      <ul>
+        <li>
+          <strong>Box-style entity sets:</strong> An entity set can be drawn as a rectangle with the entity name placed outside above the box, and the attributes listed vertically inside the box.
+          Primary key attributes appear at the top, separated from non-key attributes by a horizontal line.
+        </li>
+        <li>
+          <strong>Edge labels <code>*</code> and <code>1</code>:</strong> Cardinality constraints can use <code>*</code> (many) and <code>1</code> (one) on edges out of a relationship diamond to depict many-to-many ($M:N$), one-to-one ($1:1$), and many-to-one ($N:1$) relationships. (The one-to-many case is symmetric to many-to-one.)
+        </li>
+        <li>
+          <strong>Diamondless &ldquo;crow&rsquo;s foot&rdquo; notation:</strong> Relationship sets are drawn as lines between entity boxes without diamonds. This notation models <em>binary relationships only</em>. A forked &ldquo;crow&rsquo;s foot&rdquo; at an entity box indicates the &ldquo;many&rdquo; side.
+        </li>
+      </ul>
+
+      <figure class="wide-figure">
+        <svg viewBox="0 0 760 660" style="max-width: 680px;" aria-label="Figure 2.20 Symbols used in the E-R notation">
+          <defs>
+            <style>
+              .sh { fill: #d9dce3; stroke: #1e293b; stroke-width: 1.4; }
+              .tx { font-family: Georgia, serif; font-size: 15px; fill: #0f172a; text-anchor: middle; dominant-baseline: central; }
+              .desc { font-family: Georgia, serif; font-size: 14.5px; fill: #0f172a; text-anchor: start; }
+              .ln3 { stroke: #1e293b; stroke-width: 1.4; fill: none; }
+              .dash { fill: #d9dce3; stroke: #1e293b; stroke-width: 1.4; stroke-dasharray: 6 4; }
+            </style>
+            <marker id="arr-r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#1e293b" />
+            </marker>
+            <marker id="arr-l" viewBox="0 0 10 10" refX="1" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M 10 1 L 0 5 L 10 9 z" fill="#1e293b" />
+            </marker>
+          </defs>
+
+          <!-- LEFT COLUMN -->
+          <!-- 1. entity set -->
+          <rect class="sh" x="45" y="18" width="84" height="32" />
+          <text class="tx" x="87" y="34">E</text>
+          <text class="desc" x="175" y="39">entity set</text>
+
+          <!-- 2. weak entity set -->
+          <rect class="sh" x="45" y="70" width="84" height="32" />
+          <rect fill="none" stroke="#1e293b" stroke-width="1.1" x="49" y="74" width="76" height="24" />
+          <text class="tx" x="87" y="86">E</text>
+          <text class="desc" x="175" y="91">weak entity set</text>
+
+          <!-- 3. relationship set -->
+          <polygon class="sh" points="87,120 130,145 87,170 44,145" />
+          <text class="tx" x="87" y="145">R</text>
+          <text class="desc" x="175" y="150">relationship set</text>
+
+          <!-- 4. identifying relationship set -->
+          <polygon class="sh" points="87,184 134,212 87,240 40,212" />
+          <polygon fill="none" stroke="#1e293b" stroke-width="1.1" points="87,190 124,212 87,234 50,212" />
+          <text class="tx" x="87" y="212">R</text>
+          <text class="desc" x="175" y="200">identifying</text>
+          <text class="desc" x="175" y="218">relationship</text>
+          <text class="desc" x="175" y="236">set for weak</text>
+          <text class="desc" x="175" y="254">entity set</text>
+
+          <!-- 5. primary key -->
+          <ellipse class="sh" cx="87" cy="285" rx="46" ry="16" />
+          <text class="tx" x="87" y="285" text-decoration="underline">A</text>
+          <text class="desc" x="175" y="290">primary key</text>
+
+          <!-- 6. many-to-many -->
+          <line class="ln3" x1="25" y1="348" x2="150" y2="348" />
+          <polygon class="sh" points="87,323 125,348 87,373 49,348" />
+          <text class="tx" x="87" y="348">R</text>
+          <text class="desc" x="175" y="344">many-to-many</text>
+          <text class="desc" x="175" y="362">relationship</text>
+
+          <!-- 7. one-to-one -->
+          <line class="ln3" x1="25" y1="420" x2="150" y2="420" marker-start="url(#arr-l)" marker-end="url(#arr-r)" />
+          <polygon class="sh" points="87,395 125,420 87,445 49,420" />
+          <text class="tx" x="87" y="420">R</text>
+          <text class="desc" x="175" y="416">one-to-one</text>
+          <text class="desc" x="175" y="434">relationship</text>
+
+          <!-- 8. role indicator -->
+          <line class="ln3" x1="72" y1="496" x2="122" y2="496" />
+          <polygon class="sh" points="44,474 78,496 44,518 10,496" />
+          <text class="tx" x="44" y="496">R</text>
+          <rect class="sh" x="122" y="481" width="44" height="30" />
+          <text class="tx" x="144" y="496">E</text>
+          <text class="tx" x="98" y="472" style="font-size:13px;">role-</text>
+          <text class="tx" x="98" y="485" style="font-size:13px;">name</text>
+          <text class="desc" x="180" y="501">role indicator</text>
+
+          <!-- 9. total generalization -->
+          <line class="ln3" x1="94" y1="550" x2="94" y2="572" />
+          <line class="ln3" x1="100" y1="550" x2="100" y2="572" />
+          <polygon class="sh" points="70,572 124,572 97,610" />
+          <text class="tx" x="97" y="585" style="font-size:13px;">ISA</text>
+          <line class="ln3" x1="97" y1="610" x2="97" y2="635" />
+          <text class="desc" x="175" y="588">total</text>
+          <text class="desc" x="175" y="606">generalization</text>
+
+          <!-- RIGHT COLUMN -->
+          <!-- 10. attribute -->
+          <ellipse class="sh" cx="445" cy="34" rx="46" ry="16" />
+          <text class="tx" x="445" y="34">A</text>
+          <text class="desc" x="530" y="39">attribute</text>
+
+          <!-- 11. multivalued attribute -->
+          <ellipse class="sh" cx="445" cy="88" rx="48" ry="18" />
+          <ellipse fill="none" stroke="#1e293b" stroke-width="1.1" cx="445" cy="88" rx="42" ry="13" />
+          <text class="tx" x="445" y="88">A</text>
+          <text class="desc" x="530" y="84">multivalued</text>
+          <text class="desc" x="530" y="102">attribute</text>
+
+          <!-- 12. derived attribute -->
+          <ellipse class="dash" cx="445" cy="145" rx="46" ry="16" />
+          <text class="tx" x="445" y="145">A</text>
+          <text class="desc" x="530" y="150">derived attribute</text>
+
+          <!-- 13. total participation -->
+          <line class="ln3" x1="434" y1="210" x2="478" y2="210" />
+          <line class="ln3" x1="434" y1="216" x2="478" y2="216" />
+          <polygon class="sh" points="405,188 440,213 405,238 370,213" />
+          <text class="tx" x="405" y="213">R</text>
+          <rect class="sh" x="478" y="196" width="44" height="34" />
+          <text class="tx" x="500" y="213">E</text>
+          <text class="desc" x="535" y="192">total</text>
+          <text class="desc" x="535" y="210">participation</text>
+          <text class="desc" x="535" y="228">of entity set</text>
+          <text class="desc" x="535" y="246">in relationship</text>
+
+          <!-- 14. discriminating attribute -->
+          <ellipse class="sh" cx="445" cy="285" rx="46" ry="16" />
+          <text class="tx" x="445" y="284">A</text>
+          <line x1="430" y1="293" x2="460" y2="293" stroke="#1e293b" stroke-width="1.3" stroke-dasharray="4 3" />
+          <text class="desc" x="530" y="275">discriminating</text>
+          <text class="desc" x="530" y="293">attribute of</text>
+          <text class="desc" x="530" y="311">weak entity set</text>
+
+          <!-- 15. many-to-one -->
+          <line class="ln3" x1="382" y1="348" x2="508" y2="348" marker-end="url(#arr-r)" />
+          <polygon class="sh" points="445,323 483,348 445,373 407,348" />
+          <text class="tx" x="445" y="348">R</text>
+          <text class="desc" x="530" y="344">many-to-one</text>
+          <text class="desc" x="530" y="362">relationship</text>
+
+          <!-- 16. cardinality limits -->
+          <line class="ln3" x1="438" y1="420" x2="478" y2="420" />
+          <polygon class="sh" points="405,395 440,420 405,445 370,420" />
+          <text class="tx" x="405" y="420">R</text>
+          <rect class="sh" x="478" y="403" width="44" height="34" />
+          <text class="tx" x="500" y="420">E</text>
+          <text class="tx" x="458" y="404" style="font-size:14px;">l..h</text>
+          <text class="desc" x="535" y="416">cardinality</text>
+          <text class="desc" x="535" y="434">limits</text>
+
+          <!-- 17. ISA -->
+          <line class="ln3" x1="452" y1="472" x2="452" y2="494" />
+          <polygon class="sh" points="425,494 479,494 452,532" />
+          <text class="tx" x="452" y="507" style="font-size:13px;">ISA</text>
+          <line class="ln3" x1="452" y1="532" x2="452" y2="554" />
+          <text class="desc" x="530" y="492">ISA</text>
+          <text class="desc" x="530" y="510">(specialization or</text>
+          <text class="desc" x="530" y="528">generalization)</text>
+
+          <!-- 18. disjoint generalization -->
+          <line class="ln3" x1="452" y1="556" x2="452" y2="574" />
+          <polygon class="sh" points="425,574 479,574 452,612" />
+          <text class="tx" x="452" y="587" style="font-size:13px;">ISA</text>
+          <line class="ln3" x1="444" y1="601" x2="432" y2="634" />
+          <line class="ln3" x1="460" y1="601" x2="472" y2="634" />
+          <text class="tx" x="492" y="627" style="font-size:13px;">disjoint</text>
+          <text class="desc" x="535" y="588">disjoint</text>
+          <text class="desc" x="535" y="606">generalization</text>
+        </svg>
+        <figcaption><strong>Figure 2.20</strong> Symbols used in the E-R notation.</figcaption>
+      </figure>
+
+      <figure class="wide-figure">
+        <svg viewBox="0 0 680 390" style="max-width: 620px;" aria-label="Figure 2.21 Alternative E-R notations">
+          <defs>
+            <style>
+              .alt-sh { fill: #d9dce3; stroke: #1e293b; stroke-width: 1.4; }
+              .alt-tx { font-family: Georgia, serif; font-size: 14px; fill: #0f172a; text-anchor: middle; dominant-baseline: central; }
+              .alt-desc { font-family: Georgia, serif; font-size: 14.5px; fill: #0f172a; text-anchor: start; }
+              .alt-ln { stroke: #1e293b; stroke-width: 1.4; fill: none; }
+            </style>
+          </defs>
+
+          <!-- Top: Entity set box -->
+          <text class="alt-desc" x="25" y="42">entity set E with</text>
+          <text class="alt-desc" x="25" y="62">attributes A1, A2, A3</text>
+          <text class="alt-desc" x="25" y="82">and primary key A1</text>
+
+          <text class="alt-tx" x="340" y="18">E</text>
+          <rect x="315" y="28" width="50" height="72" fill="#ffffff" stroke="#1e293b" stroke-width="1.4" />
+          <line x1="315" y1="50" x2="365" y2="50" stroke="#1e293b" stroke-width="1.4" />
+          <text class="alt-tx" x="340" y="39">A1</text>
+          <text class="alt-tx" x="340" y="63">A2</text>
+          <text class="alt-tx" x="340" y="85">A3</text>
+
+          <!-- Row 1: many-to-many -->
+          <text class="alt-desc" x="25" y="155">many-to-many</text>
+          <text class="alt-desc" x="25" y="175">relationship</text>
+
+          <line class="alt-ln" x1="175" y1="160" x2="310" y2="160" />
+          <polygon class="alt-sh" points="242.5,132 276,160 242.5,188 209,160" />
+          <text class="alt-tx" x="242.5" y="160">R</text>
+          <text class="alt-tx" x="200" y="146" style="font-size:16px;">*</text>
+          <text class="alt-tx" x="285" y="146" style="font-size:16px;">*</text>
+
+          <!-- Crow's foot many-to-many -->
+          <rect class="alt-sh" x="375" y="147" width="46" height="26" />
+          <rect class="alt-sh" x="595" y="147" width="46" height="26" />
+          <line class="alt-ln" x1="421" y1="160" x2="595" y2="160" />
+          <!-- Left crow's foot -->
+          <line class="alt-ln" x1="439" y1="160" x2="421" y2="149" />
+          <line class="alt-ln" x1="439" y1="160" x2="421" y2="171" />
+          <!-- Right crow's foot -->
+          <line class="alt-ln" x1="577" y1="160" x2="595" y2="149" />
+          <line class="alt-ln" x1="577" y1="160" x2="595" y2="171" />
+          <text class="alt-tx" x="508" y="143">R</text>
+
+          <!-- Row 2: one-to-one -->
+          <text class="alt-desc" x="25" y="245">one-to-one</text>
+          <text class="alt-desc" x="25" y="265">relationship</text>
+
+          <line class="alt-ln" x1="175" y1="250" x2="310" y2="250" />
+          <polygon class="alt-sh" points="242.5,222 276,250 242.5,278 209,250" />
+          <text class="alt-tx" x="242.5" y="250">R</text>
+          <text class="alt-tx" x="200" y="236">1</text>
+          <text class="alt-tx" x="285" y="236">1</text>
+
+          <rect class="alt-sh" x="375" y="237" width="46" height="26" />
+          <rect class="alt-sh" x="595" y="237" width="46" height="26" />
+          <line class="alt-ln" x1="421" y1="250" x2="595" y2="250" />
+          <text class="alt-tx" x="508" y="233">R</text>
+
+          <!-- Row 3: many-to-one -->
+          <text class="alt-desc" x="25" y="335">many-to-one</text>
+          <text class="alt-desc" x="25" y="355">relationship</text>
+
+          <line class="alt-ln" x1="175" y1="340" x2="310" y2="340" />
+          <polygon class="alt-sh" points="242.5,312 276,340 242.5,368 209,340" />
+          <text class="alt-tx" x="242.5" y="340">R</text>
+          <text class="alt-tx" x="200" y="326" style="font-size:16px;">*</text>
+          <text class="alt-tx" x="285" y="326">1</text>
+
+          <rect class="alt-sh" x="375" y="327" width="46" height="26" />
+          <rect class="alt-sh" x="595" y="327" width="46" height="26" />
+          <line class="alt-ln" x1="421" y1="340" x2="595" y2="340" />
+          <!-- Left crow's foot only -->
+          <line class="alt-ln" x1="439" y1="340" x2="421" y2="329" />
+          <line class="alt-ln" x1="439" y1="340" x2="421" y2="351" />
+          <text class="alt-tx" x="508" y="323">R</text>
+        </svg>
+        <figcaption><strong>Figure 2.21</strong> Alternative E-R notations.</figcaption>
+      </figure>
+
+      <!-- SECTION 2.8 -->
+      <h2>2.8 Design of an E-R Database Schema</h2>
+
+      <p>
+        The E-R data model gives a database designer flexibility when modeling an enterprise. The designer must make six key structural decisions based on a thorough understanding of the enterprise:
+      </p>
+      <ol>
+        <li><strong>Attribute vs. Entity Set:</strong> Decide whether to use an attribute or an entity set to represent an object (Section 2.2.1).</li>
+        <li><strong>Entity Set vs. Relationship Set:</strong> Decide whether a real-world concept is expressed more accurately by an entity set or by a relationship set (Section 2.2.2).</li>
+        <li><strong>Ternary vs. Binary Pair:</strong> Decide whether to use a ternary relationship or a pair of binary relationships (Section 2.2.3).</li>
+        <li><strong>Strong vs. Weak Entity Set:</strong> Decide whether to use a strong or a weak entity set (Section 2.6). Because weak entities are existence dependent on a strong entity, a strong entity set and its dependent weak entity sets can be treated as a single &ldquo;object&rdquo; in the database.</li>
+        <li><strong>Generalization (<code>ISA</code> Hierarchy):</strong> Decide whether generalization is appropriate (Section 2.7.2). A hierarchy of <code>ISA</code> relationships improves modularity because common attributes of similar entity sets appear in one place.</li>
+        <li><strong>Aggregation:</strong> Decide whether aggregation is appropriate (Section 2.7.5). Aggregation groups part of an E-R diagram into a single entity set so it can be treated as one unit without concern for its internal structure.</li>
+      </ol>
+
+      <!-- SECTION 2.8.1 -->
+      <h3>2.8.1 Design Phases</h3>
+      <p>
+        A high-level data model provides a systematic conceptual framework to specify user data needs and database structure. Database design proceeds through four phases:
+      </p>
+      <ol>
+        <li>
+          <strong>Specification of User Requirements:</strong> Interact extensively with domain experts and prospective users to characterize all data needs. Output: a specification of user requirements.
+        </li>
+        <li>
+          <strong>Conceptual-Design Phase:</strong> Choose a data model (here, the E-R model) and translate user requirements into a <strong>conceptual schema</strong>. In the E-R model, the schema specifies all entity sets, relationship sets, attributes, and mapping constraints.
+          <ul>
+            <li>Review the schema to verify that all data requirements are satisfied with no conflicts, and remove redundant features. Focus on data and relationships, not physical storage details.</li>
+            <li>Include a <strong>specification of functional requirements</strong>: users describe the operations (transactions) performed on the data, such as modifying/updating data, searching/retrieving specific data, and deleting data. Review the schema against these functional requirements.</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Logical-Design Phase:</strong> Map the high-level conceptual schema onto the implementation data model of the target database system.
+        </li>
+        <li>
+          <strong>Physical-Design Phase:</strong> Specify the physical features of the database, including file organization and internal storage structures (covered in Chapter 11; full database design treatment in Chapter 7).
+        </li>
+      </ol>
+
+      <!-- SECTION 2.8.2 -->
+      <h2>2.8.2 Database Design for Banking Enterprise</h2>
+      <p>
+        This section applies the first two design phases to a realistic banking enterprise. (Only selected banking aspects are modeled to keep the example clear.)
+      </p>
+
+      <h3>2.8.2.1 Data Requirements</h3>
+      <p>Based on user interviews and enterprise analysis, the banking enterprise has these requirements:</p>
+      <ul>
+        <li><strong>Branches:</strong> The bank is organized into branches. Each branch is located in a specific city and is identified by a unique name. The bank monitors the assets of each branch.</li>
+        <li><strong>Customers:</strong> Customers are identified by <code>customer-id</code> values. The bank stores each customer&rsquo;s name, street, and city. Customers can hold accounts and take out loans. A customer can be associated with a particular banker (loan officer or personal banker).</li>
+        <li><strong>Employees:</strong> Employees are identified by <code>employee-id</code> values. The bank stores each employee&rsquo;s name, telephone number, the names of the employee&rsquo;s dependents, the <code>employee-id</code> of the employee&rsquo;s manager, and the employee&rsquo;s start date (used to calculate length of employment).</li>
+        <li><strong>Accounts:</strong> The bank offers two account types: <em>savings</em> and <em>checking</em>. Accounts can be held by more than one customer, and a customer can hold more than one account. Each account has a unique account number, a balance, and a record of the most recent date each customer accessed the account. Each savings account has an interest rate; each checking account records overdrafts.</li>
+        <li><strong>Loans:</strong> A loan originates at a particular branch and can be held by one or more customers. A unique loan number identifies each loan. The bank tracks the loan amount and loan payments. A payment number does not uniquely identify a payment across all bank loans, but it does identify a particular payment for a specific loan. Each payment records a date and an amount.</li>
+      </ul>
+
+      <div class="callout note">
+        <div class="callout-title">Scope Note on Deposits &amp; Withdrawals</div>
+        <p style="margin-bottom:0;">
+          A real bank also tracks deposits and withdrawals on savings and checking accounts just as it tracks loan payments. Because the modeling pattern is identical, deposits and withdrawals are omitted here to keep the example compact.
+        </p>
+      </div>
+
+      <h3>2.8.2.2 Entity Sets Designation</h3>
+      <p>From the requirements in Section 2.8.2.1, we designate the initial entity sets and attributes:</p>
+      <ul>
+        <li><code>branch</code>: <code>branch-name</code>, <code>branch-city</code>, <code>assets</code>.</li>
+        <li><code>customer</code>: <code>customer-id</code>, <code>customer-name</code>, <code>customer-street</code>, <code>customer-city</code> (and possibly <code>banker-name</code>).</li>
+        <li><code>employee</code>: <code>employee-id</code>, <code>employee-name</code>, <code>telephone-number</code>, <code>salary</code>, <code>manager</code>; plus multivalued attribute <code>dependent-name</code>, base attribute <code>start-date</code>, and derived attribute <code>employment-length</code>.</li>
+        <li>Account entity sets: <code>savings-account</code> and <code>checking-account</code>. Common attributes: <code>account-number</code> and <code>balance</code> (factored into superclass <code>account</code>). Additional specific attributes: <code>interest-rate</code> on <code>savings-account</code>; <code>overdraft-amount</code> on <code>checking-account</code>.</li>
+        <li><code>loan</code>: <code>loan-number</code>, <code>amount</code>, <code>originating-branch</code>.</li>
+        <li>Weak entity set <code>loan-payment</code> (labeled <code>payment</code> in Figure 2.22): <code>payment-number</code>, <code>payment-date</code>, <code>payment-amount</code>.</li>
+      </ul>
+
+      <h3>2.8.2.3 Relationship Sets Designation</h3>
+      <p>Next, we define relationship sets and mapping cardinalities, refining earlier attribute choices:</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Relationship Set</th>
+              <th>Participating Entity Sets</th>
+              <th>Cardinality &amp; Semantics</th>
+              <th>Refinement / Attributes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>borrower</code></td>
+              <td><code>customer</code>, <code>loan</code></td>
+              <td>Many-to-many ($M:N$)</td>
+              <td>Links customers to their loans.</td>
+            </tr>
+            <tr>
+              <td><code>loan-branch</code></td>
+              <td><code>loan</code>, <code>branch</code></td>
+              <td>Many-to-one ($N:1$ toward <code>branch</code>)</td>
+              <td>Replaces <code>originating-branch</code> attribute of <code>loan</code>.</td>
+            </tr>
+            <tr>
+              <td><code>loan-payment</code></td>
+              <td><code>loan</code>, <code>payment</code> (weak)</td>
+              <td>One-to-many ($1:N$ from <code>loan</code> to <code>payment</code>); total participation of <code>payment</code></td>
+              <td>Identifying relationship for weak entity set <code>payment</code>.</td>
+            </tr>
+            <tr>
+              <td><code>depositor</code></td>
+              <td><code>customer</code>, <code>account</code></td>
+              <td>Many-to-many ($M:N$)</td>
+              <td>Relationship attribute: <code>access-date</code>.</td>
+            </tr>
+            <tr>
+              <td><code>cust-banker</code></td>
+              <td><code>customer</code>, <code>employee</code></td>
+              <td>Many-to-one ($N:1$ toward <code>employee</code>)</td>
+              <td>Relationship attribute: <code>type</code>. Replaces <code>banker-name</code> on <code>customer</code>.</td>
+            </tr>
+            <tr>
+              <td><code>works-for</code></td>
+              <td><code>employee</code>, <code>employee</code></td>
+              <td>Many-to-one ($N:1$ toward <code>manager</code> role)</td>
+              <td>Role indicators: <code>manager</code> and <code>worker</code>. Replaces <code>manager</code> attribute on <code>employee</code>.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>2.8.2.4 E-R Diagram</h3>
+      <p>
+        Figure 2.22 presents the complete conceptual model of the banking enterprise, combining all entity sets, attributes, relationship sets, role indicators, weak entities, generalization (<code>ISA</code>), and mapping cardinalities.
+      </p>
+
+      <figure class="wide-figure">
+        <svg viewBox="0 0 840 740" style="max-width: 780px;" aria-label="Figure 2.22 E-R diagram for a banking enterprise">
+          <defs>
+            <style>
+              .b-ent { fill: #d9dce3; stroke: #1e293b; stroke-width: 1.4; }
+              .b-rel { fill: #d9dce3; stroke: #1e293b; stroke-width: 1.4; }
+              .b-att { fill: #d9dce3; stroke: #1e293b; stroke-width: 1.3; }
+              .b-att-dash { fill: #d9dce3; stroke: #1e293b; stroke-width: 1.3; stroke-dasharray: 5 3; }
+              .b-ln { stroke: #1e293b; stroke-width: 1.3; fill: none; }
+              .b-tx { font-family: Georgia, serif; font-style: italic; font-size: 13px; fill: #0f172a; text-anchor: middle; dominant-baseline: central; }
+              .b-tx-n { font-family: Georgia, serif; font-size: 13px; fill: #0f172a; text-anchor: middle; dominant-baseline: central; }
+            </style>
+            <marker id="b-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#1e293b" />
+            </marker>
+          </defs>
+
+          <!-- ===== BRANCH ===== -->
+          <line class="b-ln" x1="420" y1="82" x2="420" y2="42" />
+          <line class="b-ln" x1="400" y1="82" x2="340" y2="66" />
+          <line class="b-ln" x1="440" y1="82" x2="505" y2="66" />
+
+          <ellipse class="b-att" cx="420" cy="26" rx="46" ry="15" />
+          <text class="b-tx" x="420" y="26">branch-city</text>
+
+          <ellipse class="b-att" cx="322" cy="54" rx="52" ry="15" />
+          <text class="b-tx" x="322" y="54" text-decoration="underline">branch-name</text>
+
+          <ellipse class="b-att" cx="515" cy="54" rx="34" ry="15" />
+          <text class="b-tx" x="515" y="54">assets</text>
+
+          <rect class="b-ent" x="382" y="82" width="76" height="30" />
+          <text class="b-tx" x="420" y="97">branch</text>
+
+          <!-- ===== LOAN-BRANCH ===== -->
+          <line class="b-ln" x1="420" y1="150" x2="420" y2="112" marker-end="url(#b-arr)" />
+          <line class="b-ln" x1="420" y1="204" x2="495" y2="270" />
+          <polygon class="b-rel" points="420,150 456,177 420,204 384,177" />
+          <text class="b-tx" x="420" y="177" style="font-size:12px;">loan-branch</text>
+
+          <!-- ===== LOAN ===== -->
+          <line class="b-ln" x1="485" y1="270" x2="450" y2="238" />
+          <line class="b-ln" x1="510" y1="270" x2="542" y2="238" />
+
+          <ellipse class="b-att" cx="442" cy="224" rx="50" ry="15" />
+          <text class="b-tx" x="442" y="224" text-decoration="underline">loan-number</text>
+
+          <ellipse class="b-att" cx="545" cy="224" rx="36" ry="15" />
+          <text class="b-tx" x="545" y="224">amount</text>
+
+          <rect class="b-ent" x="466" y="270" width="66" height="30" />
+          <text class="b-tx" x="499" y="285">loan</text>
+
+          <!-- ===== BORROWER ===== -->
+          <line class="b-ln" x1="265" y1="285" x2="342" y2="285" />
+          <line class="b-ln" x1="418" y1="285" x2="466" y2="285" />
+          <polygon class="b-rel" points="380,260 418,285 380,310 342,285" />
+          <text class="b-tx" x="380" y="285">borrower</text>
+
+          <!-- ===== LOAN-PAYMENT & PAYMENT (WEAK ENTITY) ===== -->
+          <line class="b-ln" x1="582" y1="285" x2="532" y2="285" marker-end="url(#b-arr)" />
+          <!-- Double participation line -->
+          <line class="b-ln" x1="664" y1="282" x2="710" y2="282" />
+          <line class="b-ln" x1="664" y1="288" x2="710" y2="288" />
+
+          <polygon class="b-rel" points="623,254 667,285 623,316 579,285" />
+          <polygon fill="none" stroke="#1e293b" stroke-width="1.1" points="623,260 659,285 623,310 587,285" />
+          <text class="b-tx" x="623" y="278" style="font-size:12px;">loan-</text>
+          <text class="b-tx" x="623" y="292" style="font-size:12px;">payment</text>
+
+          <!-- payment attributes -->
+          <line class="b-ln" x1="735" y1="270" x2="670" y2="220" />
+          <line class="b-ln" x1="748" y1="270" x2="748" y2="178" />
+          <line class="b-ln" x1="762" y1="270" x2="778" y2="236" />
+
+          <ellipse class="b-att" cx="655" cy="206" rx="56" ry="15" />
+          <text class="b-tx" x="655" y="204" style="font-size:12px;">payment-number</text>
+          <line x1="608" y1="213" x2="702" y2="213" stroke="#1e293b" stroke-width="1.2" stroke-dasharray="4 3" />
+
+          <ellipse class="b-att" cx="745" cy="162" rx="48" ry="15" />
+          <text class="b-tx" x="745" y="162" style="font-size:12px;">payment-date</text>
+
+          <ellipse class="b-att" cx="775" cy="222" rx="56" ry="15" />
+          <text class="b-tx" x="775" y="222" style="font-size:12px;">payment-amount</text>
+
+          <rect class="b-ent" x="710" y="270" width="76" height="30" />
+          <rect fill="none" stroke="#1e293b" stroke-width="1.1" x="714" y="274" width="68" height="22" />
+          <text class="b-tx" x="748" y="285">payment</text>
+
+          <!-- ===== CUSTOMER ===== -->
+          <line class="b-ln" x1="195" y1="270" x2="105" y2="232" />
+          <line class="b-ln" x1="210" y1="270" x2="180" y2="188" />
+          <line class="b-ln" x1="230" y1="270" x2="272" y2="214" />
+          <line class="b-ln" x1="245" y1="270" x2="305" y2="245" />
+
+          <ellipse class="b-att" cx="92" cy="220" rx="46" ry="15" />
+          <text class="b-tx" x="92" y="220" text-decoration="underline">customer-id</text>
+
+          <ellipse class="b-att" cx="172" cy="172" rx="54" ry="15" />
+          <text class="b-tx" x="172" y="172">customer-name</text>
+
+          <ellipse class="b-att" cx="278" cy="198" rx="54" ry="15" />
+          <text class="b-tx" x="278" y="198">customer-street</text>
+
+          <ellipse class="b-att" cx="318" cy="236" rx="48" ry="15" />
+          <text class="b-tx" x="318" y="236">customer-city</text>
+
+          <rect class="b-ent" x="180" y="270" width="85" height="30" />
+          <text class="b-tx" x="222.5" y="285">customer</text>
+
+          <!-- ===== DEPOSITOR & ACCOUNT ===== -->
+          <line class="b-ln" x1="260" y1="300" x2="414" y2="390" />
+          <line class="b-ln" x1="472" y1="406" x2="585" y2="452" />
+          <line class="b-ln" x1="440" y1="373" x2="462" y2="348" />
+
+          <ellipse class="b-att" cx="472" cy="334" rx="44" ry="15" />
+          <text class="b-tx" x="472" y="334">access-date</text>
+
+          <polygon class="b-rel" points="440,373 480,398 440,423 400,398" />
+          <text class="b-tx" x="440" y="398">depositor</text>
+
+          <!-- account -->
+          <line class="b-ln" x1="605" y1="438" x2="570" y2="405" />
+          <line class="b-ln" x1="640" y1="438" x2="675" y2="405" />
+
+          <ellipse class="b-att" cx="562" cy="390" rx="56" ry="15" />
+          <text class="b-tx" x="562" y="390" text-decoration="underline">account-number</text>
+
+          <ellipse class="b-att" cx="680" cy="390" rx="36" ry="15" />
+          <text class="b-tx" x="680" y="390">balance</text>
+
+          <rect class="b-ent" x="585" y="438" width="76" height="30" />
+          <text class="b-tx" x="623" y="453">account</text>
+
+          <!-- ISA hierarchy -->
+          <line class="b-ln" x1="623" y1="468" x2="623" y2="508" />
+          <polygon class="b-ent" points="596,508 650,508 623,544" />
+          <text class="b-tx-n" x="623" y="520" style="font-size:12px;">ISA</text>
+
+          <line class="b-ln" x1="610" y1="534" x2="552" y2="592" />
+          <line class="b-ln" x1="636" y1="534" x2="698" y2="592" />
+
+          <rect class="b-ent" x="492" y="592" width="114" height="30" />
+          <text class="b-tx" x="549" y="607" style="font-size:12.5px;">savings-account</text>
+
+          <rect class="b-ent" x="642" y="592" width="118" height="30" />
+          <text class="b-tx" x="701" y="607" style="font-size:12.5px;">checking-account</text>
+
+          <line class="b-ln" x1="549" y1="622" x2="516" y2="665" />
+          <ellipse class="b-att" cx="510" cy="680" rx="48" ry="15" />
+          <text class="b-tx" x="510" y="680">interest-rate</text>
+
+          <line class="b-ln" x1="701" y1="622" x2="735" y2="665" />
+          <ellipse class="b-att" cx="742" cy="680" rx="60" ry="15" />
+          <text class="b-tx" x="742" y="680">overdraft-amount</text>
+
+          <!-- ===== CUST-BANKER & EMPLOYEE ===== -->
+          <line class="b-ln" x1="222.5" y1="300" x2="222.5" y2="372" />
+          <line class="b-ln" x1="222.5" y1="428" x2="222.5" y2="495" marker-end="url(#b-arr)" />
+          <line class="b-ln" x1="262" y1="400" x2="296" y2="400" />
+
+          <polygon class="b-rel" points="222.5,372 262,400 222.5,428 183,400" />
+          <text class="b-tx" x="222.5" y="400" style="font-size:12px;">cust-banker</text>
+
+          <ellipse class="b-att" cx="326" cy="400" rx="30" ry="15" />
+          <text class="b-tx" x="326" y="400">type</text>
+
+          <!-- Employee -->
+          <rect class="b-ent" x="180" y="495" width="85" height="30" />
+          <text class="b-tx" x="222.5" y="510">employee</text>
+
+          <!-- Employee attributes -->
+          <line class="b-ln" x1="192" y1="525" x2="108" y2="564" />
+          <line class="b-ln" x1="202" y1="525" x2="112" y2="612" />
+          <line class="b-ln" x1="212" y1="525" x2="122" y2="664" />
+          <line class="b-ln" x1="234" y1="525" x2="275" y2="564" />
+          <line class="b-ln" x1="244" y1="525" x2="282" y2="612" />
+          <line class="b-ln" x1="224" y1="525" x2="245" y2="664" />
+
+          <ellipse class="b-att" cx="92" cy="576" rx="48" ry="15" />
+          <text class="b-tx" x="92" y="576" text-decoration="underline">employee-id</text>
+
+          <ellipse class="b-att" cx="92" cy="624" rx="58" ry="17" />
+          <ellipse fill="none" stroke="#1e293b" stroke-width="1.1" cx="92" cy="624" rx="52" ry="13" />
+          <text class="b-tx" x="92" y="624" style="font-size:12px;">dependent-name</text>
+
+          <ellipse class="b-att-dash" cx="102" cy="680" rx="54" ry="18" />
+          <text class="b-tx" x="102" y="673" style="font-size:12px;">employment-</text>
+          <text class="b-tx" x="102" y="687" style="font-size:12px;">length</text>
+
+          <ellipse class="b-att" cx="288" cy="576" rx="56" ry="15" />
+          <text class="b-tx" x="288" y="576">employee-name</text>
+
+          <ellipse class="b-att" cx="294" cy="624" rx="60" ry="15" />
+          <text class="b-tx" x="294" y="624" style="font-size:12px;">telephone-number</text>
+
+          <ellipse class="b-att" cx="248" cy="680" rx="44" ry="15" />
+          <text class="b-tx" x="248" y="680">start-date</text>
+
+          <!-- ===== WORKS-FOR (RECURSIVE) ===== -->
+          <line class="b-ln" x1="358" y1="502" x2="265" y2="502" marker-end="url(#b-arr)" />
+          <line class="b-ln" x1="358" y1="518" x2="265" y2="518" />
+          <text class="b-tx" x="312" y="490" style="font-size:12px;">manager</text>
+          <text class="b-tx" x="312" y="531" style="font-size:12px;">worker</text>
+
+          <polygon class="b-rel" points="392,484 432,510 392,536 352,510" />
+          <text class="b-tx" x="392" y="510" style="font-size:12px;">works-for</text>
+        </svg>
+        <figcaption><strong>Figure 2.22</strong> E-R diagram for a banking enterprise.</figcaption>
+      </figure>
+
+      <!-- SECTION 2.9 -->
+      <h2>2.9 Reduction of an E-R Schema to Tables</h2>
+
+      <p>
+        We can represent a database that conforms to an E-R schema by a collection of relational tables.
+        For each entity set $E$ and each relationship set $R$ in the database, there is a unique table assigned the name of that entity set or relationship set.
+        Each table has multiple columns, and each column has a unique name:
+        $$T_E(A_1, A_2, \dots, A_n) \quad \text{and} \quad T_R(K_1, K_2, \dots, K_m, B_1, \dots, B_p).$$
+      </p>
+      <p>
+        Both the E-R model and the relational database model are abstract, logical representations of real-world enterprises.
+        Because the two models use similar design principles, we convert an E-R diagram into a table format to obtain a relational database design from an E-R schema.
+      </p>
+
+    </div>
+  </main>
+
+  <script>
+    function setColumns(n) {
+      document.documentElement.style.setProperty('--col-count', n);
+      document.getElementById('btn-1col').classList.toggle('active', n === 1);
+      document.getElementById('btn-2col').classList.toggle('active', n === 2);
+      if (window.MathJax && MathJax.typesetPromise) {
+        MathJax.typesetPromise();
+      }
+    }
+  </script>
+</body>
+</html>
+```

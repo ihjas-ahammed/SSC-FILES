@@ -1,0 +1,1311 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 6: Eigenvalues and Eigenvectors — ASD-STE100 Notes</title>
+
+  <!-- MathJax Configuration -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <style>
+    :root {
+      --navy: #16324f;
+      --blue: #1d4ed8;
+      --blue-soft: #eff6ff;
+      --blue-border: #93c5fd;
+      --slate: #334155;
+      --muted: #64748b;
+      --bg: #f8fafc;
+      --paper: #ffffff;
+      --border: #e2e8f0;
+      --amber: #b45309;
+      --amber-soft: #fffbeb;
+      --amber-border: #fcd34d;
+      --emerald: #047857;
+      --emerald-soft: #ecfdf5;
+      --emerald-border: #6ee7b7;
+      --rose: #be123c;
+      --rose-soft: #fff1f2;
+      --rose-border: #fda4af;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg);
+      color: #1e293b;
+      font-family: "Georgia", "Cambria", "Times New Roman", serif;
+      font-size: 16.5px;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    .book-wrapper {
+      max-width: 920px;
+      margin: 2rem auto;
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      box-shadow: 0 8px 30px rgba(15, 23, 42, 0.06);
+      overflow: hidden;
+    }
+
+    /* Chapter Banner */
+    .chapter-banner {
+      background: linear-gradient(135deg, var(--navy) 0%, #244c76 100%);
+      color: #ffffff;
+      padding: 2.5rem 2.75rem 2.25rem;
+      border-bottom: 4px solid #3b82f6;
+    }
+
+    .chapter-meta {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #bfdbfe;
+      margin-bottom: 0.75rem;
+    }
+
+    .ste-badge {
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .chapter-banner h1 {
+      margin: 0;
+      font-size: 2.25rem;
+      line-height: 1.2;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .content {
+      padding: 2.25rem 2.75rem 3rem;
+    }
+
+    /* Headings */
+    h2.section-title {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 1.55rem;
+      color: var(--navy);
+      border-bottom: 2px solid var(--navy);
+      padding-bottom: 0.4rem;
+      margin: 2.25rem 0 1.25rem;
+      break-after: avoid;
+    }
+
+    h2.section-title:first-child {
+      margin-top: 0;
+    }
+
+    h3.sub-title {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 1.18rem;
+      color: #1e40af;
+      margin: 1.85rem 0 0.75rem;
+      break-after: avoid;
+    }
+
+    p {
+      margin: 0.75rem 0;
+    }
+
+    /* Math Overflow Safety */
+    mjx-container {
+      max-width: 100% !important;
+      overflow-x: auto;
+      overflow-y: hidden;
+      vertical-align: middle;
+    }
+
+    mjx-container[display="true"] {
+      display: block !important;
+      margin: 1rem 0 !important;
+      padding: 0.25rem 0;
+    }
+
+    .math-block {
+      max-width: 100%;
+      overflow-x: auto;
+      margin: 0.85rem 0;
+    }
+
+    /* Callout Boxes */
+    .box {
+      border-radius: 8px;
+      padding: 1.05rem 1.25rem;
+      margin: 1.25rem 0;
+      border-left: 4px solid var(--blue);
+      background: var(--blue-soft);
+      break-inside: avoid;
+    }
+
+    .box-title {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-weight: 700;
+      font-size: 0.92rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.45rem;
+      color: var(--navy);
+    }
+
+    .box.key-eq {
+      border-left-color: var(--blue);
+      background: var(--blue-soft);
+    }
+
+    .box.good-news {
+      border-left-color: var(--emerald);
+      background: var(--emerald-soft);
+    }
+    .box.good-news .box-title { color: var(--emerald); }
+
+    .box.warning {
+      border-left-color: var(--amber);
+      background: var(--amber-soft);
+    }
+    .box.warning .box-title { color: var(--amber); }
+
+    .box.bad-news {
+      border-left-color: var(--rose);
+      background: var(--rose-soft);
+    }
+    .box.bad-news .box-title { color: var(--rose); }
+
+    /* Examples */
+    .example-card {
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--navy);
+      border-radius: 8px;
+      padding: 1.15rem 1.3rem;
+      margin: 1.4rem 0;
+      background: #ffffff;
+      break-inside: avoid;
+    }
+
+    .example-header {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-weight: 700;
+      color: var(--navy);
+      font-size: 1.02rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .eq-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin: 0.85rem 0;
+      overflow-x: auto;
+    }
+
+    .eq-row .eq-main {
+      flex: 1 1 auto;
+      text-align: center;
+      min-width: 0;
+    }
+
+    .eq-num {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 0.9rem;
+      color: var(--muted);
+      flex: 0 0 auto;
+    }
+
+    /* Figures & SVGs */
+    figure.diagram {
+      margin: 1.5rem 0;
+      padding: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #fcfdff;
+      text-align: center;
+      break-inside: avoid;
+    }
+
+    figure.diagram svg {
+      width: 100%;
+      max-width: 680px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+
+    figcaption {
+      margin-top: 0.65rem;
+      font-size: 0.92rem;
+      color: var(--slate);
+    }
+
+    figcaption strong {
+      color: var(--navy);
+    }
+
+    /* Lists */
+    ol.steps, ul.clean {
+      margin: 0.65rem 0 0.65rem 1.25rem;
+      padding-left: 0.5rem;
+    }
+
+    ol.steps li, ul.clean li {
+      margin-bottom: 0.45rem;
+    }
+
+    /* Matrices Grid */
+    .matrix-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      gap: 1rem;
+      margin: 1rem 0;
+      text-align: center;
+    }
+
+    .matrix-item {
+      padding: 0.5rem 0.75rem;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      min-width: 110px;
+    }
+
+    /* Review Box */
+    .review-box {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 1.25rem 1.4rem;
+      margin: 1.75rem 0;
+      break-inside: avoid;
+    }
+
+    .review-box h3 {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0 0 0.75rem;
+      text-align: center;
+      color: var(--navy);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-size: 1rem;
+    }
+
+    /* Problem Set */
+    .problem-item {
+      padding: 0.85rem 0;
+      border-bottom: 1px solid var(--border);
+      break-inside: avoid;
+    }
+
+    .problem-item:last-child {
+      border-bottom: none;
+    }
+
+    .prob-num {
+      display: inline-block;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-weight: 700;
+      font-size: 0.86rem;
+      color: #ffffff;
+      background: var(--navy);
+      min-width: 1.8rem;
+      text-align: center;
+      padding: 0.1rem 0.45rem;
+      border-radius: 4px;
+      margin-right: 0.5rem;
+    }
+
+    .blank {
+      display: inline-block;
+      min-width: 4.5rem;
+      border-bottom: 1.5px solid #475569;
+      margin: 0 0.25rem;
+    }
+
+    .subparts {
+      margin: 0.5rem 0 0.25rem 1.8rem;
+      padding: 0;
+      list-style: none;
+    }
+
+    .subparts li {
+      margin: 0.35rem 0;
+    }
+
+    .code-inline {
+      font-family: "JetBrains Mono", "Consolas", monospace;
+      font-size: 0.9em;
+      background: #f1f5f9;
+      padding: 0.1rem 0.35rem;
+      border-radius: 4px;
+      color: #0f172a;
+    }
+
+    /* Responsive & Print / Two-Column PDF Safety */
+    @media (max-width: 700px) {
+      .book-wrapper {
+        margin: 0;
+        border-radius: 0;
+        border: none;
+      }
+      .chapter-banner, .content {
+        padding: 1.4rem 1.15rem;
+      }
+      .chapter-banner h1 {
+        font-size: 1.7rem;
+      }
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+        font-size: 10.5pt;
+      }
+      .book-wrapper {
+        max-width: 100%;
+        margin: 0;
+        border: none;
+        box-shadow: none;
+      }
+      .chapter-banner {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .box, .example-card, .review-box, .matrix-item {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="book-wrapper">
+  <header class="chapter-banner">
+    <div class="chapter-meta">
+      <span>Linear Algebra &bull; Chapter 6</span>
+      <span class="ste-badge">ASD-STE100 Simplified Technical English</span>
+    </div>
+    <h1>Eigenvalues and Eigenvectors</h1>
+  </header>
+
+  <main class="content">
+
+    <!-- ==================== SECTION 6.1 ==================== -->
+    <h2 class="section-title">6.1 Introduction to Eigenvalues</h2>
+
+    <p>Linear equations $Ax = b$ come from steady-state problems. Eigenvalues are most important in <strong>dynamic problems</strong>. The solution of $du/dt = Au$ changes with time. It can grow, decay, or oscillate. We cannot find this solution by elimination. This chapter starts a new part of linear algebra based on $Ax = \lambda x$. All matrices in this chapter are square.</p>
+
+    <p>A good model uses the powers $A, A^2, A^3, \dots$ of a matrix. Suppose you need the hundredth power $A^{100}$. After a few steps, you cannot recognize the starting matrix $A$. The matrix $A^{100}$ is very close to $\begin{bmatrix} .6 & .6 \\ .4 & .4 \end{bmatrix}$:</p>
+
+    <div class="matrix-row">
+      <div class="matrix-item">
+        $$A = \begin{bmatrix} .8 & .3 \\ .2 & .7 \end{bmatrix}$$
+      </div>
+      <div class="matrix-item">
+        $$A^2 = \begin{bmatrix} .70 & .45 \\ .30 & .55 \end{bmatrix}$$
+      </div>
+      <div class="matrix-item">
+        $$A^3 = \begin{bmatrix} .650 & .525 \\ .350 & .475 \end{bmatrix}$$
+      </div>
+      <div class="matrix-item">
+        $$A^{100} \approx \begin{bmatrix} .6000 & .6000 \\ .4000 & .4000 \end{bmatrix}$$
+      </div>
+    </div>
+
+    <p>We found $A^{100}$ with the <em>eigenvalues</em> of $A$. We did not multiply $100$ matrices. These eigenvalues (here they are $1$ and $1/2$) show the core behavior of a matrix.</p>
+
+    <p>To explain eigenvalues, we first explain <strong>eigenvectors</strong>. Almost all vectors change direction when $A$ multiplies them. Certain special vectors $x$ stay in the <em>same direction</em> as $Ax$. Those vectors are the <strong>eigenvectors</strong>. Multiply an eigenvector by $A$, and the vector $Ax$ is a number $\lambda$ times the original $x$.</p>
+
+    <div class="box key-eq">
+      <div class="box-title">The Basic Equation</div>
+      <p>The basic equation is $Ax = \lambda x$. The number $\lambda$ is an <strong>eigenvalue</strong> of $A$.</p>
+    </div>
+
+    <p>The eigenvalue $\lambda$ tells if the special vector $x$ stretches, shrinks, reverses, or stays unchanged when $A$ multiplies it. We can find $\lambda = 2$, or $\frac{1}{2}$, or $-1$, or $1$. The eigenvalue $\lambda$ can also be zero! Then $Ax = 0x$ means that this eigenvector $x$ is in the nullspace.</p>
+
+    <p>If $A$ is the identity matrix $I$, every vector has $Ax = x$. All vectors are eigenvectors of $I$. All eigenvalues $\lambda$ ("lambda") are $\lambda = 1$. This is very unusual. Most $2 \times 2$ matrices have <em>two</em> eigenvector directions and <em>two</em> eigenvalues. We will show that $\det(A - \lambda I) = 0$.</p>
+
+    <p>This section explains how to compute the $x$'s and $\lambda$'s. It can come early in the course because we only need the determinant of a $2 \times 2$ matrix. First, we use $\det(A - \lambda I) = 0$ to find the eigenvalues in Example 1. Later, we derive this equation in equation (3).</p>
+
+    <!-- Example 1 -->
+    <div class="example-card">
+      <div class="example-header">Example 1</div>
+      <p>The matrix $A$ has two eigenvalues $\lambda = 1$ and $\lambda = 1/2$. Look at $\det(A - \lambda I)$:</p>
+      <div class="math-block">
+        $$A = \begin{bmatrix} .8 & .3 \\ .2 & .7 \end{bmatrix} \qquad \det\begin{bmatrix} .8 - \lambda & .3 \\ .2 & .7 - \lambda \end{bmatrix} = \lambda^2 - \frac{3}{2}\lambda + \frac{1}{2} = (\lambda - 1)\left(\lambda - \frac{1}{2}\right).$$
+      </div>
+      <p>Factor the quadratic into $(\lambda - 1)$ times $(\lambda - \frac{1}{2})$. This shows the two eigenvalues $\lambda = 1$ and $\lambda = \frac{1}{2}$. For those numbers, the matrix $A - \lambda I$ becomes singular (zero determinant). The eigenvectors $x_1$ and $x_2$ are in the nullspaces of $A - I$ and $A - \frac{1}{2}I$:</p>
+      <ul class="clean">
+        <li>$(A - I)x_1 = 0$ is $Ax_1 = x_1$. The first eigenvector is $(.6, .4)$.</li>
+        <li>$(A - \frac{1}{2}I)x_2 = 0$ is $Ax_2 = \frac{1}{2}x_2$. The second eigenvector is $(1, -1)$.</li>
+      </ul>
+      <div class="math-block">
+        $$x_1 = \begin{bmatrix} .6 \\ .4 \end{bmatrix} \quad \text{and} \quad Ax_1 = \begin{bmatrix} .8 & .3 \\ .2 & .7 \end{bmatrix}\begin{bmatrix} .6 \\ .4 \end{bmatrix} = x_1 \quad (Ax = x \text{ means } \lambda_1 = 1)$$
+        $$x_2 = \begin{bmatrix} 1 \\ -1 \end{bmatrix} \quad \text{and} \quad Ax_2 = \begin{bmatrix} .8 & .3 \\ .2 & .7 \end{bmatrix}\begin{bmatrix} 1 \\ -1 \end{bmatrix} = \begin{bmatrix} .5 \\ -.5 \end{bmatrix} \quad \left(\text{this is } \frac{1}{2}x_2, \text{ so } \lambda_2 = \frac{1}{2}\right).$$
+      </div>
+    </div>
+
+    <p>If $A$ multiplies $x_1$ again, we still get $x_1$. Every power of $A$ gives $A^n x_1 = x_1$. When $A$ multiplies $x_2$, it gives $\frac{1}{2}x_2$. If we multiply again, we get $(\frac{1}{2})^2 x_2$.</p>
+
+    <div class="box key-eq">
+      <div class="box-title">Powers of $A$</div>
+      <p><strong>When $A$ is squared, the eigenvectors stay the same. The eigenvalues are squared.</strong></p>
+    </div>
+
+    <p>This pattern continues because the eigenvectors stay in their own directions (Figure 6.1) and never mix. The eigenvectors of $A^{100}$ are the same $x_1$ and $x_2$. The eigenvalues of $A^{100}$ are $1^{100} = 1$ and $(\frac{1}{2})^{100}$ (a very small number).</p>
+
+    <!-- Figure 6.1 SVG -->
+    <figure class="diagram">
+      <svg viewBox="0 0 680 265" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Figure 6.1: Eigenvectors keep their directions under A and A squared">
+        <defs>
+          <marker id="arrow-navy" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1 L 10 5 L 0 9 z" fill="#16324f"/>
+          </marker>
+          <marker id="arrow-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1 L 10 5 L 0 9 z" fill="#2563eb"/>
+          </marker>
+        </defs>
+
+        <!-- Left Panel: A -->
+        <g transform="translate(30, 20)">
+          <!-- Origin -->
+          <circle cx="40" cy="110" r="3.5" fill="#16324f"/>
+          <!-- x1 direction: (.6, .4) -> scale by 150 -> (+90, -60) -->
+          <line x1="40" y1="110" x2="130" y2="50" stroke="#16324f" stroke-width="2" marker-end="url(#arrow-navy)"/>
+          <text x="48" y="38" font-family="Georgia, serif" font-size="14" fill="#16324f">λ = 1</text>
+          <text x="140" y="45" font-family="Georgia, serif" font-size="14" fill="#16324f">
+            <tspan font-style="italic">Ax</tspan><tspan dy="3" font-size="10">1</tspan><tspan dy="-3"> = </tspan><tspan font-style="italic">x</tspan><tspan dy="3" font-size="10">1</tspan><tspan dy="-3"> = [.6, .4]</tspan><tspan dy="-5" font-size="10">T</tspan>
+          </text>
+
+          <!-- x2 direction: (1, -1) -> full x2 at (40+120, 110+120) = (160, 230), Ax2 at (100, 170) -->
+          <line x1="40" y1="110" x2="160" y2="230" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrow-navy)"/>
+          <line x1="40" y1="110" x2="100" y2="170" stroke="#2563eb" stroke-width="2.2" marker-end="url(#arrow-blue)"/>
+          <text x="20" y="165" font-family="Georgia, serif" font-size="14" fill="#2563eb">λ = .5</text>
+          <text x="110" y="168" font-family="Georgia, serif" font-size="14" fill="#2563eb">
+            <tspan font-style="italic">Ax</tspan><tspan dy="3" font-size="10">2</tspan><tspan dy="-3"> = λ</tspan><tspan dy="3" font-size="10">2</tspan><tspan dy="-3" font-style="italic">x</tspan><tspan dy="3" font-size="10">2</tspan><tspan dy="-3"> = [.5, -.5]</tspan><tspan dy="-5" font-size="10">T</tspan>
+          </text>
+          <text x="170" y="232" font-family="Georgia, serif" font-size="14" fill="#16324f">
+            <tspan font-style="italic">x</tspan><tspan dy="3" font-size="10">2</tspan><tspan dy="-3"> = [1, -1]</tspan><tspan dy="-5" font-size="10">T</tspan>
+          </text>
+        </g>
+
+        <!-- Divider -->
+        <line x1="350" y1="20" x2="350" y2="245" stroke="#e2e8f0" stroke-width="1.5"/>
+
+        <!-- Right Panel: A^2 -->
+        <g transform="translate(380, 20)">
+          <circle cx="40" cy="110" r="3.5" fill="#16324f"/>
+          <!-- A^2 x1 -->
+          <line x1="40" y1="110" x2="130" y2="50" stroke="#16324f" stroke-width="2" marker-end="url(#arrow-navy)"/>
+          <text x="25" y="38" font-family="Georgia, serif" font-size="14" fill="#16324f">λ<tspan dy="-5" font-size="10">2</tspan><tspan dy="5"> = 1</tspan></text>
+          <text x="135" y="42" font-family="Georgia, serif" font-size="14" fill="#16324f">
+            <tspan font-style="italic">A</tspan><tspan dy="-5" font-size="10">2</tspan><tspan dy="5" font-style="italic">x</tspan><tspan dy="3" font-size="10">1</tspan><tspan dy="-3"> = (1)</tspan><tspan dy="-5" font-size="10">2</tspan><tspan dy="5" font-style="italic">x</tspan><tspan dy="3" font-size="10">1</tspan>
+          </text>
+
+          <!-- A^2 x2 = (.5)^2 x2 -->
+          <line x1="40" y1="110" x2="160" y2="230" stroke="#e2e8f0" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <line x1="40" y1="110" x2="70" y2="140" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arrow-blue)"/>
+          <text x="5" y="138" font-family="Georgia, serif" font-size="14" fill="#2563eb">λ<tspan dy="-5" font-size="10">2</tspan><tspan dy="5"> = .25</tspan></text>
+          <text x="82" y="150" font-family="Georgia, serif" font-size="14" fill="#2563eb">
+            <tspan font-style="italic">A</tspan><tspan dy="-5" font-size="10">2</tspan><tspan dy="5" font-style="italic">x</tspan><tspan dy="3" font-size="10">2</tspan><tspan dy="-3"> = (.5)</tspan><tspan dy="-5" font-size="10">2</tspan><tspan dy="5" font-style="italic">x</tspan><tspan dy="3" font-size="10">2</tspan><tspan dy="-3"> = [.25, -.25]</tspan><tspan dy="-5" font-size="10">T</tspan>
+          </text>
+
+          <!-- Summary labels -->
+          <text x="90" y="205" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#16324f">Ax = λx</text>
+          <text x="90" y="228" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#16324f">A<tspan dy="-5" font-size="10">2</tspan><tspan dy="5">x = λ</tspan><tspan dy="-5" font-size="10">2</tspan><tspan dy="5">x</tspan></text>
+        </g>
+      </svg>
+      <figcaption><strong>Figure 6.1:</strong> The eigenvectors keep their directions. $A^2$ has eigenvalues $1^2$ and $(.5)^2$.</figcaption>
+    </figure>
+
+    <p>Other vectors do change direction. But all other vectors are combinations of the two eigenvectors. The first column of $A$ is the combination $x_1 + (.2)x_2$:</p>
+
+    <div class="eq-row">
+      <div class="eq-main">
+        $$\textbf{Separate into eigenvectors} \qquad \begin{bmatrix} .8 \\ .2 \end{bmatrix} = x_1 + (.2)x_2 = \begin{bmatrix} .6 \\ .4 \end{bmatrix} + \begin{bmatrix} .2 \\ -.2 \end{bmatrix}.$$
+      </div>
+      <div class="eq-num">(1)</div>
+    </div>
+
+    <p>Multiply by $A$ to get $(.7, .3)$, which is the first column of $A^2$. Do this separately for $x_1$ and $(.2)x_2$. Of course $Ax_1 = x_1$. And $A$ multiplies $x_2$ by its eigenvalue $\frac{1}{2}$:</p>
+
+    <div class="math-block">
+      $$\textbf{Multiply each } x_i \textbf{ by } \lambda_i \qquad A\begin{bmatrix} .8 \\ .2 \end{bmatrix} = \begin{bmatrix} .7 \\ .3 \end{bmatrix} \quad \text{is} \quad x_1 + \frac{1}{2}(.2)x_2 = \begin{bmatrix} .6 \\ .4 \end{bmatrix} + \begin{bmatrix} .1 \\ -.1 \end{bmatrix}.$$
+    </div>
+
+    <p>Each eigenvector is multiplied by its eigenvalue when we multiply by $A$. We did not need these eigenvectors to find $A^2$. But eigenvectors are a good way to do $99$ multiplications. At every step, $x_1$ does not change, and $x_2$ is multiplied by $(\frac{1}{2})$. After $99$ steps, we have $(\frac{1}{2})^{99}$:</p>
+
+    <div class="math-block">
+      $$A^{99}\begin{bmatrix} .8 \\ .2 \end{bmatrix} \quad \text{is really} \quad x_1 + (.2)\left(\frac{1}{2}\right)^{99} x_2 = \begin{bmatrix} .6 \\ .4 \end{bmatrix} + \begin{bmatrix} \text{very} \\ \text{small} \\ \text{vector} \end{bmatrix}.$$
+    </div>
+
+    <p>This is the first column of $A^{100}$. The number we first wrote as $.6000$ was not exact. We left out $(.2)(\frac{1}{2})^{99}$, which does not show up for $30$ decimal places.</p>
+
+    <p>The eigenvector $x_1$ is a "steady state" that does not change (because $\lambda_1 = 1$). The eigenvector $x_2$ is a "decaying mode" that almost disappears (because $\lambda_2 = .5$). Higher powers of $A$ bring its columns closer to the steady state.</p>
+
+    <p>Note that this $A$ is a <strong>Markov matrix</strong>. Its entries are positive, and every column adds to $1$. These facts guarantee that the largest eigenvalue is $\lambda = 1$. Its eigenvector $x_1 = (.6, .4)$ is the <em>steady state</em>—all columns of $A^k$ approach this vector. Section 8.3 shows how Markov matrices work in applications like Google.</p>
+
+    <p>For projections, we can see the steady state ($\lambda = 1$) and the nullspace ($\lambda = 0$).</p>
+
+    <!-- Example 2 -->
+    <div class="example-card">
+      <div class="example-header">Example 2</div>
+      <p>The projection matrix $P = \begin{bmatrix} .5 & .5 \\ .5 & .5 \end{bmatrix}$ has eigenvalues $\lambda = 1$ and $\lambda = 0$.</p>
+      <p>Its eigenvectors are $x_1 = (1, 1)$ and $x_2 = (1, -1)$. For these vectors, $Px_1 = x_1$ (steady state) and $Px_2 = 0$ (nullspace). This example shows Markov matrices, singular matrices, and (most important) symmetric matrices. All three have special $\lambda$'s and $x$'s:</p>
+      <ol class="steps">
+        <li>Each column of $P = \begin{bmatrix} .5 & .5 \\ .5 & .5 \end{bmatrix}$ adds to $1$, so $\lambda = 1$ is an eigenvalue.</li>
+        <li>$P$ is <strong>singular</strong>, so $\lambda = 0$ is an eigenvalue.</li>
+        <li>$P$ is <strong>symmetric</strong>, so its eigenvectors $(1, 1)$ and $(1, -1)$ are perpendicular.</li>
+      </ol>
+    </div>
+
+    <p>The only eigenvalues of a projection matrix are $0$ and $1$. The eigenvectors for $\lambda = 0$ ($Px = 0x$) fill the nullspace. The eigenvectors for $\lambda = 1$ ($Px = x$) fill the column space. The projection sends the nullspace to zero. It projects the column space onto itself. It keeps the column space and removes the nullspace:</p>
+
+    <div class="math-block">
+      $$\textbf{Project each part} \qquad v = \begin{bmatrix} 1 \\ -1 \end{bmatrix} + \begin{bmatrix} 2 \\ 2 \end{bmatrix} \quad \textbf{projects onto} \quad Pv = \begin{bmatrix} 0 \\ 0 \end{bmatrix} + \begin{bmatrix} 2 \\ 2 \end{bmatrix}.$$
+    </div>
+
+    <p>Special properties of a matrix give special eigenvalues and eigenvectors. That is a main idea of this chapter (and it is shown in a table at the end of the chapter).</p>
+
+    <p>Projections have $\lambda = 0$ and $1$. Permutations have all $|\lambda| = 1$. The next matrix $R$ is both a reflection and a permutation.</p>
+
+    <!-- Example 3 -->
+    <div class="example-card">
+      <div class="example-header">Example 3</div>
+      <p>The reflection matrix $R = \begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix}$ has eigenvalues $1$ and $-1$.</p>
+      <p>$R$ leaves the eigenvector $(1, 1)$ unchanged. The second eigenvector is $(1, -1)$—$R$ reverses its signs. A matrix with no negative entries can still have a negative eigenvalue!</p>
+      <p>The eigenvectors for $R$ are the same as for $P$, because $\text{reflection} = 2(\text{projection}) - I$:</p>
+      <div class="eq-row">
+        <div class="eq-main">
+          $$R = 2P - I \qquad \begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix} = 2\begin{bmatrix} .5 & .5 \\ .5 & .5 \end{bmatrix} - \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}.$$
+        </div>
+        <div class="eq-num">(2)</div>
+      </div>
+    </div>
+
+    <p>Here is the main point. If $Px = \lambda x$, then $2Px = 2\lambda x$. Doubling the matrix doubles the eigenvalues. Now subtract $Ix = x$. The result is $(2P - I)x = (2\lambda - 1)x$. <strong>When you shift a matrix by $I$, each $\lambda$ shifts by $1$. The eigenvectors do not change.</strong></p>
+
+    <!-- Figure 6.2 SVG -->
+    <figure class="diagram">
+      <svg viewBox="0 0 680 235" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Figure 6.2: Projection onto blue line and Reflection across line">
+        <defs>
+          <marker id="arr-dark" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1 L 10 5 L 0 9 z" fill="#16324f"/>
+          </marker>
+          <marker id="arr-bl" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1 L 10 5 L 0 9 z" fill="#2563eb"/>
+          </marker>
+        </defs>
+
+        <!-- Left: Projection -->
+        <g transform="translate(40, 15)">
+          <!-- Blue line (45 deg) -->
+          <line x1="70" y1="165" x2="185" y2="50" stroke="#2563eb" stroke-width="2.5"/>
+          <circle cx="110" cy="125" r="3" fill="#16324f"/>
+          <!-- x1 vector along line -->
+          <line x1="110" y1="125" x2="165" y2="70" stroke="#16324f" stroke-width="2" marker-end="url(#arr-dark)"/>
+          <!-- x2 perpendicular -->
+          <line x1="110" y1="125" x2="55" y2="70" stroke="#16324f" stroke-width="2"/>
+          <circle cx="55" cy="70" r="3.5" fill="#16324f"/>
+
+          <text x="28" y="65" font-family="Georgia, serif" font-size="14" font-style="italic" fill="#16324f">x<tspan dy="3" font-size="10" font-style="normal">2</tspan></text>
+          <text x="172" y="63" font-family="Georgia, serif" font-size="14" fill="#16324f">
+            <tspan font-style="italic">Px</tspan><tspan dy="3" font-size="10">1</tspan><tspan dy="-3"> = </tspan><tspan font-style="italic">x</tspan><tspan dy="3" font-size="10">1</tspan>
+          </text>
+          <text x="122" y="132" font-family="Georgia, serif" font-size="14" fill="#16324f">
+            <tspan font-style="italic">Px</tspan><tspan dy="3" font-size="10">2</tspan><tspan dy="-3"> = 0</tspan><tspan font-style="italic">x</tspan><tspan dy="3" font-size="10">2</tspan>
+          </text>
+          <text x="130" y="198" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="13.5" fill="#334155">Projection onto blue line</text>
+        </g>
+
+        <!-- Divider -->
+        <line x1="340" y1="15" x2="340" y2="215" stroke="#e2e8f0" stroke-width="1.5"/>
+
+        <!-- Right: Reflection -->
+        <g transform="translate(380, 15)">
+          <!-- Blue line (45 deg) -->
+          <line x1="70" y1="165" x2="185" y2="50" stroke="#2563eb" stroke-width="2.5"/>
+          <circle cx="110" cy="125" r="3" fill="#16324f"/>
+          <!-- Rx1 = x1 -->
+          <line x1="110" y1="125" x2="165" y2="70" stroke="#16324f" stroke-width="2" marker-end="url(#arr-dark)"/>
+          <!-- x2 -->
+          <line x1="110" y1="125" x2="55" y2="70" stroke="#16324f" stroke-width="2"/>
+          <circle cx="55" cy="70" r="3.5" fill="#16324f"/>
+          <!-- Rx2 = -x2 (reflected) -->
+          <line x1="110" y1="125" x2="165" y2="180" stroke="#64748b" stroke-width="1.8" stroke-dasharray="4,4"/>
+          <circle cx="165" cy="180" r="3.5" fill="#2563eb"/>
+
+          <text x="28" y="65" font-family="Georgia, serif" font-size="14" font-style="italic" fill="#16324f">x<tspan dy="3" font-size="10" font-style="normal">2</tspan></text>
+          <text x="172" y="63" font-family="Georgia, serif" font-size="14" fill="#16324f">
+            <tspan font-style="italic">Rx</tspan><tspan dy="3" font-size="10">1</tspan><tspan dy="-3"> = </tspan><tspan font-style="italic">x</tspan><tspan dy="3" font-size="10">1</tspan>
+          </text>
+          <text x="175" y="185" font-family="Georgia, serif" font-size="14" fill="#2563eb">
+            <tspan font-style="italic">Rx</tspan><tspan dy="3" font-size="10">2</tspan><tspan dy="-3"> = -</tspan><tspan font-style="italic">x</tspan><tspan dy="3" font-size="10">2</tspan>
+          </text>
+          <text x="120" y="198" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="13.5" fill="#334155">Reflection across line</text>
+        </g>
+      </svg>
+      <figcaption><strong>Figure 6.2:</strong> Projections $P$ have eigenvalues $1$ and $0$. Reflections $R$ have $\lambda = 1$ and $-1$. A typical $x$ changes direction, but the eigenvectors $x_1$ and $x_2$ do not.</figcaption>
+    </figure>
+
+    <p><strong>Key idea:</strong> The eigenvalues of $R$ and $P$ have the same relation as the matrices:</p>
+    <ul class="clean">
+      <li>The eigenvalues of $R = 2P - I$ are $2(1) - 1 = 1$ and $2(0) - 1 = -1$.</li>
+      <li>The eigenvalues of $R^2$ are $\lambda^2$. Here $R^2 = I$. Check: $(1)^2 = 1$ and $(-1)^2 = 1$.</li>
+    </ul>
+
+    <h3 class="sub-title">The Equation for the Eigenvalues</h3>
+
+    <p>For projections and reflections, we found $\lambda$'s and $x$'s by geometry: $Px = x$, $Px = 0$, $Rx = -x$. Now we use determinants and linear algebra. This is the main calculation in the chapter—almost every application starts by solving $Ax = \lambda x$.</p>
+
+    <p>First, move $\lambda x$ to the left side. Write $Ax = \lambda x$ as $(A - \lambda I)x = 0$. The matrix $A - \lambda I$ times the eigenvector $x$ gives the zero vector. <strong>The eigenvectors form the nullspace of $A - \lambda I$.</strong> When we know an eigenvalue $\lambda$, we find an eigenvector by solving $(A - \lambda I)x = 0$.</p>
+
+    <p>Find the eigenvalues first. If $(A - \lambda I)x = 0$ has a nonzero solution, $A - \lambda I$ is not invertible. <strong>The determinant of $A - \lambda I$ must be zero.</strong> This tells us how to find an eigenvalue $\lambda$:</p>
+
+    <div class="box key-eq">
+      <div class="box-title">Eigenvalues and the Characteristic Equation</div>
+      <p><strong>Eigenvalues:</strong> The number $\lambda$ is an eigenvalue of $A$ if and only if $A - \lambda I$ is singular.</p>
+      <div class="eq-row">
+        <div class="eq-main">
+          $$\textbf{Equation for the eigenvalues} \qquad \det(A - \lambda I) = 0$$
+        </div>
+        <div class="eq-num">(3)</div>
+      </div>
+    </div>
+
+    <p>This "characteristic polynomial" $\det(A - \lambda I)$ contains only $\lambda$, not $x$. When $A$ is $n \times n$, equation (3) has degree $n$. Then $A$ has $n$ eigenvalues (repeats are possible!). Each $\lambda$ gives an $x$:</p>
+
+    <p><strong>For each eigenvalue $\lambda$, solve $(A - \lambda I)x = 0$ or $Ax = \lambda x$ to find an eigenvector $x$.</strong></p>
+
+    <!-- Example 4 -->
+    <div class="example-card">
+      <div class="example-header">Example 4</div>
+      <p>$A = \begin{bmatrix} 1 & 2 \\ 2 & 4 \end{bmatrix}$ is already singular (zero determinant). Find its $\lambda$'s and $x$'s.</p>
+
+      <p>When $A$ is singular, $\lambda = 0$ is one of the eigenvalues. The equation $Ax = 0x$ has solutions. These solutions are the eigenvectors for $\lambda = 0$. But $\det(A - \lambda I) = 0$ finds <em>all</em> $\lambda$'s and $x$'s. Always subtract $\lambda I$ from $A$:</p>
+
+      <div class="eq-row">
+        <div class="eq-main">
+          $$\textbf{Subtract } \lambda \textbf{ from the diagonal to find} \quad A - \lambda I = \begin{bmatrix} 1 - \lambda & 2 \\ 2 & 4 - \lambda \end{bmatrix}.$$
+        </div>
+        <div class="eq-num">(4)</div>
+      </div>
+
+      <p><strong>Take the determinant "$ad - bc$" of this $2 \times 2$ matrix.</strong> From $1 - \lambda$ times $4 - \lambda$, the "$ad$" part is $\lambda^2 - 5\lambda + 4$. The "$bc$" part (without $\lambda$) is $2$ times $2$:</p>
+
+      <div class="eq-row">
+        <div class="eq-main">
+          $$\det\begin{bmatrix} 1 - \lambda & 2 \\ 2 & 4 - \lambda \end{bmatrix} = (1 - \lambda)(4 - \lambda) - (2)(2) = \lambda^2 - 5\lambda.$$
+        </div>
+        <div class="eq-num">(5)</div>
+      </div>
+
+      <p><strong>Set this determinant $\lambda^2 - 5\lambda$ to zero.</strong> One solution is $\lambda = 0$ (as expected, because $A$ is singular). Factor it into $\lambda$ times $\lambda - 5$ to get the other root $\lambda = 5$:</p>
+
+      <div class="math-block">
+        $$\det(A - \lambda I) = \lambda^2 - 5\lambda = 0 \quad \text{gives the eigenvalues} \quad \lambda_1 = 0 \quad \text{and} \quad \lambda_2 = 5.$$
+      </div>
+
+      <p>Now find the eigenvectors. Solve $(A - \lambda I)x = 0$ separately for $\lambda_1 = 0$ and $\lambda_2 = 5$:</p>
+
+      <div class="math-block">
+        $$(A - 0I)x = \begin{bmatrix} 1 & 2 \\ 2 & 4 \end{bmatrix}\begin{bmatrix} y \\ z \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \end{bmatrix} \quad \text{gives an eigenvector} \quad \begin{bmatrix} y \\ z \end{bmatrix} = \begin{bmatrix} 2 \\ -1 \end{bmatrix} \quad \text{for } \lambda_1 = 0$$
+        $$(A - 5I)x = \begin{bmatrix} -4 & 2 \\ 2 & -1 \end{bmatrix}\begin{bmatrix} y \\ z \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \end{bmatrix} \quad \text{gives an eigenvector} \quad \begin{bmatrix} y \\ z \end{bmatrix} = \begin{bmatrix} 1 \\ 2 \end{bmatrix} \quad \text{for } \lambda_2 = 5.$$
+      </div>
+    </div>
+
+    <p>The matrices $A - 0I$ and $A - 5I$ are singular (because $0$ and $5$ are eigenvalues). The eigenvectors $(2, -1)$ and $(1, 2)$ are in the nullspaces: $(A - \lambda I)x = 0$ is $Ax = \lambda x$.</p>
+
+    <p>We must stress this point: <em>There is nothing unusual about $\lambda = 0$.</em> Like any other number, zero can be an eigenvalue or not. If $A$ is singular, zero is an eigenvalue, and its eigenvectors fill the nullspace: $Ax = 0x = 0$. If $A$ is invertible, zero is not an eigenvalue. We shift $A$ by a multiple of $I$ to make it singular. In Example 4, the shifted matrix $A - 5I$ is singular, so $5$ is the other eigenvalue.</p>
+
+    <!-- Summary Box -->
+    <div class="box key-eq">
+      <div class="box-title">Summary: How to Solve the Eigenvalue Problem for an $n \times n$ Matrix</div>
+      <ol class="steps">
+        <li><strong>Compute the determinant of $A - \lambda I$.</strong> Because $\lambda$ is subtracted along the diagonal, this determinant starts with $\lambda^n$ or $-\lambda^n$. It is a polynomial in $\lambda$ of degree $n$.</li>
+        <li><strong>Find the roots of this polynomial</strong> by solving $\det(A - \lambda I) = 0$. The $n$ roots are the $n$ eigenvalues of $A$. They make $A - \lambda I$ singular.</li>
+        <li><strong>For each eigenvalue $\lambda$, solve $(A - \lambda I)x = 0$</strong> to find an eigenvector $x$.</li>
+      </ol>
+    </div>
+
+    <p><em>Note on eigenvectors of $2 \times 2$ matrices:</em> When $A - \lambda I$ is singular, both rows are multiples of a vector $(a, b)$. The eigenvector is any multiple of $(b, -a)$. In Example 4, $\lambda = 0$ and $\lambda = 5$ gave:</p>
+    <ul class="clean">
+      <li>$\lambda = 0$: rows of $A - 0I$ in the direction $(1, 2)$; eigenvector in the direction $(2, -1)$.</li>
+      <li>$\lambda = 5$: rows of $A - 5I$ in the direction $(-4, 2)$; eigenvector in the direction $(2, 4)$.</li>
+    </ul>
+
+    <p>Earlier we wrote that last eigenvector as $(1, 2)$. Both $(1, 2)$ and $(2, 4)$ are correct. There is a whole <em>line of eigenvectors</em>—any nonzero multiple of $x$ is valid. MATLAB's <span class="code-inline">eig(A)</span> divides by the vector length to make the eigenvector a unit vector.</p>
+
+    <div class="box warning">
+      <div class="box-title">Warning: Missing Eigenvectors</div>
+      <p>Some $2 \times 2$ matrices have only <em>one</em> line of eigenvectors. This happens only when two eigenvalues are equal. (On the other hand, $A = I$ has equal eigenvalues and many eigenvectors.) Similarly, some $n \times n$ matrices do not have $n$ independent eigenvectors. Without $n$ eigenvectors, we do not have a basis. We cannot write every $v$ as a combination of eigenvectors. In the terms of Section 6.2, we cannot diagonalize a matrix without $n$ independent eigenvectors.</p>
+    </div>
+
+    <h3 class="sub-title">Good News, Bad News</h3>
+
+    <div class="box bad-news">
+      <div class="box-title">Bad News First</div>
+      <p>If you add a row of $A$ to another row, or exchange rows, the eigenvalues usually change. <em>Elimination does not keep the $\lambda$'s.</em> The triangular $U$ has its eigenvalues on its diagonal—they are the pivots. But they are not the eigenvalues of $A$! Eigenvalues change when row 1 is added to row 2:</p>
+      <div class="math-block">
+        $$U = \begin{bmatrix} 1 & 3 \\ 0 & 0 \end{bmatrix} \text{ has } \lambda = 0 \text{ and } \lambda = 1; \qquad A = \begin{bmatrix} 1 & 3 \\ 2 & 6 \end{bmatrix} \text{ has } \lambda = 0 \text{ and } \lambda = 7.$$
+      </div>
+    </div>
+
+    <div class="box good-news">
+      <div class="box-title">Good News Second</div>
+      <p>You can find the product $\lambda_1 \lambda_2$ and the sum $\lambda_1 + \lambda_2$ quickly from the matrix. For $A$ above, the product is $0 \cdot 7 = 0$. This equals the determinant (which is $0$). The sum of eigenvalues is $0 + 7 = 7$. This equals the sum down the main diagonal (the <strong>trace</strong> is $1 + 6$). These quick checks always work:</p>
+      <ul class="clean">
+        <li><strong>The product of the $n$ eigenvalues equals the determinant.</strong></li>
+        <li><strong>The sum of the $n$ eigenvalues equals the sum of the $n$ diagonal entries.</strong></li>
+      </ul>
+    </div>
+
+    <p>The sum of the entries on the main diagonal is called the <strong>trace</strong> of $A$:</p>
+
+    <div class="eq-row">
+      <div class="eq-main">
+        $$\lambda_1 + \lambda_2 + \cdots + \lambda_n = \textbf{trace} = a_{11} + a_{22} + \cdots + a_{nn}.$$
+      </div>
+      <div class="eq-num">(6)</div>
+    </div>
+
+    <p>These checks are very helpful. Problems 16–17 and Section 6.2 prove them. They do not remove the work of computing $\lambda$'s. But when a calculation is wrong, these checks usually show the error. To find the exact $\lambda$'s, use $\det(A - \lambda I) = 0$.</p>
+
+    <p>The determinant check makes the <em>product</em> of the $\lambda$'s equal to the <em>product</em> of the pivots (with no row exchanges). But the sum of the $\lambda$'s is <em>not</em> the sum of the pivots—as the example showed. The individual $\lambda$'s have almost no link to the pivots. In this part of linear algebra, the key equation is nonlinear: $\lambda$ multiplies $x$.</p>
+
+    <p><strong>Question to check:</strong> Why do the eigenvalues of a triangular matrix lie on its diagonal?</p>
+
+    <h3 class="sub-title">Imaginary Eigenvalues</h3>
+
+    <p>One more fact (and it is manageable): eigenvalues are not always real numbers.</p>
+
+    <!-- Example 5 -->
+    <div class="example-card">
+      <div class="example-header">Example 5</div>
+      <p>The $90^\circ$ rotation $Q = \begin{bmatrix} 0 & -1 \\ 1 & 0 \end{bmatrix}$ has no real eigenvectors. Its eigenvalues are $\lambda = i$ and $\lambda = -i$. Sum of $\lambda$'s $=$ trace $= 0$. Product $=$ determinant $= 1$.</p>
+    </div>
+
+    <p>After a rotation, no vector $Qx$ stays in the same direction as $x$ (except $x = 0$, which is not useful). There is no real eigenvector unless we use <strong>imaginary numbers</strong>—and we do.</p>
+
+    <p>To see how $i$ helps, look at $Q^2$, which is $-I$. If $Q$ rotates by $90^\circ$, then $Q^2$ rotates by $180^\circ$. Its eigenvalues are $-1$ and $-1$ (because $-Ix = -1x$). Squaring $Q$ squares each $\lambda$, so $\lambda^2 = -1$. The eigenvalues of the $90^\circ$ rotation matrix $Q$ are $+i$ and $-i$, because $i^2 = -1$.</p>
+
+    <p>These $\lambda$'s also come from $\det(Q - \lambda I) = 0$. This equation gives $\lambda^2 + 1 = 0$, with roots $i$ and $-i$. The imaginary number $i$ also appears in the eigenvectors:</p>
+
+    <div class="math-block">
+      $$\textbf{Complex eigenvectors} \qquad \begin{bmatrix} 0 & -1 \\ 1 & 0 \end{bmatrix}\begin{bmatrix} 1 \\ i \end{bmatrix} = -i\begin{bmatrix} 1 \\ i \end{bmatrix} \quad \text{and} \quad \begin{bmatrix} 0 & -1 \\ 1 & 0 \end{bmatrix}\begin{bmatrix} i \\ 1 \end{bmatrix} = i\begin{bmatrix} i \\ 1 \end{bmatrix}.$$
+    </div>
+
+    <p>These complex vectors $x_1 = (1, i)$ and $x_2 = (i, 1)$ keep their direction during rotation. This example shows an important fact: real matrices can easily have complex eigenvalues and eigenvectors. The eigenvalues $i$ and $-i$ also show two special properties of $Q$:</p>
+    <ol class="steps">
+      <li>$Q$ is an <strong>orthogonal matrix</strong>, so the absolute value of each $\lambda$ is $|\lambda| = 1$.</li>
+      <li>$Q$ is a <strong>skew-symmetric matrix</strong>, so each $\lambda$ is pure imaginary.</li>
+    </ol>
+
+    <p>A symmetric matrix ($A^T = A$) corresponds to a real number. A skew-symmetric matrix ($A^T = -A$) corresponds to an imaginary number. An orthogonal matrix ($A^T A = I$) corresponds to a complex number with $|\lambda| = 1$. Section 6.4 proves these rules as theorems.</p>
+
+    <p>The eigenvectors for all these special matrices are perpendicular. Even $(i, 1)$ and $(1, i)$ are perpendicular (Chapter 10 explains the dot product of complex vectors).</p>
+
+    <h3 class="sub-title">Eigshow in MATLAB</h3>
+
+    <p>MATLAB has a demo (type <span class="code-inline">eigshow</span>) that shows the eigenvalue problem for a $2 \times 2$ matrix. It starts with the unit vector $x = (1, 0)$. As you move the mouse, $x$ moves around the unit circle. At the same time, the screen shows $Ax$ moving in color. Sometimes $Ax$ is ahead of $x$. Sometimes $Ax$ is behind $x$. Sometimes $Ax$ is parallel to $x$. At that parallel moment, $Ax = \lambda x$ (at $x_1$ and $x_2$ in the second diagram of Figure 6.3).</p>
+
+    <!-- Figure 6.3 SVG (Eigshow) -->
+    <figure class="diagram">
+      <svg viewBox="0 0 680 275" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Eigshow in MATLAB: non-eigenvectors and eigenvectors lining up">
+        <defs>
+          <marker id="es-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1 L 10 5 L 0 9 z" fill="#16324f"/>
+          </marker>
+          <marker id="es-arr-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1 L 10 5 L 0 9 z" fill="#2563eb"/>
+          </marker>
+        </defs>
+
+        <!-- Left panel: Non-eigenvectors -->
+        <g transform="translate(30, 15)">
+          <!-- Axes/Origin at (45, 200), radius = 140 -->
+          <!-- Quarter circle arc from (185, 200) to (45, 60) -->
+          <path d="M 185 200 A 140 140 0 0 0 45 60" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,4"/>
+          <!-- x = (1, 0) -->
+          <line x1="45" y1="200" x2="185" y2="200" stroke="#16324f" stroke-width="2.2" marker-end="url(#es-arr)"/>
+          <!-- y = (0, 1) -->
+          <line x1="45" y1="200" x2="45" y2="60" stroke="#16324f" stroke-width="2.2" marker-end="url(#es-arr)"/>
+          <!-- Ax = (0.8, 0.2) -> (45 + 112, 200 - 28) = (157, 172) -->
+          <line x1="45" y1="200" x2="157" y2="172" stroke="#2563eb" stroke-width="2" marker-end="url(#es-arr-blue)"/>
+          <!-- Ay = (0.3, 0.7) -> (45 + 42, 200 - 98) = (87, 102) -->
+          <line x1="45" y1="200" x2="87" y2="102" stroke="#2563eb" stroke-width="2" marker-end="url(#es-arr-blue)"/>
+          <!-- Arc between Ax and Ay -->
+          <path d="M 157 172 Q 130 120 87 102" fill="none" stroke="#2563eb" stroke-width="1.4"/>
+
+          <!-- Labels -->
+          <text x="52" y="52" font-family="Georgia, serif" font-size="13.5" fill="#16324f"><tspan font-style="italic">y</tspan> = (0, 1)</text>
+          <text x="165" y="58" font-family="Georgia, serif" font-size="13.5" fill="#16324f"><tspan font-style="italic">A</tspan> = [0.8  0.3;  0.2  0.7]</text>
+          <text x="95" y="110" font-family="Georgia, serif" font-size="13.5" fill="#2563eb"><tspan font-style="italic">Ay</tspan> = (0.3, 0.7)</text>
+          <text x="163" y="176" font-family="Georgia, serif" font-size="13.5" fill="#2563eb"><tspan font-style="italic">Ax</tspan> = (0.8, 0.2)</text>
+          <text x="115" y="220" font-family="Georgia, serif" font-size="13.5" fill="#16324f"><tspan font-style="italic">x</tspan> = (1, 0)</text>
+          <text x="115" y="248" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="13.5" font-weight="600" fill="#334155">These are not eigenvectors</text>
+        </g>
+
+        <!-- Divider -->
+        <line x1="345" y1="15" x2="345" y2="260" stroke="#e2e8f0" stroke-width="1.5"/>
+
+        <!-- Right panel: Circle of x's and Ellipse of Ax's -->
+        <g transform="translate(505, 130)">
+          <!-- Unit circle of x's (radius 85) -->
+          <circle cx="0" cy="0" r="85" fill="none" stroke="#64748b" stroke-width="1.5" stroke-dasharray="5,4"/>
+          <!-- Ellipse of Ax's rotated ~34 deg: rx=85 (lambda1=1), ry=42.5 (lambda2=0.5) -->
+          <ellipse cx="0" cy="0" rx="85" ry="42.5" transform="rotate(-33.7)" fill="none" stroke="#2563eb" stroke-width="2"/>
+
+          <!-- x1 direction: angle -33.7 deg -> (70.7, -47.2) -->
+          <line x1="0" y1="0" x2="70.7" y2="-47.2" stroke="#16324f" stroke-width="2.2" marker-end="url(#es-arr)"/>
+          <!-- x2 direction: angle -33.7 - 90 = -123.7 (or +56.3, or upper-left (-47.2, -70.7)) -->
+          <line x1="0" y1="0" x2="-47.2" y2="-70.7" stroke="#16324f" stroke-width="1.8" marker-end="url(#es-arr)"/>
+          <!-- Ax2 = 0.5 x2 -> (-23.6, -35.3) -->
+          <line x1="0" y1="0" x2="-23.6" y2="-35.3" stroke="#2563eb" stroke-width="2.4" marker-end="url(#es-arr-blue)"/>
+
+          <!-- Labels -->
+          <text x="77" y="-48" font-family="Georgia, serif" font-size="13.5" fill="#16324f"><tspan font-style="italic">Ax</tspan><tspan dy="3" font-size="9">1</tspan><tspan dy="-3"> = </tspan><tspan font-style="italic">x</tspan><tspan dy="3" font-size="9">1</tspan></text>
+          <text x="-58" y="-76" font-family="Georgia, serif" font-size="13.5" fill="#16324f"><tspan font-style="italic">x</tspan><tspan dy="3" font-size="9">2</tspan></text>
+          <text x="-125" y="-32" font-family="Georgia, serif" font-size="13.5" fill="#2563eb"><tspan font-style="italic">Ax</tspan><tspan dy="3" font-size="9">2</tspan><tspan dy="-3"> = 0.5</tspan><tspan font-style="italic">x</tspan><tspan dy="3" font-size="9">2</tspan></text>
+          <text x="0" y="25" text-anchor="middle" font-family="Georgia, serif" font-size="12.5" fill="#2563eb">ellipse of <tspan font-style="italic">Ax</tspan>’s</text>
+          <text x="65" y="88" font-family="Georgia, serif" font-size="12.5" fill="#64748b">circle of <tspan font-style="italic">x</tspan>’s</text>
+          <text x="0" y="132" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="13.5" font-weight="600" fill="#334155">Ax lines up with x at eigenvectors</text>
+        </g>
+      </svg>
+      <figcaption><strong>Figure 6.3 (Eigshow):</strong> Left: typical vectors change direction. Right: at eigenvectors $x_1$ and $x_2$, $Ax$ lines up with $x$.</figcaption>
+    </figure>
+
+    <p>The eigenvalue $\lambda$ is the length (with sign) of $Ax$ when the unit eigenvector $x$ lines up. The built-in choices for $A$ show three possible cases: $0$, $1$, or $2$ directions where $Ax$ crosses $x$.</p>
+
+    <ol class="steps" start="0">
+      <li><strong>Zero real eigenvectors:</strong> $Ax$ stays behind or ahead of $x$. The eigenvalues and eigenvectors are complex, as for the rotation matrix $Q$.</li>
+      <li><strong>Only one line of eigenvectors (unusual):</strong> The moving directions $Ax$ and $x$ touch but do not cross. This happens for the last two $2 \times 2$ matrices below.</li>
+      <li><strong>Two independent eigenvector directions (typical):</strong> $Ax$ crosses $x$ at the first eigenvector $x_1$, and crosses back at the second eigenvector $x_2$. Then $Ax$ and $x$ cross again at $-x_1$ and $-x_2$.</li>
+    </ol>
+
+    <p>Follow $x$ and $Ax$ mentally for these five matrices. The number under each matrix gives the count of its real eigenvector directions:</p>
+
+    <div class="matrix-row">
+      <div class="matrix-item">$$\begin{bmatrix} 2 & 0 \\ 0 & 1 \end{bmatrix}$$<strong>2</strong></div>
+      <div class="matrix-item">$$\begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix}$$<strong>2</strong></div>
+      <div class="matrix-item">$$\begin{bmatrix} 0 & 1 \\ -1 & 0 \end{bmatrix}$$<strong>0</strong></div>
+      <div class="matrix-item">$$\begin{bmatrix} 1 & -1 \\ 1 & -1 \end{bmatrix}$$<strong>1</strong></div>
+      <div class="matrix-item">$$\begin{bmatrix} 1 & 1 \\ 0 & 1 \end{bmatrix}$$<strong>1</strong></div>
+    </div>
+
+    <p>When $A$ is singular (rank one), its column space is a line. The vector $Ax$ moves back and forth along that line while $x$ moves around the circle. One eigenvector $x$ lies along that line. Another eigenvector appears when $Ax_2 = 0$. Zero is an eigenvalue of a singular matrix.</p>
+
+    <!-- Review of Key Ideas -->
+    <div class="review-box">
+      <h3>Review of the Key Ideas</h3>
+      <ol class="steps">
+        <li>$Ax = \lambda x$ means eigenvectors $x$ keep the same direction when $A$ multiplies them.</li>
+        <li>$Ax = \lambda x$ also gives $\det(A - \lambda I) = 0$. This equation finds the $n$ eigenvalues.</li>
+        <li>The eigenvalues of $A^2$ and $A^{-1}$ are $\lambda^2$ and $\lambda^{-1}$, with the same eigenvectors.</li>
+        <li>The sum of the $\lambda$'s equals the sum down the main diagonal of $A$ (the <em>trace</em>). The product of the $\lambda$'s equals the determinant.</li>
+        <li>Projections $P$, reflections $R$, and $90^\circ$ rotations $Q$ have special eigenvalues $1, 0, -1, i, -i$. Singular matrices have $\lambda = 0$. Triangular matrices have their $\lambda$'s on the diagonal.</li>
+      </ol>
+    </div>
+
+    <!-- Worked Examples -->
+    <h3 class="sub-title">Worked Examples</h3>
+
+    <div class="example-card">
+      <div class="example-header">Worked Example 6.1 A</div>
+      <p>Find the eigenvalues and eigenvectors of $A$, $A^2$, $A^{-1}$, and $A + 4I$:</p>
+      <div class="math-block">
+        $$A = \begin{bmatrix} 2 & -1 \\ -1 & 2 \end{bmatrix} \qquad \text{and} \qquad A^2 = \begin{bmatrix} 5 & -4 \\ -4 & 5 \end{bmatrix}.$$
+      </div>
+      <p>Check the trace $\lambda_1 + \lambda_2$ and the determinant $\lambda_1 \lambda_2$ for both $A$ and $A^2$.</p>
+
+      <p><strong>Solution:</strong> The eigenvalues of $A$ come from $\det(A - \lambda I) = 0$:</p>
+      <div class="math-block">
+        $$\det(A - \lambda I) = \begin{vmatrix} 2 - \lambda & -1 \\ -1 & 2 - \lambda \end{vmatrix} = \lambda^2 - 4\lambda + 3 = 0.$$
+      </div>
+      <p>This factors into $(\lambda - 1)(\lambda - 3) = 0$, so the eigenvalues of $A$ are $\lambda_1 = 1$ and $\lambda_2 = 3$. Check the trace: $2 + 2 = 4$, which matches $1 + 3$. Check the determinant: $3$, which matches $\lambda_1 \lambda_2 = 1 \cdot 3 = 3$.</p>
+
+      <p>Find each eigenvector by solving $(A - \lambda I)x = 0$ (which is $Ax = \lambda x$):</p>
+      <div class="math-block">
+        $$\lambda = 1: \quad (A - I)x = \begin{bmatrix} 1 & -1 \\ -1 & 1 \end{bmatrix}\begin{bmatrix} x \\ y \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \end{bmatrix} \quad \text{gives the eigenvector } x_1 = \begin{bmatrix} 1 \\ 1 \end{bmatrix}$$
+        $$\lambda = 3: \quad (A - 3I)x = \begin{bmatrix} -1 & -1 \\ -1 & -1 \end{bmatrix}\begin{bmatrix} x \\ y \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \end{bmatrix} \quad \text{gives the eigenvector } x_2 = \begin{bmatrix} 1 \\ -1 \end{bmatrix}.$$
+      </div>
+      <p>$A^2$, $A^{-1}$, and $A + 4I$ keep the <em>same eigenvectors</em> as $A$. Their eigenvalues are $\lambda^2$, $\lambda^{-1}$, and $\lambda + 4$:</p>
+      <div class="math-block">
+        $$A^2 \text{ has eigenvalues } 1^2 = 1 \text{ and } 3^2 = 9 \qquad A^{-1} \text{ has } \frac{1}{1} \text{ and } \frac{1}{3} \qquad A + 4I \text{ has } \begin{matrix} 1 + 4 = 5 \\ 3 + 4 = 7 \end{matrix}$$
+      </div>
+      <p>The trace of $A^2$ is $5 + 5 = 10$, which matches $1 + 9$. The determinant is $25 - 16 = 9$, which matches $1 \cdot 9$.</p>
+      <p><em>Notes for later sections:</em> $A$ has orthogonal eigenvectors (Section 6.4 on symmetric matrices). $A$ can be diagonalized because $\lambda_1 \neq \lambda_2$ (Section 6.2). $A$ is similar to any $2 \times 2$ matrix with eigenvalues $1$ and $3$ (Section 6.6). $A$ is a positive definite matrix (Section 6.5) because $A = A^T$ and the $\lambda$'s are positive.</p>
+    </div>
+
+    <div class="example-card">
+      <div class="example-header">Worked Example 6.1 B</div>
+      <p>Find the eigenvalues and eigenvectors of this $3 \times 3$ matrix $A$:</p>
+      <div class="math-block">
+        $$\textbf{Symmetric, Singular, Trace } 1 + 2 + 1 = 4: \qquad A = \begin{bmatrix} 1 & -1 & 0 \\ -1 & 2 & -1 \\ 0 & -1 & 1 \end{bmatrix}.$$
+      </div>
+      <p><strong>Solution:</strong> All rows of $A$ add to zero, so the vector $x = (1, 1, 1)$ gives $Ax = 0$. This is an eigenvector for the eigenvalue $\lambda = 0$. To find $\lambda_2$ and $\lambda_3$, compute the $3 \times 3$ determinant:</p>
+      <div class="math-block">
+        $$\begin{aligned}
+        \det(A - \lambda I) &= \begin{vmatrix} 1 - \lambda & -1 & 0 \\ -1 & 2 - \lambda & -1 \\ 0 & -1 & 1 - \lambda \end{vmatrix} \\
+        &= (1 - \lambda)(2 - \lambda)(1 - \lambda) - 2(1 - \lambda) \\
+        &= (1 - \lambda)\big[(2 - \lambda)(1 - \lambda) - 2\big] \\
+        &= (1 - \lambda)(-\lambda)(3 - \lambda).
+        \end{aligned}$$
+      </div>
+      <p>The factor $-\lambda$ confirms that $\lambda = 0$ is a root and an eigenvalue of $A$. The other factors $(1 - \lambda)$ and $(3 - \lambda)$ give the other eigenvalues $1$ and $3$. Their sum is $0 + 1 + 3 = 4$ (the trace). Each eigenvalue $0, 1, 3$ corresponds to an eigenvector:</p>
+      <div class="math-block">
+        $$x_1 = \begin{bmatrix} 1 \\ 1 \\ 1 \end{bmatrix} \quad Ax_1 = 0x_1 \qquad\qquad x_2 = \begin{bmatrix} 1 \\ 0 \\ -1 \end{bmatrix} \quad Ax_2 = 1x_2 \qquad\qquad x_3 = \begin{bmatrix} 1 \\ -2 \\ 1 \end{bmatrix} \quad Ax_3 = 3x_3.$$
+      </div>
+      <p>Notice again that eigenvectors are perpendicular when $A$ is symmetric.</p>
+      <p>This $3 \times 3$ matrix gave a cubic (third-degree) polynomial $\det(A - \lambda I) = -\lambda^3 + 4\lambda^2 - 3\lambda$. Here we found simple roots $\lambda = 0, 1, 3$. Usually we use a software command like <span class="code-inline">eig(A)</span>, which does not use determinants (Section 9.3 shows a better method for large matrices).</p>
+      <p>The full command <span class="code-inline">[S, D] = eig(A)</span> puts unit eigenvectors in the columns of the eigenvector matrix $S$. The first column may have three minus signs: $-(1, 1, 1)/\sqrt{3}$. The eigenvalues of $A$ appear on the diagonal of the eigenvalue matrix (typed as $D$, soon called $\Lambda$).</p>
+    </div>
+
+    <!-- ==================== PROBLEM SET 6.1 ==================== -->
+    <h2 class="section-title">Problem Set 6.1</h2>
+
+    <div class="problem-item">
+      <span class="prob-num">1</span> The example at the start of the chapter has powers of this matrix $A$:
+      <div class="math-block">
+        $$A = \begin{bmatrix} .8 & .3 \\ .2 & .7 \end{bmatrix} \quad \text{and} \quad A^2 = \begin{bmatrix} .70 & .45 \\ .30 & .55 \end{bmatrix} \quad \text{and} \quad A^\infty = \begin{bmatrix} .6 & .6 \\ .4 & .4 \end{bmatrix}.$$
+      </div>
+      Find the eigenvalues of these matrices. All powers have the same eigenvectors.
+      <ul class="subparts">
+        <li>(a) Show from $A$ how a row exchange can give different eigenvalues.</li>
+        <li>(b) Why does elimination <em>not</em> change a zero eigenvalue?</li>
+      </ul>
+    </div>
+
+    <div class="problem-item">
+      <span class="prob-num">2</span> Find the eigenvalues and the eigenvectors of these two matrices:
+      <div class="math-block">
+        $$A = \begin{bmatrix} 1 & 4 \\ 2 & 3 \end{bmatrix} \qquad \text{and} \qquad A + I = \begin{bmatrix} 2 & 4 \\ 2 & 4 \end{bmatrix}.$$
+      </div>
+      $A + I$ has the <span class="blank"></span> eigenvectors as $A$. Its eigenvalues are <span class="blank"></span> by $1$.
+    </div>
+
+    <div class="problem-item">
+      <span class="prob-num">3</span> Compute the eigenvalues and eigenvectors of $A$ and $A^{-1}$. Check the trace!
+      <div class="math-block">
+        $$A = \begin{bmatrix} 0 & 2 \\ 1 & 1 \end{bmatrix} \qquad \text{and} \qquad A^{-1} = \begin{bmatrix} -1/2 & 1 \\ 1/2 & 0 \end{bmatrix}.$$
+      </div>
+      $A^{-1}$ has the <span class="blank"></span> eigenvectors as $A$. When $A$ has eigenvalues $\lambda_1$ and $\lambda_2$, its inverse has eigenvalues <span class="blank"></span>.
+    </div>
+
+    <div class="problem-item">
+      <span class="prob-num">4</span> Compute the eigenvalues and eigenvectors of $A$ and $A^2$:
+      <div class="math-block">
+        $$A = \begin{bmatrix} -1 & 3 \\ 2 & 0 \end{bmatrix} \qquad \text{and} \qquad A^2 = \begin{bmatrix} 7 & -3 \\ -2 & 6 \end{bmatrix}.$$
+      </div>
+      $A^2$ has the same <span class="blank"></span> as $A$. When $A$ has eigenvalues $\lambda_1$ and $\lambda_2$, $A^2$ has eigenvalues <span class="blank"></span>. In this example, why is $\lambda_1^2 + \lambda_2^2 = 13$?
+    </div>
+
+    <div class="problem-item">
+      <span class="prob-num">5</span> Find the eigenvalues of $A$ and $B$ (easy for triangular matrices) and $A + B$:
+      <div class="math-block">
+        $$A = \begin{bmatrix} 3 & 0 \\ 1 & 1 \end{bmatrix} \quad \text{and} \quad B = \begin{bmatrix} 1 & 1 \\ 0 & 3 \end{bmatrix} \quad \text{and} \quad A + B = \begin{bmatrix} 4 & 1 \\ 1 & 4 \end{bmatrix}.$$
+      </div>
+      Eigenvalues of $A + B$ (<em>are equal to</em> / <em>are not equal to</em>) eigenvalues of $A$ plus eigenvalues of $B$.
+    </div>
+
+    <div class="problem-item">
+      <span class="prob-num">6</span> Find the eigenvalues of $A$, $B$, $AB$, and $BA$:
+      <div class="math-block">
+        $$A = \begin{bmatrix} 1 & 0 \\ 1 & 1 \end{bmatrix}, \quad B = \begin{bmatrix} 1 & 2 \\ 0 & 1 \end{bmatrix}, \quad AB = \begin{bmatrix} 1 & 2 \\ 1 & 3 \end{bmatrix}, \quad BA = \begin{bmatrix} 3 & 2 \\ 1 & 1 \end{bmatrix}.$$
+      </div>
+      <ul class="subparts">
+        <li>(a) Do the eigenvalues of $AB$ equal the eigenvalues of $A$ times the eigenvalues of $B$?</li>
+        <li>(b) Do the eigenvalues of $AB$ equal the eigenvalues of $BA$?</li>
+      </ul>
+    </div>
+
+    <div class="problem-item">
+      <span class="prob-num">7</span> Elimination gives $A = LU$. The eigenvalues of $U$ are on its diagonal; they are the <span class="blank"></span>. The eigenvalues of $L$ are on its diagonal; they are all <span class="blank"></span>. The eigenvalues of $A$ are not the same as <span class="blank"></span>.
+    </div>
+
+    <div class="problem-item">
+      <span class="prob-num">8</span>
+      <ul class="subparts">
+        <li>(a) If you know that $x$ is an eigenvector, the way to find $\lambda$ is to <span class="blank"></span>.</li>
+        <li>(b) If you know that $\lambda$ is an eigenvalue, the way to find $x$ is to <span class="blank"></span>.</li>
+      </ul>
+    </div>
+
+    <div class="problem-item">
+      <span class="prob-num">9</span> What do you do to the equation $Ax = \lambda x$ to prove (a), (b), and (c)?
+      <ul class="subparts">
+        <li>(a) $\lambda^2$ is an eigenvalue of $A^2$, as in Problem 4.</li>
+        <li>(b) $\lambda^{-1}$ is an eigenvalue of $A^{-1}$, as in Problem 3.</li>
+        <li>(c) $\lambda + 1$ is an eigenvalue of $A + I$, as in Problem 2.</li>
+      </ul>
+    </div>
+
+    <div class="problem-item">
+      <span class="prob-num">10</span> Find the eigenvalues and eigenvectors for both of these Markov matrices $A$ and $A^\infty$. Use those answers to explain why $A^{100}$ is close to $A^\infty$:
+      <div class="math-block">
+        $$A = \begin{bmatrix} .6 & .2 \\ .4 & .8 \end{bmatrix} \qquad \text{and} \qquad A^\infty = \begin{bmatrix} 1/3 & 1/3 \\ 2/3 & 2/3 \end{bmatrix}.$$
+      </div>
+    </div>
+
+    <div class="problem-item">
+      <span class="prob-num">11</span> Here is an unusual fact about $2 \times 2$ matrices with eigenvalues $\lambda_1 \neq \lambda_2$: the columns of $A - \lambda_1 I$ are multiples of the eigenvector $x_2$. Explain why this is true.
+    </div>
+
+    <div class="problem-item">
+      <span class="prob-num">12</span> Find three eigenvectors for this projection matrix $P$ (projection matrices have $\lambda = 1$ and $0$):
+      <div class="math-block">
+        $$\textbf{Projection matrix} \qquad P = \begin{bmatrix} .2 & .4 & 0 \\ .4 & .8 & 0 \\ 0 & 0 & 1 \end{bmatrix}.$$
+      </div>
+      If two eigenvectors share the same $\lambda$, then all their linear combinations also do. Find an eigenvector of $P$ with no zero components.
+    </div>
+
+    <div class="problem-item">
+      <span class="prob-num">13</span> From the unit vector $u = \left(\frac{1}{6}, \frac{1}{6}, \frac{3}{6}, \frac{5}{6}\right)$, build the rank-one projection matrix $P = uu^T$. This matrix has $P^2 = P$ because $u^T u = 1$.
+      <ul class="subparts">
+        <li>(a) $Pu = u$ comes from $(uu^T)u = u(\,\underline{\hspace{2.5em}}\,)$. Then $u$ is an eigenvector with $\lambda = 1$.</li>
+        <li>(b) If $v$ is perpendicular to $u$, show that $Pv = 0$. Then $\lambda = 0$.</li>
+        <li>(c) Find three independent eigenvectors of $P$, all with eigenvalue $\lambda = 0$.</li>
+      </ul>
+    </div>
+
+    <div class="problem-item">
+      <span class="prob-num">14</span> Solve $\det(Q - \lambda I) = 0$ with the quadratic formula to get $\lambda = \cos\theta \pm i\sin\theta$:
+      <div class="math-block">
+        $$Q = \begin{bmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{bmatrix} \quad \text{rotates the } xy \text{ plane by the angle } \theta. \text{ No real } \lambda\text{'s.}$$
+      </div>
+      Find the eigenvectors of $Q$ by solving $(Q - \lambda I)x = 0$. Use $i^2 = -1$.
+    </div>
+
+    <div class="problem-item">
+      <span class="prob-num">15</span> Every permutation matrix leaves $x = (1, 1, \dots, 1)$ unchanged, so $\lambda = 1$. Find two more $\lambda$'s (possibly complex) for these permutations from $\det(P - \lambda I) = 0$:
+      <div class="math-block">
+        $$P = \begin{bmatrix} 0 & 1 & 0 \\ 0 & 0 & 1 \\ 1 & 0 & 0 \end{bmatrix} \qquad \text{and} \qquad P = \begin{bmatrix} 0 & 0 & 1 \\ 0 & 1 & 0 \\ 1 & 0 & 0 \end{bmatrix}.$$
+      </div>
+    </div>
+
+    <div class="problem-item">
+      <span class="prob-num">16</span> <strong>The determinant of $A$ equals the product $\lambda_1 \lambda_2 \cdots \lambda_n$.</strong> Start with the polynomial $\det(A - \lambda I)$ factored into $n$ terms (this is always possible). Then set $\lambda = 0$:
+      <div class="math-block">
+        $$\det(A - \lambda I) = (\lambda_1 - \lambda)(\lambda_2 - \lambda)\cdots(\lambda_n - \lambda) \quad \text{so} \quad \det A = \underline{\hspace{5em}}.$$
+      </div>
+      Check this rule in Example 1, where the Markov matrix has $\lambda = 1$ and $\frac{1}{2}$.
+    </div>
+
+    <div class="problem-item">
+      <span class="prob-num">17</span> <strong>The sum of the diagonal entries (the <em>trace</em>) equals the sum of the eigenvalues:</strong>
+      <div class="math-block">
+        $$A = \begin{bmatrix} a & b \\ c & d \end{bmatrix} \quad \text{has} \quad \det(A - \lambda I) = \lambda^2 - (a + d)\lambda + ad - bc = 0.$$
+      </div>
+      The quadratic formula gives the eigenvalues $\lambda = (a + d + \sqrt{\;\;})/2$ and $\lambda = \underline{\hspace{5em}}$. Their sum is <span class="blank"></span>. If $A$ has $\lambda_1 = 3$ and $\lambda_2 = 4$, then $\det(A - \lambda I) = \underline{\hspace{5em}}$.
+    </div>
+
+    <div class="problem-item">
+      <span class="prob-num">18</span> If $A$ has $\lambda_1 = 4$ and $\lambda_2 = 5$, then $\det(A - \lambda I) = (\lambda - 4)(\lambda - 5) = \lambda^2 - 9\lambda + 20$. Find three matrices that have trace $a + d = 9$, determinant $20$, and $\lambda = 4, 5$.
+    </div>
+
+    <div class="problem-item">
+      <span class="prob-num">19</span> A $3 \times 3$ matrix $B$ has eigenvalues $0, 1, 2$. This information is enough to find three of these (give the answers where possible):
+      <ul class="subparts">
+        <li>(a) the rank of $B$</li>
+        <li>(b) the determinant of $B^T B$</li>
+        <li>(c) the eigenvalues of $B^T B$</li>
+        <li>(d) the eigenvalues of $(B^2 + I)^{-1}$.</li>
+      </ul>
+    </div>
+
+    <div class="problem-item">
+      <span class="prob-num">20</span> Choose the last rows of $A$ and $C$ to give eigenvalues $4, 7$ and $1, 2, 3$:
+      <div class="math-block">
+        $$\textbf{Companion matrices} \qquad A = \begin{bmatrix} 0 & 1 \\ * & * \end{bmatrix} \qquad C = \begin{bmatrix} 0 & 1 & 0 \\ 0 & 0 & 1 \\ * & * & * \end{bmatrix}.$$
+      </div>
+    </div>
+
+    <div class="problem-item">
+      <span class="prob-num">21</span> <strong>The eigenvalues of $A$ equal the eigenvalues of $A^T$.</strong> This is because $\det(A - \lambda I)$ equals $\det(A^T - \lambda I)$. That is true because <span class="blank"></span>. Show with an example that the eigenvectors of $A$ and $A^T$ are not the same.
+    </div>
+
+    <div class="problem-item">
+      <span class="prob-num">22</span> Construct any $3 \times 3$ Markov matrix $M$: positive entries down each column add to $1$. Show that $M^T(1, 1, 1) = (1, 1, 1)$. By Problem 21, $\lambda = 1$ is also an eigenvalue of $M$. <em>Challenge:</em> A $3 \times 3$ singular Markov matrix with trace $\frac{1}{2}$ has what $\lambda$'s?
+    </div>
+
+    <div class="problem-item">
+      <span class="prob-num">23</span> Find three $2 \times 2$ matrices that have $\lambda_1 = \lambda_2 = 0$. The trace is zero and the determinant is zero. $A$ does not need to be the zero matrix, but check that $A^2 = 0$.
+    </div>
+
+    <div class="problem-item">
+      <span class="prob-num">24</span> This matrix is singular with rank one. Find three $\lambda$'s and three eigenvectors:
+      <div class="math-block">
+        $$A = \begin{bmatrix} 1 \\ 2 \\ 1 \end{bmatrix} \begin{bmatrix} 2 & 1 & 2 \end{bmatrix} = \begin{bmatrix} 2 & 1 & 2 \\ 4 & 2 & 4 \\ 2 & 1 & 2 \end{bmatrix}.$$
+      </div>
+    </div>
+
+    <div class="problem-item">
+      <span class="prob-num">25</span> Suppose $A$ and $B$ have the same eigenvalues $\lambda_1, \dots, \lambda_n$ with the same independent eigenvectors $x_1, \dots, x_n$. Then $A = B$. <em>Reason:</em> Any vector $x$ is a combination $c_1 x_1 + \cdots + c_n x_n$. What is $Ax$? What is $Bx$?
+    </div>
+
+    <div class="problem-item">
+      <span class="prob-num">26</span> Block $B$ has eigenvalues $1, 2$, block $C$ has eigenvalues $3, 4$, and block $D$ has eigenvalues $5, 7$. Find the eigenvalues of the $4 \times 4$ matrix $A$:
+      <div class="math-block">
+        $$A = \begin{bmatrix} B & C \\ 0 & D \end{bmatrix} = \begin{bmatrix} 0 & 1 & 3 & 0 \\ -2 & 3 & 0 & 4 \\ 0 & 0 & 6 & 1 \\ 0 & 0 & 1 & 6 \end{bmatrix}.$$
+      </div>
+    </div>
+
+    <div class="problem-item">
+      <span class="prob-num">27</span> Find the rank and the four eigenvalues of $A$ and $C$:
+      <div class="math-block">
+        $$A = \begin{bmatrix} 1 & 1 & 1 & 1 \\ 1 & 1 & 1 & 1 \\ 1 & 1 & 1 & 1 \\ 1 & 1 & 1 & 1 \end{bmatrix} \qquad \text{and} \qquad C = \begin{bmatrix} 1 & 0 & 1 & 0 \\ 0 & 1 & 0 & 1 \\ 1 & 0 & 1 & 0 \\ 0 & 1 & 0 & 1 \end{bmatrix}.$$
+      </div>
+    </div>
+
+    <div class="problem-item">
+      <span class="prob-num">28</span> Subtract $I$ from the previous $A$. Find the $\lambda$'s and then the determinants of
+      <div class="math-block">
+        $$B = A - I = \begin{bmatrix} 0 & 1 & 1 & 1 \\ 1 & 0 & 1 & 1 \\ 1 & 1 & 0 & 1 \\ 1 & 1 & 1 & 0 \end{bmatrix} \qquad \text{and} \qquad C = I - A = \begin{bmatrix} 0 & -1 & -1 & -1 \\ -1 & 0 & -1 & -1 \\ -1 & -1 & 0 & -1 \\ -1 & -1 & -1 & 0 \end{bmatrix}.$$
+      </div>
+    </div>
+
+    <div class="problem-item">
+      <span class="prob-num">29</span> (Review) Find the eigenvalues of $A$, $B$, and $C$:
+      <div class="math-block">
+        $$A = \begin{bmatrix} 1 & 2 & 3 \\ 0 & 4 & 5 \\ 0 & 0 & 6 \end{bmatrix}, \qquad B = \begin{bmatrix} 0 & 0 & 1 \\ 0 & 2 & 0 \\ 3 & 0 & 0 \end{bmatrix}, \qquad C = \begin{bmatrix} 2 & 2 & 2 \\ 2 & 2 & 2 \\ 2 & 2 & 2 \end{bmatrix}.$$
+      </div>
+    </div>
+
+    <div class="problem-item">
+      <span class="prob-num">30</span> When $a + b = c + d$, show that $(1, 1)$ is an eigenvector and find both eigenvalues:
+      <div class="math-block">
+        $$A = \begin{bmatrix} a & b \\ c & d \end{bmatrix}.$$
+      </div>
+    </div>
+
+    <div class="problem-item">
+      <span class="prob-num">31</span> If we exchange rows $1$ and $2$ and columns $1$ and $2$, the eigenvalues do not change. Find eigenvectors of $A$ and $B$ for $\lambda = 11$. Rank one gives $\lambda_2 = \lambda_3 = 0$.
+      <div class="math-block">
+        $$A = \begin{bmatrix} 1 & 2 & 1 \\ 3 & 6 & 3 \\ 4 & 8 & 4 \end{bmatrix} \qquad \text{and} \qquad B = PAP^T = \begin{bmatrix} 6 & 3 & 3 \\ 2 & 1 & 1 \\ 8 & 4 & 4 \end{bmatrix}.$$
+      </div>
+    </div>
+
+    <div class="problem-item">
+      <span class="prob-num">32</span> Suppose $A$ has eigenvalues $0, 3, 5$ with independent eigenvectors $u, v, w$.
+      <ul class="subparts">
+        <li>(a) Give a basis for the nullspace and a basis for the column space.</li>
+        <li>(b) Find a particular solution to $Ax = v + w$. Find all solutions.</li>
+        <li>(c) $Ax = u$ has no solution. If it did, then <span class="blank"></span> would be in the column space.</li>
+      </ul>
+    </div>
+
+    <div class="problem-item">
+      <span class="prob-num">33</span> Suppose $u, v$ are orthonormal vectors in $\mathbf{R}^2$, and $A = uv^T$. Compute $A^2 = uv^T uv^T$ to find the eigenvalues of $A$. Check that the trace of $A$ matches $\lambda_1 + \lambda_2$.
+    </div>
+
+    <div class="problem-item">
+      <span class="prob-num">34</span> Find the eigenvalues of this permutation matrix $P$ from $\det(P - \lambda I) = 0$. Which vectors stay unchanged by the permutation? Those vectors are eigenvectors for $\lambda = 1$. Can you find three more eigenvectors?
+      <div class="math-block">
+        $$P = \begin{bmatrix} 0 & 0 & 0 & 1 \\ 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 1 & 0 \end{bmatrix}.$$
+      </div>
+    </div>
+
+    <h3 class="sub-title">Challenge Problems</h3>
+
+    <div class="problem-item">
+      <span class="prob-num">35</span> There are six $3 \times 3$ permutation matrices $P$. What numbers can be the <em>determinants</em> of $P$? What numbers can be <em>pivots</em>? What numbers can be the <em>trace</em> of $P$? What four numbers can be <em>eigenvalues</em> of $P$, as in Problem 15?
+    </div>
+
+    <div class="problem-item">
+      <span class="prob-num">36</span> <em>Is there a real $2 \times 2$ matrix (other than $I$) with $A^3 = I$?</em> Its eigenvalues must satisfy $\lambda^3 = 1$. They can be $e^{2\pi i / 3}$ and $e^{-2\pi i / 3}$. What trace and determinant would this give? Build a rotation matrix as $A$ (what is the angle of rotation?).
+    </div>
+
+    <div class="problem-item">
+      <span class="prob-num">37</span>
+      <ul class="subparts">
+        <li>(a) Find the eigenvalues and eigenvectors of $A$. They depend on $c$:
+          <div class="math-block">
+            $$A = \begin{bmatrix} .4 & 1 - c \\ .6 & c \end{bmatrix}.$$
+          </div>
+        </li>
+        <li>(b) Show that $A$ has only one line of eigenvectors when $c = 1.6$.</li>
+        <li>(c) This is a Markov matrix when $c = .8$. Then $A^n$ approaches what matrix $A^\infty$?</li>
+      </ul>
+    </div>
+
+    <!-- ==================== SECTION 6.2 ==================== -->
+    <h2 class="section-title">6.2 Diagonalizing a Matrix</h2>
+
+    <p>When $x$ is an eigenvector, multiplication by $A$ is just multiplication by a number $\lambda$: $Ax = \lambda x$. All the difficulties of matrices disappear. Instead of a connected system, we can follow each eigenvector separately. It works like a <em>diagonal matrix</em>, with no off-diagonal links. The $100$th power of a diagonal matrix is easy to find.</p>
+
+    <p>The goal of this section is simple. <strong>The matrix $A$ turns into a diagonal matrix $\Lambda$ when we use the eigenvectors correctly.</strong> This is the matrix form of our main idea. We begin with that key calculation.</p>
+
+    <div class="box key-eq">
+      <div class="box-title">Diagonalization</div>
+      <p>Suppose the $n \times n$ matrix $A$ has $n$ linearly independent eigenvectors $x_1, \dots, x_n$. Put them into the columns of an <strong>eigenvector matrix $S$</strong>. Then $S^{-1} A S$ is the <strong>eigenvalue matrix $\Lambda$</strong>:</p>
+      <div class="eq-row">
+        <div class="eq-main">
+          $$\begin{matrix} \textbf{Eigenvector matrix } S \\ \textbf{Eigenvalue matrix } \Lambda \end{matrix} \qquad S^{-1} A S = \Lambda = \begin{bmatrix} \lambda_1 & & \\ & \ddots & \\ & & \lambda_n \end{bmatrix}.$$
+        </div>
+        <div class="eq-num">(1)</div>
+      </div>
+    </div>
+
+    <p>The matrix $A$ is "diagonalized." We use capital lambda ($\Lambda$) for the eigenvalue matrix because the small $\lambda$'s (the eigenvalues) sit on its diagonal.</p>
+
+    <p><strong>Proof:</strong> Multiply $A$ times its eigenvectors, which are the columns of $S$. The first column of $AS$ is $Ax_1$, which is $\lambda_1 x_1$. Each column of $S$ is multiplied by its eigenvalue $\lambda_i$:</p>
+
+    <div class="math-block">
+      $$\textbf{A times S} \qquad AS = A \begin{bmatrix} x_1 & \cdots & x_n \end{bmatrix} = \begin{bmatrix} \lambda_1 x_1 & \cdots & \lambda_n x_n \end{bmatrix}.$$
+    </div>
+
+    <p>Now split this matrix $AS$ into $S$ times $\Lambda$:</p>
+
+    <div class="math-block">
+      $$\textbf{S times } \Lambda \qquad \begin{bmatrix} \lambda_1 x_1 & \cdots & \lambda_n x_n \end{bmatrix} = \begin{bmatrix} x_1 & \cdots & x_n \end{bmatrix} \begin{bmatrix} \lambda_1 & & \\ & \ddots & \\ & & \lambda_n \end{bmatrix} = S\Lambda.$$
+    </div>
+
+    <p>Keep those matrices in the right order! Then $\lambda_1$ multiplies the first column $x_1$, as shown. Diagonalization is complete, and we can write $AS = S\Lambda$ in two useful forms:</p>
+
+    <div class="eq-row">
+      <div class="eq-main">
+        $$AS = S\Lambda \quad \text{is} \quad S^{-1}AS = \Lambda \quad \text{or} \quad A = S\Lambda S^{-1}.$$
+      </div>
+      <div class="eq-num">(2)</div>
+    </div>
+
+    <p>The matrix $S$ has an inverse because we assumed its columns (the eigenvectors of $A$) are linearly independent. <em>Without $n$ independent eigenvectors, we cannot diagonalize.</em></p>
+
+    <p>$A$ and $\Lambda$ have the same eigenvalues $\lambda_1, \dots, \lambda_n$. Their eigenvectors are different. The job of the original eigenvectors $x_1, \dots, x_n$ was to diagonalize $A$. Those eigenvectors in $S$ give $A = S\Lambda S^{-1}$. You will soon see how simple and useful the $n$th power $A^n = S\Lambda^n S^{-1}$ is.</p>
+
+  </main>
+</div>
+
+</body>
+</html>
+```

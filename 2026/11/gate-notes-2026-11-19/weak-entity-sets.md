@@ -1,0 +1,722 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 2: Entity-Relationship Model (Pages 46–49) — ASD-STE100 Notes</title>
+
+  <!-- MathJax Configuration -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    :root {
+      --bg-page: #f8fafc;
+      --bg-card: #ffffff;
+      --ink-main: #1e293b;
+      --ink-muted: #475569;
+      --accent-primary: #0f4c81;
+      --accent-secondary: #0284c7;
+      --border-soft: #cbd5e1;
+      --callout-def-bg: #eff6ff;
+      --callout-def-border: #2563eb;
+      --callout-ex-bg: #f0fdf4;
+      --callout-ex-border: #16a34a;
+      --callout-warn-bg: #fff7ed;
+      --callout-warn-border: #ea580c;
+      --callout-rule-bg: #f8fafc;
+      --callout-rule-border: #475569;
+      --code-bg: #f1f5f9;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-page);
+      color: var(--ink-main);
+      font-family: "Georgia", "Times New Roman", serif;
+      font-size: 16px;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    .book-wrapper {
+      max-width: 920px;
+      margin: 24px auto;
+      background: var(--bg-card);
+      border: 1px solid var(--border-soft);
+      border-radius: 8px;
+      box-shadow: 0 4px 18px rgba(15, 23, 42, 0.06);
+      padding: 36px 44px;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+    }
+
+    /* Textbook Header */
+    .chapter-header {
+      border-bottom: 3px solid var(--accent-primary);
+      padding-bottom: 16px;
+      margin-bottom: 28px;
+    }
+
+    .meta-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 8px;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 8px;
+    }
+
+    .ste-badge {
+      display: inline-block;
+      background: var(--accent-primary);
+      color: #ffffff;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.72rem;
+    }
+
+    h1 {
+      margin: 4px 0 0 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      font-size: 1.85rem;
+      color: var(--accent-primary);
+      line-height: 1.25;
+    }
+
+    h2 {
+      margin-top: 34px;
+      margin-bottom: 12px;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      font-size: 1.38rem;
+      color: var(--accent-primary);
+      border-bottom: 1.5px solid var(--border-soft);
+      padding-bottom: 5px;
+      break-after: avoid;
+    }
+
+    h3 {
+      margin-top: 24px;
+      margin-bottom: 10px;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      font-size: 1.12rem;
+      color: #0f172a;
+      break-after: avoid;
+    }
+
+    p {
+      margin: 0 0 12px 0;
+    }
+
+    ul, ol {
+      margin: 0 0 14px 0;
+      padding-left: 24px;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    .term {
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .entity, .attr, .rel {
+      font-family: "Courier New", Courier, monospace;
+      font-style: italic;
+      font-weight: 600;
+      background: var(--code-bg);
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 0.94em;
+      overflow-wrap: break-word;
+    }
+
+    /* Callout Boxes */
+    .callout {
+      margin: 16px 0;
+      padding: 14px 18px;
+      border-left: 4px solid;
+      border-radius: 0 6px 6px 0;
+      break-inside: avoid;
+      max-width: 100%;
+    }
+
+    .callout-title {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 6px;
+    }
+
+    .callout-def {
+      background: var(--callout-def-bg);
+      border-color: var(--callout-def-border);
+    }
+    .callout-def .callout-title { color: #1d4ed8; }
+
+    .callout-ex {
+      background: var(--callout-ex-bg);
+      border-color: var(--callout-ex-border);
+    }
+    .callout-ex .callout-title { color: #15803d; }
+
+    .callout-warn {
+      background: var(--callout-warn-bg);
+      border-color: var(--callout-warn-border);
+    }
+    .callout-warn .callout-title { color: #c2410c; }
+
+    .callout-rule {
+      background: var(--callout-rule-bg);
+      border-color: var(--callout-rule-border);
+    }
+    .callout-rule .callout-title { color: #334155; }
+
+    /* Figures & SVGs */
+    figure {
+      margin: 22px 0;
+      padding: 14px;
+      background: #ffffff;
+      border: 1px solid var(--border-soft);
+      border-radius: 6px;
+      text-align: center;
+      break-inside: avoid;
+      max-width: 100%;
+    }
+
+    figure svg {
+      width: 100%;
+      height: auto;
+      max-width: 740px;
+      display: block;
+      margin: 0 auto;
+    }
+
+    figcaption {
+      margin-top: 10px;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      font-size: 0.9rem;
+      color: var(--ink-muted);
+    }
+
+    figcaption strong {
+      color: var(--ink-main);
+    }
+
+    /* Tables */
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      margin: 16px 0;
+      break-inside: avoid;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.94rem;
+    }
+
+    th, td {
+      border: 1px solid var(--border-soft);
+      padding: 9px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f1f5f9;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      font-weight: 700;
+      color: var(--accent-primary);
+    }
+
+    /* MathJax overflow safety */
+    mjx-container {
+      max-width: 100% !important;
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+
+    /* Responsive & Print adjustments */
+    @media (max-width: 680px) {
+      .book-wrapper {
+        margin: 0;
+        border: none;
+        border-radius: 0;
+        padding: 20px 18px;
+      }
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+        font-size: 10.5pt;
+        line-height: 1.45;
+      }
+      .book-wrapper {
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+        border: none;
+        box-shadow: none;
+      }
+      .callout, figure, .table-wrap {
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="book-wrapper">
+
+    <!-- HEADER -->
+    <header class="chapter-header">
+      <div class="meta-bar">
+        <span>Silberschatz &ndash; Korth &ndash; Sudarshan &bull; Database System Concepts (4th Ed.)</span>
+        <span class="ste-badge">ASD-STE100 Notes &bull; Pages 46&ndash;49</span>
+      </div>
+      <h1>Chapter 2: Entity-Relationship Model</h1>
+    </header>
+
+    <!-- SECTION: PARTICIPATION & CARDINALITY CONSTRAINTS -->
+    <section id="sec-constraints">
+      <h2>Mapping &amp; Participation Constraints (Continued)</h2>
+
+      <h3>1. Candidate Keys in $n$-ary Relationship Sets</h3>
+      <div class="callout callout-rule">
+        <div class="callout-title">Rule 2 &mdash; Association Limit and Candidate Keys</div>
+        <p>For each entity set $A_k$, where $i &lt; k \le n$, each combination of entities from the other entity sets can associate with at most one entity from $A_k$.</p>
+        <p>Each set $\{A_1, A_2, \dots, A_{k-1}, A_{k+1}, \dots, A_n\}$, for $i &lt; k \le n$, then forms a <span class="term">candidate key</span>.</p>
+      </div>
+
+      <ul>
+        <li>Different books and systems use different interpretations (Interpretation 1 and Interpretation 2).</li>
+        <li>To prevent confusion, this book permits only one arrow out of a relationship set. When only one arrow points out, both interpretations are equivalent.</li>
+        <li>Chapter 7 (Section 7.3) explains <span class="term">functional dependencies</span>. Functional dependencies specify either interpretation clearly and without ambiguity.</li>
+      </ul>
+
+      <h3>2. Total Participation</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">Definition &mdash; Total Participation</div>
+        <p>An E-R diagram uses <span class="term">double lines</span> to show that the participation of an entity set in a relationship set is <span class="term">total</span>. Total participation means that each entity in the entity set occurs in at least one relationship in that relationship set.</p>
+      </div>
+
+      <div class="callout callout-ex">
+        <div class="callout-title">Example &mdash; Customer and Loan (Figure 2.14)</div>
+        <p>Consider the relationship <span class="rel">borrower</span> between <span class="entity">customer</span> and <span class="entity">loan</span>.</p>
+        <p>A double line from <span class="entity">loan</span> to <span class="rel">borrower</span> shows that each loan must have at least one associated customer.</p>
+        <p>A single line from <span class="entity">customer</span> to <span class="rel">borrower</span> shows that a customer does not need to have a loan.</p>
+      </div>
+
+      <figure>
+        <svg viewBox="0 0 760 225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Figure 2.14 Total participation of an entity set in a relationship set">
+          <style>
+            .er-shape { fill: #e2e8f0; stroke: #1e293b; stroke-width: 1.8; }
+            .er-line { stroke: #1e293b; stroke-width: 1.6; fill: none; }
+            .er-text { font-family: "Times New Roman", serif; font-style: italic; font-size: 16px; fill: #0f172a; text-anchor: middle; dominant-baseline: central; }
+            .er-pk { text-decoration: underline; }
+          </style>
+          <!-- Lines from attributes to customer -->
+          <line class="er-line" x1="120" y1="45" x2="235" y2="140" />
+          <line class="er-line" x1="305" y1="38" x2="270" y2="140" />
+          <line class="er-line" x1="90" y1="108" x2="210" y2="155" />
+          <line class="er-line" x1="322" y1="92" x2="290" y2="140" />
+
+          <!-- Lines between entities and relationship -->
+          <line class="er-line" x1="320" y1="160" x2="375" y2="160" />
+          <!-- Double line from borrower to loan -->
+          <line class="er-line" x1="495" y1="156" x2="565" y2="156" />
+          <line class="er-line" x1="495" y1="164" x2="565" y2="164" />
+
+          <!-- Lines from attributes to loan -->
+          <line class="er-line" x1="540" y1="68" x2="592" y2="140" />
+          <line class="er-line" x1="690" y1="90" x2="635" y2="140" />
+
+          <!-- Customer Attributes -->
+          <ellipse class="er-shape" cx="120" cy="45" rx="82" ry="20" />
+          <text class="er-text" x="120" y="45">customer-name</text>
+
+          <ellipse class="er-shape" cx="305" cy="38" rx="82" ry="20" />
+          <text class="er-text" x="305" y="38">customer-street</text>
+
+          <ellipse class="er-shape" cx="90" cy="108" rx="75" ry="20" />
+          <text class="er-text er-pk" x="90" y="108">customer-id</text>
+
+          <ellipse class="er-shape" cx="322" cy="92" rx="76" ry="20" />
+          <text class="er-text" x="322" y="92">customer-city</text>
+
+          <!-- Loan Attributes -->
+          <ellipse class="er-shape" cx="540" cy="68" rx="78" ry="20" />
+          <text class="er-text er-pk" x="540" y="68">loan-number</text>
+
+          <ellipse class="er-shape" cx="690" cy="90" rx="58" ry="20" />
+          <text class="er-text" x="690" y="90">amount</text>
+
+          <!-- Entity: customer -->
+          <rect class="er-shape" x="210" y="140" width="110" height="40" />
+          <text class="er-text" x="265" y="160">customer</text>
+
+          <!-- Relationship: borrower -->
+          <polygon class="er-shape" points="435,126 495,160 435,194 375,160" />
+          <text class="er-text" x="435" y="160">borrower</text>
+
+          <!-- Entity: loan -->
+          <rect class="er-shape" x="565" y="140" width="90" height="40" />
+          <text class="er-text" x="610" y="160">loan</text>
+        </svg>
+        <figcaption><strong>Figure 2.14</strong> Total participation of an entity set in a relationship set.</figcaption>
+      </figure>
+
+      <h3>3. Cardinality Limits ($l..h$ Notation)</h3>
+      <p>E-R diagrams can show exact limits on how many times each entity participates in relationships in a relationship set. An edge between an entity set and a binary relationship set can have a minimum and maximum cardinality written as $l..h$:</p>
+      <ul>
+        <li>$l$ is the <span class="term">minimum cardinality</span>.</li>
+        <li>$h$ is the <span class="term">maximum cardinality</span>.</li>
+      </ul>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Cardinality Value</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Minimum value $= 1$</td>
+              <td>Total participation of the entity set in the relationship set.</td>
+            </tr>
+            <tr>
+              <td>Maximum value $= 1$</td>
+              <td>Each entity participates in at most one relationship.</td>
+            </tr>
+            <tr>
+              <td>Maximum value $= *$</td>
+              <td>No upper limit on participation.</td>
+            </tr>
+            <tr>
+              <td>Label $1..*$ on an edge</td>
+              <td>Equivalent to a double line (total participation, no upper limit).</td>
+            </tr>
+            <tr>
+              <td>Both edges have maximum $= 1$</td>
+              <td>The binary relationship is <span class="term">one to one</span> ($1:1$).</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout callout-ex">
+        <div class="callout-title">Example &mdash; Cardinality Limits in Figure 2.15</div>
+        <ul>
+          <li>The edge between <span class="entity">loan</span> and <span class="rel">borrower</span> has constraint $1..1$. Both minimum and maximum cardinality are $1$. Each loan must have exactly one associated customer.</li>
+          <li>The edge between <span class="entity">customer</span> and <span class="rel">borrower</span> has constraint $0..*$. Each customer can have zero or more loans.</li>
+          <li>Therefore, <span class="rel">borrower</span> is <span class="term">one to many</span> from <span class="entity">customer</span> to <span class="entity">loan</span>, and participation of <span class="entity">loan</span> in <span class="rel">borrower</span> is total.</li>
+          <li>If the edge between <span class="entity">customer</span> and <span class="rel">borrower</span> had label $1..*$, each customer would be required to have at least one loan.</li>
+        </ul>
+      </div>
+
+      <div class="callout callout-warn">
+        <div class="callout-title">Warning &mdash; Avoid Reverse Interpretation</div>
+        <p>Do not misread $0..*$ on the edge between <span class="entity">customer</span> and <span class="rel">borrower</span> as a many-to-one relationship from <span class="entity">customer</span> to <span class="entity">loan</span>. That interpretation is the exact reverse of the correct meaning.</p>
+      </div>
+
+      <figure>
+        <svg viewBox="0 0 760 225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Figure 2.15 Cardinality limits on relationship sets">
+          <style>
+            .er-shape { fill: #e2e8f0; stroke: #1e293b; stroke-width: 1.8; }
+            .er-line { stroke: #1e293b; stroke-width: 1.6; fill: none; }
+            .er-text { font-family: "Times New Roman", serif; font-style: italic; font-size: 16px; fill: #0f172a; text-anchor: middle; dominant-baseline: central; }
+            .er-card { font-family: system-ui, -apple-system, sans-serif; font-size: 15px; font-weight: 600; fill: #0f172a; text-anchor: middle; }
+            .er-pk { text-decoration: underline; }
+          </style>
+          <!-- Lines from attributes to customer -->
+          <line class="er-line" x1="120" y1="45" x2="235" y2="140" />
+          <line class="er-line" x1="305" y1="38" x2="270" y2="140" />
+          <line class="er-line" x1="90" y1="108" x2="210" y2="155" />
+          <line class="er-line" x1="322" y1="92" x2="290" y2="140" />
+
+          <!-- Lines between entities and relationship -->
+          <line class="er-line" x1="320" y1="160" x2="375" y2="160" />
+          <line class="er-line" x1="495" y1="160" x2="565" y2="160" />
+
+          <!-- Cardinality Labels -->
+          <text class="er-card" x="348" y="148">0..*</text>
+          <text class="er-card" x="530" y="148">1..1</text>
+
+          <!-- Lines from attributes to loan -->
+          <line class="er-line" x1="540" y1="68" x2="592" y2="140" />
+          <line class="er-line" x1="690" y1="90" x2="635" y2="140" />
+
+          <!-- Customer Attributes -->
+          <ellipse class="er-shape" cx="120" cy="45" rx="82" ry="20" />
+          <text class="er-text" x="120" y="45">customer-name</text>
+
+          <ellipse class="er-shape" cx="305" cy="38" rx="82" ry="20" />
+          <text class="er-text" x="305" y="38">customer-street</text>
+
+          <ellipse class="er-shape" cx="90" cy="108" rx="75" ry="20" />
+          <text class="er-text er-pk" x="90" y="108">customer-id</text>
+
+          <ellipse class="er-shape" cx="322" cy="92" rx="76" ry="20" />
+          <text class="er-text" x="322" y="92">customer-city</text>
+
+          <!-- Loan Attributes -->
+          <ellipse class="er-shape" cx="540" cy="68" rx="78" ry="20" />
+          <text class="er-text er-pk" x="540" y="68">loan-number</text>
+
+          <ellipse class="er-shape" cx="690" cy="90" rx="58" ry="20" />
+          <text class="er-text" x="690" y="90">amount</text>
+
+          <!-- Entity: customer -->
+          <rect class="er-shape" x="210" y="140" width="110" height="40" />
+          <text class="er-text" x="265" y="160">customer</text>
+
+          <!-- Relationship: borrower -->
+          <polygon class="er-shape" points="435,126 495,160 435,194 375,160" />
+          <text class="er-text" x="435" y="160">borrower</text>
+
+          <!-- Entity: loan -->
+          <rect class="er-shape" x="565" y="140" width="90" height="40" />
+          <text class="er-text" x="610" y="160">loan</text>
+        </svg>
+        <figcaption><strong>Figure 2.15</strong> Cardinality limits on relationship sets.</figcaption>
+      </figure>
+    </section>
+
+    <!-- SECTION 2.6: WEAK ENTITY SETS -->
+    <section id="sec-weak">
+      <h2>2.6 Weak Entity Sets</h2>
+
+      <div class="callout callout-def">
+        <div class="callout-title">Definitions &mdash; Weak vs. Strong Entity Sets</div>
+        <ul>
+          <li><span class="term">Weak entity set</span>: An entity set that does not have sufficient attributes to form a primary key.</li>
+          <li><span class="term">Strong entity set</span>: An entity set that has a primary key.</li>
+        </ul>
+      </div>
+
+      <div class="callout callout-ex">
+        <div class="callout-title">Illustration &mdash; The Payment Entity Set</div>
+        <p>Consider the entity set <span class="entity">payment</span> with three attributes: <span class="attr">payment-number</span>, <span class="attr">payment-date</span>, and <span class="attr">payment-amount</span>.</p>
+        <ul>
+          <li>Payment numbers usually increase sequentially from $1$, generated separately for each loan.</li>
+          <li>Each payment entity is distinct, but payments for different loans can have the same <span class="attr">payment-number</span>.</li>
+          <li>Because these attributes cannot uniquely identify every payment across all loans, <span class="entity">payment</span> has no primary key. Thus, <span class="entity">payment</span> is a weak entity set.</li>
+        </ul>
+      </div>
+
+      <h3>1. Identifying Entity Set and Identifying Relationship</h3>
+      <ul>
+        <li>To be meaningful, a weak entity set must associate with another entity set called the <span class="term">identifying entity set</span> (or <span class="term">owner entity set</span>).</li>
+        <li>Every weak entity must associate with an identifying entity. Therefore, the weak entity set is <span class="term">existence dependent</span> on the identifying entity set.</li>
+        <li>The identifying entity set <span class="term">owns</span> the weak entity set that it identifies.</li>
+        <li>The relationship that connects the weak entity set to the identifying entity set is called the <span class="term">identifying relationship</span>.</li>
+        <li>The identifying relationship is <span class="term">many to one</span> from the weak entity set to the identifying entity set.</li>
+        <li>The participation of the weak entity set in the identifying relationship is <span class="term">total</span>.</li>
+        <li><strong>Example:</strong> For <span class="entity">payment</span>, the identifying entity set is <span class="entity">loan</span>, and the identifying relationship is <span class="rel">loan-payment</span>.</li>
+      </ul>
+
+      <h3>2. Discriminator (Partial Key) and Primary Key</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">Definitions &mdash; Discriminator and Weak Entity Primary Key</div>
+        <ul>
+          <li><span class="term">Discriminator</span> (also called <span class="term">partial key</span>): A set of attributes that distinguishes among all entities in the weak entity set that depend on one particular strong entity.</li>
+          <li><span class="term">Primary key of a weak entity set</span>: Formed by combining the primary key of the identifying entity set with the weak entity set's discriminator:
+            $$\text{Primary Key}_{\text{weak}} = \text{Primary Key}_{\text{identifying}} \cup \text{Discriminator}_{\text{weak}}$$
+          </li>
+        </ul>
+      </div>
+
+      <p><strong>Example:</strong> The discriminator of <span class="entity">payment</span> is <span class="attr">payment-number</span>, because for each loan, <span class="attr">payment-number</span> uniquely identifies one payment. The primary key of <span class="entity">payment</span> is $\{\text{loan-number}, \text{payment-number}\}$, where <span class="attr">loan-number</span> is the primary key of <span class="entity">loan</span> and <span class="attr">payment-number</span> separates payments within the same loan.</p>
+
+      <h3>3. Additional Rules and Capabilities for Weak Entity Sets</h3>
+      <ul>
+        <li><strong>No descriptive attributes on the identifying relationship:</strong> The identifying relationship set should not have descriptive attributes. Place any required attributes directly on the weak entity set (see Section 2.2.1 on moving relationship-set attributes to participating entity sets).</li>
+        <li><strong>Other relationships:</strong> A weak entity set can participate in relationships other than the identifying relationship. For example, <span class="entity">payment</span> can connect to <span class="entity">account</span> to show which account paid the loan.</li>
+        <li><strong>Owner of another weak entity set:</strong> A weak entity set can act as the owner in an identifying relationship with another weak entity set.</li>
+        <li><strong>Multiple identifying entity sets:</strong> A weak entity set can have more than one identifying entity set. A weak entity is then identified by a combination of entities, one from each identifying entity set. Its primary key is the union of the primary keys of all identifying entity sets plus its own discriminator:
+          $$\text{Primary Key} = \left(\bigcup_{j} \text{Primary Key}_{\text{identifying}_j}\right) \cup \text{Discriminator}$$
+        </li>
+      </ul>
+
+      <h3>4. E-R Diagram Notation for Weak Entity Sets (Figure 2.16)</h3>
+      <ul>
+        <li><strong>Doubly outlined box:</strong> Indicates a weak entity set (<span class="entity">payment</span>).</li>
+        <li><strong>Doubly outlined diamond:</strong> Indicates the identifying relationship (<span class="rel">loan-payment</span>).</li>
+        <li><strong>Double lines:</strong> Show total participation (<span class="entity">payment</span> in <span class="rel">loan-payment</span>; every payment must connect to a loan).</li>
+        <li><strong>Arrow from relationship to owner:</strong> Arrow from <span class="rel">loan-payment</span> to <span class="entity">loan</span> shows that each payment belongs to a single loan.</li>
+        <li><strong>Dashed underline:</strong> Marks the discriminator (<span class="attr">payment-number</span>), in contrast to a solid underline for a primary key (<span class="attr">loan-number</span>).</li>
+      </ul>
+
+      <figure>
+        <svg viewBox="0 0 760 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Figure 2.16 E-R diagram with a weak entity set">
+          <defs>
+            <marker id="arrow-left" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#1e293b" />
+            </marker>
+          </defs>
+          <style>
+            .er-shape { fill: #e2e8f0; stroke: #1e293b; stroke-width: 1.7; }
+            .er-inner { fill: none; stroke: #1e293b; stroke-width: 1.4; }
+            .er-line { stroke: #1e293b; stroke-width: 1.6; fill: none; }
+            .er-text { font-family: "Times New Roman", serif; font-style: italic; font-size: 16px; fill: #0f172a; text-anchor: middle; dominant-baseline: central; }
+            .er-pk { text-decoration: underline; }
+          </style>
+
+          <!-- Attribute lines for loan -->
+          <line class="er-line" x1="100" y1="64" x2="170" y2="142" />
+          <line class="er-line" x1="252" y1="78" x2="215" y2="142" />
+
+          <!-- Attribute lines for payment -->
+          <line class="er-line" x1="455" y1="88" x2="540" y2="140" />
+          <line class="er-line" x1="572" y1="42" x2="572" y2="140" />
+          <line class="er-line" x1="670" y1="92" x2="605" y2="140" />
+
+          <!-- Arrow from loan-payment to loan -->
+          <line class="er-line" x1="305" y1="162" x2="242" y2="162" marker-end="url(#arrow-left)" />
+
+          <!-- Double line from loan-payment to payment -->
+          <line class="er-line" x1="445" y1="158" x2="515" y2="158" />
+          <line class="er-line" x1="445" y1="166" x2="515" y2="166" />
+
+          <!-- Loan Attributes -->
+          <ellipse class="er-shape" cx="100" cy="64" rx="78" ry="20" />
+          <text class="er-text er-pk" x="100" y="64">loan-number</text>
+
+          <ellipse class="er-shape" cx="252" cy="78" rx="58" ry="20" />
+          <text class="er-text" x="252" y="78">amount</text>
+
+          <!-- Payment Attributes -->
+          <ellipse class="er-shape" cx="455" cy="88" rx="84" ry="20" />
+          <text class="er-text" x="455" y="85">payment-number</text>
+          <!-- Dashed underline for discriminator -->
+          <line x1="398" y1="97" x2="512" y2="97" stroke="#0f172a" stroke-width="1.4" stroke-dasharray="4,3" />
+
+          <ellipse class="er-shape" cx="572" cy="42" rx="74" ry="20" />
+          <text class="er-text" x="572" y="42">payment-date</text>
+
+          <ellipse class="er-shape" cx="670" cy="92" rx="82" ry="20" />
+          <text class="er-text" x="670" y="92">payment-amount</text>
+
+          <!-- Strong Entity: loan -->
+          <rect class="er-shape" x="145" y="142" width="95" height="40" />
+          <text class="er-text" x="192.5" y="162">loan</text>
+
+          <!-- Identifying Relationship: loan-payment (double diamond) -->
+          <polygon class="er-shape" points="375,124 445,162 375,200 305,162" />
+          <polygon class="er-inner" points="375,131 434,162 375,193 316,162" />
+          <text class="er-text" x="375" y="162">loan-payment</text>
+
+          <!-- Weak Entity: payment (double rectangle) -->
+          <rect class="er-shape" x="515" y="140" width="110" height="44" />
+          <rect class="er-inner" x="520" y="145" width="100" height="34" />
+          <text class="er-text" x="570" y="162">payment</text>
+        </svg>
+        <figcaption><strong>Figure 2.16</strong> E-R diagram with a weak entity set.</figcaption>
+      </figure>
+
+      <h3>5. Weak Entity Set vs. Multivalued Composite Attribute</h3>
+      <p>A database designer can sometimes express a weak entity set as a <span class="term">multivalued composite attribute</span> of the owner entity set. For example, <span class="entity">loan</span> could have a multivalued composite attribute <span class="attr">payment</span> containing <span class="attr">payment-number</span>, <span class="attr">payment-date</span>, and <span class="attr">payment-amount</span>.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Model As</th>
+              <th>When to Use This Design</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Multivalued Composite Attribute</strong></td>
+              <td>The set participates <em>only</em> in the identifying relationship, and it has <em>few attributes</em>.</td>
+            </tr>
+            <tr>
+              <td><strong>Weak Entity Set</strong></td>
+              <td>The set participates in relationships <em>other than</em> the identifying relationship, and it has <em>several attributes</em>.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout callout-ex">
+        <div class="callout-title">Additional Example &mdash; University Course Offerings</div>
+        <p>Consider offerings of a course at a university. The same course can be offered in different semesters, and within one semester there can be several sections for the same course.</p>
+        <ul>
+          <li>We model <span class="entity">course-offering</span> as a weak entity set that is existence dependent on <span class="entity">course</span>.</li>
+          <li>The attributes <span class="attr">semester</span> and <span class="attr">section-number</span> identify different offerings of the same course.</li>
+          <li>Together, $\{\text{semester}, \text{section-number}\}$ form a <span class="term">discriminator</span>, not a primary key.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- SECTION 2.7: EXTENDED E-R FEATURES -->
+    <section id="sec-extended">
+      <h2>2.7 Extended E-R Features</h2>
+      <p>Basic E-R concepts model most database features, while extended E-R features express specialized database structures more clearly. This section covers:</p>
+      <ul>
+        <li>Specialization</li>
+        <li>Generalization</li>
+        <li>Higher-level and lower-level entity sets</li>
+        <li>Attribute inheritance</li>
+        <li>Aggregation</li>
+      </ul>
+
+      <h3>2.7.1 Specialization</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">Definition &mdash; Specialization</div>
+        <p>An entity set can contain subgroupings of entities that differ in some way from other entities in the set (for example, a subset has attributes not shared by all entities in the set). <span class="term">Specialization</span> is the process of designating subgroupings within an entity set.</p>
+      </div>
+
+      <div class="callout callout-ex">
+        <div class="callout-title">Example 1 &mdash; Specialization of Person</div>
+        <p>Consider an entity set <span class="entity">person</span> with attributes <span class="attr">name</span>, <span class="attr">street</span>, and <span class="attr">city</span>. A person can be classified into two subgroups:</p>
+        <ul>
+          <li><span class="entity">customer</span>: Has all attributes of <span class="entity">person</span> plus the attribute <span class="attr">customer-id</span>.</li>
+          <li><span class="entity">employee</span>: Has all attributes of <span class="entity">person</span> plus the attributes <span class="attr">employee-id</span> and <span class="attr">salary</span>.</li>
+        </ul>
+        <p>The specialization of <span class="entity">person</span> distinguishes persons according to whether they are employees or customers.</p>
+      </div>
+
+      <div class="callout callout-ex">
+        <div class="callout-title">Example 2 &mdash; Specialization of Account</div>
+        <p>A bank divides <span class="entity">account</span> (with attributes <span class="attr">account-number</span> and <span class="attr">balance</span>) into two categories:</p>
+        <ul>
+          <li><span class="entity">savings-account</span>: Requires a minimum balance; the bank can set different interest rates for different customers (better rates for favored customers). It has all attributes of <span class="entity">account</span> plus <span class="attr">interest-rate</span>.</li>
+          <li><span class="entity">checking-account</span>: Has a fixed interest rate and provides an overdraft facility; the overdraft amount must be recorded. It has all attributes of <span class="entity">account</span> plus <span class="attr">overdraft-amount</span>.</li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+</body>
+</html>
+```

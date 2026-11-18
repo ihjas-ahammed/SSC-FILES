@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linear Algebra: Orthogonality, Gram-Schmidt, and Positive Definite Matrices</title>
+<!-- MathJax Configuration -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true
+    },
+    svg: {
+      fontCache: 'global'
+    }
+  };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+  :root {
+    --primary: #1a365d;
+    --primary-light: #2b6cb0;
+    --accent: #2c5282;
+    --bg-page: #f7fafc;
+    --bg-card: #ffffff;
+    --text-main: #2d3748;
+    --text-muted: #4a5568;
+    --border: #e2e8f0;
+    --highlight: #ebf8ff;
+    --code-bg: #edf2f7;
+    --radius: 8px;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.65;
+    color: var(--text-main);
+    background-color: var(--bg-page);
+    padding: 2rem 1rem;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: var(--bg-card);
+    padding: 3.5rem 3rem;
+    border-radius: var(--radius);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border: 1px solid var(--border);
+  }
+
+  h1, h2, h3, h4 {
+    color: var(--primary);
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  h1 {
+    font-size: 2.25rem;
+    border-bottom: 3px solid var(--primary);
+    padding-bottom: 0.75rem;
+    margin-bottom: 2rem;
+  }
+
+  h2 {
+    font-size: 1.65rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.4rem;
+  }
+
+  h3 {
+    font-size: 1.3rem;
+    margin-top: 1.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  p {
+    margin-bottom: 1rem;
+    color: var(--text-main);
+  }
+
+  .ste-note {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--primary-light);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .box-def {
+    background-color: var(--highlight);
+    border-left: 4px solid var(--primary-light);
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+    border-radius: 0 var(--radius) var(--radius) 0;
+  }
+
+  .box-key {
+    background-color: #f0fff4;
+    border-left: 4px solid #38a169;
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+    border-radius: 0 var(--radius) var(--radius) 0;
+  }
+
+  .box-alert {
+    background-color: #fffaf0;
+    border-left: 4px solid #dd6b20;
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+    border-radius: 0 var(--radius) var(--radius) 0;
+  }
+
+  pre, code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.9em;
+  }
+
+  pre {
+    background: var(--code-bg);
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius);
+    overflow-x: auto;
+    margin: 1.25rem 0;
+    border: 1px solid var(--border);
+    line-height: 1.45;
+  }
+
+  .exercise-list {
+    margin-top: 1.5rem;
+  }
+
+  .exercise-item {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px dashed var(--border);
+  }
+
+  .exercise-item:last-child {
+    border-bottom: none;
+  }
+
+  .exercise-number {
+    font-weight: 700;
+    color: var(--primary);
+    display: inline-block;
+    width: 2.5rem;
+  }
+
+  .solution-block {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    padding: 1rem 1.25rem;
+    margin-top: 0.75rem;
+    border-radius: 4px;
+    font-size: 0.95rem;
+  }
+
+  .svg-diagram {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2rem 0;
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+  }
+
+  th, td {
+    padding: 0.75rem;
+    text-align: left;
+    border: 1px solid var(--border);
+  }
+
+  th {
+    background-color: var(--code-bg);
+    color: var(--primary);
+  }
+
+  @media (max-width: 640px) {
+    .container {
+      padding: 1.5rem 1rem;
+    }
+    h1 {
+      font-size: 1.75rem;
+    }
+    h2 {
+      font-size: 1.35rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="ste-note">Technical Engineering Notes &bull; Simplified English (ASD-STE100 Style)</div>
+  <h1>Orthogonal Bases, Gram-Schmidt, and Positive Definite Matrices</h1>
+
+  <!-- SECTION 4.3 PROBLEMS -->
+  <section id="section-4-3-problems">
+    <h2>1. Section 4.3: Least Squares Approximations (Exercises)</h2>
+    
+    <div class="exercise-list">
+      <div class="exercise-item">
+        <p><span class="exercise-number">22.</span><strong>Problem:</strong> Find the best line $C + Dt$ to fit $b = (4, 2, -1, 0, 0)$ at times $t = (-2, -1, 0, 1, 2)$.</p>
+        <div class="solution-block">
+          <strong>Step 1: Set up the matrix system $Ax = b$.</strong>
+          $$A = \begin{bmatrix} 1 & -2 \\ 1 & -1 \\ 1 & 0 \\ 1 & 1 \\ 1 & 2 \end{bmatrix}, \quad x = \begin{bmatrix} C \\ D \end{bmatrix}, \quad b = \begin{bmatrix} 4 \\ 2 \\ -1 \\ 0 \\ 0 \end{bmatrix}$$
+          <strong>Step 2: Compute $A^T A$ and $A^T b$.</strong>
+          $$A^T A = \begin{bmatrix} 5 & 0 \\ 0 & 10 \end{bmatrix}$$
+          $$A^T b = \begin{bmatrix} 4 + 2 - 1 + 0 + 0 \\ (-2)(4) + (-1)(2) + 0(-1) + 1(0) + 2(0) \end{bmatrix} = \begin{bmatrix} 5 \\ -10 \end{bmatrix}$$
+          <strong>Step 3: Solve the normal equations $A^T A \hat{x} = A^T b$.</strong>
+          $$\begin{bmatrix} 5 & 0 \\ 0 & 10 \end{bmatrix} \begin{bmatrix} C \\ D \end{bmatrix} = \begin{bmatrix} 5 \\ -10 \end{bmatrix} \implies C = 1, \quad D = -1$$
+          <strong>Result:</strong> The best fit line is $C + Dt = 1 - t$.
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">23.</span><strong>Problem:</strong> Is the error vector $e$ orthogonal to $b$ or $p$ or $e$ or $\hat{x}$? Show that $\|e\|^2$ equals $e^T b$, which equals $b^T b - p^T b$. This value is the smallest total error $E$.</p>
+        <div class="solution-block">
+          <strong>Orthogonality:</strong> The error vector $e = b - p$ is orthogonal to the projection vector $p$ and to every vector in the column space of $A$. It is not orthogonal to $b$ (unless $p=0$), nor to $e$ itself (unless $e=0$), nor generally to the vector of parameters $\hat{x}$.<br><br>
+          <strong>Derivation:</strong>
+          Since $e \perp p$, we have $e^T p = 0$. Therefore:
+          $$\|e\|^2 = e^T e = e^T (b - p) = e^T b - e^T p = e^T b$$
+          Substitute $e = b - p$ into $e^T b$:
+          $$e^T b = (b - p)^T b = b^T b - p^T b$$
+          Thus, the minimum squared error is:
+          $$E = \|e\|^2 = e^T b = b^T b - p^T b$$
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">24.</span><strong>Problem:</strong> The partial derivatives of $\|Ax\|^2$ with respect to $x_1, \dots, x_n$ fill the vector $2A^T Ax$. The derivatives of $2b^T Ax$ fill the vector $2A^T b$. Therefore, the derivatives of $\|Ax - b\|^2$ are zero when:</p>
+        <div class="solution-block">
+          Expand the squared error norm:
+          $$\|Ax - b\|^2 = (Ax - b)^T(Ax - b) = x^T A^T A x - 2 b^T A x + b^T b$$
+          Take the gradient with respect to $x$:
+          $$\nabla_x \|Ax - b\|^2 = 2A^T A x - 2A^T b$$
+          Set the gradient equal to zero:
+          $$2A^T A x - 2A^T b = 0 \implies A^T A x = A^T b$$
+          <strong>Fill in the blank:</strong> The derivatives are zero when <strong>$A^T A x = A^T b$ (or $x = \hat{x} = (A^T A)^{-1}A^T b$)</strong>.
+        </div>
+      </div>
+
+      <h3>Challenge Problems</h3>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">25.</span><strong>Problem:</strong> What condition on $(t_1, b_1), (t_2, b_2), (t_3, b_3)$ puts those three points onto a straight line? A column space answer is: $(b_1, b_2, b_3)$ must be a linear combination of $(1, 1, 1)$ and $(t_1, t_2, t_3)$. Find a specific equation connecting the $t$'s and $b$'s.</p>
+        <div class="solution-block">
+          Three points lie on a straight line when the slopes between consecutive points are identical:
+          $$\frac{b_2 - b_1}{t_2 - t_1} = \frac{b_3 - b_2}{t_3 - t_2}$$
+          Equivalently, the matrix with columns $(1, 1, 1)$, $(t_1, t_2, t_3)$, and $(b_1, b_2, b_3)$ must have a determinant equal to zero:
+          $$\det \begin{bmatrix} 1 & t_1 & b_1 \\ 1 & t_2 & b_2 \\ 1 & t_3 & b_3 \end{bmatrix} = 0$$
+          Expanding this determinant gives:
+          $$b_1(t_2 - t_3) + b_2(t_3 - t_1) + b_3(t_1 - t_2) = 0$$
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">26.</span><strong>Problem:</strong> Find the plane that gives the best fit to the 4 values $b = (0, 1, 3, 4)$ at the corners $(1, 0), (0, 1), (-1, 0), (0, -1)$ of a square. The equations $C + Dx + Ey = b$ at those 4 points are $Ax = b$ with 3 unknowns $x = (C, D, E)$. What is $A$? At the center $(0, 0)$ of the square, show that $C + D(0) + E(0) = \text{average of the } b\text{'s}$.</p>
+        <div class="solution-block">
+          <strong>Matrix $A$:</strong>
+          $$A = \begin{bmatrix} 1 & 1 & 0 \\ 1 & 0 & 1 \\ 1 & -1 & 0 \\ 1 & 0 & -1 \end{bmatrix}, \quad b = \begin{bmatrix} 0 \\ 1 \\ 3 \\ 4 \end{bmatrix}$$
+          Notice that the columns of $A$ are orthogonal:
+          $$A^T A = \begin{bmatrix} 4 & 0 & 0 \\ 0 & 2 & 0 \\ 0 & 0 & 2 \end{bmatrix}$$
+          Compute $A^T b$:
+          $$A^T b = \begin{bmatrix} 0 + 1 + 3 + 4 \\ 0(1) + 1(0) + 3(-1) + 4(0) \\ 0(0) + 1(1) + 3(0) + 4(-1) \end{bmatrix} = \begin{bmatrix} 8 \\ -3 \\ -3 \end{bmatrix}$$
+          Solve $A^T A \hat{x} = A^T b$:
+          $$\hat{x} = \begin{bmatrix} C \\ D \\ E \end{bmatrix} = \begin{bmatrix} 8/4 \\ -3/2 \\ -3/2 \end{bmatrix} = \begin{bmatrix} 2 \\ -1.5 \\ -1.5 \end{bmatrix}$$
+          At the center $(0,0)$, the height is $C = 2$.<br>
+          The average of the $b$'s is $(0 + 1 + 3 + 4)/4 = 8/4 = 2$.<br>
+          Thus, $C$ equals the average of the observed values.
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">27.</span><strong>Problem:</strong> (Distance between lines) The points $P = (x, x, x)$ and $Q = (y, 3y, -1)$ are on two lines in space that do not meet. Choose $x$ and $y$ to minimize the squared distance $\|P - Q\|^2$. The line connecting the closest $P$ and $Q$ is perpendicular to <strong>_______</strong>.</p>
+        <div class="solution-block">
+          The vector between points is:
+          $$v = P - Q = \begin{bmatrix} x - y \\ x - 3y \\ x + 1 \end{bmatrix}$$
+          The squared distance is:
+          $$f(x, y) = (x - y)^2 + (x - 3y)^2 + (x + 1)^2 = 3x^2 - 8xy + 10y^2 + 2x + 1$$
+          Take partial derivatives and set to zero:
+          $$\frac{\partial f}{\partial x} = 6x - 8y + 2 = 0 \implies 3x - 4y = -1$$
+          $$\frac{\partial f}{\partial y} = -8x + 20y = 0 \implies 2x - 5y = 0 \implies x = \frac{5}{2}y$$
+          Substitute $x = \frac{5}{2}y$:
+          $$3\left(\frac{5}{2}y\right) - 4y = -1 \implies \frac{7}{2}y = -1 \implies y = -\frac{2}{7}, \quad x = -\frac{5}{7}$$
+          <strong>Perpendicularity:</strong> The line segment connecting the closest points $P$ and $Q$ is perpendicular to <strong>both lines</strong> (the direction vectors $d_1 = (1, 1, 1)$ and $d_2 = (1, 3, 0)$).
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">28.</span><strong>Problem:</strong> Suppose the columns of $A$ are not independent. How could you find a matrix $B$ so that $P = B(B^T B)^{-1} B^T$ gives the projection onto the column space of $A$?</p>
+        <div class="solution-block">
+          When the columns of $A$ are linearly dependent, $A^T A$ is singular and not invertible. To construct $B$:
+          <ol style="margin-left: 1.5rem; margin-top: 0.5rem;">
+            <li>Eliminate dependent columns from $A$ to keep only a maximal linearly independent set (a basis for the column space $C(A)$).</li>
+            <li>Collect these pivot columns into the matrix $B$.</li>
+          </ol>
+          Matrix $B$ has full column rank. Therefore, $B^T B$ is invertible, and $P = B(B^T B)^{-1} B^T$ projects onto $C(B) = C(A)$.
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">29.</span><strong>Problem:</strong> Usually there will be exactly one hyperplane in $\mathbb{R}^n$ that contains the $n$ given points $x = 0, a_1, \dots, a_{n-1}$. What is the test to have exactly one hyperplane in $\mathbb{R}^n$?</p>
+        <div class="solution-block">
+          A hyperplane passing through the origin in $\mathbb{R}^n$ is an $(n-1)$-dimensional subspace.<br>
+          <strong>Condition for uniqueness:</strong> The $n-1$ non-zero vectors $a_1, a_2, \dots, a_{n-1}$ must be <strong>linearly independent</strong>.<br>
+          If they are linearly independent, their span has dimension exactly $n-1$, which uniquely defines one hyperplane. If they are dependent, their span has dimension less than $n-1$, and infinitely many hyperplanes contain them.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4.4 THEORY -->
+  <section id="section-4-4-theory">
+    <h2>2. Section 4.4: Orthogonal Bases and Gram-Schmidt</h2>
+
+    <p>This section develops two fundamental concepts. First, orthogonal bases simplify projection equations because $A^T A$ becomes a diagonal matrix (or identity matrix $I$). Second, the <strong>Gram-Schmidt process</strong> transforms any linearly independent basis into an orthonormal basis.</p>
+
+    <div class="box-def">
+      <h3>Definition: Orthogonal and Orthonormal Vectors</h3>
+      <p>The vectors $q_1, q_2, \dots, q_n$ are <strong>orthogonal</strong> when their dot products are zero:</p>
+      $$q_i^T q_j = 0 \quad \text{whenever } i \neq j$$
+      <p>The vectors are <strong>orthonormal</strong> if they are orthogonal and have unit length ($\|q_i\| = 1$):</p>
+      $$q_i^T q_j = \begin{cases} 0 & \text{when } i \neq j \\ 1 & \text{when } i = j \end{cases}$$
+      <p>A matrix with orthonormal columns is denoted by the letter $Q$:</p>
+      $$Q^T Q = I$$
+    </div>
+
+    <h3>Properties of the Matrix $Q$</h3>
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 1.5rem;">
+      <thead>
+        <tr>
+          <th>Property</th>
+          <th>Rectangular $Q$ ($m > n$)</th>
+          <th>Square $Q$ ($m = n$, Orthogonal Matrix)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Left Inverse</strong></td>
+          <td>$Q^T Q = I_n$</td>
+          <td>$Q^T Q = I$</td>
+        </tr>
+        <tr>
+          <td><strong>Right Inverse</strong></td>
+          <td>$Q Q^T \neq I_m$ ($Q Q^T = P$, projection matrix)</td>
+          <td>$Q Q^T = I$, so $Q^{-1} = Q^T$</td>
+        </tr>
+        <tr>
+          <td><strong>Length Preservation</strong></td>
+          <td>$\|Qx\| = \|x\|$ for any $x \in \mathbb{R}^n$</td>
+          <td>$\|Qx\| = \|x\|$ for any $x \in \mathbb{R}^n$</td>
+        </tr>
+        <tr>
+          <td><strong>Dot Product Preservation</strong></td>
+          <td>$(Qx)^T(Qy) = x^T y$</td>
+          <td>$(Qx)^T(Qy) = x^T y$</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="box-key">
+      <h3>Key Examples of Orthogonal Matrices ($Q^{-1} = Q^T$)</h3>
+      <p><strong>1. Rotation Matrix:</strong> Rotates vectors in $\mathbb{R}^2$ by an angle $\theta$:</p>
+      $$Q = \begin{bmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{bmatrix}, \quad Q^T = Q^{-1} = \begin{bmatrix} \cos\theta & \sin\theta \\ -\sin\theta & \cos\theta \end{bmatrix}$$
+      
+      <p><strong>2. Permutation Matrix:</strong> Permutes the coordinates of a vector:</p>
+      $$P = \begin{bmatrix} 0 & 1 & 0 \\ 0 & 0 & 1 \\ 1 & 0 & 0 \end{bmatrix}, \quad P^{-1} = P^T = \begin{bmatrix} 0 & 0 & 1 \\ 1 & 0 & 0 \\ 0 & 1 & 0 \end{bmatrix}$$
+
+      <p><strong>3. Reflection Matrix (Householder):</strong> For any unit vector $u$ ($\|u\| = 1$):</p>
+      $$Q = I - 2uu^T$$
+      <p>Notice that $Q^T = Q$ (symmetric) and $Q^2 = (I - 2uu^T)(I - 2uu^T) = I - 4uu^T + 4u(u^T u)u^T = I$. Therefore, $Q^T Q = I$.</p>
+    </div>
+
+    <!-- SVG DIAGRAM: ROTATION AND REFLECTION -->
+    <div class="svg-diagram">
+      <svg width="600" height="260" viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg">
+        <!-- Coordinate Frame 1: Rotation -->
+        <g transform="translate(140, 150)">
+          <!-- Axes -->
+          <line x1="-100" y1="0" x2="110" y2="0" stroke="#cbd5e0" stroke-width="1.5" />
+          <line x1="0" y1="90" x2="0" y2="-120" stroke="#cbd5e0" stroke-width="1.5" />
+          <text x="115" y="4" font-size="12" fill="#718096">x</text>
+          <text x="4" y="-125" font-size="12" fill="#718096">y</text>
+          <!-- Vector i -->
+          <line x1="0" y1="0" x2="70" y2="0" stroke="#4a5568" stroke-width="2" />
+          <polygon points="70,0 63,-4 63,4" fill="#4a5568" />
+          <text x="75" y="15" font-size="13" font-weight="600" fill="#2d3748">i</text>
+          <!-- Vector j -->
+          <line x1="0" y1="0" x2="0" y2="-70" stroke="#4a5568" stroke-width="2" />
+          <polygon points="0,-70 -4,-63 4,-63" fill="#4a5568" />
+          <text x="-15" y="-75" font-size="13" font-weight="600" fill="#2d3748">j</text>
+          <!-- Rotated Qi (angle ~30 deg) -->
+          <line x1="0" y1="0" x2="60.6" y2="-35" stroke="#2b6cb0" stroke-width="2.5" />
+          <polygon points="60.6,-35 52,-33 56,-41" fill="#2b6cb0" />
+          <text x="68" y="-38" font-size="13" font-weight="700" fill="#2b6cb0">Qi</text>
+          <!-- Rotated Qj -->
+          <line x1="0" y1="0" x2="-35" y2="-60.6" stroke="#2b6cb0" stroke-width="2.5" />
+          <polygon points="-35,-60.6 -33,-52 -41,-56" fill="#2b6cb0" />
+          <text x="-55" y="-65" font-size="13" font-weight="700" fill="#2b6cb0">Qj</text>
+          <!-- Arc theta -->
+          <path d="M 35,0 A 35 35 0 0 0 30.3,-17.5" fill="none" stroke="#e53e3e" stroke-width="1.5" />
+          <text x="38" y="-7" font-size="11" fill="#e53e3e">&theta;</text>
+          <text x="-40" y="100" font-size="13" font-weight="600" fill="#1a365d">Rotation by &theta;</text>
+        </g>
+
+        <!-- Coordinate Frame 2: Reflection -->
+        <g transform="translate(440, 150)">
+          <!-- Axes -->
+          <line x1="-100" y1="0" x2="110" y2="0" stroke="#cbd5e0" stroke-width="1.5" />
+          <line x1="0" y1="90" x2="0" y2="-120" stroke="#cbd5e0" stroke-width="1.5" />
+          <!-- Mirror line (45 deg) -->
+          <line x1="-70" y1="70" x2="90" y2="-90" stroke="#e53e3e" stroke-dasharray="4" stroke-width="1.5" />
+          <text x="60" y="-95" font-size="11" fill="#e53e3e">mirror (45&deg;)</text>
+          <!-- Vector i reflected to j -->
+          <line x1="0" y1="0" x2="70" y2="0" stroke="#4a5568" stroke-width="2" />
+          <text x="75" y="15" font-size="13" font-weight="600" fill="#2d3748">i</text>
+          <line x1="0" y1="0" x2="0" y2="-70" stroke="#2b6cb0" stroke-width="2.5" />
+          <polygon points="0,-70 -4,-63 4,-63" fill="#2b6cb0" />
+          <text x="-35" y="-75" font-size="13" font-weight="700" fill="#2b6cb0">Qi = j</text>
+          <!-- Dash connection -->
+          <line x1="70" y1="0" x2="0" y2="-70" stroke="#a0aec0" stroke-dasharray="3" stroke-width="1" />
+          <text x="-60" y="100" font-size="13" font-weight="600" fill="#1a365d">Reflection across 45&deg;</text>
+        </g>
+      </svg>
+    </div>
+
+    <h3>Projections Using Orthonormal Bases</h3>
+    <p>When the columns of matrix $Q$ are orthonormal:</p>
+    <ul>
+      <li>The least squares solution solves $Q^T Q \hat{x} = Q^T b$. Since $Q^T Q = I$, the normal equations decouple completely:
+      $$\hat{x} = Q^T b \implies \hat{x}_i = q_i^T b$$</li>
+      <li>The projection vector is:
+      $$p = Q\hat{x} = Q Q^T b = q_1(q_1^T b) + q_2(q_2^T b) + \dots + q_n(q_n^T b)$$</li>
+      <li>The projection matrix is:
+      $$P = Q Q^T$$</li>
+    </ul>
+
+    <!-- GRAM-SCHMIDT SECTION -->
+    <h2>3. The Gram-Schmidt Process</h2>
+    <p>Given linearly independent vectors $a, b, c$, Gram-Schmidt constructs orthogonal vectors $A, B, C$, which are then divided by their lengths to produce orthonormal vectors $q_1, q_2, q_3$.</p>
+
+    <div class="box-def">
+      <h3>Gram-Schmidt Algorithm Steps</h3>
+      <p><strong>Step 1:</strong> Select the first vector directly:</p>
+      $$A = a$$
+      <p><strong>Step 2:</strong> Subtract from $b$ its projection along $A$:</p>
+      $$B = b - \frac{A^T b}{A^T A}A$$
+      <p><strong>Step 3:</strong> Subtract from $c$ its projections along both $A$ and $B$:</p>
+      $$C = c - \frac{A^T c}{A^T A}A - \frac{B^T c}{B^T B}B$$
+      <p><strong>Step 4 (Normalization):</strong> Divide each vector by its Euclidean length:</p>
+      $$q_1 = \frac{A}{\|A\|}, \quad q_2 = \frac{B}{\|B\|}, \quad q_3 = \frac{C}{\|C\|}$$
+    </div>
+
+    <!-- SVG DIAGRAM: GRAM-SCHMIDT GEOMETRY -->
+    <div class="svg-diagram">
+      <svg width="650" height="240" viewBox="0 0 650 240" xmlns="http://www.w3.org/2000/svg">
+        <!-- Diagram 1: Step 2 Vector B -->
+        <g transform="translate(100, 180)">
+          <!-- a vector -->
+          <line x1="0" y1="0" x2="130" y2="0" stroke="#4a5568" stroke-width="2.5" />
+          <polygon points="130,0 122,-4 122,4" fill="#4a5568" />
+          <text x="135" y="5" font-size="13" font-weight="700" fill="#2d3748">A = a</text>
+          <!-- b vector -->
+          <line x1="0" y1="0" x2="90" y2="-90" stroke="#4a5568" stroke-width="2.5" />
+          <polygon points="90,-90 80,-85 85,-80" fill="#4a5568" />
+          <text x="95" y="-95" font-size="13" font-weight="700" fill="#2d3748">b</text>
+          <!-- projection p -->
+          <line x1="0" y1="0" x2="90" y2="0" stroke="#3182ce" stroke-width="3" stroke-linecap="round" />
+          <text x="40" y="16" font-size="12" font-weight="600" fill="#3182ce">p = proj_A(b)</text>
+          <!-- orthogonal vector B -->
+          <line x1="90" y1="0" x2="90" y2="-88" stroke="#e53e3e" stroke-width="2.5" stroke-dasharray="4" />
+          <polygon points="90,-88 86,-78 94,-78" fill="#e53e3e" />
+          <text x="98" y="-45" font-size="13" font-weight="700" fill="#e53e3e">B = b - p</text>
+          <!-- right-angle symbol -->
+          <path d="M 80,0 L 80,-10 L 90,-10" fill="none" stroke="#4a5568" stroke-width="1.5" />
+        </g>
+
+        <!-- Diagram 2: Step 3 Vector C -->
+        <g transform="translate(420, 180)">
+          <!-- Plane vectors A and B -->
+          <line x1="0" y1="0" x2="90" y2="20" stroke="#4a5568" stroke-width="2" />
+          <text x="95" y="25" font-size="12" font-weight="700" fill="#4a5568">A</text>
+          <line x1="0" y1="0" x2="-60" y2="-30" stroke="#4a5568" stroke-width="2" />
+          <text x="-75" y="-35" font-size="12" font-weight="700" fill="#4a5568">B</text>
+          <!-- vector c -->
+          <line x1="0" y1="0" x2="30" y2="-120" stroke="#4a5568" stroke-width="2.5" />
+          <polygon points="30,-120 23,-112 31,-110" fill="#4a5568" />
+          <text x="35" y="-125" font-size="13" font-weight="700" fill="#2d3748">c</text>
+          <!-- projection p onto plane -->
+          <line x1="0" y1="0" x2="40" y2="-30" stroke="#3182ce" stroke-width="2" />
+          <text x="45" y="-20" font-size="11" fill="#3182ce">p onto AB</text>
+          <!-- Error C -->
+          <line x1="40" y1="-30" x2="30" y2="-118" stroke="#e53e3e" stroke-width="2.5" stroke-dasharray="4" />
+          <polygon points="30,-118 31,-108 39,-110" fill="#e53e3e" />
+          <text x="48" y="-75" font-size="13" font-weight="700" fill="#e53e3e">C = c - p</text>
+        </g>
+      </svg>
+    </div>
+
+    <h3>The $A = QR$ Factorization</h3>
+    <p>Every $m \times n$ matrix $A$ with linearly independent columns can be factored into:</p>
+    $$A = QR$$
+    <p>Where:</p>
+    <ul>
+      <li>$Q$ is an $m \times n$ matrix with <strong>orthonormal columns</strong> ($Q^T Q = I_n$).</li>
+      <li>$R$ is an $n \times n$ <strong>upper triangular matrix</strong> with positive diagonal entries.</li>
+    </ul>
+    <p>Because $Q^T Q = I$, multiplying $A = QR$ on the left by $Q^T$ yields:</p>
+    $$R = Q^T A = \begin{bmatrix} q_1^T a_1 & q_1^T a_2 & q_1^T a_3 \\ 0 & q_2^T a_2 & q_2^T a_3 \\ 0 & 0 & q_3^T a_3 \end{bmatrix}$$
+    <p>The diagonal entries of $R$ are the lengths of the orthogonal vectors: $r_{11} = \|A\|$, $r_{22} = \|B\|$, $r_{33} = \|C\|$.</p>
+  </section>
+
+  <!-- SECTION 4.4 PROBLEM SET -->
+  <section id="section-4-4-problems">
+    <h2>4. Section 4.4: Complete Problem Set (1 to 37)</h2>
+
+    <div class="exercise-list">
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">1.</span><strong>Problem:</strong> Are these pairs of vectors orthonormal, only orthogonal, or only independent? Change the second vector when necessary to produce orthonormal vectors.</p>
+        <p>(a) $\begin{bmatrix} 1 \\ 0 \end{bmatrix}$ and $\begin{bmatrix} -1 \\ 1 \end{bmatrix}$ &emsp;
+           (b) $\begin{bmatrix} .6 \\ .8 \end{bmatrix}$ and $\begin{bmatrix} .4 \\ -.3 \end{bmatrix}$ &emsp;
+           (c) $\begin{bmatrix} \cos\theta \\ \sin\theta \end{bmatrix}$ and $\begin{bmatrix} -\sin\theta \\ \cos\theta \end{bmatrix}$</p>
+        <div class="solution-block">
+          <strong>(a)</strong> Dot product: $1(-1) + 0(1) = -1 \neq 0$. The vectors are <strong>only independent</strong>.<br>
+          To make them orthonormal: the first vector $q_1 = \begin{bmatrix} 1 \\ 0 \end{bmatrix}$ is already a unit vector. A perpendicular unit vector is $q_2 = \begin{bmatrix} 0 \\ 1 \end{bmatrix}$.<br><br>
+          <strong>(b)</strong> Dot product: $(0.6)(0.4) + (0.8)(-0.3) = 0.24 - 0.24 = 0$. They are orthogonal.<br>
+          Lengths: $\|v_1\| = \sqrt{0.6^2 + 0.8^2} = 1$; $\|v_2\| = \sqrt{0.4^2 + (-0.3)^2} = \sqrt{0.25} = 0.5 \neq 1$.<br>
+          They are <strong>only orthogonal</strong>. To make them orthonormal, divide the second vector by $0.5$: $q_2 = \begin{bmatrix} 0.8 \\ -0.6 \end{bmatrix}$.<br><br>
+          <strong>(c)</strong> Dot product: $-\cos\theta\sin\theta + \sin\theta\cos\theta = 0$. Lengths: $\cos^2\theta + \sin^2\theta = 1$. They are <strong>orthonormal</strong>.
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">2.</span><strong>Problem:</strong> The vectors $(2, 2, -1)$ and $(-1, 2, 2)$ are orthogonal. Divide them by their lengths to find orthonormal vectors $q_1$ and $q_2$. Put those into the columns of $Q$ and multiply $Q^T Q$ and $Q Q^T$.</p>
+        <div class="solution-block">
+          Lengths: $\|v_1\| = \sqrt{4 + 4 + 1} = 3$, $\|v_2\| = \sqrt{1 + 4 + 4} = 3$.<br>
+          Orthonormal vectors:
+          $$q_1 = \frac{1}{3}\begin{bmatrix} 2 \\ 2 \\ -1 \end{bmatrix}, \quad q_2 = \frac{1}{3}\begin{bmatrix} -1 \\ 2 \\ 2 \end{bmatrix}$$
+          $$Q = \frac{1}{3}\begin{bmatrix} 2 & -1 \\ 2 & 2 \\ -1 & 2 \end{bmatrix}$$
+          $$Q^T Q = \frac{1}{9}\begin{bmatrix} 2 & 2 & -1 \\ -1 & 2 & 2 \end{bmatrix}\begin{bmatrix} 2 & -1 \\ 2 & 2 \\ -1 & 2 \end{bmatrix} = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix} = I_2$$
+          $$Q Q^T = \frac{1}{9}\begin{bmatrix} 2 & -1 \\ 2 & 2 \\ -1 & 2 \end{bmatrix}\begin{bmatrix} 2 & 2 & -1 \\ -1 & 2 & 2 \end{bmatrix} = \frac{1}{9}\begin{bmatrix} 5 & 2 & -4 \\ 2 & 8 & 2 \\ -4 & 2 & 5 \end{bmatrix}$$
+          Notice $Q Q^T$ is symmetric and $(Q Q^T)^2 = Q Q^T$; it is the projection matrix onto the 2D plane spanned by $q_1, q_2$.
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">3.</span><strong>Problem:</strong><br>
+        (a) If $A$ has three orthogonal columns each of length 4, what is $A^T A$?<br>
+        (b) If $A$ has three orthogonal columns of lengths 1, 2, 3, what is $A^T A$?</p>
+        <div class="solution-block">
+          Entry $(i,j)$ of $A^T A$ is $c_i^T c_j$. Because the columns are orthogonal, all off-diagonal entries are zero.<br>
+          <strong>(a)</strong> Each diagonal entry is $\|c_i\|^2 = 4^2 = 16$:
+          $$A^T A = \begin{bmatrix} 16 & 0 & 0 \\ 0 & 16 & 0 \\ 0 & 0 & 16 \end{bmatrix} = 16 I_3$$
+          <strong>(b)</strong> The diagonal entries are $\|c_1\|^2 = 1$, $\|c_2\|^2 = 4$, $\|c_3\|^2 = 9$:
+          $$A^T A = \begin{bmatrix} 1 & 0 & 0 \\ 0 & 4 & 0 \\ 0 & 0 & 9 \end{bmatrix}$$
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">4.</span><strong>Problem:</strong> Give an example of each of the following:<br>
+        (a) A matrix $Q$ that has orthonormal columns but $Q Q^T \neq I$.<br>
+        (b) Two orthogonal vectors that are not linearly independent.<br>
+        (c) An orthonormal basis for $\mathbb{R}^3$, including the vector $q_1 = (1, 1, 1)/\sqrt{3}$.</p>
+        <div class="solution-block">
+          <strong>(a)</strong> Any rectangular matrix with orthonormal columns, e.g.:
+          $$Q = \begin{bmatrix} 1 \\ 0 \end{bmatrix} \implies Q^T Q = 1, \quad Q Q^T = \begin{bmatrix} 1 & 0 \\ 0 & 0 \end{bmatrix} \neq I_2$$
+          <strong>(b)</strong> The zero vector and any non-zero vector: $v_1 = \begin{bmatrix} 0 \\ 0 \end{bmatrix}$, $v_2 = \begin{bmatrix} 1 \\ 0 \end{bmatrix}$. Their dot product is 0, but they are linearly dependent ($1\cdot v_1 + 0\cdot v_2 = 0$).<br><br>
+          <strong>(c)</strong> We need two unit vectors orthogonal to $q_1 = \frac{1}{\sqrt{3}}(1, 1, 1)$ and to each other:
+          $$q_2 = \frac{1}{\sqrt{2}}\begin{bmatrix} 1 \\ -1 \\ 0 \end{bmatrix}, \quad q_3 = q_1 \times q_2 = \frac{1}{\sqrt{6}}\begin{bmatrix} 1 \\ 1 \\ -2 \end{bmatrix}$$
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">5.</span><strong>Problem:</strong> Find two orthogonal vectors in the plane $x + y + 2z = 0$. Make them orthonormal.</p>
+        <div class="solution-block">
+          Find a first non-zero vector in the plane, e.g. set $z=0, y=1 \implies x = -1$:
+          $$v_1 = \begin{bmatrix} -1 \\ 1 \\ 0 \end{bmatrix}$$
+          Find a second vector $v_2 = (x, y, z)$ in the plane ($x + y + 2z = 0$) and orthogonal to $v_1$ ($-x + y = 0 \implies x = y$):
+          $$x + x + 2z = 0 \implies 2x + 2z = 0 \implies z = -x$$
+          Let $x = 1$, then $y = 1, z = -1$:
+          $$v_2 = \begin{bmatrix} 1 \\ 1 \\ -1 \end{bmatrix}$$
+          Normalize both vectors:
+          $$q_1 = \frac{1}{\sqrt{2}}\begin{bmatrix} -1 \\ 1 \\ 0 \end{bmatrix}, \quad q_2 = \frac{1}{\sqrt{3}}\begin{bmatrix} 1 \\ 1 \\ -1 \end{bmatrix}$$
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">6.</span><strong>Problem:</strong> If $Q_1$ and $Q_2$ are orthogonal matrices, show that their product $Q_1 Q_2$ is also an orthogonal matrix. (Use $Q^T Q = I$.)</p>
+        <div class="solution-block">
+          Let $Q = Q_1 Q_2$. Compute $Q^T Q$:
+          $$Q^T Q = (Q_1 Q_2)^T (Q_1 Q_2) = (Q_2^T Q_1^T)(Q_1 Q_2)$$
+          By associativity and using $Q_1^T Q_1 = I$:
+          $$= Q_2^T (Q_1^T Q_1) Q_2 = Q_2^T I Q_2 = Q_2^T Q_2 = I$$
+          Since $Q^T Q = I$ and $Q$ is square, $Q_1 Q_2$ is an orthogonal matrix.
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">7.</span><strong>Problem:</strong> If $Q$ has orthonormal columns, what is the least squares solution $\hat{x}$ to $Qx = b$?</p>
+        <div class="solution-block">
+          The normal equations are $Q^T Q \hat{x} = Q^T b$.<br>
+          Because $Q^T Q = I$, this simplifies immediately to:
+          $$\hat{x} = Q^T b$$
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">8.</span><strong>Problem:</strong> If $q_1$ and $q_2$ are orthonormal vectors in $\mathbb{R}^5$, what combination <strong>_____</strong>$q_1$ + <strong>_____</strong>$q_2$ is closest to a given vector $b$?</p>
+        <div class="solution-block">
+          The projection $p$ onto the subspace spanned by $q_1$ and $q_2$ minimizes the distance to $b$. Since $q_1, q_2$ are orthonormal, the projection coefficients are simply the dot products:
+          $$p = (q_1^T b) q_1 + (q_2^T b) q_2$$
+          <strong>Answer:</strong> $(q_1^T b)q_1 + (q_2^T b)q_2$.
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">9.</span><strong>Problem:</strong><br>
+        (a) Compute $P = Q Q^T$ when $q_1 = (.8, .6, 0)$ and $q_2 = (-.6, .8, 0)$. Verify that $P^2 = P$.<br>
+        (b) Prove that always $(Q Q^T)^2 = Q Q^T$ by using $Q^T Q = I$. Then $P = Q Q^T$ is the projection matrix onto the column space of $Q$.</p>
+        <div class="solution-block">
+          <strong>(a)</strong> Write $Q$:
+          $$Q = \begin{bmatrix} 0.8 & -0.6 \\ 0.6 & 0.8 \\ 0 & 0 \end{bmatrix}$$
+          $$P = Q Q^T = \begin{bmatrix} 0.8 & -0.6 \\ 0.6 & 0.8 \\ 0 & 0 \end{bmatrix} \begin{bmatrix} 0.8 & 0.6 & 0 \\ -0.6 & 0.8 & 0 \end{bmatrix} = \begin{bmatrix} 0.64 + 0.36 & 0.48 - 0.48 & 0 \\ 0.48 - 0.48 & 0.36 + 0.64 & 0 \\ 0 & 0 & 0 \end{bmatrix} = \begin{bmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 0 \end{bmatrix}$$
+          Checking $P^2$:
+          $$P^2 = \begin{bmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 0 \end{bmatrix}\begin{bmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 0 \end{bmatrix} = \begin{bmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 0 \end{bmatrix} = P$$
+          <strong>(b)</strong> General proof:
+          $$(Q Q^T)^2 = (Q Q^T)(Q Q^T) = Q (Q^T Q) Q^T = Q (I) Q^T = Q Q^T$$
+          Also $P^T = (Q Q^T)^T = (Q^T)^T Q^T = Q Q^T = P$. A symmetric idempotent matrix is an orthogonal projector.
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">10.</span><strong>Problem:</strong> Orthonormal vectors are automatically linearly independent.<br>
+        (a) Vector proof: When $c_1 q_1 + c_2 q_2 + c_3 q_3 = 0$, what dot product leads to $c_1 = 0$? Similarly $c_2 = 0$ and $c_3 = 0$. Thus the $q$'s are independent.<br>
+        (b) Matrix proof: Show that $Qx = 0$ leads to $x = 0$. Since $Q$ may be rectangular, you can use $Q^T$ but not $Q^{-1}$.</p>
+        <div class="solution-block">
+          <strong>(a)</strong> Take the dot product of both sides with $q_1$:
+          $$q_1^T (c_1 q_1 + c_2 q_2 + c_3 q_3) = c_1(q_1^T q_1) + c_2(q_1^T q_2) + c_3(q_1^T q_3) = q_1^T 0 = 0$$
+          Since $q_1^T q_1 = 1$ and $q_1^T q_2 = q_1^T q_3 = 0$:
+          $$c_1 (1) + 0 + 0 = 0 \implies c_1 = 0$$
+          Taking dot products with $q_2$ and $q_3$ yields $c_2 = 0$ and $c_3 = 0$ identically.<br><br>
+          <strong>(b)</strong> Start with $Qx = 0$. Multiply on the left by $Q^T$:
+          $$Q^T Q x = Q^T 0 = 0$$
+          Since $Q$ has orthonormal columns, $Q^T Q = I$:
+          $$I x = 0 \implies x = 0$$
+          Because the nullspace contains only $x=0$, the columns are linearly independent.
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">11.</span><strong>Problem:</strong><br>
+        (a) Gram-Schmidt: Find orthonormal vectors $q_1$ and $q_2$ in the plane spanned by $a = (1, 3, 4, 5, 7)$ and $b = (-6, 6, 8, 0, 8)$.<br>
+        (b) Which vector in this plane is closest to $(1, 0, 0, 0, 0)$?</p>
+        <div class="solution-block">
+          <strong>(a)</strong> Compute $\|a\|^2 = 1^2 + 3^2 + 4^2 + 5^2 + 7^2 = 1 + 9 + 16 + 25 + 49 = 100 \implies \|a\| = 10$.
+          $$q_1 = \frac{a}{10} = \frac{1}{10}(1, 3, 4, 5, 7)$$
+          Compute $a^T b = 1(-6) + 3(6) + 4(8) + 5(0) + 7(8) = -6 + 18 + 32 + 0 + 56 = 100$.<br>
+          Projection of $b$ onto $a$:
+          $$p = \frac{a^T b}{a^T a} a = \frac{100}{100} a = a$$
+          Orthogonal vector:
+          $$B = b - p = b - a = (-7, 3, 4, -5, 1)$$
+          Compute $\|B\|^2 = (-7)^2 + 3^2 + 4^2 + (-5)^2 + 1^2 = 49 + 9 + 16 + 25 + 1 = 100 \implies \|B\| = 10$.
+          $$q_2 = \frac{B}{10} = \frac{1}{10}(-7, 3, 4, -5, 1)$$
+          <strong>(b)</strong> The vector in the plane closest to $v = (1, 0, 0, 0, 0)$ is the projection $p = (q_1^T v)q_1 + (q_2^T v)q_2$.<br>
+          $q_1^T v = \frac{1}{10}(1) = \frac{1}{10}$.<br>
+          $q_2^T v = \frac{1}{10}(-7) = -\frac{7}{10}$.<br>
+          $$p = \frac{1}{10}\left(\frac{1}{10}(1, 3, 4, 5, 7)\right) - \frac{7}{10}\left(\frac{1}{10}(-7, 3, 4, -5, 1)\right)$$
+          $$= \frac{1}{100}\left[(1, 3, 4, 5, 7) - (-49, 21, 28, -35, 7)\right] = \frac{1}{100}(50, -18, -24, 40, 0) = (0.50, -0.18, -0.24, 0.40, 0)$$
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">12.</span><strong>Problem:</strong> If $a_1, a_2, a_3$ is a basis for $\mathbb{R}^3$, any vector $b$ can be written as $b = x_1 a_1 + x_2 a_2 + x_3 a_3$ or $\begin{bmatrix} a_1 & a_2 & a_3 \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \\ x_3 \end{bmatrix} = b$.<br>
+        (a) Suppose the $a$'s are orthonormal. Show that $x_1 = a_1^T b$.<br>
+        (b) Suppose the $a$'s are orthogonal. Show that $x_1 = a_1^T b / a_1^T a_1$.<br>
+        (c) If the $a$'s are independent, $x_1$ is the first component of <strong>_____</strong> times $b$.</p>
+        <div class="solution-block">
+          <strong>(a)</strong> Multiply $b = x_1 a_1 + x_2 a_2 + x_3 a_3$ by $a_1^T$:
+          $$a_1^T b = x_1 (a_1^T a_1) + x_2 (a_1^T a_2) + x_3 (a_1^T a_3) = x_1 (1) + 0 + 0 \implies x_1 = a_1^T b$$
+          <strong>(b)</strong> Here $a_1^T a_1 \neq 1$, but $a_1^T a_2 = a_1^T a_3 = 0$:
+          $$a_1^T b = x_1 (a_1^T a_1) \implies x_1 = \frac{a_1^T b}{a_1^T a_1}$$
+          <strong>(c)</strong> Let $A = \begin{bmatrix} a_1 & a_2 & a_3 \end{bmatrix}$. Then $Ax = b \implies x = A^{-1} b$. Therefore, $x_1$ is the first component of <strong>$A^{-1}$</strong> times $b$.
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">13.</span><strong>Problem:</strong> What multiple of $a = \begin{bmatrix} 1 \\ 1 \end{bmatrix}$ should be subtracted from $b = \begin{bmatrix} 4 \\ 0 \end{bmatrix}$ to make the result $B$ orthogonal to $a$? Sketch a figure to show $a, b,$ and $B$.</p>
+        <div class="solution-block">
+          The multiple is $c = \frac{a^T b}{a^T a}$:
+          $$a^T b = 1(4) + 1(0) = 4, \quad a^T a = 1^2 + 1^2 = 2 \implies c = \frac{4}{2} = 2$$
+          Subtract $2a$ from $b$:
+          $$B = b - 2a = \begin{bmatrix} 4 \\ 0 \end{bmatrix} - 2\begin{bmatrix} 1 \\ 1 \end{bmatrix} = \begin{bmatrix} 2 \\ -2 \end{bmatrix}$$
+          Check orthogonality: $a^T B = 1(2) + 1(-2) = 0$.
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">14.</span><strong>Problem:</strong> Complete the Gram-Schmidt process in Problem 13 by computing $q_1 = a / \|a\|$ and $q_2 = B / \|B\|$ and factoring into $QR$:</p>
+        $$\begin{bmatrix} 1 & 4 \\ 1 & 0 \end{bmatrix} = \begin{bmatrix} q_1 & q_2 \end{bmatrix} \begin{bmatrix} \|a\| & ? \\ 0 & \|B\| \end{bmatrix}$$
+        <div class="solution-block">
+          Compute lengths: $\|a\| = \sqrt{1^2 + 1^2} = \sqrt{2}$, $\|B\| = \sqrt{2^2 + (-2)^2} = \sqrt{8} = 2\sqrt{2}$.<br>
+          Orthonormal vectors:
+          $$q_1 = \frac{1}{\sqrt{2}}\begin{bmatrix} 1 \\ 1 \end{bmatrix}, \quad q_2 = \frac{1}{\sqrt{8}}\begin{bmatrix} 2 \\ -2 \end{bmatrix} = \frac{1}{\sqrt{2}}\begin{bmatrix} 1 \\ -1 \end{bmatrix}$$
+          The matrix $Q$ is:
+          $$Q = \frac{1}{\sqrt{2}}\begin{bmatrix} 1 & 1 \\ 1 & -1 \end{bmatrix}$$
+          Entry $r_{12} = q_1^T b = \frac{1}{\sqrt{2}}(1\cdot 4 + 1\cdot 0) = \frac{4}{\sqrt{2}} = 2\sqrt{2}$.<br>
+          Thus:
+          $$\begin{bmatrix} 1 & 4 \\ 1 & 0 \end{bmatrix} = \begin{bmatrix} 1/\sqrt{2} & 1/\sqrt{2} \\ 1/\sqrt{2} & -1/\sqrt{2} \end{bmatrix} \begin{bmatrix} \sqrt{2} & 2\sqrt{2} \\ 0 & 2\sqrt{2} \end{bmatrix}$$
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">15.</span><strong>Problem:</strong><br>
+        (a) Find orthonormal vectors $q_1, q_2, q_3$ such that $q_1, q_2$ span the column space of $A = \begin{bmatrix} 1 & 1 \\ 2 & -1 \\ -2 & 4 \end{bmatrix}$.<br>
+        (b) Which of the four fundamental subspaces contains $q_3$?<br>
+        (c) Solve $Ax = (1, 2, 7)$ by least squares.</p>
+        <div class="solution-block">
+          <strong>(a)</strong> Let $a_1 = (1, 2, -2)$ and $a_2 = (1, -1, 4)$.<br>
+          $\|a_1\| = \sqrt{1 + 4 + 4} = 3 \implies q_1 = \frac{1}{3}\begin{bmatrix} 1 \\ 2 \\ -2 \end{bmatrix}$.<br>
+          Compute $q_1^T a_2 = \frac{1}{3}(1(1) + 2(-1) - 2(4)) = \frac{1}{3}(1 - 2 - 8) = -3$.<br>
+          Vector $B = a_2 - (q_1^T a_2)q_1 = \begin{bmatrix} 1 \\ -1 \\ 4 \end{bmatrix} - (-3)\frac{1}{3}\begin{bmatrix} 1 \\ 2 \\ -2 \end{bmatrix} = \begin{bmatrix} 1 \\ -1 \\ 4 \end{bmatrix} + \begin{bmatrix} 1 \\ 2 \\ -2 \end{bmatrix} = \begin{bmatrix} 2 \\ 1 \\ 2 \end{bmatrix}$.<br>
+          $\|B\| = \sqrt{4 + 1 + 4} = 3 \implies q_2 = \frac{1}{3}\begin{bmatrix} 2 \\ 1 \\ 2 \end{bmatrix}$.<br>
+          To find $q_3$, take the cross product of $q_1$ and $q_2$:
+          $$q_3 = q_1 \times q_2 = \frac{1}{9}\begin{vmatrix} i & j & k \\ 1 & 2 & -2 \\ 2 & 1 & 2 \end{vmatrix} = \frac{1}{9}\begin{bmatrix} 4 - (-2) \\ -(2 - (-4)) \\ 1 - 4 \end{bmatrix} = \frac{1}{9}\begin{bmatrix} 6 \\ -6 \\ -3 \end{bmatrix} = \frac{1}{3}\begin{bmatrix} 2 \\ -2 \\ -1 \end{bmatrix}$$
+          <strong>(b)</strong> $q_3$ is orthogonal to the column space $C(A)$. Therefore, $q_3$ lies in the <strong>left nullspace $N(A^T)$</strong>.<br><br>
+          <strong>(c)</strong> Using the $QR$ system: $R\hat{x} = Q^T b$.<br>
+          $R = \begin{bmatrix} 3 & -3 \\ 0 & 3 \end{bmatrix}$, $b = \begin{bmatrix} 1 \\ 2 \\ 7 \end{bmatrix}$.<br>
+          $q_1^T b = \frac{1}{3}(1 + 4 - 14) = -3$.<br>
+          $q_2^T b = \frac{1}{3}(2 + 2 + 14) = 6$.<br>
+          $$\begin{bmatrix} 3 & -3 \\ 0 & 3 \end{bmatrix} \begin{bmatrix} \hat{x}_1 \\ \hat{x}_2 \end{bmatrix} = \begin{bmatrix} -3 \\ 6 \end{bmatrix} \implies 3\hat{x}_2 = 6 \implies \hat{x}_2 = 2$$
+          $$3\hat{x}_1 - 3(2) = -3 \implies 3\hat{x}_1 = 3 \implies \hat{x}_1 = 1$$
+          Solution: $\hat{x} = \begin{bmatrix} 1 \\ 2 \end{bmatrix}$.
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">16.</span><strong>Problem:</strong> What multiple of $a = (4, 5, 2, 2)$ is closest to $b = (1, 2, 0, 0)$? Find orthonormal vectors $q_1$ and $q_2$ in the plane of $a$ and $b$.</p>
+        <div class="solution-block">
+          $\|a\|^2 = 16 + 25 + 4 + 4 = 49 \implies \|a\| = 7$.<br>
+          $a^T b = 4(1) + 5(2) + 2(0) + 2(0) = 14$.<br>
+          Multiple: $c = \frac{a^T b}{a^T a} = \frac{14}{49} = \frac{2}{7}$.<br>
+          First unit vector: $q_1 = \frac{a}{7} = \frac{1}{7}(4, 5, 2, 2)$.<br>
+          Orthogonal vector:
+          $$B = b - \frac{2}{7}a = (1, 2, 0, 0) - \left(\frac{8}{7}, \frac{10}{7}, \frac{4}{7}, \frac{4}{7}\right) = \left(-\frac{1}{7}, \frac{4}{7}, -\frac{4}{7}, -\frac{4}{7}\right) = \frac{1}{7}(-1, 4, -4, -4)$$
+          $\|B\| = \frac{1}{7}\sqrt{(-1)^2 + 4^2 + (-4)^2 + (-4)^2} = \frac{1}{7}\sqrt{1 + 16 + 16 + 16} = \frac{\sqrt{49}}{7} = 1$.<br>
+          Thus $q_2 = B = \frac{1}{7}(-1, 4, -4, -4)$.
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">17.</span><strong>Problem:</strong> Find the projection of $b$ onto the line through $a$ for $a = \begin{bmatrix} 1 \\ 1 \\ 1 \end{bmatrix}$ and $b = \begin{bmatrix} 1 \\ 3 \\ 5 \end{bmatrix}$. Find $p$, $e = b - p$, and compute $q_1 = a/\|a\|$, $q_2 = e/\|e\|$.</p>
+        <div class="solution-block">
+          $a^T b = 1 + 3 + 5 = 9$; $a^T a = 1 + 1 + 1 = 3$.<br>
+          $\hat{x} = \frac{9}{3} = 3 \implies p = 3a = \begin{bmatrix} 3 \\ 3 \\ 3 \end{bmatrix}$.<br>
+          $e = b - p = \begin{bmatrix} 1 \\ 3 \\ 5 \end{bmatrix} - \begin{bmatrix} 3 \\ 3 \\ 3 \end{bmatrix} = \begin{bmatrix} -2 \\ 0 \\ 2 \end{bmatrix}$.<br>
+          $\|a\| = \sqrt{3} \implies q_1 = \frac{1}{\sqrt{3}}\begin{bmatrix} 1 \\ 1 \\ 1 \end{bmatrix}$.<br>
+          $\|e\| = \sqrt{(-2)^2 + 0^2 + 2^2} = \sqrt{8} = 2\sqrt{2} \implies q_2 = \frac{1}{2\sqrt{2}}\begin{bmatrix} -2 \\ 0 \\ 2 \end{bmatrix} = \frac{1}{\sqrt{2}}\begin{bmatrix} -1 \\ 0 \\ 1 \end{bmatrix}$.
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">18.</span><strong>Problem:</strong> (Recommended) Find orthogonal vectors $A, B, C$ by Gram-Schmidt from $a, b, c$:
+        $$a = (1, -1, 0, 0), \quad b = (0, 1, -1, 0), \quad c = (0, 0, 1, -1)$$
+        $A, B, C$ and $a, b, c$ are bases for the vectors perpendicular to $d = (1, 1, 1, 1)$.</p>
+        <div class="solution-block">
+          <strong>Step 1:</strong> $A = a = (1, -1, 0, 0)$. Note $A^T A = 1 + 1 = 2$.<br><br>
+          <strong>Step 2:</strong> $A^T b = 0(1) + 1(-1) + 0 + 0 = -1$.
+          $$B = b - \frac{A^T b}{A^T A}A = (0, 1, -1, 0) - \left(-\frac{1}{2}\right)(1, -1, 0, 0) = \left(\frac{1}{2}, \frac{1}{2}, -1, 0\right)$$
+          $B^T B = \frac{1}{4} + \frac{1}{4} + 1 + 0 = \frac{3}{2}$.<br><br>
+          <strong>Step 3:</strong> $A^T c = 0$; $B^T c = \frac{1}{2}(0) + \frac{1}{2}(0) - 1(1) + 0(-1) = -1$.
+          $$C = c - \frac{A^T c}{A^T A}A - \frac{B^T c}{B^T B}B = (0, 0, 1, -1) - 0 - \frac{-1}{3/2}\left(\frac{1}{2}, \frac{1}{2}, -1, 0\right)$$
+          $$= (0, 0, 1, -1) + \frac{2}{3}\left(\frac{1}{2}, \frac{1}{2}, -1, 0\right) = \left(\frac{1}{3}, \frac{1}{3}, \frac{1}{3}, -1\right)$$
+          Notice that $A, B, C$ all have components that sum to zero, so they are all orthogonal to $d = (1, 1, 1, 1)$.
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">19.</span><strong>Problem:</strong> If $A = QR$ then $A^T A = R^T R = \text{triangular} \times \text{triangular}$. Gram-Schmidt on $A$ corresponds to elimination on $A^T A$. The pivots for $A^T A$ must be the squares of diagonal entries of $R$. Find $Q$ and $R$ by Gram-Schmidt for:
+        $$A = \begin{bmatrix} -1 & 1 \\ 2 & 1 \\ 2 & 4 \end{bmatrix}, \quad A^T A = \begin{bmatrix} 9 & 9 \\ 9 & 18 \end{bmatrix} = \begin{bmatrix} 1 & 0 \\ 1 & 1 \end{bmatrix}\begin{bmatrix} 9 & 0 \\ 0 & 9 \end{bmatrix}\begin{bmatrix} 1 & 1 \\ 0 & 1 \end{bmatrix}$$</p>
+        <div class="solution-block">
+          First column $a_1 = (-1, 2, 2)$: $\|a_1\| = \sqrt{1 + 4 + 4} = 3 \implies q_1 = \frac{1}{3}(-1, 2, 2)$.<br>
+          Entry $r_{11} = \|a_1\| = 3$. Pivot $d_1 = 3^2 = 9$.<br>
+          Entry $r_{12} = q_1^T a_2 = \frac{1}{3}(-1(1) + 2(1) + 2(4)) = \frac{1}{3}(-1 + 2 + 8) = 3$.<br>
+          Orthogonal vector $B = a_2 - r_{12}q_1 = \begin{bmatrix} 1 \\ 1 \\ 4 \end{bmatrix} - 3\left(\frac{1}{3}\right)\begin{bmatrix} -1 \\ 2 \\ 2 \end{bmatrix} = \begin{bmatrix} 2 \\ -1 \\ 2 \end{bmatrix}$.<br>
+          $\|B\| = \sqrt{4 + 1 + 4} = 3 \implies r_{22} = 3$. Pivot $d_2 = 3^2 = 9$.<br>
+          Second unit vector: $q_2 = \frac{1}{3}(2, -1, 2)$.<br>
+          $$Q = \frac{1}{3}\begin{bmatrix} -1 & 2 \\ 2 & -1 \\ 2 & 2 \end{bmatrix}, \quad R = \begin{bmatrix} 3 & 3 \\ 0 & 3 \end{bmatrix}$$
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">20.</span><strong>Problem:</strong> True or false (give an example in either case):<br>
+        (a) $Q^{-1}$ is an orthogonal matrix when $Q$ is an orthogonal matrix.<br>
+        (b) If $Q$ ($3 \times 2$) has orthonormal columns then $\|Qx\|$ always equals $\|x\|$.</p>
+        <div class="solution-block">
+          <strong>(a) True:</strong> If $Q$ is orthogonal, $Q^{-1} = Q^T$. The inverse of $Q^{-1}$ is $(Q^{-1})^{-1} = Q = (Q^T)^T = (Q^{-1})^T$. Thus $(Q^{-1})^T (Q^{-1}) = I$, so $Q^{-1}$ is orthogonal.<br><br>
+          <strong>(b) True:</strong> For any $x \in \mathbb{R}^2$, $\|Qx\|^2 = (Qx)^T(Qx) = x^T (Q^T Q) x$. Since the columns are orthonormal, $Q^T Q = I_2$, yielding $x^T I_2 x = x^T x = \|x\|^2$. Thus $\|Qx\| = \|x\|$ always.
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">21.</span><strong>Problem:</strong> Find an orthonormal basis for the column space of $A$, and then compute the projection of $b$ onto that column space:</p>
+        $$A = \begin{bmatrix} 1 & -2 \\ 1 & 0 \\ 1 & 1 \\ 1 & 3 \end{bmatrix}, \quad b = \begin{bmatrix} -4 \\ -3 \\ 3 \\ 0 \end{bmatrix}$$
+        <div class="solution-block">
+          <strong>Step 1: Gram-Schmidt on columns of $A$.</strong><br>
+          $a_1 = (1, 1, 1, 1)$, $\|a_1\| = \sqrt{4} = 2 \implies q_1 = \frac{1}{2}(1, 1, 1, 1)$.<br>
+          $a_2 = (-2, 0, 1, 3)$.<br>
+          $q_1^T a_2 = \frac{1}{2}(-2 + 0 + 1 + 3) = \frac{2}{2} = 1$.<br>
+          $B = a_2 - (q_1^T a_2)q_1 = (-2, 0, 1, 3) - \frac{1}{2}(1, 1, 1, 1) = \left(-\frac{5}{2}, -\frac{1}{2}, \frac{1}{2}, \frac{5}{2}\right) = \frac{1}{2}(-5, -1, 1, 5)$.<br>
+          $\|B\| = \frac{1}{2}\sqrt{25 + 1 + 1 + 25} = \frac{\sqrt{52}}{2} = \sqrt{13}$.<br>
+          $q_2 = \frac{1}{\sqrt{52}}(-5, -1, 1, 5)$.<br><br>
+          <strong>Step 2: Projection of $b$.</strong><br>
+          $q_1^T b = \frac{1}{2}(-4 - 3 + 3 + 0) = -2$.<br>
+          $q_2^T b = \frac{1}{\sqrt{52}}((-5)(-4) + (-1)(-3) + 1(3) + 5(0)) = \frac{20 + 3 + 3}{\sqrt{52}} = \frac{26}{\sqrt{52}} = \frac{26}{2\sqrt{13}} = \sqrt{13}$.<br>
+          $$p = (q_1^T b)q_1 + (q_2^T b)q_2 = -2\left(\frac{1}{2}\begin{bmatrix} 1 \\ 1 \\ 1 \\ 1 \end{bmatrix}\right) + \sqrt{13}\left(\frac{1}{2\sqrt{13}}\begin{bmatrix} -5 \\ -1 \\ 1 \\ 5 \end{bmatrix}\right)$$
+          $$= \begin{bmatrix} -1 \\ -1 \\ -1 \\ -1 \end{bmatrix} + \begin{bmatrix} -2.5 \\ -0.5 \\ 0.5 \\ 2.5 \end{bmatrix} = \begin{bmatrix} -3.5 \\ -1.5 \\ -0.5 \\ 1.5 \end{bmatrix}$$
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">22.</span><strong>Problem:</strong> Find orthogonal vectors $A, B, C$ by Gram-Schmidt from:</p>
+        $$a = \begin{bmatrix} 1 \\ 1 \\ 2 \end{bmatrix}, \quad b = \begin{bmatrix} 1 \\ -1 \\ 0 \end{bmatrix}, \quad c = \begin{bmatrix} 1 \\ 0 \\ 4 \end{bmatrix}$$
+        <div class="solution-block">
+          <strong>Step 1:</strong> $A = a = (1, 1, 2)$. $A^T A = 1 + 1 + 4 = 6$.<br><br>
+          <strong>Step 2:</strong> $A^T b = 1(1) + 1(-1) + 2(0) = 0$.<br>
+          Since $A^T b = 0$, $b$ is already orthogonal to $A$!
+          $$B = b = \begin{bmatrix} 1 \\ -1 \\ 0 \end{bmatrix}, \quad B^T B = 1 + 1 + 0 = 2$$
+          <strong>Step 3:</strong> Compute projections of $c$ onto $A$ and $B$:
+          $$A^T c = 1(1) + 1(0) + 2(4) = 9$$
+          $$B^T c = 1(1) - 1(0) + 0(4) = 1$$
+          $$C = c - \frac{A^T c}{A^T A}A - \frac{B^T c}{B^T B}B = \begin{bmatrix} 1 \\ 0 \\ 4 \end{bmatrix} - \frac{9}{6}\begin{bmatrix} 1 \\ 1 \\ 2 \end{bmatrix} - \frac{1}{2}\begin{bmatrix} 1 \\ -1 \\ 0 \end{bmatrix}$$
+          $$= \begin{bmatrix} 1 \\ 0 \\ 4 \end{bmatrix} - \begin{bmatrix} 3/2 \\ 3/2 \\ 3 \end{bmatrix} - \begin{bmatrix} 1/2 \\ -1/2 \\ 0 \end{bmatrix} = \begin{bmatrix} 1 - 3/2 - 1/2 \\ 0 - 3/2 + 1/2 \\ 4 - 3 - 0 \end{bmatrix} = \begin{bmatrix} -1 \\ -1 \\ 1 \end{bmatrix}$$
+          Check: $A^T C = 1(-1) + 1(-1) + 2(1) = 0$; $B^T C = 1(-1) - 1(-1) + 0 = 0$.
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">23.</span><strong>Problem:</strong> Find $q_1, q_2, q_3$ (orthonormal) as combinations of $a, b, c$ (independent columns of $A$). Then write $A$ as $QR$:</p>
+        $$A = \begin{bmatrix} 1 & 2 & 4 \\ 0 & 0 & 5 \\ 0 & 3 & 6 \end{bmatrix}$$
+        <div class="solution-block">
+          Column 1: $a_1 = (1, 0, 0) \implies \|a_1\| = 1 \implies q_1 = \begin{bmatrix} 1 \\ 0 \\ 0 \end{bmatrix}$.<br><br>
+          Column 2: $a_2 = (2, 0, 3)$.<br>
+          $q_1^T a_2 = 2$.<br>
+          $B = a_2 - 2q_1 = (0, 0, 3) \implies \|B\| = 3 \implies q_2 = \begin{bmatrix} 0 \\ 0 \\ 1 \end{bmatrix}$.<br><br>
+          Column 3: $a_3 = (4, 5, 6)$.<br>
+          $q_1^T a_3 = 4$, $q_2^T a_3 = 6$.<br>
+          $C = a_3 - 4q_1 - 6q_2 = (0, 5, 0) \implies \|C\| = 5 \implies q_3 = \begin{bmatrix} 0 \\ 1 \\ 0 \end{bmatrix}$.<br><br>
+          Thus:
+          $$Q = \begin{bmatrix} 1 & 0 & 0 \\ 0 & 0 & 1 \\ 0 & 1 & 0 \end{bmatrix}, \quad R = \begin{bmatrix} q_1^T a_1 & q_1^T a_2 & q_1^T a_3 \\ 0 & q_2^T a_2 & q_2^T a_3 \\ 0 & 0 & q_3^T a_3 \end{bmatrix} = \begin{bmatrix} 1 & 2 & 4 \\ 0 & 3 & 6 \\ 0 & 0 & 5 \end{bmatrix}$$
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">24.</span><strong>Problem:</strong><br>
+        (a) Find a basis for the subspace $S$ in $\mathbb{R}^4$ spanned by all solutions of $x_1 + x_2 + x_3 - x_4 = 0$.<br>
+        (b) Find a basis for the orthogonal complement $S^\perp$.<br>
+        (c) Find $b_1$ in $S$ and $b_2$ in $S^\perp$ so that $b_1 + b_2 = b = (1, 1, 1, 1)$.</p>
+        <div class="solution-block">
+          <strong>(a)</strong> Equation: $x_4 = x_1 + x_2 + x_3$. Three free variables give a basis for $S$:
+          $$s_1 = \begin{bmatrix} 1 \\ 0 \\ 0 \\ 1 \end{bmatrix}, \quad s_2 = \begin{bmatrix} 0 \\ 1 \\ 0 \\ 1 \end{bmatrix}, \quad s_3 = \begin{bmatrix} 0 \\ 0 \\ 1 \\ 1 \end{bmatrix}$$
+          <strong>(b)</strong> $S^\perp$ is the 1D line orthogonal to the hyperplane, spanned by the normal vector:
+          $$n = \begin{bmatrix} 1 \\ 1 \\ 1 \\ -1 \end{bmatrix}$$
+          <strong>(c)</strong> Project $b$ onto $S^\perp$ to get $b_2$:
+          $$b_2 = \frac{n^T b}{n^T n} n = \frac{1(1) + 1(1) + 1(1) - 1(1)}{1^2 + 1^2 + 1^2 + (-1)^2} n = \frac{2}{4} n = \frac{1}{2}\begin{bmatrix} 1 \\ 1 \\ 1 \\ -1 \end{bmatrix} = \begin{bmatrix} 1/2 \\ 1/2 \\ 1/2 \\ -1/2 \end{bmatrix}$$
+          Then $b_1 = b - b_2$:
+          $$b_1 = \begin{bmatrix} 1 \\ 1 \\ 1 \\ 1 \end{bmatrix} - \begin{bmatrix} 1/2 \\ 1/2 \\ 1/2 \\ -1/2 \end{bmatrix} = \begin{bmatrix} 1/2 \\ 1/2 \\ 1/2 \\ 3/2 \end{bmatrix}$$
+          Check: $1/2 + 1/2 + 1/2 - 3/2 = 0$, so $b_1 \in S$.
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">25.</span><strong>Problem:</strong> If $ad - bc > 0$, the entries in $A = QR$ are:
+        $$\begin{bmatrix} a & b \\ c & d \end{bmatrix} = \frac{1}{\sqrt{a^2 + c^2}}\begin{bmatrix} a & -c \\ c & a \end{bmatrix} \begin{bmatrix} \sqrt{a^2 + c^2} & \frac{ab + cd}{\sqrt{a^2 + c^2}} \\ 0 & \frac{ad - bc}{\sqrt{a^2 + c^2}} \end{bmatrix}$$
+        Write $A = QR$ when $a, b, c, d = 2, 1, 1, 1$ and also $1, 1, 1, 1$. Which entry of $R$ becomes zero when the columns are dependent and Gram-Schmidt breaks down?</p>
+        <div class="solution-block">
+          <strong>Case 1:</strong> $(a, b, c, d) = (2, 1, 1, 1)$.
+          $$\sqrt{a^2 + c^2} = \sqrt{4 + 1} = \sqrt{5}, \quad ab + cd = 2(1) + 1(1) = 3, \quad ad - bc = 2(1) - 1(1) = 1$$
+          $$\begin{bmatrix} 2 & 1 \\ 1 & 1 \end{bmatrix} = \frac{1}{\sqrt{5}}\begin{bmatrix} 2 & -1 \\ 1 & 2 \end{bmatrix} \begin{bmatrix} \sqrt{5} & 3/\sqrt{5} \\ 0 & 1/\sqrt{5} \end{bmatrix}$$
+          <strong>Case 2:</strong> $(a, b, c, d) = (1, 1, 1, 1)$. Here $ad - bc = 1(1) - 1(1) = 0$.<br>
+          The columns are linearly dependent. The second diagonal entry of $R$, namely:
+          $$r_{22} = \frac{ad - bc}{\sqrt{a^2 + c^2}} = 0$$
+          becomes zero, and Gram-Schmidt breaks down (cannot divide by $\|B\| = 0$).
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">26.</span><strong>Problem:</strong> Show why $C$ (found via $C^*$ in the steps after (12)) is equal to $C$ in equation (8).</p>
+        <div class="solution-block">
+          Equation (8) subtracts all projections at once:
+          $$C = c - (q_1^T c)q_1 - (q_2^T c)q_2$$
+          In modified Gram-Schmidt (after equation (12)):
+          $$C^* = c - (q_1^T c)q_1$$
+          Then $C$ is found by subtracting the projection of $C^*$ along $q_2$:
+          $$C = C^* - (q_2^T C^*)q_2 = \left(c - (q_1^T c)q_1\right) - \left(q_2^T [c - (q_1^T c)q_1]\right) q_2$$
+          Because $q_2$ is orthogonal to $q_1$, $q_2^T q_1 = 0$, so $q_2^T C^* = q_2^T c$.<br>
+          Substituting this gives:
+          $$C = c - (q_1^T c)q_1 - (q_2^T c)q_2$$
+          Both expressions are mathematically identical in exact arithmetic.
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">27.</span><strong>Problem:</strong> Equation (8) subtracts from $c$ its components along $A$ and $B$. Why not subtract the components along $a$ and along $b$?</p>
+        <div class="solution-block">
+          The original vectors $a$ and $b$ are <strong>not orthogonal</strong> to each other. One-dimensional projection formulas $\frac{a^T c}{a^T a}a$ and $\frac{b^T c}{b^T b}b$ are valid only onto mutually perpendicular directions. Subtracting non-orthogonal projections would subtract the overlapping component twice, resulting in a vector that is not orthogonal to the plane of $a$ and $b$.
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">28.</span><strong>Problem:</strong> Where are the $mn^2$ multiplications in equations (11) and (12)?</p>
+        <div class="solution-block">
+          For each column $j$ (from $1$ to $n$), and for each previously computed vector $i$ (from $1$ to $j-1$):
+          <ul>
+            <li>Computing the dot product $r_{ij} = q_i^T v$ requires $m$ multiplications.</li>
+            <li>Subtracting the vector projection $v \leftarrow v - r_{ij} q_i$ requires $m$ multiplications.</li>
+          </ul>
+          Total operations across all pairs $(i, j)$:
+          $$\sum_{j=1}^n \sum_{i=1}^{j-1} 2m \approx 2m \cdot \frac{n^2}{2} = mn^2 \text{ multiplications}$$
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">29.</span><strong>Problem:</strong> Apply the MATLAB qr code to $a = (2, 2, -1)$, $b = (0, -3, 3)$, $c = (1, 0, 0)$. What are the $q$'s?</p>
+        <div class="solution-block">
+          <strong>Vector 1:</strong> $\|a\| = \sqrt{4 + 4 + 1} = 3 \implies q_1 = \frac{1}{3}(2, 2, -1)$.<br><br>
+          <strong>Vector 2:</strong> $q_1^T b = \frac{1}{3}(0 - 6 - 3) = -3$.
+          $$B = b - (-3)q_1 = \begin{bmatrix} 0 \\ -3 \\ 3 \end{bmatrix} + \begin{bmatrix} 2 \\ 2 \\ -1 \end{bmatrix} = \begin{bmatrix} 2 \\ -1 \\ 2 \end{bmatrix}$$
+          $\|B\| = \sqrt{4 + 1 + 4} = 3 \implies q_2 = \frac{1}{3}(2, -1, 2)$.<br><br>
+          <strong>Vector 3:</strong>
+          $$q_1^T c = \frac{2}{3}, \quad q_2^T c = \frac{2}{3}$$
+          $$C = c - \frac{2}{3}q_1 - \frac{2}{3}q_2 = \begin{bmatrix} 1 \\ 0 \\ 0 \end{bmatrix} - \frac{2}{9}\begin{bmatrix} 2 \\ 2 \\ -1 \end{bmatrix} - \frac{2}{9}\begin{bmatrix} 2 \\ -1 \\ 2 \end{bmatrix} = \begin{bmatrix} 1 - 8/9 \\ 0 - 2/9 \\ 0 - 2/9 \end{bmatrix} = \begin{bmatrix} 1/9 \\ -2/9 \\ -2/9 \end{bmatrix} = \frac{1}{9}\begin{bmatrix} 1 \\ -2 \\ -2 \end{bmatrix}$$
+          $\|C\| = \frac{1}{9}\sqrt{1 + 4 + 4} = \frac{3}{9} = \frac{1}{3}$.
+          $$q_3 = \frac{C}{\|C\|} = \frac{1}{3}\begin{bmatrix} 1 \\ -2 \\ -2 \end{bmatrix}$$
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">30.</span><strong>Problem:</strong> The first four wavelets are in the columns of this wavelet matrix $W$:
+        $$W = \frac{1}{2}\begin{bmatrix} 1 & 1 & \sqrt{2} & 0 \\ 1 & 1 & -\sqrt{2} & 0 \\ 1 & -1 & 0 & \sqrt{2} \\ 1 & -1 & 0 & -\sqrt{2} \end{bmatrix}$$
+        What is special about the columns? Find the inverse wavelet transform $W^{-1}$.</p>
+        <div class="solution-block">
+          <strong>Special property:</strong> All columns are pairwise orthogonal and each column has unit length:
+          $$\|w_1\|^2 = \frac{1}{4}(1 + 1 + 1 + 1) = 1, \quad \|w_3\|^2 = \frac{1}{4}(2 + 2 + 0 + 0) = 1$$
+          Therefore, $W$ is an <strong>orthogonal matrix</strong> ($W^T W = I$).<br>
+          Consequently, the inverse is simply the transpose:
+          $$W^{-1} = W^T = \frac{1}{2}\begin{bmatrix} 1 & 1 & 1 & 1 \\ 1 & 1 & -1 & -1 \\ \sqrt{2} & -\sqrt{2} & 0 & 0 \\ 0 & 0 & \sqrt{2} & -\sqrt{2} \end{bmatrix}$$
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">31.</span><strong>Problem:</strong> (a) Choose $c$ so that $Q$ is an orthogonal matrix:
+        $$Q = c\begin{bmatrix} 1 & -1 & -1 & -1 \\ -1 & 1 & -1 & -1 \\ -1 & -1 & 1 & -1 \\ -1 & -1 & -1 & 1 \end{bmatrix}$$
+        Project $b = (1, 1, 1, 1)$ onto the first column. Then project $b$ onto the plane of the first two columns.</p>
+        <div class="solution-block">
+          Let column 1 be $v_1 = (1, -1, -1, -1)$. Then $\|v_1\| = \sqrt{1 + 1 + 1 + 1} = \sqrt{4} = 2$.<br>
+          For $Q$ to have unit columns, we must set $c = \frac{1}{2}$ (or $-\frac{1}{2}$).<br>
+          Notice $v_1^T v_2 = 1(-1) + (-1)(1) + (-1)(-1) + (-1)(-1) = -1 - 1 + 1 + 1 = 0$, so columns are orthogonal.<br><br>
+          <strong>Projection of $b = (1, 1, 1, 1)$ onto $q_1$:</strong>
+          $$q_1 = \frac{1}{2}\begin{bmatrix} 1 \\ -1 \\ -1 \\ -1 \end{bmatrix} \implies q_1^T b = \frac{1}{2}(1 - 1 - 1 - 1) = -1$$
+          $$p_1 = (q_1^T b)q_1 = -1 \left(\frac{1}{2}\begin{bmatrix} 1 \\ -1 \\ -1 \\ -1 \end{bmatrix}\right) = \begin{bmatrix} -1/2 \\ 1/2 \\ 1/2 \\ 1/2 \end{bmatrix}$$
+          <strong>Projection onto the first two columns:</strong>
+          $$q_2 = \frac{1}{2}\begin{bmatrix} -1 \\ 1 \\ -1 \\ -1 \end{bmatrix} \implies q_2^T b = \frac{1}{2}(-1 + 1 - 1 - 1) = -1$$
+          $$p_2 = (q_2^T b)q_2 = \begin{bmatrix} 1/2 \\ -1/2 \\ 1/2 \\ 1/2 \end{bmatrix}$$
+          $$p_{1,2} = p_1 + p_2 = \begin{bmatrix} -1/2 \\ 1/2 \\ 1/2 \\ 1/2 \end{bmatrix} + \begin{bmatrix} 1/2 \\ -1/2 \\ 1/2 \\ 1/2 \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \\ 1 \\ 1 \end{bmatrix}$$
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">32.</span><strong>Problem:</strong> If $u$ is a unit vector, then $Q = I - 2uu^T$ is a reflection matrix. Find $Q_1$ from $u = (0, 1)$ and $Q_2$ from $u = (0, \sqrt{2}/2, \sqrt{2}/2)$. Draw the reflections when $Q_1$ and $Q_2$ multiply the vectors $(1, 2)$ and $(1, 1, 1)$.</p>
+        <div class="solution-block">
+          <strong>$Q_1$ from $u = (0, 1)^T$:</strong>
+          $$uu^T = \begin{bmatrix} 0 \\ 1 \end{bmatrix}\begin{bmatrix} 0 & 1 \end{bmatrix} = \begin{bmatrix} 0 & 0 \\ 0 & 1 \end{bmatrix} \implies Q_1 = I - 2\begin{bmatrix} 0 & 0 \\ 0 & 1 \end{bmatrix} = \begin{bmatrix} 1 & 0 \\ 0 & -1 \end{bmatrix}$$
+          For vector $v = (1, 2)^T$:
+          $$Q_1 v = \begin{bmatrix} 1 & 0 \\ 0 & -1 \end{bmatrix}\begin{bmatrix} 1 \\ 2 \end{bmatrix} = \begin{bmatrix} 1 \\ -2 \end{bmatrix}$$
+          (Reflects across the $x$-axis).<br><br>
+          <strong>$Q_2$ from $u = (0, 1/\sqrt{2}, 1/\sqrt{2})^T$:</strong>
+          $$uu^T = \begin{bmatrix} 0 \\ 1/\sqrt{2} \\ 1/\sqrt{2} \end{bmatrix}\begin{bmatrix} 0 & 1/\sqrt{2} & 1/\sqrt{2} \end{bmatrix} = \begin{bmatrix} 0 & 0 & 0 \\ 0 & 1/2 & 1/2 \\ 0 & 1/2 & 1/2 \end{bmatrix}$$
+          $$Q_2 = I - 2uu^T = \begin{bmatrix} 1 & 0 & 0 \\ 0 & 0 & -1 \\ 0 & -1 & 0 \end{bmatrix}$$
+          For vector $w = (1, 1, 1)^T$:
+          $$Q_2 w = \begin{bmatrix} 1 & 0 & 0 \\ 0 & 0 & -1 \\ 0 & -1 & 0 \end{bmatrix}\begin{bmatrix} 1 \\ 1 \\ 1 \end{bmatrix} = \begin{bmatrix} 1 \\ -1 \\ -1 \end{bmatrix}$$
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">33.</span><strong>Problem:</strong> Find all matrices that are both orthogonal and lower triangular.</p>
+        <div class="solution-block">
+          Let $L$ be lower triangular and orthogonal ($L^T = L^{-1}$).<br>
+          The transpose $L^T$ is upper triangular.<br>
+          Since $L$ is orthogonal, $L^{-1} = L^T$. But the inverse of a lower triangular matrix is always lower triangular.<br>
+          Therefore, $L^T$ must be both upper triangular and lower triangular, which means it is a <strong>diagonal matrix</strong>.<br>
+          For a diagonal matrix $D = \text{diag}(d_1, \dots, d_n)$ to be orthogonal, $D^T D = I \implies d_i^2 = 1 \implies d_i = \pm 1$.<br>
+          <strong>Conclusion:</strong> The only matrices are diagonal matrices with diagonal entries $\pm 1$.
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">34.</span><strong>Problem:</strong> $Q = I - 2uu^T$ is a reflection matrix when $u^T u = 1$. Two reflections give $Q^2 = I$.<br>
+        (a) Show that $Qu = -u$. The mirror is perpendicular to $u$.<br>
+        (b) Find $Qv$ when $u^T v = 0$. The mirror contains $v$. It reflects to itself.</p>
+        <div class="solution-block">
+          <strong>(a)</strong>
+          $$Qu = (I - 2uu^T)u = u - 2u(u^T u) = u - 2u(1) = -u$$
+          The vector along the normal $u$ is reversed in sign.<br><br>
+          <strong>(b)</strong>
+          $$Qv = (I - 2uu^T)v = v - 2u(u^T v) = v - 2u(0) = v$$
+          Any vector perpendicular to $u$ lies in the mirror plane and remains completely unchanged.
+        </div>
+      </div>
+
+      <h3>Challenge Problems (35 to 37)</h3>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">35.</span><strong>Problem:</strong> Factor $[Q, R] = \text{qr}(A)$ for $A = \text{eye}(4) - \text{diag}([1, 1, 1], -1)$. You are orthogonalizing the columns $(1, -1, 0, 0)$, $(0, 1, -1, 0)$, $(0, 0, 1, -1)$, and $(0, 0, 0, 1)$. Can you scale the orthogonal columns of $Q$ to get nice integer components?</p>
+        <div class="solution-block">
+          Gram-Schmidt orthogonal vectors (un-normalized):
+          $$A = (1, -1, 0, 0)^T$$
+          $$B = (0, 1, -1, 0)^T - \left(-\frac{1}{2}\right) A = \left(\frac{1}{2}, \frac{1}{2}, -1, 0\right)^T \xrightarrow{\times 2} (1, 1, -2, 0)^T$$
+          $$C = (0, 0, 1, -1)^T - 0 \cdot A - \left(-\frac{2}{6}\right)(1, 1, -2, 0)^T = \left(\frac{1}{3}, \frac{1}{3}, \frac{1}{3}, -1\right)^T \xrightarrow{\times 3} (1, 1, 1, -3)^T$$
+          $$D = (0, 0, 0, 1)^T - \text{projections} \xrightarrow{\times 4} (1, 1, 1, 1)^T$$
+          <strong>Integer forms:</strong>
+          $$v_1 = \begin{bmatrix} 1 \\ -1 \\ 0 \\ 0 \end{bmatrix}, \quad v_2 = \begin{bmatrix} 1 \\ 1 \\ -2 \\ 0 \end{bmatrix}, \quad v_3 = \begin{bmatrix} 1 \\ 1 \\ 1 \\ -3 \end{bmatrix}, \quad v_4 = \begin{bmatrix} 1 \\ 1 \\ 1 \\ 1 \end{bmatrix}$$
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">36.</span><strong>Problem:</strong> If $A$ is $m \times n$ with rank $n$, MATLAB $\text{qr}(A)$ produces a square $m \times m$ matrix $Q = [Q_1 \; Q_2]$ and an $m \times n$ upper triangular matrix $R = \begin{bmatrix} R_1 \\ 0 \end{bmatrix}$.<br>
+        The $n$ columns of $Q_1$ are an orthonormal basis for which fundamental subspace?<br>
+        The $m - n$ columns of $Q_2$ are an orthonormal basis for which fundamental subspace?</p>
+        <div class="solution-block">
+          <ul>
+            <li>The $n$ columns of $Q_1$ span the same space as the columns of $A$. Therefore, they form an orthonormal basis for the <strong>column space $C(A)$</strong>.</li>
+            <li>The $m - n$ columns of $Q_2$ are orthogonal to the columns of $Q_1$ (and thus orthogonal to $C(A)$). Therefore, they form an orthonormal basis for the <strong>left nullspace $N(A^T)$</strong>.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="exercise-item">
+        <p><span class="exercise-number">37.</span><strong>Problem:</strong> We know that $P = Q Q^T$ is the projection onto the column space of $Q$ ($m \times n$). Now add another column $a$ to produce $A = [Q \; a]$. What is the new orthonormal vector $q$ from Gram-Schmidt: start with $a$, subtract <strong>_____</strong>, divide by <strong>_____</strong>.</p>
+        <div class="solution-block">
+          The projection of $a$ onto the space spanned by the columns of $Q$ is:
+          $$p = Q Q^T a$$
+          The perpendicular error component is:
+          $$v = a - Q Q^T a$$
+          Normalize to obtain the new unit vector:
+          $$q = \frac{a - Q Q^T a}{\|a - Q Q^T a\|}$$
+          <strong>Fill in blanks:</strong> Start with $a$, subtract <strong>$Q Q^T a$</strong>, divide by <strong>$\|a - Q Q^T a\|$</strong>.
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION 6.5 THEORY -->
+  <section id="section-6-5-theory">
+    <h2>5. Section 6.5: Positive Definite Matrices</h2>
+
+    <p>A symmetric matrix with strictly positive eigenvalues ($\lambda_i > 0$) is called <strong>positive definite</strong>. These matrices occur ubiquitously in optimization, energy minimization, and physics.</p>
+
+    <div class="box-def">
+      <h3>The 2-by-2 Test for Positive Definiteness</h3>
+      <p>A $2 \times 2$ symmetric matrix $A = \begin{bmatrix} a & b \\ b & c \end{bmatrix}$ is positive definite if and only if:</p>
+      $$a > 0 \quad \text{and} \quad ac - b^2 > 0$$
+    </div>
+
+    <h3>Mathematical Derivation of the 2-by-2 Test</h3>
+    <ol style="margin-left: 1.5rem; margin-bottom: 1rem;">
+      <li><strong>Determinant:</strong> $\det(A) = \lambda_1 \lambda_2 = ac - b^2$. For both eigenvalues to be positive, their product must be strictly positive: $ac - b^2 > 0$.</li>
+      <li><strong>Trace:</strong> $\text{trace}(A) = \lambda_1 + \lambda_2 = a + c$. For both eigenvalues to be positive, their sum must be positive: $a + c > 0$.</li>
+      <li>If $ac - b^2 > 0$, then $ac > b^2 \ge 0$, which requires $a$ and $c$ to have the identical sign. If $a > 0$, then $c > 0$, which automatically satisfies the trace requirement $a + c > 0$.</li>
+    </ol>
+
+    <h3>Connection to Gaussian Elimination (Pivots)</h3>
+    <p>Perform row elimination on $A = \begin{bmatrix} a & b \\ b & c \end{bmatrix}$:</p>
+    $$\begin{bmatrix} a & b \\ b & c \end{bmatrix} \xrightarrow{R_2 \leftarrow R_2 - \frac{b}{a} R_1} \begin{bmatrix} a & b \\ 0 & c - \frac{b^2}{a} \end{bmatrix} = \begin{bmatrix} a & b \\ 0 & \frac{ac - b^2}{a} \end{bmatrix}$$
+    <p>The pivots of the matrix are:</p>
+    $$d_1 = a, \quad d_2 = \frac{ac - b^2}{a}$$
+    <div class="box-key">
+      <strong>Pivot Test:</strong> The eigenvalues of a symmetric matrix $A = A^T$ are positive if and only if all pivots are positive:
+      $$d_1 = a > 0 \quad \text{and} \quad d_2 = \frac{ac - b^2}{a} > 0$$
+    </div>
+
+    <h3>Diagnostic Comparison of Three Sample Matrices</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Matrix</th>
+          <th>1-by-1 Determinant ($a$)</th>
+          <th>2-by-2 Determinant ($ac - b^2$)</th>
+          <th>Eigenvalues / Classification</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>$A_1 = \begin{bmatrix} 1 & 2 \\ 2 & 1 \end{bmatrix}$</td>
+          <td>$a = 1 > 0$</td>
+          <td>$1(1) - 2^2 = -3 < 0$</td>
+          <td><strong>Not positive definite</strong> (Indefinite: $\lambda = 3, -1$)</td>
+        </tr>
+        <tr>
+          <td>$A_2 = \begin{bmatrix} 1 & -2 \\ -2 & 6 \end{bmatrix}$</td>
+          <td>$a = 1 > 0$</td>
+          <td>$1(6) - (-2)^2 = 2 > 0$</td>
+          <td><strong>Positive definite</strong> (Both $\lambda > 0$)</td>
+        </tr>
+        <tr>
+          <td>$A_3 = \begin{bmatrix} -1 & 2 \\ 2 & -6 \end{bmatrix}$</td>
+          <td>$a = -1 < 0$</td>
+          <td>$(-1)(-6) - 2^2 = +2 > 0$</td>
+          <td><strong>Negative definite</strong> ($A_3 = -A_2$; both $\lambda < 0$)</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+</div>
+
+</body>
+</html>

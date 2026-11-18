@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Linear Algebra for Statistics, Probability, and Graphics — Study Notes</title>
+  
+  <!-- MathJax Configuration -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        renderActions: {
+          addMenu: []
+        }
+      }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --primary-light: #eff6ff;
+      --secondary: #0f766e;
+      --secondary-light: #f0fdfa;
+      --accent: #b45309;
+      --text: #1f2937;
+      --text-muted: #4b5563;
+      --border: #e5e7eb;
+      --bg: #ffffff;
+      --card-bg: #f9fafb;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.65;
+      color: var(--text);
+      background-color: #f3f4f6;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      background: var(--bg);
+      padding: 3rem 3.5rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    header {
+      border-bottom: 3px double var(--border);
+      padding-bottom: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    h1 {
+      font-size: 2.1rem;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .meta-subtitle {
+      font-size: 1rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    h2 {
+      font-size: 1.55rem;
+      color: var(--primary);
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.4rem;
+    }
+
+    h3 {
+      font-size: 1.25rem;
+      color: var(--secondary);
+      margin-top: 1.75rem;
+      margin-bottom: 0.6rem;
+    }
+
+    p {
+      margin-bottom: 1.1rem;
+      text-align: justify;
+    }
+
+    ul, ol {
+      margin-left: 1.5rem;
+      margin-bottom: 1.2rem;
+    }
+
+    li {
+      margin-bottom: 0.4rem;
+    }
+
+    /* Math and Tables */
+    .table-wrapper {
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      background-color: #f8fafc;
+      font-weight: 600;
+      color: var(--primary);
+      border-bottom: 2px solid var(--border);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:nth-child(even) {
+      background-color: #fcfcfd;
+    }
+
+    /* Highlight & Box Styling */
+    .box {
+      border-radius: 6px;
+      padding: 1.2rem 1.4rem;
+      margin: 1.5rem 0;
+      border-left: 4px solid;
+    }
+
+    .box-summary {
+      background-color: var(--primary-light);
+      border-left-color: var(--primary);
+    }
+
+    .box-example {
+      background-color: var(--secondary-light);
+      border-left-color: var(--secondary);
+    }
+
+    .box-review {
+      background-color: #fffbeb;
+      border-left-color: var(--accent);
+    }
+
+    .box-title {
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .formula-display {
+      background-color: #f8fafc;
+      padding: 0.8rem;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      margin: 1rem 0;
+      text-align: center;
+    }
+
+    /* Diagram Containers */
+    .svg-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 1.75rem 0;
+      padding: 1rem;
+      background-color: #fafafa;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+    }
+
+    /* Problem Sets */
+    .problem-item {
+      margin-bottom: 1.2rem;
+      padding-left: 0.5rem;
+    }
+
+    .problem-number {
+      font-weight: 700;
+      color: var(--primary);
+      margin-right: 0.4rem;
+    }
+
+    @media print {
+      body {
+        background-color: #ffffff;
+        padding: 0;
+      }
+      .container {
+        box-shadow: none;
+        padding: 1rem 1.5rem;
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Linear Algebra: Comprehensive Applied Notes</h1>
+    <div class="meta-subtitle">Reference Guide: Eigenvalues, Statistics, Probability, &amp; Geometric Affine Transformations</div>
+  </header>
+
+  <!-- SECTION: EIGENVALUE & EIGENVECTOR DIRECTORY -->
+  <section id="chapter6-summary">
+    <h2>1. Table of Eigenvalues and Eigenvectors</h2>
+    <p>
+      How are matrix properties reflected in their eigenvalues and eigenvectors? 
+      The table below compiles these critical mathematical facts.
+    </p>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Matrix Class &amp; Condition</th>
+            <th>Eigenvalues ($\lambda_i$)</th>
+            <th>Eigenvectors ($x_i$)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Symmetric:</strong> $A^T = A$</td>
+            <td>Real $\lambda$'s</td>
+            <td>Orthogonal: $x_i^T x_j = 0$</td>
+          </tr>
+          <tr>
+            <td><strong>Orthogonal:</strong> $Q^T = Q^{-1}$</td>
+            <td>All $|\lambda| = 1$</td>
+            <td>Orthogonal: $\overline{x}_i^T x_j = 0$</td>
+          </tr>
+          <tr>
+            <td><strong>Skew-symmetric:</strong> $A^T = -A$</td>
+            <td>Imaginary $\lambda$'s ($i\mathbb{R}$)</td>
+            <td>Orthogonal: $\overline{x}_i^T x_j = 0$</td>
+          </tr>
+          <tr>
+            <td><strong>Complex Hermitian:</strong> $\overline{A}^T = A$</td>
+            <td>Real $\lambda$'s</td>
+            <td>Orthogonal: $\overline{x}_i^T x_j = 0$</td>
+          </tr>
+          <tr>
+            <td><strong>Positive Definite:</strong> $x^T A x &gt; 0$</td>
+            <td>All $\lambda &gt; 0$</td>
+            <td>Orthogonal (since $A^T = A$)</td>
+          </tr>
+          <tr>
+            <td><strong>Markov:</strong> $m_{ij} &gt; 0, \; \sum_{i=1}^n m_{ij} = 1$</td>
+            <td>$\lambda_{\max} = 1$</td>
+            <td>Steady state $x &gt; 0$</td>
+          </tr>
+          <tr>
+            <td><strong>Similar:</strong> $B = M^{-1} A M$</td>
+            <td>$\lambda(B) = \lambda(A)$</td>
+            <td>$x(B) = M^{-1} x(A)$</td>
+          </tr>
+          <tr>
+            <td><strong>Projection:</strong> $P = P^2 = P^T$</td>
+            <td>$\lambda = 1; \; 0$</td>
+            <td>Column space; Nullspace</td>
+          </tr>
+          <tr>
+            <td><strong>Plane Rotation</strong></td>
+            <td>$e^{i\theta}$ and $e^{-i\theta}$</td>
+            <td>$x = (1, i)$ and $(1, -i)$</td>
+          </tr>
+          <tr>
+            <td><strong>Reflection:</strong> $I - 2uu^T$</td>
+            <td>$\lambda = -1; \; 1, \dots, 1$</td>
+            <td>$u$; whole plane $u^\perp$</td>
+          </tr>
+          <tr>
+            <td><strong>Rank One:</strong> $uv^T$</td>
+            <td>$\lambda = v^T u; \; 0, \dots, 0$</td>
+            <td>$u$; whole plane $v^\perp$</td>
+          </tr>
+          <tr>
+            <td><strong>Inverse:</strong> $A^{-1}$</td>
+            <td>$1 / \lambda(A)$</td>
+            <td>Keep eigenvectors of $A$</td>
+          </tr>
+          <tr>
+            <td><strong>Shift:</strong> $A + cI$</td>
+            <td>$\lambda(A) + c$</td>
+            <td>Keep eigenvectors of $A$</td>
+          </tr>
+          <tr>
+            <td><strong>Stable Powers:</strong> $A^n \to 0$</td>
+            <td>All $|\lambda| &lt; 1$</td>
+            <td>Any eigenvectors</td>
+          </tr>
+          <tr>
+            <td><strong>Stable Exponential:</strong> $e^{At} \to 0$</td>
+            <td>All $\operatorname{Re}(\lambda) &lt; 0$</td>
+            <td>Any eigenvectors</td>
+          </tr>
+          <tr>
+            <td><strong>Cyclic Permutation:</strong> row 1 of $I$ placed last</td>
+            <td>$\lambda_k = e^{2\pi i k / n}$</td>
+            <td>$x_k = (1, \lambda_k, \dots, \lambda_k^{n-1})$</td>
+          </tr>
+          <tr>
+            <td><strong>Tridiagonal:</strong> $-1, 2, -1$ on diagonals</td>
+            <td>$\lambda_k = 2 - 2\cos\left(\frac{k\pi}{n+1}\right)$</td>
+            <td>$x_k = \left(\sin\frac{k\pi}{n+1}, \sin\frac{2k\pi}{n+1}, \dots\right)$</td>
+          </tr>
+          <tr>
+            <td><strong>Diagonalizable:</strong> $A = S \Lambda S^{-1}$</td>
+            <td>Diagonal of $\Lambda$</td>
+            <td>Columns of $S$ are linearly independent</td>
+          </tr>
+          <tr>
+            <td><strong>Symmetric Spectral:</strong> $A = Q \Lambda Q^T$</td>
+            <td>Diagonal of $\Lambda$ (real)</td>
+            <td>Columns of $Q$ are orthonormal</td>
+          </tr>
+          <tr>
+            <td><strong>Schur Form:</strong> $A = Q T Q^{-1}$</td>
+            <td>Diagonal of $T$</td>
+            <td>Columns of $Q$ (if $A^TA = AA^T$)</td>
+          </tr>
+          <tr>
+            <td><strong>Jordan Form:</strong> $J = M^{-1} A M$</td>
+            <td>Diagonal of $J$</td>
+            <td>Each block gives $x = (0, \dots, 1, \dots, 0)$</td>
+          </tr>
+          <tr>
+            <td><strong>Rectangular (SVD):</strong> $A = U \Sigma V^T$</td>
+            <td>$\operatorname{rank}(A) = \operatorname{rank}(\Sigma)$</td>
+            <td>Eigenvectors of $A^TA, AA^T$ in $V, U$</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- SECTION 8.6: STATISTICS AND PROBABILITY -->
+  <section id="section-8-6">
+    <h2>2. Linear Algebra for Statistics and Probability</h2>
+    <p>
+      Statistics evaluates large datasets. Because data vectors assemble into rectangular matrices, 
+      the symmetric product $A^T A$ arises naturally. Linear regression identifies the optimal solution vector 
+      $\widehat{x}$ to fit $m$ observations with $n$ parameters ($n &lt; m$) using the least squares approximation $A\widehat{x} \approx b$.
+    </p>
+    <p>
+      The standard unweighted system $A^T A \widehat{x} = A^T b$ assumes all measurements $b_1, \dots, b_m$ have equal reliability. 
+      When specific measurements have lower variance (higher precision), those relations require heavier weighting. 
+      When errors exhibit interdependence, a covariance matrix $\Sigma$ quantifies this behavior.
+    </p>
+
+    <div class="box box-summary">
+      <div class="box-title">Key Agenda of Applied Statistical Linear Algebra</div>
+      <ol>
+        <li>Weighted least squares using the weight matrix $C$: $A^T C A \widehat{x} = A^T C b$.</li>
+        <li>Variances $\sigma_1^2, \dots, \sigma_m^2$ and the covariance matrix $\Sigma$.</li>
+        <li>Foundational probability distributions: Binomial, Poisson, and Normal (Gaussian).</li>
+        <li>Principal Component Analysis (PCA) to extract maximal variance directions via the SVD.</li>
+      </ol>
+    </div>
+
+    <h3>Weighted Least Squares</h3>
+    <p>
+      Given $m$ equations $Ax = b$, assign a positive scalar weight $w_i$ to each equation $i$. 
+      Collecting these weights into a diagonal matrix $W = \operatorname{diag}(w_1, \dots, w_m)$ yields 
+      the transformed system:
+    </p>
+    <div class="formula-display">
+      $$W A x = W b$$
+    </div>
+    <p>
+      The normal equations for this transformed system become $(WA)^T (WA)\widehat{x} = (WA)^T (Wb)$. 
+      Defining the weight matrix $C = W^T W$, we obtain:
+    </p>
+    <div class="formula-display">
+      <strong>Weighted Least Squares:</strong>
+      $$A^T C A \widehat{x} = A^T C b \quad \text{where} \quad C = W^T W \tag{1}$$
+    </div>
+
+    <p>
+      <strong>Simplest Case:</strong> When $n = 1$ and $A = [1, 1, \dots, 1]^T$, the unweighted solution 
+      is the sample mean $\widehat{x} = \frac{b_1 + \dots + b_m}{m}$. With weights, this shifts to:
+    </p>
+    <div class="formula-display">
+      $$\widehat{x}_W = \frac{w_1^2 b_1 + \dots + w_m^2 b_m}{w_1^2 + \dots + w_m^2} \tag{2}$$
+    </div>
+    <p>
+      This formula weights each observation $b_i$ proportionally to $w_i^2$. 
+      We assume errors maintain a mean of zero ($E[e_i] = 0$).
+    </p>
+
+    <p>
+      <strong>Selection of Weights:</strong> Let observation $b_i$ have variance $\sigma_i^2$. 
+      The root mean square error is $\sigma_i$. Scaling each row by $1/\sigma_i$ normalizes all row variances to 1. 
+      Hence, the optimal choice sets $w_i = 1/\sigma_i$, giving diagonal elements $1/\sigma_i^2$ in $C$:
+    </p>
+    <div class="formula-display">
+      $$C = \operatorname{diag}\left(\frac{1}{\sigma_1^2}, \dots, \frac{1}{\sigma_m^2}\right)$$
+    </div>
+    <p>
+      When measurement errors are statistically dependent, off-diagonal terms appear in the covariance matrix $\Sigma$. 
+      The general optimal weighting matrix is the inverse covariance: $C = \Sigma^{-1}$.
+    </p>
+
+    <!-- MEAN AND VARIANCE -->
+    <h3>Mean and Variance</h3>
+    <p>
+      A random variable is characterized by its mean $m$ (expected value) and variance $\sigma^2$:
+    </p>
+    <div class="formula-display">
+      $$\text{Mean } m = E[e] = \sum e_j p_j, \qquad \text{Variance } \sigma^2 = E[(e-m)^2] = \sum (e_j - m)^2 p_j \tag{3}$$
+    </div>
+
+    <div class="box box-example">
+      <div class="box-title">Example 1: Single Fair Coin Flip</div>
+      <p>Outcomes: $1$ (heads), $0$ (tails). Probabilities: $p_0 = p_1 = 1/2$.</p>
+      $$m = (0)\left(\frac{1}{2}\right) + (1)\left(\frac{1}{2}\right) = \frac{1}{2}$$
+      $$\sigma^2 = \left(0 - \frac{1}{2}\right)^2 \left(\frac{1}{2}\right) + \left(1 - \frac{1}{2}\right)^2 \left(\frac{1}{2}\right) = \frac{1}{8} + \frac{1}{8} = \frac{1}{4}$$
+    </div>
+
+    <div class="box box-example">
+      <div class="box-title">Example 2: Binomial Distribution ($N$ Flips)</div>
+      <p>
+        Flip a fair coin $N$ times and record the total heads count $M$. 
+        The probability of getting $M$ heads is given by the binomial coefficient divided by total permutations $2^N$:
+      </p>
+      $$p_M = \frac{1}{2^N} \binom{N}{M} = \frac{1}{2^N}\frac{N!}{M!(N-M)!} \tag{4}$$
+      <p>
+        The probabilities sum to $\left(\frac{1}{2} + \frac{1}{2}\right)^N = 1$. 
+        The mean and variance evaluate to:
+      </p>
+      $$m = \frac{N}{2}, \qquad \sigma^2 = \frac{N}{4}, \qquad \sigma = \frac{\sqrt{N}}{2}$$
+    </div>
+
+    <div class="box box-example">
+      <div class="box-title">Example 3: Poisson Distribution (Rare Events)</div>
+      <p>
+        Consider an asymmetric coin with very low success probability ($p \ll 1$) flipped over large trials ($N \gg 1$), 
+        such that the expected occurrence $\lambda = pN$ remains constant.
+        The probability of zero successes is:
+      </p>
+      $$p_0 = (1 - p)^N = \left(1 - \frac{\lambda}{N}\right)^N \xrightarrow[N \to \infty]{} e^{-\lambda}$$
+      <p>The probability of observing exactly $j$ events is:</p>
+      $$p_j = \frac{\lambda^j}{j!} e^{-\lambda}, \qquad m = \lambda, \qquad \sigma^2 = \lambda \tag{5}$$
+    </div>
+
+    <p>
+      For continuous random variables with probability density function $p(x)$ where $\int_{-\infty}^\infty p(x)\,dx = 1$:
+    </p>
+    <div class="formula-display">
+      $$m = \int_{-\infty}^\infty x p(x)\,dx, \qquad \sigma^2 = \int_{-\infty}^\infty (x - m)^2 p(x)\,dx \tag{6}$$
+    </div>
+
+    <!-- NORMAL DISTRIBUTION -->
+    <h3>The Normal Distribution &amp; Central Limit Theorem</h3>
+    <p>
+      The standard normal distribution $N(0, \sigma)$ with mean zero has density:
+    </p>
+    <div class="formula-display">
+      $$p(x) = \frac{1}{\sqrt{2\pi}\sigma} e^{-x^2 / (2\sigma^2)} \quad \text{with} \quad \int_{-\infty}^\infty p(x)\,dx = 1 \tag{7}$$
+    </div>
+
+    <!-- SVG Normal Curve -->
+    <div class="svg-container">
+      <svg width="500" height="190" viewBox="0 0 500 190">
+        <!-- Axes -->
+        <line x1="30" y1="160" x2="470" y2="160" stroke="#4b5563" stroke-width="2"/>
+        <line x1="250" y1="170" x2="250" y2="20" stroke="#9ca3af" stroke-dasharray="4"/>
+        
+        <!-- Shaded Area (-sigma to sigma) -->
+        <path d="M 180 160 
+                 C 200 150, 215 90, 250 40 
+                 C 285 90, 300 150, 320 160 Z" 
+              fill="#bfdbfe" opacity="0.6"/>
+              
+        <!-- Bell Curve Path -->
+        <path d="M 40 159.5 
+                 C 120 159, 170 145, 210 95
+                 C 230 65, 240 40, 250 40
+                 C 260 40, 270 65, 290 95
+                 C 330 145, 380 159, 460 159.5" 
+              fill="none" stroke="#1e3a8a" stroke-width="3"/>
+        
+        <!-- Labels -->
+        <text x="250" y="178" font-size="12" text-anchor="middle" fill="#1f2937">Mean $m = 0$</text>
+        <text x="180" y="178" font-size="12" text-anchor="middle" fill="#1f2937">$-\sigma$</text>
+        <text x="320" y="178" font-size="12" text-anchor="middle" fill="#1f2937">$+\sigma$</text>
+        <text x="250" y="115" font-size="13" font-weight="600" text-anchor="middle" fill="#1e3a8a">Area $\approx 68.27\%$</text>
+      </svg>
+    </div>
+
+    <p>
+      The <strong>Central Limit Theorem</strong> guarantees that the normalized sum of independent identically distributed 
+      trials approaches a normal distribution as $N \to \infty$:
+    </p>
+    <div class="formula-display">
+      $$x = \frac{M - \text{mean}}{\sigma} = \frac{M - N/2}{\sqrt{N}/2} \longrightarrow N(0, 1)$$
+    </div>
+
+    <!-- COVARIANCE MATRIX -->
+    <h3>The Covariance Matrix $\Sigma$</h3>
+    <p>
+      For $m$ concurrent experiments, the measurement is a vector $b = [b_1, \dots, b_m]^T$. 
+      Subtracting expectations yields error vectors $e_i = b_i - m_i$ with zero mean.
+      The covariance between errors $e_i$ and $e_j$ is defined by:
+    </p>
+    <div class="formula-display">
+      $$\sigma_{ij} = \sigma_{ji} = E[e_i e_j] \tag{8}$$
+    </div>
+    <p>
+      The symmetric covariance matrix $\Sigma$ collects these values: diagonal entries $\sigma_{ii} = \sigma_i^2$ 
+      represent individual variances, while off-diagonal entries $\sigma_{ij}$ represent pairwise cross-covariances.
+    </p>
+
+    <div class="box box-example">
+      <div class="box-title">Multivariate Normal Distribution</div>
+      <p>
+        For $m$ correlated variables with zero mean, the joint probability density function is dictated by the 
+        positive definite covariance matrix $\Sigma$:
+      </p>
+      $$p(b) = \frac{1}{(2\pi)^{m/2} |\Sigma|^{1/2}} \exp\left(-\frac{1}{2} b^T \Sigma^{-1} b\right)$$
+      <p>
+        Integration properties:
+        $$\int_{\mathbb{R}^m} p(b)\,db = 1, \qquad \int_{\mathbb{R}^m} b b^T p(b)\,db = \Sigma$$
+      </p>
+    </div>
+
+    <!-- SPECTRAL DECOMPOSITION OF SIGMA -->
+    <h3>Diagonalization and Whitening of Correlated Variables</h3>
+    <p>
+      Using the orthogonal spectral decomposition $\Sigma = Q \Lambda Q^T = Q \Lambda Q^{-1}$, we can decouple 
+      correlated normal variables. Setting $b = Q c$:
+    </p>
+    <div class="formula-display">
+      $$\exp\left(-\frac{1}{2} b^T \Sigma^{-1} b\right) = \exp\left(-\frac{1}{2} c^T \Lambda^{-1} c\right) = \left(e^{-c_1^2 / (2\lambda_1)}\right) \cdots \left(e^{-c_m^2 / (2\lambda_m)}\right)$$
+    </div>
+    <p>
+      Because $|\Sigma|^{1/2} = |\Lambda|^{1/2} = (\lambda_1 \cdots \lambda_m)^{1/2}$, the multidimensional integral 
+      splits into $m$ independent 1D Gaussians. 
+      Applying the scaling transformation $b = Q \Lambda^{1/2} z$ converts the density to the standard normal distribution:
+    </p>
+    <div class="formula-display">
+      $$p(z)\,dz = \frac{e^{-z^T z / 2}}{(2\pi)^{m/2}}\,dz$$
+    </div>
+
+    <h3>Gauss-Markov Theorem &amp; Precision Matrix</h3>
+    <p>
+      To reduce $Ax = b$ to ordinary least squares with uncorrelated unit-variance errors, set $W = \Lambda^{-1/2} Q^T$. 
+      This yields $C = W^T W = Q \Lambda^{-1} Q^T = \Sigma^{-1}$.
+      The optimal weighted least squares formulation is:
+    </p>
+    <div class="formula-display">
+      $$A^T \Sigma^{-1} A \widehat{x} = A^T \Sigma^{-1} b \tag{9}$$
+    </div>
+    <p>
+      The estimate $\widehat{x}$ is the Best Linear Unbiased Estimator (BLUE). 
+      The covariance matrix $P$ of the output errors $(x - \widehat{x})$ is:
+    </p>
+    <div class="formula-display">
+      $$P = E\left[(x - \widehat{x})(x - \widehat{x})^T\right] = \left(A^T \Sigma^{-1} A\right)^{-1} \tag{10}$$
+    </div>
+
+    <div class="box box-example">
+      <div class="box-title">Example 5: Pulse Rate Measurements</div>
+      <p>
+        Ten independent doctors measure a patient's pulse. 
+        Each measurement $b_i$ has zero-mean error and variance $\sigma^2$, so $\Sigma = \sigma^2 I$.
+        The model equations $x = b_i$ define the vector $A = [1, 1, \dots, 1]^T$ ($10 \times 1$).
+      </p>
+      $$P = (A^T \Sigma^{-1} A)^{-1} = \left(\frac{A^T A}{\sigma^2}\right)^{-1} = \left(\frac{10}{\sigma^2}\right)^{-1} = \frac{\sigma^2}{10}$$
+      <p>Averaging $10$ independent observations reduces the output estimation variance by a factor of 10.</p>
+    </div>
+
+    <!-- PCA -->
+    <h3>Principal Component Analysis (PCA)</h3>
+    <p>
+      Let data matrix $A$ have size $m \times n$, representing $m$ features across $n$ samples. 
+      Center the rows so each sample mean is zero. 
+      PCA finds the linear combinations that maximize variance.
+    </p>
+    <p>
+      Using the Singular Value Decomposition (SVD):
+    </p>
+    <div class="formula-display">
+      $$A = U \Sigma_{\text{SVD}} V^T$$
+    </div>
+    <p>
+      The columns of $U$ are the orthonormal eigenvectors of $A A^T$. 
+      The columns of $V$ are the orthonormal eigenvectors of $A^T A$. 
+      The singular values $\sigma_1 \ge \sigma_2 \ge \dots \ge \sigma_r$ appear along the diagonal of $\Sigma_{\text{SVD}}$.
+      Weighting features by $u_1$ identifies the primary axis of variation (the "eigencourse"), 
+      while $v_1$ identifies the corresponding sample profile (the "eigenstudent").
+    </p>
+
+    <div class="box box-example">
+      <div class="box-title">Example 6: Grade Matrix SVD</div>
+      <p>
+        Let letter grades A, B, C, F correspond to scores $4, 2, 0, -6$. 
+        Each course and student has zero mean. The centered grade matrix $A$ is:
+      </p>
+      $$A = \begin{bmatrix} -6 & 2 & 0 & 4 \\ 0 & 4 & -6 & 2 \\ 4 & 0 & 2 & -6 \\ 2 & -6 & 4 & 0 \end{bmatrix}$$
+      <p>Expressed via orthogonal integer vectors as $A = (2U)(\Sigma_{\text{SVD}} / 4)(2V)^T$:</p>
+      $$A = \begin{bmatrix} -1 & 1 & -1 \\ -1 & -1 & 1 \\ 1 & -1 & -1 \\ 1 & 1 & 1 \end{bmatrix}
+      \begin{bmatrix} 3 & & \\ & 2 & \\ & & 1 \end{bmatrix}
+      \begin{bmatrix} 1 & -1 & 1 & -1 \\ -1 & -1 & 1 & 1 \\ 1 & -1 & -1 & 1 \end{bmatrix}$$
+      <p>
+        The singular values are $\sigma_1 = 12, \; \sigma_2 = 8, \; \sigma_3 = 4$. 
+        The first singular vector explains the following fraction of total variance:
+      </p>
+      $$\frac{\sigma_1^2}{\sigma_1^2 + \sigma_2^2 + \sigma_3^2} = \frac{144}{144 + 64 + 16} = \frac{144}{224} = \frac{9}{14} \approx 64.3\%$$
+    </div>
+  </section>
+
+  <!-- SECTION: PROBLEM SET 8.6 -->
+  <section id="problems-8-6">
+    <h2>3. Problem Set 8.6</h2>
+
+    <div class="problem-item">
+      <span class="problem-number">1.</span>
+      Find the best-fitting line $C t + D$ to the three independent measurements $b = (1, 2, 4)$ at times $t = 0, 1, 2$, 
+      given variances $\sigma_1^2 = 1, \; \sigma_2^2 = 1, \; \sigma_3^2 = 2$. Use weights $w_i = 1/\sigma_i$.
+    </div>
+
+    <div class="problem-item">
+      <span class="problem-number">2.</span>
+      In Problem 1, suppose the third measurement is totally unreliable ($\sigma_3^2 \to \infty$). 
+      The best line will not use $b_3$. Find the line that passes through the first two points and solves 
+      the first two equations in $Ax = b$ exactly.
+    </div>
+
+    <div class="problem-item">
+      <span class="problem-number">3.</span>
+      In Problem 1, suppose the third measurement is completely reliable ($\sigma_3^2 \to 0$). 
+      The best line must pass through this third point exactly. 
+      Determine the line that minimizes the sum of squared errors of the first two points subject to this constraint.
+    </div>
+
+    <div class="problem-item">
+      <span class="problem-number">4.</span>
+      A single flip of a fair coin ($0$ or $1$) has mean $m = 1/2$ and variance $\sigma^2 = 1/4$. 
+      For the sum of two independent flips, the mean is $m = 1$. 
+      Compute the variance $\sigma^2$ directly using the outcomes $\{0, 1, 2\}$ and their probabilities.
+    </div>
+
+    <div class="problem-item">
+      <span class="problem-number">5.</span>
+      Treat two coin flips as separate components of a joint random vector with outcomes $(0,0), (1,0), (0,1), (1,1)$, 
+      each with probability $1/4$. Find the $2 \times 2$ covariance matrix $\Sigma$.
+    </div>
+
+    <div class="problem-item">
+      <span class="problem-number">6.</span>
+      Modify Example 1 for a biased coin: probability of heads is $p$, and tails is $1-p$. 
+      Find the mean $m$ and the variance $\sigma^2$ of this Bernoulli distribution.
+    </div>
+
+    <div class="problem-item">
+      <span class="problem-number">7.</span>
+      Given two independent measurements $x = b_1$ and $x = b_2$ with zero mean and variances $\sigma_1^2, \sigma_2^2$, 
+      consider the convex combination $\widehat{x} = a b_1 + (1 - a) b_2$. 
+      Its variance is $P = a^2 \sigma_1^2 + (1 - a)^2 \sigma_2^2$.
+      Find the value of $a$ that minimizes $P$ by setting $dP/da = 0$. 
+      Verify that this choice matches the weighted average from Equation (2) with $w_1 = 1/\sigma_1$ and $w_2 = 1/\sigma_2$.
+    </div>
+
+    <div class="problem-item">
+      <span class="problem-number">8.</span>
+      The weighted least squares estimator is $\widehat{x} = (A^T \Sigma^{-1} A)^{-1} A^T \Sigma^{-1} b = L b$. 
+      If $b$ has error $e$, then $\widehat{x}$ has error $L e$. 
+      Show that the output error covariance matrix evaluates to:
+      $$P = E\left[(Le)(Le)^T\right] = L\,E[e e^T]\,L^T = L \Sigma L^T = (A^T \Sigma^{-1} A)^{-1}$$
+    </div>
+
+    <div class="problem-item">
+      <span class="problem-number">9.</span>
+      Let the grades A, B, C, F map to $3, 1, -1, -3$. 
+      Prove that the SVD of the revised grade matrix:
+      $$A = \begin{bmatrix} 3 & -1 & 1 & -3 \\ -1 & 3 & -3 & 1 \\ -3 & 1 & -1 & 3 \\ 1 & -3 & 3 & -1 \end{bmatrix}$$
+      shares the singular vectors $u_1, u_2, v_1, v_2$ from Example 6, but has rank 2.
+    </div>
+
+    <div class="box box-summary">
+      <div class="box-title">Remark on Missing Data &amp; Pseudoinverses</div>
+      <p>
+        Missing entries in an observational data matrix $A$ are commonly handled by completing the matrix to minimize its rank. 
+        Statistical estimation relies heavily on the Moore-Penrose pseudoinverse $A^+ = (A^T A)^{-1} A^T$ (for full column rank matrices).
+      </p>
+    </div>
+  </section>
+
+  <!-- SECTION 8.7: COMPUTER GRAPHICS -->
+  <section id="section-8-7">
+    <h2>4. Computer Graphics &amp; Affine Transformations</h2>
+
+    <div class="box box-review">
+      <div class="box-title">Key Ideas in Computer Graphics</div>
+      <ol>
+        <li>Graphics systems require translations $T(v) = v + v_0$ in addition to linear transformations $T(v) = Av$.</li>
+        <li>Translations in $\mathbb{R}^n$ can be expressed as linear matrix multiplications in $\mathbb{R}^{n+1}$ using <strong>homogeneous coordinates</strong>.</li>
+        <li>Setting the trailing coordinate to $1$ ($[x, y, z, 1]^T$) preserves affine structure when matrices maintain the row/column entry pattern $[0, 0, 0, 1]^T$.</li>
+      </ol>
+    </div>
+
+    <h3>Problem Set 8.7</h3>
+
+    <div class="problem-item">
+      <span class="problem-number">1.</span>
+      A standard point in $\mathbb{R}^3$ is $x\mathbf{i} + y\mathbf{j} + z\mathbf{k}$ with basis vectors 
+      $\mathbf{i} = (1,0,0)$, $\mathbf{j} = (0,1,0)$, $\mathbf{k} = (0,0,1)$ and coordinates $(x,y,z)$. 
+      In computer graphics, this point is represented as $x\mathbf{i} + y\mathbf{j} + z\mathbf{k} + \text{origin}$. 
+      Specify its primary homogeneous coordinate form $(x, y, z, 1)$ and its projective scaled variations $(cx, cy, cz, c)$ for $c \ne 0$.
+    </div>
+
+    <div class="problem-item">
+      <span class="problem-number">2.</span>
+      A linear transformation $T$ is determined by its action on basis vectors: $T(\mathbf{i}), T(\mathbf{j}), T(\mathbf{k})$. 
+      An affine transformation requires one additional point: $T(\text{origin})$. 
+      Show how the input point $(x, y, z, 1)$ transforms into:
+      $$x T(\mathbf{i}) + y T(\mathbf{j}) + z T(\mathbf{k}) + T(\text{origin})$$
+    </div>
+
+    <div class="problem-item">
+      <span class="problem-number">3.</span>
+      Let $T$ be the $4 \times 4$ translation matrix along vector $(1, 4, 3)$, and $T_1$ be the translation matrix along $(0, 2, 5)$. 
+      Compute the matrix product $T T_1$ and confirm that it represents translation along:
+      $$(1, 4, 3) + (0, 2, 5) = (1, 6, 8)$$
+    </div>
+
+    <div class="problem-item">
+      <span class="problem-number">4.</span>
+      Construct the $4 \times 4$ homogeneous matrix $S$ that scales all spatial coordinates by constant $c$. 
+      Compute products $S T$ and $T S$, where $T$ represents translation by $(1, 4, 3)$. 
+      Determine which operator sequence ($v S T$ vs. $v T S$) correctly scales an image about the non-origin center point $(1, 4, 3)$.
+    </div>
+
+    <div class="problem-item">
+      <span class="problem-number">5.</span>
+      Construct the $3 \times 3$ homogeneous scaling matrix $S$ that maps an $8.5 \times 11$ page into a unit square ($1 \times 1$).
+    </div>
+
+    <div class="problem-item">
+      <span class="problem-number">6.</span>
+      Construct the $4 \times 4$ homogeneous transformation matrix that translates a cube corner from $(1, 1, 2)$ to the origin, 
+      and then doubles all side lengths.
+    </div>
+
+    <div class="problem-item">
+      <span class="problem-number">7.</span>
+      For the Rodrigues rotation matrix about a unit axis $a$, show that multiplying the axis vector $a$ itself gives:
+      $$(\cos\theta) a + (1 - \cos\theta) a + 0 = a$$
+      confirming that the rotation axis remains fixed ($Q a = a$).
+    </div>
+
+    <div class="problem-item">
+      <span class="problem-number">8.</span>
+      If a vector $b$ is perpendicular to unit axis $a$ ($a^T b = 0$), show that multiplying by the rotation matrix gives 
+      $(\cos\theta) b + (\sin\theta)(a \times b)$, rotating $b$ by angle $\theta$ in the perpendicular plane.
+    </div>
+
+    <div class="problem-item">
+      <span class="problem-number">9.</span>
+      Compute the $3 \times 3$ orthogonal projection matrix $P = I - n n^T$ onto the plane passing through the origin:
+      $$\frac{2}{3}x + \frac{2}{3}y + \frac{1}{3}z = 0$$
+      Embed this into a $4 \times 4$ homogeneous matrix by adding row and column entries $[0, 0, 0, 1]$.
+    </div>
+
+    <div class="problem-item">
+      <span class="problem-number">10.</span>
+      Using the projection matrix $P$ from Problem 9, evaluate the affine projection matrix $T_- P T_+$ onto the affine plane:
+      $$\frac{2}{3}x + \frac{2}{3}y + \frac{1}{3}z = 1$$
+      where $T_-$ translates a point on this plane to the origin, and $T_+$ applies the reverse shift.
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>
