@@ -4,6 +4,8 @@
 (function () {
   'use strict';
   const D = window.DATA, RAW = new URLSearchParams(location.search).get('raw') || D.raw;
+  // Files under this repo's folder come from its own GitHub raw; source PDFs come from SSC-FILES
+  const OWN = D.v3;
   const KEY = 'gate_v3';
   // same Realtime Database as GATE V1 (its own node, so V1's data is not touched)
   const CLOUD = 'https://data-science-ef878-default-rtdb.firebaseio.com/gate_v3';
@@ -101,7 +103,11 @@
   const r5 = (x) => Math.round(x / 5) * 5;
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const $ = (s, r) => (r || document).querySelector(s);
-  const raw = (p) => RAW + p.split('/').map(encodeURIComponent).join('/');
+  const raw = (p) => {
+    const own = OWN && p.startsWith(OWN.prefix);
+    const rel = own ? p.slice(OWN.prefix.length) : p;
+    return (own ? OWN.raw : RAW) + rel.split('/').map(encodeURIComponent).join('/');
+  };
   // Read opens the whole module textbook at the unit's first page (the cut only if the full PDF is unknown)
   const readUnit = (u) => PDFV.open(raw(u.src || u.cut), u.t, u.src && u.pg && u.pg[0] ? { page: u.pg[0], range: u.pg } : {});
   const ICK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
@@ -133,12 +139,13 @@
     return own.length ? own : moduleQs(cid, u.m);
   }
   function tierOk(t) { return t === 'A' || (t === 'B' && S.set.includeB) || (t === 'C' && S.set.includeC); }
-  // time buttons per topic (Progress tab): the planned minutes are multiplied, whole minutes, 5 minutes at least
-  const MULTS = [[0.25, '1/4'], [1 / 3, '1/3'], [0.5, '1/2'], [1, '1×'], [2, '2×'], [3, '3×'], [4, '4×']];
-  const mult = (id) => S.mult[id] || 1;
-  const itemMin = (u) => { const base = u.min + 5, f = mult(u.id); return f === 1 ? base : Math.max(5, Math.round(base * f)); };
+  // topic time = book pages x minutes per page (one slider per course on the Progress tab); topics with no page range keep their planned time
+  const PPM_MIN = 0.5, PPM_MAX = 15;
+  const ppmTxt = (n) => (n < 1 ? Math.round(n * 60) + ' s' : n + ' min');
+  const ppm = (cid) => Math.max(PPM_MIN, Math.min(PPM_MAX, +(S.set.ppmC || {})[cid] || 15));
+  const unitPages = (u) => (u.pg && u.pg[0] ? u.pg[1] - u.pg[0] + 1 : 0);
+  const itemMin = (u) => { const n = unitPages(u); return n ? Math.max(5, Math.round(n * ppm(u.id.split('-')[0]))) : u.min + 5; };
   function setKeep(id, on) { if (on) S.keep[id] = true; else delete S.keep[id]; save(); invalidate(); }
-  function setMult(ids, f) { ids.forEach((id) => { if (f === 1) delete S.mult[id]; else S.mult[id] = f; }); save(); invalidate(); }
   let ITEMS = null;
   function items() {
     if (ITEMS) return ITEMS;
@@ -194,6 +201,32 @@
     }
     PLAN = P;
     return PLAN;
+  }
+  // ---------- daily share by subject: sums to 100, one slider moves and the unlocked others follow ----------
+  const SHARE_IDS = ['LA', 'PS', 'CO', 'DB', 'PDSA', 'ML', 'AI', 'GA'];
+  function spread(weights, total) {
+    const sum = weights.reduce((a, b) => a + b, 0), raw = weights.map((w) => (sum > 0 ? w / sum : 1 / weights.length) * total);
+    const out = raw.map(Math.floor); let r = total - out.reduce((a, b) => a + b, 0);
+    raw.map((x, i) => [x - Math.floor(x), i]).sort((a, b) => b[0] - a[0]).forEach(([, i]) => { if (r > 0) { out[i]++; r--; } });
+    return out;
+  }
+  function defaultShare() {
+    const ids = SHARE_IDS.filter((i) => i !== 'GA'), v = spread(ids.map((i) => C[i] ? C[i].marks : 0), 90), o = { GA: 10 };
+    ids.forEach((i, k) => (o[i] = v[k])); return o;
+  }
+  function shares() {
+    const d = defaultShare(), s = S.set.share;
+    if (!s || SHARE_IDS.reduce((a, i) => a + (+s[i] || 0), 0) !== 100) return d;
+    return s;
+  }
+  // move subject `id` to v; locked subjects keep their share, the other unlocked ones absorb the change in proportion
+  function shareMove(cur, id, v) {
+    const lock = S.set.lock || {}, others = SHARE_IDS.filter((i) => i !== id), free = others.filter((i) => !lock[i]);
+    const L = others.filter((i) => lock[i]).reduce((a, i) => a + cur[i], 0), out = Object.assign({}, cur);
+    if (!free.length) { out[id] = 100 - L; return out; }
+    v = Math.max(0, Math.min(100 - L, Math.round(v))); out[id] = v;
+    const sp = spread(free.map((i) => cur[i]), 100 - L - v); free.forEach((i, k) => (out[i] = sp[k]));
+    return out;
   }
   function buildPlan(skip) {
     const I = items(), t = TODAY, exam = S.set.exam;
@@ -257,8 +290,6 @@
     // chapter practice (module PYQ tests) is Mon-Fri only when the switch is on, shared equally across the weekdays left
     const pr = !!S.set.practiceWeekdays;
     // chapter practice: module PYQ tests, and textbook units that are problem sets or exercises (not GA)
-    const CS_COURSES = ['PDSA', 'DB', 'ML', 'AI'];
-    const isCS = (x) => CS_COURSES.includes(x.c);
     const chapterTest = (x) => (x.kind === 'test' && x.c !== 'GA') || (x.kind === 'learn' && PRACTICE_UNIT.test(x.u.t));
     // per weekday: chapter practice is shared by minutes across the weekdays left (at least one item a day)
     let curD = '', quota = Infinity, placedTests = 0;
@@ -288,15 +319,16 @@
       if (pr) quota = Math.ceil(mq.filter(chapterTest).reduce((n, x) => n + rem[x.id], 0) / Math.max(1, weekdaysFrom(o.d)));
       if (o.d >= finalStart && fq.length) { b = take(fq, o, b); b = take(mq, o, b); b = take(gq, o, b); }
       else {
-        let gb = gq.length && mq.length ? r5(b * S.set.gaShare / 100) : 0;
-        if (gb && gb < 15) gb = 0;
-        // CS share: Programming & DSA, Databases, ML and AI get their own part of the day (math is the rest)
-        const hasCS = mq.some(isCS), hasMath = mq.some((x) => !isCS(x));
-        let cb = hasCS && hasMath ? r5(b * (S.set.csShare || 0) / 100) : 0;
-        if (cb && cb < 15) cb = 0;
-        const csUsed = cb - take(mq, o, cb, isCS);
-        let mb = take(mq, o, b - gb - csUsed);
-        b = take(gq, o, gb + mb);
+        // each subject with work left gets its own part of the day (shares below 15 min are skipped); the rest goes to whatever is left
+        const sh = shares(); let used = 0;
+        for (const cid of SHARE_IDS) {
+          const q = cid === 'GA' ? gq : mq, only = (x) => x.c === cid;
+          if (!q.some(only) || (cid === 'GA' && !mq.length)) continue;
+          const sb = Math.min(b - used, r5(b * (sh[cid] || 0) / 100));
+          if (sb >= 15) used += sb - take(q, o, sb, only);
+        }
+        let mb = take(mq, o, b - used);
+        b = take(gq, o, mb);
         if (b > 0 && mq.length) b = take(mq, o, b);
         if (b > 0 && !mq.length && !gq.length && fq.length && o.d >= addDays(finalStart, -3)) b = take(fq, o, b);
       }
@@ -466,15 +498,15 @@
     const t = e.x.kind === 'learn' ? e.x.u.t : label(e.x);
     return '<span class="pill' + (e.done ? ' done' : '') + '" style="--c:' + color(e.x.c) + '">' + esc(t.length > 38 ? t.slice(0, 36) + '…' : t) + ' · ' + hm(e.min) + '</span>';
   }
-  // minutes your time buttons save (+) or add (-) across the whole plan
+  // minutes the per-page time saves (+) or add (-) across the whole plan
   function timeChangeMin() {
     const units = D.courses.flatMap((c) => c.units);
-    return Object.keys(S.mult).reduce((t, id) => { const u = units.find((x) => x.id === id); return u ? t + (u.min + 5 - itemMin(u)) : t; }, 0);
+    return units.filter((u) => tierOk(u.tier) && !S.done['u:' + u.id] && unitPages(u)).reduce((t, u) => t + (u.min + 5 - itemMin(u)), 0);
   }
   function fitCard(P) {
     const h = fitCardBase(P), tc = timeChangeMin();
     if (!tc) return h;
-    const note = '<div class="small muted" style="grid-column:1/-1">Your time buttons ' + (tc > 0 ? 'save ' + hm(tc) : 'add ' + hm(-tc)) + ' across the plan.</div>';
+    const note = '<div class="small muted" style="grid-column:1/-1">Your minutes per page ' + (tc > 0 ? 'save ' + hm(tc) : 'add ' + hm(-tc)) + ' across the plan.</div>';
     return h.replace(/<\/div>$/, note + '</div>');
   }
   function fitCardBase(P) {
@@ -536,15 +568,32 @@
       [1, 2, 3, 4, 5, 6, 0].map((i) => '<div><label>' + DOW[i] + '</label><input type="number" inputmode="numeric" min="0" max="600" step="15" data-wd="' + i + '" value="' + S.set.week[i] + '"></div>').join('') + '</div>' +
       '<label class="row" style="margin-top:14px"><input type="checkbox" id="sem6" ' + (S.set.sem6 ? 'checked' : '') + '><span class="grow small">Sem 6 exams: 30 min a day from ' + nice(D.sem6.prep[0]) + ' and no GATE work on exam days (' + D.sem6.exams.map((d) => parse(d).getDate()).join(', ') + ' Jan)</span></label>' +
       '<label class="row" style="margin-top:10px"><input type="checkbox" id="pwd" ' + (S.set.practiceWeekdays ? 'checked' : '') + '><span class="grow small">Chapter practice problems on Mon–Fri only. Sat and Sun get reading, notes and flashcards; the chapter problems are shared across the weekdays.</span></label>' +
-      '<label class="field"><span>Share of each day for General Aptitude (%)</span><input type="number" id="gashare" min="0" max="60" step="5" value="' + S.set.gaShare + '"></label>' +
-      '<label class="field"><span>Share of each day for CS subjects (%): Programming, Databases, ML, AI. Math is the rest</span><input type="number" id="csshare" min="0" max="60" step="5" value="' + (S.set.csShare || 0) + '"></label></div>';
+      '<div class="shares" data-testid="shares"><b>Share of each day by subject</b><p class="tiny">Move one slider and the other unlocked subjects adjust so the total stays 100%. Lock a subject to keep its share fixed.</p>' + SHARE_IDS.map((i) => '<div class="shr" data-s="' + i + '" style="--c:var(--' + i + ')"><div class="row"><span class="dot"></span><span class="grow small"><b>' + esc(C[i].short) + '</b></span><b class="sv"></b><button type="button" class="lk" aria-label="Lock share"></button></div><input type="range" class="msl" min="0" max="100" step="1"></div>').join('') + '<div class="tiny stot"></div></div></div>';
   }
   function bindWeek(v) {
     v.querySelectorAll('[data-wd]').forEach((inp) => (inp.onchange = () => { S.set.week[+inp.dataset.wd] = Math.max(0, +inp.value || 0); save(); PLAN = null; toast('Plan refitted'); }));
     const s6 = $('#sem6', v); if (s6) s6.onchange = () => { S.set.sem6 = s6.checked; save(); PLAN = null; toast('Plan refitted'); };
     const pw = $('#pwd', v); if (pw) pw.onchange = () => { S.set.practiceWeekdays = pw.checked; save(); PLAN = null; toast('Plan refitted'); };
-    const gs = $('#gashare', v); if (gs) gs.onchange = () => { S.set.gaShare = Math.max(0, Math.min(60, +gs.value || 0)); save(); PLAN = null; toast('Plan refitted'); };
-    const cs = $('#csshare', v); if (cs) cs.onchange = () => { S.set.csShare = Math.max(0, Math.min(60, +cs.value || 0)); save(); PLAN = null; toast('Plan refitted'); };
+    const box = $('.shares', v); if (!box) return;
+    let cur = shares();
+    const LK = '<svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4.5" y="9" width="11" height="8" rx="2"/><path d="M7 9V6.5a3 3 0 0 1 6 0V9"/></svg>';
+    const paint = () => {
+      const lock = S.set.lock || {};
+      box.querySelectorAll('.shr').forEach((row) => {
+        const i = row.dataset.s, r = row.querySelector('.msl'), isL = !!lock[i];
+        r.value = cur[i]; r.style.setProperty('--p', cur[i] + '%'); row.querySelector('.sv').textContent = cur[i] + '%';
+        const lk = row.querySelector('.lk'); lk.innerHTML = LK; lk.classList.toggle('on', isL);
+        r.disabled = SHARE_IDS.filter((x) => x !== i && !lock[x]).length === 0;
+      });
+      box.querySelector('.stot').textContent = 'Total ' + SHARE_IDS.reduce((a, i) => a + cur[i], 0) + '%';
+    };
+    paint();
+    box.querySelectorAll('.shr').forEach((row) => {
+      const i = row.dataset.s, r = row.querySelector('.msl');
+      r.oninput = () => { cur = shareMove(cur, i, +r.value); paint(); };
+      r.onchange = () => { S.set.share = Object.assign({}, cur); save(); PLAN = null; toast('Plan refitted'); };
+      row.querySelector('.lk').onclick = () => { S.set.lock = Object.assign({}, S.set.lock, { [i]: !(S.set.lock || {})[i] }); save(); paint(); };
+    });
   }
   function dayEditor(d) {
     const c = capOf(d), P = plan(), o = P.byDay[d];
@@ -920,7 +969,7 @@
       const P = plan(), name = (x) => (x.u ? x.u.t : x.title || x.id);
       const dump = {
         built: D.built, today: TODAY, url: location.href, when: new Date().toISOString(),
-        settings: S.set, mult: S.mult, keep: S.keep, dayMin: S.dayMin, parts: S.parts,
+        settings: S.set, keep: S.keep, dayMin: S.dayMin, parts: S.parts,
         plan: { finalStart: P.finalStart, needMin: P.needMin, haveMin: P.haveMin, learnDays: P.learnDays,
           dropped: P.dropped.map((x) => ({ id: x.id, name: name(x), min: P.left[x.id] || x.min, kind: x.kind })),
           unplaced: P.unplaced.map((x) => ({ id: x.id, name: name(x), left: P.left[x.id], kind: x.kind })),
@@ -950,31 +999,24 @@
   }
   function progressBox(c) {
     const us = unitsOf(c), N = us.length;
-    let ticks = '', list = '';
-    for (let i = 0; i <= N; i++) {
-      const edge = i === 0 || i === N || us[i].m !== us[i - 1].m, left = (i / N * 100) + '%';
-      ticks += '<i class="' + (edge ? 'mod' : '') + '" style="left:' + left + '"></i>';
-      if (i < N && (i === 0 || us[i].m !== us[i - 1].m)) ticks += '<em style="left:' + left + '">M' + us[i].m + '</em>';
-    }
+    let list = '';
     [...new Set(us.map((u) => u.m))].forEach((m) => {
-      list += '<div class="mod-head"><span>Module ' + m + '</span><button type="button" data-tickall="' + m + '">Tick all</button></div>' +
-        '<div class="mults mod" data-mod="' + m + '"><span class="tiny">This module</span>' + MULTS.map(([f, l]) => '<button type="button" class="mx" data-mult="' + f + '">' + l + '</button>').join('') + '</div>';
+      list += '<div class="mod-head"><span>Module ' + m + '</span><button type="button" data-tickall="' + m + '">Tick all</button></div>';
       us.filter((u) => u.m === m).forEach((u) => {
-        list += '<div class="urow" data-uid="' + u.id + '"><label class="ucheck"><input type="checkbox" data-u="' + u.id + '"><span class="tx">' + esc(u.t) + '</span><span class="h" data-eff></span></label><div class="mults">' + MULTS.map(([f, l]) => '<button type="button" class="mx" data-mult="' + f + '">' + l + '</button>').join('') + '<button type="button" class="mx keep" data-keep="u:' + u.id + '" title="Keep in plan: dropped last">Keep</button></div></div>';
+        list += '<div class="urow" data-uid="' + u.id + '"><label class="ucheck"><input type="checkbox" data-u="' + u.id + '"><span class="cb"><svg viewBox="0 0 20 20"><path d="M5 10.5l3.4 3.4L15 6.8"/></svg></span><span class="tx">' + esc(u.t) + '</span><span class="h"><b data-eff></b>' + (unitPages(u) ? '<small>' + unitPages(u) + ' pp</small>' : '') + '</span></label><div class="mults"><button type="button" class="mx keep" data-keep="u:' + u.id + '" title="Keep in plan: dropped last">Keep</button></div></div>';
       });
     });
-    const courseMults = '<div class="mults course"><span class="tiny">All topics in this course</span>' + MULTS.map(([f, l]) => '<button type="button" class="mx" data-mult="' + f + '">' + l + '</button>').join('') + '</div>';
     return '<div class="psub" data-c="' + c.id + '" style="--c:var(--' + c.id + ')" data-testid="psub-' + c.id + '">' +
       '<div class="psub-h"><span class="dot"></span><div class="grow"><div class="t">' + esc(c.name) + '</div><div class="tiny">' + c.marks + ' of 300 marks · ' + c.mods.length + ' modules</div></div><div class="pct"></div></div>' +
-      '<div class="slider-wrap"><input class="stops" type="range" min="0" max="' + N + '" step="1" aria-label="Units done in ' + esc(c.short) + '" data-testid="slider-' + c.id + '"><div class="ticks" style="left:14px;right:14px">' + ticks + '</div></div>' +
+      '<div class="pbar" data-testid="slider-' + c.id + '"><i></i></div>' +
+      '<div class="ppm"><div class="row"><span class="grow small"><b>Time per page</b></span><b class="ppm-v"></b></div><input type="range" class="msl" min="' + PPM_MIN + '" max="' + PPM_MAX + '" step="0.5" aria-label="Minutes per page, ' + esc(c.short) + '" data-testid="ppm-' + c.id + '"></div>' +
       '<div class="sl-label small"></div><div class="ptests"></div><div class="tiny pq"></div>' +
-      courseMults + '<details class="unit-dd"><summary><span>Tick topics individually</span><span class="cnt"></span></summary><div class="unit-list">' + list + '</div></details></div>';
+      '<details class="unit-dd"><summary><span>Tick topics individually</span><span class="cnt"></span></summary><div class="unit-list">' + list + '</div></details></div>';
   }
   function paintBox(box) {
     const c = C[box.dataset.c], us = unitsOf(c), N = us.length;
     const k = us.filter(doneOf).length, left = us.filter((u) => !doneOf(u)).reduce((s, u) => s + itemMin(u), 0);
-    const range = box.querySelector('.stops');
-    range.value = k; range.style.setProperty('--p', (N ? (k / N) * 100 : 0) + '%');
+    box.querySelector('.pbar').style.setProperty('--p', (N ? (k / N) * 100 : 0) + '%');
     box.querySelector('.pct').textContent = (N ? Math.round((k / N) * 100) : 0) + '%';
     box.querySelector('.sl-label').textContent = k + ' of ' + N + ' topics done · ' + hm(left) + ' left';
     const tests = items().all.filter((x) => x.kind === 'test' && x.c === c.id && x.m);
@@ -992,13 +1034,7 @@
     box.querySelectorAll('.urow').forEach((row) => {
       const u = all.find((x) => x.id === row.dataset.uid);
       row.querySelector('[data-eff]').textContent = hm(itemMin(u));
-      row.querySelectorAll('.mx[data-mult]').forEach((b) => b.classList.toggle('on', Math.abs(Number(b.dataset.mult) - mult(u.id)) < 1e-9));
       row.querySelector('.keep').classList.toggle('on', !!S.keep['u:' + u.id]);
-    });
-    box.querySelectorAll('.mults.course .mx').forEach((b) => b.classList.toggle('on', all.every((u) => Math.abs(Number(b.dataset.mult) - mult(u.id)) < 1e-9)));
-    box.querySelectorAll('.mults.mod').forEach((row) => {
-      const ids = all.filter((u) => u.m === +row.dataset.mod);
-      row.querySelectorAll('.mx').forEach((b) => b.classList.toggle('on', ids.every((u) => Math.abs(Number(b.dataset.mult) - mult(u.id)) < 1e-9)));
     });
   }
   function paintSummary() {
@@ -1013,11 +1049,20 @@
   }
   function bindProgress(v) {
     v.querySelectorAll('.psub').forEach((box) => {
-      const us = unitsOf(C[box.dataset.c]);
-      box.querySelector('.stops').oninput = (e) => {
-        const n = +e.target.value;
-        us.forEach((u, i) => setUnits([u], i < n));
-        progressChanged();
+      const us = unitsOf(C[box.dataset.c]), cid = box.dataset.c;
+      const pr = box.querySelector('.msl'), pv = box.querySelector('.ppm-v');
+      const showP = () => { pv.textContent = ppmTxt(+pr.value); pr.style.setProperty('--p', ((pr.value - PPM_MIN) / (PPM_MAX - PPM_MIN) * 100) + '%'); };
+      pr.value = ppm(cid); showP();
+      pr.oninput = showP;
+      pr.onchange = () => {
+        const old = ppm(cid), nu = +pr.value;
+        if (nu === old) return;
+        const left = (n) => { S.set.ppmC = Object.assign({}, S.set.ppmC, { [cid]: n }); const t = C[cid].units.filter((u) => tierOk(u.tier) && !S.done['u:' + u.id]).reduce((a, u) => a + itemMin(u), 0); return t; };
+        const before = left(old), after = left(nu); S.set.ppmC[cid] = old;
+        confirmBox('Change time per page?', C[cid].short + ': ' + ppmTxt(old) + ' → ' + ppmTxt(nu) + ' per page. Time left in this course goes from ' + hm(before) + ' to ' + hm(after) + ', and the whole plan is refitted.', 'Change', (ok) => {
+          if (ok) { S.set.ppmC = Object.assign({}, S.set.ppmC, { [cid]: nu }); save(); invalidate(); progressChanged(); toast('Time per page set to ' + ppmTxt(nu) + ' for ' + C[cid].short); }
+          else { pr.value = old; showP(); }
+        });
       };
       box.querySelectorAll('input[data-u]').forEach((cb) => (cb.onchange = () => {
         setUnits([us.find((u) => u.id === cb.dataset.u)], cb.checked);
@@ -1030,18 +1075,6 @@
       }));
       box.querySelectorAll('.urow .keep').forEach((b) => (b.onclick = () => {
         setKeep(b.dataset.keep, !S.keep[b.dataset.keep]);
-        progressChanged();
-      }));
-      box.querySelectorAll('.urow .mx[data-mult]').forEach((b) => (b.onclick = () => {
-        setMult([b.closest('.urow').dataset.uid], Number(b.dataset.mult));
-        progressChanged();
-      }));
-      box.querySelectorAll('.mults.mod .mx').forEach((b) => (b.onclick = () => {
-        setMult(C[box.dataset.c].units.filter((u) => u.m === +b.closest('.mults').dataset.mod).map((u) => u.id), Number(b.dataset.mult));
-        progressChanged();
-      }));
-      box.querySelectorAll('.mults.course .mx').forEach((b) => (b.onclick = () => {
-        setMult(C[box.dataset.c].units.map((u) => u.id), Number(b.dataset.mult));
         progressChanged();
       }));
       paintBox(box);
@@ -1074,7 +1107,24 @@
   }
   window.addEventListener('popstate', () => { if (!$('#pdf-sheet').hidden) PDFV.close(); else realClose(); });
   let tt = null;
-  function toast(m) { const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(tt); tt = setTimeout(() => t.classList.remove('on'), 1800); }
+  function confirmBox(title, text, yes, done) {
+    const o = document.createElement('div'); o.className = 'cfm';
+    o.innerHTML = '<div class="cfm-b" role="dialog" aria-modal="true"><b></b><p></p><div class="row"><button type="button" class="btn grow" data-n>Cancel</button><button type="button" class="btn primary grow" data-y></button></div></div>';
+    o.querySelector('b').textContent = title; o.querySelector('p').textContent = text; o.querySelector('[data-y]').textContent = yes;
+    const end = (ok) => { o.remove(); done(ok); };
+    o.querySelector('[data-n]').onclick = () => end(false); o.querySelector('[data-y]').onclick = () => end(true);
+    o.onclick = (e) => { if (e.target === o) end(false); };
+    document.body.appendChild(o);
+  }
+  function toast(m, undo) {
+    const t = $('#toast'); t.textContent = m; t.classList.toggle('act', !!undo);
+    if (undo) {
+      const b = document.createElement('button'); b.type = 'button'; b.textContent = 'Undo';
+      b.onclick = () => { clearTimeout(tt); t.classList.remove('on'); undo(); };
+      t.appendChild(b);
+    }
+    t.classList.add('on'); clearTimeout(tt); tt = setTimeout(() => t.classList.remove('on'), undo ? 6000 : 1800);
+  }
   function applyTheme() { if (S.theme) document.documentElement.dataset.theme = S.theme; else delete document.documentElement.dataset.theme; }
 
   // ---------- boot ----------

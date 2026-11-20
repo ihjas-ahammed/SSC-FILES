@@ -18,6 +18,9 @@ V1 = HERE.parent / "STUDY-PLAN-GATE-V1"
 V2 = HERE.parent / "STUDY-PLAN-GATE-V2"
 REL = lambda p: Path(os.path.relpath(p, REPO)).as_posix()
 RAW = "https://raw.githubusercontent.com/ihjas-ahammed/SSC-FILES/main/"
+# This folder is its own repo (study-plan-gate); its files live there, the source PDFs stay in SSC-FILES
+V3_PREFIX = "2026/11/STUDY-PLAN-GATE-V3/"
+V3_RAW = "https://raw.githubusercontent.com/ihjas-ahammed/study-plan-gate/main/"
 
 ORDER = ["LA", "PS", "CO", "DB", "PDSA", "ML", "AI", "GA"]
 MARKS = {"LA": 33, "CO": 26, "PS": 51, "PDSA": 48, "DB": 39, "ML": 37, "AI": 21, "GA": 45}
@@ -223,7 +226,7 @@ def main():
             tree["k"].append(nd)
 
     data = {"built": subprocess.run(["date", "+%Y-%m-%d"], capture_output=True, text=True).stdout.strip(),
-            "raw": RAW, "courses": courses, "questions": questions,
+            "raw": RAW, "v3": {"prefix": V3_PREFIX, "raw": V3_RAW}, "courses": courses, "questions": questions,
             "keysrc": {p: keys[p].get("source") for p in keys}, "tree": tree,
             "sem6": {"label": "Sem 6 university exams", "exams": ["2027-01-19", "2027-01-20", "2027-01-21", "2027-01-22", "2027-01-25", "2027-01-27"],
                      "prep": ["2027-01-10", "2027-01-27"]}}
